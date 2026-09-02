@@ -63,8 +63,11 @@ export async function onRequestPost(context) {
     const subscription = beehiivData.data || beehiivData;
 
     const status = (subscription.status || "").toLowerCase();
-    const tiers = subscription.subscription_premium_tiers || [];
-    const tierNames = tiers.map((t) => (t.name || "").toLowerCase());
+    // Beehiiv returns this as a flat array of tier name strings, e.g. ["Teacher's Circle"] —
+    // not an array of tier objects. Handle both shapes defensively.
+    const rawTierNames = subscription.subscription_premium_tier_names
+      || (subscription.subscription_premium_tiers || []).map((t) => (t && t.name) || t);
+    const tierNames = (rawTierNames || []).map((n) => (n || "").toString().toLowerCase());
     const hasTeachersCircle = tierNames.some((name) => name.includes(tierNameNeeded));
 
     const isActiveSubscriber = ACTIVE_STATUSES.includes(status);
