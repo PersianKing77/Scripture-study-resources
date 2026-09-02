@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jerusalem — the city under the city</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Archivo+Narrow:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@400;500;700&family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body {
+    background: #ece2cf; color: #2a231a;
+    font-family: 'EB Garamond', 'Frank Ruhl Libre', 'Noto Naskh Arabic', Georgia, serif;
+    display: flex; flex-direction: column; height: 100vh;
+  }
+  a { color: #8a5a2b; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #a8452f; }
+  .kicker { font-family: 'Archivo Narrow', 'Noto Naskh Arabic', sans-serif; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8a7550; font-weight: 600; }
+  header { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; padding: 13px 22px 11px; border-bottom: 1px solid #c3b394; }
+  header h1 { margin: 3px 0 2px; font-size: 25px; font-weight: 500; line-height: 1.05; }
+  header p { margin: 0; font-size: 14px; line-height: 1.35; color: #5c5240; max-width: 78ch; text-wrap: pretty; }
+  .btn { font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 6px 10px; cursor: pointer; border: 1px solid #b7a582; background: rgba(247,241,228,.8); color: #4a4132; border-radius: 2px; white-space: nowrap; }
+  .btn:hover { border-color: #6f5c38; }
+  .btn.on { background: #2a231a; color: #f3ecdb; border-color: #2a231a; }
+  main { flex: 1 1 auto; min-height: 0; display: flex; flex-wrap: nowrap; }
+  #map { flex: 1 1 auto; min-width: 240px; background: #e7dcc4; }
+  .leaflet-container { background: #e7dcc4; font-family: 'Archivo Narrow', sans-serif; }
+  aside { flex: 0 1 400px; min-width: 260px; max-width: 480px; padding: 16px 20px 22px; overflow-y: auto; border-left: 1px solid #c3b394; display: flex; flex-direction: column; gap: 12px; }
+  aside h2 { margin: 4px 0 2px; font-size: 24px; font-weight: 500; line-height: 1.1; }
+  .years { font-family: 'Archivo Narrow', 'Noto Naskh Arabic', sans-serif; font-size: 13px; letter-spacing: .1em; color: #8a5a2b; text-transform: uppercase; }
+  .body { margin: 0; font-size: 16px; line-height: 1.45; color: #3b3427; text-wrap: pretty; }
+  .flag { background: #f4e6c9; border: 1px solid #d3b978; padding: 8px 11px; font-size: 14px; line-height: 1.35; color: #6b5320; }
+  .disputed { border-left: 3px solid #a8452f; padding: 2px 0 2px 11px; font-size: 14px; line-height: 1.35; color: #6d3a2c; font-style: italic; }
+  .sechead { border-bottom: 1px solid #c3b394; padding-bottom: 5px; margin-bottom: 9px; }
+  .look { display: flex; flex-direction: column; gap: 8px; }
+  .look > div { display: flex; gap: 9px; font-size: 15px; line-height: 1.35; color: #4a4132; }
+  .look .n { flex: 0 0 auto; color: #b98c46; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; padding-top: 3px; }
+  .legend { border-top: 1px solid #c3b394; padding-top: 9px; }
+  #keypanel { position: absolute; top: 12px; right: 12px; z-index: 620; width: 268px; max-height: calc(100% - 24px);
+    overflow: auto; background: rgba(247,241,228,.97); border: 1px solid #8a7550; box-shadow: 0 6px 22px rgba(42,35,26,.22);
+    padding: 12px 14px 14px; display: none; }
+  #keypanel.open { display: block; }
+  #history { border-top: 1px solid #c3b394; padding-top: 11px; }
+  #e-hnote { margin: 0 0 14px; font-size: 13.5px; font-style: italic; color: #8a7550; line-height: 1.55; }
+  #e-history p { margin: 0 0 11px; font-size: 15px; line-height: 1.62; color: #4a3f2d; text-wrap: pretty; }
+  #e-history p:last-child { margin-bottom: 0; }
+  #e-history h5 { margin: 16px 0 7px; font-family: 'Archivo Narrow', 'Frank Ruhl Libre', 'Noto Naskh Arabic', sans-serif; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #8a7550; font-weight: 600; }
+  #e-history h5:first-child { margin-top: 0; }
+  #keypanel h4 { margin: 0 0 7px; font-family: 'Archivo Narrow', 'Frank Ruhl Libre', 'Noto Naskh Arabic', sans-serif; font-size: 11px; letter-spacing: .14em;
+    text-transform: uppercase; color: #8a7550; font-weight: 600; }
+  #keypanel h4 + h4 { margin-top: 13px; }
+  #keypanel .krow { display: flex; align-items: center; gap: 9px; margin-bottom: 5px; font-size: 12.5px; line-height: 1.25; color: #4a4132; }
+  #keypanel .gl { flex: 0 0 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: #6f5c38; }
+  #keypanel[dir="rtl"] #keyclose { right: auto; left: 8px; }
+  #keyclose { position: absolute; top: 6px; right: 8px; background: none; border: 0; cursor: pointer; font-size: 17px; line-height: 1; color: #8a7550; }
+  .legend .row { display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 1.25; margin-bottom: 4px; color: #4a4132; }
+  .legend .rule { flex: 0 0 24px; height: 0; }
+  .sources { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid #c3b394; font-size: 12.5px; line-height: 1.45; color: #6f6350; }
+  footer { flex: 0 0 auto; background: #e5d9c0; border-top: 1px solid #c3b394; padding: 10px 22px 12px; }
+  .frow { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+  .fade { display: flex; align-items: center; gap: 9px; }
+  .fade input[type=range] { width: 168px; accent-color: #3d6076; }
+  #track { position: relative; padding: 22px 0 4px; cursor: pointer; touch-action: none; }
+  #rail { position: absolute; left: 0; right: 0; top: 26px; height: 3px; background: linear-gradient(to right, #b98c46, #8a6a3e 42%, #3d6076); }
+  #thumb { position: absolute; top: 18px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: #f7f1e4; border: 3px solid #2a231a; box-shadow: 0 1px 4px rgba(0,0,0,.28); transition: left .3s cubic-bezier(.4,0,.2,1); pointer-events: none; }
+  #ticks { display: flex; align-items: flex-start; }
+  #ticks > div { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0 1px; }
+  #ticks .bar { width: 1px; height: 12px; background: #c3b394; }
+  #ticks .lb { font-family: 'Archivo Narrow', 'Frank Ruhl Libre', 'Noto Naskh Arabic', sans-serif; font-size: 10px; letter-spacing: .02em; text-align: center; line-height: 1.15; color: #8a7550; text-transform: uppercase; }
+  #ticks .dt { font-family: 'Archivo Narrow', sans-serif; font-size: 9px; text-align: center; color: #a89673; }
+  #ticks .sel .bar { background: #2a231a; }
+  #ticks .sel .lb { color: #2a231a; font-weight: 700; }
+  #ticks .sel .dt { color: #8a5a2b; }
+  .jq-label { background: none; border: none; box-shadow: none; padding: 0; white-space: nowrap; font-family: 'Archivo Narrow', 'Frank Ruhl Libre', 'Noto Naskh Arabic', sans-serif; text-shadow: 0 0 3px #efe6d2, 0 0 3px #efe6d2, 0 0 5px #efe6d2, 0 0 7px #efe6d2; }
+  .jq-label::before { display: none; }
+  .jq-label .t { font-size: 13px; letter-spacing: .02em; display: block; }
+  .jq-label .s { font-size: 11px; font-style: italic; color: #6f6350; display: block; }
+  .leaflet-tile { opacity: 1 !important; }
+  .leaflet-control-attribution { font-size: 9px; background: rgba(247,241,228,.78) !important; }
+  .basewarn { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 600; max-width: 420px; background: #f4e6c9; border: 1px solid #d3b978; padding: 8px 12px; font-size: 13px; line-height: 1.35; color: #6b5320; text-align: center; }
+  .cs text { font-family: 'Archivo Narrow', 'Frank Ruhl Libre', 'Noto Naskh Arabic', sans-serif; letter-spacing: .02em; }
+  .cs { width: 100%; height: 100%; background: #e7dcc4; border: 1px solid #c3b394; display: block; }
+  #csstrip { flex: 0 0 auto; height: min(240px, 32vh); display: flex; align-items: stretch; gap: 18px; padding: 11px 22px 13px; background: #ece2cf; border-top: 1px solid #c3b394; }
+  #csstrip.off { display: none; }
+  .cshead { flex: 0 0 200px; padding-top: 4px; }
+  .cshead h2 { margin: 4px 0 0; font-size: 19px; font-weight: 500; line-height: 1.15; }
+  .cswrap { flex: 1 1 auto; min-width: 0; }
+
+  /* stack on phones and tablets: the map must never be squeezed out */
+  @media (max-width: 900px) {
+    html, body { height: auto; overflow: auto; }
+    main { flex-wrap: wrap; }
+    body { min-height: 100vh; }
+    #map { flex: 1 1 100%; min-height: 62vh; }
+    aside { flex: 1 1 100%; max-width: none; border-left: none; border-top: 1px solid #c3b394; overflow: visible; }
+    #csstrip { height: auto; flex-direction: column; gap: 8px; padding: 12px 16px 14px; }
+    .cshead { flex: none; padding-top: 0; }
+    .cswrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .cs { width: 880px; height: 240px; }
+    header { padding: 12px 16px 10px; }
+    footer { position: sticky; bottom: 0; padding: 8px 16px 10px; }
+    #ticks .lb { font-size: 9px; }
+    #ticks .dt { display: none; }
+  }
+  /* forced phone layout: the same rules as the media query above, on demand, so the
+     stacked one-column view can be checked (or used) on any screen */
+  body.phone { height: auto; overflow: auto; min-height: 100vh; }
+  body.phone main { flex-wrap: wrap; }
+  body.phone #map { flex: 1 1 100%; min-height: 62vh; }
+  body.phone aside { flex: 1 1 100%; max-width: none; border-left: none; border-top: 1px solid #c3b394; overflow: visible; }
+  body.phone #csstrip { height: auto; flex-direction: column; gap: 8px; padding: 12px 16px 14px; }
+  body.phone .cshead { flex: none; padding-top: 0; }
+  body.phone .cswrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  body.phone .cs { width: 880px; height: 240px; }
+  body.phone header { padding: 12px 16px 10px; }
+  body.phone footer { position: sticky; bottom: 0; padding: 8px 16px 10px; }
+  body.phone #ticks .lb { font-size: 9px; }
+  body.phone #ticks .dt { display: none; }
+  body.phone #jbox { left: 12px; right: 12px; width: auto; }
+  #phoneexit { position: absolute; right: 12px; top: 12px; z-index: 640; display: none; cursor: pointer;
+    font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    color: #f7f1e4; background: #2f4f66; border: 1px solid #2a231a; padding: 8px 12px; }
+  #wallbox { border: 1px solid #c3b394; background: rgba(255,252,244,.7); padding: 9px 11px 8px; }
+  #wallbox .wbh { display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer;
+    font-family: 'Archivo Narrow', sans-serif; font-size: 10px; letter-spacing: .14em;
+    text-transform: uppercase; color: #8a7550; font-weight: 600; margin-bottom: 6px; }
+  #wallbox .wbh span { font-size: 13px; letter-spacing: 0; }
+  #wallbox.shut .wbh { margin-bottom: 0; }
+  #wallbox.shut button { display: none; }
+  #wallbox button { font-size: 12.5px; }
+  #wallbox button { display: flex; align-items: center; gap: 8px; width: 100%; background: none; border: 0; cursor: pointer;
+    padding: 3px 0; text-align: left; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; line-height: 1.2; color: #4a4132; }
+  #wallbox button svg { flex: 0 0 22px; }
+  #wallbox button.off { color: #b0a288; }
+  #wallbox button.off svg { opacity: .3; }
+  #jbox { position: absolute; left: 58px; top: 12px; z-index: 630; width: 268px; display: none;
+    background: rgba(247,241,228,.97); border: 1px solid #8a7550; box-shadow: 0 6px 22px rgba(42,35,26,.22); padding: 11px 12px 10px; }
+  #jbox.open { display: block; }
+  #jbox .wbh { font-family: 'Archivo Narrow', sans-serif; font-size: 10px; letter-spacing: .14em;
+    text-transform: uppercase; color: #8a7550; font-weight: 600; margin-bottom: 7px; }
+  #jbox button { display: block; width: 100%; text-align: left; background: none; cursor: pointer;
+    border: 0; border-top: 1px solid #ddd0b2; padding: 7px 0 8px; }
+  #jbox button:first-of-type { border-top: 0; }
+  #jbox .jn { font-family: 'EB Garamond', serif; font-size: 15px; color: #2a231a; line-height: 1.25; }
+  #jbox button.on .jn { color: #a8452f; font-weight: 600; }
+  #jbox .jm { font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: .04em; color: #8a7550; margin-top: 2px; }
+  #jbox .jref { font-family: 'EB Garamond', serif; font-style: italic; font-size: 12.5px; color: #8a7550; }
+  .beta { display: inline-block; vertical-align: 3px; margin-left: 9px; font-family: 'Archivo Narrow', sans-serif;
+    font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #f7f1e4;
+    background: #a8452f; padding: 3px 7px 2px; border-radius: 2px; }
+  #aboutbtn { flex: 0 0 auto; align-self: flex-start; }
+  #about { position: fixed; inset: 0; z-index: 3000; display: none; background: rgba(42,35,26,.55); }
+  #about.open { display: block; }
+  #aboutbox { position: absolute; inset: 24px; max-width: 940px; margin: 0 auto; display: flex; flex-direction: column;
+    background: #f7f1e4; border: 1px solid #8a7550; box-shadow: 0 18px 60px rgba(42,35,26,.4); }
+  #abouthead { flex: 0 0 auto; padding: 18px 22px 0; position: relative; border-bottom: 1px solid #c3b394; }
+  #abouthead h2 { margin: 0; font-family: 'EB Garamond', serif; font-size: 26px; font-weight: 600; color: #2a231a; line-height: 1.15; }
+  #abouthead .by { margin: 3px 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: .1em;
+    text-transform: uppercase; color: #8a7550; }
+  #aboutclose { position: absolute; top: 14px; right: 16px; background: none; border: 0; cursor: pointer;
+    font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #8a7550; }
+  #aboutclose:hover { color: #a8452f; }
+  #abouttabs { display: flex; gap: 22px; margin-top: 15px; }
+  #abouttabs button { background: none; border: 0; cursor: pointer; padding: 0 0 9px; margin-bottom: -1px;
+    font-family: 'Archivo Narrow', sans-serif; font-size: 13px; letter-spacing: .06em; color: #8a7550;
+    border-bottom: 2px solid transparent; }
+  #abouttabs button.on { color: #2a231a; border-bottom-color: #b98c46; font-weight: 600; }
+  #aboutbody { flex: 1 1 auto; overflow: auto; padding: 20px 22px 26px; }
+  #aboutbody .tab { display: none; }
+  #aboutbody .tab.on { display: block; }
+  #aboutbody h3 { margin: 22px 0 7px; font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: .14em;
+    text-transform: uppercase; color: #8a7550; font-weight: 600; }
+  #aboutbody h3:first-child { margin-top: 0; }
+  #aboutbody p { margin: 0 0 11px; font-family: 'EB Garamond', serif; font-size: 15.5px; line-height: 1.62; color: #4a4132; text-wrap: pretty; }
+  #aboutbody p.lead { font-size: 17px; color: #2a231a; }
+  #aboutbody .betanote { display: flex; gap: 11px; align-items: flex-start; background: rgba(168,69,47,.07);
+    border-left: 2px solid #a8452f; padding: 11px 13px; margin-bottom: 18px; }
+  #aboutbody .betanote p { margin: 0; font-size: 14px; }
+  #aboutbody dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; align-items: baseline; }
+  #aboutbody dt { font-family: 'Archivo Narrow', sans-serif; font-size: 13px; color: #2a231a; font-weight: 600; }
+  #aboutbody dd { margin: 0; font-family: 'EB Garamond', serif; font-size: 15px; line-height: 1.55; color: #4a4132; }
+  #aboutbody ul { margin: 0 0 11px; padding-left: 18px; }
+  #aboutbody li { font-family: 'EB Garamond', serif; font-size: 15px; line-height: 1.6; color: #4a4132; margin-bottom: 4px; }
+  #aboutbody .fine { font-family: 'Archivo Narrow', sans-serif; font-size: 12.5px; line-height: 1.6; color: #8a7550; }
+  #aboutbody a { color: #8a6a2f; }
+  #aboutbody a:hover { color: #a8452f; }
+  @media (max-width: 700px) {
+    #aboutbox { inset: 0; }
+    #abouttabs { gap: 14px; flex-wrap: wrap; }
+  }
+  /* short desktop windows: give the map its room back */
+  @media (min-width: 901px) and (max-height: 720px) {
+    #csstrip { height: 168px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div style="max-width: 760px;">
+    <div class="kicker" id="k-kicker"></div>
+    <h1><span id="k-title"></span><span class="beta">Beta</span></h1>
+    <p id="k-sub"></p>
+  </div>
+  <div style="display: flex; gap: 5px;" id="langs"></div>
+  <button class="btn" id="aboutbtn">About</button>
+</header>
+
+<div id="about" role="dialog" aria-modal="true" aria-label="About this tool">
+  <div id="aboutbox">
+    <div id="abouthead">
+      <h2>Jerusalem — the city under the city</h2>
+      <p class="by">Prepared by Taylor Halverson, Ph.D.</p>
+      <button id="aboutclose">Close &#10005;</button>
+      <div id="abouttabs">
+        <button class="on" data-tab="0">The tool</button>
+        <button data-tab="1">How to use it</button>
+        <button data-tab="2">Taylor Halverson, Ph.D.</button>
+      </div>
+    </div>
+    <div id="aboutbody">
+      <div class="tab on">
+      <div class="betanote">
+        <p><strong>Beta.</strong> Wall lines, dates, elevations and identifications are still being reviewed. Where scholars disagree — the course of the Second Temple period&rsquo;s First and Second Walls, how far the Western Hill was settled before Hezekiah, where the Antonia stood, the line of the city&rsquo;s southern wall in each age — the map draws the reading most excavators have accepted, marks it as reconstructed, and the essay says so.</p>
+      </div>
+      <h3>What this is</h3>
+      <p class="lead">Twelve phases of one city, drawn in a single set of real-world coordinates, so that each age sits over the others exactly as the archaeology does — and over the streets you are standing in today.</p>
+      <p>The Old City is almost impossible to read on the ground, and the reason is specific: the walls around it are Ottoman, finished in 1538, and they do not enclose the ancient city. They follow the Roman line, which cut off the ridge Jerusalem actually began on. So a visitor looking for the Jerusalem of the Gospels is standing inside a Turkish wall, on a Roman grid, under Mamluk façades, looking for a city that lies partly outside the gate and ten metres below the pavement.</p>
+      <p>No photograph can show that, and neither can a map of one period. What this tool does is hold the frame still and change the age: the Ottoman circuit stays drawn in blue on every phase, so every ancient wall, valley, pool and street can be read against the one boundary a visitor can actually see. Fade the modern city up and down beneath it; switch the base to satellite and watch the Herodian Upper City land on the rooftops of the Jewish Quarter. Each phase carries an essay written to be read straight through rather than consulted.</p>
+      <h3>Accuracy and limits</h3>
+      <p>The Ottoman wall is not drawn by eye. It is anchored on published coordinates for all eight gates and the corner towers, and checked against the documented circuit length of about 4,018 m and enclosed area of about 0.9 km²; the fit at each gate is within roughly 20 m. Everything ancient is a reconstruction. Positions come from published excavation and survey work — Warren and Wilson&rsquo;s surveys for the Palestine Exploration Fund, the Broad Wall and Israelite Tower in the Jewish Quarter, the Ophel and City of David excavations, the Western Wall tunnels and the Robinson&rsquo;s Arch plaza, the Pool of Siloam and the Cardo — and are placed in the same coordinate frame as the modern map.</p>
+      <p>A dashed line always means reconstructed or disputed. A solid ancient line means a course confirmed by excavation. Ground levels are the least certain thing here: in much of the Old City the present pavement lies several metres above the Roman surface, and the Tyropoeon Valley — today&rsquo;s Western Wall plaza and the street down to the Dung Gate — is filled to a depth the cross-section shows but no excavation has exposed continuously. The cross-section is a true-scale schematic cut, not a survey drawing.</p>
+      <h3>Sources</h3>
+      <p class="fine">Surveys and excavations: C. Warren and C. R. Wilson, <em>Survey of Western Palestine</em> and the Ordnance Survey of Jerusalem (1865&ndash;1884); N. Avigad, Jewish Quarter excavations (Broad Wall, Israelite Tower); B. Mazar and E. Mazar, Ophel and Temple Mount excavations; K. Kenyon and Y. Shiloh, City of David; R. Reich and E. Shukron, Pool of Siloam and the Gihon fortifications; the Madaba mosaic map (6th c.) for the Byzantine Cardo and Nea Church.</p>
+      <p class="fine">Ancient sources: 2 Samuel 5; 2 Kings 20 and 25; 2 Chronicles 32; Isaiah 22; Nehemiah 2&ndash;3 and 12; the Gospels; Josephus, <em>Jewish War</em> V (the three walls, the Temple, the Antonia); Eusebius, <em>Onomasticon</em>; the Bordeaux Pilgrim (333); Mujir al-Din (1495).</p>
+      <p class="fine">Base imagery: Esri World Imagery (Maxar, Earthstar Geographics); Esri Light Gray Canvas (Esri, HERE, Garmin); Esri World Hillshade; OpenStreetMap contributors.</p>
+      <p class="fine">Plans are schematic reconstructions in a common coordinate frame, not survey drawings. This is a teaching aid, not a measured record. Corrections are welcome — this is a Beta.</p>
+      </div>
+      <div class="tab">
+      <p class="lead">One city, twelve phases, always in the same frame at the same scale unless you move it. Everything else here is a way of asking a question about that frame — what changed, what survived, what is buried, and where it sits on the ground today.</p>
+      <h3>Start here</h3>
+      <p>The timeline along the bottom is the main control: twelve phases in date order. Click any tick, or drag the scrubber through them. The left and right arrow keys step one phase at a time, and the right-hand panel changes to that period&rsquo;s essay as you go.</p>
+      <h3>The blue outline never moves</h3>
+      <p>The blue circuit is today&rsquo;s wall — Suleiman&rsquo;s, 1538 — and it is drawn on every single phase, whether or not it existed yet. That is deliberate: it is the one line your group can see with their own eyes, so it works as the ruler against which every older city is measured. Watch the Canaanite city sit almost entirely <em>outside</em> it to the south, and the Herodian city spill past it in the same direction.</p>
+      <h3>Today&rsquo;s city slider</h3>
+      <p>Fades the present-day street map up and down beneath the reconstruction. All the way down and you have a clean historical plan; all the way up and you can see which modern alley runs along a Roman colonnade. Sweeping it slowly is the single most useful gesture in the tool.</p>
+      <h3>Three base maps</h3>
+      <p>Three buttons in the bottom bar switch between them. <em>English</em> labels the streets and landmarks in English — the default, and the one to use with a group. <em>Local names</em> shows the signage as it actually appears on the ground in Hebrew and Arabic, which is what your guests are reading on the walls. <em>Satellite</em> drops in aerial photography, so the ancient outlines land on real rooftops and courtyards.</p>
+      <h3>Jerusalem&rsquo;s four walls</h3>
+      <p>The panel at the bottom right of the map lets you show and hide each wall circuit independently, which is the fastest way to settle the question learners actually have. On <em>Jesus&rsquo; time</em> all four appear: the <strong>First Wall</strong>, Hasmonean and kept by Herod, running from the Citadel along the Broad Wall line and down to the Pool of Siloam; the <strong>Second Wall</strong>, standing by AD 33, from the Gennath Gate north-east to the Antonia &mdash; the line that leaves Golgotha <em>outside</em> the city at the crucifixion; the <strong>Third Wall</strong>, built by Agrippa in AD 41&ndash;44 to enclose Bezetha far to the north and finished barely in time for the siege of AD 70; and <strong>today&rsquo;s wall</strong> of 1538. Turn off all but two and the comparison your group needs is on the screen by itself. Click the panel heading to collapse it.</p>
+      <h3>Relief</h3>
+      <p>Shades the map with real terrain hillshading, so the ravines that made the city defensible stop reading as flat ground. With it on you can see the saddle between the City of David ridge and the Temple Mount, the Kidron cutting away to the east, the Hinnom curving round the south and west, and the shallow Tyropoeon dividing the Western Hill from the Eastern &mdash; the single fact that explains why the city sits exactly where it does. Relief applies to the two street maps; the satellite view has its own shadows.</p>
+      <h3>Phone</h3>
+      <p>Forces the stacked one-column layout at any window size: map full width, essay beneath it, timeline pinned to the bottom. Phones and small tablets get that layout automatically &mdash; this button is for checking what your group will see before you send them the link, and for using the same layout in a narrow window on a laptop. To leave it, press the same button (it reads <em>Exit phone view</em> while on) or the dark chip at the top right of the map.</p>
+      <h3>Journeys</h3>
+      <p>Five walks the Gospels describe, each drawn on the map and cut as a true elevation profile in the strip below: the ascent from Jericho, Bethany over Olivet to the Temple, the Upper Room to Gethsemane, the night of the trials, and Hezekiah&rsquo;s Tunnel. Each gives distance in kilometres, miles and stadia, with total climb and descent. This is where topography becomes teaching: Jericho lies 250 m <em>below</em> sea level and Jerusalem some 740 m above it, so &ldquo;going up to Jerusalem&rdquo; is a literal thousand-metre climb, and the tunnel &mdash; 533 m of rock cut from both ends at once &mdash; falls barely 30 cm end to end. Elevations are approximate; the profiles are teaching graphics, not survey data.</p>
+      <h3>Key</h3>
+      <p>Opens the panel at the top right of the map. It explains every line style and colour on the overlay, every symbol on the street map — gates, churches, mosques, synagogues, museums, viewpoints, restaurants, cafés, toilets, playgrounds — and the key to the cross-section. It also carries the longer history of the phase you are looking at, so you can read the period in depth without leaving the map.</p>
+      <h3>Section</h3>
+      <p>The strip beneath the map is a cut through the city, with heights drawn at &times;1.9 so the ravines read as the obstacles they were, from the Hinnom Valley on the west, across the Western Hill, down through the Tyropoeon Valley, over the Temple Mount and out to the Kidron. It redraws for every phase, so you can see the valley being filled in, the ridges built over, and the present ground surface floating above the ancient one. This is the answer to &ldquo;why do we walk down so many steps to the Western Wall?&rdquo; The <strong>Section</strong> button hides it if you want the map full height.</p>
+      <h3>The essay panel</h3>
+      <p>On the right: the period&rsquo;s title and dates, an essay written for reading aloud or reading alone, a <em>what to look for on the ground</em> list of things a visitor can actually stand next to, and — where it matters — a note on what is disputed rather than a quiet decision.</p>
+      <h3>Moving the map</h3>
+      <p>Drag to pan, scroll or pinch to zoom, and the <strong>&#8962;</strong> button returns to the framing that shows the whole Old City with the City of David ridge below it. Zoom in far enough on the satellite view and you can pick out individual doorways.</p>
+      <h3>Reading it with a group</h3>
+      <p>The sequence that works: start on <em>Today</em> so everyone recognises where they are. Step back to <em>Jesus&rsquo; time</em> and hold the blue line steady while you point out that the Temple Mount is the same platform and almost nothing else is. Then jump to <em>Canaanite</em> to show them that the original city is out of sight, downhill, outside the gate they walked in through. Then walk forward through the phases and let them watch the wall migrate north onto the line they know.</p>
+      <p class="fine">Escape closes this panel and the key. On a phone the map, section and timeline stack vertically and the essay panel sits below the map.</p>
+      </div>
+      <div class="tab">
+      <h3>About the author</h3>
+      <p class="lead">Taylor Halverson is a scholar of scripture and a teacher of learners — an entrepreneurship professor in the BYU Marriott School of Business who spends his working life helping people find and act on the best ideas and tools available to them.</p>
+      <p>He is the author and editor of more than fifty books and nearly a thousand articles and blog posts, and a builder of scripture study resources: the ScripturePlus app with Scripture Central, whose scripture YouTube channel he co-hosted to more than fifty million views, and BYU&rsquo;s Virtual Scripture Group, whose team spent more than five years reconstructing New Testament Jerusalem in three dimensions. This map belongs to that same body of work — tools made so that ordinary readers can see what specialists see.</p>
+      <p>He leads tours to Israel and the Middle East, China, India, Central America, Europe, and the national parks of the American West, where he unfolds how geology, geography, civilization, and scriptural texts created our beautiful present day.</p>
+      <h3>Academic training</h3>
+      <dl>
+        <dt>Ph.D.</dt><dd>Judaism &amp; Christianity in Antiquity — Indiana University</dd>
+        <dt>Ph.D.</dt><dd>Instructional Systems Technology — Indiana University</dd>
+        <dt>M.A.</dt><dd>Biblical Studies — Yale University</dd>
+        <dt>B.A.</dt><dd>Ancient Near Eastern Studies — Brigham Young University</dd>
+      </dl>
+      <p class="fine" style="margin-top: 12px;">Two doctorates in two separate fields — the ancient world, and the design of learning. Both of them are in this tool.</p>
+      <h3>Elsewhere</h3>
+      <ul>
+        <li><a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a></li>
+        <li><a href="https://books.taylorhalverson.com" target="_blank" rel="noopener">books.taylorhalverson.com</a></li>
+        <li><a href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com</a></li>
+      </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div id="map">
+    <div id="jbox"></div>
+    <button id="phoneexit" type="button">&times; Exit phone view</button>
+    <div id="keypanel">
+      <button id="keyclose" aria-label="close">&times;</button>
+      <h4 id="key-g1"></h4>
+      <div id="key-rows1"></div>
+      <h4 id="key-g2"></h4>
+      <div id="key-rows2"></div>
+      <div class="legend" style="margin-top: 13px;">
+        <div class="kicker" style="margin-bottom: 6px;" id="k-legend"></div>
+        <div id="legend-rows"></div>
+      </div>
+      <div style="border-top: 1px solid #c3b394; margin-top: 13px; padding-top: 4px;">
+        <p class="body" style="font-size: 13.5px; margin: 9px 0 0;" id="k-secbody"></p>
+        <div class="legend" style="border: none; padding-top: 8px;" id="seckeys"></div>
+      </div>
+      <p class="sources" id="k-sources" style="margin-top: 13px;"></p>
+    </div>
+  </div>
+  <aside id="panel">
+    <div>
+      <div class="kicker" id="e-index"></div>
+      <h2 id="e-title"></h2>
+      <div class="years" id="e-years"></div>
+    </div>
+    <div class="flag" id="e-flag" hidden></div>
+    <div id="wallbox"></div>
+    <p class="body" id="e-body"></p>
+    <div>
+      <div class="kicker sechead" id="k-look"></div>
+      <div class="look" id="e-look"></div>
+    </div>
+    <div class="disputed" id="e-disputed" hidden></div>
+    <div id="history">
+      <div class="kicker sechead" id="k-history"></div>
+      <p id="e-hnote" hidden></p>
+      <div id="e-history"></div>
+    </div>
+  </aside>
+</main>
+
+<section id="csstrip">
+  <div class="cshead">
+    <div class="kicker" id="k-seckicker"></div>
+    <h2 id="k-sectitle"></h2>
+  </div>
+  <div class="cswrap">
+    <svg class="cs" viewBox="0 0 1240 350" preserveAspectRatio="xMidYMid meet">
+      <g id="cs-body"></g>
+      <g id="cs-labels"></g>
+    </svg>
+  </div>
+</section>
+<footer>
+  <div class="frow">
+    <div class="kicker" id="k-timeline"></div>
+    <div class="kicker" id="maphint" style="color: #a89673; letter-spacing: .1em;"></div>
+    <div class="fade">
+      <span class="kicker" id="k-fade"></span>
+      <input type="range" id="fade" min="0" max="100" step="1" value="42" />
+      <span class="kicker" id="fadeval" style="width: 34px;"></span>
+    </div>
+    <div style="display: flex; gap: 5px;">
+      <button class="btn" id="phonetoggle">Phone</button>
+      <button class="btn" id="jtoggle">Journeys</button>
+      <button class="btn" id="relieftoggle">Relief</button>
+      <button class="btn" id="keytoggle"></button>
+      <span id="basepick" style="display: flex; gap: 3px; border: 1px solid #c3b394; padding: 2px;">
+        <button class="btn" id="base-sat" data-base="sat" style="border: none;">Satellite</button>
+        <button class="btn" id="base-en" data-base="en" style="border: none;">Plan</button>
+        <button class="btn" id="base-local" data-base="local" style="border: none;">Local names</button>
+      </span>
+      <button class="btn on" id="cstoggle"></button>
+      <button class="btn" id="home">&#8962;</button>
+      <button class="btn" id="prev">&larr;</button>
+      <button class="btn" id="next">&rarr;</button>
+    </div>
+  </div>
+  <div id="track">
+    <div id="rail"></div>
+    <div id="thumb"></div>
+    <div id="ticks"></div>
+  </div>
+</footer>
+
+<script src="jerusalem-data.js"></script>
+<script src="jerusalem-history.js"></script>
+<script>
+(function () {
+  var P = JD.P, T = JD.T, ERAS = JD.ERAS, LB = JD.LB, LEG = JD.LEG, SECKEYS = JD.SECKEYS, CS = JD.CS;
+  var KEYS = ERAS.map(function (e) { return e.key; });
+  var idxOf = function (k) { return KEYS.indexOf(k); };
+
+  var UI = {
+    fade: { en: "Today's city", he: "העיר של היום", ar: "مدينة اليوم", es: "Ciudad actual" },
+    cs: { en: "Cross-section", he: "חתך רוחב", ar: "مقطع عرضي", es: "Corte" },
+    baseEn: { en: "Map: plan", he: "מפה: תרשים", ar: "الخريطة: مخطط", es: "Mapa: plano" },
+    baseLoc: { en: "Map: local names", he: "מפה: שמות מקומיים", ar: "الخريطة: أسماء محلية", es: "Mapa: nombres locales" },
+    baseSat: { en: "Map: satellite", he: "מפה: לוויין", ar: "الخريطة: قمر صناعي", es: "Mapa: satélite" },
+    warn: { en: "The street basemap is not loading right now. The historical layers still work — try the other basemap, or wait a few minutes.",
+             he: "OpenStreetMap מגביל כרגע את שכבת הבסיס. השכבות ההיסטוריות עדיין פועלות — רחובות היום יחזרו בעוד דקות ספורות.",
+             ar: "يقيّد OpenStreetMap خريطة الأساس حالياً. الطبقات التاريخية لا تزال تعمل — وستعود شوارع اليوم بعد دقائق.",
+             es: "OpenStreetMap está limitando el mapa base ahora mismo. Las capas históricas siguen funcionando; las calles actuales volverán en unos minutos." },
+    hint: { en: "real streets · drag, zoom, fade today's city",
+            he: "רחובות אמיתיים · גרירה, זום, עמעום העיר של היום",
+            ar: "شوارع حقيقية · اسحب، كبّر، خفّف مدينة اليوم",
+            es: "calles reales · arrastre, zoom, atenúe la ciudad actual" }
+  };
+
+  // ---- historical layers, keyed by era ----
+  var W = "#8a6a3e", GOLD = "#b98c46", DARK = "#8a5a2b", RED = "#a8452f", WATER = "#2f6b72", BLUE = "#3d6076";
+  var SH = [
+    { p: "jebusite",       in: ["canaan", "david"],  fill: "rgba(185,140,70,.30)", stroke: W,     w: 4,   closed: true },
+    { p: "solomonic",      in: ["david", "hezekiah", "return"], fill: "rgba(185,140,70,.18)", stroke: W, w: 3, dash: "10 7", closed: true },
+    { p: "ophel",          in: ["david", "return"],  fill: "rgba(185,140,70,.20)", stroke: W,     w: 2.5, closed: true },
+    { p: "ironAgeCity",    in: ["hezekiah"],         fill: "rgba(185,140,70,.24)", stroke: W,     w: 4.5, closed: true },
+    { p: "broadWall",      in: ["hezekiah"],         stroke: DARK,  w: 9 },
+    { p: "cityOfDavid",    in: ["return"],           fill: "rgba(185,140,70,.26)", stroke: W,     w: 3.5, closed: true },
+    { p: "nehemiah",       in: ["return"],           stroke: DARK,  w: 6 },
+    { p: "westernHillIron",in: ["return"],           stroke: "#a89673", w: 2.5, dash: "3 8", closed: true },
+    { p: "secondTemple",   in: ["herod"],            fill: "rgba(185,140,70,.24)", stroke: GOLD,  w: 6,   closed: true },
+    { p: "secondWall",     in: ["herod"],            stroke: RED,   w: 5,   dash: "14 9" },
+    { p: "thirdWall",      in: ["herod"],            stroke: RED,   w: 4,   dash: "18 12", op: .85 },
+    { p: "quarry",         in: ["herod"],            fill: "rgba(168,69,47,.16)", stroke: RED,    w: 2,   dash: "6 5", closed: true },
+    { p: "temple",         in: ["herod"],            fill: "rgba(185,140,70,.55)", stroke: DARK,  w: 2.5, closed: true },
+    { p: "royalStoa",      in: ["herod"],            fill: "rgba(185,140,70,.45)", stroke: DARK,  w: 2,   closed: true },
+    { p: "antonia",        in: ["herod"],            fill: "rgba(185,140,70,.45)", stroke: DARK,  w: 2,   closed: true },
+    { p: "platform",       from: "herod",            fill: "rgba(185,140,70,.14)", stroke: GOLD,  w: 5,   closed: true },
+    { p: "ottoman",        in: ["aelia", "byz", "muslim", "crusader", "mamluk"], fill: "rgba(185,140,70,.13)", stroke: W, w: 4, dash: "11 8", closed: true },
+    { p: "cardoW",         from: "aelia",            stroke: W,     w: 11, op: .42, cap: "round" },
+    { p: "cardoWext",      in: ["byz"],              stroke: W,     w: 11, op: .42, cap: "round" },
+    { p: "cardoE",         from: "aelia",            stroke: W,     w: 10, op: .42, cap: "round" },
+    { p: "decumanus",      from: "aelia",            stroke: W,     w: 11, op: .42, cap: "round" },
+    { p: "decumanusN",     from: "aelia",            stroke: W,     w: 9, op: .42, cap: "round" },
+    { p: "constantinian",  in: ["byz"],              fill: "rgba(185,140,70,.5)", stroke: DARK,   w: 2.5, closed: true },
+    { p: "nea",            in: ["byz"],              fill: "rgba(185,140,70,.5)", stroke: DARK,   w: 2.5, closed: true },
+    { p: "umayyad",        in: ["muslim"],           fill: "rgba(185,140,70,.45)", stroke: DARK,  w: 2.5, closed: true },
+    { p: "bethesda",       in: ["herod", "byz", "crusader"], fill: "rgba(74,127,134,.45)", stroke: WATER, w: 2, closed: true },
+    { p: "sepulchre",      from: "muslim",           fill: "rgba(185,140,70,.55)", stroke: DARK,  w: 2.5, closed: true },
+    { p: "dome",           from: "muslim",           fill: "rgba(185,140,70,.5)", stroke: DARK,   w: 2.5, closed: true },
+    { p: "aqsa",           from: "muslim",           fill: "rgba(185,140,70,.5)", stroke: DARK,   w: 2.5, closed: true },
+    { p: "citadel",        from: "herod",            fill: "rgba(185,140,70,.5)", stroke: DARK,   w: 2.5, closed: true },
+    { p: "christianQ",     in: ["crusader"],         fill: "rgba(61,96,118,.10)", stroke: BLUE,   w: 2,   dash: "9 7", closed: true },
+    { p: "armenianQ",      in: ["crusader"],         fill: "rgba(61,96,118,.10)", stroke: BLUE,   w: 2,   dash: "9 7", closed: true },
+    { p: "jewishQ",        in: ["crusader", "today"],fill: "rgba(61,96,118,.10)", stroke: BLUE,   w: 2,   dash: "9 7", closed: true },
+    { p: "muslimQ",        in: ["mamluk"],           fill: "rgba(138,90,43,.16)", stroke: DARK,   w: 2,   dash: "9 7", closed: true },
+    { p: "tunnel",         in: ["hezekiah", "return", "herod", "today"], stroke: "#4a7f86", w: 5 },
+    { p: "siloam",         from: "hezekiah",         fill: "rgba(74,127,134,.5)", stroke: WATER,  w: 2.5, closed: true },
+    { p: "wwPlaza",        in: ["today"],            fill: "rgba(61,96,118,.18)", stroke: BLUE,   w: 2.5, closed: true }
+  ];
+  var VALLEYS = [["kidron", 30], ["hinnom", 26], ["tyropoeon", 22]];
+  var MARKS = [
+    { la: 31.77300, lo: 35.23600, e: "all",   c: WATER, r: 5 },
+    { la: 31.77021, lo: 35.23538, from: "hezekiah", c: WATER, r: 5 },
+    { la: 31.77839, lo: 35.22972, e: ["herod"], c: RED, r: 6 },
+    { la: 31.77606, lo: 35.23431, e: ["herod"], c: DARK, r: 4.5 },
+    { la: 31.77700, lo: 35.23445, e: ["herod"], c: DARK, r: 4.5 },
+    { la: 31.77568, lo: 35.23050, e: ["hezekiah"], c: DARK, r: 5 },
+    { la: 31.77440, lo: 35.23520, e: ["david"], c: DARK, r: 5 }
+  ];
+
+  var state = {
+    era: idxOf("herod"), lang: "en", fade: 42,
+    walls: { modern: true, secondTemple: true, secondWall: true, thirdWall: true }
+  };
+  try {
+    var saved = JSON.parse(localStorage.getItem("jq3") || "null");
+    if (saved) {
+      if (typeof saved.era === "number" && saved.era >= 0 && saved.era < ERAS.length) state.era = saved.era;
+      if (T[saved.lang]) state.lang = saved.lang;
+      if (typeof saved.fade === "number") state.fade = saved.fade;
+    }
+  } catch (e) {}
+  function save() { try { localStorage.setItem("jq3", JSON.stringify(state)); } catch (e) {} }
+
+  // phone layout is decided before the map is built: adding the class afterwards
+  // resizes the container underneath Leaflet and its first fitBounds locks in a bad zoom
+  try { if (localStorage.getItem("jq_phone") === "1") document.body.classList.add("phone"); } catch (e) {}
+
+  // ---- map ----
+  var map = L.map("map", { center: [31.7772, 35.2330], zoom: 16, minZoom: 13, maxZoom: 19, zoomControl: true, attributionControl: true, fadeAnimation: false });
+  map.createPane("reliefPane");
+  map.getPane("reliefPane").style.zIndex = 185;
+  map.getPane("reliefPane").style.pointerEvents = "none";
+  map.createPane("basePane");
+  map.getPane("basePane").style.zIndex = 190;
+  var reliefOn = localStorage.getItem("jq_relief") !== "0";
+  var reliefLayer = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}",
+    { pane: "reliefPane", maxZoom: 19, opacity: 1, attribution: "Hillshade &copy; Esri", updateWhenIdle: true, keepBuffer: 1 });
+  function applyRelief() {
+    var bp = map.getPane("basePane");
+    var usable = reliefOn && baseMode !== "sat";
+    var rb0 = document.getElementById("relieftoggle");
+    if (rb0) rb0.style.opacity = (baseMode === "sat") ? .45 : 1;
+    if (usable) {
+      if (!map.hasLayer(reliefLayer)) reliefLayer.addTo(map);
+      bp.style.mixBlendMode = "multiply";
+      map.getPane("reliefPane").style.filter = "contrast(1.55) brightness(1.02) saturate(0)";
+    } else {
+      if (map.hasLayer(reliefLayer)) map.removeLayer(reliefLayer);
+      bp.style.mixBlendMode = "normal";
+    }
+    var rb = document.getElementById("relieftoggle");
+    if (rb) rb.className = "btn" + (usable ? " on" : "");
+  }
+
+  var tileFail = 0;
+  var TILESRC = {
+    // a label-free drawn base: every name on the map is then ours, in English.
+    // Esri's Light Gray canvas is keyless and ships no text of its own.
+    en: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+          attr: '&copy; Esri, HERE, Garmin, OpenStreetMap contributors', max: 19, native: 16,
+          filter: "grayscale(1) sepia(.3) contrast(1.5) brightness(.98)" },
+    local: { url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png", attr: '&copy; OpenStreetMap contributors', max: 19,
+             filter: "grayscale(1) sepia(.34) contrast(1.32) brightness(.97)" },
+    sat: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+           attr: 'Imagery &copy; Esri, Maxar, Earthstar Geographics', max: 19,
+           filter: "saturate(.82) brightness(.92) contrast(1.05)" }
+  };
+  var BASEORDER = ["sat", "en", "local"];
+  var baseMode = localStorage.getItem("jq_base_v3") || "sat";
+  if (BASEORDER.indexOf(baseMode) < 0) baseMode = "sat";
+  function tileOpts(m) {
+    return {
+      attribution: TILESRC[m].attr, maxZoom: TILESRC[m].max, maxNativeZoom: TILESRC[m].native || TILESRC[m].max,
+      pane: "basePane", className: "jq-tile",
+      updateWhenIdle: true, updateWhenZooming: false, keepBuffer: 1,
+      subdomains: TILESRC[m].sub || "abc",
+      errorTileUrl: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+    };
+  }
+  var tiles;
+  function mountTiles(m) {
+    if (tiles) map.removeLayer(tiles);
+    tileFail = 0;
+    map.getPane("basePane").style.filter = TILESRC[m].filter;
+    tiles = L.tileLayer(TILESRC[m].url, tileOpts(m));
+    tiles.on("tileerror", function () { if (tileFail++ > 2) { basewarn.style.display = "block"; } });
+    tiles.on("tileload", function () { tileFail = 0; basewarn.style.display = "none"; });
+    tiles.addTo(map);
+  }
+  mountTiles(baseMode);
+  window.jqMap = map;
+  var HOME = [[31.7702, 35.2266], [31.7836, 35.2382]];
+  function home() {
+    map.invalidateSize({ animate: false });
+    var b = L.latLngBounds(HOME);
+    map.setView(b.getCenter(), map.getBoundsZoom(b, false, L.point(28, 28)), { animate: false });
+  }
+  function reframe() { map.invalidateSize(); home(); }
+  map.whenReady(function () { setTimeout(home, 60); setTimeout(home, 400); });
+  window.addEventListener("load", reframe);          // once layout has settled
+  setTimeout(reframe, 900);                          // and once more after fonts land
+  window.addEventListener("resize", function () { map.invalidateSize(); if (window.csAutoRef) window.csAutoRef(); });
+
+  var GLYPH = [
+    '<svg width="18" height="18"><rect x="3.5" y="3.5" width="11" height="11" fill="rgba(185,140,70,.35)" stroke="#8a5a2b" stroke-width="2"/></svg>',
+    '<svg width="18" height="18"><rect x="3.5" y="3.5" width="11" height="11" fill="none" stroke="#2f6b72" stroke-width="2.5"/></svg>',
+    '<svg width="18" height="18"><circle cx="9" cy="9" r="4.5" fill="#2f6b72"/></svg>',
+    '<svg width="18" height="18"><circle cx="9" cy="9" r="5" fill="#a8452f"/></svg>',
+    '<svg width="18" height="18"><circle cx="9" cy="9" r="4" fill="#8a5a2b"/></svg>',
+    '<svg width="18" height="18"><path d="M9 2v14M4 6.5h10" stroke="#6f5c38" stroke-width="2" fill="none"/></svg>',
+    '<svg width="18" height="18"><path d="M12.6 3.4a6 6 0 1 0 0 11.2 7 7 0 1 1 0-11.2z" fill="#6f5c38"/><path d="M14.4 6.2l.6 1.7 1.7.1-1.35 1.1.5 1.7-1.45-1-1.45 1 .5-1.7-1.35-1.1 1.7-.1z" fill="#6f5c38"/></svg>',
+    '<svg width="18" height="18"><path d="M9 2.5l5.6 9.7H3.4z" fill="none" stroke="#6f5c38" stroke-width="1.6"/><path d="M9 15.5L3.4 5.8h11.2z" fill="none" stroke="#6f5c38" stroke-width="1.6"/></svg>',
+    '<svg width="18" height="18"><path d="M7 3h4v2.2c0 .9 1.6 1.6 1.6 3.4S11 12 11 13.4V15H7v-1.6C7 12 5.4 10.6 5.4 8.6S7 6.1 7 5.2z" fill="none" stroke="#6f5c38" stroke-width="1.5"/></svg>',
+    '<svg width="18" height="18"><path d="M2.5 15h13M4 15V8m3 7V8m4 7V8m3 7V8M2 8l7-4.5L16 8z" stroke="#6f5c38" stroke-width="1.4" fill="none"/></svg>',
+    '<svg width="18" height="18"><path d="M1.5 9S4.5 4.5 9 4.5 16.5 9 16.5 9 13.5 13.5 9 13.5 1.5 9 1.5 9z" fill="none" stroke="#6f5c38" stroke-width="1.4"/><circle cx="9" cy="9" r="2.2" fill="#6f5c38"/></svg>',
+    '<svg width="18" height="18" fill="none" stroke="#6f5c38" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.2 3v3.4M7 3v3.4M8.8 3v3.4M5.2 6.4h3.6M7 6.4V15"/><path d="M12.6 3c1.3 1.1 1.3 4.6 0 5.5V15"/></svg>',
+    '<svg width="18" height="18" fill="none" stroke="#6f5c38" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.3 6.2h7.4v3.6a3.7 3.7 0 0 1-7.4 0z"/><path d="M11.7 7h1.3a1.5 1.5 0 0 1 0 3h-1.3"/><path d="M3.2 14.1h9.6"/></svg>',
+    '<svg width="18" height="18" fill="none" stroke="#6f5c38" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 7.8a5.6 4.3 0 0 1 11.2 0"/><path d="M3.6 10.1h10.8"/><path d="M4 12.2h10c0 1.3-.9 2-2 2H6c-1.1 0-2-.7-2-2z"/></svg>',
+    '<svg width="18" height="18" fill="none" stroke="#6f5c38" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.7 8.6a4.3 3.3 0 0 1 8.6 0"/><path d="M4.9 8.6h8.2l-1 5.6H5.9z"/><path d="M7.4 8.6v5.6M10.6 8.6v5.6"/></svg>',
+    '<svg width="18" height="18" fill="none" stroke="#6f5c38" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 7.7h10.8v6.8H3.6z"/><path d="M3.6 10.1h10.8M9 7.7v6.8"/><path d="M9 7.7C7.7 5.4 5.2 5.5 5.5 6.9c.2 1 2.2.9 3.5.8zM9 7.7c1.3-2.3 3.8-2.2 3.5-.8-.2 1-2.2.9-3.5.8z"/></svg>',
+    '<svg width="18" height="18"><text x="9" y="14" text-anchor="middle" font-family="Archivo Narrow, sans-serif" font-size="15" font-weight="700" fill="#6f5c38">P</text></svg>',
+    '<svg width="18" height="18"><path d="M9 2.5c3 4 4.8 6.2 4.8 8.3A4.8 4.8 0 0 1 9 15.6a4.8 4.8 0 0 1-4.8-4.8C4.2 8.7 6 6.5 9 2.5z" fill="none" stroke="#2f6b72" stroke-width="1.5"/></svg>',
+    '<svg width="18" height="18" fill="#6f5c38"><circle cx="5.4" cy="3.9" r="1.5"/><path d="M5.4 6.1c-1.2 0-1.9.7-1.9 1.9v3h1V15h1.8v-4h1v-3c0-1.2-.7-1.9-1.9-1.9z"/><circle cx="12.6" cy="3.9" r="1.5"/><path d="M12.6 6.1c-1.3 0-2.1.9-2.3 2.2l-.5 3h1.3V15h3v-3.7h1.3l-.5-3c-.2-1.3-1-2.2-2.3-2.2z"/><rect x="8.7" y="2.6" width=".9" height="12.8" opacity=".45"/></svg>',
+    '<svg width="18" height="18" fill="none" stroke="#6f5c38" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 14.2h12.4"/><path d="M3.8 11.6l10.4-3.4"/><path d="M9 9.9L7.5 14.2h3z"/><circle cx="3.9" cy="10.4" r="1.3" fill="#6f5c38"/><circle cx="14.1" cy="7.1" r="1.3" fill="#6f5c38"/></svg>'
+  ];
+  var keyPanel = document.getElementById("keypanel");
+  function renderKey(lang) {
+    var K = ICONKEY[lang] || ICONKEY.en;
+    document.getElementById("key-g1").textContent = K.g1;
+    document.getElementById("key-g2").textContent = K.g2;
+    function fill(id, from, to) {
+      var host = document.getElementById(id); host.innerHTML = "";
+      for (var i = from; i < to; i++) {
+        var r = document.createElement("div"); r.className = "krow";
+        r.innerHTML = '<span class="gl">' + GLYPH[i] + "</span><span>" + K.rows[i] + "</span>";
+        host.appendChild(r);
+      }
+    }
+    fill("key-rows1", 0, 5); fill("key-rows2", 5, 20);
+    var b = document.getElementById("keytoggle");
+    b.textContent = K.btn;
+    b.className = "btn" + (keyPanel.classList.contains("open") ? " on" : "");
+  }
+  document.getElementById("keytoggle").onclick = function () {
+    keyPanel.classList.toggle("open"); renderKey(state.lang);
+  };
+  document.getElementById("keyclose").onclick = function () {
+    keyPanel.classList.remove("open"); renderKey(state.lang);
+  };
+  L.DomEvent.disableClickPropagation(keyPanel);
+  L.DomEvent.disableScrollPropagation(keyPanel);
+
+  var hint = document.getElementById("maphint");
+  var basewarn = L.DomUtil.create("div", "basewarn", map.getContainer());
+  basewarn.style.display = "none";
+  var overlay = L.layerGroup().addTo(map);
+  var labelGroup = L.layerGroup().addTo(map);
+
+  function ll(pts) { return pts.map(function (p) { return [p[0], p[1]]; }); }
+  function visible(o, key, i) {
+    if (o.e === "all") return true;
+    if (o.from) return i >= idxOf(o.from);
+    return (o.e || o.in || []).indexOf(key) >= 0;
+  }
+
+  function drawShapes() {
+    overlay.clearLayers();
+    var key = KEYS[state.era], i = state.era;
+    VALLEYS.forEach(function (v) {
+      L.polyline(ll(P.valleys[v[0]]), { color: "#b09872", weight: v[1], opacity: .3, lineCap: "round", interactive: false }).addTo(overlay);
+      L.polyline(ll(P.valleys[v[0]]), { color: "#8a7550", weight: 2, opacity: .55, dashArray: "9 7", interactive: false }).addTo(overlay);
+    });
+    SH.forEach(function (s) {
+      if (!visible(s, key, i)) return;
+      if (state.walls[s.p] === false) return;
+      var pts = ll(P[s.p]);
+      var opts = {
+        color: s.stroke, weight: s.w, opacity: s.op || 1, fill: !!s.fill, fillColor: s.fill,
+        fillOpacity: 1, dashArray: s.dash || null, lineJoin: "round", lineCap: "round", interactive: false
+      };
+      if (s.fill) { opts.fillColor = s.fill; opts.fillOpacity = 1; }
+      (s.closed ? L.polygon(pts, opts) : L.polyline(pts, opts)).addTo(overlay);
+    });
+    if (state.walls.modern !== false) {
+      L.polygon(ll(P.ottoman), { color: "#2f4f66", weight: 4, fill: false, opacity: .95, lineJoin: "round", interactive: false }).addTo(overlay);
+    }
+    MARKS.forEach(function (m) {
+      if (!visible(m, key, i)) return;
+      L.circleMarker([m.la, m.lo], { radius: m.r, color: "#f4ecd9", weight: 2, fillColor: m.c, fillOpacity: 1, interactive: false }).addTo(overlay);
+    });
+    // water benchmarks: the four fixed spatial anchors, pinned in every era.
+    // Filled = in use in this period. Hollow ring = the place, not yet (or no longer) in use.
+    WATERREF.forEach(function (w) {
+      var live = i >= idxOf(w.from) && (!w.to || i <= idxOf(w.to));
+      if (live) return; // MARKS/SH already draw the live ones
+      L.circleMarker([w.la, w.lo], { radius: 5.5, color: WATER, weight: 1.6, opacity: .8,
+        dashArray: "3 3", fillColor: "#f4ecd9", fillOpacity: .55, interactive: false }).addTo(overlay);
+    });
+  }
+  var WATERREF = [
+    { k: "gihon",  la: 31.77300, lo: 35.23600, from: "canaan" },
+    { k: "siloam", la: 31.77021, lo: 35.23538, from: "hezekiah" },
+    { k: "tunnel", la: 31.77170, lo: 35.23548, from: "hezekiah" },
+    { k: "beth",   la: 31.78140, lo: 35.23660, from: "herod" }
+  ];
+
+  var DIR = { start: "right", end: "left", middle: "top" };
+  // label decluttering: the anchors you orient by are always on; detail arrives with zoom
+  var P1 = ["modwall","tm","ww","hs","gihon","siloam","kidron","hinnom","tyro","dome","zion"];
+  var P3 = ["stChristian","stFrancis","stArm","stJewish","stSouq","gNew","gHerod","gZion","stoa","antonia","rob","wil","beth","umay","nea","millo","threshing"];
+  function minZoomFor(k) { return P1.indexOf(k) >= 0 ? 0 : (P3.indexOf(k) >= 0 ? 17 : 16); }
+  function drawLabels() {
+    labelGroup.clearLayers();
+    var key = KEYS[state.era], i = state.era, lang = state.lang, z = map.getZoom();
+    LB.forEach(function (l) {
+      var on = l.mod ? true : visible({ e: l.e }, key, i);
+      if (!on) return;
+      if (z < minZoomFor(l.k)) return;
+      var name = l.n[lang] || l.n.en;
+      var sub = (l.s && z >= 16) ? (l.s[lang] || l.s.en) : "";
+      var html = '<span class="t" style="color:' + l.c + ';font-weight:' + (l.w || 600) + '">' + name + "</span>" +
+                 (sub ? '<span class="s" style="color:' + (l.c === RED ? RED : "#6f6350") + '">' + sub + "</span>" : "");
+      L.tooltip({
+        permanent: true, direction: DIR[l.a] || "top", className: "jq-label",
+        offset: [l.dx || 0, l.dy || 0], interactive: false, opacity: 1
+      }).setLatLng([l.la, l.lo]).setContent(html).addTo(labelGroup);
+    });
+  }
+
+  // ---- panel + chrome ----
+  function txt(id, s) { document.getElementById(id).textContent = s; }
+  function render() {
+    state.lang = "en";
+    var lang = "en", t = T.en, E = ERAS[state.era];
+    document.documentElement.lang = lang;
+    var rtl = (lang === "he" || lang === "ar");
+    document.getElementById("panel").setAttribute("dir", rtl ? "rtl" : "ltr");
+    document.getElementById("keypanel").setAttribute("dir", rtl ? "rtl" : "ltr");
+
+    txt("k-kicker", t.kicker); txt("k-title", t.title); txt("k-sub", t.sub);
+    txt("k-look", t.look); txt("k-legend", t.legend); txt("k-timeline", t.timeline);
+    txt("k-seckicker", t.sectionKicker); txt("k-sectitle", t.sectionTitle);
+    txt("k-secbody", t.sectionBody); txt("k-sources", t.sources);
+    txt("k-fade", UI.fade[lang] || UI.fade.en);
+    txt("fadeval", state.fade + "%");
+    hint.textContent = UI.hint[lang] || UI.hint.en;
+    document.getElementById("cstoggle").textContent = UI.cs[lang] || UI.cs.en;
+    ["sat", "en", "local"].forEach(function (m) {
+      var b = document.getElementById("base-" + m);
+      if (b) b.className = "btn" + (baseMode === m ? " on" : "");
+    });
+    basewarn.textContent = UI.warn[lang] || UI.warn.en;
+    renderKey(lang);
+
+    txt("e-index", t.eraOf + " " + (state.era + 1) + " " + t.of + " " + ERAS.length);
+    txt("e-title", E.title[lang] || E.title.en);
+    txt("e-years", E.years[lang] || E.years.en);
+    txt("e-body", E.body[lang] || E.body.en);
+    var fl = document.getElementById("e-flag");
+    if (E.flag) { fl.hidden = false; fl.textContent = E.flag[lang] || E.flag.en; } else { fl.hidden = true; }
+    var dp = document.getElementById("e-disputed");
+    if (E.disputed) { dp.hidden = false; dp.textContent = E.disputed[lang] || E.disputed.en; } else { dp.hidden = true; }
+
+    var look = document.getElementById("e-look");
+    look.innerHTML = "";
+    (E.look[lang] || E.look.en).forEach(function (s, n) {
+      var d = document.createElement("div");
+      d.innerHTML = '<span class="n">' + ("0" + (n + 1)).slice(-2) + "</span><span>" + s + "</span>";
+      look.appendChild(d);
+    });
+
+    function rules(target, arr) {
+      var host = document.getElementById(target); host.innerHTML = "";
+      arr.forEach(function (r) {
+        var d = document.createElement("div"); d.className = "row";
+        d.innerHTML = '<span class="rule" style="border-top:' + r[0] + '"></span><span>' + r[1] + "</span>";
+        host.appendChild(d);
+      });
+    }
+    var HL = (typeof HISTORY !== "undefined") ? (HISTORY[lang] || HISTORY.en) : null;
+    var hw = document.getElementById("history"), hb = document.getElementById("e-history");
+    var art = HL && HL.eras && HL.eras[state.era];
+    if (art) {
+      hw.hidden = false;
+      txt("k-history", HL.head);
+      var nb = document.getElementById("e-hnote");
+      if (HL.note) { nb.hidden = false; nb.textContent = HL.note; nb.setAttribute("dir", rtl ? "rtl" : "ltr"); }
+      else { nb.hidden = true; }
+      hb.innerHTML = art.map(function (s) {
+        return s.charAt(0) === "#" ? "<h5>" + s.slice(1).trim() + "</h5>" : "<p>" + s + "</p>";
+      }).join("");
+      hb.setAttribute("dir", HL.note ? "ltr" : (rtl ? "rtl" : "ltr"));
+    } else { hw.hidden = true; }
+    rules("legend-rows", LEG[lang] || LEG.en);
+    rules("seckeys", SECKEYS[lang] || SECKEYS.en);
+
+    refreshSection();
+
+    var tk = document.getElementById("ticks"); tk.innerHTML = "";
+    ERAS.forEach(function (E2, n) {
+      var d = document.createElement("div");
+      if (n === state.era) d.className = "sel";
+      d.innerHTML = '<span class="bar"></span><span class="lb">' + (E2.tick[lang] || E2.tick.en) +
+        '</span><span class="dt">' + (E2.date[lang] || E2.date.en) + "</span>";
+      d.onclick = function () { setEra(n); };
+      tk.appendChild(d);
+    });
+    var step = 100 / ERAS.length;
+    document.getElementById("thumb").style.left = (step * state.era + step / 2) + "%";
+
+    document.getElementById("panel").scrollTop = 0;
+    if (window.__renderWalls) window.__renderWalls();
+  }
+
+
+  // ---- cross-section, per era ----
+  // Shared x stations, in metres above sea level. BED = bedrock / earliest surface,
+  // MOD = today's surface. Each era sits at a fraction f of the way between them.
+  var SX  = [0, 60, 120, 200, 280, 340, 400, 450, 500, 520, 600, 680, 740, 800, 860, 880, 940, 1000, 1060, 1140, 1240];
+  var BED = [745, 762, 772, 776, 772, 757, 734, 712, 702, 701, 720, 737, 741, 729, 700, 670, 638, 621, 639, 700, 760];
+  var MOD = [748, 765, 774, 777, 774, 761, 741, 727, 725, 724, 738, 742, 744, 736, 712, 690, 650, 632, 650, 706, 764];
+  var FILLF = { canaan: .02, david: .05, hezekiah: .10, return: .13, herod: .42, aelia: .55, byz: .62, muslim: .70, crusader: .76, mamluk: .84, ottoman: .92, today: 1 };
+  var EX = {
+    emptyHill: { en: "Western Hill — empty", he: "הגבעה המערבית — ריקה", ar: "التلة الغربية — خالية", es: "Colina Occidental — vacía" },
+    ruinHill:  { en: "Western Hill — in ruins", he: "הגבעה המערבית — בחורבנה", ar: "التلة الغربية — خراب", es: "Colina Occidental — en ruinas" },
+    presumed:  { en: "Temple platform (presumed)", he: "רחבת המקדש (משוערת)", ar: "ساحة الهيكل (مفترضة)", es: "Explanada del Templo (presunta)" },
+    bareRock:  { en: "Mount Moriah — bare rock", he: "הר המוריה — סלע חשוף", ar: "جبل المروة — صخر مكشوف", es: "Monte Moria — roca desnuda" },
+    fill:      { en: "≈ {n} m of later fill above this surface", he: "כ־{n} מ' של מילוי מאוחר מעל פני השטח האלה", ar: "نحو {n} م من الردم اللاحق فوق هذا السطح", es: "≈ {n} m de relleno posterior sobre esta superficie" },
+    nowLevel:  { en: "you walk here today", he: "כאן אתם הולכים היום", ar: "هنا تسير اليوم", es: "aquí camina usted hoy" }
+  };
+  // vertical exaggeration: the transect is ~1240 m wide and only ~156 m of relief,
+  // so at true scale the ravines that made the city defensible read as gentle swells.
+  // 1.55x: enough to make the ravines read as obstacles, while leaving parchment
+  // above the Upper City ridge and below the Kidron floor for the labels
+  var VE = 1.55, VPIV = 621, VBASE = 330;
+  function csy(e) { return VBASE - (e - VPIV) * VE; }
+  // label y values were authored against the old 1.1x scale; remap them through the
+  // same elevations so every label stays pinned to the feature it names
+  function remapY(y) {
+    var v = csy(600 + (320 - y) / 1.1);
+    // clamp the BASELINE allowing for cap height (~40) and descender (~10) at fs 37.4,
+    // so no glyph crosses the edge of the 350-unit frame
+    return Math.max(44, Math.min(336, v));
+  }
+
+  function prof(f) { return SX.map(function (x, i) { return [x, BED[i] + (MOD[i] - BED[i]) * f]; }); }
+  function csPath(pts) { return pts.map(function (p, i) { return (i ? "L " : "M ") + p[0] + " " + csy(p[1]).toFixed(1); }).join(" "); }
+  function segAt(pts, x0, x1) { return pts.filter(function (p) { return p[0] >= x0 && p[0] <= x1; }); }
+
+  function drawSection() {
+    var key = KEYS[state.era], i = state.era, lang = state.lang;
+    var f = FILLF[key], per = prof(f), mod = prof(1);
+    var hasPlat = i >= idxOf("herod");
+    var hasDome = i >= idxOf("muslim");
+    var presumed = ["david", "hezekiah", "return"].indexOf(key) >= 0;
+    var o = [];
+
+    // rock body up to this era's surface
+    o.push('<path d="' + csPath(per) + " L 1240 350 L 0 350 Z" + '" fill="#d6c49e"></path>');
+    // everything dumped on top of it since
+    if (f < 1) {
+      var band = csPath(per) + " " + mod.slice().reverse().map(function (p, n) { return "L " + p[0] + " " + csy(p[1]).toFixed(1); }).join(" ") + " Z";
+      o.push('<path d="' + band + '" fill="#3d6076" opacity=".26"></path>');
+      o.push('<path d="' + csPath(mod) + '" fill="none" stroke="#3d6076" stroke-width="2" opacity=".55" stroke-dasharray="6 5"></path>');
+    } else {
+      o.push('<path d="' + csPath(mod) + '" fill="none" stroke="#3d6076" stroke-width="3"></path>');
+    }
+    // this era's surface
+    o.push('<path d="' + csPath(per) + '" fill="none" stroke="#8a5a2b" stroke-width="3"></path>');
+
+    if (hasPlat) {
+      o.push('<path d="M 520 ' + csy(740).toFixed(1) + " L 880 " + csy(740).toFixed(1) + " L 880 " + csy(670).toFixed(1) + '" fill="none" stroke="#b98c46" stroke-width="5"></path>');
+      o.push('<path d="M 520 ' + csy(740).toFixed(1) + " L 520 " + csy(701).toFixed(1) + '" fill="none" stroke="#b98c46" stroke-width="5"></path>');
+      o.push('<path d="M 520 ' + csy(731).toFixed(1) + " L 880 " + csy(731).toFixed(1) + '" fill="none" stroke="#b98c46" stroke-width="1.4" opacity=".5"></path>');
+    } else if (presumed) {
+      o.push('<path d="M 620 ' + csy(747).toFixed(1) + " L 800 " + csy(747).toFixed(1) + '" fill="none" stroke="#8a6a3e" stroke-width="3" stroke-dasharray="9 7"></path>');
+    }
+    if (hasDome) o.push('<circle cx="700" cy="' + csy(748).toFixed(1) + '" r="9" fill="none" stroke="#4a4132" stroke-width="2"></circle>');
+
+    // how much has piled up over this era's street, measured in the valley
+    var dm = Math.round(MOD[9] - (BED[9] + (MOD[9] - BED[9]) * f));
+    if (dm >= 2) {
+      var y1 = csy(BED[9] + (MOD[9] - BED[9]) * f), y0 = csy(MOD[9]);
+      o.push('<path d="M 505 ' + y0.toFixed(1) + " L 505 " + y1.toFixed(1) +
+        " M 500 " + (y0 + 5).toFixed(1) + " L 505 " + y0.toFixed(1) + " L 510 " + (y0 + 5).toFixed(1) +
+        " M 500 " + (y1 - 5).toFixed(1) + " L 505 " + y1.toFixed(1) + " L 510 " + (y1 - 5).toFixed(1) +
+        '" fill="none" stroke="#a8452f" stroke-width="2"></path>');
+    }
+    o.push('<path d="M 30 ' + csy(620).toFixed(1) + ' L 1210 ' + csy(620).toFixed(1) + '" stroke="#a8906a" stroke-width="1" stroke-dasharray="4 5"></path>');
+    document.getElementById("cs-body").innerHTML = o.join("");
+
+    // labels: same anchors, era-appropriate text
+    function pick(o2) { return o2[lang] || o2.en; }
+    var base = CS.map(function (c) { return { x: c.x, y: c.y, a: c.a, fs: c.fs, w: c.w, c: c.c, s: pick(c.t) }; });
+    var out = [];
+    if (key === "ottoman" || key === "today") out.push({ x: 92, y: base[0].y, a: "middle", fs: base[0].fs, w: base[0].w, c: base[0].c, s: base[0].s });
+    if (i >= idxOf("hezekiah") && key !== "return") out.push(base[1]);
+    else out.push({ x: 215, y: 99, a: "middle", fs: 17, w: 600, c: "#8a7550", s: pick(key === "return" ? EX.ruinHill : EX.emptyHill) });
+    out.push(base[2]);
+    if (dm >= 2) out.push({ x: 500, y: 283, a: "middle", fs: 14, w: 500, c: "#6d3a2c", s: pick(EX.fill).replace("{n}", dm) });
+    else out.push({ x: 500, y: 283, a: "middle", fs: 14, w: 500, c: "#6d3a2c", s: pick(EX.nowLevel) });
+    if (hasPlat) { out.push(base[4]); out.push(base[5]); }
+    else if (presumed) out.push({ x: 700, y: 132, a: "middle", fs: 17, w: 600, c: "#8a6a3e", s: pick(EX.presumed) });
+    else out.push({ x: 700, y: 132, a: "middle", fs: 17, w: 600, c: "#8a7550", s: pick(EX.bareRock) });
+    out.push(base[6]); out.push(base[7]); out.push(base[8]);
+
+    document.getElementById("cs-labels").innerHTML = out.map(function (c) {
+      var fs = c.fs * 2.2;
+      return '<text x="' + c.x + '" y="' + remapY(c.y).toFixed(1) + '" text-anchor="' + c.a + '" font-size="' + fs +
+        '" fill="#e7dcc4" stroke="#e7dcc4" stroke-width="9" stroke-linejoin="round" style="paint-order:stroke">' + c.s + "</text>" +
+        '<text x="' + c.x + '" y="' + remapY(c.y).toFixed(1) + '" text-anchor="' + c.a + '" font-size="' + fs +
+        '" fill="' + c.c + '" font-weight="' + c.w + '">' + c.s + "</text>";
+    }).join("");
+  }
+
+  function setEra(n) {
+    n = Math.max(0, Math.min(ERAS.length - 1, n));
+    if (n === state.era) return;
+    state.era = n; save(); render(); drawShapes(); drawLabels();
+  }
+
+  document.getElementById("basepick").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-base]");
+    if (!b) return;
+    baseMode = b.getAttribute("data-base");
+    localStorage.setItem("jq_base_v3", baseMode);
+    // a heavily faded base hides the map you just asked for
+    if (state.fade < 45) { state.fade = 70; document.getElementById("fade").value = 70; save(); applyFade(); }
+    mountTiles(baseMode); applyRelief(); render();
+  });
+  var csEl = document.getElementById("csstrip"), csBtn = document.getElementById("cstoggle"), csUser = false;
+  function csAuto() {
+    if (csUser) return;
+    var off = window.innerHeight < 620 && window.innerWidth > 900;
+    csEl.classList.toggle("off", off);
+    csBtn.classList.toggle("on", !off);
+    map.invalidateSize();
+  }
+  csBtn.onclick = function () {
+    csUser = true;
+    var off = csEl.classList.toggle("off");
+    csBtn.classList.toggle("on", !off);
+    map.invalidateSize();
+  };
+  window.csAutoRef = csAuto;
+  csAuto();
+  document.getElementById("home").onclick = function () { home(); };
+  document.getElementById("prev").onclick = function () { setEra(state.era - 1); };
+  document.getElementById("next").onclick = function () { setEra(state.era + 1); };
+  // ---- wall toggles ----
+  function swatch(c, w, d, op) {
+    return '<svg width="22" height="10"><path d="M1 5h20" stroke="' + c + '" stroke-width="' + w +
+           '"' + (d ? ' stroke-dasharray="' + d + '"' : "") + (op ? ' opacity="' + op + '"' : "") + "/></svg>";
+  }
+  // one row per circuit actually drawn in this era; p matches the SH entry it controls
+  var WALLROWS = [
+    { p: "modern", sw: swatch("#2f4f66", 3.5), n: "Today&rsquo;s wall &middot; 1538", all: true },
+    { p: "jebusite", e: ["canaan", "david"], sw: swatch(W, 4),
+      n: "City of David &middot; Jebusite circuit" },
+    { p: "cityOfDavid", e: ["return"], sw: swatch(W, 3.5), n: "City of David circuit" },
+    { p: "ophel", e: ["david", "return"], sw: swatch(W, 2.5), n: "Ophel fortification" },
+    { p: "solomonic", e: ["david", "hezekiah", "return"], sw: swatch(W, 3, "10 7"),
+      n: "Solomon&rsquo;s Temple enclosure" },
+    { p: "ironAgeCity", e: ["hezekiah"], sw: swatch(W, 4.5),
+      n: "Hezekiah&rsquo;s wall &middot; the doubled city" },
+    { p: "broadWall", e: ["hezekiah"], sw: swatch(DARK, 8),
+      n: "Broad Wall &middot; excavated segment" },
+    { p: "westernHillIron", e: ["return"], sw: swatch("#a89673", 2.5, "3 6"),
+      n: "Western Hill &middot; abandoned, in ruins" },
+    { p: "nehemiah", e: ["return"], sw: swatch(DARK, 6),
+      n: "Nehemiah&rsquo;s wall &middot; excavated segment" },
+    { p: "secondTemple", e: ["herod"], sw: swatch(GOLD, 4),
+      n: "First Wall &middot; Hasmonean, kept by Herod" },
+    { p: "secondWall", e: ["herod"], sw: swatch(RED, 3.5, "7 4"),
+      n: "Second Wall &middot; standing by AD 33" },
+    { p: "thirdWall", e: ["herod"], sw: swatch(RED, 3, "10 6", .85),
+      n: "Third Wall &middot; Agrippa, AD 41&ndash;44" },
+    { p: "ottoman", e: ["aelia", "byz", "muslim", "crusader", "mamluk"], sw: swatch(W, 4, "11 8"),
+      n: "Roman&ndash;Byzantine circuit" }
+  ];
+  var wallBox = document.getElementById("wallbox");
+  wallBox.classList.add("shut");
+  var wallTouched = false;
+  function renderWalls() {
+    var k = KEYS[state.era];
+    var rows = WALLROWS.filter(function (r) { return r.all || (r.e || []).indexOf(k) >= 0; });
+    var shut = wallBox.classList.contains("shut");
+    var o = ['<div class="wbh" id="wbh">Wall circuits &middot; ' + rows.length +
+             "<span>" + (shut ? "+" : "&minus;") + "</span></div>"];
+    rows.forEach(function (r) {
+      o.push('<button data-w="' + r.p + '" class="' + (state.walls[r.p] === false ? "off" : "") + '">' +
+             r.sw + "<span>" + r.n + "</span></button>");
+    });
+    wallBox.innerHTML = o.join("");
+    document.getElementById("wbh").onclick = function () { wallTouched = true; wallBox.classList.toggle("shut"); renderWalls(); };
+    [].slice.call(wallBox.querySelectorAll("button")).forEach(function (b) {
+      b.onclick = function () {
+        var k = b.getAttribute("data-w");
+        state.walls[k] = state.walls[k] === false;
+        renderWalls(); drawShapes();
+      };
+    });
+  }
+  window.__renderWalls = renderWalls;
+  L.DomEvent.disableClickPropagation(wallBox);
+
+  var phoneBtn = document.getElementById("phonetoggle");
+  var phoneOn = localStorage.getItem("jq_phone") === "1";
+  function applyPhone() {
+    document.body.classList.toggle("phone", phoneOn);
+    phoneBtn.className = "btn" + (phoneOn ? " on" : "");
+    phoneBtn.textContent = phoneOn ? "Exit phone view" : "Phone";
+    document.getElementById("phoneexit").style.display = phoneOn ? "block" : "none";
+    setTimeout(reframe, 60);
+  }
+  document.getElementById("phoneexit").onclick = function () {
+    phoneOn = false; localStorage.setItem("jq_phone", "0"); applyPhone();
+    window.scrollTo(0, 0);
+  };
+  phoneBtn.onclick = function () {
+    phoneOn = !phoneOn;
+    try { localStorage.setItem("jq_phone", phoneOn ? "1" : "0"); } catch (e) {}
+    applyPhone();
+  };
+  phoneBtn.className = "btn" + (phoneOn ? " on" : "");
+  phoneBtn.textContent = phoneOn ? "Exit phone view" : "Phone";
+  document.getElementById("phoneexit").style.display = phoneOn ? "block" : "none";
+  document.getElementById("relieftoggle").onclick = function () {
+    reliefOn = !reliefOn; localStorage.setItem("jq_relief", reliefOn ? "1" : "0"); applyRelief();
+  };
+
+  // ---- journeys: elevation profiles of the walks the Gospels describe ----
+  // pts: [lat, lon, metres above sea level, label]
+  var ROUTES = [
+    { id: "jericho", n: "The ascent from Jericho", ref: "Luke 10:30; 19:28",
+      note: "Every pilgrim from Galilee and Perea came this way. The road climbs about a thousand metres in a single day&rsquo;s walk &mdash; which is why scripture never speaks of going <em>across</em> to Jerusalem, only up.",
+      pts: [[31.8700,35.4444,-250,"Jericho"],[31.8520,35.4180,-120,""],[31.8330,35.3800,120,""],
+            [31.8180,35.3170,250,"Inn of the Good Samaritan"],[31.7950,35.3000,400,"Ma&rsquo;ale Adummim ridge"],
+            [31.7710,35.2650,690,"Bethany"],[31.7780,35.2470,826,"Mount of Olives"],
+            [31.7795,35.2395,660,"Kidron"],[31.7780,35.2354,743,"Temple Mount"]] },
+    { id: "palm", n: "Bethany over Olivet to the Temple", ref: "Matthew 21:1&ndash;12",
+      note: "The city is invisible from Bethany and appears all at once at the crest of Olivet, directly across from the Temple. The descent to the Kidron and the climb back up is 200 m in under a kilometre.",
+      pts: [[31.7710,35.2650,690,"Bethany"],[31.7745,35.2540,780,"Bethphage"],[31.7780,35.2470,826,"Olivet summit"],
+            [31.7795,35.2395,660,"Gethsemane"],[31.7787,35.2374,628,"Kidron floor"],[31.7780,35.2354,743,"Temple platform"]] },
+    { id: "upper", n: "Upper Room to Gethsemane", ref: "Mark 14:26&ndash;32",
+      note: "A short walk with a hard descent: out of the Upper City, down through the Tyropoeon and the lower city, across the Kidron, and up the far bank.",
+      pts: [[31.7715,35.2295,765,"Upper Room, Mount Zion"],[31.7745,35.2345,700,"Tyropoeon Valley"],
+            [31.7770,35.2385,630,"Kidron floor"],[31.7795,35.2395,660,"Gethsemane"]] },
+    { id: "trials", n: "The night of the trials", ref: "Mark 14:53 &ndash; 15:22",
+      note: "Arrest in the valley, uphill to the high priest&rsquo;s house on Mount Zion, back down and north to the praetorium, then out to Golgotha &mdash; roughly 2.5 km of climbing and descending, in the dark.",
+      pts: [[31.7795,35.2395,660,"Gethsemane"],[31.7770,35.2385,630,"Kidron"],[31.7715,35.2295,765,"House of Caiaphas"],
+            [31.7805,35.2354,740,"Antonia / praetorium"],[31.7784,35.2298,757,"Golgotha"]] },
+    { id: "tunnel", n: "Hezekiah&rsquo;s Tunnel", ref: "2 Kings 20:20",
+      note: "533 m of rock cut from both ends at once, falling barely 30 cm end to end &mdash; a gradient of about 0.06%. The profile is drawn to the same vertical scale as the others, which is the point: it is effectively level.",
+      pts: [[31.7730,35.2360,636.0,"Gihon Spring"],[31.7722,35.2357,635.9,""],[31.7712,35.2355,635.8,""],
+            [31.7702,35.2354,635.7,"Pool of Siloam"]] }
+  ];
+  var routeLayer = L.layerGroup().addTo(map);
+  var activeRoute = null;
+  function rdist(a, b) {
+    var dy = (b[0] - a[0]) * 110900, dx = (b[1] - a[1]) * 94650;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  function routeStats(r) {
+    var d = 0, up = 0, dn = 0;
+    for (var i = 1; i < r.pts.length; i++) {
+      d += rdist(r.pts[i - 1], r.pts[i]);
+      var de = r.pts[i][2] - r.pts[i - 1][2];
+      if (de > 0) up += de; else dn -= de;
+    }
+    return { d: d, up: up, dn: dn };
+  }
+  function fmtDist(m) {
+    var km = m / 1000;
+    return km.toFixed(km < 2 ? 2 : 1) + " km &middot; " + (m / 1609.34).toFixed(km < 2 ? 2 : 1) +
+           " mi &middot; " + Math.round(m / 185) + " stadia";
+  }
+  function fmtRise(v) { return v < 2 ? (Math.round(v * 100) + " cm") : (Math.round(v) + " m"); }
+  function drawRouteLine(r) {
+    routeLayer.clearLayers();
+    if (!r) return;
+    var ll2 = r.pts.map(function (p) { return [p[0], p[1]]; });
+    L.polyline(ll2, { color: "#f7f1e4", weight: 9, opacity: .8, interactive: false }).addTo(routeLayer);
+    L.polyline(ll2, { color: "#a8452f", weight: 4, opacity: .95, dashArray: "12 7", interactive: false }).addTo(routeLayer);
+    r.pts.forEach(function (p) {
+      if (!p[3]) return;
+      L.circleMarker([p[0], p[1]], { radius: 5, color: "#f7f1e4", weight: 2, fillColor: "#a8452f", fillOpacity: 1, interactive: false }).addTo(routeLayer);
+    });
+    map.fitBounds(L.latLngBounds(ll2).pad(.18), { animate: true });
+  }
+  function drawProfile(r) {
+    var st = routeStats(r), pts = r.pts;
+    var els = pts.map(function (p) { return p[2]; });
+    var lo = Math.min.apply(null, els), hi = Math.max.apply(null, els);
+    var pad = Math.max(20, (hi - lo) * .18);
+    lo -= pad; hi += pad;
+    var X0 = 112, X1 = 1195, Y0 = 296, Y1 = 52;
+    var cum = [0];
+    for (var i = 1; i < pts.length; i++) cum.push(cum[i - 1] + rdist(pts[i - 1], pts[i]));
+    var sx = function (m) { return X0 + (m / st.d) * (X1 - X0); };
+    var sy = function (e) { return Y0 - ((e - lo) / (hi - lo)) * (Y0 - Y1); };
+    var o = [];
+    // elevation gridlines
+    var step = (hi - lo) > 600 ? 250 : ((hi - lo) > 200 ? 100 : 20);
+    for (var g = Math.ceil(lo / step) * step; g <= hi; g += step) {
+      var zero = Math.abs(g) < .01;
+      o.push('<path d="M ' + X0 + " " + sy(g).toFixed(1) + " L " + X1 + " " + sy(g).toFixed(1) +
+             '" stroke="' + (zero ? "#2f6b72" : "#c9b691") + '" stroke-width="' + (zero ? 2 : 1) +
+             '" stroke-dasharray="' + (zero ? "none" : "3 6") + '"></path>');
+      o.push('<text x="' + (X0 - 8) + '" y="' + (sy(g) + 7).toFixed(1) + '" text-anchor="end" font-size="18" fill="' +
+             (zero ? "#2f6b72" : "#a8906a") + '">' + (zero ? "sea level" : g + " m") + "</text>");
+    }
+    var line = pts.map(function (p, n) { return (n ? "L " : "M ") + sx(cum[n]).toFixed(1) + " " + sy(p[2]).toFixed(1); }).join(" ");
+    o.push('<path d="' + line + " L " + X1 + " " + Y0 + " L " + X0 + " " + Y0 + ' Z" fill="#d6c49e" opacity=".85"></path>');
+    o.push('<path d="' + line + '" fill="none" stroke="#8a5a2b" stroke-width="3.5"></path>');
+    // labelled stops, de-crowded: where two stops fall close together the labels
+    // alternate above and below the line and drop a leader down to the dot
+    var named = [];
+    pts.forEach(function (p, n) { if (p[3]) named.push(n); });
+    var flip = 0;
+    pts.forEach(function (p, n) {
+      var x = sx(cum[n]), y = sy(p[2]);
+      o.push('<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (p[3] ? 6 : 3.5) +
+             '" fill="#a8452f" stroke="#f7f1e4" stroke-width="2"></circle>');
+      if (!p[3]) return;
+      var pos = named.indexOf(n);
+      var gapL = pos > 0 ? x - sx(cum[named[pos - 1]]) : 999;
+      var gapR = pos < named.length - 1 ? sx(cum[named[pos + 1]]) - x : 999;
+      var tight = Math.min(gapL, gapR) < 165;
+      var up, lead;
+      if (tight) {
+        var slot = flip++ % 4;                       // four distinct berths, so neighbours never stack
+        up = (slot === 0 || slot === 2);
+        lead = (slot < 2) ? 62 : 16;
+      } else {
+        up = (n === 0 || p[2] >= pts[Math.max(0, n - 1)][2]);
+        lead = 0;
+      }
+      var ty = up ? y - 18 - lead : y + 32 + lead;
+      if (ty > 330) { up = true; ty = y - 18 - lead; }        // never fall off the strip
+      if (ty < 42)  { up = false; ty = y + 32 + lead; }
+      ty = Math.max(42, Math.min(330, ty));
+      var anchor = pos === 0 ? "start" : (pos === named.length - 1 ? "end" : "middle");
+      if (lead) {
+        o.push('<path d="M ' + x.toFixed(1) + " " + y.toFixed(1) + " L " + x.toFixed(1) + " " +
+               (up ? ty + 6 : ty - 22).toFixed(1) + '" stroke="#a8452f" stroke-width="1" opacity=".5"></path>');
+      }
+      o.push('<text x="' + x.toFixed(1) + '" y="' + ty.toFixed(1) + '" text-anchor="' + anchor +
+             '" font-size="21" font-weight="600" fill="#2a231a">' + p[3] + "</text>");
+      o.push('<text x="' + x.toFixed(1) + '" y="' + (ty + (up ? -20 : 20)).toFixed(1) + '" text-anchor="' + anchor +
+             '" font-size="18" fill="#8a7550">' + Math.round(p[2]) + " m</text>");
+    });
+    o.push('<text x="' + X0 + '" y="332" font-size="18" fill="#6f5c38">' + fmtDist(st.d) +
+           " &middot; climb " + fmtRise(st.up) + " &middot; descent " + fmtRise(st.dn) +
+           " &middot; elevations approximate</text>");
+    document.getElementById("cs-body").innerHTML = o.join("");
+    document.getElementById("cs-labels").innerHTML = "";
+    document.getElementById("k-seckicker").textContent = "Elevation profile";
+    document.getElementById("k-sectitle").innerHTML = r.n;
+    var sb = document.getElementById("k-secbody");
+    if (sb) sb.innerHTML = r.note + ' <em>(' + r.ref + ')</em>';
+  }
+  function setRoute(id) {
+    activeRoute = (activeRoute && activeRoute.id === id) ? null : ROUTES.filter(function (r) { return r.id === id; })[0];
+    drawRouteLine(activeRoute);
+    if (csEl.classList.contains("off") && activeRoute) { csEl.classList.remove("off"); map.invalidateSize(); }
+    refreshSection();
+    renderJ();
+  }
+  function refreshSection() {
+    if (activeRoute) { drawProfile(activeRoute); return; }
+    var t = T.en;
+    document.getElementById("k-seckicker").textContent = t.sectionKicker;
+    document.getElementById("k-sectitle").textContent = t.sectionTitle;
+    document.getElementById("k-secbody").textContent = t.sectionBody;
+    drawSection();
+  }
+  window.refreshSectionRef = refreshSection;
+  var jbox = document.getElementById("jbox");
+  function renderJ() {
+    var o = ['<div class="wbh">Journeys &mdash; elevation profiles</div>'];
+    ROUTES.forEach(function (r) {
+      var st = routeStats(r);
+      o.push('<button data-j="' + r.id + '" class="' + (activeRoute && activeRoute.id === r.id ? "on" : "") + '">' +
+             '<div class="jn">' + r.n + '</div><div class="jm">' + fmtDist(st.d) + " &middot; climb " +
+             fmtRise(st.up) + '</div><div class="jref">' + r.ref + "</div></button>");
+    });
+    o.push('<button data-j="" style="border-top:1px solid #ddd0b2"><div class="jn">Back to the city cross-section</div></button>');
+    jbox.innerHTML = o.join("");
+    [].slice.call(jbox.querySelectorAll("button")).forEach(function (b) {
+      b.onclick = function () {
+        var id = b.getAttribute("data-j");
+        if (!id) { activeRoute = null; drawRouteLine(null); refreshSection(); renderJ(); return; }
+        setRoute(id);
+      };
+    });
+    document.getElementById("jtoggle").className = "btn" + (jbox.classList.contains("open") ? " on" : "");
+  }
+  L.DomEvent.disableClickPropagation(jbox);
+  L.DomEvent.disableScrollPropagation(jbox);
+  document.getElementById("jtoggle").onclick = function () { jbox.classList.toggle("open"); renderJ(); };
+
+  var aboutEl = document.getElementById("about");
+  var aboutTabs = [].slice.call(document.querySelectorAll("#abouttabs button"));
+  var aboutPanes = [].slice.call(document.querySelectorAll("#aboutbody .tab"));
+  function showTab(n) {
+    aboutTabs.forEach(function (b, i) { b.className = i === n ? "on" : ""; });
+    aboutPanes.forEach(function (p, i) { p.className = "tab" + (i === n ? " on" : ""); });
+    document.getElementById("aboutbody").scrollTop = 0;
+  }
+  aboutTabs.forEach(function (b, i) { b.onclick = function () { showTab(i); }; });
+  function openAbout(v) {
+    aboutEl.classList.toggle("open", v);
+    document.getElementById("aboutbtn").className = "btn" + (v ? " on" : "");
+  }
+  document.getElementById("aboutbtn").onclick = function () { openAbout(!aboutEl.classList.contains("open")); };
+  document.getElementById("aboutclose").onclick = function () { openAbout(false); };
+  aboutEl.onclick = function (e) { if (e.target === aboutEl) openAbout(false); };
+
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      if (aboutEl.classList.contains("open")) { openAbout(false); return; }
+      if (keyPanel.classList.contains("open")) { keyPanel.classList.remove("open"); renderKey(state.lang); }
+      return;
+    }
+    if (aboutEl.classList.contains("open")) return;
+    if (e.key === "ArrowRight") setEra(state.era + 1);
+    else if (e.key === "ArrowLeft") setEra(state.era - 1);
+  });
+
+  var trackEl = document.getElementById("track"), dragging = false;
+  function pick(ev) {
+    var r = trackEl.getBoundingClientRect();
+    var f = (ev.clientX - r.left) / r.width;
+    setEra(Math.floor(f * ERAS.length));
+  }
+  trackEl.addEventListener("pointerdown", function (e) { dragging = true; pick(e); });
+  trackEl.addEventListener("pointermove", function (e) { if (dragging) pick(e); });
+  window.addEventListener("pointerup", function () { dragging = false; });
+
+  var fadeEl = document.getElementById("fade");
+  fadeEl.value = state.fade;
+  function applyFade() {
+    var v = state.fade / 100;
+    map.getPane("basePane").style.opacity = v;
+    txt("fadeval", state.fade + "%");
+  }
+  fadeEl.addEventListener("input", function () {
+    state.fade = +fadeEl.value; save(); applyFade(); drawLabels();
+  });
+
+  map.on("zoomend", drawLabels);
+  renderWalls(); renderJ(); applyRelief();
+  render(); applyFade(); drawShapes(); drawLabels();
+})();
+</script>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#ece2cf"/><g transform="translate(30 30)"><path d="M6 34 L2 12 L14 2 L34 6 L38 28 L22 38 Z" fill="none" stroke="#b98c46" stroke-width="3"/><path d="M12 4 L16 36" stroke="#3d6076" stroke-width="2.5"/><path d="M2 20 L38 16" stroke="#3d6076" stroke-width="2.5"/></g></svg>
+</template>
+</body>
+</html>

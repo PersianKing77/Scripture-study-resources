@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..600&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #f7f3ea; }
+  * { box-sizing: border-box; }
+  a { color: #8c2f24; text-decoration: none; border-bottom: 1px solid rgba(140,47,36,.35); }
+  a:hover { color: #6d2018; border-bottom-color: #6d2018; }
+  input, button, textarea { font: inherit; color: inherit; }
+  ::selection { background: #e9d7a8; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #cfc5ae; border-radius: 6px; border: 3px solid transparent; background-clip: content-box; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+</helmet>
+<div style="position: relative; display: flex; height: 100vh; width: 100%; overflow: hidden; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #221e18; background: #f7f3ea;">
+
+  <aside style="{{ asideStyle }}">
+    <div style="padding: 22px 20px 16px; border-bottom: 1px solid #d8cfba;">
+      <div style="display: flex; align-items: flex-start; gap: 9px;">
+        <div style="font-family: 'EB Garamond', serif; font-size: 23px; line-height: 1.15; letter-spacing: .01em;">Synopsis of the<br />Four Gospels</div>
+        <span style="flex: 0 0 auto; margin-top: 3px; padding: 2px 7px; border: 1px solid #8c2f24; border-radius: 3px; color: #8c2f24; font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;">Beta</span>
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 7px;">
+        <span style="font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase; color: #8a8172;">367 pericopes · 18 sections</span>
+        <button onClick="{{ onAbout }}" style="background: transparent; border: 0; padding: 0; cursor: pointer; font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase; color: #8c2f24; border-bottom: 1px solid rgba(140,47,36,.4);">About</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;">
+        <input value="{{ query }}" onInput="{{ onQuery }}" placeholder="Search pericope titles" style="width: 100%; padding: 8px 10px; font-size: 13px; background: #f7f3ea; border: 1px solid #d3c9b2; border-radius: 3px; outline: none;" style-focus="border-color: #8c2f24;" />
+        <input value="{{ jump }}" onInput="{{ onJump }}" onKeyDown="{{ onJumpKey }}" placeholder="Jump to reference — e.g. Mark 9:2" style="width: 100%; padding: 8px 10px; font-size: 13px; background: #f7f3ea; border: 1px solid #d3c9b2; border-radius: 3px; outline: none;" style-focus="border-color: #8c2f24;" />
+        <sc-if value="{{ jumpMsg }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size: 11.5px; color: #8c2f24;">{{ jumpMsg }}</div>
+        </sc-if>
+        <select value="{{ cfmValue }}" onChange="{{ onCfm }}" style="width: 100%; padding: 8px 10px; font-size: 12.5px; background: #f7f3ea; border: 1px solid #d3c9b2; border-radius: 3px; outline: none;">
+          <sc-for list="{{ cfmOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.label }}</option></sc-for>
+        </select>
+      </div>
+    </div>
+
+    <div style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 0 40px;">
+      <sc-for list="{{ nav }}" as="sec" hint-placeholder-count="8">
+        <div style="padding: 0 8px;">
+          <button onClick="{{ sec.onToggle }}" style="display: flex; gap: 8px; align-items: baseline; width: 100%; text-align: left; padding: 9px 10px; background: transparent; border: 0; cursor: pointer; border-radius: 3px;" style-hover="background: #e5dcc9;">
+            <span style="font-family: 'EB Garamond', serif; font-size: 15px; color: #8c2f24; flex: 0 0 26px;">{{ sec.mark }}</span>
+            <span style="font-family: 'EB Garamond', serif; font-size: 15.5px; line-height: 1.25; flex: 1;">{{ sec.title }}</span>
+            <span style="font-size: 10px; color: #9c937f;">{{ sec.count }}</span>
+          </button>
+          <sc-if value="{{ sec.open }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 1px; padding: 2px 0 10px 12px;">
+              <sc-for list="{{ sec.items }}" as="p" hint-placeholder-count="4">
+                <button onClick="{{ p.onClick }}" style="{{ p.style }}" style-hover="background: #e5dcc9;">
+                  <span style="font-size: 10.5px; font-variant-numeric: tabular-nums; opacity: .55; flex: 0 0 22px;">{{ p.n }}</span>
+                  <span style="font-family: 'EB Garamond', serif; font-size: 15px; line-height: 1.3; flex: 1;">{{ p.title }}</span>
+                  <span style="font-size: 11px; letter-spacing: .06em; opacity: .5;">{{ p.gospels }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </aside>
+
+  <main style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+    <div style="display: flex; align-items: center; gap: 14px 18px; flex-wrap: wrap; padding: 11px 26px; border-bottom: 1px solid #d8cfba; background: #f2ece0;">
+      <div style="display: flex; gap: 6px; flex: 0 0 auto;">
+        <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ onToggleNav }}" title="Pericope index" style="width: 30px; height: 30px; border: 1px solid #d3c9b2; background: #f7f3ea; border-radius: 3px; cursor: pointer; font-size: 13px; line-height: 1;">☰</button>
+        </sc-if>
+        <button onClick="{{ onPrev }}" title="Previous pericope" style="width: 30px; height: 30px; border: 1px solid #d3c9b2; background: #f7f3ea; border-radius: 3px; cursor: pointer; font-size: 14px; line-height: 1;" style-hover="border-color: #8c2f24; color: #8c2f24;">‹</button>
+        <button onClick="{{ onNext }}" title="Next pericope" style="width: 30px; height: 30px; border: 1px solid #d3c9b2; background: #f7f3ea; border-radius: 3px; cursor: pointer; font-size: 14px; line-height: 1;" style-hover="border-color: #8c2f24; color: #8c2f24;">›</button>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 7px; flex: 0 0 auto; flex-wrap: nowrap;">
+        <span style="font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a8172; margin-right: 2px;">Gospels</span>
+        <sc-for list="{{ gospelChips }}" as="gc" hint-placeholder-count="4">
+          <button onClick="{{ gc.onToggle }}" title="{{ gc.hint }}" style="{{ gc.style }}">{{ gc.label }}</button>
+        </sc-for>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 7px; flex: 0 0 auto; flex-wrap: nowrap;">
+        <span style="font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a8172; margin-right: 2px;">Texts</span>
+        <sc-for list="{{ transChips }}" as="t" hint-placeholder-count="5">
+          <button onClick="{{ t.onToggle }}" style="{{ t.style }}">{{ t.label }}</button>
+        </sc-for>
+        <button onClick="{{ restChip.onToggle }}" title="Book of Mormon, D&amp;C and Pearl of Great Price parallels" style="{{ restChip.style }}">{{ restChip.label }}</button>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 7px; flex: 0 0 auto; flex-wrap: nowrap;">
+        <span style="font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a8172; margin-right: 2px;">Compare</span>
+        <sc-for list="{{ modeChips }}" as="m" hint-placeholder-count="3">
+          <button onClick="{{ m.onClick }}" title="{{ m.hint }}" style="{{ m.style }}">{{ m.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display: flex; align-items: center; gap: 7px; flex: 0 1 auto; flex-wrap: wrap;">
+        <sc-for list="{{ optChips }}" as="o" hint-placeholder-count="2">
+          <button onClick="{{ o.onToggle }}" title="{{ o.hint }}" style="{{ o.style }}">{{ o.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex: 1; min-height: 0; overflow: auto;">
+      <div style="position: sticky; left: 0; width: 100%; padding: 26px 26px 0;">
+        <div style="display: flex; align-items: flex-end; gap: 24px;">
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #8c2f24;">{{ cur.section }}</div>
+            <h1 style="margin: 8px 0 0; font-family: 'EB Garamond', serif; font-weight: 500; font-size: 33px; line-height: 1.1; letter-spacing: -.005em;">
+              <span style="color: #b8ae98; font-size: 21px; vertical-align: 3px; margin-right: 10px; font-variant-numeric: tabular-nums;">{{ cur.n }}</span>{{ cur.title }}
+            </h1>
+            <div style="margin-top: 8px; font-family: 'EB Garamond', serif; font-size: 16px; color: #6d6558; font-style: italic;">{{ cur.refLine }}</div>
+            <sc-if value="{{ dataNote }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; gap: 9px; margin-top: 11px; max-width: 760px;">
+                <span style="flex: 0 0 auto; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: #8c2f24; padding-top: 3px;">Note</span>
+                <span style="font-family: 'EB Garamond', serif; font-size: 15.5px; line-height: 1.45; color: #6d6558; text-wrap: pretty;"><sc-for list="{{ dataNoteParts }}" as="np" hint-placeholder-count="1"><sc-if value="{{ np.plain }}" hint-placeholder-val="{{ true }}"><span>{{ np.text }}</span></sc-if><sc-if value="{{ np.jump }}" hint-placeholder-val="{{ false }}"><button onClick="{{ np.onClick }}" title="Go to this pericope" style="background: transparent; border: 0; padding: 0; font: inherit; color: #8c2f24; cursor: pointer; border-bottom: 1px solid rgba(140,47,36,.4);">{{ np.text }}</button></sc-if></sc-for></span>
+              </div>
+            </sc-if>
+            <sc-if value="{{ chronNote }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; gap: 9px; margin-top: 11px; max-width: 760px; padding: 10px 12px; background: #f2ece0; border: 1px solid #ddd5c4; border-radius: 4px;">
+                <span style="flex: 0 0 auto; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: #6d6558; padding-top: 3px; max-width: 86px;">Chronology &amp; context</span>
+                <span style="font-family: 'EB Garamond', serif; font-size: 15.5px; line-height: 1.45; color: #4a443b; text-wrap: pretty;"><sc-for list="{{ chronNoteParts }}" as="cp" hint-placeholder-count="1"><sc-if value="{{ cp.plain }}" hint-placeholder-val="{{ true }}"><span>{{ cp.text }}</span></sc-if><sc-if value="{{ cp.jump }}" hint-placeholder-val="{{ false }}"><button onClick="{{ cp.onClick }}" title="Go to this pericope" style="background: transparent; border: 0; padding: 0; font: inherit; color: #8c2f24; cursor: pointer; border-bottom: 1px solid rgba(140,47,36,.4);">{{ cp.text }}</button></sc-if></sc-for></span>
+              </div>
+            </sc-if>
+            <sc-if value="{{ cfmBadge }}" hint-placeholder-val="{{ true }}">
+              <div style="display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-top: 10px;">
+                <span style="padding: 3px 9px; border-radius: 999px; background: #221e18; color: #f7f3ea; font-size: 10.5px; letter-spacing: .08em;">{{ cfmBadge.label }}</span>
+                <span style="font-family: 'EB Garamond', serif; font-size: 15.5px; color: #6d6558;">{{ cfmBadge.title }}</span>
+              </div>
+            </sc-if>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button onClick="{{ onBookmark }}" style="{{ bookmarkStyle }}">{{ bookmarkLabel }}</button>
+            <button onClick="{{ onToggleNote }}" style="padding: 7px 13px; border-radius: 3px; border: 1px solid #d3c9b2; background: transparent; color: #6d6558; font-size: 12px; cursor: pointer;" style-hover="border-color: #8c2f24; color: #8c2f24;">{{ noteBtn }}</button>
+          </div>
+        </div>
+
+        <sc-if value="{{ analysis.has }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; align-items: flex-start; gap: 30px; margin: 18px 0 0; padding: 14px 16px; background: #f2ece0; border: 1px solid #ddd5c4; border-radius: 4px;">
+            <sc-if value="{{ analysis.hasPairs }}" hint-placeholder-val="{{ true }}">
+            <div style="flex: 0 0 auto;">
+              <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8a8172; margin-bottom: 9px;">Verbal agreement</div>
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <sc-for list="{{ analysis.pairs }}" as="pr" hint-placeholder-count="3">
+                  <div style="display: flex; align-items: center; gap: 9px;">
+                    <span style="width: 58px; font-size: 11.5px; color: #6d6558; letter-spacing: .03em;">{{ pr.label }}</span>
+                    <span style="width: 132px; height: 7px; background: #e5dcc9; border-radius: 4px; overflow: hidden; display: block;">
+                      <span style="{{ pr.barStyle }}"></span>
+                    </span>
+                    <span style="width: 34px; font-size: 11px; color: #8a8172; font-variant-numeric: tabular-nums; text-align: right;">{{ pr.pct }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            </sc-if>
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8a8172; margin-bottom: 9px;">Reading this pericope</div>
+              <div style="font-family: 'EB Garamond', serif; font-size: 17px; line-height: 1.5; color: #332e26; text-wrap: pretty;">{{ analysis.summary }}</div>
+              <sc-if value="{{ legendShow }}" hint-placeholder-val="{{ true }}">
+              <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 12px;">
+                <sc-for list="{{ legend }}" as="l" hint-placeholder-count="3">
+                  <span style="display: flex; align-items: center; gap: 7px; white-space: nowrap; flex: 0 0 auto;">
+                    <span style="{{ l.swatch }}"></span>
+                    <span style="font-size: 11.5px; color: #6d6558;">{{ l.label }}</span>
+                  </span>
+                </sc-for>
+                <span style="font-size: 11.5px; color: #a89e88;">{{ legend2 }}</span>
+              </div>
+              </sc-if>
+              <sc-if value="{{ hasQuestions }}" hint-placeholder-val="{{ true }}">
+              <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #ddd5c4;">
+                <button onClick="{{ onToggleQ }}" style="display: flex; align-items: center; gap: 8px; background: transparent; border: 0; padding: 0; cursor: pointer;">
+                  <span style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8c2f24;">Look for this</span>
+                  <span style="font-size: 10px; color: #a89e88;">{{ qToggleLabel }}</span>
+                </button>
+                <sc-if value="{{ qOpen }}" hint-placeholder-val="{{ true }}">
+                  <ol style="margin: 10px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 7px;">
+                    <sc-for list="{{ questions }}" as="qn" hint-placeholder-count="3">
+                      <li style="font-family: 'EB Garamond', serif; font-size: 16.5px; line-height: 1.45; color: #332e26; text-wrap: pretty;">{{ qn }}</li>
+                    </sc-for>
+                  </ol>
+                </sc-if>
+              </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ noteOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position: sticky; left: 0; width: 100%; padding: 16px 26px 0;">
+          <textarea value="{{ note }}" onInput="{{ onNote }}" placeholder="Notes on this pericope — saved on this device." style="width: 100%; min-height: 92px; resize: vertical; padding: 11px 13px; font-family: 'EB Garamond', serif; font-size: 16px; line-height: 1.5; background: #f2ece0; border: 1px solid #d3c9b2; border-radius: 4px; outline: none;" style-focus="border-color: #8c2f24;"></textarea>
+        </div>
+      </sc-if>
+
+      <div style="{{ gridStyle }}">
+        <sc-for list="{{ cur.columns }}" as="col" hint-placeholder-count="4">
+          <section style="border-right: 1px solid #ddd5c4; min-width: 0; padding-bottom: 80px;">
+            <button onClick="{{ col.onBase }}" title="{{ col.baseHint }}" style="{{ col.headStyle }}" style-hover="background: #efe9dc;">
+              <span style="display: flex; align-items: baseline; gap: 9px;">
+                <span style="font-family: 'EB Garamond', serif; font-size: 17px; letter-spacing: .02em;">{{ col.book }}</span>
+                <span style="font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: #8c2f24;">{{ col.baseTag }}</span>
+              </span>
+              <span style="font-size: 11.5px; color: #8c2f24; font-variant-numeric: tabular-nums; margin-top: 2px;">{{ col.ref }}</span>
+              <sc-if value="{{ col.voice }}" hint-placeholder-val="{{ false }}">
+                <span style="display: block; margin-top: 6px; font-family: 'EB Garamond', serif; font-size: 14px; line-height: 1.35; font-style: italic; color: #8a8172; text-align: left; text-wrap: pretty;">{{ col.voice }}</span>
+              </sc-if>
+            </button>
+            <div style="display: flex; gap: 0;">
+              <sc-for list="{{ col.panes }}" as="pane" hint-placeholder-count="2">
+                <div style="flex: 1 1 0; min-width: 210px; padding: 14px 14px 0; border-right: 1px dotted #ddd5c4;">
+                  <sc-if value="{{ pane.showLabel }}" hint-placeholder-val="{{ true }}">
+                    <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #a89e88; margin-bottom: 9px;">{{ pane.label }}</div>
+                  </sc-if>
+                  <sc-for list="{{ pane.verses }}" as="v" hint-placeholder-count="6">
+                    <p onMouseEnter="{{ v.onEnter }}" onMouseLeave="{{ v.onLeave }}" style="{{ v.style }}">
+                      <sc-if value="{{ v.showNum }}" hint-placeholder-val="{{ true }}">
+                        <span style="font-family: 'IBM Plex Sans', sans-serif; font-size: 9.5px; color: #b8ae98; vertical-align: 3px; margin-right: 4px; font-variant-numeric: tabular-nums;">{{ v.n }}</span>
+                      </sc-if>
+                      <sc-for list="{{ v.runs }}" as="r" hint-placeholder-count="3"><sc-if value="{{ r.plain }}" hint-placeholder-val="{{ true }}"><span style="{{ pane.textStyle }}">{{ r.t }}</span></sc-if><sc-if value="{{ r.a1 }}" hint-placeholder-val="{{ false }}"><span title="Shared with one other gospel" style="{{ pane.textStyle }}; background: #c8dce6; box-shadow: 0 0 0 1px #c8dce6; border-radius: 2px;">{{ r.t }}</span></sc-if><sc-if value="{{ r.a2 }}" hint-placeholder-val="{{ false }}"><span title="Shared with two other gospels" style="{{ pane.textStyle }}; background: #d3ddaa; box-shadow: 0 0 0 1px #d3ddaa; border-radius: 2px;">{{ r.t }}</span></sc-if><sc-if value="{{ r.a3 }}" hint-placeholder-val="{{ false }}"><span title="Shared with all three other gospels" style="{{ pane.textStyle }}; background: #e6bf6e; box-shadow: 0 0 0 1px #e6bf6e; border-radius: 2px;">{{ r.t }}</span></sc-if><sc-if value="{{ r.uniq }}" hint-placeholder-val="{{ false }}"><span title="Found in no other gospel here" style="{{ pane.textStyle }}; color: #8c2f24; border-bottom: 1px solid rgba(140,47,36,.3);">{{ r.t }}</span></sc-if><sc-if value="{{ r.grk }}" hint-placeholder-val="{{ false }}"><span onClick="{{ r.onClick }}" style="{{ pane.textStyle }}; cursor: help; border-bottom: 1px dotted #b8ae98;" style-hover="color: #8c2f24; border-bottom-color: #8c2f24;">{{ r.t }}</span></sc-if></sc-for>
+                    </p>
+                  </sc-for>
+                  <sc-for list="{{ pane.links }}" as="lk" hint-placeholder-count="0">
+                    <p style="margin: 0 0 9px; font-family: 'EB Garamond', serif; font-size: 16px; line-height: 1.5; color: #6d6558;">
+                      <a href="{{ lk.href }}" target="_blank" rel="noopener">{{ lk.label }}</a> — text not available offline; opens on the Church site.
+                    </p>
+                  </sc-for>
+                  <sc-if value="{{ pane.empty }}" hint-placeholder-val="{{ false }}">
+                    <div onClick="{{ pane.onEmptyClick }}" style="font-family: 'EB Garamond', serif; font-size: 15px; font-style: italic; color: #b8ae98; cursor: default;">{{ pane.emptyMsg }}</div>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <sc-if value="{{ col.noParallel }}" hint-placeholder-val="{{ false }}">
+                <div style="flex: 1; padding: 16px 14px; font-family: 'EB Garamond', serif; font-size: 15px; font-style: italic; color: #c3b9a2;">No parallel.</div>
+              </sc-if>
+            </div>
+          </section>
+        </sc-for>
+      </div>
+    </div>
+  </main>
+
+  <sc-if value="{{ aboutOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ onAbout }}" style="position: fixed; inset: 0; z-index: 50; background: rgba(34,30,24,.42); display: flex; align-items: center; justify-content: center; padding: 30px;">
+      <div onClick="{{ stopProp }}" style="width: 660px; max-width: 100%; max-height: 82vh; overflow-y: auto; background: #f7f3ea; border: 1px solid #d8cfba; border-radius: 5px; padding: 30px 32px; box-shadow: 0 26px 70px rgba(34,30,24,.34);">
+        <div style="display: flex; gap: 22px; border-bottom: 1px solid #ddd5c4; margin-bottom: 22px;">
+          <button onClick="{{ onTabTool }}" style="background: transparent; border: 0; border-bottom: 2px solid {{ tabToolBorder }}; padding: 0 0 9px; margin-bottom: -1px; cursor: pointer; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: {{ tabToolColor }};">The synopsis</button>
+          <button onClick="{{ onTabUse }}" style="background: transparent; border: 0; border-bottom: 2px solid {{ tabUseBorder }}; padding: 0 0 9px; margin-bottom: -1px; cursor: pointer; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: {{ tabUseColor }};">How to use it</button>
+          <button onClick="{{ onTabBio }}" style="background: transparent; border: 0; border-bottom: 2px solid {{ tabBioBorder }}; padding: 0 0 9px; margin-bottom: -1px; cursor: pointer; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: {{ tabBioColor }};">Taylor Halverson, Ph.D.</button>
+        </div>
+
+        <sc-if value="{{ tabTool }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 10px;">
+              <h2 style="margin: 0; font-family: 'EB Garamond', serif; font-weight: 500; font-size: 27px; line-height: 1.15;">Synopsis of the Four Gospels</h2>
+              <span style="padding: 2px 7px; border: 1px solid #8c2f24; border-radius: 3px; color: #8c2f24; font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;">Beta</span>
+            </div>
+            <p style="margin: 16px 0 0; font-family: 'EB Garamond', serif; font-size: 18px; line-height: 1.5;">Prepared by <strong style="font-weight: 600;">Taylor Halverson, Ph.D.</strong></p>
+            <p style="margin: 14px 0 0; font-family: 'EB Garamond', serif; font-size: 16.5px; line-height: 1.55; color: #4a443b; text-wrap: pretty;">All 367 pericopes are arranged in the sectional order of Kurt Aland's <em>Synopsis Quattuor Evangeliorum</em>, following the United Bible Societies' synopsis of the four gospels.</p>
+            <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #ddd5c4;">
+              <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8c2f24;">Beta</div>
+              <p style="margin: 9px 0 0; font-family: 'EB Garamond', serif; font-size: 16px; line-height: 1.5; color: #4a443b; text-wrap: pretty;">Pericope divisions, parallel assignments and Restoration links are still being reviewed. Where the underlying synopsis is itself odd — a reference that looks like a typo, a section that duplicates another, a citation that reaches outside its gospel — the pericope carries a <strong style="font-weight: 600;">Note</strong> saying so rather than quietly correcting it. Where the gospels themselves order an event differently — the cleansing of the temple early in John and late in the synoptics, the dating of the anointing at Bethany, whether the last supper was the Passover, the hour of the crucifixion — a <strong style="font-weight: 600;">Chronology &amp; context</strong> panel states the difference and the usual explanations instead of harmonizing it away.</p>
+            </div>
+            <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid #ddd5c4;">
+              <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8a8172;">On the comparison</div>
+              <p style="margin: 9px 0 0; font-family: 'EB Garamond', serif; font-size: 16px; line-height: 1.5; color: #4a443b;">Agreement is measured on phrases, not stray words: a word counts as shared only when it sits inside a two-word run the other account also contains. Percentages describe verbal overlap in a single English translation — they are a reading aid, not a text-critical judgment.</p>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabUse }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <h2 style="margin: 0; font-family: 'EB Garamond', serif; font-weight: 500; font-size: 27px; line-height: 1.15;">How to use it</h2>
+            <p style="margin: 12px 0 0; font-family: 'EB Garamond', serif; font-size: 16.5px; line-height: 1.55; color: #4a443b; text-wrap: pretty;">The four gospels stand side by side in fixed columns, always in the same order, so your eye learns where to look. Everything else is a way of asking a question about that layout.</p>
+
+            <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #ddd5c4;">
+              <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8a8172;">Finding a passage</div>
+              <div style="display: grid; gap: 9px; margin-top: 11px; font-family: 'EB Garamond', serif; font-size: 16px; line-height: 1.45; color: #4a443b;">
+                <div><strong style="font-weight: 600;">The index</strong> down the left holds all 367 pericopes in 18 sections, in Aland's order. Click a section to open it.</div>
+                <div><strong style="font-weight: 600;">Search</strong> matches pericope titles. <strong style="font-weight: 600;">Jump to reference</strong> takes a citation — <em>Mark 9:2</em>, <em>Luke 15</em>, <em>John 11:35</em> — and opens the pericope that contains it.</div>
+                <div><strong style="font-weight: 600;">Come, Follow Me</strong> narrows the whole index to one week's reading, and the pericope you land on shows its week.</div>
+                <div><strong style="font-weight: 600;">← and →</strong> step through pericopes in order; <strong style="font-weight: 600;">Esc</strong> closes whatever panel is open.</div>
+              </div>
+            </div>
+
+            <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid #ddd5c4;">
+              <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8a8172;">Texts</div>
+              <div style="display: grid; gap: 9px; margin-top: 11px; font-family: 'EB Garamond', serif; font-size: 16px; line-height: 1.45; color: #4a443b;">
+                <div>Turn on as many translations as you want — KJV, NIV, WEB, NET, Greek. They sit as sub-columns <em>inside</em> each gospel, so you can read one gospel across four versions or four gospels in one version.</div>
+                <div><strong style="font-weight: 600;">Gospels</strong> (Mt · Mk · Lk · Jn) drops a column out of the comparison. Turn two off to read Matthew against Mark alone, or to fit two columns on a tablet without sideways scrolling. Agreement, percentages and the summary are always measured across the columns you can see.</div>
+                <div><strong style="font-weight: 600;">Restoration parallel</strong> adds a fifth column: 3 Nephi, JS—Matthew, and other Book of Mormon, Doctrine and Covenants and Pearl of Great Price passages that carry the same words. The chip greys out where there is no parallel.</div>
+                <div><strong style="font-weight: 600;">Interlinear Greek</strong> makes each Greek word clickable for its lexicon entry and Strong's number.</div>
+                <div><strong style="font-weight: 600;">Author voice</strong> prints one line under each heading on that writer's characteristic emphasis — useful when a class is asking why the accounts differ at all.</div>
+                <div><strong style="font-weight: 600;">Verse nos.</strong> hides the numbers when you would rather read continuous prose.</div>
+              </div>
+            </div>
+
+            <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid #ddd5c4;">
+              <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8a8172;">Comparing</div>
+              <div style="display: grid; gap: 9px; margin-top: 11px; font-family: 'EB Garamond', serif; font-size: 16px; line-height: 1.45; color: #4a443b;">
+                <div><strong style="font-weight: 600;">Agreement</strong> tints every shared phrase by how many gospels have it — one, two, or all three others — and underlines in red what no other account reports.</div>
+                <div><strong style="font-weight: 600;">Unique only</strong> strips the shared material away so a gospel's own contribution stands alone.</div>
+                <div><strong style="font-weight: 600;">Base text</strong> measures every column against one gospel. Click a gospel's heading to make it the base; click it again to release.</div>
+                <div><strong style="font-weight: 600;">Hover a verse</strong> and the closest parallel verse in the other columns lifts with it.</div>
+                <div>The bars above the columns give verbal overlap for each pair, highest first; <strong style="font-weight: 600;">Look for this</strong> offers observation questions — things to notice, not answers to find.</div>
+                <div><strong style="font-weight: 600;">Off</strong> returns plain, unmarked text for straight reading.</div>
+              </div>
+            </div>
+
+            <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid #ddd5c4;">
+              <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8a8172;">Keeping your work</div>
+              <p style="margin: 10px 0 0; font-family: 'EB Garamond', serif; font-size: 16px; line-height: 1.5; color: #4a443b; text-wrap: pretty;">Bookmarks, notes, your open translations and your comparison mode are saved on this device, so the synopsis reopens where you left it. Nothing is sent anywhere. On a tablet or phone the columns stack and the index becomes a drawer behind ☰.</p>
+            </div>
+
+            <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid #ddd5c4;">
+              <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8a8172;">Sources</div>
+              <div style="display: grid; gap: 8px; margin-top: 11px; font-family: 'EB Garamond', serif; font-size: 15.5px; line-height: 1.45; color: #4a443b;">
+                <div>Sectional order and parallel assignments: Kurt Aland, <em>Synopsis Quattuor Evangeliorum</em> (United Bible Societies).</div>
+                <div>KJV, NIV, WEB and NET load from <a href="https://bolls.life" target="_blank" rel="noopener">bolls.life</a>.</div>
+                <div>Greek: Tischendorf's eighth critical edition, with Strong's numbering behind the interlinear.</div>
+                <div>Restoration text: a public-domain JSON edition of the Book of Mormon, Doctrine and Covenants, and Pearl of Great Price.</div>
+                <div>Come, Follow Me weeks follow the New Testament year of the four-year rotation.</div>
+                <div>Joseph Smith Translation passages, and a few Doctrine and Covenants citations, are linked to the Church's site rather than reproduced here.</div>
+              </div>
+              <p style="margin: 12px 0 0; font-family: 'EB Garamond', serif; font-size: 15.5px; line-height: 1.5; color: #6d6558; font-style: italic; text-wrap: pretty;">Agreement percentages describe verbal overlap in one English translation. They are a reading aid, not a text-critical judgment.</p>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabBio }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <h2 style="margin: 0; font-family: 'EB Garamond', serif; font-weight: 500; font-size: 27px; line-height: 1.15;">Taylor Halverson, Ph.D.</h2>
+            <div style="margin-top: 7px; font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase; color: #8a8172;">Author · Teacher · Tour leader · Scripture scholar</div>
+            <p style="margin: 16px 0 0; font-family: 'EB Garamond', serif; font-size: 16.5px; line-height: 1.55; color: #38332c; text-wrap: pretty;">Taylor Halverson is a scholar of scripture and a teacher of learners — an entrepreneurship professor in the BYU Marriott School of Business who spends his working life helping people find and act on the best ideas and tools available to them.</p>
+            <p style="margin: 12px 0 0; font-family: 'EB Garamond', serif; font-size: 16.5px; line-height: 1.55; color: #4a443b; text-wrap: pretty;">He is the author and editor of more than fifty books and nearly a thousand articles and blog posts, and a builder of scripture study resources: the ScripturePlus app with Scripture Central, whose scripture YouTube channel he co-hosted to more than fifty million views, and BYU's Virtual Scripture Group, whose team spent more than five years reconstructing New Testament Jerusalem in three dimensions. This synopsis belongs to that same body of work — tools made so that ordinary readers can see what specialists see.</p>
+            <p style="margin: 12px 0 0; font-family: 'EB Garamond', serif; font-size: 16.5px; line-height: 1.55; color: #4a443b; text-wrap: pretty;">He leads tours to Israel and the Middle East, China, India, Central America, Europe, and the national parks of the American West, where he unfolds how geology, geography, civilization, and scriptural texts created our beautiful present day.</p>
+            <div style="margin-top: 22px; padding-top: 16px; border-top: 1px solid #ddd5c4;">
+              <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8a8172;">Academic training</div>
+              <div style="display: grid; gap: 7px; margin-top: 11px; font-family: 'EB Garamond', serif; font-size: 16px; line-height: 1.4; color: #4a443b;">
+                <div>Ph.D., Judaism &amp; Christianity in Antiquity — Indiana University</div>
+                <div>Ph.D., Instructional Systems Technology — Indiana University</div>
+                <div>M.A., Biblical Studies — Yale University</div>
+                <div>B.A., Ancient Near Eastern Studies — Brigham Young University</div>
+              </div>
+              <p style="margin: 13px 0 0; font-family: 'EB Garamond', serif; font-size: 15.5px; line-height: 1.5; color: #6d6558; font-style: italic;">Two doctorates in two separate fields — the ancient world, and the design of learning. Both of them are in this tool.</p>
+            </div>
+            <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid #ddd5c4;">
+              <div style="font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8a8172;">Elsewhere</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; font-family: 'EB Garamond', serif; font-size: 16px;">
+                <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>
+                <a href="https://books.taylorhalverson.com" target="_blank" rel="noopener">books.taylorhalverson.com</a>
+                <a href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com</a>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <button onClick="{{ onAbout }}" style="margin-top: 24px; padding: 8px 16px; border-radius: 3px; border: 1px solid #d3c9b2; background: transparent; color: #6d6558; font-size: 12px; cursor: pointer;">Close</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ gloss }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; right: 22px; bottom: 22px; width: 380px; max-height: 52vh; overflow-y: auto; background: #221e18; color: #f2ece0; border-radius: 5px; padding: 16px 18px; box-shadow: 0 18px 44px rgba(34,30,24,.34); z-index: 40;">
+      <div style="display: flex; align-items: baseline; gap: 10px;">
+        <span style="font-family: 'Gentium Book Plus', serif; font-size: 22px;">{{ gloss.word }}</span>
+        <span style="font-size: 10.5px; letter-spacing: .12em; color: #b8ae98;">STRONG {{ gloss.num }}</span>
+        <button onClick="{{ onCloseGloss }}" style="margin-left: auto; background: transparent; border: 0; color: #b8ae98; cursor: pointer; font-size: 15px;">✕</button>
+      </div>
+      <div style="margin-top: 10px; font-family: 'EB Garamond', serif; font-size: 15.5px; line-height: 1.5; white-space: pre-line;">{{ gloss.body }}</div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;}}">
+const BOOKS = { Matthew: 40, Mark: 41, Luke: 42, John: 43, Acts: 44, Romans: 45, "1 Corinthians": 46, "2 Corinthians": 47 };
+/* Aland cites a few passages from outside the gospels (e.g. 1 Cor. 15:3-8 among
+   the resurrection appearances); those references carry their own book name. */
+const CITED = { "1 cor": "1 Corinthians", "1 corinthians": "1 Corinthians", "2 cor": "2 Corinthians", acts: "Acts", rom: "Romans", romans: "Romans" };
+const GOSPELS = ["Matthew", "Mark", "Luke", "John"];
+const ABBR = { Matthew: "Mt", Mark: "Mk", Luke: "Lk", John: "Jn" };
+/* One line on each writer's characteristic emphasis — shown under the column
+   heading when "Author voice" is on. */
+const VOICE = {
+  Matthew: "Writes for readers who know the law and the prophets: Jesus as Israel's promised Messiah, and scripture fulfilled.",
+  Mark: "The shortest, fastest account — action over discourse, and the Son of God finally confessed at the cross.",
+  Luke: "The physician's gospel, told outward to the world: the poor, women, Samaritans, Gentiles, the lost brought in.",
+  John: "The Word made flesh — signs, long discourses, and Jesus declaring who he is in his own voice.",
+  Restoration: "Latter-day scripture on the same words: what was restored, added, or spoken again."
+};
+const TRANS = [
+  { code: "KJV", label: "KJV", lang: "en" },
+  { code: "NIV", label: "NIV", lang: "en" },
+  { code: "WEB", label: "WEB", lang: "en" },
+  { code: "NET", label: "NET", lang: "en" },
+  { code: "TISCH", label: "Greek", lang: "grc" }
+];
+const STOP = new Set("a an the and or but if of to in on at by for with from into unto as is was were be been am are it its his her him she he they them their there then thee thou thy ye you your that this these those which who whom what when where while all also not no nor so shall will would should may might can could do did done doth hath have has had say said saith says up out off over about after before again very much many".split(" "));
+const AG = { 1: "#c8dce6", 2: "#d3ddaa", 3: "#e6bf6e" };
+ABBR.Restoration = "Rest";
+const ABBRBOOK = b => ({ "3 Nephi": "3 Ne.", "2 Nephi": "2 Ne.", "1 Nephi": "1 Ne.", Moroni: "Moro.", Mosiah: "Mosiah", Alma: "Alma", "Joseph Smith—Matthew": "JS—M" }[b] || b);
+const RAW = "https://cdn.jsdelivr.net/gh/bcbooks/scriptures-json@master/reference/";
+const RAW_ALT = "https://raw.githubusercontent.com/bcbooks/scriptures-json/master/reference/";
+const SLUG = { "3 Nephi": "bofm/3-ne", "2 Nephi": "bofm/2-ne", "1 Nephi": "bofm/1-ne", Moroni: "bofm/moro", Mosiah: "bofm/mosiah", Alma: "bofm/alma", "Doctrine and Covenants": "dc-testament/dc", "Joseph Smith—Matthew": "pgp/js-m" };
+const churchUrl = p => {
+  const slug = SLUG[p.book]; if (!slug) return null;
+  return "https://www.churchofjesuschrist.org/study/scriptures/" + slug + "/" + p.c + "?lang=eng&id=p" + p.v1 + "-p" + p.v2 + "#p" + p.v1;
+};
+const VOLS = {
+  "book-of-mormon-reference.json": ["1 nephi", "2 nephi", "jacob", "enos", "jarom", "omni", "words of mormon", "mosiah", "alma", "helaman", "3 nephi", "4 nephi", "mormon", "ether", "moroni"],
+  "doctrine-and-covenants-reference.json": ["doctrine and covenants"],
+  "pearl-of-great-price-reference.json": ["moses", "abraham", "joseph smith matthew", "joseph smith history"]
+};
+
+class Component extends DCLogic {
+  state = {
+    data: null, open: {}, curId: 0, query: "", jump: "", jumpMsg: "",
+    trans: { KJV: true, TISCH: false, NIV: true, WEB: false, NET: false },
+    showNums: true, mode: "agree", base: null, interlinear: false,
+    marks: {}, notes: {}, noteOpen: false, hover: null, gloss: null, tick: 0,
+    restOn: true, cfmWeek: null, navOpen: false, vw: 1400, qOpen: true,
+    show: { Matthew: true, Mark: true, Luke: true, John: true }, voiceOn: false,
+    cfm: null, par: null, dataNotes: null, chron: null, aboutOpen: false, aboutTab: "tool"
+  };
+  cache = {};
+  glossCache = {};
+  vols = {};
+
+  componentDidMount() {
+    fetch("./pericopes.json").then(r => r.json()).then(d => {
+      const flat = [];
+      d.sections.forEach((s, si) => s.pericopes.forEach(p => flat.push({ ...p, si, id: flat.length })));
+      this.setState({ data: d, flat }, () => this.load());
+    }).catch(e => console.error("pericopes.json", e));
+    fetch("./data-notes.json").then(r => r.json()).then(dataNotes => this.setState({ dataNotes })).catch(() => {});
+    fetch("./chronology-notes.json").then(r => r.json()).then(chron => this.setState({ chron })).catch(() => {});
+    fetch("./cfm-new-testament.json").then(r => r.json()).then(cfm => this.setState({ cfm })).catch(() => {});
+    fetch("./restoration-parallels.json").then(r => r.json()).then(par => this.setState({ par })).catch(() => {});
+    const onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener("resize", onResize);
+    const onKey = e => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const t = e.target;
+      if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
+      if (e.key === "ArrowLeft") this.go(Math.max(0, this.state.curId - 1));
+      else if (e.key === "ArrowRight") this.go(this.state.curId + 1);
+      else if (e.key === "Escape") this.setState({ aboutOpen: false, gloss: null, navOpen: false });
+      else return;
+      e.preventDefault();
+    };
+    window.addEventListener("keydown", onKey);
+    this._off = () => { window.removeEventListener("resize", onResize); window.removeEventListener("keydown", onKey); };
+    this.setState({ vw: window.innerWidth });
+    try {
+      const s = JSON.parse(localStorage.getItem("gospelSynopsis.v1") || "{}");
+      const next = {};
+      ["trans", "marks", "notes", "show"].forEach(k => { if (s[k]) next[k] = s[k]; });
+      if (typeof s.voiceOn === "boolean") next.voiceOn = s.voiceOn;
+      if (typeof s.curId === "number") next.curId = s.curId;
+      if (typeof s.showNums === "boolean") next.showNums = s.showNums;
+      if (typeof s.interlinear === "boolean") next.interlinear = s.interlinear;
+      if (typeof s.mode === "string") next.mode = s.mode;
+      if (Object.keys(next).length) this.setState(next);
+    } catch (e) {}
+  }
+
+  persist() {
+    const { trans, marks, notes, curId, showNums, mode, interlinear, show, voiceOn } = this.state;
+    try { localStorage.setItem("gospelSynopsis.v1", JSON.stringify({ trans, marks, notes, curId, showNums, mode, interlinear, show, voiceOn })); } catch (e) {}
+  }
+
+  cur() { return (this.state.flat || [])[this.state.curId] || null; }
+
+  /* Display a reference without mangling a book abbreviation's period. */
+  refDisplay(raw) {
+    const s = String(raw || "").trim();
+    const m = s.match(/^((?:[1-3]\s*)?[A-Za-z]+\.?)\s+(\d.*)$/);
+    if (m) return m[1] + " " + m[2].replace(/\./g, ":").replace(/-/g, "–");
+    return s.replace(/\./g, ":").replace(/-/g, "–");
+  }
+
+  /* True when this cell is a citation from outside its column's gospel. */
+  isCitation(ref) { return !!(ref && this.parseRef(ref).book); }
+
+  /* A gospel really tells this pericope: not a citation, not an apparatus note. */
+  hasPassage(p, g) {
+    const ref = p && p.refs[g];
+    if (!ref) return false;
+    const parsed = this.parseRef(ref);
+    return !parsed.book && !parsed.note && parsed.ranges.length > 0;
+  }
+
+  parseRef(raw) {
+    let src = String(raw || "").trim();
+    let book = null;
+    const bm = src.match(/^((?:[1-3]\s*)?[A-Za-z]+)\.?\s+(\d.*)$/);
+    if (bm) {
+      const hit = CITED[bm[1].toLowerCase().replace(/\s+/g, " ").trim()];
+      if (hit) { book = hit; src = bm[2]; }
+    }
+    const s = src.replace(/\s+/g, "");
+    if (!s) return { ranges: [], note: "", book };
+    if (!/^[\d.,\-ab;]+$/.test(s)) return { ranges: [], note: String(raw).trim(), book };
+    const out = []; let ch = null;
+    for (const seg of s.split(/[;,]/)) {
+      if (!seg) continue;
+      const m = seg.match(/^(?:(\d+)\.)?(\d+)[ab]?(?:-(?:(\d+)\.)?(\d+)[ab]?)?$/);
+      if (!m) continue;
+      const c1 = m[1] ? +m[1] : ch; if (!c1) continue;
+      ch = c1;
+      const v1 = +m[2], c2 = m[3] ? +m[3] : c1, v2 = m[4] ? +m[4] : v1;
+      if (c2 === c1) out.push({ c: c1, v1, v2 });
+      else { out.push({ c: c1, v1, v2: 999 }); for (let c = c1 + 1; c < c2; c++) out.push({ c, v1: 1, v2: 999 }); out.push({ c: c2, v1: 1, v2 }); ch = c2; }
+    }
+    return { ranges: out, note: "", book };
+  }
+
+  /* bolls.life rate-limits bursts, so requests are queued (4 at a time) and
+     retried; a failed chapter is never cached as an empty result. */
+  q = { pending: [], active: 0 };
+  enqueue(fn) {
+    return new Promise(resolve => {
+      const run = () => {
+        this.q.active++;
+        fn().then(v => {
+          this.q.active--;
+          resolve(v);
+          const next = this.q.pending.shift();
+          if (next) next();
+        });
+      };
+      if (this.q.active < 4) run(); else this.q.pending.push(run);
+    });
+  }
+
+  async getChapter(trans, book, ch) {
+    const url = "https://bolls.life/get-text/" + trans + "/" + BOOKS[book] + "/" + ch + "/";
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (attempt) await new Promise(r => setTimeout(r, 500 * attempt * attempt));
+      try {
+        const r = await fetch(url);
+        if (!r.ok) continue;
+        const j = await r.json();
+        if (Array.isArray(j) && j.length) return j;
+      } catch (e) { /* retry */ }
+    }
+    return null;
+  }
+
+  chapter(trans, book, ch) {
+    const key = trans + ":" + book + ":" + ch;
+    if (this.cache[key]) return this.cache[key];
+    const p = this.enqueue(() => this.getChapter(trans, book, ch));
+    p.then(arr => {
+      if (arr) p.__v = arr;
+      else { p.__failed = true; delete this.cache[key]; }
+      this.setState(s => ({ tick: s.tick + 1 }));
+    });
+    this.cache[key] = p;
+    return p;
+  }
+
+  async load() {
+    const p = this.cur(); if (!p) return;
+    const active = TRANS.filter(t => this.state.trans[t.code]);
+    const seen = new Set();
+    const jobs = [];
+    for (const t of active) for (const g of GOSPELS) {
+      const ref = p.refs[g]; if (!ref) continue;
+      const parsed = this.parseRef(ref);
+      const book = parsed.book || g;
+      for (const r of parsed.ranges) {
+        const k = t.code + book + r.c;
+        if (seen.has(k)) continue; seen.add(k);
+        jobs.push(this.chapter(t.code, book, r.c));
+      }
+    }
+    await Promise.all(jobs);
+    this.setState(s => ({ tick: s.tick + 1 }));
+  }
+
+  verses(transCode, bookIn, ref) {
+    const parsed = this.parseRef(ref);
+    const { ranges } = parsed;
+    const book = parsed.book || bookIn;
+    const out = []; let pending = false, failed = false;
+    const multi = ranges.length > 1;
+    for (const r of ranges) {
+      const key = transCode + ":" + book + ":" + r.c;
+      const c = this.cache[key];
+      const arr = c && c.__v;
+      if (!arr) {
+        if (!c) {
+          failed = true;
+          this.retries = this.retries || {};
+          if ((this.retries[key] || 0) < 2) { this.retries[key] = (this.retries[key] || 0) + 1; this.chapter(transCode, book, r.c); }
+        } else pending = true;
+        continue;
+      }
+      for (const v of arr) if (v.verse >= r.v1 && v.verse <= r.v2) out.push({ n: (multi ? r.c + ":" : "") + v.verse, text: v.text });
+    }
+    return { list: out, pending, failed };
+  }
+
+  clean(t) {
+    return String(t || "")
+      .replace(/<S>\d+<\/S>/g, "")
+      /* editorial apparatus: drop the element AND its contents, or note words
+         would be read as scripture and would feed the agreement engine */
+      .replace(/<(sup|f|note)\b[^>]*>[\s\S]*?<\/\1>/gi, "")
+      .replace(/<[^>]+>/g, "")
+      .replace(/\s+/g, " ")
+      /* two adjacent Strong's tags leave a space stranded before punctuation */
+      .replace(/\s+([,.;:!?’”'")\]])/g, "$1")
+      .replace(/([([“‘])\s+/g, "$1")
+      .trim();
+  }
+
+  /* ---- Restoration scripture (Book of Mormon, D&C, Pearl of Great Price) ---- */
+  volFor(book) {
+    const b = book.toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+    for (const f of Object.keys(VOLS)) if (VOLS[f].some(n => b === n || b.startsWith(n))) return f;
+    return null;
+  }
+
+  /* Tries the GitHub raw copy, then the pinned jsDelivr mirror; bounded
+     attempts so a render loop can never hammer either host. */
+  async getVolume(file) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (attempt) await new Promise(r => setTimeout(r, 600 * attempt));
+      for (const host of [RAW, RAW_ALT]) {
+        try {
+          const r = await fetch(host + file);
+          if (!r.ok) continue;
+          const j = await r.json();
+          if (j && typeof j === "object" && Object.keys(j).length) return j;
+        } catch (e) { /* try the other host */ }
+      }
+    }
+    return null;
+  }
+
+  volume(file) {
+    if (this.vols[file]) return this.vols[file];
+    const p = this.getVolume(file);
+    p.then(j => {
+      if (j) p.__v = j; else p.__failed = true;   // entry is KEPT, so the error is visible
+      this.setState(s => ({ tick: s.tick + 1 }));
+    });
+    this.vols[file] = p;
+    return p;
+  }
+
+  retryVolumes() {
+    Object.keys(this.vols).forEach(f => { if (this.vols[f].__failed) delete this.vols[f]; });
+    this.setState(s => ({ tick: s.tick + 1 }));
+  }
+
+  parseRestRef(ref) {
+    const m = String(ref).match(/^(.+?)\s+(\d+):(\d+)(?:-(\d+))?$/);
+    if (!m) return null;
+    const book = m[1].trim();
+    return { book, file: this.volFor(book), c: +m[2], v1: +m[3], v2: m[4] ? +m[4] : +m[3], ref };
+  }
+
+  restVerses(refs) {
+    const out = []; let pending = false, failed = false; const links = [];
+    for (const r of refs) {
+      const p = this.parseRestRef(r);
+      if (!p || !p.file) continue;
+      const vol = this.volume(p.file);
+      const data = vol.__v;
+      if (!data) {
+        if (vol.__failed) { failed = true; const u = churchUrl(p); if (u) links.push({ label: r, href: u }); }
+        else pending = true;
+        continue;
+      }
+      let bk = data[p.book];
+      if (!bk) {
+        const norm = s => s.toLowerCase().replace(/[^a-z0-9]+/g, "");
+        const key = Object.keys(data).find(k => norm(k) === norm(p.book));
+        bk = key ? data[key] : null;
+      }
+      const ch = bk ? bk[String(p.c)] : data[String(p.c)];
+      if (!ch) continue;
+      for (let v = p.v1; v <= p.v2; v++) {
+        const cell = ch[String(v)];
+        if (cell == null) continue;
+        const text = typeof cell === "string" ? cell : cell.text || cell.verse_text || "";
+        out.push({ n: (p.book === "Doctrine and Covenants" ? "D&C " : ABBRBOOK(p.book) + " ") + p.c + ":" + v, text });
+      }
+    }
+    return { list: out, pending, failed, links };
+  }
+
+  /* §NNN inside a note becomes a jump to that pericope */
+  noteParts(raw, flat) {
+    if (!raw) return [];
+    return raw.split(/(§\s?\d+)/).filter(Boolean).map(piece => {
+      const m = piece.match(/^§\s?(\d+)$/);
+      if (!m) return { text: piece, plain: true };
+      const target = (flat || []).find(p => p.n === +m[1]);
+      return target
+        ? { text: "§" + m[1], jump: true, onClick: () => this.go(target.id) }
+        : { text: piece, plain: true };
+    });
+  }
+
+  /* Which Restoration passages parallel this pericope */
+  restRefs(p) {
+    const par = this.state.par;
+    if (!par || !p) return { refs: [], labels: [] };
+    const refs = [], labels = [];
+    const sermon = par.sermon.Matthew;
+    const mt = p.refs.Matthew && !this.isCitation(p.refs.Matthew) ? this.parseRef(p.refs.Matthew) : null;
+    if (mt) for (const r of mt.ranges) {
+      const target = sermon[String(r.c)];
+      if (target) { refs.push(target + ":" + r.v1 + "-" + r.v2); labels.push("Verse-for-verse in " + target); }
+    }
+    for (const e of par.entries) {
+      const hit = e.match.some(([book, c, v1, v2]) => {
+        const ref = p.refs[book]; if (!ref) return false;
+        const parsed = this.parseRef(ref);
+        if (parsed.book) return false;
+        return parsed.ranges.some(r => r.c === c && r.v1 <= v2 && r.v2 >= v1);
+      });
+      if (hit) { e.refs.forEach(r => refs.push(r)); labels.push(e.label); }
+    }
+    return { refs, labels };
+  }
+
+  cfmFor(p) {
+    const cfm = this.state.cfm;
+    if (!cfm || !p) return null;
+    return cfm.weeks.find(w => w.ranges.some(([book, c1, c2]) => {
+      const ref = p.refs[book]; if (!ref) return false;
+      const parsed = this.parseRef(ref);
+      if (parsed.book) return false;   // a citation from another book, not this gospel
+      return parsed.ranges.some(r => r.c >= c1 && r.c <= c2);
+    })) || null;
+  }
+
+  /* Build a token model for one gospel column: segments per verse + a flat
+     normalised word sequence used for phrase (bigram) comparison. */
+  model(transCode, book, ref) {
+    return this.modelFrom(this.verses(transCode, book, ref));
+  }
+
+  modelFrom({ list, pending, failed }) {
+    const verses = [];
+    const seq = [];
+    for (const v of list) {
+      const segs = (this.clean(v.text).match(/[A-Za-z\u2019']+|[^A-Za-z\u2019']+/g) || []).map(raw => {
+        if (!/[A-Za-z]/.test(raw)) return { raw, word: false };
+        const norm = raw.toLowerCase().replace(/[\u2019']/g, "");
+        const k = seq.length;
+        seq.push(norm);
+        return { raw, word: true, norm, k };
+      });
+      verses.push({ n: v.n, segs });
+    }
+    return { verses, seq, pending, failed, bigrams: this.bigrams(seq), words: new Set(seq) };
+  }
+
+  bigrams(seq) {
+    const s = new Set();
+    for (let i = 0; i < seq.length - 1; i++) s.add(seq[i] + "\u0000" + seq[i + 1]);
+    return s;
+  }
+
+  /* A token agrees with another gospel when it sits inside a two-word run
+     that gospel also contains — phrase agreement, not stray word matches. */
+  agreement(models, list) {
+    list = list || GOSPELS;
+    const flags = {};
+    for (const g of list) {
+      const m = models[g]; if (!m) continue;
+      flags[g] = m.seq.map((w, i) => {
+        const set = [];
+        for (const h of list) {
+          if (h === g || !models[h]) continue;
+          const b1 = i > 0 ? models[g].seq[i - 1] + "\u0000" + w : null;
+          const b2 = i < m.seq.length - 1 ? w + "\u0000" + models[g].seq[i + 1] : null;
+          if ((b1 && models[h].bigrams.has(b1)) || (b2 && models[h].bigrams.has(b2))) set.push(h);
+        }
+        const anywhere = list.some(h => h !== g && models[h] && models[h].words.has(w));
+        return { set, unique: !anywhere && !STOP.has(w) && w.length > 2 };
+      });
+    }
+    return flags;
+  }
+
+  pairStats(models, flags, list) {
+    list = list || GOSPELS;
+    const out = [];
+    for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+      const a = list[i], b = list[j];
+      if (!models[a] || !models[b] || !models[a].seq.length || !models[b].seq.length) continue;
+      const ma = flags[a].filter(f => f.set.includes(b)).length;
+      const mb = flags[b].filter(f => f.set.includes(a)).length;
+      const pct = Math.round((100 * (ma + mb)) / (models[a].seq.length + models[b].seq.length));
+      out.push({ a, b, pct, label: ABBR[a] + "–" + ABBR[b] });
+    }
+    return out.sort((x, y) => y.pct - x.pct);
+  }
+
+  runs(model, flags, lang, rawVerse, interlinear) {
+    if (lang === "grc") {
+      const parts = String(rawVerse).split(/(<S>\d+<\/S>)/).map(s => (/^<S>\d+<\/S>$/.test(s) ? s : s.replace(/<[^>]+>/g, "")));
+      const out = []; let buf = "";
+      const flush = () => { if (buf) out.push({ t: buf, plain: true }); buf = ""; };
+      for (let i = 0; i < parts.length; i++) {
+        const seg = parts[i];
+        if (/^<S>\d+<\/S>$/.test(seg)) continue;
+        const num = (parts[i + 1] || "").match(/^<S>(\d+)<\/S>$/);
+        if (!interlinear || !num) { buf += seg; continue; }
+        const words = seg.split(/(\s+)/);
+        let last = -1;
+        words.forEach((w, k) => { if (/\S/.test(w)) last = k; });
+        words.forEach((w, k) => {
+          if (k === last) { flush(); out.push({ t: w, grk: true, onClick: () => this.showGloss(w, num[1]) }); }
+          else buf += w;
+        });
+      }
+      flush();
+      return out.length ? out : [{ t: this.clean(rawVerse), plain: true }];
+    }
+    return null;
+  }
+
+  showGloss(word, num) {
+    const key = "G" + num;
+    const strip = h => String(h).replace(/<p\s*\/?>/g, "\n").replace(/<[^>]+>/g, "").replace(/\n{3,}/g, "\n\n").replace(/[ \t]+/g, " ").trim();
+    if (this.glossCache[key]) { this.setState({ gloss: { word: word.trim(), num: key, body: this.glossCache[key] } }); return; }
+    this.setState({ gloss: { word: word.trim(), num: key, body: "Loading definition…" } });
+    fetch("https://bolls.life/dictionary-definition/BDBT/" + key + "/")
+      .then(r => r.json())
+      .then(j => {
+        const body = strip((j && j[0] && j[0].definition) || "No entry found.");
+        this.glossCache[key] = body;
+        this.setState(s => (s.gloss && s.gloss.num === key ? { gloss: { ...s.gloss, body } } : {}));
+      })
+      .catch(() => this.setState(s => (s.gloss && s.gloss.num === key ? { gloss: { ...s.gloss, body: "Definition unavailable." } } : {})));
+  }
+
+  go(id) {
+    const p = (this.state.flat || [])[id]; if (!p) return;
+    this.setState(s => ({ curId: id, open: { ...s.open, [p.si]: true }, gloss: null, jumpMsg: "", hover: null }), () => { this.persist(); this.load(); });
+  }
+
+  jumpTo() {
+    const q = this.state.jump.trim();
+    const m = q.match(/^(\d?\s*[A-Za-z]+)\s*(\d+)[:.\s]?(\d+)?/);
+    if (!m) { this.setState({ jumpMsg: "Try “John 3:16”." }); return; }
+    const book = GOSPELS.find(g => g.toLowerCase().startsWith(m[1].trim().toLowerCase().slice(0, 3)));
+    if (!book) { this.setState({ jumpMsg: "Gospels only: Matthew, Mark, Luke, John." }); return; }
+    const c = +m[2], v = m[3] ? +m[3] : 1;
+    const hit = (this.state.flat || []).find(p => {
+      const ref = p.refs[book]; if (!ref) return false;
+      const parsed = this.parseRef(ref);
+      if (parsed.book) return false;
+      return parsed.ranges.some(r => r.c === c && v >= r.v1 && v <= r.v2);
+    });
+    if (!hit) { this.setState({ jumpMsg: "No pericope covers " + book + " " + c + ":" + v + "." }); return; }
+    this.go(hit.id);
+  }
+
+  chip(on, wide) {
+    return on
+      ? "padding: 5px " + (wide ? "11px" : "10px") + "; border-radius: " + (wide ? "999px" : "3px") + "; border: 1px solid #221e18; background: #221e18; color: #f7f3ea; font-size: 11.5px; letter-spacing: .04em; cursor: pointer; white-space: nowrap;"
+      : "padding: 5px " + (wide ? "11px" : "10px") + "; border-radius: " + (wide ? "999px" : "3px") + "; border: 1px solid #d3c9b2; background: transparent; color: #6d6558; font-size: 11.5px; letter-spacing: .04em; cursor: pointer; white-space: nowrap;";
+  }
+
+  renderVals() {
+    const st = this.state;
+    const data = st.data;
+    const flat = st.flat || [];
+    const cur = this.cur();
+    const active = TRANS.filter(t => st.trans[t.code]);
+    const eng = active.find(t => t.lang === "en");
+    const mode = st.mode;
+    /* Which gospel columns are on screen. Agreement, percentages and the
+       summary are all measured across the shown columns only, so what the
+       tints claim is always something the reader can see. */
+    const shown = GOSPELS.filter(g => st.show[g] !== false);
+    const SHOWN = shown.length ? shown : GOSPELS;
+    const base = st.base && SHOWN.indexOf(st.base) >= 0 && cur && cur.refs[st.base] ? st.base : null;
+
+    const q = st.query.trim().toLowerCase();
+    const nav = (data ? data.sections : []).map((sec, si) => {
+      const items = flat.filter(p => p.si === si && (!q || p.title.toLowerCase().includes(q))
+        && (!st.cfmWeek || (this.cfmFor(p) || {}).n === st.cfmWeek));
+      return {
+        title: sec.title.replace(/^§\s*\d+\.\s*/, ""),
+        mark: "§" + (si + 1),
+        count: items.length,
+        open: q ? items.length > 0 : !!st.open[si],
+        onToggle: () => this.setState(s => ({ open: { ...s.open, [si]: !s.open[si] } })),
+        items: items.map(p => ({
+          n: p.n, title: p.title,
+          gospels: GOSPELS.filter(g => p.refs[g]).map(g => ABBR[g]).join(" "),
+          style: "display: flex; gap: 9px; align-items: baseline; text-align: left; width: 100%; padding: 6px 10px; border: 0; border-radius: 3px; cursor: pointer;"
+            + (p.id === st.curId ? "background: #221e18; color: #f7f3ea;" : "background: " + (st.marks[p.id] ? "rgba(140,47,36,.07)" : "transparent") + "; color: #221e18;"),
+          onClick: () => this.go(p.id)
+        }))
+      };
+    }).filter(sec => (!q && !st.cfmWeek) || sec.items.length > 0);
+
+    const rest = cur ? this.restRefs(cur) : { refs: [], labels: [] };
+    const restOn = st.restOn && rest.refs.length > 0;
+    const COMPARE = restOn ? SHOWN.concat(["Restoration"]) : SHOWN;
+    const restRead = restOn ? this.restVerses(rest.refs) : { list: [], pending: false };
+
+    // ---- comparison model for the primary English text -------------------
+    let models = {}, flags = {}, pairs = [], vlinks = {};
+    if (cur && eng) {
+      SHOWN.forEach(g => {
+        const ref = cur.refs[g];
+        if (!ref || this.parseRef(ref).note) return;
+        const m = this.model(eng.code, g, ref);
+        if (m.verses.length) models[g] = m;
+      });
+      if (restOn && restRead.list.length) models.Restoration = this.modelFrom(restRead);
+      flags = this.agreement(models, COMPARE);
+      pairs = this.pairStats(models, flags, COMPARE);
+      if (st.hover) {
+        const src = models[st.hover.g];
+        const sv = src && src.verses[st.hover.i];
+        if (sv) {
+          const sb = this.bigrams(sv.segs.filter(s => s.word).map(s => s.norm));
+          COMPARE.forEach(g => {
+            if (g === st.hover.g || !models[g]) return;
+            let best = -1, score = 1;
+            models[g].verses.forEach((vv, i) => {
+              const seq = vv.segs.filter(s => s.word).map(s => s.norm);
+              let n = 0;
+              for (let k = 0; k < seq.length - 1; k++) if (sb.has(seq[k] + "\u0000" + seq[k + 1])) n++;
+              if (n > score) { score = n; best = i; }
+            });
+            if (best >= 0) vlinks[g] = best;
+          });
+        }
+      }
+    }
+
+    const analyses = {};
+    const analyze = code => {
+      if (analyses[code]) return analyses[code];
+      const ms = {};
+      SHOWN.forEach(g => {
+        const ref = cur && cur.refs[g];
+        if (!ref || this.parseRef(ref).note) return;
+        const m = this.model(code, g, ref);
+        if (m.verses.length) ms[g] = m;
+      });
+      if (restOn && restRead.list.length) ms.Restoration = this.modelFrom(restRead);
+      const a = { models: ms, flags: this.agreement(ms, COMPARE) };
+      analyses[code] = a;
+      return a;
+    };
+    if (eng) analyses[eng.code] = { models, flags };
+
+    const classify = (g, seg, fl) => {
+      if (!seg.word || !fl || !fl[g] || mode === "off") return "plain";
+      const f = fl[g][seg.k];
+      if (!f) return "plain";
+      if (base) {
+        if (g === base) return f.set.length ? "a" + Math.min(3, f.set.length) : (f.unique ? "uniq" : "plain");
+        return f.set.includes(base) ? "a3" : (f.unique ? "uniq" : "plain");
+      }
+      if (mode === "unique") return f.unique ? "uniq" : "plain";
+      if (f.set.length) return "a" + Math.min(3, f.set.length);
+      return f.unique && mode === "agree" ? "uniq" : "plain";
+    };
+
+    const verseStyle = (g, i) => {
+      let s = "margin: 0 0 11px; padding: 1px 0 1px 10px; border-left: 2px solid transparent; transition: opacity .12s, border-color .12s, background .12s;";
+      if (!st.hover) return s;
+      if (st.hover.g === g && st.hover.i === i) return s + "border-left-color: #221e18; background: rgba(34,30,24,.04);";
+      if (vlinks[g] === i) return s + "border-left-color: #8c2f24; background: rgba(140,47,36,.05);";
+      return s + "opacity: .3;";
+    };
+
+    let columns = [], refLine = "";
+    if (cur) {
+      refLine = GOSPELS.filter(g => cur.refs[g]).map(g => {
+        const ref = cur.refs[g];
+        if (this.parseRef(ref).note) return g + " — no verse reference";
+        return (this.isCitation(ref) ? "" : g + " ") + this.refDisplay(ref);
+      }).join("  ·  ");
+      columns = COMPARE.map(g => {
+        if (g === "Restoration") {
+          const verses = (models.Restoration ? models.Restoration.verses : []).map((v, i) => {
+            const runs = []; let buf = "", cls = "plain";
+            const push = () => { if (!buf) return; const o = { t: buf }; o[cls === "plain" ? "plain" : cls] = true; runs.push(o); buf = ""; };
+            for (const seg of v.segs) {
+              const c = classify("Restoration", seg, flags);
+              if (c !== cls) { push(); cls = c; }
+              buf += seg.raw;
+            }
+            push();
+            return { n: v.n, showNum: st.showNums, runs, style: verseStyle("Restoration", i), onEnter: () => this.setState({ hover: { g: "Restoration", i } }), onLeave: () => this.setState({ hover: null }) };
+          });
+          return {
+            book: "Restoration", ref: rest.refs.join("; "), baseTag: "", baseHint: "", noParallel: false,
+            voice: st.voiceOn ? VOICE.Restoration : "",
+            onBase: () => {}, headStyle: "position: sticky; top: 0; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; width: 100%; text-align: left; padding: 11px 14px 9px; border: 0; border-bottom: 1px solid #ddd5c4; background: #f2ece0; cursor: default;",
+            panes: [{
+              label: rest.labels[0] || "Latter-day parallel", showLabel: true,
+              textStyle: "font-family: 'EB Garamond', serif; font-size: 17px; line-height: 1.6; color: #221e18;",
+              verses, links: restRead.links || [],
+              empty: verses.length === 0 && !(restRead.links || []).length,
+              emptyMsg: restRead.failed ? "Couldn’t load the Restoration text — click to retry." : restRead.pending ? "Loading…" : "Not available.",
+              onEmptyClick: () => this.retryVolumes()
+            }]
+          };
+        }
+        return (g => {
+        const ref = cur.refs[g];
+        const note = ref ? this.parseRef(ref).note : "";
+        const isBase = base === g;
+        const cite = ref ? this.parseRef(ref).book : null;
+        return {
+          book: cite || g,
+          voice: st.voiceOn ? VOICE[g] : "",
+          ref: !ref ? "—" : (note ? "no verse reference" : this.refDisplay(ref)),
+          baseTag: cite ? "Cited, not " + g : isBase ? "Base text" : "",
+          baseHint: ref ? (isBase ? "Clear base text" : "Compare every column against " + g) : "",
+          noParallel: !ref,
+          onBase: () => ref && this.setState(s => ({ base: s.base === g ? null : g, hover: null })),
+          headStyle: "position: sticky; top: 0; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; width: 100%; text-align: left; padding: 11px 14px 9px; cursor: " + (ref ? "pointer" : "default") + "; border: 0; border-bottom: 1px solid " + (isBase ? "#221e18" : "#ddd5c4") + "; background: " + (isBase ? "#efe9dc" : "#f7f3ea") + ";",
+          panes: (ref && !note ? active : ref && note ? active.slice(0, 1) : []).map(t => {
+            const isEng = t.lang === "en";
+            const an = isEng && !note ? analyze(t.code) : null;
+            const m = an && an.models[g] ? an.models[g] : (note ? { verses: [], pending: false } : this.model(t.code, g, ref));
+            const raws = isEng ? null : this.verses(t.code, g, ref).list;
+            const verses = t.lang === "grc"
+              ? (raws || []).map(v => ({ n: v.n, showNum: st.showNums, runs: this.runs(null, null, "grc", v.text, st.interlinear), style: "margin: 0 0 11px; padding-left: 10px;" }))
+              : m.verses.map((v, i) => {
+                  const runs = []; let buf = "", cls = "plain";
+                  const push = () => { if (!buf) return; const o = { t: buf }; o[cls === "plain" ? "plain" : cls] = true; runs.push(o); buf = ""; };
+                  for (const seg of v.segs) {
+                    const c = classify(g, seg, an && an.flags);
+                    if (c !== cls) { push(); cls = c; }
+                    buf += seg.raw;
+                  }
+                  push();
+                  return { n: v.n, showNum: st.showNums, runs, style: verseStyle(g, i), onEnter: () => this.setState({ hover: { g, i } }), onLeave: () => this.setState({ hover: null }) };
+                });
+            return {
+              label: t.code === "TISCH" ? "Tischendorf" : t.label,
+              showLabel: active.length > 1,
+              textStyle: t.lang === "grc"
+                ? "font-family: 'Gentium Book Plus', serif; font-size: 16.5px; line-height: 1.62; color: #2c2a3a;"
+                : "font-family: 'EB Garamond', serif; font-size: 17px; line-height: 1.6; color: #221e18;",
+              verses,
+              empty: verses.length === 0,
+              emptyMsg: note || (m.failed ? t.label + " didn’t load — click to retry." : m.pending ? "Loading…" : "Not available."),
+              onEmptyClick: () => { this.retries = {}; this.load(); }
+            };
+          })
+        };
+        })(g);
+      });
+    }
+
+    // ---- narrative summary ------------------------------------------------
+    let summary = "";
+    if (cur) {
+      const present = SHOWN.filter(g => this.hasPassage(cur, g));
+      const absent = SHOWN.filter(g => !this.hasPassage(cur, g));
+      const cited = SHOWN.map(g => cur.refs[g]).filter(r => this.isCitation(r)).map(r => this.refDisplay(r));
+      if (!present.length) summary = cited.length
+        ? "Aland prints only a citation here — " + cited.join("; ") + " — with no gospel passage to compare."
+        : "No gospel passage is printed here; see the note above.";
+      else if (present.length === 1) summary = "Told only by " + present[0] + " — no synoptic parallel to compare.";
+      else if (!pairs.length) summary = "Loading the texts…";
+      else {
+        const top = pairs[0], low = pairs[pairs.length - 1];
+        summary = top.a + " and " + top.b + " share the most wording here (" + top.pct + "% of their words fall inside phrases the other also has)";
+        if (pairs.length > 1 && top.pct - low.pct > 8) summary += ", while " + low.a + " and " + low.b + " overlap least (" + low.pct + "%)";
+        summary += ". ";
+        if (absent.length === 1) summary += absent[0] + " has no parallel. ";
+        else if (absent.length > 1) summary += absent.slice(0, -1).join(", ") + " and " + absent[absent.length - 1] + " have no parallel. ";
+        summary += base ? "Every column is measured against " + base + "." : "Click a gospel heading to make it the base text; hover a verse to find its counterpart.";
+      }
+    }
+
+    const legend = mode === "off" || !pairs.length ? [] : (base
+      ? [{ label: "Agrees with " + base, swatch: "width: 14px; height: 14px; border-radius: 3px; background: " + AG[3] + "; display: block;" },
+         { label: "Found nowhere else", swatch: "width: 14px; height: 14px; border-radius: 3px; background: transparent; border-bottom: 2px solid #8c2f24; display: block;" }]
+      : mode === "unique"
+        ? [{ label: "Unique to this gospel", swatch: "width: 14px; height: 14px; border-radius: 3px; background: transparent; border-bottom: 2px solid #8c2f24; display: block;" }]
+        : [{ label: "Shared with one", swatch: "width: 14px; height: 14px; border-radius: 3px; background: " + AG[1] + "; display: block;" },
+           { label: "with two", swatch: "width: 14px; height: 14px; border-radius: 3px; background: " + AG[2] + "; display: block;" },
+           { label: "with three", swatch: "width: 14px; height: 14px; border-radius: 3px; background: " + AG[3] + "; display: block;" },
+           { label: "unique", swatch: "width: 14px; height: 14px; border-radius: 3px; background: transparent; border-bottom: 2px solid #8c2f24; display: block;" }]);
+
+    // ---- observation questions -------------------------------------------
+    const narrow = st.vw < 1000;
+    const cfmWeek = cur ? this.cfmFor(cur) : null;
+    const questions = [];
+    if (cur && pairs.length) {
+      const lens = {};
+      Object.keys(models).forEach(g => { lens[g] = models[g].seq.length; });
+      const named = Object.keys(lens).sort((a, b) => lens[b] - lens[a]);
+      const top = pairs[0];
+      questions.push("Read " + top.a + " and " + top.b + " side by side. They agree in " + top.pct + "% of their wording — find the places they part, and note exactly what each one changes.");
+      if (named.length > 1) questions.push(named[0] + " is the longest account here (" + lens[named[0]] + " words) and " + named[named.length - 1] + " the shortest (" + lens[named[named.length - 1]] + "). What does the longer account spend its extra words on?");
+      const uniq = named.filter(g => flags[g] && flags[g].some(f => f.unique));
+      if (uniq.length) questions.push("Look at the oxblood words: " + uniq.join(", ") + (uniq.length > 1 ? " each carry" : " carries") + " material no other account has here. Write down what would be missing if you only had the others.");
+      const absent = SHOWN.filter(g => !cur.refs[g]);
+      if (absent.length) questions.push(absent.join(" and ") + (absent.length > 1 ? " leave" : " leaves") + " this out entirely. Where does " + (absent.length > 1 ? "each" : "that gospel") + " go instead at this point in the story?");
+      if (restOn && models.Restoration) questions.push("Compare the latter-day text (" + rest.refs.join("; ") + ") against the gospel columns. What is added, and what is left out?");
+    }
+
+    const note = cur ? st.notes[cur.id] || "" : "";
+    return {
+      query: st.query,
+      onQuery: e => this.setState({ query: e.target.value }),
+      jump: st.jump, jumpMsg: st.jumpMsg,
+      onJump: e => this.setState({ jump: e.target.value, jumpMsg: "" }),
+      onJumpKey: e => { if (e.key === "Enter") this.jumpTo(); },
+      nav,
+      cfmValue: st.cfmWeek ? String(st.cfmWeek) : "",
+      cfmOptions: [{ v: "", label: "All 367 pericopes" }].concat((st.cfm ? st.cfm.weeks : []).filter(w => w.ranges.length).map(w => ({ v: String(w.n), label: w.dates + " · " + w.ranges.map(r => ABBR[r[0]] + " " + (r[1] === r[2] ? r[1] : r[1] + "–" + r[2])).join("; ") }))),
+      onCfm: e => { const v = e.target.value; this.setState({ cfmWeek: v ? +v : null }); },
+      transChips: TRANS.map(t => ({
+        label: t.label, style: this.chip(!!st.trans[t.code], true),
+        onToggle: () => this.setState(s => ({ trans: { ...s.trans, [t.code]: !s.trans[t.code] } }), () => { this.persist(); this.load(); })
+      })),
+      modeChips: [
+        { label: "Agreement", hint: "Tint phrases by how many gospels share them", style: this.chip(mode === "agree" && !base), onClick: () => this.setState({ mode: "agree", base: null }, () => this.persist()) },
+        { label: "Unique only", hint: "Show only what this gospel alone reports", style: this.chip(mode === "unique" && !base), onClick: () => this.setState({ mode: "unique", base: null }, () => this.persist()) },
+        { label: base ? "Base: " + ABBR[base] : "Base text", hint: "Click a gospel heading to set the base", style: this.chip(!!base), onClick: () => this.setState(s => ({ base: s.base ? null : SHOWN.find(g => cur && cur.refs[g]) || null })) },
+        { label: "Off", hint: "Plain text, no comparison", style: this.chip(mode === "off"), onClick: () => this.setState({ mode: "off", base: null }, () => this.persist()) }
+      ],
+      optChips: [
+        { label: "Verse nos.", hint: "Show or hide verse numbers", style: this.chip(st.showNums), onToggle: () => this.setState(s => ({ showNums: !s.showNums }), () => this.persist()) },
+        { label: "Author voice", hint: "One line on each writer's characteristic emphasis", style: this.chip(st.voiceOn), onToggle: () => this.setState(s => ({ voiceOn: !s.voiceOn }), () => this.persist()) },
+        { label: "Interlinear Greek", hint: "Click a Greek word for its lexicon entry", style: this.chip(st.interlinear), onToggle: () => this.setState(s => ({ interlinear: !s.interlinear }), () => this.persist()) }
+      ],
+      legend, legendShow: legend.length > 0, hasQuestions: questions.length > 0,
+      legend2: mode === "off" || !pairs.length ? "" : "Phrases, not stray words — a word counts as shared only inside a two-word run the other gospel also has.",
+      analysis: { has: !!cur, hasPairs: pairs.length > 0, pairs: pairs.map(p => ({ label: p.label, pct: p.pct + "%", barStyle: "display: block; height: 100%; width: " + p.pct + "%; background: " + (p.pct > 55 ? "#8c2f24" : p.pct > 25 ? "#c08a3e" : "#c3b9a2") + ";" })), summary },
+      restChip: { label: rest.refs.length ? "Restoration parallel" : "No Restoration parallel", style: this.chip(restOn, true) + (rest.refs.length ? "" : "opacity:.45;cursor:default;"), onToggle: () => rest.refs.length && this.setState(s => ({ restOn: !s.restOn })) },
+      cfmBadge: cfmWeek ? { label: "Come, Follow Me · " + cfmWeek.dates, title: cfmWeek.title } : null,
+      cfmChip: { label: cfmWeek ? "CFM week " + cfmWeek.n : "Not in a CFM gospel week", style: "padding: 4px 9px; border-radius: 3px; border: 1px solid #d3c9b2; background: transparent; color: #6d6558; font-size: 11px; cursor: default;" },
+      questions, qOpen: st.qOpen, qToggleLabel: st.qOpen ? "hide" : "show", onToggleQ: () => this.setState(s => ({ qOpen: !s.qOpen })),
+      narrow, navOpen: !narrow || st.navOpen,
+      onToggleNav: () => this.setState(s => ({ navOpen: !s.navOpen })),
+      asideStyle: narrow
+        ? "position: absolute; z-index: 30; top: 0; bottom: 0; left: 0; width: 320px; display: " + (st.navOpen ? "flex" : "none") + "; flex-direction: column; min-height: 0; background: #efe9dc; border-right: 1px solid #d8cfba; box-shadow: 0 0 40px rgba(34,30,24,.2);"
+        : "flex: 0 0 320px; width: 320px; display: flex; flex-direction: column; min-height: 0; background: #efe9dc; border-right: 1px solid #d8cfba;",
+      gospelChips: GOSPELS.map(g => ({
+        label: ABBR[g], full: g,
+        hint: (st.show[g] !== false ? "Hide " : "Show ") + g + (cur && !cur.refs[g] ? " — no passage in this pericope" : ""),
+        style: this.chip(st.show[g] !== false) + (cur && !cur.refs[g] ? "opacity:.5;" : ""),
+        onToggle: () => this.setState(s => {
+          const on = s.show[g] !== false;
+          if (on && GOSPELS.filter(x => s.show[x] !== false).length === 1) return null;
+          return { show: { ...s.show, [g]: !on }, base: s.base === g && on ? null : s.base, hover: null };
+        }, () => this.persist())
+      })),
+      chronNote: cur && st.chron ? st.chron[String(cur.n)] || "" : "",
+      chronNoteParts: this.noteParts(cur && st.chron ? st.chron[String(cur.n)] || "" : "", flat),
+      /* On tablets two columns still fit side by side when only one translation
+         is on; below that the columns stack. */
+      gridStyle: narrow
+        ? (columns.length <= 2 && active.length === 1 && st.vw >= 680
+            ? "display: grid; grid-template-columns: repeat(" + columns.length + ", minmax(0, 1fr)); margin-top: 22px; border-top: 1px solid #ddd5c4;"
+            : "display: grid; grid-template-columns: minmax(0, 1fr); margin-top: 22px; border-top: 1px solid #ddd5c4;")
+        : "display: grid; grid-template-columns: repeat(" + columns.length + ", minmax(0, 1fr)); min-width: " + (columns.length * Math.max(1, active.length) * (active.length > 1 ? 252 : 320)) + "px; margin-top: 22px; border-top: 1px solid #ddd5c4;",
+      cur: cur ? { n: cur.n, title: cur.title, section: (data.sections[cur.si] || {}).title || "", refLine, columns }
+               : { n: "", title: "Loading…", section: "", refLine: "", columns: [] },
+      onPrev: () => this.go(Math.max(0, st.curId - 1)),
+      onNext: () => this.go(Math.min(flat.length - 1, st.curId + 1)),
+      bookmarkLabel: cur && st.marks[cur.id] ? "Bookmarked" : "Bookmark",
+      bookmarkStyle: "padding: 7px 13px; border-radius: 3px; font-size: 12px; cursor: pointer; border: 1px solid " + (cur && st.marks[cur.id] ? "#8c2f24; background: #8c2f24; color: #f7f3ea;" : "#d3c9b2; background: transparent; color: #6d6558;"),
+      onBookmark: () => cur && this.setState(s => ({ marks: { ...s.marks, [cur.id]: !s.marks[cur.id] } }), () => this.persist()),
+      noteBtn: note ? "Note ●" : "Note",
+      noteOpen: st.noteOpen,
+      onToggleNote: () => this.setState(s => ({ noteOpen: !s.noteOpen })),
+      note,
+      onNote: e => { const v = e.target.value; this.setState(s => ({ notes: { ...s.notes, [cur.id]: v } }), () => this.persist()); },
+      dataNote: cur && st.dataNotes ? st.dataNotes[String(cur.n)] || "" : "",
+      /* §NNN inside a note becomes a jump */
+      dataNoteParts: this.noteParts(cur && st.dataNotes ? st.dataNotes[String(cur.n)] || "" : "", flat),
+      aboutOpen: st.aboutOpen,
+      onAbout: () => this.setState(s => ({ aboutOpen: !s.aboutOpen })),
+      stopProp: e => e.stopPropagation(),
+      tabTool: st.aboutTab === "tool",
+      tabUse: st.aboutTab === "use",
+      tabBio: st.aboutTab === "bio",
+      tabToolColor: st.aboutTab === "tool" ? "#8c2f24" : "#8a8172",
+      tabUseColor: st.aboutTab === "use" ? "#8c2f24" : "#8a8172",
+      tabBioColor: st.aboutTab === "bio" ? "#8c2f24" : "#8a8172",
+      tabToolBorder: st.aboutTab === "tool" ? "#8c2f24" : "transparent",
+      tabUseBorder: st.aboutTab === "use" ? "#8c2f24" : "transparent",
+      tabBioBorder: st.aboutTab === "bio" ? "#8c2f24" : "transparent",
+      onTabTool: () => this.setState({ aboutTab: "tool" }),
+      onTabUse: () => this.setState({ aboutTab: "use" }),
+      onTabBio: () => this.setState({ aboutTab: "bio" }),
+      gloss: st.gloss,
+      onCloseGloss: () => this.setState({ gloss: null })
+    };
+  }
+}
+
+</script>
+</body>
+</html>

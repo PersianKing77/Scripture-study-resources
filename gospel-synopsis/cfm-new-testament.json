@@ -1,0 +1,481 @@
+{
+ "year": "New Testament (Come, Follow Me rotation — 2023 outline; the New Testament year repeats in 2027)",
+ "weeks": [
+  {
+   "n": 2,
+   "dates": "January 2–8",
+   "title": "“Be It unto Me according to Thy Word”",
+   "ranges": [
+    [
+     "Matthew",
+     1,
+     1
+    ],
+    [
+     "Luke",
+     1,
+     1
+    ]
+   ]
+  },
+  {
+   "n": 3,
+   "dates": "January 9–15",
+   "title": "We Have Come to Worship Him",
+   "ranges": [
+    [
+     "Matthew",
+     2,
+     2
+    ],
+    [
+     "Luke",
+     2,
+     2
+    ]
+   ]
+  },
+  {
+   "n": 4,
+   "dates": "January 16–22",
+   "title": "We Have Found the Messiah",
+   "ranges": [
+    [
+     "John",
+     1,
+     1
+    ]
+   ]
+  },
+  {
+   "n": 5,
+   "dates": "January 23–29",
+   "title": "“Prepare Ye the Way of the Lord”",
+   "ranges": [
+    [
+     "Matthew",
+     3,
+     3
+    ],
+    [
+     "Mark",
+     1,
+     1
+    ],
+    [
+     "Luke",
+     3,
+     3
+    ]
+   ]
+  },
+  {
+   "n": 6,
+   "dates": "January 30–February 5",
+   "title": "“The Spirit of the Lord Is upon Me”",
+   "ranges": [
+    [
+     "Matthew",
+     4,
+     4
+    ],
+    [
+     "Luke",
+     4,
+     5
+    ]
+   ]
+  },
+  {
+   "n": 7,
+   "dates": "February 6–12",
+   "title": "“Ye Must Be Born Again”",
+   "ranges": [
+    [
+     "John",
+     2,
+     4
+    ]
+   ]
+  },
+  {
+   "n": 8,
+   "dates": "February 13–19",
+   "title": "“Blessed Are Ye”",
+   "ranges": [
+    [
+     "Matthew",
+     5,
+     5
+    ],
+    [
+     "Luke",
+     6,
+     6
+    ]
+   ]
+  },
+  {
+   "n": 9,
+   "dates": "February 20–26",
+   "title": "“He Taught Them as One Having Authority”",
+   "ranges": [
+    [
+     "Matthew",
+     6,
+     7
+    ]
+   ]
+  },
+  {
+   "n": 10,
+   "dates": "February 27–March 5",
+   "title": "“Thy Faith Hath Saved Thee”",
+   "ranges": [
+    [
+     "Matthew",
+     8,
+     8
+    ],
+    [
+     "Mark",
+     2,
+     4
+    ],
+    [
+     "Luke",
+     7,
+     7
+    ]
+   ]
+  },
+  {
+   "n": 11,
+   "dates": "March 6–12",
+   "title": "“These Twelve Jesus Sent Forth”",
+   "ranges": [
+    [
+     "Matthew",
+     9,
+     10
+    ],
+    [
+     "Mark",
+     5,
+     5
+    ],
+    [
+     "Luke",
+     9,
+     9
+    ]
+   ]
+  },
+  {
+   "n": 12,
+   "dates": "March 13–19",
+   "title": "“I Will Give You Rest”",
+   "ranges": [
+    [
+     "Matthew",
+     11,
+     12
+    ],
+    [
+     "Luke",
+     11,
+     11
+    ]
+   ]
+  },
+  {
+   "n": 13,
+   "dates": "March 20–26",
+   "title": "“Who Hath Ears to Hear, Let Him Hear”",
+   "ranges": [
+    [
+     "Matthew",
+     13,
+     13
+    ],
+    [
+     "Luke",
+     8,
+     8
+    ],
+    [
+     "Luke",
+     13,
+     13
+    ]
+   ]
+  },
+  {
+   "n": 14,
+   "dates": "March 27–April 2",
+   "title": "“Be Not Afraid”",
+   "ranges": [
+    [
+     "Matthew",
+     14,
+     14
+    ],
+    [
+     "Mark",
+     6,
+     6
+    ],
+    [
+     "John",
+     5,
+     6
+    ]
+   ]
+  },
+  {
+   "n": 15,
+   "dates": "April 3–9",
+   "title": "Easter — “O Grave, Where Is Thy Victory”",
+   "ranges": []
+  },
+  {
+   "n": 16,
+   "dates": "April 10–16",
+   "title": "“Thou Art the Christ”",
+   "ranges": [
+    [
+     "Matthew",
+     15,
+     17
+    ],
+    [
+     "Mark",
+     7,
+     9
+    ]
+   ]
+  },
+  {
+   "n": 17,
+   "dates": "April 17–23",
+   "title": "“What Shall I Do to Inherit Eternal Life?”",
+   "ranges": [
+    [
+     "Matthew",
+     18,
+     18
+    ],
+    [
+     "Luke",
+     10,
+     10
+    ]
+   ]
+  },
+  {
+   "n": 18,
+   "dates": "April 24–30",
+   "title": "“I Am the Good Shepherd”",
+   "ranges": [
+    [
+     "John",
+     7,
+     10
+    ]
+   ]
+  },
+  {
+   "n": 19,
+   "dates": "May 1–7",
+   "title": "“Rejoice with Me; for I Have Found My Sheep Which Was Lost”",
+   "ranges": [
+    [
+     "Luke",
+     12,
+     17
+    ],
+    [
+     "John",
+     11,
+     11
+    ]
+   ]
+  },
+  {
+   "n": 20,
+   "dates": "May 8–14",
+   "title": "“What Lack I Yet?”",
+   "ranges": [
+    [
+     "Matthew",
+     19,
+     20
+    ],
+    [
+     "Mark",
+     10,
+     10
+    ],
+    [
+     "Luke",
+     18,
+     18
+    ]
+   ]
+  },
+  {
+   "n": 21,
+   "dates": "May 15–21",
+   "title": "“Behold, Thy King Cometh”",
+   "ranges": [
+    [
+     "Matthew",
+     21,
+     23
+    ],
+    [
+     "Mark",
+     11,
+     11
+    ],
+    [
+     "Luke",
+     19,
+     20
+    ],
+    [
+     "John",
+     12,
+     12
+    ]
+   ]
+  },
+  {
+   "n": 22,
+   "dates": "May 22–28",
+   "title": "“The Son of Man Shall Come” (with Joseph Smith—Matthew 1)",
+   "ranges": [
+    [
+     "Matthew",
+     24,
+     25
+    ],
+    [
+     "Mark",
+     12,
+     13
+    ],
+    [
+     "Luke",
+     21,
+     21
+    ]
+   ]
+  },
+  {
+   "n": 23,
+   "dates": "May 29–June 4",
+   "title": "“In Remembrance”",
+   "ranges": [
+    [
+     "Matthew",
+     26,
+     26
+    ],
+    [
+     "Mark",
+     14,
+     14
+    ],
+    [
+     "John",
+     13,
+     13
+    ]
+   ]
+  },
+  {
+   "n": 24,
+   "dates": "June 5–11",
+   "title": "“Continue Ye in My Love”",
+   "ranges": [
+    [
+     "John",
+     14,
+     17
+    ]
+   ]
+  },
+  {
+   "n": 25,
+   "dates": "June 12–18",
+   "title": "“Not My Will, but Thine, Be Done”",
+   "ranges": [
+    [
+     "Luke",
+     22,
+     22
+    ],
+    [
+     "John",
+     18,
+     18
+    ]
+   ]
+  },
+  {
+   "n": 26,
+   "dates": "June 19–25",
+   "title": "“It Is Finished”",
+   "ranges": [
+    [
+     "Matthew",
+     27,
+     27
+    ],
+    [
+     "Mark",
+     15,
+     15
+    ],
+    [
+     "Luke",
+     23,
+     23
+    ],
+    [
+     "John",
+     19,
+     19
+    ]
+   ]
+  },
+  {
+   "n": 27,
+   "dates": "June 26–July 2",
+   "title": "“He Is Risen”",
+   "ranges": [
+    [
+     "Matthew",
+     28,
+     28
+    ],
+    [
+     "Mark",
+     16,
+     16
+    ],
+    [
+     "Luke",
+     24,
+     24
+    ],
+    [
+     "John",
+     20,
+     21
+    ]
+   ]
+  }
+ ]
+}

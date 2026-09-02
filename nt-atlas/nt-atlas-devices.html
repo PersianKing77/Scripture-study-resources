@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Testament Atlas — phone &amp; tablet layouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#241c14;--parch:#f3e9d4;--parch-2:#fdf9ef;--rule:#c9b894;--rule-2:#a38e68;--red:#8c1f0f}
+  *{box-sizing:border-box}
+  body{margin:0;background:#241c14;color:#f3e9d4;font-family:'Spectral',Georgia,serif;
+    min-height:100vh;padding:22px 24px 40px}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;margin:0;letter-spacing:.01em}
+  .sub{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#b6a37e;margin-top:5px}
+  p.lede{font-size:14.5px;line-height:1.6;max-width:70ch;color:#e4d7b9;margin:14px 0 0;text-wrap:pretty}
+  p.lede a{color:#e8b9a8}
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:20px 0 6px;
+    padding-top:16px;border-top:1px solid #4a3d2e}
+  .bar span.lbl{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#8b7856;margin-right:4px}
+  button{font-family:'Spectral',serif;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+    white-space:nowrap;line-height:1.2;
+    background:transparent;color:#b6a37e;border:1px solid #6b5b41;border-radius:2px;padding:7px 13px;cursor:pointer}
+  button:hover{background:#3a2f22;color:var(--parch-2)}
+  button.on{background:var(--parch-2);color:var(--ink);border-color:var(--parch-2)}
+  .stage{display:flex;flex-wrap:wrap;gap:34px;align-items:flex-start;margin-top:26px}
+  figure{margin:0;display:flex;flex-direction:column;gap:10px;flex:none}
+  figcaption{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#b6a37e}
+  figcaption b{color:var(--parch-2);font-weight:500;letter-spacing:.06em;text-transform:none;font-size:13.5px}
+  /* the frame is a real viewport: the atlas inside it resolves its own media queries
+     against these dimensions, so the phone and tablet layouts are the true ones */
+  .device{background:#0d0a07;border:1px solid #6b5b41;border-radius:22px;padding:11px;
+    box-shadow:0 18px 44px rgba(0,0,0,.45)}
+  .device.tablet{border-radius:16px;padding:13px}
+  .device iframe{display:block;border:0;background:var(--parch);border-radius:12px}
+  .device.tablet iframe{border-radius:6px}
+  .note{font-size:12.5px;line-height:1.55;color:#c9b894;max-width:34ch}
+  .note b{color:var(--parch-2);font-weight:500}
+  .checks{margin:8px 0 0;padding-left:17px;font-size:12.5px;line-height:1.6;color:#c9b894}
+  .checks li{margin-bottom:4px}
+  .foot{margin-top:34px;padding-top:14px;border-top:1px solid #4a3d2e;font-size:12px;color:#8b7856;line-height:1.6}
+  .foot a{color:#b6a37e}
+</style>
+</head>
+<body>
+  <h1>Phone &amp; tablet layouts</h1>
+  <div class="sub">New Testament Atlas — layout check</div>
+  <p class="lede">Each frame below is a real viewport at true device size, so the atlas inside resolves its own
+  breakpoints exactly as it would on the hardware. Use this to check the bottom bar, the drawer, the six tabs and
+  the 44&nbsp;px touch targets without a device in hand — then confirm on glass, since finger size and
+  Safari's toolbars are the two things a frame can't fake.
+  <a href="nt-atlas.html">Back to the atlas →</a></p>
+
+  <div class="bar">
+    <span class="lbl">Rotate</span>
+    <button id="b-port" class="on">Portrait</button>
+    <button id="b-land">Landscape</button>
+    <span class="lbl" style="margin-left:14px">Open at</span>
+    <button data-go="" class="on">Default view</button>
+    <button data-go="#cfm=30">Lesson week 30</button>
+    <button data-go="#place=capernaum">A place panel</button>
+    <button data-go="#tour=t-passion:1">A tour</button>
+    <span class="lbl" style="margin-left:14px">Reload</span>
+    <button id="b-reload">Both frames</button>
+  </div>
+
+  <div class="stage">
+    <figure>
+      <figcaption><b>iPhone 15</b><br>393 × 852</figcaption>
+      <div class="device" id="dev-phone"><iframe id="f-phone" title="Atlas at phone size" width="393" height="852" src="nt-atlas.html"></iframe></div>
+      <ul class="checks">
+        <li>Bottom bar reachable by thumb</li>
+        <li>Index drawer slides over the map</li>
+        <li>Six tabs still readable</li>
+        <li>Place panel is full width</li>
+      </ul>
+    </figure>
+    <figure>
+      <figcaption><b>iPad (10.9")</b><br>820 × 1180</figcaption>
+      <div class="device tablet" id="dev-tablet"><iframe id="f-tablet" title="Atlas at tablet size" width="820" height="1180" src="nt-atlas.html"></iframe></div>
+      <ul class="checks">
+        <li>Map keeps the full canvas</li>
+        <li>Detail panel is a 440&nbsp;px sheet, not full width</li>
+        <li>Masthead scrolls sideways to the view buttons</li>
+        <li>Presenter mode still legible at this width</li>
+      </ul>
+    </figure>
+    <figure>
+      <figcaption><b>What to test on real glass</b></figcaption>
+      <p class="note"><b>Touch targets.</b> Every row, chip and tab is built to 44&nbsp;px, but only a thumb
+      confirms the bottom bar's five buttons are distinguishable without looking.</p>
+      <p class="note"><b>Pinch and pan.</b> The map owns two-finger gestures; check that scrolling the sidebar
+      list never drags the map underneath it.</p>
+      <p class="note"><b>Safari chrome.</b> iOS collapses its toolbars on scroll, which changes the visible
+      height mid-gesture — watch that the bottom bar stays put.</p>
+      <p class="note"><b>Presenter mode.</b> Turn it on, then stand where the back row of the class will be.</p>
+    </figure>
+  </div>
+
+  <div class="foot">
+    New Testament Atlas — created, written and owned by Taylor Halverson, PhD ·
+    <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a><br>
+    This page is a layout harness, not part of the atlas itself.
+  </div>
+
+<script>
+  const phone = {p:[393,852], l:[852,393]};
+  const tablet = {p:[820,1180], l:[1180,820]};
+  let orient = 'p', hash = '';
+  const fP = document.getElementById('f-phone'), fT = document.getElementById('f-tablet');
+  function size(){
+    const a = phone[orient], b = tablet[orient];
+    fP.width = a[0]; fP.height = a[1];
+    fT.width = b[0]; fT.height = b[1];
+  }
+  function load(){
+    fP.src = 'nt-atlas.html' + hash;
+    fT.src = 'nt-atlas.html' + hash;
+  }
+  function pick(btns, el){ btns.forEach(b => b.classList.toggle('on', b === el)); }
+  const rot = [document.getElementById('b-port'), document.getElementById('b-land')];
+  rot[0].onclick = () => { orient = 'p'; size(); pick(rot, rot[0]); };
+  rot[1].onclick = () => { orient = 'l'; size(); pick(rot, rot[1]); };
+  const gos = [...document.querySelectorAll('[data-go]')];
+  gos.forEach(b => b.onclick = () => { hash = b.dataset.go; pick(gos, b); load(); });
+  document.getElementById('b-reload').onclick = load;
+  size();
+</script>
+</body>
+</html>

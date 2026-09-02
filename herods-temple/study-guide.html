@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="omelette-owns-print" content="true">
+<title>Herod’s Temple — Study Handout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  @page { size: letter; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #6b6558; font-family: "EB Garamond", Georgia, serif; color: #201e17; }
+  .sheet { max-width: 190mm; margin: 0 auto; background: #fbf7ee; padding: 22mm 18mm; }
+  h1 { font-family: "Cormorant Garamond", serif; font-size: 40px; font-weight: 600; margin: 0 0 2px; line-height: 1.05; }
+  .lede { font-size: 15px; letter-spacing: .2em; text-transform: uppercase; color: #8a7042; margin-bottom: 6px; }
+  .intro { font-size: 16.5px; line-height: 1.55; max-width: 62ch; margin: 14px 0 0; }
+  h2 { font-family: "Cormorant Garamond", serif; font-size: 13px; letter-spacing: .28em; text-transform: uppercase;
+       color: #8a7042; font-weight: 500; margin: 34px 0 10px; border-bottom: 1px solid #d8cdb2; padding-bottom: 6px; }
+  article { break-inside: avoid; margin: 0 0 22px; }
+  h3 { font-family: "Cormorant Garamond", serif; font-size: 23px; font-weight: 600; margin: 0; line-height: 1.15; }
+  .sub { font-style: italic; color: #6b6353; font-size: 14.5px; margin-bottom: 7px; }
+  .body { font-size: 15.5px; line-height: 1.52; text-wrap: pretty; margin: 0 0 10px; }
+  .verses { margin: 0; padding: 0; list-style: none; }
+  .verses li { font-size: 14.5px; line-height: 1.45; padding: 7px 11px; background: #f1e9d6; border: 1px solid #e0d5ba; margin-bottom: 6px; }
+  .verses b { display: block; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #8a7042; font-weight: 400; margin-bottom: 3px; }
+  .srcs { font-size: 13px; line-height: 1.45; color: #57503f; margin: 8px 0 0; padding-left: 13px; border-left: 2px solid #c8ab55; }
+  .note { font-size: 13px; line-height: 1.45; background: #ece3cc; border: 1px solid #dbcfae; padding: 8px 11px; margin-top: 8px; color: #4a4436; }
+  .note b { display: block; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #8a7042; font-weight: 400; margin-bottom: 3px; }
+  .beta { display: inline-block; vertical-align: 12px; padding: 2px 7px 1px; font-family: "EB Garamond", serif;
+    font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8a7042; border: 1px solid #c8ab55; border-radius: 2px; }
+  .credit { font-size: 15.5px; color: #3d3a33; margin: 14px 0 0; }
+  .beta-note { font-size: 13.5px; line-height: 1.5; color: #6b6353; font-style: italic; margin: 10px 0 0; max-width: 62ch; }
+  .runfoot { position: fixed; left: 0; right: 0; bottom: 0; text-align: center; font-size: 10.5px;
+    letter-spacing: .11em; text-transform: uppercase; color: #8a7042; padding: 7px 10px 8px;
+    background: #f1e9d6; border-top: 1px solid #ddd2b6; }
+  .colophon { margin: 40px 0 0; padding: 16px 0 4px; border-top: 2px solid #c8ab55; break-inside: avoid; }
+  .colophon h4 { font-family: "Cormorant Garamond", serif; font-size: 21px; font-weight: 600; margin: 0 0 6px; }
+  .colophon p { font-size: 14px; line-height: 1.55; color: #4a4436; margin: 0 0 7px; max-width: 66ch; }
+  .colophon .rights { font-size: 13px; color: #6b6353; }
+  @media print {
+    @page { size: letter; margin: 18mm 16mm 26mm; }
+    body { background: #fff; }
+    .sheet { max-width: none; margin: 0; padding: 0; }
+    .runfoot { bottom: -16mm; background: none; border-top: 1px solid #ddd2b6; }
+    .colophon { margin-bottom: 4mm; }
+  }
+  @media screen { .sheet { padding-bottom: 46px; } }
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+  <div class="lede">Jerusalem &middot; c. 30 CE</div>
+  <h1>Herod’s Temple <span class="beta">Beta</span></h1>
+  <p class="intro">A station-by-station handout to the 3D reconstruction: every location with its description,
+  the scripture read there in the King James Version, the primary sources behind it, and a note wherever
+  those sources disagree. Sources: KJV; Josephus, <i>War</i> and <i>Antiquities</i>; the Mishnah
+  (Middot, Tamid, Yoma, Shekalim, Sukkah, Parah); the Babylonian Talmud.</p>
+  <p class="credit">Prepared by Taylor Halverson, Ph.D.</p>
+  <p class="beta-note">Beta &mdash; a work in progress. The reconstruction follows the majority reading of the
+  sources, but dimensions, decoration and the lines of the city walls remain debated; see the notes marked
+  &ldquo;where the sources differ.&rdquo;</p>
+  <div id="out"></div>
+  <div class="colophon">
+    <h4>About this handout</h4>
+    <p>Prepared by <b>Taylor Halverson, Ph.D.</b>, to accompany <i>Herod’s Temple &mdash; Jerusalem, c. 30 CE</i>,
+    an explorable three-dimensional reconstruction of the temple as it stood in the time of Christ. Forty-three
+    annotated locations; one hundred sixty-two passages of scripture.</p>
+    <p>Every description is drawn from the King James New Testament, Josephus’ <i>War</i> and <i>Antiquities</i>,
+    the Mishnah (Middot, Tamid, Yoma, Shekalim, Sukkah, Parah) and the Babylonian Talmud, with the disagreements
+    among them noted rather than smoothed over.</p>
+    <p class="rights">&copy; 2026 Taylor Halverson. All rights reserved. Beta &mdash; a work in progress.
+    May be printed for personal study and classroom teaching with attribution retained.</p>
+  </div>
+</div>
+<div class="runfoot">Herod’s Temple &middot; Jerusalem, c. 30 CE &mdash; prepared by Taylor Halverson, Ph.D. &middot; &copy; 2026</div>
+<script type="module">
+import { LABELS, GROUPS, VERSES, typo } from './temple-labels.js';
+const out = document.getElementById('out');
+let html = '';
+for (const g of GROUPS) {
+  html += '<h2>' + g.name + '</h2>';
+  for (const id of g.ids) {
+    const L = LABELS[id]; if (!L) continue;
+    const vs = VERSES[id] || [];
+    html += '<article><h3>' + typo(L.title) + '</h3><div class="sub">' + typo(L.sub) + '</div>' +
+      '<p class="body">' + typo(L.body) + '</p>' +
+      (vs.length ? '<ul class="verses">' + vs.map(v => '<li><b>' + typo(v.ref) + '</b>' + typo(v.text) + '</li>').join('') + '</ul>' : '') +
+      '<div class="srcs">' + typo(L.sources.join(' &nbsp;·&nbsp; ')) + '</div>' +
+      (L.note ? '<div class="note"><b>Where the sources differ</b>' + typo(L.note) + '</div>' : '') +
+      '</article>';
+  }
+}
+out.innerHTML = html;
+</script>
+</body>
+</html>

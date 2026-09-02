@@ -1,0 +1,2797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Old Testament Atlas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<style>
+  :root{
+    --parch:#efe6d4; --parch-2:#e6dbc4; --sea:#d5dedd; --ink:#241f18; --ink-2:#5c5346;
+    --line:#b9ab8e; --rule:#cbbfa4; --terra:#a8442a; --indigo:#2f4858; --olive:#5f6b34;
+    --gold:#b0842a; --plum:#6d3355;
+  }
+  *{box-sizing:border-box}
+  header,main,footer{min-width:0; overflow:hidden}
+  html,body{height:100%;margin:0}
+  body{
+    max-width:100vw; background:var(--parch); color:var(--ink);
+    font-family:"EB Garamond",Georgia,serif; font-size:16px;
+    display:grid; grid-template-rows:auto 1fr auto; grid-template-columns:minmax(0,1fr);
+    height:100vh; overflow:hidden;
+  }
+  a{color:var(--terra)} a:hover{color:var(--ink)}
+  header{display:flex; align-items:baseline; gap:16px; padding:12px 20px 10px;
+    border-bottom:1px solid var(--rule); background:linear-gradient(#f4ecda,#eee4d0)}
+  header h1{margin:0; font-size:24px; font-weight:600; letter-spacing:.02em; flex:none; white-space:nowrap}
+  header .beta{flex:none; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.18em;
+    text-transform:uppercase; color:#f4ecda; background:var(--terra); padding:2px 6px; border-radius:2px;
+    position:relative; top:-2px}
+  header .sub{flex:none; white-space:nowrap; font-family:"IBM Plex Mono",monospace; font-size:12px;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--ink-2)}
+  .aboutbtn{margin-left:14px; flex:none; font-family:"IBM Plex Mono",monospace; font-size:9.5px;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--ink-2); background:#f6efdd;
+    border:1px solid var(--line); border-radius:2px; padding:5px 9px; cursor:pointer; white-space:nowrap}
+  .aboutbtn:hover{background:#fff; color:var(--ink)}
+  @media (max-width:1280px){ header .hint{display:none} }
+  .modalwrap{position:fixed; inset:0; background:#241f1866; display:flex; align-items:center;
+    justify-content:center; z-index:50; padding:24px}
+  .modalwrap[hidden]{display:none}
+  .modal{background:#f4ecda; border:1px solid #8d8266; box-shadow:0 18px 50px #241f1840; max-width:560px;
+    width:100%; max-height:86vh; overflow-y:auto; padding:22px 24px 24px; position:relative}
+  .modaltabs{display:flex; gap:0; margin:12px 0 16px; border-bottom:1px solid var(--rule)}
+  .modaltabs button{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-2); background:none; border:0; border-bottom:2px solid transparent;
+    padding:7px 11px; cursor:pointer; margin-bottom:-1px}
+  .modaltabs button:hover{color:var(--ink)}
+  .modaltabs button[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--terra)}
+  .modalpane[hidden]{display:none}
+  .modal .lede{font-size:16.5px; line-height:1.5; margin:0 0 12px}
+  .modal .subhead{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-2); margin:18px 0 7px}
+  .modal .flag{border-left:2px solid var(--terra); padding:2px 0 2px 11px; margin:0 0 12px}
+  .modal .flag .tag{font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--terra); display:block; margin-bottom:3px}
+  .modal .role{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--ink-2); margin:0 0 13px}
+  .modal .degrees{list-style:none; padding:0; margin:0 0 11px}
+  .modal .degrees li{padding:5px 0; border-bottom:1px solid var(--line); font-size:14.5px}
+  .modal .degrees li:last-child{border-bottom:0}
+  .modal .links{display:flex; flex-wrap:wrap; gap:8px; margin:2px 0 0}
+  .modal .links a{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink);
+    text-decoration:none; border:1px solid var(--line); border-radius:2px; padding:5px 9px; background:#f6efdd}
+  .modal .links a:hover{background:#fff; border-color:var(--terra); color:var(--terra)}
+  .lightbox{background:#f4ecda; border:1px solid #8d8266; box-shadow:0 18px 50px #241f1840; margin:0;
+    max-width:min(1100px, 94vw); max-height:90vh; padding:12px; position:relative; display:flex;
+    flex-direction:column; gap:8px}
+  .lightbox img{max-width:100%; max-height:76vh; object-fit:contain; display:block; background:#e6dbc4;
+    border:1px solid var(--line)}
+  .lightbox figcaption{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-2); line-height:1.5}
+  .lightbox figcaption b{font-family:"EB Garamond",Georgia,serif; font-size:15px; font-weight:600; color:var(--ink)}
+  .zoomhint{cursor:zoom-in}
+  .modal h2{font-family:"EB Garamond",Georgia,serif; font-size:24px; font-weight:600; text-transform:none;
+    letter-spacing:0; color:var(--ink); margin:0 0 2px}
+  .modal .by{font-size:17px; margin:0 0 14px}
+  .modal p{font-size:15.5px; line-height:1.5; margin:0 0 11px; text-wrap:pretty}
+  .modal .sec{margin-top:14px}
+  .modal ul{margin:0; padding-left:18px; font-size:14.5px; line-height:1.55}
+  .modal .close{position:absolute; top:8px; right:11px; background:none; border:0; font-size:20px;
+    color:var(--ink-2); cursor:pointer}
+  header .hint{margin-left:auto; font-size:12px; color:var(--ink-2); font-family:"IBM Plex Mono",monospace; text-align:right}
+
+  main{display:grid; grid-template-columns:216px minmax(0,1fr) 384px; min-height:0}
+  .rail{border-right:1px solid var(--rule); overflow-y:auto; padding:0 0 18px}
+  .rail h2,.panel h2{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ink-2); margin:14px 14px 6px; font-weight:500}
+  .searchwrap{padding:10px 12px 4px; position:sticky; top:0; background:var(--parch); z-index:2}
+  #q{width:100%; font-family:inherit; font-size:15px; padding:6px 8px; color:var(--ink);
+    background:#f6efdd; border:1px solid var(--line); border-radius:2px}
+  #q:focus{outline:1px solid var(--terra)}
+  #results{margin:4px 0 0; max-height:230px; overflow:auto}
+  #results button{display:block; width:100%; text-align:left; background:none; border:0; cursor:pointer;
+    font-family:inherit; font-size:14.5px; padding:5px 12px; color:var(--ink)}
+  #results button:hover{background:#e8dec8}
+  #results .t{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--ink-2); margin-left:6px}
+  .era{display:block; width:100%; text-align:left; background:none; border:0; cursor:pointer;
+    padding:8px 14px 8px 17px; font-family:inherit; color:var(--ink); border-left:3px solid transparent}
+  .era:hover{background:#e8dec8}
+  .era .n{font-size:16px; display:block; line-height:1.2}
+  .era .d{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-2); letter-spacing:.04em}
+  .era[aria-current="true"]{background:#e4d8bd; border-left-color:var(--terra)}
+  .era[aria-current="true"] .n{font-weight:600}
+  .lay{display:flex; align-items:center; gap:8px; padding:4px 14px; font-size:14.5px; cursor:pointer; line-height:1.25}
+  .lay span:not(.k){flex:1 1 auto; min-width:0}
+  .lay:hover{background:#e8dec8}
+  .lay input{accent-color:var(--terra); margin:0; cursor:pointer}
+  .lay .k{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:9.5px; color:var(--ink-2)}
+
+  .stage{position:relative; min-width:0; overflow:hidden; background:var(--sea)}
+  svg{display:block; width:100%; height:100%; cursor:grab}
+  svg.dragging{cursor:grabbing}
+  .layerbar{position:absolute; top:10px; left:12px; right:12px; display:flex; flex-wrap:wrap; gap:5px; z-index:4}
+  .lchip{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase;
+    padding:4px 7px; border:1px solid var(--line); border-radius:2px; background:#f4ecdad9; color:var(--ink-2);
+    cursor:pointer; white-space:nowrap}
+  .lchip:hover{background:#fff; color:var(--ink)}
+  .lchip[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:#f4ecda}
+  .lchip.act{background:#f4ecdad9; color:var(--terra); border-color:#c8a79a}
+  .lchip.act:hover{background:#fff}
+  .barsep{width:1px; align-self:stretch; background:var(--line); margin:0 3px}
+  .lchip.modern[aria-pressed="true"]{background:#2f6d8c; border-color:#2f6d8c}
+  .lchip.basemap[aria-pressed="true"]{background:#1f4a3a; border-color:#1f4a3a}
+  .zoombar{position:absolute; right:12px; bottom:56px; display:flex; flex-direction:column; gap:5px; z-index:7}
+  .zoombar button{width:29px;height:29px;border:1px solid var(--line); background:#f4ecdaee; color:var(--ink);
+    font-family:"IBM Plex Mono",monospace; font-size:14px; cursor:pointer; border-radius:2px}
+  .zoombar button:hover{background:#fff}
+  .tourbar{position:absolute; left:12px; right:64px; bottom:44px; background:#f4ecdaf5; border:1px solid #8d8266;
+    box-shadow:0 10px 26px #241f1826; padding:10px 12px 11px; z-index:6; max-width:560px}
+  .tourbar[hidden]{display:none}
+  .tourhead{display:flex; align-items:baseline; gap:8px; font-family:"IBM Plex Mono",monospace; font-size:9.5px;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--terra)}
+  .tourx{margin-left:auto; background:none; border:0; font-size:17px; line-height:1; color:var(--ink-2); cursor:pointer}
+  .tourbody{font-size:16px; line-height:1.45; margin:5px 0 8px; text-wrap:pretty}
+  .tourbody b{display:block; font-size:18px; font-weight:600; margin-bottom:2px}
+  .tournav{display:flex; align-items:center; gap:9px; flex-wrap:wrap}
+  .tournav button{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap;
+    background:#f6efdd; border:1px solid var(--line); border-radius:2px; padding:5px 9px; cursor:pointer; color:var(--ink)}
+  .tournav button:hover{background:#fff}
+  .tournav button:disabled{opacity:.4; cursor:default}
+  .tourpick{display:flex; gap:9px; align-items:flex-start; width:100%; text-align:left; background:none;
+    cursor:pointer; border:0; border-top:1px solid var(--rule); padding:9px 17px; font-family:inherit; color:var(--ink)}
+  .tourpick:hover{background:#e8dec8}
+  .legtoggle{position:absolute; right:12px; bottom:12px; background:#f4ecdae8; border:1px solid var(--line);
+    font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-2); padding:6px 9px; cursor:pointer; border-radius:2px}
+  .legtoggle:hover{background:#fff; color:var(--ink)}
+  .legend{position:absolute; right:12px; bottom:12px; background:#f4ecdaf2; border:1px solid var(--line);
+    padding:9px 11px; font-size:12.5px; display:grid; gap:4px; max-width:212px; cursor:pointer}
+  .legend[hidden]{display:none}
+  .legend .row{display:flex; align-items:center; gap:7px}
+  .legend .dot{width:9px;height:9px;border-radius:50%;background:var(--ink);border:1.5px solid #f4ecda}
+  .legend .sw{width:20px;height:0;border-top:2.5px solid var(--terra)}
+  .legend svg{width:12px;height:12px;display:block}
+  .hovertip{position:absolute; left:12px; bottom:52px; display:none; max-width:calc(100% - 24px);
+    background:var(--ink); color:#f4ecda; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+    padding:5px 8px; border-radius:2px; z-index:4; pointer-events:none}
+  .tilecredit{position:absolute; right:12px; top:auto; bottom:38px; font-family:"IBM Plex Mono",monospace;
+    font-size:9px; color:#e9e2d0; text-shadow:0 1px 3px #000a; pointer-events:none; text-align:right}
+  #map.sat{background:#0d1520} #map.street{background:#cfd9dd}
+  #map.sat .site-label,#map.street .site-label,
+  #map.sat .citylab,#map.street .citylab,#map.relief .citylab{stroke:#000000b0; stroke-width:3.5px; fill:#fff !important}
+  #map.sat .cityval,#map.street .cityval,#map.relief .cityval{stroke:#000000b0; stroke-width:3.2px; fill:#bcd3dc !important}
+  #map.sat .region-label,#map.sat .tribe-label,#map.sat .water-label,#map.sat .road-label{fill:#dfe6ea; opacity:.9}
+  #map.sat .coast{stroke:#ffffff55}
+  #map.street .coast{stroke:#00000033}
+  #map.sat .kingdom-label{stroke:#000000aa; stroke-width:3.5px}
+  #map.relief{background:#cdd8d8}
+  .zone-label{font-family:"IBM Plex Mono",monospace; fill:#3f6b76; paint-order:stroke; stroke:#efe6d4;
+    stroke-width:2.5px; stroke-linejoin:round; pointer-events:none}
+  .zone-belt{font-family:"IBM Plex Mono",monospace; letter-spacing:.18em; fill:#6f6a4e; paint-order:stroke;
+    stroke:#efe6d4; stroke-width:3px; stroke-linejoin:round; pointer-events:none}
+  .scalebar{position:absolute; left:52px; bottom:16px; font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:#3c3a33}
+  .scalebar .bar{height:5px;border:1px solid #4a4740;border-top:0;margin-bottom:2px}
+
+  .panel{border-left:1px solid var(--rule); overflow:hidden; display:grid; grid-template-rows:auto minmax(0,1fr)}
+  .tabs{display:flex; border-bottom:1px solid var(--rule); background:#eee4d0}
+  .tabs button{flex:1 1 0; min-width:0; border:0; background:none; cursor:pointer; padding:9px 2px 8px;
+    font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--ink-2); border-bottom:2px solid transparent}
+  .tabs button:hover{color:var(--ink)}
+  .tabs button[aria-current="true"]{color:var(--terra); border-bottom-color:var(--terra); background:var(--parch)}
+  .pane{overflow-y:auto; padding-bottom:26px}
+  .pane[hidden]{display:none}
+  .body{padding:13px 17px}
+  .kicker{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--terra)}
+  .pane h3{margin:4px 0 2px; font-size:22px; font-weight:600; line-height:1.15}
+  .dates{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-2); margin-bottom:9px}
+  .pacebar{display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin:2px 0 7px}
+  .pacesel{font-family:"IBM Plex Mono",monospace; font-size:10.5px; background:#f6efdd; color:var(--ink);
+    border:1px solid var(--line); border-radius:2px; padding:2px 4px}
+  table.itin{width:100%; border-collapse:collapse; font-size:14.5px}
+  table.itin td{padding:3px 0; border-bottom:1px dotted var(--rule); vertical-align:top}
+  table.itin td.num{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink-2); text-align:right; white-space:nowrap; padding-left:8px}
+  table.itin td.day{color:var(--terra)}
+  table.itin .arw{color:var(--ink-2)}
+  p.narr{margin:0 0 11px; font-size:16.5px; line-height:1.52; text-wrap:pretty}
+  .books{font-size:13.5px; color:var(--ink-2); font-style:italic; border-top:1px solid var(--rule); padding-top:8px}
+  .caveat{font-size:13px; color:var(--ink-2); background:#e8dec8; border-left:2px solid var(--line);
+    padding:7px 9px; margin:9px 0 0; line-height:1.4}
+  .jrn,.evt{display:flex; gap:9px; align-items:flex-start; width:100%; text-align:left; background:none;
+    cursor:pointer; border:0; border-top:1px solid var(--rule); padding:9px 17px; font-family:inherit; color:var(--ink)}
+  .jrn:hover,.evt:hover{background:#e8dec8}
+  .jrn .swatch{width:13px;height:13px;flex:none;margin-top:3px;border-radius:2px}
+  .evt .gl{width:15px;flex:none;margin-top:1px}
+  .t{font-size:15.5px; line-height:1.25}
+  .r{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-2)}
+  .note{font-size:13.5px; color:var(--ink-2); font-style:italic; line-height:1.35}
+  .sitelist{display:flex; flex-wrap:wrap; gap:5px; padding:4px 17px 0}
+  .chip{border:1px solid var(--line); background:#f2e9d6; cursor:pointer; font-family:inherit; font-size:14px;
+    padding:3px 8px; border-radius:2px; color:var(--ink)}
+  .chip:hover{background:#fff}
+  .ref{border:1px solid #d3b6ab; background:#f7ece6; color:var(--terra); cursor:pointer;
+    font-family:"IBM Plex Mono",monospace; font-size:11px; padding:3px 7px; border-radius:2px}
+  .ref:hover{background:#fff; color:var(--ink)}
+  .refrow{display:flex; flex-wrap:wrap; gap:5px; margin:7px 0 0}
+  .sec{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ink-2); margin:14px 0 5px; border-top:1px solid var(--rule); padding-top:9px}
+  .arch{font-size:15.5px; line-height:1.5; margin:0; text-wrap:pretty}
+  figure{margin:11px 0 0}
+  figure img{width:100%; display:block; border:1px solid var(--line); background:#e6dbc4}
+  figcaption{font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--ink-2); margin-top:4px; line-height:1.4}
+  .verse{font-size:17px; line-height:1.6; text-wrap:pretty; cursor:pointer}
+  .verse:hover{background:#eee2c9}
+  .verse.active{background:#e4d8bd; box-shadow:-6px 0 0 #e4d8bd, 6px 0 0 #e4d8bd}
+  .pn{display:inline; font-family:inherit; font-size:inherit; line-height:inherit; background:none; border:0;
+    padding:0; cursor:pointer; color:var(--terra); border-bottom:1px dotted var(--terra)}
+  .pn:hover{color:var(--ink); background:#f2dfd5}
+  .versebar{position:sticky; top:0; z-index:2; background:var(--parch); border-bottom:1px solid var(--rule);
+    padding:6px 0 7px; margin-bottom:7px; display:flex; flex-wrap:wrap; gap:5px; align-items:center}
+  .versebar .r{width:100%}
+  .vchip{display:inline-flex; align-items:center; gap:5px; padding:2px 7px 2px 3px}
+  .vchip img{width:22px; height:16px; object-fit:cover; border:1px solid var(--line)}
+  .verse .vn{font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--terra); vertical-align:super; margin-right:3px}
+  .scrip-src{font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--ink-2); margin-top:10px}
+  .loading{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-2)}
+  .peo{display:block; width:100%; text-align:left; background:none; cursor:pointer; border:0;
+    border-top:1px solid var(--rule); padding:9px 17px; font-family:inherit; color:var(--ink)}
+  .peo:hover{background:#e8dec8}
+  .back{background:none; border:0; cursor:pointer; font-family:"IBM Plex Mono",monospace; font-size:10px;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); padding:0}
+  .back:hover{color:var(--terra)}
+
+  .card{position:absolute; width:268px; max-width:calc(100% - 16px); max-height:calc(100% - 24px); overflow-y:auto;
+    overscroll-behavior:contain; background:#f6efdd; border:1px solid #8d8266;
+    padding:11px 12px 12px; box-shadow:0 10px 24px #241f1826; font-size:15px; z-index:5}
+  .card h4{margin:0; font-size:18px; font-weight:600; padding-right:14px}
+  .cityval{font-family:"EB Garamond",serif; font-style:italic; font-size:9.5px; fill:#5d7a86;
+    letter-spacing:.04em; paint-order:stroke; stroke:#f0e7d5; stroke-width:2.4px}
+  .citylab{font-family:"EB Garamond",serif; font-size:9px; fill:var(--ink);
+    paint-order:stroke; stroke:#f0e7d5; stroke-width:2.6px}
+  .citylab.strong{font-weight:600; font-size:9.5px}
+  .perrow{display:flex; flex-wrap:wrap; gap:5px; margin:9px 0 2px}
+  .perbtn{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.08em; text-transform:uppercase;
+    padding:4px 7px; border:1px solid var(--rule); background:transparent; color:var(--ink-2); cursor:pointer;
+    border-radius:2px; line-height:1.3}
+  .perbtn:hover{border-color:var(--terra); color:var(--terra)}
+  .perbtn[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:#f2e9d6}
+  .perbtn i{font-style:normal; opacity:.55; margin-left:5px; letter-spacing:0; text-transform:none}
+  .idnote{font-size:13px; line-height:1.45; color:var(--ink-2); font-style:italic; margin:7px 0 0;
+    border-left:2px solid var(--rule); padding-left:8px}
+  .idnote b{font-style:normal; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--terra)}
+  .card .modern{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-2); margin:2px 0 7px; letter-spacing:.03em}
+  .card p{margin:0 0 7px; line-height:1.45; text-wrap:pretty}
+  .card img{width:100%; display:block; border:1px solid var(--line); margin:0 0 8px}
+  .card .x{position:absolute; top:4px; right:7px; border:0; background:none; cursor:pointer; font-size:16px; color:var(--ink-2)}
+  .card .more{background:none; border:0; padding:0; margin-top:6px; cursor:pointer; color:var(--terra);
+    font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase}
+  .card .more:hover{color:var(--ink)}
+
+  footer{border-top:1px solid var(--rule); padding:7px 20px 10px; background:#eee4d0}
+  .tlrow{display:flex; align-items:stretch; gap:8px; min-width:0}
+  .tlbtn{flex:none; border:1px solid var(--line); background:#f6efdd; color:var(--ink-2); cursor:pointer;
+    font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
+    padding:0 9px; border-radius:2px}
+  .tlbtn:hover{background:#fff; color:var(--ink)}
+  .tlbtn[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:#f4ecda}
+  .chrono{height:250px; margin:0 0 8px; overflow:hidden; border:1px solid var(--rule); background:#f4ecda}
+  .chrono[hidden]{display:none}
+  #chronosvg{width:100%; height:250px; display:block}
+  .cx{font-family:"IBM Plex Mono",monospace; font-size:9px; fill:var(--ink-2)}
+  .clab{font-family:"IBM Plex Mono",monospace; font-size:8.5px; letter-spacing:.12em; text-transform:uppercase; fill:var(--ink-2)}
+  .cname{font-family:"EB Garamond",Georgia,serif; font-size:10.5px; fill:#f4ecda; pointer-events:none}
+  .cname.dark{fill:var(--ink)}
+  .creign{cursor:pointer}
+  .creign:hover{filter:brightness(1.15)}
+  .tl{display:flex; gap:2px; align-items:stretch; min-width:0}
+  .tl button{flex:1 1 0; min-width:0; border:0; border-bottom:3px solid #d8cbb0; background:none; cursor:pointer;
+    padding:4px 5px 5px; font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--ink-2);
+    letter-spacing:.03em; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .tl button:hover{color:var(--ink); border-bottom-color:var(--line)}
+  .tl button[aria-current="true"]{color:var(--terra); border-bottom-color:var(--terra)}
+
+  .site-label{font-size:11.5px; paint-order:stroke; stroke:#efe6d4; stroke-width:3px; stroke-linejoin:round; pointer-events:none}
+  .region-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.22em; fill:#8a7c5f; pointer-events:none}
+  .tribe-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.16em; fill:#7d6a4b; pointer-events:none}
+  .kingdom-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.22em; opacity:.85; paint-order:stroke;
+    stroke:#efe6d4; stroke-width:3px; stroke-linejoin:round; pointer-events:none}
+  .water-label{font-style:italic; fill:#6d8189; pointer-events:none}
+  .modern-label{font-family:"IBM Plex Mono",monospace; fill:#2f6d8c; paint-order:stroke; stroke:#eef4f6;
+    stroke-width:2.5px; stroke-linejoin:round; pointer-events:none}
+  .country-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.3em; fill:#2f6d8c; opacity:.75;
+    paint-order:stroke; stroke:#eef4f6; stroke-width:3px; stroke-linejoin:round; pointer-events:none}
+  .road-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.1em; fill:#8a7a58; pointer-events:none}
+  .dist-label{font-family:"IBM Plex Mono",monospace; paint-order:stroke; stroke:#efe6d4; stroke-width:3px;
+    stroke-linejoin:round; pointer-events:none}
+  /* ---- Come, Follow Me ---- */
+  .cfmnow{margin:9px 17px 4px; border:1px solid #d3b6ab; background:#f7ece6; padding:9px 11px}
+  .cfmnow .k{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--terra)}
+  .cfmnow .t{display:block; font-size:17px; line-height:1.25; margin:2px 0 6px}
+  .where{margin:9px 0 2px; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:8px 0}
+  .wrow{display:grid; grid-template-columns:88px minmax(0,1fr); gap:9px; padding:3px 0; font-size:14.5px; line-height:1.4}
+  .wk{font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-2); padding-top:4px}
+  .wv{text-wrap:pretty}
+  .wv .mono{font-family:"IBM Plex Mono",monospace; font-size:12px}
+  .cf{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    border:1px solid var(--line); border-radius:2px; padding:2px 6px; background:#f2e9d6}
+  .cf.secure{border-color:#3f4f3a; color:#3f4f3a}
+  .cf.probable{border-color:#8a6a2a; color:#8a6a2a}
+  .cf.disputed{border-color:var(--terra); color:var(--terra)}
+  .groundrow{display:flex; flex-wrap:wrap; gap:5px; margin:1px 0 0}
+  .groundrow .chip{white-space:nowrap; font-size:13px}
+  .cfmnow .chip{white-space:nowrap}
+  .cfmweek{display:flex; gap:10px; align-items:flex-start; width:100%; text-align:left; background:none;
+    cursor:pointer; border:0; border-top:1px solid var(--rule); padding:9px 17px; font-family:inherit; color:var(--ink)}
+  .cfmweek:hover{background:#e8dec8}
+  .cfmweek[aria-current="true"]{background:#e4d8bd}
+  .cfmweek .wn{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-2); flex:none;
+    width:26px; padding-top:3px}
+  .cfmweek .wn.here{color:var(--terra)}
+  .theaters{display:flex; flex-direction:column; gap:3px; padding:0 14px}
+  .theaters button{text-align:left; background:#f6efdd; border:1px solid var(--line); border-radius:2px;
+    cursor:pointer; padding:5px 7px; font-family:inherit; color:var(--ink); font-size:13.5px; line-height:1.2}
+  .theaters button:hover{background:#fff}
+  .theaters button .s{font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.1em;
+    color:var(--ink-2); float:right; padding-top:2px}
+
+  /* ---- Presenter mode: readable from the back of a classroom ---- */
+  .presentpill{display:none; position:absolute; right:12px; top:12px; z-index:9;
+    font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    background:var(--ink); color:#f4ecda; border:0; border-radius:2px; padding:10px 14px; cursor:pointer}
+  .presentpill:hover{background:var(--terra)}
+  body.present .presentpill{display:block}
+  body.present .rail,body.present .panel,body.present .layerbar,body.present .legtoggle,
+  body.present .legend,body.present header .hint,body.present .tilecredit{display:none}
+  body.present main{grid-template-columns:minmax(0,1fr)}
+  body.present header{padding:8px 20px 7px}
+  body.present .site-label{font-size:20px; stroke-width:4.5px}
+  body.present .region-label{font-size:22px}
+  body.present .kingdom-label{font-size:21px; opacity:1}
+  body.present .tribe-label{font-size:19px}
+  body.present .water-label{font-size:20px}
+  body.present .road-label{font-size:18px}
+  body.present .focus-label{font-size:26px; stroke-width:6px}
+  body.present .dist-label{font-size:18px}
+  body.present .citylab{font-size:19px}
+  body.present #map path.route{stroke-width:5px; vector-effect:non-scaling-stroke}
+  body.present #map path.camp{stroke-width:5px; vector-effect:non-scaling-stroke}
+  body.present #map path.road{stroke-width:4px; vector-effect:non-scaling-stroke}
+  body.present #map .coast{stroke:#584f3c; stroke-width:2px; vector-effect:non-scaling-stroke}
+  body.present #map path.cwall{stroke-width:4px; vector-effect:non-scaling-stroke}
+  body.present .tourbar{max-width:none; right:64px; padding:14px 16px}
+  body.present .halo{stroke-width:4px}
+  body.present .refrow .ref{font-size:13px; padding:6px 9px}
+  body.present .tourhead{font-size:12px}
+  body.present .tourbody{font-size:22px; line-height:1.4}
+  body.present .tourbody b{font-size:26px}
+  body.present .tournav button{font-size:13px; padding:8px 13px}
+  body.present .scalebar{font-size:14px}
+  body.present .zoombar button{width:40px; height:40px; font-size:19px}
+  @keyframes spin{to{stroke-dashoffset:-28}}
+  .focusring{animation:spin 1.6s linear infinite}
+  .focus-label{font-size:12px; font-family:"EB Garamond",Georgia,serif; paint-order:stroke; stroke:#f4ecda;
+    stroke-width:3.5px; stroke-linejoin:round; pointer-events:none}
+  #map.sat .focus-label,#map.street .focus-label{stroke:#000000b0}
+  @keyframes pulse{0%{opacity:.85; r:9}70%{opacity:0; r:22}100%{opacity:0; r:22}}
+  .halo{animation:pulse 1.8s ease-out infinite; fill:none; stroke:var(--terra); stroke-width:2px}
+</style>
+</head>
+<body>
+<header>
+  <h1>The Old Testament Atlas</h1>
+  <span class="beta" title="Work in progress — data and identifications are still being checked">Beta</span>
+  <span class="sub">Ur to the Second Temple</span>
+  <span class="hint">drag to pan · scroll to zoom · click any place, event or verse</span>
+  <button class="aboutbtn" id="cfmbtn" title="Come, Follow Me — this week's reading on the map (w)">Come, Follow Me</button>
+  <button class="aboutbtn" id="presentbtn" title="Presenter mode — large type, high contrast, no controls (m)">Presenter</button>
+  <button class="aboutbtn" id="aboutbtn">About</button>
+</header>
+
+<main>
+  <nav class="rail">
+    <div class="searchwrap">
+      <input id="q" type="search" placeholder="Search places, events, peoples…" autocomplete="off">
+      <div id="results"></div>
+    </div>
+    <h2>Map layers</h2>
+    <div id="layers"></div>
+    <h2>Eras</h2>
+    <div id="eralist"></div>
+    <h2>Scale</h2>
+    <div class="theaters" id="theaters"></div>
+  </nav>
+
+  <div class="stage" id="stage">
+    <svg id="map"></svg>
+    <div class="layerbar" id="layerbar"></div>
+    <div class="hovertip" id="hovertip"></div>
+    <div class="zoombar">
+      <button id="zin" title="Zoom in">+</button>
+      <button id="zout" title="Zoom out">−</button>
+      <button id="zreset" title="Fit era">⤾</button>
+    </div>
+    <div class="tilecredit" id="tilecredit"></div>
+    <div class="scalebar"><div class="bar" id="scalebar" style="width:90px"></div><span id="scaletext">200 km</span></div>
+    <div class="tourbar" id="tourbar" hidden>
+      <div class="tourhead"><span id="tourtitle"></span>
+        <button class="tourx" id="tourexit" title="Leave the tour">×</button></div>
+      <div class="tourbody"><b id="tourstop"></b><span id="tourtext"></span></div>
+      <div class="tournav">
+        <button id="tourprev">‹ back</button>
+        <span class="r" id="tourcount"></span>
+        <button id="tournext">next ›</button>
+        <span id="tourref"></span>
+      </div>
+    </div>
+    <div class="tourbar" id="cfmbar" hidden>
+      <div class="tourhead"><span id="cfmweekno"></span>
+        <button class="tourx" id="cfmexit" title="Close this week">×</button></div>
+      <div class="tourbody"><b id="cfmtitle"></b><span id="cfmnote"></span></div>
+      <div class="refrow" id="cfmplaces" style="margin:0 0 7px"></div>
+      <div class="tournav">
+        <button id="cfmprev">‹ previous week</button>
+        <button id="cfmnext">next week ›</button>
+        <span id="cfmrefs" class="refrow" style="margin:0"></span>
+      </div>
+    </div>
+    <button class="presentpill" id="presentexit" title="Leave presenter mode (or press m)">× &nbsp;Exit presenter mode</button>
+    <button class="legtoggle" id="legtoggle">Legend</button>
+    <div class="legend" id="legend" hidden></div>
+  </div>
+
+  <aside class="panel">
+    <div class="tabs" id="tabs"></div>
+    <div class="pane" id="pane-era"></div>
+    <div class="pane" id="pane-cfm" hidden></div>
+    <div class="pane" id="pane-tours" hidden></div>
+    <div class="pane" id="pane-place" hidden></div>
+    <div class="pane" id="pane-wars" hidden></div>
+    <div class="pane" id="pane-finds" hidden></div>
+    <div class="pane" id="pane-peoples" hidden></div>
+    <div class="pane" id="pane-scripture" hidden></div>
+  </aside>
+</main>
+
+<footer>
+  <div class="chrono" id="chrono" hidden><svg id="chronosvg"></svg></div>
+  <div class="tlrow">
+    <button class="tlbtn" id="chronobtn" aria-pressed="false">Timeline</button>
+    <div class="tl" id="tl"></div>
+  </div>
+</footer>
+
+<div class="modalwrap" id="lightwrap" hidden>
+  <figure class="lightbox" id="lightbox">
+    <button class="close" id="lightclose" title="Close">×</button>
+    <img id="lightimg" alt="">
+    <figcaption id="lightcap"></figcaption>
+  </figure>
+</div>
+
+<div class="modalwrap" id="aboutwrap" hidden>
+  <div class="modal" role="dialog" aria-label="About this atlas">
+    <button class="close" id="aboutclose" title="Close">×</button>
+    <h2>The Old Testament Atlas</h2>
+    <p class="by">Ur to the Second Temple · prepared by <strong>Taylor Halverson, Ph.D.</strong></p>
+
+    <div class="modaltabs" role="tablist">
+      <button role="tab" data-pane="synopsis" aria-selected="true">The atlas</button>
+      <button role="tab" data-pane="howto" aria-selected="false">How to use it</button>
+      <button role="tab" data-pane="author" aria-selected="false">Taylor Halverson</button>
+    </div>
+
+    <div class="modalpane" data-pane="synopsis">
+      <p class="lede">Fifteen hundred years of Old Testament history laid on the land it happened on:
+        88 places, 41 journeys, 36 military campaigns, 33 excavated objects, twelve ancient peoples and
+        nine eras, each drawn in real coordinates and tied to the verse that reports it.</p>
+      <div class="flag">
+        <span class="tag">Beta</span>
+        Places, routes, dates and identifications are still being reviewed. Where scholars disagree — the
+        location of Sinai, the date of the exodus, the sea crossing, the cities of the plain — the atlas follows
+        the traditional identification and says so in the entry rather than choosing silently.
+      </div>
+      <div class="subhead">On the evidence</div>
+      <p>All 601 scripture references were checked against book and chapter counts. Regnal dates follow Thiele's
+        synchronised chronology. Inscription dates, findspots and museum holdings were checked against published
+        translations and museum records; disputed points — Samaria falling in 722 or 720, the figure on the Black
+        Obelisk — are named as disputed.</p>
+      <div class="subhead">On the routes</div>
+      <p>Every route leg was checked against the coastline and stepped through real roads, rivers and caravan
+        stations: none crosses water, and none runs more than about 200 km without a waystation — except the
+        Arabian incense road, where the desert genuinely is that empty. Routes follow the historic network
+        (Via Maris, the King's Highway, the Euphrates road) but remain schematic, and kingdom outlines are
+        approximate zones, not surveyed frontiers.</p>
+      <div class="subhead">On the Jerusalem plan</div>
+      <p>Walls, gates, valleys and the water system are drawn from the excavated and surveyed lines in four
+        building phases — David, Solomon, Hezekiah, Nehemiah. Reconstructed stretches are named as such in the entry.</p>
+    </div>
+
+    <div class="modalpane" data-pane="howto" hidden>
+      <p class="lede">The map is the document; everything else is a way of asking a question about it. Nine eras
+        run down the left and across the bottom, layers sit above the map, and the panel on the right holds whatever
+        you last clicked.</p>
+      <div class="subhead">Finding your way in</div>
+      <ul>
+        <li><em>Come, Follow Me</em> (key w) opens the reading year: pick a week and the map sets itself to that
+          reading — era, layers, places and one note on what the ground adds.</li>
+        <li><em>Tours</em> is the easiest start: seven narrated walks that set the map up stop by stop.</li>
+        <li><em>Presenter</em> (key m) strips the controls and enlarges every label for a classroom projector.</li>
+        <li><em>Scale</em> in the left rail jumps between the four scales the Old Testament is read at — Crescent,
+          Egypt and Sinai, Canaan, the ridge country — or straight into Jerusalem (shift-1 to shift-5).</li>
+        <li>Nine eras across the bottom and down the left; arrow keys step through them.</li>
+        <li>Search (key /) reaches places, events, peoples, objects, city features and scripture references.</li>
+      </ul>
+      <div class="subhead">Layers and lines</div>
+      <ul>
+        <li>Layer chips at the top of the map, with <em>Clear</em>, <em>All</em> and <em>Reset</em>; number keys toggle them.
+          Journeys, places and events show by default — campaigns, finds, roads and tribes are opt-in.</li>
+        <li>Hover any line to name it; click a journey or campaign for its stage-by-stage distances and days.</li>
+        <li>Clicking anything in the right panel rings it on the map and turns its layer on for you.</li>
+      </ul>
+      <div class="subhead">Time and text</div>
+      <ul>
+        <li><em>Timeline</em> (key C) opens the chronology: Judah and Israel's kings side by side, the prophets who
+          overlap them, and the empires above. Click a reign to read it; click a prophet to fly to his home town.</li>
+        <li>Every scripture reference is a button. In the <em>Verses</em> tab, place names inside the text are
+          clickable and the map follows the verse you are reading.</li>
+      </ul>
+      <div class="subhead">Seeing the ground</div>
+      <ul>
+        <li><em>Jerusalem plan</em> (key J), or open Jerusalem's entry and pick a building phase.</li>
+        <li><em>Satellite</em> and <em>Street map</em> swap the parchment for real imagery, down to a single excavation.</li>
+        <li>Click any photograph — on the map or in a panel — to see it full size with its licence. Esc closes
+          whatever is open.</li>
+      </ul>
+      <div class="subhead">Sources</div>
+      <ul>
+        <li>Coastlines and modern borders: Natural Earth (public domain), 1:50m.</li>
+        <li>Scripture text: King James Version, World English Bible and Bible in Basic English (public domain).</li>
+        <li>Photographs of sites and artefacts: Wikimedia Commons — each carries a link to its source and licence.</li>
+        <li>Satellite imagery: Esri, Maxar, Earthstar Geographics. Street map: © OpenStreetMap contributors.</li>
+      </ul>
+    </div>
+
+    <div class="modalpane" data-pane="author" hidden>
+      <h2 style="margin-bottom:4px">Taylor Halverson, Ph.D.</h2>
+      <p class="role">Author · Teacher · Tour leader · Scripture scholar</p>
+      <p>Taylor Halverson is a scholar of scripture and a teacher of learners — an entrepreneurship professor in the
+        BYU Marriott School of Business who spends his working life helping people find and act on the best ideas
+        and tools available to them.</p>
+      <p>He is the author and editor of more than fifty books and nearly a thousand articles and blog posts, and a
+        builder of scripture study resources: the ScripturePlus app with Scripture Central, whose scripture YouTube
+        channel he co-hosted to more than fifty million views, and BYU's Virtual Scripture Group, whose team spent
+        more than five years reconstructing New Testament Jerusalem in three dimensions. This atlas belongs to that
+        same body of work — tools made so that ordinary readers can see what specialists see.</p>
+      <p>He leads tours to Israel and the Middle East, China, India, Central America, Europe, and the national parks
+        of the American West, where he unfolds how geology, geography, civilization, and scriptural texts created our
+        beautiful present day.</p>
+      <div class="subhead">Academic training</div>
+      <ul class="degrees">
+        <li>Ph.D., Judaism &amp; Christianity in Antiquity — Indiana University</li>
+        <li>Ph.D., Instructional Systems Technology — Indiana University</li>
+        <li>M.A., Biblical Studies — Yale University</li>
+        <li>B.A., Ancient Near Eastern Studies — Brigham Young University</li>
+      </ul>
+      <p>Two doctorates in two separate fields — the ancient world, and the design of learning. Both of them are
+        in this tool.</p>
+      <div class="subhead">Elsewhere</div>
+      <div class="links">
+        <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>
+        <a href="https://books.taylorhalverson.com" target="_blank" rel="noopener">books.taylorhalverson.com</a>
+        <a href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="atlas-data.js"></script>
+<script>
+/* =========================== scripture references =========================== */
+const BOOKS = {
+  gen:"Genesis", exod:"Exodus", lev:"Leviticus", num:"Numbers", deut:"Deuteronomy", josh:"Joshua",
+  judg:"Judges", ruth:"Ruth", "1sam":"1 Samuel", "2sam":"2 Samuel", "1kgs":"1 Kings", "2kgs":"2 Kings",
+  "1chr":"1 Chronicles", "2chr":"2 Chronicles", ezra:"Ezra", neh:"Nehemiah", est:"Esther", job:"Job",
+  ps:"Psalms", prov:"Proverbs", eccl:"Ecclesiastes", song:"Song of Solomon", isa:"Isaiah", jer:"Jeremiah",
+  lam:"Lamentations", ezek:"Ezekiel", dan:"Daniel", hos:"Hosea", joel:"Joel", amos:"Amos", obad:"Obadiah",
+  jon:"Jonah", mic:"Micah", nah:"Nahum", hab:"Habakkuk", zeph:"Zephaniah", hag:"Haggai", zech:"Zechariah",
+  mal:"Malachi"
+};
+const norm = s => s.toLowerCase().replace(/[\s.]/g,"");
+
+/* "Gen 11:31 – 13:18" -> {book, display, query, chapters:[11,12,13]} */
+function parseRef(tok){
+  let t = tok.trim().replace(/^cf\.\s*/i,"").replace(/[–—]/g,"-").replace(/\s*-\s*/g,"-");
+  const m = t.match(/^([123]?\s?[A-Za-z]+\.?)\s*(.*)$/);
+  if(!m) return null;
+  const book = BOOKS[norm(m[1])];
+  if(!book) return null;
+  const nums = m[2].trim();
+  const chapters = [];
+  const seg = nums.split(",")[0];
+  const parts = seg.split("-").map(x=>x.trim()).filter(Boolean);
+  const chOf = p => parseInt(p.split(":")[0],10);
+  if(parts.length){
+    const a = chOf(parts[0]);
+    const last = parts[parts.length-1];
+    // "28:10-22" is a verse range inside one chapter; "11:31-13:18" and "5-10" cross chapters
+    let b = a;
+    if(parts.length>1){
+      if(last.includes(":")) b = chOf(last);
+      else if(!parts[0].includes(":")) b = parseInt(last,10);
+    }
+    if(!isNaN(a)) for(let c=a; c<=(isNaN(b)?a:b) && c<a+40; c++) chapters.push(c);
+  }
+  const vOf = p => { const bits = (p||"").split(":"); return bits.length>1 ? parseInt(bits[1],10) : null; };
+  const startV = vOf(parts[0]);
+  // "1:1-3" — the tail is a bare verse number, not a chapter
+  const tail = parts[parts.length-1] || "";
+  const endV = parts.length>1
+    ? (tail.includes(":") ? vOf(tail) : (parts[0].includes(":") ? parseInt(tail,10) : null))
+    : startV;
+  let clipped = false, chs = chapters;
+  if(chs.length > 4){ chs = chapters.slice(0,4); clipped = true; }   // keep payloads sane
+  return { book, chapters:chs, startV, endV,
+           display:(book + (nums?" "+nums.replace(/-/g,"–"):"")),
+           query:(nums ? `${book} ${seg}` : book), clipped, raw:tok.trim() };
+}
+const splitRefs = str => str.split(/;|\s·\s/).map(s=>s.trim()).filter(Boolean).map(parseRef).filter(Boolean);
+
+/* reverse index: "Genesis 12" -> atlas entries */
+const REFINDEX = new Map();
+function indexRef(refStr, entry){
+  splitRefs(refStr||"").forEach(r => r.chapters.forEach(c=>{
+    const k = r.book+" "+c;
+    if(!REFINDEX.has(k)) REFINDEX.set(k,[]);
+    if(!REFINDEX.get(k).some(e=>e.kind===entry.kind && e.label===entry.label)) REFINDEX.get(k).push(entry);
+  }));
+}
+Object.values(S).forEach(s => indexRef(s.r, {kind:"place", label:s.n, id:s.id, c:s.c}));
+EVENTS.forEach((v,i) => indexRef(v.r, {kind:"event", label:v.t, i, c:v.c, era:v.e}));
+ERAS.forEach((e,ei) => e.journeys.forEach((j,ji) => indexRef(j.refs, {kind:"journey", label:j.name, ei, ji})));
+PEOPLES.forEach((p,i) => { /* peoples carry loose refs; index by book mentions only */ });
+
+/* =========================== state =========================== */
+const state = {
+  era: 1, tab: "era", activeJourney: null, place: null, people: null,
+  passage: null, highlight: [], verseIds: [], campaign: null, find: null, allFinds: false, focus: null, tour: null,
+  layers: { routes:true, places:true, events:true, campaigns:false, finds:false,
+            kingdoms:false, roads:false, distances:false, tribes:false, modern:false, photos:false,
+            terrain:false, relief:false, satellite:false, street:false, city:false },
+  cityPeriod: "nehemiah"
+};
+
+/* =========================== map =========================== */
+const hoverTip = document.getElementById("hovertip");
+const svg = d3.select("#map");
+const stage = document.getElementById("stage");
+let W = stage.clientWidth || 320, H = stage.clientHeight || 240, measured = false;
+function syncSize(){
+  const w = stage.clientWidth, h = stage.clientHeight;
+  if(!(w>0 && h>0)) return false;
+  if(measured && Math.abs(w-W)<2 && Math.abs(h-H)<2) return false;
+  W = w; H = h; measured = true; svg.attr("viewBox",`0 0 ${W} ${H}`); return true;
+}
+svg.attr("viewBox",`0 0 ${W} ${H}`);
+
+const defs = svg.append("defs");
+defs.append("marker").attr("id","arrow").attr("viewBox","0 0 10 10").attr("refX",8).attr("refY",5)
+  .attr("markerWidth",5).attr("markerHeight",5).attr("orient","auto-start-reverse")
+  .append("path").attr("d","M0,1 L9,5 L0,9 Z").attr("fill","context-stroke");
+
+const root = svg.append("g");
+const gLand = root.append("g"), gModern = root.append("g"), gWater = root.append("g"),
+      gTiles = root.append("g"), gTerrain = root.append("g"), gKing = root.append("g"), gRoads = root.append("g"), gRegions = root.append("g"), gTribes = root.append("g"),
+      gCamp = root.append("g"), gRoutes = root.append("g"), gHalo = root.append("g"),
+      gCity = root.append("g"), gVerse = root.append("g"), gBattles = root.append("g"), gEvents = root.append("g"), gFinds = root.append("g"), gDist = root.append("g"),
+      gSites = root.append("g"), gPhotos = root.append("g"), gLabels = root.append("g"),
+      gFocus = root.append("g");
+
+const projection = d3.geoMercator();
+const path = d3.geoPath(projection);
+const line = d3.line().curve(d3.curveCatmullRom.alpha(0.6));
+let transform = d3.zoomIdentity, land, coast, borders;
+
+function fitTo(bbox){
+  projection.fitExtent([[22,22],[W-22,H-22]],{type:"MultiPoint",coordinates:[
+    [bbox[0][0],bbox[0][1]],[bbox[1][0],bbox[0][1]],[bbox[1][0],bbox[1][1]],[bbox[0][0],bbox[1][1]]]});
+}
+const px = p => Array.isArray(p) ? projection(p) : projection(S[p].c);
+
+const zoom = d3.zoom().scaleExtent([0.12,2000]).on("zoom", e=>{
+  transform = e.transform; root.attr("transform",transform);
+  const k = transform.k;
+  gSites.selectAll("circle.pin").interrupt().attr("opacity",1);
+  root.selectAll("path.route").interrupt().attr("stroke-dashoffset",0);
+  gLabels.selectAll("text").interrupt().attr("opacity",1);
+  root.selectAll(".coast").attr("stroke-width",0.9/k);
+  root.selectAll(".border").attr("stroke-width",1/k).attr("stroke-dasharray",`${7/k} ${4/k}`);
+  root.selectAll(".river").attr("stroke-width",1.3/k);
+  root.selectAll(".lake").attr("stroke-width",0.6/k);
+  root.selectAll("path.route").attr("stroke-width",2.6/k);
+  root.selectAll("path.camp").attr("stroke-width",3.2/k).attr("stroke-dasharray",`${9/k} ${5/k}`);
+  root.selectAll(".route-hit").attr("stroke-width",14/k);
+  root.selectAll(".road").attr("stroke-width",2.2/k).attr("stroke-dasharray",`${1.5/k} ${4/k}`);
+  gCity.selectAll("path.cval").attr("stroke-width",6/k);
+  gCity.selectAll("path.cwall").attr("stroke-width",2.6/k);
+  gSites.selectAll("circle.pin").attr("r",d=>(d.major?5:3.6)/k).attr("stroke-width",1.6/k);
+  gModern.selectAll("circle").attr("r",2.8/k).attr("stroke-width",1/k);
+  gModern.select(".mcountries").selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gModern.select(".mcities").selectAll("g").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  scaleMarks(k);
+  scheduleTiles();
+  updateScale(); positionCard();
+});
+const WIDE_OUT = 0.55;                     // below this the view is continental, not regional
+function applyDetailVisibility(){
+  const wide = transform.k < WIDE_OUT;
+  gModern.select(".mcities").attr("display", state.layers.modern && !wide ? null : "none");
+  gTribes.attr("display", state.layers.tribes && !wide ? null : "none");
+  gTerrain.attr("display", state.layers.terrain && !wide ? null : "none");
+  gPhotos.attr("display", state.layers.photos && !wide ? null : "none");
+  gDist.attr("display", state.layers.distances && !wide ? null : "none");
+  gRoads.attr("display", state.layers.roads && !wide ? null : "none");
+  gCity.attr("display", state.layers.city && transform.k > 60 ? null : "none");
+}
+function scaleMarks(k){
+  gLabels.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gRegions.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gTribes.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gModern.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gEvents.selectAll("g.ev").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gBattles.selectAll("g.bt").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gFinds.selectAll("g.fd").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gRoads.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gCity.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gCity.selectAll("g.cy").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  relayoutCityLabels();
+  gKing.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gTerrain.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gTerrain.selectAll("path").attr("stroke-width",1.6/k).attr("stroke-dasharray",`${8/k} ${4/k}`);
+  gKing.selectAll("path").attr("stroke-width",1.4/k).attr("stroke-dasharray",`${5/k} ${3/k}`);
+  gDist.selectAll("g").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  gVerse.selectAll("path.versepath").attr("stroke-width",2.4/k).attr("stroke-dasharray",`${6/k} ${4/k}`);
+  gVerse.selectAll("g.vp").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  drawFocus();
+  renderPhotos();
+  applyDetailVisibility();
+  gHalo.selectAll("circle").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  layoutLabels(false);
+}
+svg.call(zoom).on("dblclick.zoom",null);
+svg.on("mousedown",()=>svg.classed("dragging",true)).on("mouseup",()=>svg.classed("dragging",false));
+
+function updateScale(){
+  const c = projection.invert([W/2,H/2]);
+  const p1 = projection([c[0],c[1]]), p2 = projection([c[0]+1,c[1]]);
+  const kmPerPx = 111.32*Math.cos(c[1]*Math.PI/180)/((p2[0]-p1[0])*transform.k);
+  const targets=[0.05,0.1,0.25,0.5,1,2,5,10,25,50,100,200,400,800,1600];
+  const km = targets.find(t=>t/kmPerPx>70 && t/kmPerPx<190) ||
+    targets.reduce((a,b)=>Math.abs(b/kmPerPx-120)<Math.abs(a/kmPerPx-120)?b:a);
+  document.getElementById("scalebar").style.width = Math.min(W-70, km/kmPerPx).toFixed(0)+"px";
+  document.getElementById("scaletext").textContent = km < 1 ? Math.round(km*1000)+" m" : km+" km";
+}
+
+const REGION = [[-32,-28],[124,76]];            // wide enough to pull right back without cut edges
+function inRegion(lon,lat){ return lon>=REGION[0][0] && lon<=REGION[1][0] && lat>=REGION[0][1] && lat<=REGION[1][1]; }
+function clipFeatures(fc){
+  return { type:"FeatureCollection", features: fc.features.filter(f=>{
+    const b = d3.geoBounds(f);
+    return !(b[1][0] < REGION[0][0] || b[0][0] > REGION[1][0] || b[1][1] < REGION[0][1] || b[0][1] > REGION[1][1]);
+  }) };
+}
+function clipMesh(mesh){
+  const lines = (mesh.type==="MultiLineString" ? mesh.coordinates : [mesh.coordinates])
+    .filter(ls => ls.some(p=>inRegion(p[0],p[1])));
+  return { type:"MultiLineString", coordinates: lines };
+}
+function buildBase(topo){
+  const countries = topojson.feature(topo, topo.objects.countries);
+  land = clipFeatures(countries);
+  coast = clipMesh(topojson.mesh(topo, topo.objects.countries, (a,b)=>a===b));
+  borders = clipMesh(topojson.mesh(topo, topo.objects.countries, (a,b)=>a!==b));
+  gLand.append("path").attr("class","landmass").attr("fill","var(--parch)");
+  gLand.append("path").attr("class","coast").attr("fill","none").attr("stroke","#8f8362").attr("stroke-width",0.9);
+  gModern.append("path").attr("class","border").attr("fill","none").attr("stroke","#2f6d8c")
+    .attr("stroke-width",1).attr("stroke-dasharray","7 4");
+  gModern.append("g").attr("class","mcountries");
+  gModern.append("g").attr("class","mcities");
+  gWater.append("g").attr("class","rivers");
+  gWater.append("g").attr("class","lakes");
+  gWater.append("g").attr("class","waterlabels");
+  const refit = ()=>{ if(syncSize()){ fitEra(false); renderMap(false); } };
+  syncSize(); setEra(1,false);
+  requestAnimationFrame(refit); setTimeout(refit,0); setTimeout(refit,300);
+  new ResizeObserver(refit).observe(stage);
+  if(document.fonts) document.fonts.ready.then(refit);
+}
+// 1:50m outlines: the 110m set flattens the Levant coast into straight chords.
+d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json")
+  .then(buildBase)
+  .catch(()=>d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json").then(buildBase));
+
+function paintGeo(){
+  gLand.select(".landmass").datum(land).attr("d",path);
+  gLand.select(".coast").datum(coast).attr("d",path);
+  gModern.select(".border").datum(borders).attr("d",path);
+
+  const mc = gModern.select(".mcities").selectAll("g")
+    .data(MODERN.map(m=>({t:m[0], xy:projection([m[1],m[2]])})), d=>d.t);
+  mc.exit().remove();
+  const mcE = mc.enter().append("g");
+  mcE.append("circle").attr("r",2.8).attr("fill","#2f6d8c").attr("stroke","#eef4f6").attr("stroke-width",1);
+  mcE.append("text").attr("class","modern-label").attr("x",5.5).attr("y",3.5).attr("font-size",9.5).text(d=>d.t);
+  gModern.select(".mcities").selectAll("g").attr("transform",d=>`translate(${d.xy}) scale(${1/transform.k})`);
+
+  const cy = gModern.select(".mcountries").selectAll("text")
+    .data(MODERN_COUNTRIES.map(m=>({t:m[0], xy:projection([m[1],m[2]])})), d=>d.t);
+  cy.exit().remove();
+  cy.enter().append("text").attr("class","country-label").attr("text-anchor","middle").attr("font-size",11)
+    .text(d=>d.t)
+    .merge(cy).attr("transform",d=>`translate(${d.xy}) scale(${1/transform.k})`);
+
+  paintOverlays();
+}
+function paintOverlays(){
+  const on = state.layers.modern ? null : "none";
+  gModern.select(".border").attr("display",on);
+  gModern.select(".mcountries").attr("display",on);
+  if(land) applyDetailVisibility();
+
+  const rv = gWater.select(".rivers").selectAll("path").data(Object.entries(RIVERS));
+  rv.enter().append("path").attr("class","river").attr("fill","none").attr("stroke","#8ea7ab")
+    .attr("stroke-width",1.3).attr("stroke-linecap","round")
+    .merge(rv).attr("d",d=>line(d[1].map(p=>projection(p))));
+
+  const lk = gWater.select(".lakes").selectAll("path").data(Object.entries(LAKES));
+  lk.enter().append("path").attr("class","lake").attr("fill","#c3d3d4").attr("stroke","#8ea7ab").attr("stroke-width",0.6)
+    .merge(lk).attr("d",d=>line(d[1].map(p=>projection(p)))+"Z");
+
+  const wl = gWater.select(".waterlabels").selectAll("text").data(SEAS);
+  wl.enter().append("text").attr("class","water-label").attr("text-anchor","middle")
+    .merge(wl).attr("x",d=>projection([d[1],d[2]])[0]).attr("y",d=>projection([d[1],d[2]])[1])
+    .attr("font-size",d=>d[3]).text(d=>d[0]);
+}
+
+/* ---- event glyphs ---- */
+const KINDS = {
+  battle:  {c:"var(--terra)",  n:"Battle or campaign", d:"M0,-6 L5.5,4 L-5.5,4 Z"},
+  miracle: {c:"var(--gold)",   n:"Miracle or sign",    d:"M0,-7 L1.9,-1.9 L7,0 L1.9,1.9 L0,7 L-1.9,1.9 L-7,0 L-1.9,-1.9 Z"},
+  covenant:{c:"var(--indigo)", n:"Covenant or worship",d:"M0,-6 L6,0 L0,6 L-6,0 Z"},
+  word:    {c:"var(--olive)",  n:"Word, vision, call", d:"M0,-5.2 A5.2,5.2 0 1,1 -0.01,-5.2 Z"},
+  judgment:{c:"#7a2f2f",       n:"Judgment or fall",   d:"M-4.5,-4.5 L4.5,4.5 M4.5,-4.5 L-4.5,4.5"}
+};
+
+const BATTLE_D = "M-5,-5 L5,5 M5,-5 L-5,5 M-6,-6 L-4,-4 M6,6 L4,4";
+const FIND_D = "M-5,-6 H5 V6 H-5 Z M-3,-3 H3 M-3,0 H3 M-3,3 H1";
+
+/* =========================== render =========================== */
+function fitEra(animate){
+  state.lastBox = ERAS[state.era].focus;
+  fitTo(ERAS[state.era].focus);
+  paintGeo();
+  const t = d3.zoomIdentity;
+  if(animate) svg.transition().duration(600).call(zoom.transform,t); else svg.call(zoom.transform,t);
+  transform = t; root.attr("transform",t); updateScale();
+}
+
+function renderMap(animate){
+  const era = ERAS[state.era], k = transform.k, L = state.layers;
+
+  /* routes */
+  gRoutes.selectAll("*").remove();
+  if(L.routes){
+    const jd = era.journeys.map((j,idx)=>({...j, idx, pts:j.path.map(px)}));
+    const rg = gRoutes.selectAll("g").data(jd).enter().append("g").attr("data-j",d=>d.idx)
+      .style("cursor","pointer").on("click",(e,d)=>{ setJourney(d.idx); e.stopPropagation(); });
+    rg.append("path").attr("class","route-hit").attr("fill","none").attr("stroke","transparent")
+      .attr("stroke-width",14/k).attr("d",d=>line(d.pts));
+    rg.on("mouseenter",(e,d)=>hoverRoute("j",d.idx)).on("mouseleave",()=>hoverRoute(null));
+    rg.append("title").text(d=>`${d.name} · ${d.refs}`);
+    rg.append("path").attr("class","route").attr("fill","none").attr("stroke",d=>d.color)
+      .attr("stroke-width",2.6/k).attr("stroke-linecap","round").attr("marker-end","url(#arrow)")
+      .attr("d",d=>line(d.pts))
+      .each(function(){ const l=this.getTotalLength();
+        d3.select(this).attr("stroke-dasharray",l+" "+l).attr("stroke-dashoffset",animate?l:0); });
+    if(animate) gRoutes.selectAll("path.route").transition().delay((d,i)=>120+i*220)
+      .duration(1000).ease(d3.easeCubicInOut).attr("stroke-dashoffset",0);
+    if(state.activeJourney!==null) applyJourneyEmphasis();
+  }
+
+  /* physical geography: belts and rain lines */
+  gTerrain.selectAll("*").remove();
+  if(L.terrain){
+    gTerrain.selectAll("path").data(ISOHYETS).enter().append("path").attr("class","isohyet")
+      .attr("fill","none").attr("stroke","#4b7a86").attr("stroke-width",1.6/k)
+      .attr("stroke-dasharray",`${8/k} ${4/k}`)
+      .attr("d",z=>line(z.pts.map(p=>projection(p))))
+      .append("title").text(z=>z.n);
+    gTerrain.selectAll("text.iso").data(ISOHYETS.map(z=>({t:z.n, xy:projection(z.pts[z.pts.length-1])})))
+      .enter().append("text").attr("class","iso zone-label").attr("font-size",8.5)
+      .attr("transform",z=>`translate(${z.xy}) scale(${1/k})`).attr("x",6).attr("y",3).text(z=>z.t);
+    gTerrain.selectAll("text.zone").data(ZONES.map(z=>({t:z.n, xy:projection(z.at)})))
+      .enter().append("text").attr("class","zone zone-belt").attr("text-anchor","middle").attr("font-size",8.5)
+      .attr("transform",z=>`translate(${z.xy}) scale(${1/k})`).text(z=>z.t);
+  }
+
+  /* political entities */
+  gKing.selectAll("*").remove();
+  if(L.kingdoms){
+    const kd = KINGDOMS.filter(x=>x.e.includes(era.id));
+    const kg = gKing.selectAll("g").data(kd).enter().append("g");
+    kg.append("path").attr("fill",x=>x.c).attr("fill-opacity",0.09)
+      .attr("stroke",x=>x.c).attr("stroke-opacity",0.55).attr("stroke-width",1.4/k)
+      .attr("stroke-dasharray",`${5/k} ${3/k}`)
+      .attr("d",x=>line(x.ring.map(p=>projection(p)))+"Z")
+      .append("title").text(x=>x.n+" — approximate extent");
+    gKing.selectAll("text").data(kd.map(x=>({t:x.n, c:x.c, xy:projection(x.at)}))).enter()
+      .append("text").attr("class","kingdom-label").attr("text-anchor","middle").attr("font-size",10)
+      .attr("fill",x=>x.c).attr("transform",x=>`translate(${x.xy}) scale(${1/k})`).text(x=>x.t);
+  }
+
+  /* ancient roads */
+  gRoads.selectAll("*").remove();
+  if(L.roads){
+    gRoads.selectAll("path").data(ROADS).enter().append("path").attr("class","road")
+      .call(s=>s.append("title").text(d=>d.n))
+      .attr("fill","none").attr("stroke","#9a8a67").attr("stroke-width",2.2/k)
+      .attr("stroke-dasharray",`${1.5/k} ${4/k}`).attr("stroke-linecap","round")
+      .attr("d",d=>line(d.pts.map(p=>projection(p))));
+    gRoads.selectAll("text").data(ROADS.map(r=>({t:r.n, xy:projection(r.pts[Math.floor(r.pts.length/2)])})))
+      .enter().append("text").attr("class","road-label").attr("text-anchor","middle").attr("font-size",9)
+      .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).attr("y",-5).text(d=>d.t);
+  }
+
+  /* military campaigns */
+  gCamp.selectAll("*").remove(); gBattles.selectAll("*").remove();
+  if(L.campaigns){
+    const cd = CAMPAIGNS.filter(c=>c.e===era.id).map(c=>({...c, pts:c.path.map(px)}));
+    const cg = gCamp.selectAll("g").data(cd).enter().append("g").attr("data-c",d=>d.i)
+      .style("cursor","pointer").on("click",(e,d)=>{ setCampaign(d.i); e.stopPropagation(); });
+    cg.append("path").attr("class","route-hit").attr("fill","none").attr("stroke","transparent")
+      .attr("stroke-width",14/k).attr("d",d=>line(d.pts));
+    cg.on("mouseenter",(e,d)=>hoverRoute("c",d.i)).on("mouseleave",()=>hoverRoute(null));
+    cg.append("title").text(d=>`${d.n} · ${d.date} · ${d.who}`);
+    cg.append("path").attr("class","camp").attr("fill","none").attr("stroke",d=>d.color)
+      .attr("stroke-width",3.2/k).attr("stroke-dasharray",`${9/k} ${5/k}`).attr("stroke-linecap","round")
+      .attr("opacity",0.75).attr("marker-end","url(#arrow)").attr("d",d=>line(d.pts));
+    const bd = [];
+    cd.forEach(c=>(c.battles||[]).forEach(b=>bd.push({...b, ci:c.i, color:c.color, xy:projection(b.c)})));
+    const bg = gBattles.selectAll("g.bt").data(bd).enter().append("g").attr("class","bt")
+      .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).style("cursor","pointer")
+      .on("click",(e,d)=>{ openBattle(d); e.stopPropagation(); });
+    bg.append("circle").attr("r",8).attr("fill","transparent");
+    bg.append("path").attr("d",BATTLE_D).attr("fill","none").attr("stroke",d=>d.color).attr("stroke-width",1.8);
+    if(state.campaign!==null) applyCampaignEmphasis();
+  }
+
+  /* Jerusalem city plan */
+  gCity.selectAll("*").remove();
+  if(L.city){
+    const per = state.cityPeriod, ORDER = ["david","solomon","hezekiah","nehemiah"];
+    const shown = per==="all" ? JERUSALEM.walls : JERUSALEM.walls.filter(w=>w.period===per);
+    JERUSALEM.valleys.forEach(v=>{
+      gCity.append("path").attr("class","cval").attr("fill","none").attr("stroke","#8fa9b5").attr("stroke-width",6/k)
+        .attr("stroke-opacity",0.5).attr("stroke-linecap","round")
+        .attr("d",line(v.pts.map(p=>projection(p))))
+        .call(s=>s.append("title").text(v.n+" — "+v.p));
+      const mid = v.pts[Math.floor(v.pts.length/2)];
+      gCity.append("text").datum({xy:projection(mid), pts:v.pts, n:v.n}).attr("class","cityval")
+        .attr("transform","translate("+projection(mid)+") scale("+(1/k)+")")
+        .attr("text-anchor","middle").text(v.n);
+    });
+    shown.forEach(w=>{
+      const dim = per==="all" && w.period!=="nehemiah" ? 0.75 : 1;
+      gCity.append("path").attr("class","cwall").attr("d",line(w.pts.map(p=>projection(p))))
+        .attr("fill",WALLC[w.period]).attr("fill-opacity",0.10*dim)
+        .attr("stroke",WALLC[w.period]).attr("stroke-width",2.6/k).attr("stroke-opacity",0.9*dim)
+        .style("cursor","pointer")
+        .on("click",e=>{ openCityItem(w,"wall"); e.stopPropagation(); })
+        .call(s=>s.append("title").text(w.n+" · "+w.r));
+    });
+    if(per==="nehemiah" || per==="all"){
+      const gg = gCity.selectAll("g.cygate").data(JERUSALEM.gates.map(g=>({...g,xy:projection(g.c)})))
+        .enter().append("g").attr("class","cy cygate")
+        .attr("transform",d=>"translate("+d.xy+") scale("+(1/k)+")").style("cursor","pointer")
+        .on("click",(e,d)=>{ openCityItem(d,"gate"); e.stopPropagation(); });
+      gg.append("rect").attr("x",-3.5).attr("y",-3.5).attr("width",7).attr("height",7)
+        .attr("fill","#f2e9d6").attr("stroke",WALLC.nehemiah).attr("stroke-width",1.3);
+      gg.append("text").attr("class","citylab").text(d=>d.n);
+    }
+    const fg = gCity.selectAll("g.cyf").data(JERUSALEM.features.map(f=>({...f,xy:projection(f.c)})))
+      .enter().append("g").attr("class","cy cyf")
+      .attr("transform",d=>"translate("+d.xy+") scale("+(1/k)+")").style("cursor","pointer")
+      .on("click",(e,d)=>{ openCityItem(d,"feature"); e.stopPropagation(); });
+    fg.append("circle").attr("r",8).attr("fill","transparent");
+    fg.append("circle").attr("r",3.4).attr("fill","var(--terra)").attr("stroke","#f2e9d6").attr("stroke-width",1.1);
+    fg.append("text").attr("class","citylab strong").text(d=>d.n);
+    relayoutCityLabels();
+  }
+
+  /* archaeological finds */
+  gFinds.selectAll("*").remove();
+  if(L.finds){
+    const fd = FINDS.filter(f=>state.allFinds || f.e.includes(era.id)).map(f=>({...f, xy:projection(f.c)}));
+    const fg = gFinds.selectAll("g.fd").data(fd).enter().append("g").attr("class","fd")
+      .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).style("cursor","pointer")
+      .on("click",(e,d)=>{ openFind(d.i); e.stopPropagation(); });
+    fg.append("circle").attr("r",8).attr("fill","transparent");
+    fg.append("path").attr("d",FIND_D).attr("fill","#f2e9d6").attr("stroke","var(--plum)").attr("stroke-width",1.2);
+  }
+
+  /* events */
+  gEvents.selectAll("*").remove();
+  if(L.events){
+    const ed = EVENTS.map((v,i)=>({...v,i})).filter(v=>v.e===era.id).map(v=>({...v, xy:projection(v.c)}));
+    const eg = gEvents.selectAll("g.ev").data(ed).enter().append("g").attr("class","ev")
+      .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).style("cursor","pointer")
+      .on("click",(e,d)=>{ openEvent(d); e.stopPropagation(); });
+    eg.append("circle").attr("r",9).attr("fill","transparent");
+    eg.append("path").attr("d",d=>KINDS[d.k].d)
+      .attr("fill",d=>d.k==="judgment"?"none":KINDS[d.k].c)
+      .attr("stroke",d=>d.k==="word"||d.k==="judgment"?KINDS[d.k].c:"#f0e7d5")
+      .attr("stroke-width",d=>d.k==="judgment"?2:1)
+      .attr("fill-opacity",d=>d.k==="word"?0:0.9);
+  }
+
+  /* sites */
+  gSites.selectAll("*").remove();
+  const sd = L.places ? era.sites.map(id=>({...S[id],
+      major: era.journeys.some(j=>j.path.includes(id))})) : [];
+  gSites.selectAll("circle").data(sd).enter().append("circle").attr("class","pin")
+    .attr("cx",d=>projection(d.c)[0]).attr("cy",d=>projection(d.c)[1])
+    .attr("r",d=>(d.major?5:3.6)/k).attr("stroke-width",1.6/k)
+    .attr("fill",d=>d.major?"var(--ink)":"#efe6d4").attr("stroke",d=>d.major?"#efe6d4":"var(--ink)")
+    .style("cursor","pointer").on("click",(e,d)=>{ openPlace(d.id); e.stopPropagation(); })
+    .attr("opacity",animate?0:1);
+  if(animate) gSites.selectAll("circle").transition().delay((d,i)=>i*22).duration(260).attr("opacity",1);
+
+  /* labels */
+  gLabels.selectAll("*").remove();
+  gLabels.selectAll("text").data(sd.map(d=>({...d, xy:projection(d.c), label:d.n.replace(/ \(.*\)/,"").replace(/ \/.*$/,"")}))
+      .sort((a,b)=>(b.major?1:0)-(a.major?1:0)))
+    .enter().append("text").attr("class","site-label")
+    .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`)
+    .attr("fill",d=>d.major?"var(--ink)":"var(--ink-2)")
+    .attr("font-weight",d=>d.major?600:400).text(d=>d.label);
+
+  /* regions & tribes */
+  gRegions.selectAll("*").remove();
+  gRegions.selectAll("text").data((era.regions||[]).map(r=>({t:r[0], xy:projection([r[1],r[2]])})))
+    .enter().append("text").attr("class","region-label").attr("text-anchor","middle").attr("font-size",11.5)
+    .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).text(d=>d.t);
+
+  gTribes.selectAll("*").remove();
+  if(L.tribes) gTribes.selectAll("text").data(TRIBES.map(t=>({t:t[0], xy:projection([t[1],t[2]])})))
+    .enter().append("text").attr("class","tribe-label").attr("text-anchor","middle").attr("font-size",9.5)
+    .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).text(d=>d.t);
+
+  renderTiles();
+  renderDistances();
+  renderPhotos();
+  applyDetailVisibility();
+  drawFocus();
+  renderHalos();
+  if(state.verseIds.length) spotlightVerse(state.verseIds, false);   // reproject the active verse
+  layoutLabels(animate);
+}
+
+function renderDistances(){
+  gDist.selectAll("*").remove();
+  if(!state.layers.distances) return;
+  const era = ERAS[state.era];
+  let pathArr = null, color = "var(--ink)";
+  if(state.activeJourney!==null && era.journeys[state.activeJourney]){
+    pathArr = era.journeys[state.activeJourney].path; color = era.journeys[state.activeJourney].color;
+  } else if(state.campaign!==null && CAMPAIGNS[state.campaign] && CAMPAIGNS[state.campaign].e===era.id){
+    pathArr = CAMPAIGNS[state.campaign].path; color = CAMPAIGNS[state.campaign].color;
+  }
+  if(!pathArr) return;
+  const legs = itinerary(pathArr);
+  const data = legs.map(l=>{
+    const a = S[l.from].c, b = S[l.to].c;
+    return { xy: projection([(a[0]+b[0])/2, (a[1]+b[1])/2]), t:`${Math.round(l.km)} km · ${days(l.km)}d` };
+  });
+  const g = gDist.selectAll("g").data(data).enter().append("g")
+    .attr("transform",d=>`translate(${d.xy}) scale(${1/transform.k})`);
+  g.append("text").attr("class","dist-label").attr("text-anchor","middle").attr("font-size",9.5)
+    .attr("fill",color).text(d=>d.t);
+}
+
+/* ---- label decluttering in screen space ---- */
+const CAND=[[8,4,"start"],[-8,4,"end"],[0,-9,"middle"],[0,16,"middle"],[8,-8,"start"],[-8,-8,"end"],[8,16,"start"],[-8,16,"end"]];
+let LBL_SCALE = 1;                       // presenter mode enlarges the type: the layout must know
+function layoutLabels(animate){
+  const boxes=[]; const hit=(a,b)=>!(a[2]<b[0]||b[2]<a[0]||a[3]<b[1]||b[3]<a[1]);
+  const s = LBL_SCALE;
+  gLabels.selectAll("text").each(function(d){
+    const [sx,sy] = transform.apply(d.xy);
+    const w = (d.label.length*5.7+2)*s, h = 13*s; let placed = null;
+    for(const c of CAND){
+      const cx = c[0]*s, cy = c[1]*s;
+      const ax = c[2]==="start" ? sx+cx : c[2]==="end" ? sx+cx-w : sx+cx-w/2;
+      const box=[ax-1, sy+cy-h+2, ax+w+1, sy+cy+3];
+      if(box[0]<2||box[2]>W-2||box[1]<2||box[3]>H-2) continue;
+      if(boxes.every(b=>!hit(box,b))){ placed=c; boxes.push(box); break; }
+    }
+    const sel = d3.select(this);
+    if(placed){
+      sel.attr("x",placed[0]*s).attr("y",placed[1]*s).attr("text-anchor",placed[2]).style("display",null);
+      if(animate) sel.attr("opacity",0).transition().delay(200).duration(300).attr("opacity",1);
+      else sel.attr("opacity",1);
+    } else sel.style("display","none");
+  });
+}
+
+function setJourney(idx){
+  state.activeJourney = (state.activeJourney===idx) ? null : idx;
+  if(state.activeJourney!==null) ensureLayer("routes");
+  applyJourneyEmphasis();
+  document.querySelectorAll("#jlist .jrn").forEach((b,j)=>b.style.background = (state.activeJourney===j)?"#e4d8bd":"");
+  afterRouteSelect();
+  if(state.activeJourney!==null){
+    const p = gRoutes.select(`g[data-j="${state.activeJourney}"] path.route`);
+    if(!p.empty()){ const l = p.node().getTotalLength();
+      p.attr("stroke-dasharray",l+" "+l).attr("stroke-dashoffset",l)
+        .transition().duration(1100).ease(d3.easeCubicInOut).attr("stroke-dashoffset",0); }
+  }
+}
+function setCampaign(i){
+  state.campaign = (state.campaign===i) ? null : i;
+  if(state.campaign!==null) ensureLayer("campaigns");
+  applyCampaignEmphasis();
+  document.querySelectorAll(".camprow").forEach(b=>b.style.background =
+    (state.campaign!==null && +b.dataset.c===state.campaign) ? "#e4d8bd" : "");
+  if(state.campaign!==null){
+    const p = gCamp.select(`g[data-c="${state.campaign}"] path.camp`);
+    if(!p.empty()){ const l = p.node().getTotalLength();
+      p.attr("stroke-dasharray",l+" "+l).attr("stroke-dashoffset",l)
+       .transition().duration(1300).ease(d3.easeCubicInOut).attr("stroke-dashoffset",0)
+       .on("end",function(){ d3.select(this).attr("stroke-dasharray",`${9/transform.k} ${5/transform.k}`); }); }
+    const c = CAMPAIGNS[state.campaign];
+    const pts = c.path.map(p=>Array.isArray(p)?p:S[p].c);
+    const lons = pts.map(p=>p[0]), lats = pts.map(p=>p[1]);
+    fitTo([[Math.min(...lons)-1.2, Math.min(...lats)-1.0],[Math.max(...lons)+1.2, Math.max(...lats)+1.0]]);
+    paintGeo(); const t=d3.zoomIdentity;
+    svg.transition().duration(650).call(zoom.transform,t);
+    transform=t; root.attr("transform",t); renderMap(false); updateScale();
+    applyCampaignEmphasis();
+  }
+}
+function applyCampaignEmphasis(){
+  gCamp.selectAll("g").each(function(d){
+    const on = state.campaign===null || state.campaign===d.i;
+    d3.select(this).select("path.camp").attr("opacity", on?0.85:0.12);
+  });
+  if(state.campaign!==null) gRoutes.selectAll("path.route").attr("opacity",0.12);
+  gBattles.selectAll("g.bt").attr("opacity",d=> state.campaign===null || state.campaign===d.ci ? 1 : 0.15);
+}
+function hoverRoute(kind, idx){
+  if(kind===null){
+    gRoutes.selectAll("path.route").attr("opacity",null);
+    gCamp.selectAll("path.camp").attr("opacity",null);
+    applyJourneyEmphasis(); applyCampaignEmphasis();
+    hoverTip.style.display = "none";
+    return;
+  }
+  const dim = 0.12;
+  gRoutes.selectAll("g").each(function(d){
+    d3.select(this).select("path.route").attr("opacity", kind==="j" && d.idx===idx ? 1 : dim); });
+  gCamp.selectAll("g").each(function(d){
+    d3.select(this).select("path.camp").attr("opacity", kind==="c" && d.i===idx ? 0.95 : dim); });
+  const era = ERAS[state.era];
+  const label = kind==="j" ? `${era.journeys[idx].name} — ${era.journeys[idx].refs}`
+                           : `${CAMPAIGNS[idx].n} — ${CAMPAIGNS[idx].date}`;
+  hoverTip.textContent = label; hoverTip.style.display = "block";
+}
+function afterRouteSelect(){ if(state.layers.distances && land) renderDistances(); }
+function applyJourneyEmphasis(){
+  gRoutes.selectAll("g").each(function(d){
+    const on = state.activeJourney===null || state.activeJourney===d.idx;
+    d3.select(this).select("path.route").attr("opacity", on?1:0.15);
+  });
+  if(state.activeJourney!==null) gCamp.selectAll("path.camp").attr("opacity",0.12);
+}
+
+/* ---- halos: places a passage touches ---- */
+function renderHalos(){
+  const pts = state.highlight.map(c=>({xy:projection(c)}));
+  const sel = gHalo.selectAll("circle").data(pts);
+  sel.exit().remove();
+  sel.enter().append("circle").attr("class","halo").attr("r",9)
+    .merge(sel).attr("transform",d=>`translate(${d.xy}) scale(${1/transform.k})`);
+}
+function flyTo(c, k){
+  const target = k || Math.max(transform.k, 3.2);
+  const p = projection(c);
+  const t = d3.zoomIdentity.translate(W/2 - p[0]*target, H/2 - p[1]*target).scale(target);
+  svg.transition().duration(700).call(zoom.transform, t);
+}
+
+/* =========================== focus marker =========================== */
+/* Anything the reader touches in the right-hand panel gets marked here, whatever
+   era or layers are showing, so the map always answers the panel. */
+function ensureLayer(key){
+  if(state.layers[key]) return false;
+  state.layers[key] = true;
+  if(key==="photos") ensurePhotos(ERAS[state.era].sites);
+  syncLayerUI();
+  return true;
+}
+function clearFocus(){ state.focus = null; gFocus.selectAll("*").remove(); }
+function focusOn(c, label, color){
+  state.focus = {c, label, color:color||"var(--terra)"};
+  drawFocus();
+}
+function drawFocus(){
+  gFocus.selectAll("*").remove();
+  if(!state.focus) return;
+  const {c, label, color} = state.focus;
+  const k = transform.k, xy = projection(c);
+  const g = gFocus.append("g").attr("class","focusmark")
+    .attr("transform",`translate(${xy}) scale(${1/k})`);
+  g.append("circle").attr("class","focusring").attr("r",13).attr("fill","none")
+    .attr("stroke",color).attr("stroke-width",1.6).attr("stroke-dasharray","4 3");
+  g.append("circle").attr("r",6.5).attr("fill",color).attr("stroke","#f4ecda").attr("stroke-width",2);
+  g.append("text").attr("class","focus-label").attr("x",12).attr("y",4.5).attr("fill",color)
+    .attr("font-weight",600).text(label);
+}
+
+/* =========================== verse ↔ map linkage =========================== */
+const ALIAS_INDEX = (()=>{
+  const pairs = [];
+  Object.entries(ALIASES).forEach(([id,list])=>list.forEach(a=>pairs.push([a,id])));
+  pairs.sort((a,b)=>b[0].length-a[0].length);
+  const rx = new RegExp("\\b(" + pairs.map(p=>p[0].replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|") + ")\\b","gi");
+  const map = new Map(pairs.map(([a,id])=>[a.toLowerCase(),id]));
+  return {rx, map};
+})();
+function isPersonContext(txt, offset){
+  const before = txt.slice(Math.max(0, offset-22), offset).toLowerCase();
+  return PERSON_GUARDS.some(g=>before.endsWith(g+" ") || before.endsWith(g+" the "));
+}
+function placesInText(txt){
+  const found = [];
+  txt.replace(ALIAS_INDEX.rx, (m, _g, off)=>{
+    const id = ALIAS_INDEX.map.get(m.toLowerCase());
+    if(id && S[id] && !isPersonContext(txt, off) && !found.includes(id)) found.push(id);
+    return m;
+  });
+  return found;
+}
+function markupVerse(txt){
+  return txt.replace(ALIAS_INDEX.rx, (m, _g, off)=>{
+    const id = ALIAS_INDEX.map.get(m.toLowerCase());
+    return (id && S[id] && !isPersonContext(txt, off))
+      ? `<span class="pn" role="button" tabindex="0" data-id="${id}">${m}</span>` : m;
+  });
+}
+/* mark a set of places as clickable pins, whatever era is showing */
+function markPlaces(ids){
+  ids = ids.filter(id=>S[id]);
+  state.verseIds = ids;
+  state.highlight = ids.map(id=>S[id].c);
+  renderHalos();
+  gVerse.selectAll("*").remove();
+  const k = transform.k;
+  const vd = ids.map(id=>({...S[id], id, xy:projection(S[id].c),
+    inEra: ERAS[state.era].sites.includes(id)}));
+  const vg = gVerse.selectAll("g.vp").data(vd).enter().append("g").attr("class","vp")
+    .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).style("cursor","pointer")
+    .on("click",(e,d)=>{ openPlace(d.id); setTab("place"); e.stopPropagation(); });
+  vg.append("circle").attr("r",9).attr("fill","transparent");
+  vg.append("circle").attr("r",5).attr("fill","var(--terra)").attr("stroke","#f4ecda").attr("stroke-width",1.8);
+  vg.filter(d=>!d.inEra).append("text").attr("class","site-label verse-label")
+    .attr("x",9).attr("y",4).attr("font-weight",600).attr("fill","var(--terra)")
+    .text(d=>d.n.replace(/ \(.*\)/,"").replace(/ \/.*$/,""));
+  vg.append("title").text(d=>`${d.n} — ${d.m} · click for the exact location`);
+}
+
+/* highlight what the verse being read names */
+function spotlightVerse(ids, fit){
+  state.verseIds = ids;
+  state.highlight = ids.map(id=>S[id].c);
+  renderHalos();
+  gVerse.selectAll("*").remove();
+  const k = transform.k;
+  if(ids.length>1){
+    gVerse.append("path").attr("class","versepath").attr("fill","none")
+      .attr("stroke","var(--terra)").attr("stroke-width",2.4/k)
+      .attr("stroke-dasharray",`${6/k} ${4/k}`)
+      .attr("d",line(ids.map(id=>projection(S[id].c))));
+  }
+  // draw the verse's places as pins + labels in their own right, so a passage from
+  // another era still gets a dot, a name and a click target
+  const vd = ids.map(id=>({...S[id], xy:projection(S[id].c),
+    inEra: ERAS[state.era].sites.includes(id)}));
+  const vg = gVerse.selectAll("g.vp").data(vd).enter().append("g").attr("class","vp")
+    .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).style("cursor","pointer")
+    .on("click",(e,d)=>{ openPlace(d.id); e.stopPropagation(); });
+  vg.append("circle").attr("r",9).attr("fill","transparent");
+  vg.append("circle").attr("r",5).attr("fill","var(--terra)").attr("stroke","#f4ecda").attr("stroke-width",1.8);
+  vg.filter(d=>!d.inEra).append("text").attr("class","site-label verse-label")
+    .attr("x",9).attr("y",4).attr("font-weight",600).attr("fill","var(--terra)")
+    .text(d=>d.n.replace(/ \(.*\)/,"").replace(/ \/.*$/,""));
+  vg.append("title").text(d=>`${d.n} — ${d.m}`);
+  if(fit && ids.length){
+    const lons = ids.map(id=>S[id].c[0]), lats = ids.map(id=>S[id].c[1]);
+    const pad = ids.length===1 ? 1.6 : 0.9;
+    fitTo([[Math.min(...lons)-pad, Math.min(...lats)-pad],[Math.max(...lons)+pad, Math.max(...lats)+pad]]);
+    paintGeo(); const t = d3.zoomIdentity;
+    svg.transition().duration(600).call(zoom.transform,t);
+    transform = t; root.attr("transform",t);
+    renderMap(false); updateScale(); spotlightVerse(ids,false);
+  }
+}
+
+/* =========================== raster tiles (satellite / street) =========================== */
+function activeTileset(){ return state.layers.satellite ? "satellite"
+  : state.layers.street ? "street" : state.layers.relief ? "relief" : null; }
+function renderTiles(){
+  const set = activeTileset();
+  const svgEl = document.getElementById("map");
+  svgEl.classList.toggle("sat", set==="satellite");
+  svgEl.classList.toggle("street", set==="street");
+  svgEl.classList.toggle("relief", set==="relief");
+  gLand.select(".landmass").attr("fill-opacity", set==="relief" ? 0.35 : set ? 0 : 1);
+  gWater.selectAll(".lake").attr("fill-opacity", set?0:1);
+  document.getElementById("tilecredit").textContent = set ? TILESETS[set].credit : "";
+  if(!set){ gTiles.selectAll("*").remove(); return; }
+
+  // visible geographic window, then the tile grid that covers it
+  const inv = p => projection.invert(transform.invert(p));
+  const nw = inv([0,0]), se = inv([W,H]);
+  if(!nw || !se) return;
+  const lon0 = Math.max(-179.9, Math.min(nw[0],se[0])), lon1 = Math.min(179.9, Math.max(nw[0],se[0]));
+  const lat1 = Math.min(85, Math.max(nw[1],se[1])), lat0 = Math.max(-85, Math.min(nw[1],se[1]));
+  const spanLon = lon1 - lon0;
+  let z = Math.round(Math.log2(360 / Math.max(0.02, spanLon)) + Math.log2(W/256));
+  z = Math.max(1, Math.min(19, z));
+  const n = 2**z;
+  const xOf = lon => Math.floor((lon+180)/360*n);
+  const yOf = lat => { const r = lat*Math.PI/180;
+    return Math.floor((1 - Math.log(Math.tan(r) + 1/Math.cos(r))/Math.PI)/2*n); };
+  const x0 = Math.max(0, xOf(lon0)-1), x1 = Math.min(n-1, xOf(lon1)+1);
+  const y0 = Math.max(0, yOf(lat1)-1), y1 = Math.min(n-1, yOf(lat0)+1);
+  if((x1-x0+1)*(y1-y0+1) > 260){ gTiles.selectAll("*").remove(); return; }
+  const lonOf = x => x/n*360-180;
+  const latOf = y => { const t = Math.PI*(1-2*y/n); return 180/Math.PI*Math.atan(0.5*(Math.exp(t)-Math.exp(-t))); };
+  const url = TILESETS[set].url;
+  const tiles = [];
+  for(let x=x0;x<=x1;x++) for(let y=y0;y<=y1;y++){
+    const a = projection([lonOf(x), latOf(y)]), b = projection([lonOf(x+1), latOf(y+1)]);
+    if(!a||!b) continue;
+    tiles.push({k:`${set}/${z}/${x}/${y}`, href:url(z,x,y), x:a[0], y:a[1], w:b[0]-a[0], h:b[1]-a[1]});
+  }
+  const sel = gTiles.selectAll("image").data(tiles, d=>d.k);
+  sel.exit().remove();
+  // hairline overlap to hide seams — measured in SCREEN px, so it must shrink as the zoom grows
+  const pad = 0.6/transform.k;
+  sel.enter().append("image").attr("preserveAspectRatio","none")
+    .merge(sel)
+    .attr("href",d=>d.href)
+    .attr("x",d=>d.x).attr("y",d=>d.y)
+    .attr("width",d=>Math.abs(d.w)+pad).attr("height",d=>Math.abs(d.h)+pad);
+}
+let tileTimer;
+function scheduleTiles(){ clearTimeout(tileTimer); tileTimer = setTimeout(renderTiles, 90); }
+
+/* =========================== distances & itineraries =========================== */
+let PACE = 25;                                   // km per day
+function km(a,b){
+  const R=6371, t=Math.PI/180;
+  const dLat=(b[1]-a[1])*t, dLon=(b[0]-a[0])*t;
+  const s=Math.sin(dLat/2)**2 + Math.cos(a[1]*t)*Math.cos(b[1]*t)*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(s));
+}
+const coordOf = p => Array.isArray(p) ? p : S[p].c;
+/* legs run from one NAMED stop to the next, measured along the road waypoints between them */
+function itinerary(pathArr){
+  const legs = []; let from = null, run = 0, prev = null;
+  pathArr.forEach(p=>{
+    const c = coordOf(p);
+    if(prev) run += km(prev, c);
+    prev = c;
+    if(!Array.isArray(p)){
+      if(from) legs.push({from, to:p, km:run});
+      from = p; run = 0;
+    }
+  });
+  return legs;
+}
+function totalKm(legs){ return legs.reduce((a,l)=>a+l.km,0); }
+const days = d => Math.max(1, Math.round(d/PACE));
+function itineraryEl(pathArr, color){
+  const legs = itinerary(pathArr), tot = totalKm(legs);
+  const box = document.createElement("div");
+  box.innerHTML = `<div class="sec">Stage by stage</div>
+    <div class="pacebar">
+      <span class="r">${Math.round(tot)} km total · ${days(tot)} days at</span>
+      <select class="pacesel">
+        <option value="15">15 km/day · flocks</option>
+        <option value="25">25 km/day · caravan</option>
+        <option value="32">32 km/day · forced march</option>
+      </select>
+    </div>
+    <table class="itin"><tbody>${legs.map(l=>`<tr>
+        <td>${S[l.from].n.replace(/ \(.*\)/,"")} <span class="arw">→</span> ${S[l.to].n.replace(/ \(.*\)/,"")}</td>
+        <td class="num">${Math.round(l.km)} km</td>
+        <td class="num day">${days(l.km)} d</td></tr>`).join("")}</tbody></table>
+    <div class="note" style="margin-top:6px">Distances measured along the road waypoints of this route, not straight lines. A day's walk in the ancient Near East ran 15 km with flocks and children, 25–30 km for a caravan or army on a made road.</div>`;
+  const sel = box.querySelector(".pacesel");
+  sel.value = String(PACE);
+  sel.onchange = e=>{ PACE = +e.target.value;
+    if(state.tab==="wars") renderWarsPane();
+    else renderEraPane(), setTab(state.tab);
+    if(state.layers.distances && land) renderMap(false); };
+  return box;
+}
+
+/* =========================== photographs =========================== */
+const PHOTOS = {};                                    // wiki title -> {src,page,extract} | null
+function photoFor(site){ return site.w ? PHOTOS[site.w] : undefined; }
+async function loadPhoto(title, hint){
+  if(title in PHOTOS) return PHOTOS[title];
+  PHOTOS[title] = null;
+  let page = "https://en.wikipedia.org/wiki/"+title, label = title.replace(/_/g," ");
+  // 1. article summary
+  try{
+    const j = await (await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(title))).json();
+    if(j.content_urls && j.content_urls.desktop) page = j.content_urls.desktop.page;
+    if(j.titles && j.titles.normalized) label = j.titles.normalized;
+    if(j.thumbnail){
+      PHOTOS[title] = {src:j.thumbnail.source, page, title:label,
+        full:(j.originalimage && j.originalimage.source) || j.thumbnail.source};
+      return PHOTOS[title];
+    }
+  }catch(e){}
+  // 2. pageimages (some articles expose an image the summary endpoint omits)
+  try{
+    const u = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages&piprop=thumbnail&pithumbsize=500&titles="+encodeURIComponent(title.replace(/_/g," "));
+    const j = await (await fetch(u)).json();
+    const p = Object.values(j.query.pages)[0];
+    if(p && p.thumbnail){ PHOTOS[title] = {src:p.thumbnail.source, page, title:label, full:p.thumbnail.source}; return PHOTOS[title]; }
+  }catch(e){}
+  // 3. Wikimedia Commons file search
+  try{
+    const q = hint || title.replace(/_/g," ");
+    const u = "https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&list=search&srnamespace=6&srlimit=1&srsearch="+encodeURIComponent(q);
+    const j = await (await fetch(u)).json();
+    const hitTitle = j.query && j.query.search && j.query.search[0] && j.query.search[0].title;
+    if(hitTitle){
+      const file = hitTitle.replace(/^File:/,"");
+      PHOTOS[title] = {
+        src: "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width=500",
+        full: "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width=1400",
+        page: "https://commons.wikimedia.org/wiki/"+encodeURIComponent(hitTitle),
+        title: label
+      };
+    }
+  }catch(e){}
+  return PHOTOS[title];
+}
+async function ensurePhotos(ids){
+  const titles = [...new Set(ids.map(id=>S[id] && S[id].w).filter(t=>t && !(t in PHOTOS)))];
+  for(let i=0;i<titles.length;i+=5){
+    await Promise.all(titles.slice(i,i+5).map(loadPhoto));
+    renderPhotos(); if(state.place) renderPlacePane();
+  }
+}
+function renderPhotos(){
+  gPhotos.selectAll("*").remove();
+  if(!state.layers.photos) return;
+  const era = ERAS[state.era];
+  // thumbnails are big on screen: keep journey sites first and drop any that would overlap
+  const boxes = [], hit=(a,b)=>!(a[2]<b[0]||b[2]<a[0]||a[3]<b[1]||b[3]<a[1]);
+  const data = era.sites.map(id=>S[id]).filter(s=>photoFor(s))
+    .map(s=>({...s, xy:projection(s.c), ph:photoFor(s),
+      major: era.journeys.some(j=>j.path.includes(s.id))}))
+    .sort((a,b)=>(b.major?1:0)-(a.major?1:0))
+    .filter(s=>{
+      const [x,y] = transform.apply(s.xy);
+      const box = [x-21,y-42,x+21,y-10];
+      if(box[0]<0||box[2]>W||box[1]<0) return false;
+      if(boxes.some(b=>hit(box,b))) return false;
+      boxes.push(box); return true;
+    });
+  const g = gPhotos.selectAll("g.ph").data(data).enter().append("g").attr("class","ph")
+    .attr("transform",d=>`translate(${d.xy}) scale(${1/transform.k})`).style("cursor","zoom-in")
+    .on("click",(e,d)=>{ openLightbox(d.ph, d.n); openPlace(d.id); e.stopPropagation(); });
+  g.append("title").text(d=>`${d.n} — click for the full photograph`);
+  g.append("rect").attr("x",-19).attr("y",-40).attr("width",38).attr("height",28)
+    .attr("fill","#f6efdd").attr("stroke","#6f6551").attr("stroke-width",1);
+  g.append("clipPath").attr("id",d=>"cp-"+d.id).append("rect")
+    .attr("x",-18).attr("y",-39).attr("width",36).attr("height",26);
+  g.append("image").attr("x",-18).attr("y",-39).attr("width",36).attr("height",26)
+    .attr("preserveAspectRatio","xMidYMid slice").attr("clip-path",d=>`url(#cp-${d.id})`)
+    .attr("href",d=>d.ph.src);
+  g.append("path").attr("d","M0,-12 L0,-4").attr("stroke","#6f6551").attr("stroke-width",1);
+}
+
+/* =========================== scripture reader =========================== */
+const TRANSLATIONS = [["kjv","King James Version"],["web","World English Bible"],["bbe","Bible in Basic English"]];
+let TRANS = (()=>{ try{ return localStorage.getItem("otatlas:trans") || "kjv"; }catch(e){ return "kjv"; } })();
+const VERSES = {};
+const ck = q => TRANS+":"+q;
+function cacheGet(q){
+  if(VERSES[ck(q)]) return VERSES[ck(q)];
+  try{ const raw = localStorage.getItem("otatlas2:"+ck(q)); if(raw){ VERSES[ck(q)]=JSON.parse(raw); return VERSES[ck(q)]; } }catch(e){}
+  return null;
+}
+function cacheSet(q,v){ VERSES[ck(q)]=v; try{ localStorage.setItem("otatlas2:"+ck(q), JSON.stringify(v)); }catch(e){} }
+
+function eraForRef(ref){
+  const hits = placesForRef(ref);
+  const votes = {};
+  hits.forEach(e=>{
+    if(e.kind==="journey") votes[ERAS[e.ei].id] = (votes[ERAS[e.ei].id]||0) + 3;
+    else if(e.kind==="event") votes[e.era] = (votes[e.era]||0) + 2;
+    else if(e.kind==="place") ERAS.filter(x=>x.sites.includes(e.id)).forEach(x=>votes[x.id] = (votes[x.id]||0) + 1);
+  });
+  const best = Object.entries(votes).sort((a,b)=>b[1]-a[1])[0];
+  return best ? ERAS.findIndex(e=>e.id===best[0]) : -1;
+}
+async function openPassage(ref){
+  state.passage = {ref, verses:null, error:null};
+  setTab("scripture");
+  const ei = eraForRef(ref);                       // read Joshua, get the Conquest map
+  if(ei>=0 && ei!==state.era) setEra(ei, false);
+  state.highlight = placesForRef(ref).map(e=>e.c).filter(Boolean);
+  renderHalos();
+  renderScripturePane();
+  const hit = cacheGet(ref.query);
+  if(hit){ state.passage.verses = hit; renderScripturePane(); return; }
+  try{
+    const chapters = ref.chapters.length ? ref.chapters : [1];
+    let all = [];
+    for(const ch of chapters){
+      const q = `${ref.book} ${ch}`;
+      let vs = cacheGet(q);
+      if(!vs){
+        const r = await fetch(`https://bible-api.com/${encodeURIComponent(q)}?translation=${TRANS}`);
+        if(!r.ok) throw new Error("http "+r.status);
+        const j = await r.json();
+        vs = (j.verses||[]).map(v=>({c:v.chapter, v:v.verse, t:v.text.trim()}));
+        if(!vs.length) throw new Error("empty chapter");
+        cacheSet(q, vs);
+      }
+      all = all.concat(vs);
+    }
+    // trim to the verse range the reference actually asks for
+    const firstCh = chapters[0], lastCh = chapters[chapters.length-1];
+    if(ref.startV) all = all.filter(v=>!(v.c===firstCh && v.v < ref.startV));
+    if(ref.endV)   all = all.filter(v=>!(v.c===lastCh  && v.v > ref.endV));
+    if(!all.length) throw new Error("empty range");
+    cacheSet(ref.query, all);
+    state.passage.verses = all;
+  }catch(e){
+    state.passage.error = "Could not load the text — check your connection and try again.";
+  }
+  renderScripturePane();
+}
+function placesForRef(ref){
+  const out = [];
+  ref.chapters.forEach(c => (REFINDEX.get(ref.book+" "+c)||[]).forEach(e=>{
+    if(!out.some(o=>o.kind===e.kind && o.label===e.label)) out.push(e);
+  }));
+  return out;
+}
+
+/* =========================== panels =========================== */
+const TABS = [["era","Era"],["cfm","Weekly"],["tours","Tours"],["place","Place"],["wars","Wars"],["finds","Finds"],["peoples","Peoples"],["scripture","Verses"]];
+const tabsEl = document.getElementById("tabs");
+TABS.forEach(([id,label])=>{
+  const b = document.createElement("button"); b.textContent = label; b.dataset.tab = id;
+  b.onclick = ()=>setTab(id); tabsEl.appendChild(b);
+});
+function setTab(id){
+  state.tab = id;
+  tabsEl.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current", b.dataset.tab===id));
+  TABS.forEach(([t])=>document.getElementById("pane-"+t).hidden = (t!==id));
+  if(id==="cfm") renderCfmPane();
+  if(id==="tours") renderToursPane();
+  if(id==="place") renderPlacePane();
+  if(id==="wars") renderWarsPane();
+  if(id==="finds") renderFindsPane();
+  if(id==="peoples") renderPeoplesPane();
+  if(id==="scripture") renderScripturePane();
+}
+
+function refRow(refStr){
+  const wrap = document.createElement("div"); wrap.className = "refrow";
+  splitRefs(refStr).forEach(r=>{
+    const b = document.createElement("button"); b.className = "ref"; b.textContent = r.display;
+    b.title = "Read " + r.display;
+    b.onclick = ()=>openPassage(r); wrap.appendChild(b);
+  });
+  return wrap;
+}
+function glyphSVG(kind){
+  const K = KINDS[kind];
+  return `<svg viewBox="-8 -8 16 16" width="15" height="15"><path d="${K.d}" fill="${kind==="judgment"||kind==="word"?"none":K.c}" stroke="${K.c}" stroke-width="${kind==="judgment"?2:1}"/></svg>`;
+}
+
+function renderEraPane(){
+  const era = ERAS[state.era], p = document.getElementById("pane-era");
+  p.innerHTML = `<div class="body">
+      <div class="kicker">Era ${String(state.era+1).padStart(2,"0")} of ${ERAS.length}</div>
+      <h3>${era.name}</h3>
+      <div class="dates">${era.dates}</div>
+      <p class="narr">${era.narr}</p>
+      <div class="books">${era.books}</div>
+      ${era.caveat?`<p class="caveat">${era.caveat}</p>`:""}
+    </div>
+    ${era.journeys.length?`<h2>Journeys &amp; campaigns</h2><div id="jlist"></div>`:""}
+    ${CAMPAIGNS.filter(c=>c.e===era.id).length?`<h2>Military campaigns</h2><div id="wlist"></div>`:""}
+    <h2>What happened here</h2><div id="elist"></div>
+    <h2>Places on this map</h2><div class="sitelist" id="clist"></div>`;
+
+  const jl = p.querySelector("#jlist");
+  if(jl) era.journeys.forEach((j,idx)=>{
+    const b = document.createElement("button"); b.className = "jrn";
+    b.innerHTML = `<span class="swatch" style="background:${j.color}"></span>
+      <span><span class="t">${j.name}</span><br><span class="r">${j.refs} · ${j.path.filter(x=>!Array.isArray(x)).length} named stops</span>
+      ${j.note?`<br><span class="note">${j.note}</span>`:""}</span>`;
+    b.onclick = ()=>{ setJourney(idx); showJourney(idx); };
+    jl.appendChild(b);
+  });
+
+  const wl = p.querySelector("#wlist");
+  if(wl) CAMPAIGNS.filter(c=>c.e===era.id).forEach(c=>{
+    const b = document.createElement("button"); b.className = "jrn camprow"; b.dataset.c = c.i;
+    b.innerHTML = `<span class="swatch" style="background:${c.color}"></span>
+      <span><span class="t">${c.n}</span><br><span class="r">${c.date} · ${c.battles.length} battle${c.battles.length===1?"":"s"}</span></span>`;
+    b.onclick = ()=>{ setTab("wars"); setCampaign(c.i); };
+    wl.appendChild(b);
+  });
+
+  const el = p.querySelector("#elist");
+  EVENTS.map((v,i)=>({...v,i})).filter(v=>v.e===era.id).forEach(v=>{
+    const b = document.createElement("button"); b.className = "evt";
+    b.innerHTML = `<span class="gl">${glyphSVG(v.k)}</span>
+      <span><span class="t">${v.t}</span><br><span class="r">${v.r}</span></span>`;
+    b.onclick = ()=>openEvent({...v, xy:projection(v.c)});
+    el.appendChild(b);
+  });
+
+  const cl = p.querySelector("#clist");
+  era.sites.forEach(id=>{
+    const b = document.createElement("button"); b.className = "chip";
+    b.textContent = S[id].n.replace(/ \(.*\)/,"");
+    b.onclick = ()=>{ openPlace(id); };
+    cl.appendChild(b);
+  });
+}
+
+function showJourney(idx){
+  const p = document.getElementById("pane-era");
+  const old = p.querySelector(".jrndetail"); if(old) old.remove();
+  if(state.activeJourney===null) return;
+  const j = ERAS[state.era].journeys[idx];
+  const box = document.createElement("div");
+  box.className = "body jrndetail";
+  box.style.borderTop = "1px solid var(--rule)";
+  box.innerHTML = `<div class="kicker" style="color:${j.color}">Journey</div>
+    <h3>${j.name}</h3><div class="dates">${j.refs}</div>
+    ${j.note?`<p class="note">${j.note}</p>`:""}`;
+  box.appendChild(itineraryEl(j.path, j.color));
+  const rr = refRow(j.refs); box.appendChild(rr);
+  p.appendChild(box);
+  const jl = p.querySelector("#jlist");
+  if(jl) jl.after(box);
+  if(state.layers.distances && land) renderMap(false);
+}
+
+/* ---------- where exactly ---------- */
+function dms(v, pos, neg){
+  const hemi = v>=0 ? pos : neg, a = Math.abs(v);
+  const d = Math.floor(a), m = Math.floor((a-d)*60), s = Math.round((((a-d)*60)-m)*60);
+  return `${d}°${String(m).padStart(2,"0")}′${String(s).padStart(2,"0")}″${hemi}`;
+}
+const CF_LABEL = { secure:"Securely identified", probable:"Probable identification", disputed:"Disputed — no agreed site" };
+function whereBlock(id){
+  const s = S[id], p = (typeof PREC!=="undefined" && PREC[id]) || {};
+  const cf = p.cf || (s.q ? "disputed" : null);
+  return `<div class="where">
+    <div class="wrow"><span class="wk">Coordinates</span><span class="wv"><span class="mono">${dms(s.c[1],"N","S")} ${dms(s.c[0],"E","W")}</span><br>
+      <span class="mono">${s.c[1].toFixed(4)}, ${s.c[0].toFixed(4)}</span></span></div>
+    ${p.el!=null ? `<div class="wrow"><span class="wk">Elevation</span><span class="wv">${p.el<0 ? Math.abs(p.el)+" m below sea level" : "≈ "+p.el+" m above sea level"}</span></div>` : ""}
+    ${cf ? `<div class="wrow"><span class="wk">Certainty</span><span class="wv"><span class="cf ${cf}">${CF_LABEL[cf]}</span></span></div>` : ""}
+    ${p.at ? `<div class="wrow"><span class="wk">Finding it</span><span class="wv">${p.at}</span></div>` : ""}
+    ${p.id ? `<div class="wrow"><span class="wk">How we know</span><span class="wv">${p.id}</span></div>` : ""}
+    <div class="wrow"><span class="wk">See it</span><span class="wv groundrow">
+      <button class="chip" data-ground="sat">Satellite</button>
+      <button class="chip" data-ground="street">Street map</button>
+      <button class="chip" data-ground="close">Closest zoom</button>
+    </span></div></div>`;
+}
+function wireGround(root, id){
+  const s = S[id];
+  root.querySelectorAll("[data-ground]").forEach(b=>{
+    b.onclick = ()=>{
+      const mode = b.dataset.ground;
+      if(mode==="sat") toggleLayer("satellite", true);
+      if(mode==="street") toggleLayer("street", true);
+      flyTo(s.c, mode==="close" ? 1400 : 700);
+      focusOn(s.c, s.n, "var(--terra)");
+    };
+  });
+}
+function renderPlacePane(){
+  const p = document.getElementById("pane-place");
+  if(!state.place){
+    p.innerHTML = `<div class="body"><p class="narr">Click any place on the map — or a name in the era list — to read its entry: what Scripture records there, and what archaeology has found.</p>
+    <p class="loading">Turn on <b>Photographs</b> in the layers panel for free images of each site.</p></div>`;
+    return;
+  }
+  const s = S[state.place], ph = photoFor(s);
+  p.innerHTML = `<div class="body">
+      <div class="kicker">Place</div>
+      <h3>${s.n}</h3>
+      <div class="dates">${s.m}</div>
+      ${whereBlock(state.place)}
+      ${ph?`<figure><img class="zoomhint" id="placeimg" src="${ph.src}" alt="${s.n}" title="Click to enlarge"><figcaption>${ph.title} — photograph via Wikimedia / Wikipedia. <a href="${ph.page}" target="_blank" rel="noopener">source &amp; licence</a> · click the image to enlarge</figcaption></figure>`:
+        (s.w && state.layers.photos ? `<p class="loading">Looking for a photograph…</p>` : "")}
+      <p class="narr" style="margin-top:11px">${s.p}</p>
+      ${s.q ? `<p class="idnote"><b>Identification</b> — ${s.q}</p>` : ""}
+      ${state.place==="jerusalem" ? `<div class="sec">The city plan</div>
+        <p class="narr" style="font-size:14px">Four building phases in real coordinates — walls, gates, valleys,
+        water system. Pick a phase, then click any wall, gate or feature on the map.</p>
+        <div class="perrow" id="periods"></div>` : ""}
+      <div id="prefs"></div>
+      <div class="sec">Archaeology &amp; extra-biblical record</div>
+      <p class="arch">${s.a||"No significant excavation is associated with this location."}</p>
+      <div class="sec">Events here</div><div class="sitelist" id="pevents" style="padding-left:0"></div>
+      <div class="sec">Campaigns through here</div><div class="sitelist" id="pcamp" style="padding-left:0"></div>
+      <div class="sec">Finds from here</div><div class="sitelist" id="pfinds" style="padding-left:0"></div>
+      <div class="sec">Appears in</div>
+      <div class="sitelist" id="perias" style="padding-left:0"></div>
+    </div>`;
+  const pi = p.querySelector("#placeimg");
+  if(pi) pi.onclick = ()=>openLightbox(ph, s.n);
+  wireGround(p, state.place);
+  p.querySelector("#prefs").appendChild(refRow(s.r));
+  const perBox = p.querySelector("#periods");
+  if(perBox) PERIODS.forEach(([id,label,when])=>{
+    const b = document.createElement("button");
+    b.className = "perbtn"; b.innerHTML = label + (when ? " <i>"+when+"</i>" : "");
+    b.setAttribute("aria-pressed", state.cityPeriod===id);
+    b.onclick = ()=>{ state.cityPeriod = id; if(!state.layers.city) toggleLayer("city",true); else renderMap();
+      if(transform.k < 200) flyTo(JERUSALEM.centre, 900);
+      perBox.querySelectorAll(".perbtn").forEach(x=>x.setAttribute("aria-pressed", false));
+      b.setAttribute("aria-pressed", true); };
+    perBox.appendChild(b);
+  });
+  const near = (a,b)=>km(a,b) < 12;
+  const evBox = p.querySelector("#pevents");
+  const evs = EVENTS.map((v,i)=>({...v,i})).filter(v=>near(v.c, s.c));
+  evs.forEach(v=>{ const b=document.createElement("button"); b.className="chip";
+    b.innerHTML = `${glyphSVG(v.k)} ${v.t}`; b.style.display="inline-flex"; b.style.alignItems="center"; b.style.gap="5px";
+    b.onclick = ()=>{ const ei=ERAS.findIndex(e=>e.id===v.e); if(ei>=0 && ei!==state.era) setEra(ei,false);
+      openEvent({...v, xy:projection(v.c)}); }; evBox.appendChild(b); });
+  if(!evs.length) evBox.innerHTML = `<span class="note">Nothing recorded at this exact spot.</span>`;
+
+  const cBox = p.querySelector("#pcamp");
+  const camps = CAMPAIGNS.filter(c=>c.path.some(x=>x===s.id) || c.battles.some(b=>near(b.c, s.c)));
+  camps.forEach(c=>{ const b=document.createElement("button"); b.className="chip"; b.textContent=`${c.n} (${c.date})`;
+    b.onclick = ()=>{ const ei=ERAS.findIndex(e=>e.id===c.e); if(ei>=0 && ei!==state.era) setEra(ei,false);
+      setTab("wars"); setCampaign(c.i); }; cBox.appendChild(b); });
+  if(!camps.length) cBox.innerHTML = `<span class="note">No campaign recorded here.</span>`;
+
+  const fBox = p.querySelector("#pfinds");
+  const fnds = FINDS.filter(f=>near(f.c, s.c));
+  fnds.forEach(f=>{ const b=document.createElement("button"); b.className="chip"; b.textContent=f.n;
+    b.onclick = ()=>{ openFind(f.i, true); setTab("finds"); scrollFindIntoPane(f.i); }; fBox.appendChild(b); });
+  if(!fnds.length) fBox.innerHTML = `<span class="note">No inscription or object in this atlas comes from here.</span>`;
+
+  const eras = ERAS.filter(e=>e.sites.includes(s.id));
+  const box = p.querySelector("#perias");
+  (eras.length?eras:[]).forEach(e=>{
+    const b = document.createElement("button"); b.className="chip"; b.textContent = e.name;
+    b.onclick = ()=>setEra(ERAS.indexOf(e));
+    box.appendChild(b);
+  });
+  if(!eras.length) box.innerHTML = `<span class="note">Background site — not tied to one era.</span>`;
+}
+
+function renderWarsPane(){
+  const era = ERAS[state.era], p = document.getElementById("pane-wars");
+  const list = CAMPAIGNS.filter(c=>c.e===era.id);
+  p.innerHTML = `<div class="body"><div class="kicker">Military campaigns</div>
+      <h3>${era.name}</h3>
+      <div class="dates">${list.length} campaign${list.length===1?"":"s"} · click one to trace it and isolate its battles</div>
+      ${list.length?"":`<p class="narr">No campaign is recorded in this era.</p>`}</div>`;
+  list.forEach(c=>{
+    const b = document.createElement("button"); b.className = "jrn camprow"; b.dataset.c = c.i;
+    b.innerHTML = `<span class="swatch" style="background:${c.color}"></span>
+      <span><span class="t">${c.n}</span><br><span class="r">${c.date} · ${c.battles.length} battle${c.battles.length===1?"":"s"}</span>
+      <br><span class="note">${c.who}</span></span>`;
+    b.onclick = ()=>{ setCampaign(c.i);
+      const old = p.querySelector(".campdetail"); if(old) old.remove();
+      if(state.campaign!==null) showCampaign(c); };
+    p.appendChild(b);
+  });
+  if(state.campaign!==null && CAMPAIGNS[state.campaign].e===era.id) showCampaign(CAMPAIGNS[state.campaign], true);
+}
+function showCampaign(c, keepList){
+  const p = document.getElementById("pane-wars");
+  const box = document.createElement("div"); box.className = "body";
+  box.style.borderTop = "1px solid var(--rule)"; box.style.marginTop = "4px";
+  box.innerHTML = `<div class="kicker" style="color:${c.color}">${c.date}</div>
+    <h3>${c.n}</h3><div class="dates">${c.who}</div>
+    <p class="narr">${c.p}</p>
+    <div class="sec">Outcome</div><p class="arch">${c.out}</p>
+    <div class="sec">Battles</div><div id="btl"></div>
+    <div id="citin"></div>
+    <div class="sec">Scripture</div><div id="crefs"></div>`;
+  const old = p.querySelector(".campdetail"); if(old) old.remove();
+  box.classList.add("campdetail"); p.appendChild(box);
+  const btl = box.querySelector("#btl");
+  c.battles.forEach(b=>{
+    const x = document.createElement("button"); x.className = "chip"; x.textContent = b.n;
+    x.onclick = ()=>{ openBattle({...b, ci:c.i, color:c.color}); flyTo(b.c); };
+    btl.appendChild(x); btl.appendChild(document.createTextNode(" "));
+  });
+  box.querySelector("#citin").appendChild(itineraryEl(c.path, c.color));
+  box.querySelector("#crefs").appendChild(refRow(c.r));
+  box.scrollIntoView ? null : null;
+}
+
+function renderFindsPane(){
+  const era = ERAS[state.era], p = document.getElementById("pane-finds");
+  const list = FINDS.filter(f=>state.allFinds || f.e.includes(era.id));
+  p.innerHTML = `<div class="body"><div class="kicker">Archaeology</div>
+      <h3>Finds &amp; inscriptions</h3>
+      <div class="dates">${list.length} object${list.length===1?"":"s"} ${state.allFinds?"in the whole atlas":"tied to "+era.name}</div>
+      <label class="lay" style="padding:6px 0"><input type="checkbox" id="allf" ${state.allFinds?"checked":""}><span>Show every find, not just this era</span></label>
+      </div>`;
+  p.querySelector("#allf").onchange = e=>{ state.allFinds = e.target.checked; renderFindsPane(); if(land) renderMap(false); };
+  list.forEach(f=>{
+    const wrap = document.createElement("div"); wrap.className = "body";
+    wrap.dataset.find = f.i;
+    wrap.style.borderTop = "1px solid var(--rule)";
+    wrap.style.transition = "background .5s";
+    const ph = f.w ? PHOTOS[f.w] : undefined;
+    wrap.innerHTML = `<div class="t" style="font-size:17px;font-weight:600">${f.n}</div>
+      <div class="r">${f.date} · ${f.found} · ${f.where}</div>
+      ${ph?`<figure><img class="zoomhint" src="${ph.src}" alt="${f.n}" title="Click to enlarge"><figcaption>${ph.title} — via Wikimedia / Wikipedia. <a href="${ph.page}" target="_blank" rel="noopener">source &amp; licence</a> · click to enlarge</figcaption></figure>`:
+        `<p class="loading" style="margin:6px 0 0">photograph loading…</p>`}
+      <p class="arch" style="margin-top:8px">${f.p}</p>`;
+    const fi = wrap.querySelector("img");
+    if(fi) fi.onclick = ()=>openLightbox(PHOTOS[f.w], f.n);
+    const rr = refRow(f.r); wrap.appendChild(rr);
+    const go = document.createElement("button"); go.className="chip"; go.textContent="Show on map";
+    go.style.marginTop = "7px";
+    go.onclick = ()=>{ openFind(f.i, true); flyTo(f.c, Math.max(transform.k, 4)); };
+    wrap.appendChild(go);
+    p.appendChild(wrap);
+    if(f.w && !(f.w in PHOTOS)) loadPhoto(f.w, f.q).then(()=>{ if(state.tab==="finds") renderFindsPane(); });
+  });
+}
+
+function renderPeoplesPane(){
+  const p = document.getElementById("pane-peoples");
+  if(state.people===null){
+    p.innerHTML = `<div class="body"><div class="kicker">Peoples &amp; empires</div>
+      <h3>The neighbours</h3>
+      <p class="narr">Israel never had the map to itself. Twelve civilisations shaped the story — pick one to see its heartland, what it left behind, and where it touches Scripture.</p></div>`;
+    PEOPLES.forEach((pe,i)=>{
+      const b = document.createElement("button"); b.className="peo";
+      b.innerHTML = `<span class="t">${pe.n}</span><br><span class="r">${pe.d} · ${pe.cap}</span>`;
+      b.onclick = ()=>{ state.people = i; renderPeoplesPane();
+        ensureLayer("kingdoms"); fitPeople(pe); focusOn(pe.at, pe.n, "var(--plum)"); };
+      p.appendChild(b);
+    });
+    return;
+  }
+  const pe = PEOPLES[state.people];
+  p.innerHTML = `<div class="body">
+      <button class="back" id="pback">‹ all peoples</button>
+      <h3 style="margin-top:8px">${pe.n}</h3>
+      <div class="dates">${pe.d} · capitals: ${pe.cap} · ${pe.land}</div>
+      <p class="narr">${pe.p}</p>
+      <div class="sec">In Scripture</div><p class="arch">${pe.b}</p>
+      <div class="sec">What they left behind</div><p class="arch">${pe.f}</p>
+    </div>`;
+  p.querySelector("#pback").onclick = ()=>{ state.people=null; renderPeoplesPane(); };
+}
+function fitPeople(pe){
+  fitTo(pe.focus); paintGeo(); const t=d3.zoomIdentity;
+  svg.transition().duration(650).call(zoom.transform,t);
+  transform=t; root.attr("transform",t); renderMap(false); updateScale();
+}
+
+function renderScripturePane(){
+  const p = document.getElementById("pane-scripture");
+  const era = ERAS[state.era];
+  if(!state.passage){
+    p.innerHTML = `<div class="body"><div class="kicker">Scripture</div>
+      <h3>Read it on the map</h3>
+      <p class="narr">Every reference in this atlas is a link. Tap one and the passage opens here, with the places it names ringed on the map.</p>
+      <div class="sec">Passages in ${era.name}</div></div>`;
+    const box = document.createElement("div"); box.className="sitelist"; p.appendChild(box);
+    const seen = new Set();
+    const add = str => splitRefs(str).forEach(r=>{
+      if(seen.has(r.display)) return; seen.add(r.display);
+      const b = document.createElement("button"); b.className="ref"; b.textContent=r.display;
+      b.onclick = ()=>openPassage(r); box.appendChild(b);
+    });
+    era.journeys.forEach(j=>add(j.refs));
+    EVENTS.filter(v=>v.e===era.id).forEach(v=>add(v.r));
+    era.sites.forEach(id=>add(S[id].r));
+    return;
+  }
+  const {ref, verses, error} = state.passage;
+  p.innerHTML = `<div class="body">
+      <button class="back" id="sback">‹ passages in ${era.name}</button>
+      <h3 style="margin-top:8px">${ref.display}</h3>
+      <div class="dates"><select class="pacesel" id="transsel">${TRANSLATIONS.map(t=>
+        `<option value="${t[0]}" ${t[0]===TRANS?"selected":""}>${t[1]}</option>`).join("")}</select>${ref.clipped?` · first ${ref.chapters.length} chapters of this range`:""}</div>
+      <div id="vtext">${error?`<p class="note">${error}</p><button class="chip" id="vretry">Try again</button>`:
+        verses?verses.map((v,i)=>{
+          const ids = placesInText(v.t);
+          return `<span class="verse" data-vi="${i}" data-ids="${ids.join(",")}">` +
+                 `<span class="vn">${v.c}:${v.v}</span>${markupVerse(v.t.replace(/\n/g," "))} </span>`;
+        }).join(""):
+        `<p class="loading">Loading text…</p>`}</div>
+      <div class="scrip-src">Text: bible-api.com · ${(TRANSLATIONS.find(t=>t[0]===TRANS)||[])[1]} (public domain)</div>
+      <div class="sec">On the map in this passage</div>
+      <div id="plinks"></div>
+    </div>`;
+  const ts = p.querySelector("#transsel");
+  if(ts) ts.onchange = e=>{ TRANS = e.target.value;
+    try{ localStorage.setItem("otatlas:trans", TRANS); }catch(err){}
+    openPassage(ref); };
+  const rt = p.querySelector("#vretry");
+  if(rt) rt.onclick = ()=>openPassage(ref);
+  p.querySelector("#sback").onclick = ()=>{ state.passage=null; state.highlight=[]; state.verseIds=[];
+    gVerse.selectAll("*").remove(); renderHalos(); renderScripturePane(); };
+  wireVerses(p);
+  const links = p.querySelector("#plinks");
+  const hits = placesForRef(ref);
+  if(!hits.length) links.innerHTML = `<span class="note">No atlas entry is keyed to this chapter.</span>`;
+  hits.forEach(e=>{
+    const b = document.createElement("button"); b.className="chip";
+    b.innerHTML = e.kind==="event" ? `${glyphSVG(EVENTS[e.i].k)} ${e.label}` : e.label;
+    b.style.display = "inline-flex"; b.style.alignItems="center"; b.style.gap="5px";
+    b.onclick = ()=>{
+      if(e.kind==="place"){ openPlace(e.id); }
+      else if(e.kind==="event"){ const v = EVENTS[e.i];
+        if(ERAS[state.era].id !== v.e){ const ei = ERAS.findIndex(x=>x.id===v.e); if(ei>=0) setEra(ei,false); }
+        openEvent({...v, i:e.i, xy:projection(v.c)}); }
+      else if(e.kind==="journey"){ if(state.era!==e.ei) setEra(e.ei,false); setJourney(e.ji); setTab("era"); }
+    };
+    links.appendChild(b);
+  });
+}
+
+/* verse interactions: click a verse to fly to it, scroll to spotlight it */
+function wireVerses(pane){
+  const idsOf = el => (el.dataset.ids||"").split(",").filter(Boolean);
+  const bar = document.createElement("div");
+  bar.className = "versebar"; bar.id = "versebar";
+  const body = pane.querySelector(".body");
+  const vtext = pane.querySelector("#vtext");
+  if(!vtext) return;
+  vtext.before(bar);
+  const setActive = (el, fit)=>{
+    pane.querySelectorAll(".verse.active").forEach(v=>v.classList.remove("active"));
+    if(!el) return;
+    el.classList.add("active");
+    const ids = idsOf(el);
+    spotlightVerse(ids, fit);
+    bar.innerHTML = ids.length
+      ? `<span class="r">On the map in this verse</span>` : `<span class="r">No mapped place in this verse</span>`;
+    ids.forEach(id=>{
+      const ph = photoFor(S[id]);
+      const b = document.createElement("button"); b.className = "chip vchip";
+      b.innerHTML = (ph?`<img src="${ph.src}" alt="">`:"") + S[id].n.replace(/ \(.*\)/,"");
+      b.title = ph ? "Open place · shift-click for the photograph" : "Open place";
+      b.addEventListener("click", ev=>{ if(ev.shiftKey && ph){ ev.stopPropagation(); openLightbox(ph, S[id].n); } }, true);
+      b.onclick = ()=>{ openPlace(id); flyTo(S[id].c, Math.max(transform.k,4)); };
+      bar.appendChild(b);
+      if(S[id].w && !(S[id].w in PHOTOS)) loadPhoto(S[id].w).then(()=>{ if(el.classList.contains("active")) setActive(el,false); });
+    });
+  };
+  vtext.querySelectorAll(".verse").forEach(v=>{
+    v.addEventListener("click", e=>{
+      if(e.target.classList.contains("pn")) return;
+      setActive(v, true);
+    });
+  });
+  vtext.querySelectorAll(".pn").forEach(b=>{
+    const go = e=>{
+      e.stopPropagation();
+      const id = b.dataset.id;
+      setActive(b.closest(".verse"), false);
+      openPlace(id); flyTo(S[id].c, Math.max(transform.k, 4.5));
+    };
+    b.addEventListener("click", go);
+    b.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" ") go(e); });
+  });
+  let raf;
+  pane.onscroll = ()=>{
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(()=>{
+      const top = pane.scrollTop + 40;
+      let best = null, bestD = Infinity;
+      vtext.querySelectorAll(".verse").forEach(v=>{
+        const d = Math.abs(v.offsetTop - top);
+        if(d < bestD && (v.dataset.ids||"").length){ bestD = d; best = v; }
+      });
+      if(best && !best.classList.contains("active")) setActive(best, false);
+    });
+  };
+  const first = [...vtext.querySelectorAll(".verse")].find(v=>(v.dataset.ids||"").length);
+  if(first) setActive(first, false);
+}
+
+/* =========================== guided tours =========================== */
+const tourBar = document.getElementById("tourbar");
+function renderToursPane(){
+  const p = document.getElementById("pane-tours");
+  p.innerHTML = `<div class="body"><div class="kicker">Guided tours</div>
+    <h3>Walk it through</h3>
+    <p class="narr">Seven narrated routes through the atlas. Each stop sets the map up for you — era, layers,
+    zoom — and hands you the passage to read there. Arrow keys move between stops.</p></div>`;
+  TOURS.forEach(t=>{
+    const b = document.createElement("button"); b.className = "tourpick";
+    b.innerHTML = `<span class="swatch" style="background:var(--terra);width:13px;height:13px;flex:none;margin-top:4px;border-radius:2px"></span>
+      <span><span class="t">${t.n}</span><br><span class="r">${t.sub}</span>
+      <br><span class="note">${t.intro}</span></span>`;
+    b.onclick = ()=>startTour(t.id);
+    p.appendChild(b);
+  });
+}
+function startTour(id){
+  const t = TOURS.find(x=>x.id===id);
+  state.tour = {id, i:0};
+  tourBar.hidden = false;
+  document.getElementById("tourtitle").textContent = t.n;
+  goStop(0);
+}
+function endTour(){
+  state.tour = null; tourBar.hidden = true; clearFocus(); closeCard();
+}
+function goStop(i){
+  const t = TOURS.find(x=>x.id===state.tour.id);
+  const n = t.stops.length;
+  state.tour.i = Math.max(0, Math.min(n-1, i));
+  const s = t.stops[state.tour.i];
+  const ei = ERAS.findIndex(e=>e.id===t.era);
+  if(ei>=0 && ei!==state.era) setEra(ei, false);
+  setLayers(s.layers || t.layers);
+  const c = Array.isArray(s.p) ? s.p : S[s.p].c;
+  focusOn(c, s.t, "var(--terra)");
+  flyTo(c, s.k || 5);
+  if(!Array.isArray(s.p)){ state.place = s.p; if(state.tab==="place") renderPlacePane(); }
+  document.getElementById("tourstop").textContent = s.t;
+  document.getElementById("tourtext").textContent = s.d;
+  document.getElementById("tourcount").textContent = `${state.tour.i+1} / ${n}`;
+  document.getElementById("tourprev").disabled = state.tour.i===0;
+  document.getElementById("tournext").disabled = state.tour.i===n-1;
+  const refBox = document.getElementById("tourref");
+  refBox.innerHTML = "";
+  if(s.r) refBox.appendChild(refRow(s.r));
+}
+document.getElementById("tourprev").onclick = ()=>goStop(state.tour.i-1);
+document.getElementById("tournext").onclick = ()=>goStop(state.tour.i+1);
+document.getElementById("tourexit").onclick = endTour;
+
+/* =========================== cards =========================== */
+let cardEl = null, cardAnchor = null;
+function closeCard(){ if(cardEl){ cardEl.remove(); cardEl=null; cardAnchor=null; } }
+function dismissCard(){ closeCard(); clearFocus(); }
+function makeCard(html, anchor){
+  const keep = anchor || cardAnchor;
+  closeCard();
+  cardAnchor = keep;
+  cardEl = document.createElement("div"); cardEl.className = "card"; cardEl.innerHTML = html;
+  cardEl.querySelector(".x").onclick = dismissCard;
+  // a photo arriving late makes the card taller than it was when first placed
+  cardEl.querySelectorAll("img").forEach(im=>{
+    if(!im.complete) im.addEventListener("load", positionCard, {once:true});
+  });
+  cardEl.addEventListener("click", e=>e.stopPropagation());
+  stage.appendChild(cardEl);
+  positionCard();
+}
+function positionCard(){
+  if(!cardEl || !cardAnchor) return;
+  const [x,y] = transform.apply(projection(cardAnchor));
+  const cw = cardEl.offsetWidth || 268;
+  let left = x+14, top = y-30;
+  if(left+cw+8 > W) left = x-cw-14;
+  left = Math.max(8, Math.min(left, W-cw-8));
+  const ch = cardEl.offsetHeight;
+  if(ch > H-16) top = 8;                       // taller than the stage: pin it and let it scroll
+  else if(top+ch+8 > H) top = Math.max(8, y+30-ch);   // no room below the marker, so sit above it
+  top = Math.max(8, Math.min(top, H-ch-8));
+  cardEl.style.left = left+"px"; cardEl.style.top = top+"px";
+}
+function openPlace(id){
+  const s = S[id]; state.place = id;
+  ensureLayer("places");
+  focusOn(s.c, s.n.replace(/ \(.*\)/,""), "var(--ink)");
+  const ph = photoFor(s);
+  if(s.w && !(s.w in PHOTOS)) loadPhoto(s.w).then(()=>{ if(state.place===id){ renderPlacePane(); if(cardEl) openPlace(id); } });
+  makeCard(`<button class="x" title="Close">×</button>
+    <h4>${s.n}</h4>
+    <div class="modern">${s.m} · ${s.c[1].toFixed(3)}°N ${s.c[0].toFixed(3)}°E</div>
+    ${ph?`<img class="zoomhint" id="cardimg" src="${ph.src}" alt="${s.n}" title="Click to enlarge">`:""}
+    <p>${s.p}</p>
+    ${s.q ? `<p class="idnote">Identification debated — see the full entry.</p>` : ""}
+    <div class="refrow" id="cardrefs"></div>
+    <button class="more">Full entry &amp; archaeology ›</button>`, s.c);
+  cardEl.querySelector("#cardrefs").replaceWith(refRow(s.r));
+  const ci = cardEl.querySelector("#cardimg");
+  if(ci) ci.onclick = ()=>openLightbox(ph, s.n);
+  cardEl.querySelector(".more").onclick = ()=>{ setTab("place"); };
+  renderPlacePane();
+  if(state.tab==="place") renderPlacePane();
+}
+function openEvent(v){
+  ensureLayer("events");
+  focusOn(v.c, v.t, KINDS[v.k].c);
+  makeCard(`<button class="x" title="Close">×</button>
+    <h4>${glyphSVG(v.k)} ${v.t}</h4>
+    <div class="modern">${KINDS[v.k].n}</div>
+    <p>${v.p}</p>
+    <div class="refrow" id="cardrefs"></div>`, v.c);
+  cardEl.querySelector("h4").style.display="flex";
+  cardEl.querySelector("h4").style.alignItems="center";
+  cardEl.querySelector("h4").style.gap="6px";
+  cardEl.querySelector("#cardrefs").replaceWith(refRow(v.r));
+}
+function openBattle(b){
+  const c = CAMPAIGNS[b.ci];
+  ensureLayer("campaigns");
+  focusOn(b.c, b.n, c.color);
+  makeCard(`<button class="x" title="Close">×</button>
+    <h4>${b.n}</h4>
+    <div class="modern">Battle · ${c.n} · ${c.date}</div>
+    <p>${c.who}</p>
+    <div class="refrow" id="cardrefs"></div>
+    <button class="more">Read the campaign ›</button>`, b.c);
+  cardEl.querySelector("#cardrefs").replaceWith(refRow(b.r));
+  cardEl.querySelector(".more").onclick = ()=>{ setTab("wars"); setCampaign(b.ci); };
+}
+function openFind(i, fromPane){
+  const f = FINDS[i]; state.find = i;
+  ensureLayer("finds");
+  if(!f.e.includes(ERAS[state.era].id)) state.allFinds = true;   // so its marker really is on the map
+  focusOn(f.c, f.n, "var(--plum)");
+  if(land) renderMap(false);
+  if(f.w && !(f.w in PHOTOS)) loadPhoto(f.w, f.q).then(()=>{ if(state.tab==="finds") renderFindsPane(); });
+  // compact marker card — the full entry with its photograph lives in the Finds tab
+  makeCard(`<button class="x" title="Close">×</button>
+    <h4>${f.n}</h4>
+    <div class="modern">${f.date} · found at ${f.found}</div>
+    <p style="margin-bottom:4px">${f.p.split(/(?<=\.)\s/)[0]}</p>
+    <div class="refrow" id="cardrefs"></div>
+    <button class="more">Photograph &amp; full entry ›</button>`, f.c);
+  cardEl.querySelector("#cardrefs").replaceWith(refRow(f.r));
+  cardEl.querySelector(".more").onclick = ()=>{ setTab("finds"); scrollFindIntoPane(i); };
+  if(!fromPane){ setTab("finds"); scrollFindIntoPane(i); }
+}
+function scrollFindIntoPane(i){
+  const pane = document.getElementById("pane-finds");
+  const el = pane.querySelector(`[data-find="${i}"]`);
+  if(el){ pane.scrollTop = Math.max(0, el.offsetTop - pane.offsetTop - 6);
+    el.style.background = "#e8dec8"; setTimeout(()=>el.style.background="", 1400); }
+}
+svg.on("click",()=>dismissCard());
+
+/* =========================== era switching =========================== */
+function setEra(i, animate=true){
+  state.era = i; state.activeJourney = null; state.campaign = null;
+  if(!state.tour) clearFocus();
+  closeCard();
+  document.querySelectorAll("#eralist .era").forEach((b,j)=>b.setAttribute("aria-current", j===i));
+  document.querySelectorAll("#tl button").forEach((b,j)=>b.setAttribute("aria-current", j===i));
+  if(!document.getElementById("chrono").hidden) drawChrono();
+  renderEraPane();
+  if(state.tab==="wars") renderWarsPane();
+  if(state.tab==="finds") renderFindsPane();
+  if(state.tab==="scripture" && !state.passage) renderScripturePane();
+  if(land){ fitEra(animate); renderMap(animate); }
+  if(state.layers.photos) ensurePhotos(ERAS[i].sites);
+}
+
+const eralist = document.getElementById("eralist"), tl = document.getElementById("tl");
+ERAS.forEach((e,i)=>{
+  const b = document.createElement("button"); b.className = "era";
+  b.innerHTML = `<span class="n">${e.name}</span><span class="d">${e.dates}</span>`;
+  b.onclick = ()=>setEra(i); eralist.appendChild(b);
+  const t = document.createElement("button"); t.textContent = `${e.short} · ${e.dates.replace("c. ","")}`;
+  t.onclick = ()=>setEra(i); tl.appendChild(t);
+});
+
+/* =========================== layers UI =========================== */
+const TILESETS = {
+  satellite:{ url:(z,x,y)=>`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`,
+              credit:"Imagery: Esri, Maxar, Earthstar Geographics" },
+  relief:{    url:(z,x,y)=>`https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/${z}/${y}/${x}`,
+              credit:"Hillshade: Esri · elevation from SRTM/GEBCO" },
+  street:{    url:(z,x,y)=>`https://tile.openstreetmap.org/${z}/${x}/${y}.png`,
+              credit:"© OpenStreetMap contributors" }
+};
+const WALLC = { david:"#7a3b2e", solomon:"#8a6a1f", hezekiah:"#2f4858", nehemiah:"#6d3355" };
+/* place city labels around their dot, skipping positions already taken */
+function relayoutCityLabels(){
+  if(!state.layers.city) return;
+  const k = transform.k, sr = svg.node().getBoundingClientRect(), boxes = [];
+  gLabels.selectAll("text").each(function(){        // the era's own place names hold their ground
+    if(this.getAttribute("display")==="none") return;
+    const b = this.getBoundingClientRect();
+    if(b.width) boxes.push([b.left,b.top,b.right,b.bottom]);
+  });
+  placeValleyLabels(k, sr, boxes);
+  placeCityLabels(gCity.selectAll("g.cyf"), k, sr, boxes);
+  placeCityLabels(gCity.selectAll("g.cygate"), k, sr, boxes);
+}
+function labelWidth(node, dd){
+  if(dd.__w == null){
+    let w = 0; try{ w = node.getComputedTextLength(); }catch(e){}
+    dd.__w = w || (dd.n.length * 4.3);
+  }
+  return dd.__w;
+}
+const hits = (box,boxes) => boxes.some(b=>!(box[2]<b[0]||box[0]>b[2]||box[3]<b[1]||box[1]>b[3]));
+/* valleys slide along their own course looking for clear air */
+function placeValleyLabels(k, sr, boxes){
+  gCity.selectAll("text.cityval").each(function(dd){
+    const t = d3.select(this); t.attr("display",null);
+    const w = labelWidth(this,dd) + 3, pts = dd.pts || [];
+    let placed = null;
+    for(const f of [0.5,0.38,0.62,0.27,0.73,0.16,0.85]){
+      const p = pts[Math.max(0,Math.min(pts.length-1, Math.round(f*(pts.length-1))))];
+      if(!p) continue;
+      const xy = projection(p), px = sr.left+transform.applyX(xy[0]), py = sr.top+transform.applyY(xy[1]);
+      for(const dy of [-5,11,-14,19]){
+        const box = [px-w/2, py+dy-9, px+w/2, py+dy+2];
+        if(hits(box,boxes)) continue;
+        boxes.push(box); placed = [xy,dy]; break;
+      }
+      if(placed) break;
+    }
+    if(placed){ dd.xy = placed[0];
+      t.attr("y",placed[1]).attr("transform",`translate(${placed[0]}) scale(${1/k})`); }
+    else t.attr("display","none");
+  });
+}
+function placeCityLabels(sel, k, sr, boxes){
+  const CAND = [[6,3.4,"start"],[-6,3.4,"end"],[0,-7,"middle"],[0,12,"middle"],[6,-6,"start"],[-6,-6,"end"],[6,13,"start"],[-6,13,"end"],[10,8,"start"],[-10,8,"end"]];
+  sel.each(function(dd){
+    const t = d3.select(this).select("text"); if(t.empty()) return;
+    t.attr("display",null);
+    const w = labelWidth(t.node(),dd) + 3;
+    const px = sr.left + transform.applyX(dd.xy[0]), py = sr.top + transform.applyY(dd.xy[1]);
+    let placed = false;
+    for(const [dx,dy,anch] of CAND){
+      const x0 = anch==="start" ? px+dx : anch==="end" ? px+dx-w : px+dx-w/2;
+      const box = [x0, py+dy-9, x0+w, py+dy+2];
+      if(hits(box,boxes)) continue;
+      boxes.push(box); t.attr("x",dx).attr("y",dy).attr("text-anchor",anch); placed = true; break;
+    }
+    t.attr("display", placed ? null : "none");   // rather than stack unreadable text
+  });
+}
+const PERIODS = [["david","David","c. 1000 BC"],["solomon","Solomon","c. 960 BC"],
+  ["hezekiah","Hezekiah","c. 700 BC"],["nehemiah","Nehemiah","c. 445 BC"],["all","All four",""]];
+function openCityItem(o,kind){
+  const label = kind==="wall" ? "City wall" : kind==="gate" ? "Gate of the wall" : "In the city";
+  const c = o.c || o.pts[Math.floor(o.pts.length/2)];
+  makeCard(`<button class="x" aria-label="Close">×</button>
+    <div class="kicker">Jerusalem · ${label}</div>
+    <h4>${o.n}</h4>
+    ${o.p ? `<p>${o.p}</p>` : ""}
+    ${o.a ? `<p class="idnote"><b>Archaeology</b> — ${o.a}</p>` : ""}
+    <div class="refrow" id="cardrefs"></div>`, c);
+  if(o.r) cardEl.querySelector("#cardrefs").replaceWith(refRow(o.r));
+}
+function showJerusalem(period){
+  state.cityPeriod = period || state.cityPeriod || "nehemiah";
+  toggleLayer("city", true);
+  flyTo(JERUSALEM.centre, 900);
+  openPlace("jerusalem"); setTab("place"); dismissCard();
+}
+const LAYERS = [
+  ["routes","Journeys","1"],["places","Places","2"],["events","Events","3"],
+  ["campaigns","Campaigns","4"],["finds","Finds","5"],["kingdoms","Kingdoms","6"],
+  ["roads","Trade roads","7"],["distances","Distances","8"],["tribes","Tribes","9"],
+  ["terrain","Land + rainfall","g"],["modern","Borders + cities","0"],["photos","Photos","p"],
+  ["relief","Relief","r"],["satellite","Satellite","s"],["street","Street map","t"],
+  ["city","Jerusalem plan","j"]
+];
+const DEFAULT_LAYERS = {routes:true, places:true, events:true};
+if(!state.cityPeriod) state.cityPeriod = "nehemiah";
+const layersEl = document.getElementById("layers");
+LAYERS.forEach(([key,label,k])=>{
+  const l = document.createElement("label"); l.className = "lay";
+  l.innerHTML = `<input type="checkbox" ${state.layers[key]?"checked":""}><span>${label}</span><span class="k">${k}</span>`;
+  l.querySelector("input").onchange = e => toggleLayer(key, e.target.checked);
+  layersEl.appendChild(l);
+});
+const barEl = document.getElementById("layerbar");
+[["Clear","Turn every layer off",()=>setLayers({})],
+ ["All","Turn every layer on",()=>setLayers(Object.fromEntries(LAYERS.map(l=>[l[0],true])))],
+ ["Reset","Back to the default view",()=>setLayers(DEFAULT_LAYERS)]].forEach(([label,tip,fn])=>{
+  const b = document.createElement("button");
+  b.className = "lchip act"; b.textContent = label; b.title = tip; b.onclick = fn;
+  barEl.appendChild(b);
+});
+barEl.appendChild(Object.assign(document.createElement("span"),{className:"barsep"}));
+const layerChips = [];
+LAYERS.forEach(([key,label,k])=>{
+  const b = document.createElement("button");
+  b.className = "lchip" + (key==="modern"?" modern":"") +
+    (["satellite","street","relief"].includes(key)?" basemap":"");
+  layerChips.push(b);
+  b.textContent = label; b.title = "Layer "+k+" — click to toggle";
+  b.setAttribute("aria-pressed", state.layers[key]);
+  b.onclick = ()=>toggleLayer(key, !state.layers[key]);
+  barEl.appendChild(b);
+});
+function syncLayerUI(){
+  LAYERS.forEach(([key],i)=>{
+    layersEl.querySelectorAll("input")[i].checked = state.layers[key];
+    layerChips[i].setAttribute("aria-pressed", state.layers[key]);
+  });
+}
+function setLayers(map){
+  LAYERS.forEach(([key])=>state.layers[key] = !!map[key]);
+  if(state.layers.photos) ensurePhotos(ERAS[state.era].sites);
+  if(state.layers.satellite){ state.layers.street = false; state.layers.relief = false; }
+  else if(state.layers.street) state.layers.relief = false;
+  gTiles.selectAll("*").remove();
+  syncLayerUI();
+  if(land){ paintOverlays(); renderMap(false); renderTiles(); }
+}
+function toggleLayer(key, on){
+  state.layers[key] = on;
+  syncLayerUI();
+  if(key==="photos" && on) ensurePhotos(ERAS[state.era].sites);
+  const bases = ["satellite","street","relief"];               // one basemap at a time
+  if(bases.includes(key)){
+    if(on) bases.forEach(b=>{ if(b!==key) state.layers[b] = false; });
+    gTiles.selectAll("*").remove();                            // drop the old set before re-tiling
+  }
+  syncLayerUI();
+  if(land){ paintOverlays(); renderMap(false); renderTiles(); }
+  if(key==="city" && on && transform.k < 200) flyTo(JERUSALEM.centre, 900);
+}
+
+/* =========================== legend =========================== */
+document.getElementById("legend").innerHTML = `
+  <div class="row"><span class="dot"></span> Place on a journey</div>
+  <div class="row"><span class="dot" style="background:#efe6d4"></span> Other place named</div>
+  <div class="row"><span class="sw"></span> Journey or travel route</div>
+  <div class="row"><span class="sw" style="border-top-style:dashed;border-top-color:#7a2f2f"></span> Military campaign</div>
+  <div class="row"><svg viewBox="-8 -8 16 16" width="12" height="12"><path d="M-5,-5 L5,5 M5,-5 L-5,5" fill="none" stroke="#7a2f2f" stroke-width="1.8"/></svg> Battle</div>
+  <div class="row"><svg viewBox="-8 -8 16 16" width="12" height="12"><path d="M-5,-6 H5 V6 H-5 Z" fill="#f2e9d6" stroke="#6d3355" stroke-width="1.2"/></svg> Archaeological find</div>
+  <div class="row"><span class="sw" style="border-top-style:dashed;border-top-color:#2f4858"></span> Kingdom or empire (approximate)</div>
+  <div class="row"><span class="sw" style="border-top-color:#6d3355"></span> Jerusalem city wall — click for its phase</div>
+  <div class="row"><svg viewBox="-6 -6 12 12" width="11" height="11"><rect x="-3.5" y="-3.5" width="7" height="7" fill="#f2e9d6" stroke="#6d3355" stroke-width="1.3"/></svg> Gate of the wall (Nehemiah 3)</div>
+  <div class="row" style="font-size:10px;color:var(--ink-2);font-family:'IBM Plex Mono',monospace">
+    Hover any line to name it · Clear / Reset at the top left</div>
+  ${Object.entries(KINDS).map(([k,v])=>`<div class="row">${glyphSVG(k)} ${v.n}</div>`).join("")}
+  <div class="row" style="font-size:10px;color:var(--ink-2);font-family:'IBM Plex Mono',monospace;line-height:1.35">
+    Coastlines: Natural Earth 1:50m. Routes follow historic roads and rivers — no leg crosses water, and none
+    runs more than ~200 km without a waystation — but they remain schematic. Contested identifications are
+    flagged on the place entry.</div>`;
+const legEl = document.getElementById("legend"), legBtn = document.getElementById("legtoggle");
+legBtn.onclick = ()=>{ legEl.hidden=false; legBtn.style.display="none"; };
+legEl.addEventListener("click",()=>{ legEl.hidden=true; legBtn.style.display=""; });
+
+/* =========================== search =========================== */
+const qEl = document.getElementById("q"), resEl = document.getElementById("results");
+qEl.oninput = ()=>{
+  const q = qEl.value.trim().toLowerCase();
+  resEl.innerHTML = "";
+  if(q.length<2) return;
+  const out = [];
+  Object.values(S).forEach(s=>{ if(s.n.toLowerCase().includes(q)||s.m.toLowerCase().includes(q))
+    out.push({label:s.n, tag:"place", go:()=>{ const ei=ERAS.findIndex(e=>e.sites.includes(s.id));
+      if(ei>=0 && ei!==state.era) setEra(ei,false); openPlace(s.id); flyTo(s.c); }}); });
+  EVENTS.forEach((v,i)=>{ if(v.t.toLowerCase().includes(q))
+    out.push({label:v.t, tag:"event", go:()=>{ const ei=ERAS.findIndex(e=>e.id===v.e);
+      if(ei>=0 && ei!==state.era) setEra(ei,false); openEvent({...v,i,xy:projection(v.c)}); flyTo(v.c); }}); });
+  PEOPLES.forEach((p,i)=>{ if(p.n.toLowerCase().includes(q))
+    out.push({label:p.n, tag:"people", go:()=>{ state.people=i; setTab("peoples"); fitPeople(p); }}); });
+  CAMPAIGNS.forEach(c=>{ if(c.n.toLowerCase().includes(q)||c.who.toLowerCase().includes(q))
+    out.push({label:c.n, tag:"campaign", go:()=>{ const ei=ERAS.findIndex(e=>e.id===c.e);
+      if(ei>=0 && ei!==state.era) setEra(ei,false); setTab("wars"); setCampaign(c.i); }}); });
+  JERUSALEM.features.forEach(f=>{ if(f.n.toLowerCase().includes(q))
+    out.push({label:f.n, tag:"in Jerusalem", go:()=>{ showJerusalem(state.cityPeriod);
+      setTimeout(()=>openCityItem(f,"feature"), 780); }}); });
+  JERUSALEM.gates.forEach(g=>{ if(g.n.toLowerCase().includes(q))
+    out.push({label:g.n, tag:"Jerusalem gate", go:()=>{ showJerusalem("nehemiah");
+      setTimeout(()=>openCityItem(g,"gate"), 780); }}); });
+  JERUSALEM.walls.forEach(w=>{ if(w.n.toLowerCase().includes(q))
+    out.push({label:w.n, tag:"city wall", go:()=>{ showJerusalem(w.period);
+      setTimeout(()=>openCityItem(w,"wall"), 780); }}); });
+  FINDS.forEach(f=>{ if(f.n.toLowerCase().includes(q))
+    out.push({label:f.n, tag:"find", go:()=>{ openFind(f.i); flyTo(f.c,4); setTab("finds"); }}); });
+  ERAS.forEach((e,i)=>{ if(e.name.toLowerCase().includes(q))
+    out.push({label:e.name, tag:"era", go:()=>setEra(i)}); });
+  Object.keys(BOOKS).forEach(k=>{ const b=BOOKS[k];
+    if(b.toLowerCase().includes(q) && out.filter(o=>o.tag==="book").length<3)
+      out.push({label:b+" 1", tag:"book", go:()=>openPassage(parseRef(b+" 1"))}); });
+  out.slice(0,14).forEach(o=>{
+    const b = document.createElement("button");
+    b.innerHTML = `${o.label}<span class="t">${o.tag}</span>`;
+    b.onclick = ()=>{ o.go(); resEl.innerHTML=""; qEl.value=""; };
+    resEl.appendChild(b);
+  });
+};
+
+/* =========================== controls =========================== */
+document.getElementById("zin").onclick = ()=>svg.transition().duration(300).call(zoom.scaleBy,1.6);
+document.getElementById("zout").onclick = ()=>svg.transition().duration(300).call(zoom.scaleBy,1/1.6);
+document.getElementById("zreset").onclick = ()=>{ fitEra(true); renderMap(false); };
+window.addEventListener("keydown", e=>{
+  if(document.activeElement===qEl){ if(e.key==="Escape") qEl.blur(); return; }
+  if(state.tour){
+    if(e.key==="ArrowRight"||e.key==="ArrowDown"){ goStop(state.tour.i+1); e.preventDefault(); return; }
+    if(e.key==="ArrowLeft"||e.key==="ArrowUp"){ goStop(state.tour.i-1); e.preventDefault(); return; }
+  }
+  if(e.key==="ArrowDown"||e.key==="ArrowRight"){ setEra(Math.min(ERAS.length-1,state.era+1)); e.preventDefault(); }
+  if(e.key==="ArrowUp"||e.key==="ArrowLeft"){ setEra(Math.max(0,state.era-1)); e.preventDefault(); }
+  if(e.key==="Escape"){ dismissCard();
+    document.getElementById("aboutwrap").hidden = true;
+    document.getElementById("lightwrap").hidden = true; }
+  if(e.key==="/"){ qEl.focus(); e.preventDefault(); }
+  if(e.key==="c"){ document.getElementById("chronobtn").click(); }
+  const li = LAYERS.findIndex(l=>l[2]===e.key);
+  if(li>=0 && !e.metaKey && !e.ctrlKey) toggleLayer(LAYERS[li][0], !state.layers[LAYERS[li][0]]);
+});
+window.addEventListener("resize",()=>{ if(syncSize() && land){ fitEra(false); renderMap(false); } });
+
+/* ---------- chronology chart ---------- */
+const chronoEl = document.getElementById("chrono"), chronoBtn = document.getElementById("chronobtn");
+const KCOL = {united:"#3f4f3a", judah:"var(--terra)", israel:"var(--indigo)", yehud:"#6d3355"};
+function drawChrono(){
+  const box = chronoEl.getBoundingClientRect();
+  const w = Math.max(600, box.width);
+  const m = {l:74, r:14, t:16, b:22};
+  const x = d3.scaleLinear().domain([-2050,-400]).range([m.l, w-m.r]);
+  const yearsPerPx = 1650 / (w - m.l - m.r);
+
+  // lay the prophets out first: their names need room, and the row count sets the height
+  const plane = [], pLanes = [];
+  PROPHETS.forEach(p=>{
+    const labelYears = (p.n.length*5.6 + 12) * yearsPerPx;
+    let lane = 0;
+    while(plane[lane] !== undefined && plane[lane] > p.a) lane++;
+    plane[lane] = p.b + labelYears;
+    pLanes.push({p, lane});
+  });
+  const pRows = plane.length;
+  // judges: cyclical and overlapping, so packed into lanes — the count sets the rows below
+  const jlane = [], jPlaced = [];
+  JUDGES.forEach(j=>{
+    let lane = 0;
+    while(jlane[lane] !== undefined && jlane[lane] > j.a) lane++;
+    jlane[lane] = j.b;
+    jPlaced.push({j, lane});
+  });
+  const jRows = jlane.length;
+  const rows = {empires:26, judges:62};
+  const jLabelRows = 4;                    // names sit under the bars, on packed sub-lines
+  rows.judgeLabels = rows.judges + jRows*13 + 2;
+  rows.judah = rows.judgeLabels + jLabelRows*14 + 10;
+  rows.israel = rows.judah + 34;
+  rows.prophets = rows.israel + 34;
+  rows.eras = rows.prophets + pRows*12 + 10;
+  const h = rows.eras + 40;
+  chronoEl.style.height = h+"px";
+  document.getElementById("chronosvg").style.height = h+"px";
+  const svgC = d3.select("#chronosvg").attr("viewBox",`0 0 ${w} ${h}`);
+  svgC.selectAll("*").remove();
+
+  // axis
+  const g = svgC.append("g");
+  d3.range(-2000,-399,200).forEach(yr=>{
+    g.append("line").attr("x1",x(yr)).attr("x2",x(yr)).attr("y1",m.t-6).attr("y2",h-m.b)
+      .attr("stroke","#cbbfa4").attr("stroke-width",yr%1000===0?1.2:0.6);
+    g.append("text").attr("class","cx").attr("x",x(yr)).attr("y",h-8).attr("text-anchor","middle")
+      .text(Math.abs(yr)+" BC");
+  });
+  [["Empires",rows.empires],["Judges",rows.judges],["Judah",rows.judah],["Israel",rows.israel],["Prophets",rows.prophets],["Atlas eras",rows.eras]]
+    .forEach(([label,y])=>g.append("text").attr("class","clab").attr("x",8).attr("y",y+10).text(label));
+
+  // empire bands
+  EMPIRE_BANDS.forEach((b,i)=>{
+    const y = rows.empires + (i%2)*13;
+    g.append("rect").attr("x",x(b.a)).attr("y",y).attr("width",Math.max(2,x(b.b)-x(b.a))).attr("height",11)
+      .attr("fill",b.c).attr("fill-opacity",0.55).append("title").text(`${b.n} · ${Math.abs(b.a)}–${Math.abs(b.b)} BC`);
+    g.append("text").attr("class","cname").attr("x",x(b.a)+4).attr("y",y+9).text(b.n.length*5.6 < (x(b.b)-x(b.a)) ? b.n : "");
+  });
+
+  const jLabelEnd = [], jPending = [];     // right edge in use per sub-line
+  jPlaced.forEach(({j,lane})=>{
+    const y = rows.judges + lane*13, x0 = x(j.a), x1 = Math.max(x0+3, x(j.b));
+    const grp = g.append("g").attr("class","creign")
+      .on("click",()=>{ const r = parseRef(j.r.split(";")[0]); if(r) openPassage(r); });
+    grp.append("rect").attr("x",x0).attr("y",y).attr("width",x1-x0).attr("height",11)
+      .attr("fill","#6b5a3a").attr("fill-opacity",0.8);
+    grp.append("title").text(j.n+" · "+j.r+" · approximate");
+    const leader = grp.append("line").attr("x1",(x0+x1)/2).attr("x2",(x0+x1)/2).attr("y1",y+11)
+      .attr("stroke","#6b5a3a").attr("stroke-width",0.6).attr("stroke-opacity",0.6);
+    const txt = grp.append("text").attr("class","cname dark").attr("y",rows.judgeLabels+9).text(j.n);
+    jPending.push({txt, leader, mid:(x0+x1)/2});
+  });
+  jPending.forEach(({txt,leader,mid})=>{                    // measured widths, so names cannot collide
+    let wName = 0; try{ wName = txt.node().getComputedTextLength(); }catch(e){}
+    if(!wName) wName = txt.text().length * 5.2;      // drawer may still be closed: estimate
+    let lx = Math.max(m.l, Math.min(mid - wName/2, w-m.r-wName));
+    let line = 0;
+    while(line < jLabelRows && jLabelEnd[line] !== undefined && jLabelEnd[line] > lx) line++;
+    if(line >= jLabelRows){                                 // fall back to whichever line ends soonest
+      line = jLabelEnd.indexOf(Math.min(...jLabelEnd));
+      lx = Math.min(jLabelEnd[line] + 6, w-m.r-wName);
+    }
+    jLabelEnd[line] = lx + wName + 6;
+    const ly = rows.judgeLabels + line*14 + 9;
+    txt.attr("x",lx).attr("y",ly);
+    leader.attr("y2",ly-7);
+  });
+
+  // reigns, packed into lanes so co-regencies stay readable
+  const lanes = {judah:[], israel:[], united:[], yehud:[]};
+  KINGS.forEach(k=>{
+    const key = k.k, base = key==="israel" ? rows.israel : key==="judah" || key==="united" ? rows.judah : rows.judah;
+    const laneSet = lanes[key];
+    let lane = 0;
+    while(laneSet[lane] !== undefined && laneSet[lane] > k.a) lane++;
+    laneSet[lane] = k.b;
+    const y = (key==="israel" ? rows.israel : rows.judah) + lane*13;
+    const x0 = x(k.a), x1 = Math.max(x0+3, x(k.b));
+    const grp = g.append("g").attr("class","creign")
+      .on("click",()=>{ const r = parseRef(k.r.split(";")[0]); if(r) openPassage(r); });
+    grp.append("rect").attr("x",x0).attr("y",y).attr("width",x1-x0).attr("height",11)
+      .attr("fill",KCOL[key]).attr("fill-opacity",k.g==="good"?0.95:0.72)
+      .attr("stroke",k.g==="good"?"#f4ecda":"none").attr("stroke-width",1);
+    grp.append("title").text(`${k.n} · ${Math.abs(k.a)}–${Math.abs(k.b)} BC · ${k.r}`);
+    if(x1-x0 > k.n.length*5.4+6)
+      grp.append("text").attr("class","cname").attr("x",x0+4).attr("y",y+9).text(k.n);
+  });
+
+  // prophets
+  pLanes.forEach(({p, lane})=>{
+    const y = rows.prophets + lane*12;
+    const x0 = x(p.a), x1 = Math.max(x0+3, x(p.b));
+    const grp = g.append("g").attr("class","creign")
+      .on("click",()=>{ if(S[p.home]) { openPlace(p.home); flyTo(S[p.home].c, 3.2); }
+        const r = parseRef(p.r.split(";")[0]); if(r) openPassage(r); });
+    grp.append("line").attr("x1",x0).attr("x2",x1).attr("y1",y+5).attr("y2",y+5)
+      .attr("stroke","var(--olive)").attr("stroke-width",3).attr("stroke-linecap","round");
+    grp.append("circle").attr("cx",x0).attr("cy",y+5).attr("r",3).attr("fill","var(--olive)");
+    grp.append("text").attr("class","cname dark").attr("x",x1+5).attr("y",y+8.5).text(p.n);
+    grp.on("mouseenter",()=>{ if(S[p.home]) focusOn(S[p.home].c, p.n, "var(--olive)"); });
+    grp.append("title").text(`${p.n} · ${Math.abs(p.a)}–${Math.abs(p.b)} BC · to ${p.to} · ${p.r}`);
+  });
+
+  // atlas eras
+  const ERA_SPANS = [[-2050,-2000],[-2000,-1700],[-1450,-1400],[-1400,-1350],[-1350,-1050],[-1050,-930],[-930,-722],[-722,-586],[-586,-430]];
+  ERAS.forEach((e,i)=>{
+    const sp = ERA_SPANS[i]; if(!sp) return;
+    const x0 = Math.max(m.l, x(sp[0])), x1 = Math.min(w-m.r, x(sp[1]));
+    if(x1 <= x0) return;
+    const grp = g.append("g").attr("class","creign").on("click",()=>setEra(i));
+    grp.append("rect").attr("x",x0).attr("y",rows.eras).attr("width",x1-x0).attr("height",13)
+      .attr("fill", i===state.era ? "var(--ink)" : "#d8cbb0")
+      .attr("stroke","#f4ecda").attr("stroke-width",1);
+    grp.append("title").text(`${e.name} · ${e.dates}`);
+    if(x1-x0 > e.short.length*5.4+6)
+      grp.append("text").attr("class","cname" + (i===state.era?"":" dark")).attr("x",x0+4).attr("y",rows.eras+10).text(e.short);
+  });
+}
+chronoBtn.onclick = ()=>{
+  const open = chronoEl.hidden;
+  chronoEl.hidden = !open;
+  chronoBtn.setAttribute("aria-pressed", open);
+  if(open) drawChrono();
+  if(syncSize() && land){ fitEra(false); renderMap(false); }
+};
+window.addEventListener("resize",()=>{ if(!chronoEl.hidden) drawChrono(); });
+
+/* ---------- photo lightbox ---------- */
+const lightWrap = document.getElementById("lightwrap");
+function openLightbox(ph, caption){
+  if(!ph) return;
+  document.getElementById("lightimg").src = ph.full || ph.src;
+  const name = caption || ph.title;
+  document.getElementById("lightcap").innerHTML =
+    `<b>${name}</b><br>${ph.title && ph.title !== name ? ph.title + " — " : ""}photograph via Wikimedia / Wikipedia.
+     <a href="${ph.page}" target="_blank" rel="noopener">source &amp; licence</a>`;
+  lightWrap.hidden = false;
+}
+document.getElementById("lightclose").onclick = ()=>{ lightWrap.hidden = true; };
+lightWrap.addEventListener("click", e=>{ if(e.target===lightWrap) lightWrap.hidden = true; });
+
+const aboutWrap = document.getElementById("aboutwrap");
+document.getElementById("aboutbtn").onclick = ()=>{ aboutWrap.hidden = false; };
+document.getElementById("aboutclose").onclick = ()=>{ aboutWrap.hidden = true; };
+aboutWrap.addEventListener("click", e=>{ if(e.target===aboutWrap) aboutWrap.hidden = true; });
+aboutWrap.querySelectorAll(".modaltabs button").forEach(b=>{
+  b.onclick = ()=>{
+    aboutWrap.querySelectorAll(".modaltabs button").forEach(x=> x.setAttribute("aria-selected", String(x===b)));
+    aboutWrap.querySelectorAll(".modalpane").forEach(p=> p.hidden = p.dataset.pane !== b.dataset.pane);
+    aboutWrap.querySelector(".modal").scrollTop = 0;
+  };
+});
+
+/* =========================== viewport theatres =========================== */
+/* One zoom level cannot serve Ur-to-Egypt and the ridge road alike. */
+function fitBox(box, animate=true){
+  state.lastBox = box;
+  const bar = document.getElementById("cfmbar"), tb = document.getElementById("tourbar");
+  const shown = [bar, tb].find(b=>b && !b.hidden);
+  const bottom = shown ? Math.min(H*0.45, shown.getBoundingClientRect().height + 56) : 0;
+  projection.fitExtent([[22,22],[W-22,H-22-bottom]], {type:"MultiPoint",coordinates:[
+    [box[0][0],box[0][1]],[box[1][0],box[0][1]],[box[1][0],box[1][1]],[box[0][0],box[1][1]]]});
+  paintGeo();
+  const t = d3.zoomIdentity;
+  if(animate) svg.transition().duration(650).call(zoom.transform,t); else svg.call(zoom.transform,t);
+  transform = t; root.attr("transform",t); renderMap(false); updateScale(); renderHalos();
+}
+const theatersEl = document.getElementById("theaters");
+THEATERS.forEach((th,i)=>{
+  const b = document.createElement("button");
+  b.innerHTML = `<span class="s">${th.s}</span>${th.n}`;
+  b.title = th.d + "  ·  shift-" + (i+1);
+  b.onclick = ()=>{
+    if(th.n==="Jerusalem"){ showJerusalem(state.cityPeriod); return; }
+    fitBox(th.box);
+  };
+  theatersEl.appendChild(b);
+});
+
+/* =========================== Come, Follow Me =========================== */
+/* like setLayers, but leaves the redraw to the fit that follows */
+function setLayersQuiet(map){
+  LAYERS.forEach(([key])=>state.layers[key] = !!map[key]);
+  if(state.layers.satellite){ state.layers.street = false; state.layers.relief = false; }
+  else if(state.layers.street) state.layers.relief = false;
+  if(state.layers.photos) ensurePhotos(ERAS[state.era].sites);
+  gTiles.selectAll("*").remove();
+  syncLayerUI();
+  if(land){ paintOverlays(); renderTiles(); }
+}
+const cfmBar = document.getElementById("cfmbar");
+function cfmWeekNow(){
+  const start = new Date(CFM_START+"T00:00:00");
+  const today = new Date(); today.setHours(0,0,0,0);
+  const w = Math.floor((today - start)/(7*86400000)) + 1;
+  return (w>=1 && w<=CFM.length) ? w : null;
+}
+function cfmBox(week){
+  if(week.box) return week.box;
+  const pts = week.pl.map(id=>S[id] && S[id].c).filter(Boolean);
+  if(!pts.length) return ERAS[Math.max(0,ERAS.findIndex(e=>e.id===week.era))].focus;
+  const lon = pts.map(p=>p[0]), lat = pts.map(p=>p[1]);
+  const w0=Math.min(...lon), w1=Math.max(...lon), s0=Math.min(...lat), s1=Math.max(...lat);
+  const padX = Math.max(0.55, (w1-w0)*0.22), padY = Math.max(0.45, (s1-s0)*0.22);
+  return [[w0-padX, s0-padY],[w1+padX, s1+padY]];
+}
+function openWeek(n){
+  const week = CFM.find(c=>c.w===n);
+  if(!week) return;
+  if(state.tour) document.getElementById("tourexit").click();
+  state.cfm = n;
+  const ei = ERAS.findIndex(e=>e.id===week.era);
+  if(ei>=0 && ei!==state.era) setEra(ei, false);
+  setLayersQuiet(Object.fromEntries(week.lay.split(/\s+/).map(k=>[k,true])));
+  markPlaces(week.pl);
+  clearFocus();
+  const pr = document.getElementById("cfmplaces");
+  pr.innerHTML = "";
+  week.pl.forEach(id=>{
+    if(!S[id]) return;
+    const b = document.createElement("button"); b.className = "chip"; b.textContent = S[id].n;
+    b.title = S[id].m + " — click for the exact location";
+    b.onclick = ()=>{ openPlace(id); setTab("place"); flyTo(S[id].c, Math.max(transform.k, 5)); };
+    pr.appendChild(b);
+  });
+  const now = cfmWeekNow();
+  document.getElementById("cfmweekno").textContent =
+    `Come, Follow Me · week ${week.w}${now===week.w ? " · this week" : ""}`;
+  document.getElementById("cfmtitle").textContent = week.t;
+  document.getElementById("cfmnote").textContent = week.note;
+  const rr = document.getElementById("cfmrefs");
+  rr.innerHTML = "";
+  (week.refs||[]).slice(0,6).forEach(r=>{
+    const ref = parseRef(r);
+    if(!ref){ rr.appendChild(Object.assign(document.createElement("span"),
+      {className:"r", textContent:r})); return; }
+    const b = document.createElement("button"); b.className = "ref"; b.textContent = r;
+    b.onclick = ()=>openPassage(ref);
+    rr.appendChild(b);
+  });
+  document.getElementById("cfmprev").disabled = week.w<=1;
+  document.getElementById("cfmnext").disabled = week.w>=CFM.length;
+  cfmBar.hidden = false;
+  fitBox(cfmBox(week));
+  if(state.tab==="cfm") markCfmActive();
+}
+function markCfmActive(){
+  document.querySelectorAll("#pane-cfm .cfmweek").forEach(b=>
+    b.setAttribute("aria-current", String(Number(b.dataset.w)===state.cfm)));
+}
+function renderCfmPane(){
+  const p = document.getElementById("pane-cfm"), now = cfmWeekNow();
+  const cur = now ? CFM.find(c=>c.w===now) : null;
+  p.innerHTML = `<div class="body"><div class="kicker">Come, Follow Me</div>
+    <h3>This week on the ground</h3>
+    <p class="narr">The Old Testament reading year, week by week. Each week sets the era, turns on the layers
+      that reading needs, marks the places it names and says what the map adds that the text alone does not.
+      Weeks whose reading has no earthly setting — a vision, a genealogy, a psalm — say so instead of inventing one.</p></div>
+    ${cur ? `<div class="cfmnow"><span class="k">Week ${cur.w} · the current week</span>
+      <span class="t">${cur.t}</span>
+      <button class="chip" id="cfmgo">Open this week's map</button></div>` : ""}`;
+  if(cur) p.querySelector("#cfmgo").onclick = ()=>openWeek(cur.w);
+  CFM.forEach(c=>{
+    const b = document.createElement("button");
+    b.className = "cfmweek"; b.dataset.w = c.w;
+    b.setAttribute("aria-current", String(c.w===state.cfm));
+    b.innerHTML = `<span class="wn${c.w===now?" here":""}">${c.w}</span>
+      <span><span class="t">${c.t}</span><br><span class="note">${c.note}</span></span>`;
+    b.onclick = ()=>{ openWeek(c.w); markCfmActive(); };
+    p.appendChild(b);
+  });
+}
+document.getElementById("cfmexit").onclick = ()=>{
+  cfmBar.hidden = true; state.cfm = null; state.highlight = []; state.verseIds = [];
+  gVerse.selectAll("*").remove(); renderHalos(); markCfmActive();
+};
+document.getElementById("cfmprev").onclick = ()=>openWeek((state.cfm||1)-1);
+document.getElementById("cfmnext").onclick = ()=>openWeek((state.cfm||0)+1);
+document.getElementById("cfmbtn").onclick = ()=>{
+  setTab("cfm");
+  const now = cfmWeekNow();
+  if(now) openWeek(now);
+};
+
+/* =========================== presenter mode =========================== */
+/* Projected on a meetinghouse screen: big type, hard lines, no chrome. */
+function setPresent(on){
+  document.body.classList.toggle("present", on);
+  LBL_SCALE = on ? 1.95 : 1;                            // matches the presenter font-size rule
+  Object.values(S).forEach(s=>{ delete s.__w; });          // label widths were cached at the old size
+  setTimeout(()=>{
+    if(syncSize() && land){ fitBox(state.lastBox || ERAS[state.era].focus, false); }
+    else if(land){ renderMap(false); }
+    layoutLabels(false);
+  }, 60);
+  document.getElementById("presentbtn").setAttribute("aria-pressed", on);
+}
+document.getElementById("presentbtn").onclick = ()=>setPresent(!document.body.classList.contains("present"));
+document.getElementById("presentexit").onclick = ()=>setPresent(false);
+
+window.addEventListener("keydown", e=>{
+  if(document.activeElement && document.activeElement.tagName==="INPUT") return;
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  if(e.key==="m"){ setPresent(!document.body.classList.contains("present")); e.preventDefault(); }
+  if(e.key==="w"){ document.getElementById("cfmbtn").click(); e.preventDefault(); }
+  if(e.shiftKey && /^[1-5]$/.test(e.key)){
+    const th = THEATERS[Number(e.key)-1];
+    if(th){ th.n==="Jerusalem" ? showJerusalem(state.cityPeriod) : fitBox(th.box); e.preventDefault(); }
+  }
+  if(state.cfm && !e.shiftKey){
+    if(e.key==="]"){ openWeek(state.cfm+1); e.preventDefault(); }
+    if(e.key==="["){ openWeek(state.cfm-1); e.preventDefault(); }
+  }
+});
+
+setTab("era");
+</script>
+</body>
+</html>

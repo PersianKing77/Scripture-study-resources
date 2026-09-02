@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Archivo+Narrow:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@400;500;700&family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #ddd2ba; }
+  * { box-sizing: border-box; }
+  a { color: #8a5a2b; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #a8452f; }
+  ::selection { background: #d8c8a4; }
+  @keyframes pulseDot { 0%, 100% { opacity: .35; r: 7; } 50% { opacity: .9; r: 13; } }
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden; background: #ece2cf; background-image: radial-gradient(circle at 18% 12%, rgba(255,252,244,.75), transparent 55%), radial-gradient(circle at 82% 88%, rgba(196,176,140,.35), transparent 60%); color: #2a231a; font-family: 'EB Garamond', 'Frank Ruhl Libre', 'Noto Naskh Arabic', Georgia, serif; display: flex; flex-direction: column;">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; padding: 14px 24px 12px; border-bottom: 1px solid #c3b394; flex: 0 0 auto;">
+    <div style="max-width: 720px;">
+      <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #8a7550; font-weight: 600;">{{ t_kicker }}</div>
+      <h1 style="margin: 4px 0 3px; font-size: 26px; font-weight: 500; line-height: 1.05; letter-spacing: -.01em;">{{ t_title }}</h1>
+      <p style="margin: 0; font-size: 14px; line-height: 1.35; color: #5c5240; max-width: 74ch; text-wrap: pretty;">{{ t_sub }}</p>
+    </div>
+  </header>
+
+  <div style="display: flex; flex-wrap: nowrap; align-items: stretch; gap: 0; flex: 1 1 auto; min-height: 0;">
+
+    <div ref="{{ mapRef }}" style="flex: 1 1 auto; min-width: 0; min-height: 0; position: relative; background: #e5d9c0; border-right: 1px solid #c3b394; overflow: hidden;">
+      <svg viewBox="{{ viewBox }}" preserveAspectRatio="xMidYMid meet" onPointerDown="{{ onDown }}" onPointerMove="{{ onMove }}" onPointerUp="{{ onUp }}" onPointerLeave="{{ onUp }}" style="display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; background: #e7dcc4;">
+        <defs>
+          <pattern id="jq-fill" width="9" height="9" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="9" stroke="#3d6076" stroke-width="1.4" opacity=".5"></line>
+          </pattern>
+          <pattern id="jq-quarry" width="8" height="8" patternTransform="rotate(-40)" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#8a6a3e" stroke-width="1.6" opacity=".55"></line>
+          </pattern>
+          <filter id="jq-soft" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="9"></feGaussianBlur>
+          </filter>
+        </defs>
+
+        <g opacity="{{ topoOp }}">
+          <sc-for list="{{ valleys }}" as="v" hint-placeholder-count="3">
+            <path d="{{ v.d }}" fill="none" stroke="#c0aa82" strokeWidth="{{ v.w }}" strokeLinecap="round" filter="url(#jq-soft)" opacity=".95"></path>
+          </sc-for>
+          <sc-for list="{{ valleys }}" as="v" hint-placeholder-count="3">
+            <path d="{{ v.d }}" fill="none" stroke="#a8906a" strokeWidth="3" strokeDasharray="14 10" strokeLinecap="round" opacity=".7"></path>
+          </sc-for>
+        </g>
+
+        <sc-for list="{{ shapes }}" as="s" hint-placeholder-count="24">
+          <path d="{{ s.d }}" fill="{{ s.fill }}" stroke="{{ s.stroke }}" strokeWidth="{{ s.w }}" strokeDasharray="{{ s.dash }}" strokeLinejoin="round" strokeLinecap="round" opacity="{{ s.op }}" style="transition: opacity .55s ease;"></path>
+        </sc-for>
+
+        <sc-for list="{{ marks }}" as="m" hint-placeholder-count="10">
+          <circle cx="{{ m.x }}" cy="{{ m.y }}" r="{{ m.r }}" fill="{{ m.fill }}" stroke="#f4ecd9" strokeWidth="{{ m.sw }}" opacity="{{ m.op }}" style="transition: opacity .55s ease;"></circle>
+        </sc-for>
+
+      </svg>
+      <div style="position: absolute; inset: 0; pointer-events: none;">{{ labelSvg }}</div>
+
+      <div style="position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 5px;">
+        <button type="button" onClick="{{ zoomIn }}" style="width: 28px; height: 28px; font-size: 16px; line-height: 1; cursor: pointer; border: 1px solid #b7a582; background: rgba(247,241,228,.92); color: #2a231a; border-radius: 2px;" style-hover="border-color: #6f5c38;">+</button>
+        <button type="button" onClick="{{ zoomOut }}" style="width: 28px; height: 28px; font-size: 16px; line-height: 1; cursor: pointer; border: 1px solid #b7a582; background: rgba(247,241,228,.92); color: #2a231a; border-radius: 2px;" style-hover="border-color: #6f5c38;">−</button>
+        <button type="button" onClick="{{ resetView }}" style="width: 28px; height: 28px; font-family: 'Archivo Narrow', sans-serif; font-size: 9px; letter-spacing: .04em; cursor: pointer; border: 1px solid #b7a582; background: rgba(247,241,228,.92); color: #2a231a; border-radius: 2px;" style-hover="border-color: #6f5c38;">{{ t_fit }}</button>
+      </div>
+
+      <div style="position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; align-items: flex-end;">
+        <button type="button" onClick="{{ toggleModern }}" style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo Narrow', sans-serif; font-size: 10px; letter-spacing: .09em; text-transform: uppercase; padding: 6px 9px; cursor: pointer; border: 1px solid #b7a582; background: rgba(247,241,228,.94); color: #2a231a; border-radius: 2px; white-space: nowrap;" style-hover="border-color: #3d6076;">
+          <span style="width: 17px; height: 7px; background: {{ modernSwatch }}; border: 1px solid #3d6076; display: inline-block;"></span>{{ t_modern }}
+        </button>
+        <button type="button" onClick="{{ toggleTopo }}" style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo Narrow', sans-serif; font-size: 10px; letter-spacing: .09em; text-transform: uppercase; padding: 6px 9px; cursor: pointer; border: 1px solid #b7a582; background: rgba(247,241,228,.94); color: #2a231a; border-radius: 2px; white-space: nowrap;" style-hover="border-color: #6f5c38;">
+          <span style="width: 17px; height: 7px; background: {{ topoSwatch }}; border: 1px solid #a8906a; display: inline-block;"></span>{{ t_valleys }}
+        </button>
+      </div>
+
+      <div style="position: absolute; bottom: 10px; right: 10px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+        <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 10px; letter-spacing: .14em; color: #6f5c38; text-align: right; background: rgba(247,241,228,.85); padding: 4px 7px;">{{ t_north }}</div>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; background: rgba(247,241,228,.85); padding: 5px 7px;">
+          <div style="width: 70px; height: 6px; border: 1px solid #4a4132; border-top: none; background: linear-gradient(to right, #4a4132 0 25%, transparent 25% 50%, #4a4132 50% 75%, transparent 75%);"></div>
+          <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 10px; letter-spacing: .1em; color: #4a4132; margin-top: 3px;">{{ scaleLabel }}</div>
+        </div>
+      </div>
+    </div>
+
+    <aside dir="{{ dir }}" style="flex: 0 0 400px; min-width: 300px; padding: 18px 22px 24px; display: flex; flex-direction: column; gap: 13px; overflow-y: auto; min-height: 0;">
+      <div>
+        <div style="font-family: 'Archivo Narrow', 'Noto Naskh Arabic', sans-serif; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8a7550; font-weight: 600;">{{ eraIndexLabel }}</div>
+        <h2 style="margin: 4px 0 2px; font-size: 25px; font-weight: 500; line-height: 1.08;">{{ eraTitle }}</h2>
+        <div style="font-family: 'Archivo Narrow', 'Noto Naskh Arabic', sans-serif; font-size: 14px; letter-spacing: .1em; color: #8a5a2b; text-transform: uppercase;">{{ eraYears }}</div>
+      </div>
+
+      <sc-if value="{{ eraFlag }}" hint-placeholder-val="{{ true }}">
+        <div style="background: #f4e6c9; border: 1px solid #d3b978; padding: 9px 12px; font-size: 15px; line-height: 1.35; color: #6b5320;">{{ eraFlag }}</div>
+      </sc-if>
+
+      <p style="margin: 0; font-size: 16px; line-height: 1.45; color: #3b3427; text-wrap: pretty;">{{ eraBody }}</p>
+
+      <div>
+        <div style="font-family: 'Archivo Narrow', 'Noto Naskh Arabic', sans-serif; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #8a7550; font-weight: 600; border-bottom: 1px solid #c3b394; padding-bottom: 6px; margin-bottom: 10px;">{{ t_look }}</div>
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <sc-for list="{{ eraLook }}" as="b" hint-placeholder-count="3">
+            <div style="display: flex; gap: 10px; font-size: 15px; line-height: 1.35; color: #4a4132;">
+              <span style="flex: 0 0 auto; color: #b98c46; font-family: 'Archivo Narrow', sans-serif; font-size: 13px; padding-top: 3px;">{{ b.n }}</span>
+              <span style="text-wrap: pretty;">{{ b.text }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      
+        <div style="border-top: 1px solid #c3b394; padding-top: 10px;">
+        <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #8a7550; font-weight: 600; margin-bottom: 5px;">{{ t_legend }}</div>
+        <sc-for list="{{ legend }}" as="k" hint-placeholder-count="5">
+          <div style="display: flex; align-items: center; gap: 7px; font-size: 13px; line-height: 1.25; margin-bottom: 4px; color: #4a4132;">
+            <span style="flex: 0 0 24px; height: 0; border-top: {{ k.rule }};"></span><span>{{ k.text }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ eraDisputed }}" hint-placeholder-val="{{ true }}">
+        <div style="border-left: 3px solid #a8452f; padding: 2px 0 2px 12px; font-size: 15px; line-height: 1.4; color: #6d3a2c; font-style: italic;">{{ eraDisputed }}</div>
+      </sc-if>
+<div style="padding: 6px 0 0; border-top: 1px solid #c3b394; margin-top: 4px;">
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div>
+        <div style="font-family: 'Archivo Narrow', 'Noto Naskh Arabic', sans-serif; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8a7550; font-weight: 600;">{{ t_sectionKicker }}</div>
+        <h3 style="margin: 4px 0 10px; font-size: 19px; font-weight: 500;">{{ t_sectionTitle }}</h3>
+        <div style="position: relative;">
+        <svg viewBox="0 0 1240 350" preserveAspectRatio="xMidYMid meet" style="display: block; width: 100%; background: #e7dcc4; border: 1px solid #c3b394;">
+          <path d="M 0 160.5 L 60 141.8 L 120 130.8 L 200 126.4 L 280 130.8 L 340 146.2 L 400 171.5 L 450 194.6 L 490 203.4 L 520 205.6 L 600 185.8 L 680 168.2 L 740 164.9 L 800 177 L 860 210 L 880 240.8 L 940 276 L 1000 293.6 L 1060 276 L 1140 210 L 1240 144 L 1240 350 L 0 350 Z" fill="#d6c49e"></path>
+          <path d="M 340 146.2 L 400 171.5 L 450 194.6 L 490 203.4 L 520 205.6 L 520 182 L 500 182 L 450 179.8 L 400 164.2 L 340 141.8 Z" fill="#3d6076" opacity=".16"></path>
+          <path d="M 860 210 L 880 240.8 L 940 276 L 1000 293.6 L 1040 284.8 L 980 265 L 920 199 L 880 166 Z" fill="#3d6076" opacity=".12"></path>
+          <path d="M 0 160.5 L 60 141.8 L 120 130.8 L 200 126.4 L 280 130.8 L 340 146.2 L 400 171.5 L 450 194.6 L 490 203.4 L 520 205.6 L 600 185.8 L 680 168.2 L 740 164.9 L 800 177 L 860 210 L 880 240.8 L 940 276 L 1000 293.6 L 1060 276 L 1140 210 L 1240 144" fill="none" stroke="#8a6a3e" strokeWidth="2.6" strokeDasharray="10 7"></path>
+          <path d="M 0 157.2 L 60 138.5 L 120 128.6 L 200 125.3 L 280 128.6 L 340 141.8 L 400 164.2 L 450 179.8 L 500 182 L 520 182 L 520 166 L 880 166 L 920 199 L 980 265 L 1040 284.8 L 1100 265 L 1180 199 L 1240 138.5" fill="none" stroke="#3d6076" strokeWidth="3"></path>
+          <path d="M 520 166 L 880 166 L 880 240.8" fill="none" stroke="#b98c46" strokeWidth="5"></path>
+          <path d="M 520 166 L 520 205.6" fill="none" stroke="#b98c46" strokeWidth="5"></path>
+          <path d="M 520 176 L 880 176" fill="none" stroke="#b98c46" strokeWidth="1.4" opacity=".55"></path>
+          <circle cx="700" cy="158" r="9" fill="none" stroke="#4a4132" strokeWidth="2"></circle>
+          <path d="M 505 182 L 505 205.6 M 500 186 L 505 181 L 510 186 M 500 201.6 L 505 206.6 L 510 201.6" fill="none" stroke="#a8452f" strokeWidth="2"></path>
+          <path d="M 30 320 L 1210 320" stroke="#a8906a" strokeWidth="1" strokeDasharray="4 5"></path>
+        </svg>
+        <div style="position: absolute; inset: 0; pointer-events: none;">{{ csSvg }}</div>
+        </div>
+      </div>
+      <div dir="{{ dir }}">
+        <p style="margin: 0 0 12px; font-size: 15px; line-height: 1.5; color: #3b3427; text-wrap: pretty;">{{ t_sectionBody }}</p>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <sc-for list="{{ sectionKeys }}" as="k" hint-placeholder-count="3">
+            <div style="display: flex; gap: 9px; align-items: baseline; font-size: 14px; line-height: 1.3; color: #4a4132;">
+              <span style="flex: 0 0 26px; height: 0; border-top: {{ k.rule }}; transform: translateY(-5px);"></span><span style="text-wrap: pretty;">{{ k.text }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    <p dir="{{ dir }}" style="margin: 16px 0 0; padding-top: 12px; border-top: 1px solid #c3b394; font-size: 13px; line-height: 1.45; color: #6f6350; text-wrap: pretty;">{{ t_sources }}</p>
+  </div>
+    </aside>
+  </div>
+
+  <div style="border-top: 1px solid #c3b394; border-bottom: none; background: #e5d9c0; padding: 12px 24px 14px; flex: 0 0 auto;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 14px; flex-wrap: wrap;">
+      <div style="font-family: 'Archivo Narrow', 'Noto Naskh Arabic', sans-serif; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8a7550; font-weight: 600;">{{ t_timeline }}</div>
+      <div style="display: flex; gap: 6px;">
+        <button type="button" onClick="{{ prevEra }}" style="font-family: 'Archivo Narrow', sans-serif; font-size: 13px; padding: 5px 12px; cursor: pointer; border: 1px solid #b7a582; background: #f3ecdb; color: #2a231a; border-radius: 2px;" style-hover="border-color: #6f5c38;">←</button>
+        <button type="button" onClick="{{ nextEra }}" style="font-family: 'Archivo Narrow', sans-serif; font-size: 13px; padding: 5px 12px; cursor: pointer; border: 1px solid #b7a582; background: #f3ecdb; color: #2a231a; border-radius: 2px;" style-hover="border-color: #6f5c38;">→</button>
+      </div>
+    </div>
+    <div onPointerDown="{{ trackDown }}" onPointerMove="{{ trackMove }}" onPointerUp="{{ trackUp }}" onPointerLeave="{{ trackUp }}" style="position: relative; padding: 26px 0 8px; cursor: pointer; touch-action: none;">
+      <div style="position: absolute; left: 0; right: 0; top: 30px; height: 3px; background: linear-gradient(to right, #b98c46, #8a6a3e 45%, #3d6076);"></div>
+      <div style="position: absolute; top: 22px; left: {{ thumbPct }}; width: 19px; height: 19px; margin-left: -9.5px; border-radius: 50%; background: #f7f1e4; border: 3px solid #2a231a; box-shadow: 0 1px 4px rgba(0,0,0,.28); transition: left .35s cubic-bezier(.4,0,.2,1); pointer-events: none;"></div>
+      <div style="display: flex; align-items: flex-start;">
+        <sc-for list="{{ ticks }}" as="tk" hint-placeholder-count="9">
+          <div onClick="{{ tk.pick }}" style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 2px;">
+            <span style="width: 1px; height: 14px; background: {{ tk.tickColor }};"></span>
+            <span style="font-family: 'Archivo Narrow', 'Frank Ruhl Libre', 'Noto Naskh Arabic', sans-serif; font-size: 10px; letter-spacing: .02em; text-align: center; line-height: 1.2; color: {{ tk.color }}; font-weight: {{ tk.weight }}; text-transform: uppercase;">{{ tk.label }}</span>
+            <span style="font-family: 'Archivo Narrow', sans-serif; font-size: 10px; letter-spacing: .04em; text-align: center; color: {{ tk.dateColor }};">{{ tk.date }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1180}}">
+const LAT0 = 31.7855, LON0 = 35.2238, MLAT = 110900, MLON = 94650;
+const VW = 1646, VH = 1852;
+
+const P = {
+  ottoman: [[31.78115,35.22700],[31.78135,35.23000],[31.78228,35.23271],[31.78243,35.23670],[31.78130,35.23697],[31.77918,35.23723],[31.77596,35.23731],[31.77477,35.23394],[31.77415,35.23190],[31.77374,35.22910],[31.77390,35.22795],[31.77664,35.22740],[31.77930,35.22690]],
+  platform: [[31.77567,35.23407],[31.77596,35.23731],[31.78020,35.23724],[31.78007,35.23400]],
+  jebusite: [[31.77470,35.23485],[31.77445,35.23600],[31.77350,35.23648],[31.77250,35.23628],[31.77170,35.23600],[31.77155,35.23520],[31.77250,35.23500],[31.77370,35.23478]],
+  cityOfDavid: [[31.77480,35.23480],[31.77450,35.23608],[31.77340,35.23655],[31.77230,35.23630],[31.77120,35.23608],[31.77030,35.23575],[31.77000,35.23495],[31.77120,35.23488],[31.77250,35.23495],[31.77380,35.23470]],
+  westernHillIron: [[31.77600,35.22790],[31.77568,35.23010],[31.77510,35.23230],[31.77450,35.23330],[31.77330,35.23330],[31.77230,35.23260],[31.77160,35.23100],[31.77150,35.22950],[31.77190,35.22820],[31.77300,35.22760],[31.77450,35.22750]],
+  broadWall: [[31.77600,35.22790],[31.77582,35.22930],[31.77568,35.23010],[31.77540,35.23120]],
+  solomonic: [[31.77720,35.23410],[31.77730,35.23640],[31.78000,35.23632],[31.77990,35.23404]],
+  ophel: [[31.77480,35.23480],[31.77567,35.23470],[31.77596,35.23731],[31.77450,35.23608]],
+  secondTemple: [[31.77650,35.22755],[31.77690,35.23010],[31.77700,35.23250],[31.77700,35.23400],[31.78007,35.23400],[31.78020,35.23724],[31.77596,35.23731],[31.77480,35.23660],[31.77380,35.23670],[31.77260,35.23640],[31.77130,35.23615],[31.77030,35.23575],[31.76990,35.23470],[31.77060,35.23350],[31.77130,35.23180],[31.77150,35.22990],[31.77190,35.22820],[31.77300,35.22750],[31.77480,35.22735]],
+  secondWall: [[31.77690,35.22990],[31.77790,35.23040],[31.77880,35.23150],[31.77970,35.23300],[31.78040,35.23450],[31.78060,35.23520]],
+  thirdWall: [[31.77650,35.22755],[31.78300,35.22715],[31.78560,35.22900],[31.78600,35.23350],[31.78450,35.23700],[31.78243,35.23670]],
+  temple: [[31.77762,35.23440],[31.77772,35.23575],[31.77852,35.23570],[31.77842,35.23435]],
+  royalStoa: [[31.77600,35.23420],[31.77610,35.23720],[31.77650,35.23718],[31.77640,35.23418]],
+  antonia: [[31.78010,35.23480],[31.78016,35.23600],[31.78090,35.23596],[31.78084,35.23476]],
+  citadel: [[31.77585,35.22752],[31.77592,35.22822],[31.77655,35.22816],[31.77648,35.22746]],
+  ironAgeCity: [[31.77600,35.22790],[31.77582,35.22930],[31.77568,35.23010],[31.77556,35.23140],[31.77560,35.23290],[31.77567,35.23407],[31.77990,35.23404],[31.78000,35.23632],[31.77730,35.23644],[31.77620,35.23652],[31.77480,35.23608],[31.77450,35.23612],[31.77340,35.23655],[31.77230,35.23630],[31.77120,35.23608],[31.77030,35.23575],[31.77000,35.23495],[31.77060,35.23380],[31.77130,35.23180],[31.77150,35.22990],[31.77190,35.22820],[31.77300,35.22760],[31.77450,35.22750],[31.77530,35.22770]],
+  nehemiah: [[31.77470,35.23478],[31.77420,35.23545],[31.77340,35.23572],[31.77250,35.23568],[31.77160,35.23548],[31.77110,35.23528]],
+  umayyad: [[31.77505,35.23425],[31.77522,35.23600],[31.77560,35.23594],[31.77543,35.23419]],
+  tunnel: [[31.77300,35.23600],[31.77280,35.23545],[31.77245,35.23560],[31.77215,35.23520],[31.77170,35.23548],[31.77120,35.23520],[31.77075,35.23548],[31.77030,35.23540]],
+  cardoW: [[31.78120,35.23000],[31.78000,35.23020],[31.77850,35.23040],[31.77700,35.23058],[31.77560,35.23068]],
+  cardoWext: [[31.77560,35.23068],[31.77470,35.23078]],
+  cardoE: [[31.78095,35.23055],[31.77960,35.23140],[31.77830,35.23225],[31.77720,35.23295],[31.77640,35.23340],[31.77560,35.23372]],
+  decumanus: [[31.77664,35.22745],[31.77680,35.22900],[31.77690,35.23060],[31.77698,35.23250],[31.77700,35.23400]],
+  decumanusN: [[31.78048,35.22850],[31.78060,35.23010],[31.78075,35.23230],[31.78092,35.23430],[31.78100,35.23555]],
+  nea: [[31.77410,35.23048],[31.77418,35.23130],[31.77480,35.23124],[31.77472,35.23042]],
+  constantinian: [[31.77808,35.22930],[31.77816,35.23050],[31.77872,35.23044],[31.77864,35.22924]],
+  sepulchre: [[31.77812,35.22945],[31.77818,35.23008],[31.77868,35.23002],[31.77862,35.22939]],
+  dome: [[31.77772,35.23486],[31.77772,35.23546],[31.77832,35.23546],[31.77832,35.23486]],
+  aqsa: [[31.77592,35.23552],[31.77596,35.23604],[31.77648,35.23600],[31.77644,35.23548]],
+  quarry: [[31.77800,35.22900],[31.77812,35.23020],[31.77900,35.23010],[31.77888,35.22890]],
+  bethesda: [[31.78118,35.23562],[31.78124,35.23628],[31.78176,35.23622],[31.78170,35.23556]],
+  siloam: [[31.77000,35.23508],[31.77006,35.23562],[31.77046,35.23556],[31.77040,35.23502]],
+  wwPlaza: [[31.77620,35.23330],[31.77700,35.23325],[31.77706,35.23400],[31.77612,35.23404]],
+  jewishQ: [[31.77420,35.23130],[31.77560,35.23100],[31.77690,35.23150],[31.77700,35.23330],[31.77490,35.23370],[31.77410,35.23200]],
+  muslimQ: [[31.77720,35.23070],[31.78100,35.23020],[31.78230,35.23280],[31.78120,35.23690],[31.77720,35.23400]],
+  christianQ: [[31.77700,35.22740],[31.77940,35.22698],[31.78110,35.22712],[31.78120,35.23000],[31.77720,35.23060]],
+  armenianQ: [[31.77390,35.22800],[31.77660,35.22760],[31.77690,35.23010],[31.77420,35.23120]],
+  streets: [
+    [[31.77760,35.22868],[31.77860,35.22878],[31.77950,35.22888],[31.78010,35.22898]],
+    [[31.77900,35.22790],[31.77948,35.22858],[31.77988,35.22928]],
+    [[31.77640,35.22790],[31.77530,35.22815],[31.77440,35.22860],[31.77400,35.22932]],
+    [[31.77690,35.23125],[31.77600,35.23148],[31.77510,35.23174],[31.77452,35.23208]],
+    [[31.77700,35.22996],[31.77620,35.23004]],
+    [[31.77700,35.23021],[31.77620,35.23029]],
+    [[31.77700,35.23046],[31.77620,35.23054]],
+    [[31.77900,35.23262],[31.77902,35.23392]],
+    [[31.77962,35.23232],[31.77964,35.23378]],
+    [[31.77560,35.23372],[31.77505,35.23386],[31.77477,35.23394]],
+    [[31.78062,35.23108],[31.77992,35.23078],[31.77930,35.23020],[31.77880,35.22992]]
+  ],
+  valleys: {
+    kidron: [[31.78420,35.23830],[31.78100,35.23805],[31.77800,35.23795],[31.77500,35.23768],[31.77200,35.23705],[31.76980,35.23605],[31.76900,35.23520]],
+    hinnom: [[31.77520,35.22600],[31.77300,35.22650],[31.77150,35.22800],[31.77000,35.23000],[31.76920,35.23250],[31.76900,35.23480]],
+    tyropoeon: [[31.78200,35.23050],[31.78000,35.23125],[31.77800,35.23235],[31.77650,35.23320],[31.77500,35.23400],[31.77300,35.23450],[31.77100,35.23480],[31.76980,35.23520]]
+  }
+};
+
+const T = {
+  en: { kicker: "Jerusalem — comparative survey", title: "The city under the city", sub: "One map, eleven layers. Slide through time to see exactly where the Jerusalem of each era sits beneath — and outside — the walls you walk today.", fit: "FIT", modern: "Today's city", valleys: "Valleys", legend: "Legend", north: "North ↑", timeline: "Slide through time", look: "What you can still see on the ground", sectionKicker: "Why it doesn't look right", sectionTitle: "Cross-section, west to east — the buried valley", sectionBody: "The single biggest reason the Old City confuses people is vertical. Jerusalem was built on two ridges split by a deep ravine, the Tyropoeon. Twenty centuries of rubble, ruin and rebuilding filled that ravine in. Where a first-century pilgrim climbed monumental stairs out of a valley, you now stroll across a flat plaza — the valley is still there, twelve metres under your shoes.", sources: "How to read this: solid warm lines are walls and structures whose course is established by excavation. Dashed red lines are reconstructions where scholars genuinely disagree — chiefly the Second and Third Walls of the Second Temple period. The cool blue line is the standing Ottoman wall of 1538 and today's street plan, drawn to the same scale and position. Reconstruction follows the mainstream consensus (Avigad's Jewish Quarter excavations, Mazar's Temple Mount and Ophel excavations, Reich & Shukron at the City of David, and the Madaba mosaic map for the Byzantine city). Street lines show only the principal named streets of the Old City — the Via Dolorosa, the two cardines (Khan el-Zeit and El-Wad), David and Chain Streets, Christian Quarter Road, St Francis Street, the Armenian Patriarchate Road, Jewish Quarter Road, the triple souq of the Muristan and the Bab al-Nazir and Bab al-Hadid approaches to the Haram. The hundreds of minor lanes are deliberately omitted rather than approximated. This is a schematic survey drawn to true geographic position, not a traced satellite image.", eraOf: "Layer", of: "of" },
+  he: { kicker: "ירושלים — סקר השוואתי", title: "העיר שמתחת לעיר", sub: "מפה אחת, אחת־עשרה שכבות. הזיזו את הסרגל בזמן וראו בדיוק היכן שוכנת ירושלים של כל תקופה מתחת לחומות שאתם מהלכים בהן היום — ומחוצה להן.", fit: "התאמה", modern: "העיר של היום", valleys: "עמקים", legend: "מפתח", north: "צפון ↑", timeline: "הזזה בזמן", look: "מה עוד אפשר לראות בשטח", sectionKicker: "למה זה לא מסתדר", sectionTitle: "חתך רוחב, ממערב למזרח — העמק הקבור", sectionBody: "הסיבה הגדולה לבלבול היא אנכית. ירושלים נבנתה על שני רכסים שביניהם ערוץ עמוק — עמק גיא־התירופיון. עשרים מאות של הרס, פסולת ובנייה מחדש מילאו את הערוץ. במקום שבו עולה־רגל מן המאה הראשונה טיפס במדרגות מונומנטליות מתוך עמק, אתם חוצים היום רחבה שטוחה — והעמק עדיין שם, שנים־עשר מטר מתחת לנעליכם.", sources: "כיצד לקרוא את המפה: קווים חמים ורצופים הם חומות ומבנים שמסלולם נקבע בחפירות. קווים אדומים מקוטעים הם שחזורים שיש עליהם מחלוקת אמיתית בין החוקרים — בעיקר החומה השנייה והחומה השלישית מימי הבית השני. הקו הכחול הקר הוא חומת השלטון העות'מאני משנת 1538 ומערך הרחובות של היום, במידה ובמקום זהים. השחזור נסמך על הקונצנזוס המקובל (חפירות אביגד ברובע היהודי, חפירות מזר בהר הבית ובעופל, רייך ושוקרון בעיר דוד, ומפת מידבא לעיר הביזנטית). קווי הרחובות מציגים רק את הרחובות הראשיים הנקובים בשם: ויה דולורוזה, שני רחובות הקרדו (חאן א־זית ואל־ואד), רחוב דוד ורחוב השלשלת, רחוב הרובע הנוצרי, רחוב סנט פרנציסקוס, רחוב הפטריארכיה הארמנית, רחוב הרובע היהודי, שלושת רחובות השוק שבמוריסטן, ורחובות באב א־נאזר ובאב אל־חדיד העולים אל הַחרם. מאות הסמטאות הקטנות הושמטו במתכוון ולא שורטטו בקירוב. זהו סקר סכמטי המשורטט במקום גיאוגרפי נכון, ולא העתקה מתצלום לוויין.", eraOf: "שכבה", of: "מתוך" },
+  ar: { kicker: "القدس — مسح مقارن", title: "المدينة تحت المدينة", sub: "خريطة واحدة وإحدى عشرة طبقة. حرّك المؤشر عبر الزمن لترى بالضبط أين تقع قدس كل عصر تحت الأسوار التي تسير داخلها اليوم — وخارجها.", fit: "ملاءمة", modern: "مدينة اليوم", valleys: "الأودية", legend: "المفتاح", north: "الشمال ↑", timeline: "التنقّل عبر الزمن", look: "ما يمكن رؤيته على الأرض اليوم", sectionKicker: "لماذا لا تتطابق الصورة", sectionTitle: "مقطع عرضي من الغرب إلى الشرق — الوادي المدفون", sectionBody: "السبب الأكبر للالتباس رأسي لا أفقي. بُنيت القدس على تلّتين يفصل بينهما وادٍ عميق هو وادي التيروبيون. عشرون قرناً من الأنقاض والخراب وإعادة البناء ردمت ذلك الوادي. وحيث كان حاجّ القرن الأول يصعد سلالم ضخمة خارجاً من الوادي، تعبر أنت اليوم ساحة مستوية — والوادي ما زال هناك، على عمق اثني عشر متراً تحت قدميك.", sources: "كيف تقرأ الخريطة: الخطوط الدافئة المتصلة أسوار ومبانٍ ثبت مسارها بالتنقيب. الخطوط الحمراء المتقطعة إعادات بناء يختلف فيها الباحثون فعلاً — وأهمها السور الثاني والسور الثالث من العهد الهيكلي الثاني. الخط الأزرق البارد هو السور العثماني القائم من عام ١٥٣٨ ومخطط شوارع اليوم، بالمقياس والموضع ذاتهما. تتبع إعادة البناء الإجماع السائد (تنقيبات أفيغاد في حارة اليهود، وتنقيبات مازار في الحرم والعوفل، ورايش وشكرون في تلة سلوان، وخريطة مادبا للمدينة البيزنطية). خطوط الشوارع تُظهر الشوارع الرئيسية المسمّاة فقط: طريق الآلام، والكاردوان (خان الزيت والواد)، وشارع داود وطريق السلسلة، وشارع حارة النصارى، وشارع القديس فرنسيس، وشارع دير الأرمن، وشارع حارة اليهود، وأسواق المورستان الثلاثة، وطريقا باب الناظر وباب الحديد إلى الحرم. أما مئات الأزقة الصغيرة فقد أُغفلت عن قصد بدلاً من تقديرها. هذا مسح تخطيطي مرسوم على المواضع الجغرافية الصحيحة، وليس نسخاً عن صورة أقمار صناعية.", eraOf: "طبقة", of: "من" },
+  es: { kicker: "Jerusalén — estudio comparado", title: "La ciudad bajo la ciudad", sub: "Un mapa, once capas. Deslice el tiempo para ver exactamente dónde queda la Jerusalén de cada época debajo — y fuera — de las murallas por las que hoy camina.", fit: "AJUSTAR", modern: "Ciudad actual", valleys: "Valles", legend: "Leyenda", north: "Norte ↑", timeline: "Deslice el tiempo", look: "Lo que aún se ve en el terreno", sectionKicker: "Por qué no encaja", sectionTitle: "Corte oeste–este: el valle enterrado", sectionBody: "La mayor causa de confusión es vertical. Jerusalén se levantó sobre dos colinas separadas por un barranco profundo, el Tiropeón. Veinte siglos de escombros, destrucción y reconstrucción lo rellenaron. Donde un peregrino del siglo I subía escalinatas monumentales para salir del valle, usted hoy cruza una plaza plana: el valle sigue ahí, doce metros bajo sus zapatos.", sources: "Cómo leerlo: las líneas cálidas continuas son murallas y estructuras cuyo trazado está establecido por excavación. Las líneas rojas discontinuas son reconstrucciones donde los especialistas discrepan de verdad, sobre todo la Segunda y la Tercera Muralla del período del Segundo Templo. La línea azul fría es la muralla otomana de 1538, aún en pie, y el trazado actual de calles, a la misma escala y posición. La reconstrucción sigue el consenso mayoritario (excavaciones de Avigad en el Barrio Judío, de Mazar en el Monte del Templo y el Ofel, de Reich y Shukron en la Ciudad de David, y el mapa mosaico de Madaba para la ciudad bizantina). Las líneas de calle muestran solo las vías principales con nombre: Vía Dolorosa, los dos cardos (Khan el-Zeit y El-Wad), las calles David y de la Cadena, la calle del Barrio Cristiano, San Francisco, la del Patriarcado Armenio, la del Barrio Judío, el triple souq del Muristán y los accesos de Bab al-Nazir y Bab al-Hadid al Haram. Los cientos de callejones menores se omiten deliberadamente en lugar de aproximarlos. Es un levantamiento esquemático dibujado en posición geográfica real, no un calco de imagen satelital.", eraOf: "Capa", of: "de" }
+};
+
+const LEG = {
+  en: [["solid #b98c46 3px","Excavated / established ancient line"],["dashed #a8452f 3px","Reconstruction — scholars disagree"],["solid #3d6076 3px","Standing Ottoman wall (1538) & today's streets"],["dashed #a8906a 3px","Valley floor (mostly buried today)"],["solid #4a7f86 3px","Water: springs, pools, Hezekiah's Tunnel"]],
+  he: [["solid #b98c46 3px","קו קדום מבוסס על חפירות"],["dashed #a8452f 3px","שחזור — יש מחלוקת בין החוקרים"],["solid #3d6076 3px","חומה עות'מאנית קיימת (1538) ורחובות היום"],["dashed #a8906a 3px","קרקעית העמק (קבורה בעיקרה היום)"],["solid #4a7f86 3px","מים: מעיינות, בריכות, נקבת חזקיהו"]],
+  ar: [["solid #b98c46 3px","خط أثري مؤكَّد بالتنقيب"],["dashed #a8452f 3px","إعادة بناء — خلاف بين الباحثين"],["solid #3d6076 3px","السور العثماني القائم (١٥٣٨) وشوارع اليوم"],["dashed #a8906a 3px","قاع الوادي (مدفون في معظمه اليوم)"],["solid #4a7f86 3px","المياه: عيون وبرك ونفق حزقيا"]],
+  es: [["solid #b98c46 3px","Trazado antiguo confirmado por excavación"],["dashed #a8452f 3px","Reconstrucción: hay desacuerdo académico"],["solid #3d6076 3px","Muralla otomana en pie (1538) y calles de hoy"],["dashed #a8906a 3px","Fondo del valle (hoy casi todo enterrado)"],["solid #4a7f86 3px","Agua: manantiales, piscinas, túnel de Ezequías"]]
+};
+
+const SECKEYS = {
+  en: [["dashed #8a6a3e 3px","Bedrock and the first-century surface"],["solid #3d6076 3px","The surface you walk on today"],["solid #b98c46 5px","Herod's retaining walls — the same stones, top to bottom"]],
+  he: [["dashed #8a6a3e 3px","סלע האם ופני השטח במאה הראשונה"],["solid #3d6076 3px","פני השטח שאתם הולכים עליהם היום"],["solid #b98c46 5px","הכתלים התומכים של הורדוס — אותן אבנים, מלמעלה עד למטה"]],
+  ar: [["dashed #8a6a3e 3px","الصخر الأصلي وسطح القرن الأول"],["solid #3d6076 3px","السطح الذي تسير عليه اليوم"],["solid #b98c46 5px","جدران هيرودس الاستنادية — الحجارة ذاتها من الأعلى إلى الأسفل"]],
+  es: [["dashed #8a6a3e 3px","Roca madre y superficie del siglo I"],["solid #3d6076 3px","La superficie por la que hoy camina"],["solid #b98c46 5px","Muros de contención de Herodes: las mismas piedras, de arriba abajo"]]
+};
+
+const CS = [
+  { x: 58, y: 182, a: "middle", fs: 15, w: 600, c: "#4a4132", t: { en: "Jaffa Gate", he: "שער יפו", ar: "باب الخليل", es: "Puerta de Jafa" } },
+  { x: 225, y: 108, a: "middle", fs: 17, w: 600, c: "#8a5a2b", t: { en: "Upper City 775 m", he: "העיר העליונה 775 מ'", ar: "المدينة العليا ٧٧٥ م", es: "Ciudad Alta 775 m" } },
+  { x: 452, y: 240, a: "middle", fs: 16, w: 700, c: "#a8452f", t: { en: "Tyropoeon Valley", he: "עמק התירופיון", ar: "وادي التيروبيون", es: "Valle del Tiropeón" } },
+  { x: 455, y: 298, a: "middle", fs: 14, w: 400, c: "#6d3a2c", t: { en: "≈ 12 m of fill", he: "כ־12 מ' של מילוי", ar: "نحو ١٢ م من الردم", es: "≈ 12 m de relleno" } },
+  { x: 512, y: 152, a: "end", fs: 15, w: 600, c: "#8a5a2b", t: { en: "Western Wall", he: "הכותל המערבי", ar: "حائط البراق / الحائط الغربي", es: "Muro Occidental" } },
+  { x: 700, y: 132, a: "middle", fs: 17, w: 600, c: "#8a5a2b", t: { en: "Temple Mount 740 m", he: "הר הבית 740 מ'", ar: "الحرم 740 م", es: "Monte del Templo 740 m" } },
+  { x: 1005, y: 318, a: "middle", fs: 16, w: 600, c: "#4a4132", t: { en: "Kidron 625 m", he: "קדרון 625 מ'", ar: "قدرون ٦٢٥ م", es: "Cedrón 625 m" } },
+  { x: 1215, y: 112, a: "end", fs: 15, w: 600, c: "#4a4132", t: { en: "Mount of Olives →", he: "הר הזיתים →", ar: "جبل الزيتون →", es: "Monte de los Olivos →" } },
+  { x: 26, y: 340, a: "start", fs: 12, w: 400, c: "#8a7550", t: { en: "vertical exaggeration ×1.25", he: "הגדלה אנכית ×1.25", ar: "تكبير رأسي ×١٫٢٥", es: "exageración vertical ×1,25" } }
+];
+
+const ERAS = [
+  { key: "canaan", tick: { en: "Canaanite", he: "כנענית", ar: "كنعانية", es: "Cananea" }, date: { en: "1800 BCE", he: "1800 לפנה\"ס", ar: "١٨٠٠ ق.م", es: "1800 a.C." },
+    title: { en: "Canaanite Jerusalem — the City of David ridge", he: "ירושלים הכנענית — רכס עיר דוד", ar: "القدس الكنعانية — تلّة مدينة داود", es: "Jerusalén cananea — la colina de la Ciudad de David" },
+    years: { en: "c. 1800 – 1000 BCE", he: "בערך 1800–1000 לפנה\"ס", ar: "نحو ١٨٠٠–١٠٠٠ ق.م", es: "c. 1800 – 1000 a.C." },
+    body: { en: "Jerusalem begins entirely outside today's walls. The whole city — about five hectares, smaller than the Temple Mount platform — sits on a narrow spur running south from the Mount, chosen for one reason: the Gihon Spring, the only permanent water in the region. Everything inside the Ottoman gates you walk through today is bare hillside and quarry.", he: "ירושלים מתחילה כולה מחוץ לחומות של היום. כל העיר — כחמישה הקטרים, פחות משטח רחבת הר הבית — יושבת על רכס צר היורד דרומה מן ההר, ונבחרה מסיבה אחת: מעיין הגיחון, מקור המים הקבוע היחיד באזור. כל מה שבתוך השערים העות'מאניים שאתם עוברים בהם היום הוא מדרון חשוף ומחצבות.", ar: "بدأت القدس بكاملها خارج أسوار اليوم. المدينة كلها — نحو خمسة هكتارات، أصغر من ساحة الحرم — كانت على تلّة ضيّقة تنحدر جنوباً من الحرم، واختيرت لسبب واحد: عين الجيحون، مصدر الماء الدائم الوحيد في المنطقة. أما كل ما هو داخل الأبواب العثمانية التي تمرّ بها اليوم فكان منحدراً عارياً ومقالع حجر.", es: "Jerusalén empieza enteramente fuera de las murallas actuales. Toda la ciudad —unas cinco hectáreas, menos que la explanada del Templo— ocupa un espolón estrecho que baja hacia el sur, elegido por una razón: el manantial de Guijón, la única agua permanente de la región. Todo lo que hoy queda dentro de las puertas otomanas era ladera desnuda y cantera." },
+    look: { en: ["The Gihon Spring and the Middle Bronze spring tower, reached by stairs below the City of David visitor centre.","Warren's Shaft — the vertical shaft that let the city draw water without leaving the walls.","Massive Canaanite fortification blocks, some over three metres thick, on the east slope above the Kidron."], he: ["מעיין הגיחון ומגדל המעיין מתקופת הברונזה התיכונה, שאליהם יורדים במדרגות מתחת למרכז המבקרים בעיר דוד.","פיר וורן — הפיר האנכי שאיפשר לעיר לשאוב מים בלי לצאת מן החומות.","גושי ביצור כנעניים עצומים, חלקם בעובי של יותר משלושה מטרים, במדרון המזרחי מעל הקדרון."], ar: ["عين الجيحون وبرج العين من العصر البرونزي المتوسط، ويُنزل إليهما بسلالم تحت مركز الزوار في تلّة سلوان.","بئر وارن — البئر الرأسية التي مكّنت المدينة من سحب الماء دون الخروج من الأسوار.","كتل تحصين كنعانية ضخمة، بعضها بسماكة تتجاوز ثلاثة أمتار، على المنحدر الشرقي فوق وادي قدرون."], es: ["El manantial de Guijón y la torre del manantial del Bronce Medio, a los que se baja por escaleras bajo el centro de visitantes.","El pozo de Warren: el pozo vertical que permitía sacar agua sin salir de las murallas.","Bloques de fortificación cananeos enormes, algunos de más de tres metros de grosor, en la ladera oriental sobre el Cedrón."] } },
+
+  { key: "first", tick: { en: "First Temple", he: "בית ראשון", ar: "الهيكل الأول", es: "Primer Templo" }, date: { en: "1000–586 BCE", he: "1000–586 לפנה\"ס", ar: "١٠٠٠–٥٨٦ ق.م", es: "1000–586 a.C." },
+    title: { en: "First Temple period — the city climbs the western hill", he: "תקופת הבית הראשון — העיר עולה אל הגבעה המערבית", ar: "عهد الهيكل الأول — تتوسّع المدينة إلى التلة الغربية", es: "Primer Templo: la ciudad sube a la colina occidental" },
+    years: { en: "c. 1000 – 586 BCE", he: "בערך 1000–586 לפנה\"ס", ar: "نحو ١٠٠٠–٥٨٦ ق.م", es: "c. 1000 – 586 a.C." },
+    body: { en: "David takes the ridge; Solomon builds the Temple on the rock to the north, on ground that is still just outside the town. Two centuries later, refugees from the fallen northern kingdom swell the city onto the Western Hill, and Hezekiah throws a seven-metre-thick wall around it — the Broad Wall you can stand beside in the Jewish Quarter. The result is one continuous walled city for the first time: the new Western Hill quarter, the old City of David ridge and the Temple platform all inside a single circuit, with the wall dropping across the Tyropoeon Valley at the south end. He also cuts a 533-metre tunnel through solid rock to bring the Gihon's water safely inside, to the Pool of Siloam.", he: "דוד כובש את הרכס; שלמה בונה את המקדש על הסלע שמצפון, בשטח שעדיין נמצא מחוץ לעיר. מאתיים שנה אחר כך גלי פליטים מממלכת ישראל שנפלה מרחיבים את העיר אל הגבעה המערבית, וחזקיהו מקיף אותה בחומה בעובי שבעה מטרים — היא החומה הרחבה שאתם יכולים לעמוד לידה ברובע היהודי. הוא גם חוצב נקבה באורך 533 מטר כדי להוליך את מי הגיחון בבטחה אל תוך העיר, לבריכת השילוח.", ar: "استولى داود على التلّة، وبنى سليمان الهيكل على الصخرة إلى الشمال، في أرض كانت لا تزال خارج البلدة. وبعد قرنين تدفّق لاجئو المملكة الشمالية الساقطة فامتدّت المدينة إلى التلة الغربية، فأحاطها حزقيا بسور بسماكة سبعة أمتار — هو «السور العريض» الذي يمكنك الوقوف إلى جانبه في حارة اليهود. وحفر كذلك نفقاً بطول ٥٣٣ متراً في الصخر ليجرّ ماء الجيحون بأمان إلى داخل المدينة، إلى بركة سلوان.", es: "David toma la colina; Salomón construye el Templo sobre la roca al norte, en terreno todavía exterior a la ciudad. Dos siglos después, los refugiados del reino del norte desbordan la ciudad hacia la Colina Occidental, y Ezequías la rodea con una muralla de siete metros de grosor: el Muro Ancho junto al que puede pararse en el Barrio Judío. También excava un túnel de 533 metros en la roca para llevar el agua del Guijón a salvo dentro, a la piscina de Siloé." },
+    look: { en: ["The Broad Wall, exposed and standing in the Jewish Quarter — Hezekiah's answer to Sennacherib.","Hezekiah's Tunnel: you can wade its full length from the Gihon to the Pool of Siloam.","The Stepped Stone Structure on the east slope, the largest Iron Age retaining work in the country."], he: ["החומה הרחבה, חשופה ועומדת ברובע היהודי — תשובתו של חזקיהו לסנחריב.","נקבת חזקיהו: אפשר לעבור בה במים לכל אורכה, מן הגיחון עד בריכת השילוח.","המבנה המדורג במדרון המזרחי, מבנה התמך הגדול ביותר בארץ מתקופת הברזל."], ar: ["«السور العريض» المكشوف والقائم في حارة اليهود — جواب حزقيا على سنحاريب.","نفق حزقيا: يمكنك خوضه بطوله كاملاً من الجيحون إلى بركة سلوان.","البناء المدرّج الحجري على المنحدر الشرقي، أكبر عمل استنادي من العصر الحديدي في البلاد."], es: ["El Muro Ancho, expuesto y en pie en el Barrio Judío: la respuesta de Ezequías a Senaquerib.","El túnel de Ezequías: se puede vadear entero, del Guijón a la piscina de Siloé.","La Estructura Escalonada de Piedra en la ladera este, la mayor obra de contención de la Edad del Hierro del país."] },
+    disputed: { en: "The exact northern line of the western-hill wall, and the size of Solomon's platform, are not fixed by excavation — both are drawn here as best estimates.", he: "הקו הצפוני המדויק של חומת הגבעה המערבית וגודלה של רחבת שלמה אינם מבוססים על חפירות — שניהם משורטטים כאן כהערכה בלבד.", ar: "الخط الشمالي الدقيق لسور التلة الغربية وحجم ساحة سليمان غير محدّدين بالتنقيب، وقد رُسما هنا كتقدير أوّلي.", es: "La línea norte exacta de la muralla de la colina occidental y el tamaño de la explanada salomónica no están fijados por excavación: aquí son estimaciones." } },
+
+  { key: "return", tick: { en: "Return", he: "שיבת ציון", ar: "العودة", es: "Retorno" }, date: { en: "538–332 BCE", he: "538–332 לפנה\"ס", ar: "٥٣٨–٣٣٢ ق.م", es: "538–332 a.C." },
+    title: { en: "Return from exile — the small city of Ezra and Nehemiah", he: "שיבת ציון — העיר הקטנה של עזרא ונחמיה", ar: "العودة من المنفى — مدينة عزرا ونحميا الصغيرة", es: "El retorno del exilio: la pequeña ciudad de Esdras y Nehemías" },
+    years: { en: "538 – 332 BCE", he: "538–332 לפנה\"ס", ar: "٥٣٨ – ٣٣٢ ق.م", es: "538 – 332 a.C." },
+    body: { en: "The exiles come back to a city a fraction of its former size. The Western Hill and Mount Zion are abandoned and stay in ruins for the next four centuries; Jerusalem contracts back onto the old ridge and the Temple platform, with perhaps a few thousand people. Zerubbabel's modest Second Temple rises on the same rock in 516 BCE — no grand esplanade yet. Nehemiah rebuilds the wall in fifty-two days in 445 BCE, and because the Iron Age wall down the eastern slope had collapsed into rubble he builds his higher up the ridge. This is the one era where the city gets smaller at the moment of its restoration.", he: "הגולים חוזרים אל עיר שהיא שבריר מגודלה הקודם. הגבעה המערבית והר ציון נעזבים ונשארים בחורבנם ארבע מאות שנה; ירושלים מצטמצמת בחזרה אל הרכס הקדום ואל רחבת המקדש, ובה אולי אלפים בודדים של תושבים. בית שני צנוע של זרובבל קם על אותו הסלע בשנת 516 לפנה\"ס — בלי רחבה מפוארת. נחמיה בונה את החומה בחמישים ושניים יום בשנת 445 לפנה\"ס, ומכיוון שחומת תקופת הברזל שבמדרון המזרחי התמוטטה לגל אבנים, הוא בונה את שלו גבוה יותר על הרכס. זו התקופה האחת שבה העיר מתכנסת ומתקטנת דווקא ברגע שיקומה.", ar: "يعود المنفيّون إلى مدينة صارت جزءاً صغيراً من حجمها السابق. فقد هُجرت التلة الغربية وجبل صهيون وبقيتا خراباً أربعة قرون، وتقلّصت القدس إلى التلّة القديمة وساحة الهيكل، وفيها بضعة آلاف من السكان. وقام هيكل زربابل الثاني المتواضع على الصخرة ذاتها عام ٥١٦ ق.م — دون ساحة فخمة بعد. وأعاد نحميا بناء السور في اثنين وخمسين يوماً عام ٤٤٥ ق.م، ولأن سور العصر الحديدي على المنحدر الشرقي كان قد انهار أنقاضاً، بنى سوره أعلى على التلّة. وهذا هو العصر الوحيد الذي تصغر فيه المدينة في لحظة نهضتها.", es: "Los desterrados vuelven a una ciudad reducida a una fracción de lo que fue. La Colina Occidental y el Monte Sión quedan abandonados y en ruinas los cuatro siglos siguientes; Jerusalén se contrae de nuevo a la vieja colina y la explanada del Templo, con unos pocos miles de habitantes. El modesto Segundo Templo de Zorobabel se levanta sobre la misma roca en 516 a.C., aún sin gran esplanada. Nehemías reconstruye la muralla en cincuenta y dos días en 445 a.C., y como el muro de la Edad del Hierro de la ladera oriental se había derrumbado en escombros, construye el suyo más arriba en la colina. Es la única época en que la ciudad se hace más pequeña justo al restaurarse." },
+    look: { en: ["The wall segment at the top of the City of David's eastern slope, identified by its excavator as Nehemiah's.","The collapsed Iron Age terraces below it — the rubble Nehemiah's builders could not clear (Nehemiah 4:10).","Nothing at all on the Western Hill: four centuries of empty ground is itself the evidence."], he: ["קטע החומה בראש המדרון המזרחי של עיר דוד, שהחופרת זיהתה כחומת נחמיה.","המדרגות ההרוסות מתקופת הברזל שמתחתיו — גל האבנים שבוני נחמיה לא הצליחו לפנות (נחמיה ד', י').","דבר לא נותר על הגבעה המערבית: ארבע מאות שנים של קרקע ריקה הן עצמן העדות."], ar: ["مقطع السور في أعلى المنحدر الشرقي لتلّة مدينة داود، الذي نسبته الحافرة إلى نحميا.","المصاطب المنهارة من العصر الحديدي تحته — الأنقاض التي لم يستطع بنّاؤو نحميا إزالتها (نحميا ٤:١٠).","لا شيء على التلة الغربية: أربعة قرون من الأرض الخالية هي الدليل بذاته."], es: ["El tramo de muralla en lo alto de la ladera oriental de la Ciudad de David, atribuido por su excavadora a Nehemías.","Las terrazas derrumbadas de la Edad del Hierro debajo: los escombros que los constructores de Nehemías no pudieron retirar (Nehemías 4:10).","Nada en la Colina Occidental: cuatro siglos de terreno vacío son en sí la prueba."] },
+    disputed: { en: "The attribution of that wall segment to Nehemiah is contested, and the size of the post-exilic Temple platform is simply unknown — both are drawn here as best estimates.", he: "ייחוס אותו קטע חומה לנחמיה נתון בוויכוח, וגודלה של רחבת המקדש שלאחר הגלות אינו ידוע — שניהם משורטטים כאן כהערכה.", ar: "نسبة ذلك المقطع إلى نحميا موضع خلاف، وحجم ساحة الهيكل بعد المنفى غير معروف أصلاً — وقد رُسما هنا كتقدير.", es: "La atribución de ese tramo a Nehemías se discute, y el tamaño de la explanada posexílica es simplemente desconocido: aquí son estimaciones." } },
+
+  { key: "herod", tick: { en: "Jesus' time", he: "ימי ישוע", ar: "زمن المسيح", es: "Tiempo de Jesús" }, date: { en: "37 BCE–70 CE", he: "37 לפנה\"ס–70 לספירה", ar: "٣٧ ق.م–٧٠ م", es: "37 a.C.–70 d.C." },
+    title: { en: "Second Temple Jerusalem — the city Jesus saw", he: "ירושלים של הבית השני — העיר שישוע ראה", ar: "قدس الهيكل الثاني — المدينة التي رآها المسيح", es: "Jerusalén del Segundo Templo: la ciudad que vio Jesús" },
+    years: { en: "37 BCE – 70 CE", he: "37 לפנה\"ס – 70 לספירה", ar: "٣٧ ق.م – ٧٠ م", es: "37 a.C. – 70 d.C." },
+    body: { en: "This is the Jerusalem of the Gospels. Herod doubles the Temple platform to the size it still is — the retaining walls you touch at the Western Wall are his. The Upper City of priestly mansions covers the Western Hill, separated from the Temple by the deep Tyropoeon Valley and joined to it by monumental stairs at Wilson's and Robinson's Arches. And Golgotha, with its rock-cut tombs, lies in an abandoned quarry OUTSIDE the Second Wall. That is the single fact that unlocks the Old City: the Church of the Holy Sepulchre stands inside the walls today because the wall moved, not the tomb.", he: "זו ירושלים של הבשורות. הורדוס מכפיל את רחבת הר הבית לגודלה עד היום — הכתלים התומכים שאתם נוגעים בהם בכותל המערבי הם שלו. העיר העליונה, ובה בתי הכוהנים המפוארים, מכסה את הגבעה המערבית, מופרדת מן ההר בעמק גיא־התירופיון העמוק ומחוברת אליו במדרגות מונומנטליות בקמרון וילסון ובקמרון רובינסון. וגולגותא, עם קברי הסלע שבה, שוכנת במחצבה נטושה מחוץ לחומה השנייה. זו העובדה שפותחת את כל העיר העתיקה: כנסיית הקבר עומדת היום בתוך החומות מפני שהחומה זזה — לא הקבר.", ar: "هذه هي قدس الأناجيل. ضاعف هيرودس ساحة الهيكل إلى حجمها الباقي حتى اليوم — والجدران الاستنادية التي تلمسها عند الحائط الغربي من بنائه. وكانت المدينة العليا بقصور الكهنة تغطّي التلة الغربية، يفصلها عن الحرم وادي التيروبيون العميق وتصلها به سلالم ضخمة عند قوس ويلسون وقوس روبنسون. أما الجُلجُثة وقبورها المنقورة في الصخر فكانت في مقلع مهجور خارج السور الثاني. هذه هي الحقيقة الواحدة التي تفتح البلدة القديمة كلها: كنيسة القيامة تقف اليوم داخل الأسوار لأن السور هو الذي تحرّك، لا القبر.", es: "Esta es la Jerusalén de los Evangelios. Herodes duplica la explanada del Templo hasta el tamaño que conserva: los muros de contención que se tocan en el Muro Occidental son suyos. La Ciudad Alta, con las mansiones sacerdotales, cubre la Colina Occidental, separada del Templo por el profundo valle del Tiropeón y unida a él por escalinatas monumentales en los arcos de Wilson y Robinson. Y el Gólgota, con sus tumbas talladas en roca, queda en una cantera abandonada FUERA de la Segunda Muralla. Ese es el dato que abre toda la Ciudad Vieja: el Santo Sepulcro está hoy dentro de las murallas porque se movió la muralla, no la tumba." },
+    flag: { en: "The key layer for a Gospel itinerary — everything on this map is first-century.", he: "השכבה המרכזית למסלול על פי הבשורות — כל מה שבמפה הזו הוא מן המאה הראשונה.", ar: "الطبقة المفتاحية لمسار إنجيلي — كل ما في هذه الخريطة من القرن الأول.", es: "La capa clave para un itinerario evangélico: todo en este mapa es del siglo I." },
+    look: { en: ["Robinson's Arch and the collapsed stones still lying on the Herodian street where Roman soldiers threw them in 70 CE.","The Southern Steps, worn and uneven by design, where pilgrims entered the Temple courts.","Wilson's Arch, now deep inside the Western Wall tunnels, once carrying a bridge over the valley from the Upper City.","The Pool of Siloam's monumental steps — the pool of John 9, still being excavated."], he: ["קמרון רובינסון והאבנים שנפלו ועודן מוטלות על הרחוב ההרודיאני, שם השליכו אותן חיילי רומא בשנת 70.","מדרגות הכניסה הדרומיות, שחוקות ולא־אחידות בכוונה, שבהן עלו עולי הרגל אל הר הבית.","קמרון וילסון, כיום בעומק מנהרות הכותל, שנשא פעם גשר מעל העמק מן העיר העליונה.","מדרגות בריכת השילוח המונומנטליות — הבריכה של יוחנן ט', שנחשפת עד היום."], ar: ["قوس روبنسون والحجارة المنهارة التي ما زالت ملقاة على الشارع الهيرودي حيث ألقاها الجنود الرومان عام ٧٠م.","السلالم الجنوبية، المتفاوتة عن قصد، حيث كان الحجّاج يدخلون ساحات الهيكل.","قوس ويلسون، وهو اليوم في عمق أنفاق الحائط الغربي، وكان يحمل جسراً فوق الوادي من المدينة العليا.","سلالم بركة سلوان الضخمة — بركة إنجيل يوحنا ٩، ولا يزال التنقيب فيها جارياً."], es: ["El arco de Robinson y las piedras derrumbadas que siguen sobre la calle herodiana donde los soldados romanos las arrojaron en el 70 d.C.","Las Escalinatas del Sur, irregulares a propósito, por donde los peregrinos entraban al Templo.","El arco de Wilson, hoy en el fondo de los túneles del Muro, que sostenía un puente sobre el valle desde la Ciudad Alta.","Las escalinatas monumentales de la piscina de Siloé, la de Juan 9, aún en excavación."] },
+    disputed: { en: "The Second Wall's course is genuinely disputed — no continuous stretch has been found — but every proposed line leaves Golgotha outside the city. The Third Wall (dashed, far north) was built by Agrippa I in 41–44 CE, after Jesus' lifetime, and its identification is also contested.", he: "מסלול החומה השנייה נתון במחלוקת אמיתית — לא נמצא ממנה קטע רצוף — אך כל הצעה מותירה את גולגותא מחוץ לעיר. החומה השלישית (המקוטעת, בצפון הרחוק) נבנתה בידי אגריפס הראשון בשנים 41–44, אחרי ימי ישוע, וגם זיהויה נתון בוויכוח.", ar: "مسار السور الثاني موضع خلاف حقيقي — فلم يُعثر على أي مقطع متّصل منه — لكن كل خط مقترح يترك الجُلجُثة خارج المدينة. أما السور الثالث (المتقطع في الشمال البعيد) فبناه أغريباس الأول بين ٤١ و٤٤م، بعد زمن المسيح، وتحديد موضعه موضع جدل أيضاً.", es: "El trazado de la Segunda Muralla está realmente en disputa —no se ha hallado ningún tramo continuo—, pero toda propuesta deja el Gólgota fuera de la ciudad. La Tercera Muralla (discontinua, al norte) la construyó Agripa I en 41–44 d.C., después de la vida de Jesús, y su identificación también se discute." } },
+
+  { key: "aelia", tick: { en: "Roman", he: "רומית", ar: "رومانية", es: "Romana" }, date: { en: "135–324 CE", he: "135–324", ar: "١٣٥–٣٢٤ م", es: "135–324 d.C." },
+    title: { en: "Aelia Capitolina — the grid that survives", he: "איליה קפיטולינה — הרשת שנשארה", ar: "إيليا كابيتولينا — الشبكة الباقية", es: "Aelia Capitolina: la retícula que sobrevive" },
+    years: { en: "135 – 324 CE", he: "135–324 לספירה", ar: "١٣٥ – ٣٢٤ م", es: "135 – 324 d.C." },
+    body: { en: "After 70 CE the city is levelled; after 135 Hadrian rebuilds it as a Roman colony on the standard military plan. Two colonnaded cardines run south from the north gate; a decumanus runs east from the west gate to the Temple Mount. This is the single most useful thing a visitor can know: the souq you get lost in is not a medieval accident, it is a Roman grid. Khan el-Zeit and El-Wad are the two cardines; David Street and Chain Street are the decumanus. The southern hills — the City of David, Mount Zion — are left outside, and stay outside from now on.", he: "אחרי שנת 70 העיר מיושרת עם הקרקע; אחרי 135 מקים אדריאנוס קולוניה רומית לפי התכנית הצבאית המקובלת. שני רחובות עמודים (קרדו) יורדים דרומה מן השער הצפוני, ורחוב רוחב (דקומנוס) עובר מזרחה מן השער המערבי אל הר הבית. זה הדבר המועיל ביותר שמבקר יכול לדעת: השוק שאתם נבלעים בו איננו תוצאה מקרית של ימי הביניים אלא רשת רומית. חאן א־זית ואל־ואד הם שני הקרדו; רחוב דוד ורחוב השלשלת הם הדקומנוס. הגבעות הדרומיות — עיר דוד והר ציון — נותרות בחוץ, ומכאן ואילך יישארו בחוץ.", ar: "بعد عام ٧٠م سُوّيت المدينة بالأرض، وبعد ١٣٥ أعاد هدريان بناءها كمستعمرة رومانية على المخطط العسكري المعتاد: شارعان معمّدان (كاردو) ينزلان جنوباً من الباب الشمالي، وشارع عرضي (ديكومانوس) يمتدّ شرقاً من الباب الغربي إلى الحرم. وهذه أنفع معلومة للزائر: السوق الذي تتوه فيه ليس فوضى من العصور الوسطى بل شبكة رومانية. خان الزيت والواد هما الكاردوان، وشارع داود وطريق السلسلة هما الديكومانوس. أما التلال الجنوبية — تلّة سلوان وجبل صهيون — فبقيت خارج السور، وستبقى خارجه من الآن.", es: "Tras el 70 la ciudad queda arrasada; tras el 135 Adriano la refunda como colonia romana con el plan militar estándar. Dos cardos con columnatas bajan desde la puerta norte; un decumano va desde la puerta oeste al Monte del Templo. Este es el dato más útil para un visitante: el souq en el que se pierde no es un desorden medieval, es una retícula romana. Khan el-Zeit y El-Wad son los dos cardos; la calle David y la calle de la Cadena son el decumano. Las colinas del sur —Ciudad de David, Monte Sión— quedan fuera, y fuera se quedan." },
+    look: { en: ["The Roman paving and column bases of the Cardo, exposed under the Jewish Quarter.","Hadrian's triple gate under today's Damascus Gate — you can walk down to the Roman threshold.","The Lithostrotos paving stones beneath the Sisters of Zion convent, Roman, not the pavement of Pilate's trial."], he: ["מרצפות הקרדו ובסיסי העמודים הרומיים, חשופים מתחת לרובע היהודי.","שער הכניסה המשולש של אדריאנוס מתחת לשער שכם של היום — אפשר לירד עד המפתן הרומי.","אבני הריצוף של הליתוסטרוטוס מתחת למשכן אחיות ציון — רומיות, ולא רצפת משפטו של פילטוס."], ar: ["بلاط الكاردو الروماني وقواعد أعمدته، المكشوفة تحت حارة اليهود.","بوابة هدريان الثلاثية تحت باب العمود الحالي — ويمكنك النزول إلى العتبة الرومانية.","حجارة الليثوستروتوس تحت دير أخوات صهيون: رومانية، وليست بلاط محاكمة بيلاطس."], es: ["El pavimento romano y las basas de columna del Cardo, expuestos bajo el Barrio Judío.","La puerta triple de Adriano bajo la actual Puerta de Damasco: se puede bajar al umbral romano.","Las losas del Litóstrotos bajo el convento de las Hermanas de Sión: romanas, no el pavimento del juicio de Pilato."] } },
+
+  { key: "byz", tick: { en: "Byzantine", he: "ביזנטית", ar: "بيزنطية", es: "Bizantina" }, date: { en: "324–638 CE", he: "324–638", ar: "٣٢٤–٦٣٨ م", es: "324–638 d.C." },
+    title: { en: "Byzantine Jerusalem — the Madaba Map city", he: "ירושלים הביזנטית — העיר של מפת מידבא", ar: "القدس البيزنطية — مدينة خريطة مادبا", es: "Jerusalén bizantina: la ciudad del mapa de Madaba" },
+    years: { en: "324 – 638 CE", he: "324–638 לספירה", ar: "٣٢٤ – ٦٣٨ م", es: "324 – 638 d.C." },
+    body: { en: "Constantine's engineers cut the hillside away around the tomb, quarry Golgotha into a free-standing rock, and raise the first Church of the Holy Sepulchre facing the Cardo. Two centuries later Justinian extends the Cardo south to the vast Nea Church. The Madaba mosaic map, made about 560, shows this exact city from above: colonnaded main street, two great churches — and the Temple Mount left pointedly empty.", he: "מהנדסיו של קונסטנטינוס חוצבים את המדרון סביב הקבר, מבודדים את גולגותא כסלע עומד לעצמו, ומקימים את כנסיית הקבר הראשונה כשפניה אל הקרדו. מאתיים שנה אחר כך מאריך יוסטיניאנוס את הקרדו דרומה עד כנסיית הנֵאָה העצומה. מפת מידבא, פסיפס משנת 560 בקירוב, מציגה בדיוק את העיר הזאת ממעל: רחוב עמודים ראשי, שתי כנסיות גדולות — והר הבית מושאר ריק במופגן.", ar: "قطع مهندسو قسطنطين المنحدر حول القبر، ونحتوا الجُلجُثة صخرةً قائمة بذاتها، وأقاموا أول كنيسة للقيامة تطلّ على الكاردو. وبعد قرنين مدّ يوستنيانوس الكاردو جنوباً إلى كنيسة «النيّا» الهائلة. وخريطة مادبا الفسيفسائية، المصنوعة نحو ٥٦٠م، تُظهر هذه المدينة بالضبط من الأعلى: شارع رئيسي معمّد، وكنيستان كبيرتان — والحرم متروك خالياً بتعمّد.", es: "Los ingenieros de Constantino recortan la ladera en torno a la tumba, tallan el Gólgota como roca aislada y levantan la primera basílica del Santo Sepulcro frente al Cardo. Dos siglos después Justiniano prolonga el Cardo al sur hasta la enorme Nea. El mapa mosaico de Madaba, hacia 560, muestra exactamente esta ciudad desde arriba: calle principal con columnatas, dos grandes iglesias y el Monte del Templo deliberadamente vacío." },
+    look: { en: ["The rock of Golgotha, still standing inside the church, its quarried face visible in the Chapel of Adam.","Justinian's Nea Church foundations and cistern at the south edge of the Jewish Quarter.","The Madaba Map itself — worth showing your group before you walk in through the Jaffa Gate."], he: ["סלע גולגותא, העומד עד היום בתוך הכנסייה, וחזיתו החצובה נראית בקפלת אדם.","יסודות כנסיית הנֵאָה של יוסטיניאנוס והבור שלה בקצה הדרומי של הרובע היהודי.","מפת מידבא עצמה — כדאי להראות אותה לקבוצה לפני הכניסה בשער יפו."], ar: ["صخرة الجُلجُثة، ما زالت قائمة داخل الكنيسة، ويظهر وجهها المنحوت في كنيسة آدم.","أساسات كنيسة «النيّا» اليوستنيانية وصهريجها في الحدّ الجنوبي لحارة اليهود.","خريطة مادبا نفسها — يُستحسن عرضها على المجموعة قبل الدخول من باب الخليل."], es: ["La roca del Gólgota, aún en pie dentro de la iglesia, con su cara cortada visible en la capilla de Adán.","Los cimientos y la cisterna de la Nea de Justiniano, al sur del Barrio Judío.","El propio mapa de Madaba: conviene mostrarlo al grupo antes de entrar por la Puerta de Jafa."] } },
+
+  { key: "muslim", tick: { en: "Early Muslim", he: "מוסלמית קדומה", ar: "إسلامية مبكرة", es: "Islámica temprana" }, date: { en: "638–1099", he: "638–1099", ar: "٦٣٨–١٠٩٩", es: "638–1099" },
+    title: { en: "Early Muslim Jerusalem — the Haram takes shape", he: "ירושלים המוסלמית הקדומה — הַחרם מתעצב", ar: "القدس الإسلامية المبكرة — تكوّن الحرم", es: "Jerusalén islámica temprana: nace el Haram" },
+    years: { en: "638 – 1099", he: "638–1099", ar: "٦٣٨ – ١٠٩٩", es: "638 – 1099" },
+    body: { en: "Jerusalem surrenders in 638, and the Temple Mount — deliberately left empty and ruined since 70 CE — becomes the centre of the city again. The Dome of the Rock is finished in 691, al-Aqsa about 705, and an Umayyad palace quarter rises immediately south of the platform. The Roman-Byzantine street grid survives intact, but the weight of the city shifts east and south toward the Haram. This is the era that produced the skyline your group photographs from the Mount of Olives: the golden dome is Umayyad, not biblical, and it stands where the Temple stood.", he: "ירושלים נכנעת בשנת 638, והר הבית — שהושאר ריק והרוס בכוונה מאז שנת 70 — חוזר להיות מרכז העיר. כובד הסלע נשלם בשנת 691, אל־אקצא בערך ב־705, ורובע ארמונות אומיי קם מיד מדרום לרחבה. מערך הרחובות הרומי־ביזנטי נשמר בשלמותו, אך מרכז הכובד של העיר נע מזרחה ודרומה, אל הַחרם. זו התקופה שיצרה את קו הרקיע שהקבוצה שלכם מצלמת מהר הזיתים: הכיפה המוזהבת היא אומיית, לא מקראית, והיא עומדת במקום שבו עמד המקדש.", ar: "استُلمت القدس عام ٦٣٨، فعاد الحرم — الذي تُرك خالياً خراباً بتعمّد منذ عام ٧٠م — مركزاً للمدينة من جديد. أُنجزت قبة الصخرة عام ٦٩١، والمسجد الأقصى نحو ٧٠٥، وقام حيّ القصور الأموية جنوب الساحة مباشرة. وبقيت شبكة الشوارع الرومانية–البيزنطية سليمة، لكن ثقل المدينة انتقل شرقاً وجنوباً نحو الحرم. هذا هو العصر الذي أنتج المنظر الذي تصوّره مجموعتك من جبل الزيتون: القبة الذهبية أموية لا توراتية، وهي قائمة حيث كان الهيكل.", es: "Jerusalén se rinde en 638 y el Monte del Templo —dejado vacío y en ruinas a propósito desde el 70 d.C.— vuelve a ser el centro de la ciudad. La Cúpula de la Roca se termina en 691, al-Aqsa hacia 705, y un barrio palaciego omeya se levanta justo al sur de la explanada. La retícula romano-bizantina sobrevive intacta, pero el peso de la ciudad se desplaza al este y al sur, hacia el Haram. Esta es la época que produjo el perfil que su grupo fotografía desde el Monte de los Olivos: la cúpula dorada es omeya, no bíblica, y se alza donde estuvo el Templo." },
+    look: { en: ["The Dome of the Rock itself — an Umayyad building of 691, the oldest surviving Islamic monument in the world.","The excavated Umayyad palaces and administrative buildings in the Ophel park, immediately south of the Haram.","The Double Gate and its stairs in the southern wall: Herodian courses below, Umayyad work above — one wall, two eras."], he: ["כובד הסלע עצמו — מבנה אומיי משנת 691, האנדרטה האסלאמית העתיקה ביותר בעולם שנשתמרה.","ארמונות אומיים ומבני מִנהל שנחשפו בגן העופל, מיד מדרום לַחרם.","שער כפול ומדרגותיו בחומה הדרומית: נדבכים הרודיאניים מלמטה, בנייה אומיית מלמעלה — חומה אחת, שתי תקופות."], ar: ["قبة الصخرة نفسها — بناء أموي من عام ٦٩١، وأقدم أثر إسلامي باقٍ في العالم.","القصور الأموية والمباني الإدارية المكشوفة في حديقة العوفل، جنوب الحرم مباشرة.","الباب المزدوج وسلالمه في السور الجنوبي: مداميك هيرودية أسفل وعمل أموي أعلى — سور واحد وعصران."], es: ["La propia Cúpula de la Roca: edificio omeya de 691, el monumento islámico más antiguo que se conserva en el mundo.","Los palacios y edificios administrativos omeyas excavados en el parque del Ofel, justo al sur del Haram.","La Puerta Doble y sus escaleras en el muro sur: hiladas herodianas abajo, obra omeya arriba — un muro, dos épocas."] } },
+
+  { key: "crusader", tick: { en: "Crusader", he: "צלבנית", ar: "صليبية", es: "Cruzada" }, date: { en: "1099–1187", he: "1099–1187", ar: "١٠٩٩–١١٨٧", es: "1099–1187" },
+    title: { en: "Crusader Jerusalem — the quarters take shape", he: "ירושלים הצלבנית — הרבעים מתגבשים", ar: "القدس الصليبية — تتشكّل الحارات", es: "Jerusalén cruzada: nacen los barrios" },
+    years: { en: "1099 – 1187", he: "1099–1187", ar: "١٠٩٩ – ١١٨٧", es: "1099 – 1187" },
+    body: { en: "The Crusaders inherit the Roman-Byzantine street plan unchanged and organise the city into quarters — the same four-quarter division tourists are handed on a map today. They gather Constantine's separate shrines under a single Romanesque roof: the church you walk into is essentially their building. The Dome of the Rock becomes Templum Domini, al-Aqsa becomes the Templars' headquarters, and the covered markets of the Muristan are laid out.", he: "הצלבנים יורשים את תכנית הרחובות הרומית־ביזנטית כמעט ללא שינוי ומחלקים את העיר לרבעים — אותה חלוקה לארבעה רבעים שמקבלים תיירים במפה עד היום. הם מאחדים את המקומות הקדושים הנפרדים של קונסטנטינוס תחת גג רומנסקי אחד: הכנסייה שאתם נכנסים אליה היא בעיקרה בניין שלהם. כובד הסלע הופך ל־Templum Domini, אל־אקצא הופך למפקדת הטמפלרים, והשווקים המקורים של המוריסטן נסללים.", ar: "ورث الصليبيون المخطط الروماني–البيزنطي للشوارع كما هو، ونظّموا المدينة في حارات — وهي القسمة الرباعية ذاتها التي يتلقّاها السائح على الخريطة اليوم. وجمعوا مقامات قسطنطين المنفصلة تحت سقف رومانسكي واحد: فالكنيسة التي تدخلها هي في جوهرها بناؤهم. وصارت قبة الصخرة «هيكل الرب»، والمسجد الأقصى مقرّاً لفرسان الهيكل، وخُطّت أسواق المورستان المسقوفة.", es: "Los cruzados heredan intacto el plan viario romano-bizantino y organizan la ciudad en barrios: la misma división en cuatro que hoy se entrega al turista en un plano. Reúnen los santuarios separados de Constantino bajo un solo techo románico: la iglesia en la que usted entra es esencialmente su edificio. La Cúpula de la Roca pasa a ser Templum Domini, al-Aqsa el cuartel de los templarios, y se trazan los mercados cubiertos del Muristán." },
+    look: { en: ["The Holy Sepulchre's south façade and bell tower — twelfth-century work, largely unaltered.","The three parallel vaulted market streets south of David Street, still trading.","St Anne's Church by the Pool of Bethesda, the purest Crusader interior in the city."], he: ["החזית הדרומית של כנסיית הקבר ומגדל הפעמונים — עבודה מן המאה השתים־עשרה, כמעט ללא שינוי.","שלושת רחובות השוק המקומרים המקבילים מדרום לרחוב דוד, שסוחרים בהם עד היום.","כנסיית סנטה אנה שליד בריכת בית־חסדא, הפנים הצלבני הצרוף ביותר בעיר."], ar: ["الواجهة الجنوبية لكنيسة القيامة وبرج الأجراس — عمل من القرن الثاني عشر، شبه سليم.","شوارع السوق المعقودة الثلاثة المتوازية جنوب شارع داود، وما زالت عامرة بالتجارة.","كنيسة القديسة حنة عند بركة بيت حسدا، أنقى داخل صليبي في المدينة."], es: ["La fachada sur del Santo Sepulcro y su campanario: obra del siglo XII casi intacta.","Las tres calles-mercado abovedadas paralelas al sur de la calle David, aún comerciales.","Santa Ana, junto a la piscina de Betesda: el interior cruzado más puro de la ciudad."] } },
+
+  { key: "mamluk", tick: { en: "Mamluk", he: "ממלוכית", ar: "مملوكية", es: "Mameluca" }, date: { en: "1250–1517", he: "1250–1517", ar: "١٢٥٠–١٥١٧", es: "1250–1517" },
+    title: { en: "Mamluk Jerusalem — where the maze comes from", he: "ירושלים הממלוכית — מכאן בא המבוך", ar: "القدس المملوكية — من هنا جاءت المتاهة", es: "Jerusalén mameluca: de aquí viene el laberinto" },
+    years: { en: "1250 – 1517", he: "1250–1517", ar: "١٢٥٠ – ١٥١٧", es: "1250 – 1517" },
+    body: { en: "Nothing about the street plan changes; everything about the texture does. The Mamluks pack the approaches to the Haram with madrasas, pilgrim hostels, tombs and markets, stacked two and three storeys over the Roman line and roofed across it. This is the layer that makes visitors say 'maze': the grid is still under your feet, but it has been vaulted over, built into and narrowed for three centuries. If a street feels like a tunnel, you are in a Mamluk street.", he: "בתכנית הרחובות שום דבר לא משתנה; במרקם — הכול. הממלוכים דוחסים את הדרכים אל הַחרם במדרסות, אכסניות לעולי רגל, מקברים ושווקים, בשתיים ושלוש קומות מעל הקו הרומי ובקירוי מעליו. זו השכבה שגורמת למבקרים לומר 'מבוך': הרשת עודנה תחת רגליכם, אך היא קורתה, נבנתה והוצרה במשך שלוש מאות שנה. אם רחוב מרגיש כמו מנהרה — אתם ברחוב ממלוכי.", ar: "لم يتغيّر شيء في مخطط الشوارع، وتغيّر كل شيء في نسيجها. حشد المماليك مداخل الحرم بالمدارس وأربطة الحجّاج والتُّرَب والأسواق، طابقين وثلاثة فوق الخط الروماني ومسقوفة عبره. هذه هي الطبقة التي تجعل الزائر يقول «متاهة»: الشبكة لا تزال تحت قدميك، لكنها عُقدت وبُني فيها وضُيّقت على مدى ثلاثة قرون. فإن أحسست أن الشارع نفق، فأنت في شارع مملوكي.", es: "Nada cambia en el plano viario; todo cambia en la textura. Los mamelucos abarrotan los accesos al Haram con madrasas, hospederías de peregrinos, mausoleos y mercados, apilados en dos y tres alturas sobre la línea romana y techados por encima. Esta es la capa que hace decir «laberinto»: la retícula sigue bajo sus pies, pero durante tres siglos fue abovedada, ocupada y estrechada. Si una calle parece un túnel, es una calle mameluca." },
+    look: { en: ["Chain Street (Tariq Bab al-Silsila): a continuous run of Mamluk façades with striped masonry and stalactite portals.","The Ashrafiyya and Tankiziyya madrasas built right up against the Haram's western edge.","Ablutions fountains and sabils still set into the walls along the approaches."], he: ["רחוב השלשלת (טריק באב א־סילסילה): רצף חזיתות ממלוכיות עם אבן בפסים ופתחי מוקרנס.","המדרסות אל־אשרפייה ואל־תנכיזייה, שנבנו ממש אל קצה הַחרם המערבי.","סבילים ומזרקות רחצה שעודם משוקעים בקירות לאורך הדרכים אל ההר."], ar: ["طريق باب السلسلة: تتابع متّصل من الواجهات المملوكية بالحجر المشهّر والمداخل المقرنصة.","المدرستان الأشرفية والتنكزية المبنيّتان ملاصقتين للحدّ الغربي للحرم.","الأسبلة ومياضئ الوضوء التي لا تزال قائمة في الجدران على مسارب الحرم."], es: ["La calle de la Cadena (Tariq Bab al-Silsila): una sucesión continua de fachadas mamelucas con sillería rayada y portadas de mocárabes.","Las madrasas Ashrafiyya y Tankiziyya, adosadas al borde occidental del Haram.","Sabiles y fuentes de ablución todavía embutidos en los muros de los accesos."] } },
+
+  { key: "ottoman", tick: { en: "Ottoman", he: "עות'מאנית", ar: "عثمانية", es: "Otomana" }, date: { en: "1538", he: "1538", ar: "١٥٣٨", es: "1538" },
+    title: { en: "Suleiman's walls, 1538 — the walls everyone assumes are ancient", he: "חומות סולימאן, 1538 — החומות שכולם חושבים שהן עתיקות", ar: "أسوار سليمان، ١٥٣٨ — الأسوار التي يظنّها الجميع قديمة", es: "Las murallas de Solimán, 1538: las que todos creen antiguas" },
+    years: { en: "1538 – 1917", he: "1538–1917", ar: "١٥٣٨ – ١٩١٧", es: "1538 – 1917" },
+    body: { en: "Suleiman the Magnificent rebuilds the circuit — and this is the crux of the whole confusion. These walls are less than 500 years old, and they follow the Roman-Byzantine line, not the biblical one. That means they deliberately leave out the oldest Jerusalem there is: the City of David, the Gihon Spring, the Pool of Siloam and Mount Zion all end up outside the gates. A group that only walks inside these walls never sets foot in the city of David, Hezekiah, or the Siloam of John 9.", he: "סולימאן המפואר בונה מחדש את מעגל החומות — וכאן שורש כל הבלבול. החומות האלה צעירות מ־500 שנה, והן הולכות בקו הרומי־ביזנטי ולא בקו המקראי. משמע: הן משאירות בכוונה בחוץ את ירושלים הקדומה ביותר שיש — עיר דוד, מעיין הגיחון, בריכת השילוח והר ציון כולם מחוץ לשערים. קבוצה שמהלכת רק בתוך החומות האלה לא דורכת מעולם בעיר של דוד, של חזקיהו, או בשילוח של יוחנן ט'.", ar: "أعاد سليمان القانوني بناء دائرة الأسوار — وهنا لبّ الالتباس كله. هذه الأسوار عمرها أقل من خمسة قرون، وهي تتبع الخط الروماني–البيزنطي لا الخط التوراتي. أي أنها تترك خارجها أقدم قدس على الإطلاق: تلّة مدينة داود وعين الجيحون وبركة سلوان وجبل صهيون كلها خارج الأبواب. والمجموعة التي تتنقّل داخل هذه الأسوار فقط لا تطأ قدماها مدينة داود ولا حزقيا ولا سلوان الإنجيلية.", es: "Solimán el Magnífico reconstruye el recinto, y aquí está el nudo de toda la confusión. Estas murallas tienen menos de 500 años y siguen la línea romano-bizantina, no la bíblica. Es decir: dejan fuera a propósito la Jerusalén más antigua que existe: la Ciudad de David, el manantial de Guijón, la piscina de Siloé y el Monte Sión quedan todos extramuros. Un grupo que solo camina dentro de estas murallas nunca pisa la ciudad de David, de Ezequías, ni el Siloé de Juan 9." },
+    look: { en: ["Suleiman's dedicatory inscriptions over the Jaffa and Damascus Gates, dated by the Muslim year.","The seam in the eastern wall south of the Golden Gate, where Ottoman masonry sits on Herodian courses.","The ramparts walk — the fastest way to show a group what the walls include and, crucially, exclude."], he: ["כתובות ההקדשה של סולימאן מעל שער יפו ושער שכם, מתוארכות לשנה המוסלמית.","התפר בחומה המזרחית מדרום לשער הרחמים, שם בנייה עות'מאנית יושבת על נדבכים הרודיאניים.","הטיילת על החומות — הדרך המהירה ביותר להראות לקבוצה מה החומות מכניסות ומה, בעיקר, הן משאירות בחוץ."], ar: ["نقوش سليمان التذكارية فوق باب الخليل وباب العمود، مؤرَّخة بالتقويم الهجري.","الخط الفاصل في السور الشرقي جنوب باب الرحمة، حيث تجلس البناية العثمانية على مداميك هيرودية.","المسير على الأسوار — أسرع طريقة لتُبيّن لمجموعتك ما تُدخله الأسوار وما تُخرجه، والأهم ما تُخرجه."], es: ["Las inscripciones dedicatorias de Solimán sobre las puertas de Jafa y Damasco, fechadas en año musulmán.","La costura del muro oriental al sur de la Puerta Dorada, donde la sillería otomana se asienta sobre hiladas herodianas.","El paseo por las murallas: la forma más rápida de mostrar al grupo qué incluyen y, sobre todo, qué excluyen."] } },
+
+  { key: "today", tick: { en: "Today", he: "היום", ar: "اليوم", es: "Hoy" }, date: { en: "now", he: "עכשיו", ar: "الآن", es: "ahora" },
+    title: { en: "The Old City today — everything at once", he: "העיר העתיקה היום — הכול בבת אחת", ar: "البلدة القديمة اليوم — كل شيء في وقت واحد", es: "La Ciudad Vieja hoy: todo a la vez" },
+    years: { en: "1917 – present", he: "1917 – ימינו", ar: "١٩١٧ – الآن", es: "1917 – hoy" },
+    body: { en: "What makes the Old City hard to read is that nothing was ever demolished flat — it was built over. Roman paving lies under Crusader vaults under Mamluk façades under twentieth-century reconstruction, and the ground has risen by up to twelve metres. The Tyropoeon Valley is buried, which is why the Western Wall plaza feels level. Set this layer against the Herodian one and the geography snaps into place: the walls shrank away from the south, the valley filled, the streets stayed exactly where Rome put them.", he: "מה שמקשה לקרוא את העיר העתיקה הוא שדבר לא נהרס עד היסוד — הכול נבנה מעל. ריצוף רומי מתחת לקמרונות צלבניים מתחת לחזיתות ממלוכיות מתחת לשיקום מן המאה העשרים, ופני הקרקע עלו עד שנים־עשר מטרים. עמק גיא־התירופיון קבור, ולכן רחבת הכותל מרגישה שטוחה. העמידו את השכבה הזאת מול השכבה ההרודיאנית והגיאוגרפיה מתיישבת: החומות נסוגו מן הדרום, העמק התמלא, והרחובות נשארו בדיוק במקום שרומא הניחה אותם.", ar: "ما يجعل قراءة البلدة القديمة صعبة أنّ شيئاً لم يُهدم إلى الأرض قط، بل بُني فوقه. بلاط روماني تحت عقود صليبية تحت واجهات مملوكية تحت ترميم من القرن العشرين، وقد ارتفع مستوى الأرض حتى اثني عشر متراً. وادي التيروبيون مدفون، ولهذا تبدو ساحة الحائط الغربي مستوية. قارن هذه الطبقة بالطبقة الهيرودية فتستقيم الجغرافيا: انسحبت الأسوار عن الجنوب، وامتلأ الوادي، وبقيت الشوارع في موضعها الذي وضعته روما.", es: "Lo que hace difícil leer la Ciudad Vieja es que nada se arrasó del todo: se construyó encima. Pavimento romano bajo bóvedas cruzadas bajo fachadas mamelucas bajo reconstrucción del siglo XX, y el suelo ha subido hasta doce metros. El valle del Tiropeón está enterrado, y por eso la plaza del Muro parece llana. Contraste esta capa con la herodiana y la geografía encaja: las murallas se retiraron del sur, el valle se rellenó y las calles siguen donde Roma las puso." },
+    look: { en: ["Stand on the Western Wall plaza and point down, not up: the Herodian street is about twelve metres below the paving.","Walk David Street and Chain Street end to end — you have just walked a Roman decumanus.","Leave by the Dung Gate and keep going downhill: only then are you entering the original Jerusalem."], he: ["עמדו ברחבת הכותל והצביעו למטה, לא למעלה: הרחוב ההרודיאני נמצא כשנים־עשר מטרים מתחת לריצוף.","הלכו את רחוב דוד ורחוב השלשלת מקצה לקצה — הרגע הלכתם בדקומנוס רומי.","צאו בשער האשפות והמשיכו במורד: רק אז אתם נכנסים לירושלים המקורית."], ar: ["قف في ساحة الحائط الغربي وأشِر إلى الأسفل لا إلى الأعلى: الشارع الهيرودي نحو اثني عشر متراً تحت البلاط.","امشِ شارع داود وطريق السلسلة من أوّلهما إلى آخرهما — فقد مشيت للتوّ في ديكومانوس روماني.","اخرج من باب المغاربة وواصل النزول: عندها فقط تدخل القدس الأصلية."], es: ["Párese en la plaza del Muro y señale hacia abajo, no hacia arriba: la calle herodiana está unos doce metros bajo el pavimento.","Recorra la calle David y la de la Cadena de punta a punta: acaba de caminar un decumano romano.","Salga por la Puerta de los Basureros y siga cuesta abajo: solo entonces entra en la Jerusalén original."] } }
+];
+
+const LB = [
+  { k: "modwall", la: 31.78380, lo: 35.23180, e: [], mod: true, dx: 0, dy: 0, a: "middle", w: 700, c: "#2f4f66", n: { en: "Today's Old City wall — Ottoman, 1538", he: "חומת העיר העתיקה של היום — עות'מאנית, 1538", ar: "سور البلدة القديمة اليوم — عثماني، ١٥٣٨", es: "Muralla actual de la Ciudad Vieja — otomana, 1538" }, s: { en: "the thin blue lines inside are today's streets", he: "הקווים הכחולים הדקים בתוכה הם רחובות היום", ar: "الخطوط الزرقاء الرقيقة داخله هي شوارع اليوم", es: "las líneas azules finas de dentro son las calles de hoy" } },
+  { k: "neh", la: 31.77340, lo: 35.23572, e: [-1], dx: 16, dy: 0, a: "start", w: 700, c: "#8a5a2b", n: { en: "Nehemiah's wall, 445 BCE", he: "חומת נחמיה, 445 לפנה\"ס", ar: "سور نحميا، ٤٤٥ ق.م", es: "Muralla de Nehemías, 445 a.C." }, s: { en: "built higher up the slope than the old wall", he: "נבנתה גבוה יותר במדרון מן החומה הקודמת", ar: "بُني أعلى في المنحدر من السور القديم", es: "construida más arriba que la muralla vieja" } },
+  { k: "abandoned", la: 31.77390, lo: 35.23020, e: [-1], dx: 0, dy: 0, a: "middle", w: 600, c: "#a8452f", n: { en: "Western Hill — abandoned", he: "הגבעה המערבית — נעזבה", ar: "التلة الغربية — مهجورة", es: "Colina Occidental — abandonada" }, s: { en: "in ruins for four centuries", he: "בחורבנה ארבע מאות שנה", ar: "خراب أربعة قرون", es: "en ruinas cuatro siglos" } },
+  { k: "zerub", la: 31.77860, lo: 35.23520, e: [-1], dx: 0, dy: 0, a: "middle", w: 600, c: "#7a5a2a", n: { en: "Zerubbabel's Temple, 516 BCE", he: "מקדש זרובבל, 516 לפנה\"ס", ar: "هيكل زربابل، ٥١٦ ق.م", es: "Templo de Zorobabel, 516 a.C." }, s: { en: "platform size unknown", he: "גודל הרחבה אינו ידוע", ar: "حجم الساحة غير معروف", es: "tamaño de la explanada desconocido" } },
+  { k: "gihon", la: 31.77300, lo: 35.23600, e: "all", dx: 16, dy: 4, a: "start", w: 500, c: "#2f6b72", n: { en: "Gihon Spring", he: "מעיין הגיחון", ar: "عين الجيحون", es: "Manantial de Guijón" } },
+  { k: "siloam", la: 31.77021, lo: 35.23538, e: [-2,-1,1,2,3,4,5,6,7,8], dx: 16, dy: 4, a: "start", w: 500, c: "#2f6b72", n: { en: "Pool of Siloam", he: "בריכת השילוח", ar: "بركة سلوان", es: "Piscina de Siloé" }, s: { en: "outside today's walls", he: "מחוץ לחומות היום", ar: "خارج أسوار اليوم", es: "extramuros hoy" } },
+  { k: "cod", la: 31.77230, lo: 35.23558, e: "all", dx: 0, dy: 0, a: "middle", w: 700, c: "#7a5a2a", n: { en: "City of David ridge", he: "רכס עיר דוד", ar: "تلّة مدينة داود", es: "Colina de la Ciudad de David" }, s: { en: "the original Jerusalem", he: "ירושלים המקורית", ar: "القدس الأصلية", es: "la Jerusalén original" } },
+  { k: "tunnel", la: 31.77160, lo: 35.23560, e: [-1,1,2,8], dx: 16, dy: 4, a: "start", w: 500, c: "#2f6b72", n: { en: "Hezekiah's Tunnel", he: "נקבת חזקיהו", ar: "نفق حزقيا", es: "Túnel de Ezequías" } },
+  { k: "tm", la: 31.77960, lo: 35.23560, e: [-2,2,3,4,5,6,7,8], dx: 0, dy: 0, a: "middle", w: 700, c: "#7a5a2a", n: { en: "Temple Mount / Haram al-Sharif", he: "הר הבית / אל־חרם א־שריף", ar: "الحرم الشريف / جبل الهيكل", es: "Monte del Templo / Haram al-Sharif" }, s: { en: "Herod's platform, unchanged", he: "רחבת הורדוס, ללא שינוי", ar: "ساحة هيرودس دون تغيير", es: "explanada de Herodes, intacta" } },
+  { k: "temple", la: 31.77805, lo: 35.23505, e: [2], dx: 0, dy: 0, a: "middle", w: 700, c: "#7a5a2a", n: { en: "Herod's Temple", he: "מקדש הורדוס", ar: "هيكل هيرودس", es: "Templo de Herodes" } },
+  { k: "stoa", la: 31.77620, lo: 35.23575, e: [2], dx: 16, dy: 4, a: "start", w: 500, c: "#7a5a2a", n: { en: "Royal Stoa", he: "הסטוא המלכותית", ar: "الرواق الملكي", es: "Stoa Real" } },
+  { k: "antonia", la: 31.78050, lo: 35.23540, e: [2], dx: 16, dy: -6, a: "start", w: 500, c: "#7a5a2a", n: { en: "Antonia Fortress", he: "מצודת אנטוניה", ar: "قلعة أنطونيا", es: "Fortaleza Antonia" } },
+  { k: "ww", la: 31.77680, lo: 35.23400, e: [-2,2,3,4,5,6,7,8], dx: -14, dy: 0, a: "end", w: 700, c: "#7a5a2a", n: { en: "Western Wall", he: "הכותל המערבי", ar: "الحائط الغربي / البراق", es: "Muro Occidental" } },
+  { k: "rob", la: 31.77606, lo: 35.23431, e: [2], dx: -14, dy: 22, a: "end", w: 500, c: "#7a5a2a", n: { en: "Robinson's Arch", he: "קמרון רובינסון", ar: "قوس روبنسون", es: "Arco de Robinson" } },
+  { k: "wil", la: 31.77700, lo: 35.23445, e: [2], dx: -14, dy: -20, a: "end", w: 500, c: "#7a5a2a", n: { en: "Wilson's Arch", he: "קמרון וילסון", ar: "قوس ويلسون", es: "Arco de Wilson" } },
+  { k: "hs", la: 31.77839, lo: 35.22972, e: [-2,4,5,6,7,8], dx: -14, dy: 0, a: "end", w: 700, c: "#7a5a2a", n: { en: "Church of the Holy Sepulchre", he: "כנסיית הקבר", ar: "كنيسة القيامة", es: "Santo Sepulcro" } },
+  { k: "golg", la: 31.77860, lo: 35.22960, e: [2], dx: -14, dy: 0, a: "end", w: 700, c: "#a8452f", n: { en: "Golgotha & the tomb", he: "גולגותא והקבר", ar: "الجُلجُثة والقبر", es: "Gólgota y la tumba" }, s: { en: "OUTSIDE the city wall", he: "מחוץ לחומת העיר", ar: "خارج سور المدينة", es: "FUERA de la muralla" } },
+  { k: "broad", la: 31.77568, lo: 35.23010, e: [1], dx: 0, dy: -16, a: "middle", w: 700, c: "#7a5a2a", n: { en: "Broad Wall", he: "החומה הרחבה", ar: "السور العريض", es: "Muro Ancho" }, s: { en: "Hezekiah, 8th c. BCE", he: "חזקיהו, המאה ה־8 לפנה\"ס", ar: "حزقيا، القرن ٨ ق.م", es: "Ezequías, s. VIII a.C." } },
+  { k: "kidron", la: 31.77900, lo: 35.23860, e: "all", dx: 0, dy: 0, a: "start", w: 500, c: "#8a7550", n: { en: "Kidron Valley", he: "נחל קדרון", ar: "وادي قدرون", es: "Valle de Cedrón" } },
+  { k: "hinnom", la: 31.77020, lo: 35.22780, e: "all", dx: 0, dy: 0, a: "middle", w: 500, c: "#8a7550", n: { en: "Hinnom Valley", he: "גיא בן־הינום", ar: "وادي جهنّم", es: "Valle de Hinón" } },
+  { k: "tyro", la: 31.77420, lo: 35.23452, e: "all", dx: -14, dy: 0, a: "end", w: 600, c: "#8a7550", n: { en: "Tyropoeon Valley", he: "עמק גיא־התירופיון", ar: "وادي التيروبيون", es: "Valle del Tiropeón" }, s: { en: "buried under the modern city", he: "קבור תחת העיר המודרנית", ar: "مدفون تحت المدينة الحديثة", es: "enterrado bajo la ciudad actual" } },
+  { k: "zion", la: 31.77181, lo: 35.22879, e: [-2,1,2,3,4,5,6,7,8], dx: 0, dy: 0, a: "middle", w: 600, c: "#7a5a2a", n: { en: "Mount Zion", he: "הר ציון", ar: "جبل صهيون", es: "Monte Sión" } },
+  { k: "cit", la: 31.77618, lo: 35.22782, e: [-2,2,3,4,5,6,7,8], dx: -14, dy: -10, a: "end", w: 500, c: "#7a5a2a", n: { en: "Citadel / Tower of David", he: "המצודה / מגדל דוד", ar: "القلعة / برج داود", es: "Ciudadela / Torre de David" } },
+  { k: "jaffa", la: 31.77664, lo: 35.22740, e: [7,8], dx: -14, dy: 14, a: "end", w: 500, c: "#2f4f66", n: { en: "Jaffa Gate", he: "שער יפו", ar: "باب الخليل", es: "Puerta de Jafa" } },
+  { k: "dam", la: 31.78135, lo: 35.23000, e: [-2,3,4,5,6,7,8], dx: 0, dy: -14, a: "middle", w: 500, c: "#2f4f66", n: { en: "Damascus Gate", he: "שער שכם", ar: "باب العمود", es: "Puerta de Damasco" } },
+  { k: "dung", la: 31.77477, lo: 35.23394, e: [7,8], dx: 0, dy: 22, a: "middle", w: 500, c: "#2f4f66", n: { en: "Dung Gate", he: "שער האשפות", ar: "باب المغاربة", es: "Puerta de los Basureros" } },
+  { k: "lions", la: 31.78130, lo: 35.23697, e: [7,8], dx: 14, dy: 0, a: "start", w: 500, c: "#2f4f66", n: { en: "Lions' Gate", he: "שער האריות", ar: "باب الأسباط", es: "Puerta de los Leones" } },
+  { k: "cardow", la: 31.77935, lo: 35.23032, e: [-2,3,4,5,6,7,8], dx: -14, dy: 0, a: "end", w: 600, c: "#2f4f66", n: { en: "Cardo → Khan el-Zeit", he: "הקרדו → חאן א־זית", ar: "الكاردو → خان الزيت", es: "Cardo → Khan el-Zeit" } },
+  { k: "cardoe", la: 31.77878, lo: 35.23212, e: [-2,3,4,5,6,7,8], dx: 14, dy: 0, a: "start", w: 600, c: "#2f4f66", n: { en: "East Cardo → El-Wad St", he: "הקרדו המזרחי → אל־ואד", ar: "الكاردو الشرقي → الواد", es: "Cardo este → El-Wad" } },
+  { k: "decn", la: 31.78088, lo: 35.23340, e: [-2,3,4,5,6,7,8], dx: 0, dy: -18, a: "middle", w: 600, c: "#2f4f66", n: { en: "North Decumanus \u2192 Via Dolorosa", he: "\u05d4\u05d3\u05e7\u05d5\u05de\u05e0\u05d5\u05e1 \u05d4\u05e6\u05e4\u05d5\u05e0\u05d9 \u2192 \u05d5\u05d9\u05d4 \u05d3\u05d5\u05dc\u05d5\u05e8\u05d5\u05d6\u05d4", ar: "\u0627\u0644\u062f\u064a\u0643\u0648\u0645\u0627\u0646\u0648\u0633 \u0627\u0644\u0634\u0645\u0627\u0644\u064a \u2192 \u0637\u0631\u064a\u0642 \u0627\u0644\u0623\u0644\u0627\u0645", es: "Decumano norte \u2192 V\u00eda Dolorosa" } },
+  { k: "umay", la: 31.77535, lo: 35.23510, e: [-2], dx: 0, dy: 22, a: "middle", w: 600, c: "#7a5a2a", n: { en: "Umayyad palaces, 8th c.", he: "\u05d0\u05e8\u05de\u05d5\u05e0\u05d5\u05ea \u05d0\u05d5\u05de\u05d9\u05d9\u05d9\u05dd, \u05d4\u05de\u05d0\u05d4 \u05d4\u05f8\u05f8", ar: "\u0627\u0644\u0642\u0635\u0648\u0631 \u0627\u0644\u0623\u0645\u0648\u064a\u0629\u060c \u0627\u0644\u0642\u0631\u0646 \u0627\u0644\u0640\u0668", es: "Palacios omeyas, s. VIII" } },
+  { k: "dec", la: 31.77690, lo: 35.22930, e: [-2,3,4,5,6,7,8], dx: 0, dy: 20, a: "middle", w: 600, c: "#2f4f66", n: { en: "Decumanus → David St / Chain St", he: "הדקומנוס → רחוב דוד / השלשלת", ar: "الديكومانوس → شارع داود / السلسلة", es: "Decumano → calle David / de la Cadena" } },
+  { k: "nea", la: 31.77445, lo: 35.23085, e: [4], dx: 0, dy: 22, a: "middle", w: 500, c: "#7a5a2a", n: { en: "Nea Church", he: "כנסיית הנֵאָה", ar: "كنيسة النيّا", es: "Iglesia Nea" } },
+  { k: "beth", la: 31.78145, lo: 35.23593, e: [2,4,5], dx: 14, dy: 0, a: "start", w: 500, c: "#2f6b72", n: { en: "Pool of Bethesda", he: "בריכת בית־חסדא", ar: "بركة بيت حسدا", es: "Piscina de Betesda" } },
+  { k: "upper", la: 31.77380, lo: 35.22940, e: [2], dx: 0, dy: 0, a: "middle", w: 600, c: "#7a5a2a", n: { en: "Upper City", he: "העיר העליונה", ar: "المدينة العليا", es: "Ciudad Alta" }, s: { en: "priestly mansions", he: "בתי הכוהנים", ar: "قصور الكهنة", es: "mansiones sacerdotales" } },
+  { k: "ophel", la: 31.77520, lo: 35.23570, e: [-1,1,2], dx: 14, dy: 0, a: "start", w: 500, c: "#7a5a2a", n: { en: "Ophel", he: "העופל", ar: "العوفل", es: "Ofel" } },
+  { k: "2w", la: 31.77900, lo: 35.23130, e: [2], dx: -14, dy: -6, a: "end", w: 600, c: "#a8452f", n: { en: "Second Wall", he: "החומה השנייה", ar: "السور الثاني", es: "Segunda Muralla" }, s: { en: "course disputed", he: "המסלול במחלוקת", ar: "المسار موضع خلاف", es: "trazado en disputa" } },
+  { k: "3w", la: 31.78560, lo: 35.23050, e: [2], dx: 0, dy: -16, a: "middle", w: 600, c: "#a8452f", n: { en: "Third Wall — Agrippa I, 41–44 CE", he: "החומה השלישית — אגריפס א', 41–44", ar: "السور الثالث — أغريباس الأول، ٤١–٤٤م", es: "Tercera Muralla — Agripa I, 41–44 d.C." }, s: { en: "after Jesus' lifetime; line disputed", he: "אחרי ימי ישוע; הקו במחלוקת", ar: "بعد زمن المسيح؛ المسار متنازع عليه", es: "posterior a Jesús; trazado en disputa" } },
+  { k: "muslimq", la: 31.78000, lo: 35.23380, e: [6,7,8], dx: 0, dy: 0, a: "middle", w: 600, c: "#2f4f66", n: { en: "Muslim Quarter", he: "הרובע המוסלמי", ar: "الحارة الإسلامية", es: "Barrio Musulmán" } },
+  { k: "jewishq", la: 31.77540, lo: 35.23200, e: [5,6,7,8], dx: 0, dy: 0, a: "middle", w: 600, c: "#2f4f66", n: { en: "Jewish Quarter", he: "הרובע היהודי", ar: "حارة اليهود", es: "Barrio Judío" } },
+  { k: "christq", la: 31.77950, lo: 35.22810, e: [5,6,7,8], dx: 0, dy: 0, a: "middle", w: 600, c: "#2f4f66", n: { en: "Christian Quarter", he: "הרובע הנוצרי", ar: "حارة النصارى", es: "Barrio Cristiano" } },
+  { k: "armq", la: 31.77480, lo: 35.22880, e: [5,6,7,8], dx: 0, dy: 0, a: "middle", w: 600, c: "#2f4f66", n: { en: "Armenian Quarter", he: "הרובע הארמני", ar: "حارة الأرمن", es: "Barrio Armenio" } },
+  { k: "wwp", la: 31.77655, lo: 35.23320, e: [8], dx: -12, dy: 20, a: "end", w: 600, c: "#2f4f66", n: { en: "Western Wall plaza", he: "רחבת הכותל", ar: "ساحة الحائط الغربي", es: "Plaza del Muro" }, s: { en: "flat — the valley is beneath it", he: "שטוחה — העמק מתחתיה", ar: "مستوية — والوادي تحتها", es: "llana: el valle está debajo" } },
+  { k: "dome", la: 31.77802, lo: 35.23516, e: [-2,5,6,7,8], dx: 0, dy: 26, a: "middle", w: 600, c: "#7a5a2a", n: { en: "Dome of the Rock", he: "כובד הסלע", ar: "قبة الصخرة", es: "Cúpula de la Roca" } },
+  { k: "aqsa", la: 31.77618, lo: 35.23576, e: [-2,5,6,7,8], dx: 14, dy: 4, a: "start", w: 500, c: "#7a5a2a", n: { en: "Al-Aqsa Mosque", he: "מסגד אל־אקצא", ar: "المسجد الأقصى", es: "Mezquita de al-Aqsa" } },
+  { k: "golden", la: 31.77918, lo: 35.23723, e: [-2,5,6,7,8], dx: 14, dy: 0, a: "start", w: 500, c: "#2f4f66", n: { en: "Golden Gate", he: "שער הרחמים", ar: "باب الرحمة", es: "Puerta Dorada" } }
+];
+
+class Component extends DCLogic {
+  state = { era: 2, lang: "en", zoom: 1, cx: VW / 2, cy: VH / 2, showModern: true, showTopo: true, drag: null };
+
+  mapRef = (el) => {
+    if (!el || this._ro) return;
+    const upd = () => { const r = el.getBoundingClientRect(); if (r.width && r.height) this.setState({ aspect: r.width / r.height, mapH: r.height }); };
+    this._ro = new ResizeObserver(upd); this._ro.observe(el); upd();
+  };
+
+  componentDidMount() {
+    try {
+      const s = localStorage.getItem("jq-state");
+      if (s) { const o = JSON.parse(s); this.setState({ era: o.era ?? 2, lang: o.lang ?? "en" }); }
+    } catch (e) {}
+    this._key = (ev) => {
+      if (ev.key === "ArrowRight") this.go(1);
+      else if (ev.key === "ArrowLeft") this.go(-1);
+    };
+    window.addEventListener("keydown", this._key);
+  }
+  componentWillUnmount() { window.removeEventListener("keydown", this._key); if (this._ro) this._ro.disconnect(); }
+
+  persist(era, lang) { try { localStorage.setItem("jq-state", JSON.stringify({ era, lang })); } catch (e) {} }
+  setEra = (i) => { const era = Math.max(0, Math.min(ERAS.length - 1, i)); this.setState({ era }); this.persist(era, this.state.lang); };
+  go = (d) => this.setEra(this.state.era + d);
+
+  X(lo) { return (lo - LON0) * MLON; }
+  Y(la) { return (LAT0 - la) * MLAT; }
+  path(pts, close) {
+    let d = "";
+    for (let i = 0; i < pts.length; i++) d += (i ? " L " : "M ") + this.X(pts[i][1]).toFixed(1) + " " + this.Y(pts[i][0]).toFixed(1);
+    return d + (close ? " Z" : "");
+  }
+
+  active(list, era) { return list === "all" ? 1 : (list.indexOf(era) >= 0 ? 1 : 0); }
+
+  renderVals() {
+    const eraIdx = this.state.era, lang = this.state.lang, z = this.state.zoom;
+    // legacy era numbering: the post-exilic layer was inserted at index 2 and maps to -1
+    const era = eraIdx < 2 ? eraIdx : eraIdx === 2 ? -1 : eraIdx === 6 ? -2 : eraIdx < 6 ? eraIdx - 1 : eraIdx - 2;
+    const t = T[lang] || T.en;
+    const E = ERAS[eraIdx];
+    const mOn = this.state.showModern || era === 8;
+    const mo = era === 8 ? 1 : (mOn ? 0.5 : 0);
+
+    const A = this.state.aspect || 1, dataA = VW / VH;
+    const baseW = A > dataA ? VH * A : VW, baseH = A > dataA ? VH : VW / A;
+    const bx0 = VW / 2 - baseW / 2, by0 = VH / 2 - baseH / 2;
+    const w = baseW / z, h = baseH / z;
+    const cx = Math.max(bx0 + w / 2, Math.min(bx0 + baseW - w / 2, this.state.cx));
+    const cy = Math.max(by0 + h / 2, Math.min(by0 + baseH - h / 2, this.state.cy));
+    const vbStr = [(cx - w / 2).toFixed(1), (cy - h / 2).toFixed(1), w.toFixed(1), h.toFixed(1)].join(" ");
+    const u = 1.35 / z;
+    const fs = 30 * u, fs2 = 22 * u;
+
+
+    const S = [];
+    const add = (d, fill, stroke, w, dash, op) => S.push({ d, fill: fill || "none", stroke: stroke || "none", w: w || 0, dash: dash || "none", op: op });
+
+    // valleys
+    const valleys = [
+      { d: this.path(P.valleys.kidron, false), w: 58 },
+      { d: this.path(P.valleys.hinnom, false), w: 50 },
+      { d: this.path(P.valleys.tyropoeon, false), w: 42 }
+    ];
+
+    // ancient built areas
+    add(this.path(P.jebusite, true), "rgba(185,140,70,.28)", "#8a6a3e", 7, "none", era === 0 ? 1 : 0);
+    add(this.path(P.ironAgeCity, true), "rgba(185,140,70,.24)", "#8a6a3e", 7, "none", era === 1 ? 1 : 0);
+    add(this.path(P.cityOfDavid, true), "rgba(185,140,70,.26)", "#8a6a3e", 6, "none", (era === 2 || era === -1) ? 1 : 0);
+    add(this.path(P.nehemiah, false), "none", "#8a5a2b", 10, "none", era === -1 ? 1 : 0);
+    add(this.path(P.westernHillIron, true), "none", "#a89673", 4, "4 10", era === -1 ? 1 : 0);
+        add(this.path(P.broadWall, false), "none", "#8a5a2b", 13, "none", era === 1 ? 1 : 0);
+    add(this.path(P.solomonic, true), "rgba(185,140,70,.18)", "#8a6a3e", 5, "12 9", (era === 1 || era === -1) ? 1 : 0);
+    add(this.path(P.ophel, true), "rgba(185,140,70,.20)", "#8a6a3e", 4, "none", (era === 2 || era === -1) ? 1 : 0);
+    add(this.path(P.secondTemple, true), "rgba(185,140,70,.24)", "#b98c46", 9, "none", era === 2 ? 1 : 0);
+    add(this.path(P.secondWall, false), "none", "#a8452f", 8, "20 12", era === 2 ? 1 : 0);
+    add(this.path(P.thirdWall, false), "none", "#a8452f", 6, "26 16", era === 2 ? 0.85 : 0);
+    add(this.path(P.quarry, true), "url(#jq-quarry)", "#a8452f", 3, "8 6", era === 2 ? 1 : 0);
+    add(this.path(P.temple, true), "rgba(185,140,70,.55)", "#8a5a2b", 4, "none", era === 2 ? 1 : 0);
+    add(this.path(P.royalStoa, true), "rgba(185,140,70,.45)", "#8a5a2b", 3, "none", era === 2 ? 1 : 0);
+    add(this.path(P.antonia, true), "rgba(185,140,70,.45)", "#8a5a2b", 3, "none", era === 2 ? 1 : 0);
+
+    // platform: standing from Herod on
+    add(this.path(P.platform, true), "rgba(185,140,70,.16)", "#b98c46", 8, "none", (era >= 2 || era === -2) ? 1 : 0);
+
+    // Aelia / Byzantine / Crusader / Mamluk walled circuit ≈ standing line
+    add(this.path(P.ottoman, true), "rgba(185,140,70,.14)", "#8a6a3e", 6, "14 10", ((era >= 3 && era <= 6) || era === -2) ? 1 : 0);
+
+    // Roman grid, persists
+    add(this.path(P.cardoW, false), "none", "#8a6a3e", 11, "none", (era >= 3 || era === -2) ? 1 : 0);
+    add(this.path(P.cardoWext, false), "none", "#8a6a3e", 11, "none", (era === 4 || era === 5) ? 1 : 0);
+    add(this.path(P.cardoE, false), "none", "#8a6a3e", 10, "none", (era >= 3 || era === -2) ? 1 : 0);
+    add(this.path(P.decumanus, false), "none", "#8a6a3e", 11, "none", (era >= 3 || era === -2) ? 1 : 0);
+    add(this.path(P.decumanusN, false), "none", "#8a6a3e", 8, "none", (era >= 3 || era === -2) ? 1 : 0);
+
+    add(this.path(P.constantinian, true), "rgba(185,140,70,.5)", "#8a5a2b", 4, "none", era === 4 ? 1 : 0);
+    add(this.path(P.nea, true), "rgba(185,140,70,.5)", "#8a5a2b", 4, "none", era === 4 ? 1 : 0);
+    add(this.path(P.bethesda, true), "rgba(74,127,134,.45)", "#2f6b72", 3, "none", (era === 2 || era === 4 || era === 5) ? 1 : 0);
+    add(this.path(P.sepulchre, true), "rgba(185,140,70,.55)", "#8a5a2b", 4, "none", (era >= 5 || era === -2) ? 1 : 0);
+    add(this.path(P.dome, true), "rgba(185,140,70,.5)", "#8a5a2b", 4, "none", (era >= 5 || era === -2) ? 1 : 0);
+    add(this.path(P.aqsa, true), "rgba(185,140,70,.5)", "#8a5a2b", 4, "none", (era >= 5 || era === -2) ? 1 : 0);
+    add(this.path(P.citadel, true), "rgba(185,140,70,.5)", "#8a5a2b", 4, "none", (era >= 2 || era === -2) ? 1 : 0);
+    add(this.path(P.umayyad, true), "rgba(185,140,70,.45)", "#8a5a2b", 4, "none", era === -2 ? 1 : 0);
+
+    // quarters
+    add(this.path(P.christianQ, true), "rgba(61,96,118,.10)", "#3d6076", 3, "12 9", era === 5 ? 1 : 0);
+    add(this.path(P.armenianQ, true), "rgba(61,96,118,.10)", "#3d6076", 3, "12 9", era === 5 ? 1 : 0);
+    add(this.path(P.muslimQ, true), "rgba(138,90,43,.16)", "#8a5a2b", 3, "12 9", era === 6 ? 1 : 0);
+    add(this.path(P.jewishQ, true), "rgba(61,96,118,.10)", "#3d6076", 3, "12 9", (era === 5 || era === 8) ? 1 : 0);
+
+    // water
+    add(this.path(P.tunnel, false), "none", "#4a7f86", 7, "none", (era === 1 || era === 2 || era === 8 || era === -1) ? 1 : 0);
+    add(this.path(P.siloam, true), "rgba(74,127,134,.5)", "#2f6b72", 4, "none", (era >= 1 || era === -1) ? 1 : 0);
+
+    // modern layer
+    add(this.path(P.ottoman, true), "rgba(61,96,118,.07)", "#3d6076", 10, "none", mo);
+    P.streets.forEach((s) => add(this.path(s, false), "none", "#3d6076", 5, "none", mo * 0.7));
+    add(this.path(P.wwPlaza, true), "url(#jq-fill)", "#3d6076", 4, "none", era === 8 ? 1 : 0);
+
+    const marks = [
+      { la: 31.77300, lo: 35.23600, e: "all", fill: "#2f6b72", r: 9 },
+      { la: 31.77021, lo: 35.23538, e: [1,2,3,4,5,6,7,8], fill: "#2f6b72", r: 8 },
+      { la: 31.77839, lo: 35.22972, e: [2], fill: "#a8452f", r: 11 },
+      { la: 31.77606, lo: 35.23431, e: [2], fill: "#8a5a2b", r: 8 },
+      { la: 31.77700, lo: 35.23445, e: [2], fill: "#8a5a2b", r: 8 },
+      { la: 31.77568, lo: 35.23010, e: [1], fill: "#8a5a2b", r: 9 },
+      { la: 31.77664, lo: 35.22740, e: [7,8], fill: "#3d6076", r: 8 },
+      { la: 31.78135, lo: 35.23000, e: [3,4,5,6,7,8], fill: "#3d6076", r: 8 },
+      { la: 31.77477, lo: 35.23394, e: [7,8], fill: "#3d6076", r: 8 },
+      { la: 31.78130, lo: 35.23697, e: [7,8], fill: "#3d6076", r: 8 },
+      { la: 31.77918, lo: 35.23723, e: [5,6,7,8], fill: "#3d6076", r: 7 },
+      { la: 31.77181, lo: 35.22879, e: [1,2,3,4,5,6,7,8], fill: "#8a5a2b", r: 7 }
+    ].map((m) => ({ x: this.X(m.lo).toFixed(1), y: this.Y(m.la).toFixed(1), r: (m.r * 1.1).toFixed(1), fill: m.fill, sw: 3, op: this.active(m.e, era) }));
+
+    const LF = "'Archivo Narrow', 'Frank Ruhl Libre', 'Noto Naskh Arabic', sans-serif";
+    const txt = (key, x, y, anchor, size, fill, weight, halo, italic, s, hw) => [
+      React.createElement("text", { key: key + "h", x, y, textAnchor: anchor, fontSize: size, fill: halo, stroke: halo, strokeWidth: hw, strokeLinejoin: "round", style: { fontFamily: LF, letterSpacing: ".04em", paintOrder: "stroke" } }, s),
+      React.createElement("text", { key: key + "t", x, y, textAnchor: anchor, fontSize: size, fill, fontWeight: weight, fontStyle: italic ? "italic" : "normal", style: { fontFamily: LF, letterSpacing: ".04em" } }, s)
+    ];
+
+    const labels = LB.map((l) => {
+      const on = l.mod ? mo : this.active(l.e, era);
+      const sub = l.s ? (l.s[lang] || l.s.en) : "";
+      return {
+        tx: (this.X(l.lo) + (l.dx || 0) * u).toFixed(1),
+        ty: (this.Y(l.la) + (l.dy || 0) * u + fs * 0.34).toFixed(1),
+        ty2: (this.Y(l.la) + (l.dy || 0) * u + fs * 0.34 + fs2 * 1.05).toFixed(1),
+        anchor: l.a, fs: fs.toFixed(1), fs2: fs2.toFixed(1), halo: (fs * 0.16).toFixed(2),
+        name: l.n[lang] || l.n.en, sub: sub, color: l.c, subColor: l.c === "#a8452f" ? "#a8452f" : "#6f6350",
+        weight: l.w, op: on
+      };
+    });
+
+    const labelSvg = React.createElement("svg", {
+      viewBox: vbStr,
+      preserveAspectRatio: "xMidYMid meet",
+      style: { position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "visible" }
+    }, labels.filter((l) => l.op > 0).map((l, i) => React.createElement("g", { key: i, opacity: l.op }, [
+      ...txt("a" + i, l.tx, l.ty, l.anchor, l.fs, l.color, l.weight, "#f2e9d6", false, l.name, l.halo),
+      ...(l.sub ? txt("b" + i, l.tx, l.ty2, l.anchor, l.fs2, l.subColor, 500, "#f2e9d6", true, l.sub, l.halo) : [])
+    ])));
+
+    const csSvg = React.createElement("svg", {
+      viewBox: "0 0 1240 350", preserveAspectRatio: "xMidYMid meet",
+      style: { position: "absolute", inset: 0, width: "100%", height: "100%" }
+    }, CS.map((c, i) => React.createElement("g", { key: i }, [
+      React.createElement("text", { key: "h", x: c.x, y: c.y, textAnchor: c.a, fontSize: c.fs * 2.2, fill: "#e7dcc4", stroke: "#e7dcc4", strokeWidth: 9, strokeLinejoin: "round", style: { fontFamily: LF, paintOrder: "stroke" } }, c.t[lang] || c.t.en),
+      React.createElement("text", { key: "t", x: c.x, y: c.y, textAnchor: c.a, fontSize: c.fs * 2.2, fill: c.c, fontWeight: c.w, style: { fontFamily: LF, letterSpacing: ".03em" } }, c.t[lang] || c.t.en)
+    ])));
+
+    const langs = [["en","English"],["he","עברית"],["ar","العربية"],["es","Español"]].map(([k, label]) => ({
+      label, bg: lang === k ? "#2a231a" : "rgba(247,241,228,.7)", fg: lang === k ? "#f3ecdb" : "#4a4132",
+      pick: () => { this.setState({ lang: k }); this.persist(this.state.era, k); }
+    }));
+
+    const ticks = ERAS.map((x, i) => ({
+      label: x.tick[lang] || x.tick.en, date: x.date[lang] || x.date.en,
+      color: i === eraIdx ? "#2a231a" : "#8a7550", dateColor: i === eraIdx ? "#8a5a2b" : "#a89673",
+      tickColor: i === eraIdx ? "#2a231a" : "#c3b394", weight: i === eraIdx ? 700 : 500,
+      pick: () => this.setEra(i)
+    }));
+
+    const pick = (ev, el) => {
+      const r = el.getBoundingClientRect();
+      const f = (ev.clientX - r.left) / r.width;
+      this.setEra(Math.round(f * (ERAS.length - 1)));
+    };
+
+    let dragging = false;
+    return {
+      t_kicker: t.kicker, t_title: t.title, t_sub: t.sub, t_fit: t.fit, t_modern: t.modern,
+      t_valleys: t.valleys, t_legend: t.legend, t_north: t.north, t_timeline: t.timeline, t_look: t.look,
+      t_sectionKicker: t.sectionKicker, t_sectionTitle: t.sectionTitle, t_sectionBody: t.sectionBody, t_sources: t.sources,
+      dir: (lang === "he" || lang === "ar") ? "rtl" : "ltr",
+      langs, ticks, valleys, shapes: S, marks, labelSvg, csSvg,
+      topOp: 1, topoOp: this.state.showTopo ? 1 : 0.12,
+      modernSwatch: mOn ? "#3d6076" : "transparent",
+      topoSwatch: this.state.showTopo ? "#a8906a" : "transparent",
+      viewBox: vbStr, mapRef: this.mapRef,
+      scaleLabel: (200 / z >= 100 ? "200 m" : "100 m"),
+      eraIndexLabel: t.eraOf + " " + (eraIdx + 1) + " " + t.of + " " + ERAS.length,
+      eraTitle: E.title[lang] || E.title.en,
+      eraYears: E.years[lang] || E.years.en,
+      eraBody: E.body[lang] || E.body.en,
+      eraFlag: E.flag ? (E.flag[lang] || E.flag.en) : "",
+      eraDisputed: E.disputed ? (E.disputed[lang] || E.disputed.en) : "",
+      eraLook: (E.look[lang] || E.look.en).map((text, i) => ({ n: String(i + 1).padStart(2, "0"), text })),
+      legend: (LEG[lang] || LEG.en).map(([rule, text]) => ({ rule, text })),
+      sectionKeys: (SECKEYS[lang] || SECKEYS.en).map(([rule, text]) => ({ rule, text })),
+      thumbPct: (eraIdx / (ERAS.length - 1)) * 100 * (1 - 1 / ERAS.length) + (100 / ERAS.length / 2) + "%",
+      zoomIn: () => this.setState({ zoom: Math.min(6, this.state.zoom * 1.5) }),
+      zoomOut: () => this.setState({ zoom: Math.max(1, this.state.zoom / 1.5) }),
+      resetView: () => this.setState({ zoom: 1, cx: VW / 2, cy: VH / 2 }),
+      toggleModern: () => this.setState({ showModern: !this.state.showModern }),
+      toggleTopo: () => this.setState({ showTopo: !this.state.showTopo }),
+      prevEra: () => this.go(-1),
+      nextEra: () => this.go(1),
+      onDown: (ev) => { this._d = { x: ev.clientX, y: ev.clientY, cx, cy, rw: ev.currentTarget.getBoundingClientRect().width }; },
+      onMove: (ev) => {
+        if (!this._d) return;
+        const k = w / this._d.rw;
+        this.setState({ cx: this._d.cx - (ev.clientX - this._d.x) * k, cy: this._d.cy - (ev.clientY - this._d.y) * k });
+      },
+      onUp: () => { this._d = null; },
+      trackDown: (ev) => { this._t = true; pick(ev, ev.currentTarget); },
+      trackMove: (ev) => { if (this._t) pick(ev, ev.currentTarget); },
+      trackUp: () => { this._t = false; }
+    };
+  }
+}
+
+</script>
+</body>
+</html>

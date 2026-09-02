@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="./cod-data.js"></script>
+<script src="./cod-elev.js"></script>
+<script src="./cod-plain.js"></script>
+<script src="./cod-essays-a.js"></script>
+<script src="./cod-essays-b.js"></script>
+<script src="./cod-essays-c.js"></script>
+<script src="./cod-scripture.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #0d0b09; }
+  * { box-sizing: border-box; }
+  a { color: #c88a3c; text-decoration: none; border-bottom: 1px solid rgba(200,138,60,0.35); }
+  a:hover { color: #e0a75c; border-bottom-color: rgba(224,167,92,0.7); }
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-track { background: #0d0b09; }
+  ::-webkit-scrollbar-thumb { background: #322b22; border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: #4a4034; }
+  input[type=range].cod { -webkit-appearance: none; appearance: none; background: transparent; }
+  input[type=range].cod::-webkit-slider-thumb { -webkit-appearance: none; width: 15px; height: 30px; border-radius: 3px; background: #f0e7d5; border: 1px solid #0d0b09; box-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 3px 10px rgba(0,0,0,0.7); cursor: grab; margin-top: -8px; }
+  input[type=range].cod::-webkit-slider-thumb:active { cursor: grabbing; background: #fff; }
+  input[type=range].cod::-webkit-slider-runnable-track { height: 14px; background: transparent; }
+  input[type=range].cod::-moz-range-thumb { width: 13px; height: 28px; border-radius: 3px; background: #f0e7d5; border: 1px solid #0d0b09; cursor: grab; }
+  input[type=range].codsm::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #c8b99c; border: none; margin-top: -4px; cursor: pointer; }
+  input[type=range].codsm::-webkit-slider-runnable-track { height: 4px; background: #2e2820; border-radius: 2px; }
+  input[type=range].codsm { -webkit-appearance: none; appearance: none; background: transparent; }
+</style>
+</helmet>
+
+<div style="height: 100vh; min-height: 540px; display: grid; grid-template-columns: minmax(196px, 0.62fr) minmax(300px, 1.9fr) minmax(268px, 1fr); grid-template-rows: 58px minmax(0, 1fr) 112px; background: #0d0b09; font-family: 'IBM Plex Mono', ui-monospace, monospace; color: #ded4c2; overflow: hidden;">
+
+  <header style="grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 22px; border-bottom: 1px solid #241f19; background: #100e0b;">
+    <div style="flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 18px;">
+      <h1 style="flex: none; margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 21px; letter-spacing: 0.02em; color: #f0e7d5;">The City of David</h1>
+      <span style="flex: none; align-self: center; padding: 3px 7px 2px; border: 1px solid rgba(200,138,60,0.55); border-radius: 3px; background: rgba(200,138,60,0.12); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: #d9a662;">Beta</span>
+      <p style="margin: 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; letter-spacing: 0.06em; color: #7d715e; text-transform: uppercase;">Southeastern ridge of Jerusalem · Gihon Spring to the Pool of Siloam · c. 4500 BCE – today</p>
+    </div>
+    <div style="flex: none; display: flex; align-items: center; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 9px; font-size: 10.5px; letter-spacing: 0.08em; color: #6b6152; text-transform: uppercase; white-space: nowrap;">
+        <span>{{ activeName }}</span>
+        <span style="width: 9px; height: 9px; border-radius: 50%; background: {{ activeColor }};"></span>
+      </div>
+      <button onClick="{{ toggleHelp }}" style="{{ helpBtn }}">About</button>
+    </div>
+  </header>
+
+  <div style="{{ helpStyle }}">
+    <div style="max-width: 760px; margin: 0 auto; padding: 30px 34px 48px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 1px solid #2a241d;">
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <button onClick="{{ goRead }}" style="{{ tabReadBtn }}">How to read this</button>
+          <button onClick="{{ goModel }}" style="{{ tabModelBtn }}">The model</button>
+          <button onClick="{{ goAuthor }}" style="{{ tabAuthorBtn }}">Taylor Halverson, Ph.D.</button>
+        </div>
+        <button onClick="{{ toggleHelp }}" style="{{ helpBtn }}">Close</button>
+      </div>
+
+      <div style="{{ paneRead }}">
+      <h2 style="margin: 26px 0 0; font-family: 'Newsreader', serif; font-weight: 400; font-size: 27px; color: #f4ecdb;">How to read this</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px 34px; margin-top: 22px;">
+        <div>
+          <p style="margin: 0 0 7px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: {{ activeColor }};">Colour = phase</p>
+          <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: #cec4b1;">The base map is deliberately grey. Every colour on screen belongs to a phase, running cool for the earliest periods to warm for the latest. The selected phase is drawn solid; other phases you switch on sit behind it as faint underlays, the way a published phase plan stacks its periods.</p>
+        </div>
+        <div>
+          <p style="margin: 0 0 7px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: {{ activeColor }};">Line = how sure we are</p>
+          <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: #cec4b1;">Solid means excavated and not seriously disputed. Long dashes mean the line is partly reconstructed between excavated points. Short dashes mean scholars disagree about its date or identification. Dotted means it is drawn only to help you read the map. Hatching marks destruction and collapse.</p>
+        </div>
+        <div>
+          <p style="margin: 0 0 7px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: {{ activeColor }};">Four ways to look</p>
+          <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: #cec4b1;">Plan looks straight down and numbers each element to the list on the right. Section cuts along the ridge at 2.5× vertical exaggeration to show the water systems underneath. Elevation is a true-scale side view you can walk along. 3D is a modelled landform you can orbit, with every structure at its real footprint and height.</p>
+        </div>
+        <div>
+          <p style="margin: 0 0 7px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: {{ activeColor }};">Moving around</p>
+          <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: #cec4b1;">Drag the timeline, or press the left and right arrow keys to step one phase at a time. Drag inside any drawing to pan and use the plus and minus buttons, or the scroll wheel in 3D, to zoom. Hover anything — on the drawing or in the element list — to read what it is and how confident the evidence is.</p>
+        </div>
+      </div>
+      <p style="margin: 26px 0 0; padding-top: 16px; border-top: 1px solid #2a241d; font-size: 11.5px; line-height: 1.6; color: #7d715e;">This is a reading of published excavation, not a photograph of the past. Where the evidence is contested — the date of the Stepped Stone Structure, the Large Stone Structure as a Davidic palace, Nehemiah's wall, the Seleucid Akra — the disagreement is shown rather than resolved, and the essay for each phase sets out both sides.</p>
+      </div>
+
+      <div style="{{ paneModel }}">
+        <h2 style="margin: 26px 0 0; font-family: 'Newsreader', serif; font-weight: 400; font-size: 27px; color: #f4ecdb;">The City of David</h2>
+        <p style="margin: 8px 0 0; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #7d715e;">Prepared by Taylor Halverson, Ph.D. · Beta</p>
+        <p style="margin: 20px 0 0; font-family: 'Newsreader', serif; font-size: 16.5px; line-height: 1.65; color: #d5cab7; text-wrap: pretty;">Thirteen phases of the southeastern ridge of Jerusalem, from the first spring-side settlement to the archaeological park standing there now, drawn on one fixed footprint so that every period can be laid over every other. Each phase carries the same four views — plan, section, elevation, 3D — and an essay setting out what was found, who found it, and what remains argued.</p>
+
+        <div style="margin: 24px 0 0; padding: 14px 16px; border: 1px solid rgba(200,138,60,0.35); border-radius: 4px; background: rgba(200,138,60,0.07);">
+          <p style="margin: 0 0 6px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #d9a662;">Beta</p>
+          <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: #cec4b1; text-wrap: pretty;">Phase dates, structure footprints and the identification of individual buildings are still under review. Where the published evidence is itself unsettled, the drawing says so through its line weight rather than quietly choosing a side.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px 34px; margin-top: 26px;">
+          <div>
+            <p style="margin: 0 0 7px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: {{ activeColor }};">On the terrain</p>
+            <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: #cec4b1; text-wrap: pretty;">The landform is built from measured points: the Gihon Spring at 636 m, the Pool of Siloam at 635.7 m, the ridge crest falling from about 725 m at the north to 624 m at the south end. Hezekiah's Tunnel drops roughly 30 cm over its 533 m, and the model holds that. Slopes between those anchors are reasoned, not surveyed.</p>
+          </div>
+          <div>
+            <p style="margin: 0 0 7px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: {{ activeColor }};">On vertical exaggeration</p>
+            <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: #cec4b1; text-wrap: pretty;">The ridge is genuinely subtle, so the 3D view exaggerates height — ×1.6 by default — to make it legible. The factor is stated on screen at all times and the slider will return it to true 1:1. Plan distances are never exaggerated.</p>
+          </div>
+          <div>
+            <p style="margin: 0 0 7px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: {{ activeColor }};">Sources</p>
+            <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: #cec4b1; text-wrap: pretty;">Published excavation reports from Warren, Parker, Weill, Kenyon, Shiloh, Reich and Shukron, and the ongoing Givati and Giv'ati parking-lot work; elevations from the Survey of Israel; water-system gradients from the tunnel surveys.</p>
+          </div>
+          <div>
+            <p style="margin: 0 0 7px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: {{ activeColor }};">Your own imagery</p>
+            <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: #cec4b1; text-wrap: pretty;">A satellite photograph from your own device can be loaded into the plan view and aligned to the ridge with scale, rotation, stretch and pan. It stays on this device; nothing is uploaded.</p>
+          </div>
+        </div>
+        <p style="margin: 26px 0 0; padding-top: 16px; border-top: 1px solid #2a241d; font-size: 11.5px; line-height: 1.6; color: #7d715e;">Corrections are welcome — particularly measured elevations for the eastern and western flanks, which are the weakest part of the landform.</p>
+      </div>
+
+      <div style="{{ paneAuthor }}">
+        <h2 style="margin: 26px 0 0; font-family: 'Newsreader', serif; font-weight: 400; font-size: 27px; color: #f4ecdb;">Taylor Halverson, Ph.D.</h2>
+        <p style="margin: 8px 0 0; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #7d715e;">Author · Teacher · Tour leader · Scripture scholar</p>
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px; max-width: 620px;">
+          <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 16.5px; line-height: 1.65; color: #d5cab7; text-wrap: pretty;">Taylor Halverson is a scholar of scripture and a teacher of learners — an entrepreneurship professor in the BYU Marriott School of Business who spends his working life helping people find and act on the best ideas and tools available to them.</p>
+          <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 16.5px; line-height: 1.65; color: #cec4b1; text-wrap: pretty;">He is the author and editor of more than fifty books and nearly a thousand articles and blog posts, and a builder of scripture study resources: the ScripturePlus app with Scripture Central, whose scripture YouTube channel he co-hosted to more than fifty million views, and BYU's Virtual Scripture Group, whose team spent more than five years reconstructing New Testament Jerusalem in three dimensions. This visualization of the City of David belongs to that same body of work — tools made so that ordinary readers can see what specialists see.</p>
+          <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 16.5px; line-height: 1.65; color: #cec4b1; text-wrap: pretty;">He leads tours to Israel and the Middle East, China, India, Central America, Europe, and the national parks of the American West, where he unfolds how geology, geography, civilization, and scriptural texts created our beautiful present day.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px 34px; margin-top: 28px; padding-top: 20px; border-top: 1px solid #2a241d;">
+          <div>
+            <p style="margin: 0 0 9px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: {{ activeColor }};">Academic training</p>
+            <div style="display: flex; flex-direction: column; gap: 6px; font-family: 'Newsreader', serif; font-size: 14.5px; line-height: 1.45; color: #cec4b1;">
+              <span>Ph.D., Judaism &amp; Christianity in Antiquity — Indiana University</span>
+              <span>Ph.D., Instructional Systems Technology — Indiana University</span>
+              <span>M.A., Biblical Studies — Yale University</span>
+              <span>B.A., Ancient Near Eastern Studies — Brigham Young University</span>
+            </div>
+            <p style="margin: 12px 0 0; font-size: 11.5px; line-height: 1.6; color: #7d715e; text-wrap: pretty;">Two doctorates in two separate fields — the ancient world, and the design of learning. Both of them are in this tool.</p>
+          </div>
+          <div>
+            <p style="margin: 0 0 9px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: {{ activeColor }};">Elsewhere</p>
+            <div style="display: flex; flex-direction: column; gap: 7px; font-size: 13px;">
+              <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>
+              <a href="https://books.taylorhalverson.com" target="_blank" rel="noopener">books.taylorhalverson.com</a>
+              <a href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <aside style="grid-row: 2; grid-column: 1; border-right: 1px solid #241f19; background: #100e0b; overflow-y: auto; overflow-x: hidden; padding: 18px 16px 40px;">
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: #171410; border: 1px solid #2a241d; border-radius: 4px;">
+      <button onClick="{{ setPlan }}" style="{{ planBtn }}">Plan</button>
+      <button onClick="{{ setSection }}" style="{{ sectionBtn }}">Section</button>
+      <button onClick="{{ setElev }}" style="{{ elevBtn }}">Elevation · walk the ridge</button>
+      <button onClick="{{ set3d }}" style="{{ d3Btn }}">3D · orbit the ridge</button>
+    </div>
+    <p style="margin: 8px 0 0; font-size: 9.5px; line-height: 1.5; letter-spacing: 0.06em; color: #5f5648; text-transform: uppercase;">{{ viewHint }}</p>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; margin: 22px 0 8px;">
+      <p style="margin: 0; font-size: 10px; letter-spacing: 0.16em; color: #6b6152; text-transform: uppercase;">Phases · click to select</p>
+      <button onClick="{{ soloActive }}" title="Turn off every overlay except the selected phase" style="background: none; border: none; padding: 0; font-family: inherit; font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a7f6d; cursor: pointer; border-bottom: 1px solid #3a332a;">Solo</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <sc-for list="{{ eras }}" as="e" hint-placeholder-count="5">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin: 0 0 4px;">
+            <span style="font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #5f5648; white-space: nowrap;">{{ e.label }}</span>
+            <span style="flex: 1; height: 1px; background: #241f19;"></span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <sc-for list="{{ e.rows }}" as="p" hint-placeholder-count="3">
+              <div onClick="{{ p.select }}" style="{{ p.rowStyle }}">
+                <button onClick="{{ p.toggle }}" title="Show or hide this phase as an underlay" style="{{ p.dotStyle }}"></button>
+                <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px;">
+                  <span style="font-size: 11.5px; line-height: 1.25; text-wrap: pretty;">{{ p.n }}</span>
+                  <span style="font-size: 9.5px; color: #6b6152; letter-spacing: 0.03em;">{{ p.short }}</span>
+                </span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
+      <div>
+        <div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.1em; color: #6b6152; text-transform: uppercase; margin-bottom: 6px;">
+          <span>Overlay opacity</span><span>{{ opPct }}</span>
+        </div>
+        <input class="codsm" type="range" min="10" max="100" step="5" value="{{ opVal }}" onChange="{{ setOp }}" style="width: 100%;" />
+      </div>
+      <div style="padding: 11px 11px 12px; background: #16130f; border: 1px solid #241f19; border-radius: 4px;">
+        <label style="display: flex; align-items: center; gap: 9px; cursor: pointer; font-size: 11.5px; color: #e6dcc8;">
+          <input type="checkbox" checked="{{ present }}" onChange="{{ togglePresent }}" style="accent-color: #d8cdb8; width: 13px; height: 13px;" />
+          <span>Modern map overlay</span>
+        </label>
+        <div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.1em; color: #6b6152; text-transform: uppercase; margin: 10px 0 6px;">
+          <span>Transparency</span><span>{{ modernPct }}</span>
+        </div>
+        <input class="codsm" type="range" min="0" max="100" step="1" value="{{ modernVal }}" onChange="{{ setModern }}" onInput="{{ setModern }}" style="width: 100%;" />
+        <p style="margin: 8px 0 0; font-size: 10px; line-height: 1.5; color: #6b6152;">Present-day village and archaeological park: outline in plan, ground surface in section, standing buildings in the elevation and 3D views.</p>
+
+        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #241f19;">
+          <p style="margin: 0 0 8px; font-size: 10px; letter-spacing: 0.1em; color: #6b6152; text-transform: uppercase;">Satellite photo (plan view)</p>
+          <label style="{{ satDropStyle }}">
+            <input type="file" accept="image/*" onChange="{{ satLoad }}" style="display: none;" />
+            <span>{{ satPrompt }}</span>
+          </label>
+          <div style="{{ satCtlStyle }}">
+            <div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.1em; color: #6b6152; text-transform: uppercase; margin: 11px 0 6px;">
+              <span>Photo opacity</span><span>{{ satOpPct }}</span>
+            </div>
+            <input class="codsm" type="range" min="0" max="100" step="1" value="{{ satOpVal }}" onChange="{{ setSatOp }}" onInput="{{ setSatOp }}" style="width: 100%;" />
+            <p style="margin: 10px 0 6px; font-size: 10px; letter-spacing: 0.1em; color: #6b6152; text-transform: uppercase;">Align to the ridge</p>
+            <div style="display: grid; grid-template-columns: 52px 1fr; gap: 6px 9px; align-items: center; font-size: 10px; color: #7d715e;">
+              <span>Scale</span><input class="codsm" type="range" min="20" max="300" step="1" value="{{ satScaleVal }}" onChange="{{ setSatScale }}" onInput="{{ setSatScale }}" />
+              <span>Rotate</span><input class="codsm" type="range" min="-180" max="180" step="1" value="{{ satRotVal }}" onChange="{{ setSatRot }}" onInput="{{ setSatRot }}" />
+              <span>Left–right</span><input class="codsm" type="range" min="-400" max="400" step="1" value="{{ satDxVal }}" onChange="{{ setSatDx }}" onInput="{{ setSatDx }}" />
+              <span>Up–down</span><input class="codsm" type="range" min="-500" max="500" step="1" value="{{ satDyVal }}" onChange="{{ setSatDy }}" onInput="{{ setSatDy }}" />
+              <span>Stretch</span><input class="codsm" type="range" min="40" max="220" step="1" value="{{ satAspVal }}" onChange="{{ setSatAsp }}" onInput="{{ setSatAsp }}" />
+            </div>
+            <div style="display: flex; gap: 6px; margin-top: 10px;">
+              <button onClick="{{ satReset }}" style="{{ satMiniBtn }}">Reset alignment</button>
+              <button onClick="{{ satClear }}" style="{{ satMiniBtn }}">Remove</button>
+            </div>
+          </div>
+          <p style="margin: 9px 0 0; font-size: 10px; line-height: 1.5; color: #6b6152;">{{ satHelp }}</p>
+        </div>
+      </div>
+      <label style="display: flex; align-items: center; gap: 9px; cursor: pointer; font-size: 11.5px; color: #c3b9a6;">
+        <input type="checkbox" checked="{{ labelsOn }}" onChange="{{ toggleLabels }}" style="accent-color: #d8cdb8; width: 13px; height: 13px;" />
+        <span>Labels on drawing</span>
+      </label>
+      <label style="display: flex; align-items: center; gap: 9px; cursor: pointer; font-size: 11.5px; color: #c3b9a6;">
+        <input type="checkbox" checked="{{ scrOn }}" onChange="{{ toggleScr }}" style="accent-color: #d8cdb8; width: 13px; height: 13px;" />
+        <span>Scripture references</span>
+      </label>
+      <div style="{{ vexRow }}">
+        <div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.1em; color: #6b6152; text-transform: uppercase; margin-bottom: 6px;">
+          <span>Height exaggeration</span><span>{{ vexLabel }}</span>
+        </div>
+        <input class="codsm" type="range" min="10" max="30" step="1" value="{{ vexVal }}" onChange="{{ setVex }}" onInput="{{ setVex }}" style="width: 100%;" />
+        <div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.1em; color: #6b6152; text-transform: uppercase; margin: 16px 0 6px;">
+          <span>See through the hill</span><span>{{ xrayLabel }}</span>
+        </div>
+        <input class="codsm" type="range" min="10" max="100" step="1" value="{{ xrayVal }}" onChange="{{ setXray }}" onInput="{{ setXray }}" style="width: 100%;" />
+        <p style="margin: 7px 0 12px; font-size: 10px; line-height: 1.5; color: #6b6152;">Fade the hillside to glass to follow the water system underneath it — the spring at the foot of the Kidron, the shaft and tunnel inside the rock, the pool at the southern tip, and the buildings standing above them all.</p>
+        <p style="margin: 7px 0 0; font-size: 10px; line-height: 1.5; color: #6b6152;">The ridge is genuinely subtle — about 100 m of fall over 700 m. Stretching heights makes the landform readable; plan distances stay true. Set it to 1.0 for the real shape.</p>
+      </div>
+    </div>
+
+    <p style="margin: 26px 0 10px; font-size: 10px; letter-spacing: 0.16em; color: #6b6152; text-transform: uppercase;">Key — what is on screen now</p>
+    <div style="display: flex; flex-direction: column; gap: 9px; padding: 12px; background: #16130f; border: 1px solid #241f19; border-radius: 4px;">
+      <sc-for list="{{ catKey }}" as="k" hint-placeholder-count="8">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 11px; color: #b3a894;">
+          <svg width="34" height="16" viewBox="0 0 34 16" style="flex: none;">
+            <defs>
+              <pattern id="hatchkey" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <path d="M0 0 L0 6" stroke="{{ hatchColor }}" strokeWidth="2" opacity="0.8"></path>
+              </pattern>
+            </defs>
+            <path d="{{ k.d }}" fill="{{ k.fill }}" stroke="{{ k.stroke }}" strokeWidth="{{ k.sw }}"></path>
+          </svg>
+          <span>{{ k.n }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <p style="margin: 22px 0 10px; font-size: 10px; letter-spacing: 0.16em; color: #6b6152; text-transform: uppercase;">Key — confidence</p>
+    <div style="display: flex; flex-direction: column; gap: 10px; padding: 12px; background: #16130f; border: 1px solid #241f19; border-radius: 4px;">
+      <sc-for list="{{ confKey }}" as="k" hint-placeholder-count="4">
+        <div style="display: flex; gap: 10px; align-items: flex-start;">
+          <svg width="34" height="10" viewBox="0 0 34 10" style="flex: none; margin-top: 3px;">
+            <path d="M1 5 L33 5" stroke="{{ activeColor }}" strokeWidth="2.4" strokeDasharray="{{ k.dash }}"></path>
+          </svg>
+          <div style="min-width: 0;">
+            <div style="font-size: 11px; color: #d3c9b6; letter-spacing: 0.04em;">{{ k.n }}</div>
+            <div style="font-size: 10.5px; color: #7d715e; line-height: 1.45; margin-top: 2px;">{{ k.d }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <p style="margin: 22px 0 8px; font-size: 10px; letter-spacing: 0.16em; color: #6b6152; text-transform: uppercase;">Base map</p>
+    <p style="margin: 0; font-size: 10.5px; line-height: 1.6; color: #7d715e;">Schematic, north at top. The plan is a simplified rendering of the ridge, not a survey drawing. The section is a projected longitudinal cut along the ridge, north on the left, with roughly 2.5× vertical exaggeration; features off the centre line, including the spring, are projected onto it.</p>
+  </aside>
+
+  <main style="grid-row: 2; grid-column: 2; position: relative; overflow: hidden; background: #131009; display: flex; flex-direction: column;">
+    <div style="flex: none; height: 46px; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 0 12px; border-bottom: 1px solid #1e1a15; overflow: hidden;">
+      <div style="min-width: 0; display: flex; align-items: baseline; gap: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        <span style="font-family: 'Newsreader', serif; font-size: 20px; color: #f0e7d5; letter-spacing: 0.01em; overflow: hidden; text-overflow: ellipsis;">{{ activeName }}</span>
+        <span style="flex: none; font-size: 11px; letter-spacing: 0.08em; color: {{ activeColor }};">{{ activeSpan }}</span>
+      </div>
+      <div style="flex: none; display: flex; gap: 6px;">
+        <button onClick="{{ zoomOut }}" style="{{ zoomBtn }}">−</button>
+        <button onClick="{{ zoomIn }}" style="{{ zoomBtn }}">+</button>
+        <button onClick="{{ resetView }}" style="{{ resetBtn }}">Reset</button>
+      </div>
+    </div>
+
+    <div style="flex: none; padding: 13px 16px 14px; border-bottom: 1px solid #1e1a15; background: #16130f;">
+      <p style="margin: 0; font-family: 'Newsreader', serif; font-size: 19px; line-height: 1.3; color: #f4ecdb; text-wrap: pretty;">{{ sceneOne }}</p>
+      <p style="margin: 5px 0 0; font-size: 12px; line-height: 1.55; color: #a49a87; max-width: 78ch; text-wrap: pretty;">{{ sceneTwo }}</p>
+    </div>
+
+    <sc-if value="{{ isPlan }}" hint-placeholder-val="{{ true }}">
+      <svg viewBox="0 0 520 980" preserveAspectRatio="xMidYMid meet" onMouseDown="{{ dragStart }}" onMouseMove="{{ dragMove }}" onMouseUp="{{ dragEnd }}" onMouseLeave="{{ dragEnd }}" style="flex: 1 1 auto; min-height: 0; width: 100%; display: block; cursor: grab; user-select: none;">
+        <defs>
+          <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <path d="M0 0 L0 7" stroke="{{ hatchColor }}" strokeWidth="2.4" opacity="0.75"></path>
+          </pattern>
+        </defs>
+        <g transform="{{ planTransform }}">
+          <sc-if value="{{ hasSat }}" hint-placeholder-val="{{ false }}">
+            <image href="{{ satHref }}" x="{{ satX }}" y="{{ satY }}" width="{{ satW }}" height="{{ satH }}" opacity="{{ satOp }}" transform="{{ satRot }}" preserveAspectRatio="none" style="pointer-events: none;"></image>
+          </sc-if>
+          <sc-for list="{{ terrainPlan }}" as="s" hint-placeholder-count="4">
+            <path d="{{ s.d }}" fill="{{ s.f }}" stroke="{{ s.s }}" strokeWidth="{{ s.sw }}" strokeDasharray="{{ s.dash }}"></path>
+          </sc-for>
+          <sc-for list="{{ terrainLines }}" as="s" hint-placeholder-count="6">
+            <path d="{{ s.d }}" fill="none" stroke="{{ s.s }}" strokeWidth="{{ s.sw }}" strokeDasharray="{{ s.dash }}"></path>
+          </sc-for>
+          <sc-for list="{{ planShapes }}" as="s" hint-placeholder-count="10">
+            <path d="{{ s.d }}" fill="{{ s.fill }}" stroke="{{ s.stroke }}" strokeWidth="{{ s.sw }}" strokeDasharray="{{ s.dash }}" strokeLinejoin="round" strokeLinecap="round" opacity="{{ s.op }}" onMouseEnter="{{ s.enter }}" onClick="{{ s.click }}" style="cursor: pointer;"></path>
+          </sc-for>
+          <circle cx="358" cy="332" r="6" fill="#8fd0e8" opacity="0.9"></circle>
+          <circle cx="358" cy="332" r="12" fill="none" stroke="#8fd0e8" strokeWidth="1" opacity="0.4"></circle>
+          {{ terrainLabelEls }}
+          {{ planLabelEls }}
+          <path d="M40 148 L40 116 L84 116" fill="none" stroke="#7d715e" strokeWidth="2.2"></path>
+          <text x="48" y="108" fill="#7d715e" fontSize="26" fontFamily="'IBM Plex Mono', monospace">N</text>
+          <path d="M40 936 L120 936 M40 928 L40 946 M120 928 L120 946" stroke="#7d715e" strokeWidth="2" fill="none"></path>
+          <text x="80" y="970" fill="#7d715e" fontSize="24" textAnchor="middle" fontFamily="'IBM Plex Mono', monospace">c. 100 m</text>
+        </g>
+      </svg>
+    </sc-if>
+
+    <sc-if value="{{ isSection }}" hint-placeholder-val="{{ false }}">
+      <svg viewBox="0 0 980 752" preserveAspectRatio="xMidYMid meet" onMouseDown="{{ dragStart }}" onMouseMove="{{ dragMove }}" onMouseUp="{{ dragEnd }}" onMouseLeave="{{ dragEnd }}" style="flex: 1 1 auto; min-height: 0; width: 100%; display: block; cursor: grab; user-select: none;">
+        <defs>
+          <pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <path d="M0 0 L0 9" stroke="{{ hatchColor }}" strokeWidth="3" opacity="0.75"></path>
+          </pattern>
+        </defs>
+        <g transform="{{ secTransform }}">
+          <g transform="translate(0 -24) scale(1 1.6)">
+            <sc-for list="{{ secAxis }}" as="a" hint-placeholder-count="5">
+              <path d="{{ a.d }}" stroke="#221d17" strokeWidth="1" fill="none" vectorEffect="non-scaling-stroke"></path>
+            </sc-for>
+            <sc-for list="{{ terrainSec }}" as="s" hint-placeholder-count="4">
+              <path d="{{ s.d }}" fill="{{ s.f }}" stroke="{{ s.s }}" strokeWidth="{{ s.sw }}" strokeDasharray="{{ s.dash }}" vectorEffect="non-scaling-stroke"></path>
+            </sc-for>
+            <sc-for list="{{ secShapes }}" as="s" hint-placeholder-count="8">
+              <path d="{{ s.d }}" fill="{{ s.fill }}" stroke="{{ s.stroke }}" strokeWidth="{{ s.sw }}" strokeDasharray="{{ s.dash }}" strokeLinejoin="round" strokeLinecap="round" opacity="{{ s.op }}" onMouseEnter="{{ s.enter }}" onClick="{{ s.click }}" vectorEffect="non-scaling-stroke" style="cursor: pointer;"></path>
+            </sc-for>
+          </g>
+          {{ secAxisEls }}
+          {{ secBaseLabelEls }}
+          {{ secLabelEls }}
+          <text x="950" y="744" fill="#5d5140" fontSize="20" textAnchor="end" fontFamily="'IBM Plex Mono', monospace">metres above sea level · vertical exaggeration c. 2.5×</text>
+        </g>
+      </svg>
+    </sc-if>
+
+    <sc-if value="{{ isElev }}" hint-placeholder-val="{{ false }}">
+      <svg viewBox="{{ elevVB }}" preserveAspectRatio="xMidYMid slice" onMouseDown="{{ dragStart }}" onMouseMove="{{ dragMove }}" onMouseUp="{{ dragEnd }}" onMouseLeave="{{ dragEnd }}" style="flex: 1 1 auto; min-height: 0; width: 100%; display: block; cursor: grab; user-select: none; background: #100d09;">
+        {{ elevGridEls }}
+        <sc-for list="{{ elevGround }}" as="s" hint-placeholder-count="2">
+          <path d="{{ s.d }}" fill="{{ s.f }}" stroke="{{ s.s }}" strokeWidth="{{ s.sw }}" strokeDasharray="{{ s.dash }}" vectorEffect="non-scaling-stroke"></path>
+        </sc-for>
+        <sc-for list="{{ elevShapes }}" as="s" hint-placeholder-count="10">
+          <path d="{{ s.d }}" fill="{{ s.fill }}" stroke="{{ s.stroke }}" strokeWidth="{{ s.sw }}" strokeDasharray="{{ s.dash }}" strokeLinejoin="round" strokeLinecap="round" opacity="{{ s.op }}" onMouseEnter="{{ s.enter }}" onClick="{{ s.click }}" vectorEffect="non-scaling-stroke" style="cursor: pointer;"></path>
+        </sc-for>
+        {{ elevFigureEls }}
+        {{ elevLabelEls }}
+        {{ elevRulerEls }}
+      </svg>
+    </sc-if>
+
+    <sc-if value="{{ is3d }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="cod-scene" from="./cod3d.js" period="{{ activeIdStr }}" visible="{{ visibleIds }}" ctxop="{{ ctxOpStr }}" modernop="{{ modernOpStr }}" vex="{{ vexStr }}" xray="{{ xrayStr }}" hint-size="100%,100%"></x-import>
+    </sc-if>
+
+  </main>
+
+  <section style="grid-row: 2; grid-column: 3; border-left: 1px solid #241f19; background: #100e0b; overflow-y: auto; overflow-x: hidden;">
+    <div style="padding: 20px 26px 60px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: {{ activeColor }};"></span>
+        <span style="font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #7d715e;">Period {{ activeIndex }} of 13 · {{ activeSpan }}</span>
+      </div>
+      <h2 style="margin: 8px 0 0; font-family: 'Newsreader', serif; font-weight: 400; font-size: 30px; line-height: 1.15; color: #f4ecdb; letter-spacing: 0.005em;">{{ activeName }}</h2>
+
+      <div style="{{ tipStyle }}">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 7px; flex-wrap: wrap;">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ tipColor }}; flex: none;"></span>
+          <span style="font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: #8a7f6d;">{{ tipPeriod }}</span>
+          <span style="{{ tipConfStyle }}">{{ tipConf }}</span>
+        </div>
+        <div style="font-family: 'Newsreader', serif; font-size: 18px; color: #f0e7d5; line-height: 1.25;">{{ tipName }}</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #cec4b1; margin-top: 6px; text-wrap: pretty;">{{ tipWhy }}</div>
+        <div style="font-size: 11px; line-height: 1.55; color: #8a7f6d; margin-top: 8px; padding-top: 8px; border-top: 1px solid #241f19; text-wrap: pretty;">{{ tipNote }}</div>
+        <div style="font-size: 10px; line-height: 1.4; color: #6b6152; margin-top: 6px; letter-spacing: 0.04em;">{{ tipFormal }}</div>
+      </div>
+
+      <div style="margin: 20px 0 24px; border-top: 1px solid #241f19; border-bottom: 1px solid #241f19; padding: 14px 0;">
+        <p style="margin: 0 0 4px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #6b6152;">What you can see</p>
+        <p style="margin: 0 0 10px; font-size: 10.5px; line-height: 1.5; color: #6b6152;">Hover any row to find it on the drawing. The tag says how certain archaeologists are.</p>
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+          <sc-for list="{{ elements }}" as="e" hint-placeholder-count="6">
+            <div onMouseEnter="{{ e.enter }}" onClick="{{ e.click }}" style="{{ e.style }}">
+              <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px;">
+                <span style="font-size: 12.5px; line-height: 1.3;">{{ e.n }}</span>
+                <span style="font-size: 10px; line-height: 1.35; color: #6b6152;">{{ e.formal }}</span>
+              </span>
+              <span style="{{ e.chip }}">{{ e.conf }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="{{ scrBlockStyle }}">
+        <p style="margin: 0 0 4px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #6b6152;">In scripture</p>
+        <p style="margin: 0 0 14px; font-size: 10.5px; line-height: 1.5; color: #6b6152;">Passages that name what is drawn here, or that happen on this ground. Turn them off in the controls at left.</p>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <sc-for list="{{ scrGroups }}" as="g" hint-placeholder-count="2">
+            <div onMouseEnter="{{ g.enter }}" onClick="{{ g.click }}" style="padding: 12px 14px; border: 1px solid #241f19; border-left: 2px solid {{ g.color }}; border-radius: 3px; background: #16130f; cursor: pointer;">
+              <div style="font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: #8a7f6d;">{{ g.head }}</div>
+              <div style="font-family: 'Newsreader', serif; font-size: 16px; line-height: 1.25; color: #f0e7d5; margin-top: 3px;">{{ g.n }}</div>
+              <p style="{{ g.ctxStyle }}">{{ g.ctx }}</p>
+              <div style="display: flex; flex-direction: column; gap: 9px; margin-top: 10px;">
+                <sc-for list="{{ g.refs }}" as="r" hint-placeholder-count="2">
+                  <div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.06em; color: {{ g.color }};">{{ r.r }}</div>
+                    <div style="font-size: 12px; line-height: 1.55; color: #b3a894; margin-top: 2px; text-wrap: pretty;">{{ r.t }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="max-width: 62ch;">
+        <sc-for list="{{ essay }}" as="b" hint-placeholder-count="12">
+          <p style="{{ b.style }}">{{ b.t }}</p>
+        </sc-for>
+      </div>
+
+      <p style="margin: 34px 0 0; padding-top: 16px; border-top: 1px solid #241f19; font-size: 10.5px; line-height: 1.6; color: #6b6152;">{{ wordNote }}</p>
+    </div>
+  </section>
+
+  <footer style="grid-column: 1 / -1; grid-row: 3; border-top: 1px solid #241f19; background: #100e0b; padding: 14px 26px 10px;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px;">
+      <span style="font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #6b6152;">Drag the slider through time</span>
+      <span style="font-family: 'Newsreader', serif; font-size: 19px; color: #f0e7d5;">{{ yearLabel }}</span>
+    </div>
+    <div style="position: relative; height: 46px;">
+      <div style="position: absolute; left: 0; right: 0; top: 4px; height: 14px; background: #171410; border: 1px solid #241f19; border-radius: 3px; overflow: hidden; display: flex;">
+        <sc-for list="{{ bands }}" as="b" hint-placeholder-count="13">
+          <div onClick="{{ b.select }}" title="{{ b.n }}" style="{{ b.style }}"></div>
+        </sc-for>
+      </div>
+      <input class="cod" type="range" min="0" max="1000" step="1" value="{{ pos }}" onChange="{{ setPos }}" onInput="{{ setPos }}" style="position: absolute; left: -7px; right: -7px; top: 0; width: calc(100% + 14px); height: 22px; margin: 0; z-index: 2;" />
+      <div style="position: absolute; left: 0; right: 0; top: 26px; height: 18px;">
+        <sc-for list="{{ ticks }}" as="t" hint-placeholder-count="8">
+          <div style="{{ t.style }}">{{ t.t }}</div>
+        </sc-for>
+      </div>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1600,&quot;height&quot;:980},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#c88a3c&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#c88a3c&quot;,&quot;#8fb4c4&quot;,&quot;#b1402c&quot;,&quot;#a89a7c&quot;],&quot;section&quot;:&quot;Appearance&quot;},&quot;startView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;plan&quot;,&quot;options&quot;:[&quot;plan&quot;,&quot;section&quot;,&quot;elev&quot;,&quot;3d&quot;],&quot;tsType&quot;:&quot;'plan'|'section'|'elev'|'3d'&quot;,&quot;section&quot;:&quot;Appearance&quot;},&quot;overlayOpacity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.42,&quot;min&quot;:0.1,&quot;max&quot;:1,&quot;step&quot;:0.02,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Appearance&quot;},&quot;modernOpacity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.55,&quot;min&quot;:0,&quot;max&quot;:1,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Appearance&quot;},&quot;showPresent&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Appearance&quot;}}">
+const ANCH = [[-4500,0],[-3000,80],[-1900,150],[-1550,210],[-1200,265],[-1000,315],[-800,380],[-587,450],[-538,470],[-63,570],[-37,585],[70,625],[324,680],[638,735],[1099,800],[1917,900],[2026,1000]];
+const CAT = {
+  water:      { fill: 0.30, sw: 2.0,  n: 'Water system — spring, pool, channel, tunnel' },
+  fort:       { fill: 0.20, sw: 3.4,  n: 'Fortification — wall, tower, terrace mantle' },
+  monument:   { fill: 0.28, sw: 2.4,  n: 'Monumental or public building' },
+  domestic:   { fill: 0.16, sw: 1.2,  n: 'Houses and ordinary buildings' },
+  street:     { fill: 0.00, sw: 12,   n: 'Street or paved route' },
+  extent:     { fill: 0.07, sw: 1.4,  n: 'Reconstructed extent of settlement' },
+  destruction:{ fill: 0.24, sw: 1.2,  n: 'Destruction, burning or collapse' },
+  find:       { fill: 0.72, sw: 1.0,  n: 'Find spot of a specific object' },
+  burial:     { fill: 0.20, sw: 1.2,  n: 'Burial' },
+  excav:      { fill: 0.06, sw: 1.4,  n: 'Modern excavation area' },
+  modern:     { fill: 0.10, sw: 1.2,  n: 'Modern village / park' },
+  agri:       { fill: 0.00, sw: 2.0,  n: 'Agricultural terracing' }
+};
+const CONF = {
+  secure:      { dash: '',        n: 'Secure',      d: 'Excavated, published, not seriously disputed.' },
+  probable:    { dash: '7 4',     n: 'Probable',    d: 'Well supported, but the line drawn is partly reconstructed.' },
+  debated:     { dash: '3 4',     n: 'Debated',     d: 'Competent scholars disagree about date or identification.' },
+  conjectural: { dash: '1.5 4',   n: 'Conjectural', d: 'Drawn to help you read the map; not established by excavation.' }
+};
+const KEYCAT = ['water','fort','monument','domestic','street','extent','destruction','excav','find','agri','modern','burial'];
+const ERAS = [
+  { label: 'Prehistory & Bronze Age', ids: ['chalco', 'mb2', 'lb'] },
+  { label: 'Iron Age Jerusalem', ids: ['ir2a', 'ir2bc', 'd586'] },
+  { label: 'Second Temple period', ids: ['pershas', 'herod', 'd70'] },
+  { label: 'Late antiquity & Islam', ids: ['byz', 'islam'] },
+  { label: 'Village & excavation', ids: ['medott', 'modern'] }
+];
+
+class Component extends DCLogic {
+  state = {
+    pos: 450,
+    view: this.props.startView || 'plan',
+    vis: {},
+    op: Math.round((this.props.overlayOpacity != null ? this.props.overlayOpacity : 0.42) * 100),
+    present: this.props.showPresent !== false,
+    mop: Math.round((this.props.modernOpacity != null ? this.props.modernOpacity : 0.55) * 100),
+    labels: true,
+    hover: null,
+    pin: null,
+    zoom: 1, tx: 0, ty: 0,
+    ex: 96, eyTop: 748, ew: 150,
+    help: false,
+    tab: 'read',
+    vex: 16,
+    xray: 100,
+    scr: true,
+    sat: null, satOp: 55, satScale: 100, satRot: 0, satDx: 0, satDy: 0, satAsp: 100,
+    ready: !!(window.COD && window.COD_ESSAYS && window.COD_ESSAYS.modern)
+  };
+
+  componentDidMount() {
+    try { const v = localStorage.getItem('cod.sat'); if (v) this.setState({ sat: v }); } catch (e) {}
+    this._key = (e) => {
+      if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      const P = (window.COD || {}).periods; if (!P) return;
+      const i = P.findIndex(p => p.id === this.activeId());
+      const n = Math.max(0, Math.min(P.length - 1, i + (e.key === 'ArrowRight' ? 1 : -1)));
+      e.preventDefault();
+      this.setState({ pos: Math.round((this.y2p(P[n].y0) + this.y2p(P[n].y1)) / 2), pin: null, hover: null });
+    };
+    window.addEventListener('keydown', this._key);
+    if (this.state.ready) return;
+    this._t = setInterval(() => {
+      if (window.COD && window.COD_ESSAYS && window.COD_ESSAYS.modern) {
+        clearInterval(this._t); this._t = null; this.setState({ ready: true });
+      }
+    }, 60);
+  }
+  componentWillUnmount() { if (this._t) clearInterval(this._t); if (this._key) window.removeEventListener('keydown', this._key); }
+
+  y2p(y) {
+    for (let i = 1; i < ANCH.length; i++) {
+      if (y <= ANCH[i][0]) {
+        const a = ANCH[i - 1], b = ANCH[i];
+        return a[1] + (y - a[0]) / (b[0] - a[0]) * (b[1] - a[1]);
+      }
+    }
+    return 1000;
+  }
+  p2y(p) {
+    for (let i = 1; i < ANCH.length; i++) {
+      if (p <= ANCH[i][1]) {
+        const a = ANCH[i - 1], b = ANCH[i];
+        return Math.round(a[0] + (p - a[1]) / (b[1] - a[1]) * (b[0] - a[0]));
+      }
+    }
+    return 2026;
+  }
+  yearStr(y) {
+    if (y < 0) return Math.abs(y).toLocaleString() + ' BCE';
+    if (y < 1) return '1 CE';
+    return y.toLocaleString() + ' CE';
+  }
+
+  activeId() {
+    const P = window.COD.periods, y = this.p2y(this.state.pos);
+    for (let i = 0; i < P.length; i++) if (y >= P[i].y0 && y < P[i].y1) return P[i].id;
+    return y < P[0].y0 ? P[0].id : P[P.length - 1].id;
+  }
+
+  texts(key, list, size, halo) {
+    const h = React.createElement;
+    return h('g', { key: key, style: { pointerEvents: 'none' } }, list.map((l, i) => h('text', {
+      key: key + i, x: l.x, y: l.y, fill: l.f, fontSize: l.s || size,
+      textAnchor: l.a || 'start', transform: l.tr || undefined,
+      fontFamily: "'IBM Plex Mono', monospace", letterSpacing: l.ls || '0.06em',
+      stroke: halo ? '#0d0b09' : undefined, strokeWidth: halo || undefined,
+      strokeLinejoin: 'round', style: { paintOrder: 'stroke' }
+    }, l.t)));
+  }
+
+  // ---- elevation view: everything below is in metres, y = 760 - (m above sea level)
+  eY(e) { return 760 - e; }
+  boxD(b, base) {
+    const t = this.eY(base + b.h), y = this.eY(base), x = b.x, w = b.w;
+    if (b.shape === 'step') {
+      let d = 'M' + x + ' ' + y, n = 5, sx = w / n, sy = b.h / n;
+      for (let i = 0; i < n; i++) d += ' L' + (x + i * sx) + ' ' + (y - b.h + i * sy) + ' L' + (x + (i + 1) * sx) + ' ' + (y - b.h + i * sy);
+      return d + ' L' + (x + w) + ' ' + y + ' Z';
+    }
+    if (b.shape === 'pool') {
+      const i = w * 0.14;
+      return 'M' + x + ' ' + t + ' L' + (x + i) + ' ' + y + ' L' + (x + w - i) + ' ' + y + ' L' + (x + w) + ' ' + t;
+    }
+    if (b.shape === 'basilica') {
+      const r = b.h * 0.34, wy = t + r;
+      return 'M' + x + ' ' + y + ' L' + x + ' ' + wy + ' L' + (x + w / 2) + ' ' + t + ' L' + (x + w) + ' ' + wy + ' L' + (x + w) + ' ' + y + ' Z';
+    }
+    return 'M' + x + ' ' + y + ' L' + x + ' ' + t + ' L' + (x + w) + ' ' + t + ' L' + (x + w) + ' ' + y + ' Z';
+  }
+  elevRuler(st, eTop, eh) {
+    const h = React.createElement, y0 = eTop + eh - 9, y1 = eTop + eh, kids = [
+      h('path', { key: 'bg', d: 'M' + st.ex + ' ' + y0 + ' L' + (st.ex + st.ew) + ' ' + y0 + ' L' + (st.ex + st.ew) + ' ' + y1 + ' L' + st.ex + ' ' + y1 + ' Z', fill: 'rgba(13,11,9,0.9)', stroke: 'none' })
+    ];
+    for (let x = 0; x <= 700; x += 25) {
+      const big = x % 100 === 0;
+      kids.push(h('path', { key: 'p' + x, d: 'M' + x + ' ' + y0 + ' L' + x + ' ' + (y0 + (big ? 3 : 1.5)), stroke: '#7a6a52', strokeWidth: 1, vectorEffect: 'non-scaling-stroke', fill: 'none' }));
+      if (big) kids.push(h('text', { key: 't' + x, x: x, y: y1 - 1.8, fontSize: 3, fill: '#a29177', textAnchor: 'middle', fontFamily: "'IBM Plex Mono', monospace" }, x + ' m'));
+    }
+    kids.push(h('text', { key: 'nn', x: st.ex + 2, y: eTop + 4, fontSize: 3.4, fill: '#8a7c66', fontFamily: "'IBM Plex Mono', monospace", letterSpacing: '0.1em' }, '← NORTH · towards the Ophel'));
+    kids.push(h('text', { key: 'ss', x: st.ex + st.ew - 2, y: eTop + 4, fontSize: 3.4, fill: '#8a7c66', textAnchor: 'end', fontFamily: "'IBM Plex Mono', monospace", letterSpacing: '0.1em' }, 'SOUTH · Pool of Siloam →'));
+    kids.push(h('text', { key: 'sc', x: st.ex + st.ew - 2, y: eTop + eh - 12, fontSize: 3, fill: '#6b6152', textAnchor: 'end', fontFamily: "'IBM Plex Mono', monospace" }, 'true scale · no vertical exaggeration'));
+    return h('g', { key: 'ruler', style: { pointerEvents: 'none' } }, kids);
+  }
+  lineD(pts) { return pts.map((p, i) => (i ? 'L' : 'M') + p[0] + ' ' + this.eY(p[1])).join(' '); }
+
+  /* Push overlapping captions apart vertically — on a dense terrace slope several buildings
+     sit within a few metres of each other and their names would otherwise overprint. */
+  destack(list) {
+    const out = list.slice().sort((a, b) => a.x - b.x);
+    out.forEach((o, i) => { out[i] = Object.assign({}, o, { y0: o.y }); });
+    for (let i = 1; i < out.length; i++) {
+      for (let j = 0; j < i; j++) {
+        const dx = Math.abs(out[i].x - out[j].x), dy = Math.abs(out[i].y - out[j].y);
+        const need = (String(out[j].t).length * (out[j].s || 3.4) * 0.56);
+        if (dx < need && dy < 4.4) { out[i] = Object.assign({}, out[i], { y: out[j].y - 4.6, lead: true }); j = -1; }
+      }
+    }
+    this._leaders = out.filter(o => o.ax != null && Math.abs(o.y - o.y0) > 0.4)
+      .map((o, i) => ({ key: 'ld' + i, d: 'M' + (o.x + 0.6) + ' ' + (o.y + 0.6) + ' L' + (o.x + 0.6) + ' ' + (o.ay - 0.4) + ' L' + o.ax + ' ' + (o.ay - 0.4), fill: 'none', stroke: '#7d715e', sw: 0.16, dash: '', op: 0.85, enter: null, click: null }));
+    return out;
+  }
+
+  badges(list) {
+    const h = React.createElement;
+    return h('g', { key: 'badges' }, list.map(b => {
+      const right = b.side !== 'left';
+      const cw = String(b.label).length * 13.4 + 22;
+      const px = right ? b.x + 30 : b.x - 30 - cw;
+      return h('g', { key: 'b' + b.id, onMouseEnter: b.enter, onClick: b.click, style: { cursor: 'pointer' } }, [
+        h('rect', { key: 'p', x: px, y: b.y - 17, width: cw, height: 34, rx: 17, fill: b.hl ? '#fdf6e6' : 'rgba(13,11,9,0.9)', stroke: b.c, strokeWidth: 2 }),
+        h('text', { key: 'l', x: px + cw / 2, y: b.y + 8, textAnchor: 'middle', fontSize: 22, fontFamily: "'IBM Plex Mono', monospace", fill: b.hl ? '#0d0b09' : '#e6dcc8', style: { pointerEvents: 'none' } }, b.label),
+        h('circle', { key: 'c', cx: b.x, cy: b.y, r: 20, fill: b.hl ? '#fdf6e6' : '#0d0b09', stroke: b.c, strokeWidth: 3 }),
+        h('text', { key: 't', x: b.x, y: b.y + 9, textAnchor: 'middle', fontSize: 25, fontFamily: "'IBM Plex Mono', monospace", fill: b.hl ? '#0d0b09' : '#f0e7d5', style: { pointerEvents: 'none' } }, b.n)
+      ]);
+    }));
+  }
+
+  dragStart = (e) => { if (this.state.view === 'elev' && !this.state.eManual) this.setState({ eManual: true, ex: this._fx, eyTop: this._fy, ew: this._fw }); this._d = { x: e.clientX, y: e.clientY, tx: this.state.tx, ty: this.state.ty, ex: this.state.ex, ey: this.state.eyTop, w: e.currentTarget.clientWidth || 460 }; };
+  dragMove = (e) => {
+    if (!this._d) return;
+    const s = this.state;
+    if (s.view === 'elev') {
+      const mpp = s.ew / this._d.w;
+      this.setState({
+        ex: Math.max(-20, Math.min(700 - s.ew * 0.35, this._d.ex - (e.clientX - this._d.x) * mpp)),
+        eyTop: Math.max(620, Math.min(775, this._d.ey + (e.clientY - this._d.y) * mpp))
+      });
+      return;
+    }
+    const k = s.view === 'plan' ? 1.4 : 1.9;
+    this.setState({ tx: this._d.tx + (e.clientX - this._d.x) * k / s.zoom, ty: this._d.ty + (e.clientY - this._d.y) * k / s.zoom });
+  };
+  dragEnd = () => { this._d = null; };
+
+  renderVals() {
+    const st = this.state;
+    const blank = { periodRows: [], planShapes: [], secShapes: [], planLabels: [], secLabels: [], elements: [], essay: [], bands: [], ticks: [], terrainPlan: [], terrainLines: [], terrainLabels: [], terrainSec: [], secBaseLabels: [], secAxis: [], catKey: [], confKey: [] };
+    if (!st.ready) return Object.assign(blank, { activeName: 'Loading…', activeSpan: '', activeColor: '#7d715e', yearLabel: '', tipStyle: { display: 'none' }, viewTitle: '', activeIndex: '', wordNote: '', hasSat: false, satHref: '', satOp: 0, satX: 0, satY: 0, satW: 0, satH: 0, satRot: '', satCtlStyle: { display: 'none' }, satDropStyle: { display: 'none' } });
+
+    const D = window.COD, E = window.COD_ESSAYS, V = window.COD_ELEV;
+    const PL = window.COD_PLAIN || { say: {}, scene: {}, lookup: function () { return null; } };
+    const P = D.periods, aid = this.activeId();
+    const A = P.find(p => p.id === aid);
+    const ai = P.indexOf(A);
+    const acc = this.props.accent || '#c88a3c';
+    const ctxOp = st.op / 100;
+
+    const visSet = {};
+    P.forEach(p => { if (st.vis[p.id]) visSet[p.id] = true; });
+    visSet[aid] = true;
+
+    const hoverId = st.pin || st.hover;
+    const setHover = (id) => () => { if (!st.pin) this.setState({ hover: id }); };
+    const setPin = (id) => (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ pin: st.pin === id ? null : id, hover: id }); };
+
+    // ---- build layers -------------------------------------------------
+    const planShapes = [], secShapes = [], planLabels = [], secLabels = [];
+    const order = P.map(p => p.id).filter(id => visSet[id] && id !== aid).concat([aid]);
+
+    // inherited features still standing in the active period
+    D.features.forEach(f => {
+      if (f.per === aid) return;
+      if (!f.spans || f.spans.indexOf(aid) < 0) return;
+      if (visSet[f.per]) return;
+      const c = CAT[f.cat] || CAT.domestic;
+      const base = { stroke: '#9a9184', sw: f.sw || c.sw, dash: '2 5', op: 0.4, enter: setHover(f.id), click: setPin(f.id) };
+      if (f.d) planShapes.push(Object.assign({ key: 'i' + f.id, d: f.d, fill: f.line || !c.fill ? 'none' : 'rgba(154,145,132,0.10)' }, base));
+      if (f.sd) secShapes.push(Object.assign({ key: 'is' + f.id, d: f.sd, fill: f.line || !c.fill ? 'none' : 'rgba(154,145,132,0.10)' }, base));
+    });
+
+    order.forEach(pid => {
+      const per = P.find(p => p.id === pid);
+      const isA = pid === aid;
+      const col = per.c;
+      D.features.forEach(f => {
+        if (f.per !== pid) return;
+        const c = CAT[f.cat] || CAT.domestic;
+        const hl = hoverId === f.id;
+        const op = isA ? (hl ? 1 : 0.94) : ctxOp;
+        const sw = (f.sw || c.sw) * (hl ? 1.5 : 1);
+        const fill = (f.line || !c.fill) ? 'none'
+          : (f.cat === 'destruction' && isA ? 'url(#hatch)' : this.rgba(col, c.fill * (hl ? 1.5 : 1)));
+        const base = { fill: fill, stroke: hl ? '#fdf6e6' : col, sw: sw, dash: CONF[f.conf].dash, op: op, enter: setHover(f.id), click: setPin(f.id) };
+        if (f.d) planShapes.push(Object.assign({ key: pid + f.id, d: f.d }, base));
+        if (f.sd) secShapes.push(Object.assign({ key: 's' + pid + f.id, d: f.sd }, base));
+        if (isA && st.labels && f.slbl && f.sd) secLabels.push({ x: f.slx, y: f.sly, a: f.sla, t: f.n, f: '#e6dcc8' });
+      });
+    });
+
+    const mOp = st.present ? st.mop / 100 : 0;
+    if (mOp > 0.02) {
+      ['park', 'village-now', 'silwan-old'].forEach(id => {
+        const f = D.features.find(x => x.id === id);
+        if (f && f.per !== aid) planShapes.push({ key: 'pd' + id, d: f.d, fill: id === 'park' ? 'none' : 'rgba(239,230,211,0.10)', stroke: '#efe6d3', sw: 1.3, dash: '5 5', op: mOp, enter: setHover(id), click: setPin(id) });
+      });
+      secShapes.push({ key: 'pdsec', d: D.terrainSec[3].d, fill: 'none', stroke: '#efe6d3', sw: 1.3, dash: '5 5', op: mOp, enter: setHover(null), click: setPin(null) });
+    }
+
+    // ---- side panels ----------------------------------------------------
+    const rowFor = (p) => {
+      const on = !!visSet[p.id], isA = p.id === aid;
+      return {
+        key: p.id, n: p.n, short: p.span.replace('c. ', '').replace(' BCE', ' BC').replace(' CE', ''),
+        rowStyle: { display: 'flex', alignItems: 'center', gap: '9px', padding: '6px 8px', borderRadius: '3px', cursor: 'pointer', background: isA ? 'rgba(255,255,255,0.055)' : 'transparent', color: isA ? '#f0e7d5' : (on ? '#bcb2a0' : '#776e5f'), borderLeft: '2px solid ' + (isA ? p.c : 'transparent') },
+        dotStyle: { width: '13px', height: '13px', flex: 'none', borderRadius: '3px', cursor: 'pointer', padding: 0, border: '1px solid ' + p.c, background: on ? p.c : 'transparent', opacity: on ? 1 : 0.55 },
+        select: () => this.setState({ pos: Math.round((this.y2p(p.y0) + this.y2p(p.y1)) / 2), pin: null, hover: null }),
+        toggle: (e) => { e.stopPropagation(); const v = Object.assign({}, st.vis); v[p.id] = !visSet[p.id]; this.setState({ vis: v }); },
+        hoverOn: () => {}
+      };
+    };
+    const eras = ERAS.map(er => ({ key: er.label, label: er.label, rows: er.ids.map(id => rowFor(P.find(p => p.id === id))) }));
+
+    const actF = D.features.filter(f => f.per === aid);
+    const planBadges = st.labels ? actF.map((f, i) => {
+      if (!f.d) return null;
+      let x = f.lx, y = f.ly;
+      if (x == null) { const m = f.d.match(/-?\d+(\.\d+)?/g); x = +m[0]; y = +m[1]; }
+      const pl = PL.lookup(f.n);
+      const cx = Math.max(26, Math.min(494, x));
+      return { id: f.id, n: String(i + 1), label: pl ? pl.short : f.n, side: f.la === 'end' ? 'left' : 'right',
+        x: cx, y: Math.max(26, Math.min(954, y)), c: A.c, hl: hoverId === f.id, enter: setHover(f.id), click: setPin(f.id) };
+    }).filter(Boolean) : [];
+
+    // the key lists only what is actually drawn for the selected phase — professional plans key
+    // the sheet, not the whole convention set
+    const onScreenCats = {};
+    (st.view === 'elev' && window.COD_ELEV ? window.COD_ELEV.buildings.filter(b => b.per === aid) : actF).forEach(f => { onScreenCats[f.cat] = true; });
+
+    const elemSrc = (st.view === 'elev' && window.COD_ELEV)
+      ? window.COD_ELEV.buildings.filter(b => b.per === aid).map((b, i) => ({ id: b.uid || 'ev' + i, n: b.n, conf: b.conf }))
+      : actF.map((f, i) => ({ id: f.id, n: f.n, num: i + 1, conf: f.conf }));
+
+    const elements = elemSrc.map(f => {
+      const hl = hoverId === f.id;
+      const pl = PL.lookup(f.n);
+      return {
+        key: f.id, n: (f.num ? f.num + '. ' : '') + (pl ? pl.short : f.n), formal: pl && pl.short !== f.n ? f.n : '', conf: CONF[f.conf].n.toLowerCase(),
+        style: { display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '5px 7px', borderRadius: '3px', cursor: 'pointer', background: hl ? 'rgba(255,255,255,0.06)' : 'transparent', color: hl ? '#f0e7d5' : '#b3a894' },
+        chip: { flex: 'none', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: '2px', border: '1px solid ' + this.rgba(A.c, 0.45), color: f.conf === 'secure' ? '#d9cfba' : '#a1957f', background: f.conf === 'secure' ? this.rgba(A.c, 0.16) : 'transparent' },
+        enter: setHover(f.id), click: setPin(f.id)
+      };
+    });
+
+    const SCR = window.COD_SCRIPTURE || {};
+    const plainName = (f) => { const pl = PL.lookup(f.n); return pl ? pl.short : f.n; };
+    const seenScr = [];
+    const scrGroups = st.scr ? actF.map(f => {
+      const s = SCR[f.id];
+      // several features can share one passage set (a destruction layer, its
+      // collapse and its arrowheads are all one event) — card it once,
+      // naming every structure the passages cover
+      if (!s || seenScr.indexOf(s) >= 0) return null;
+      seenScr.push(s);
+      const kin = actF.filter(o => SCR[o.id] === s);
+      return {
+        key: 'scr' + f.id, head: s.head, n: kin.map(plainName).join(' · '), color: A.c,
+        ctx: s.ctx || '',
+        ctxStyle: { display: s.ctx ? 'block' : 'none', margin: '9px 0 0', fontSize: '12px', lineHeight: 1.6, color: '#cec4b1', textWrap: 'pretty' },
+        refs: s.refs.map((r, i) => Object.assign({ key: 'r' + i }, r)),
+        enter: setHover(f.id), click: setPin(f.id)
+      };
+    }).filter(Boolean) : [];
+
+    const raw = (E[aid] || []);
+    const essay = raw.map((b, i) => typeof b === 'string'
+      ? { key: 'e' + i, t: b, style: { margin: '0 0 15px', fontFamily: "'Newsreader', serif", fontSize: '16.5px', lineHeight: 1.66, color: '#d5cbb8', textWrap: 'pretty' } }
+      : { key: 'e' + i, t: b.h, style: { margin: i === 0 ? '4px 0 12px' : '30px 0 12px', fontFamily: "'IBM Plex Mono', monospace", fontSize: '10.5px', letterSpacing: '0.16em', textTransform: 'uppercase', color: acc } });
+    const words = raw.reduce((n, b) => n + String(typeof b === 'string' ? b : b.h).split(/\s+/).length, 0);
+
+    const bands = P.map(p => {
+      const a = this.y2p(p.y0), b = this.y2p(p.y1), on = !!visSet[p.id];
+      return { key: p.id, n: p.n + ' · ' + p.span, select: () => this.setState({ pos: Math.round((a + b) / 2), pin: null }),
+        style: { width: ((b - a) / 10) + '%', background: p.id === aid ? p.c : this.rgba(p.c, on ? 0.5 : 0.22), cursor: 'pointer', borderRight: '1px solid #0d0b09' } };
+    });
+
+    const ticks = [[-4000, '4000 BCE'], [-2000, '2000'], [-1000, '1000'], [-586, '586'], [-63, '63 BCE'], [70, '70 CE'], [638, '638'], [1517, '1517'], [2026, 'today']].map(t => ({
+      key: t[0], t: t[1],
+      style: { position: 'absolute', left: (this.y2p(t[0]) / 10) + '%', transform: 'translateX(-50%)', fontSize: '9.5px', color: '#5f5648', letterSpacing: '0.06em', whiteSpace: 'nowrap', paddingTop: '4px', borderLeft: '1px solid #2a241d', paddingLeft: '0' }
+    }));
+
+    const scene = (PL.scene && PL.scene[aid]) || { one: A.n, two: A.span };
+
+    // satellite photo placement: centred on the ridge, then nudged by the alignment controls
+    const sW = 520 * (st.satScale / 100), sH = 980 * (st.satScale / 100) * (st.satAsp / 100);
+    const satBox = { x: 260 - sW / 2 + st.satDx, y: 490 - sH / 2 + st.satDy, w: sW, h: sH };
+    const hf = hoverId ? (D.features.find(f => f.id === hoverId) || (V ? V.buildings.find(b => b.uid === hoverId) : null)) : null;
+    const hp = hf ? P.find(p => p.id === hf.per) : null;
+    const hpl = hf ? PL.lookup(hf.n) : null;
+    const hfNote = hf ? (hf.note || (hf.line
+      ? 'Runs underground for roughly ' + Math.round(hf.line[hf.line.length - 1][0] - hf.line[0][0]) + ' m along the ridge, about ' + hf.th + ' m across. Drawn at true scale.'
+      : 'Drawn at true scale: about ' + hf.w + ' m across and ' + hf.h + ' m high' + (hf.elev != null ? ', floor at ' + hf.elev + ' m above sea level.' : ', standing on ground at about ' + Math.round(V.ground(hf.x)) + ' m above sea level.'))) : '';
+
+    const btn = (on) => ({ flex: 1, padding: '7px 0', fontFamily: 'inherit', fontSize: '10.5px', letterSpacing: '0.12em', textTransform: 'uppercase', borderRadius: '3px', cursor: 'pointer', border: '1px solid ' + (on ? this.rgba(acc, 0.6) : 'transparent'), background: on ? this.rgba(acc, 0.16) : 'transparent', color: on ? '#f0e7d5' : '#7d715e' });
+    const tabBtn = (on) => ({ padding: '7px 13px', fontFamily: 'inherit', fontSize: '10px', letterSpacing: '0.11em', textTransform: 'uppercase', borderRadius: '3px', cursor: 'pointer', whiteSpace: 'nowrap', border: '1px solid ' + (on ? this.rgba(acc, 0.55) : '#2a241d'), background: on ? this.rgba(acc, 0.16) : 'transparent', color: on ? '#f0e7d5' : '#8a7f6d' });
+    const zb = { width: '30px', height: '28px', fontFamily: 'inherit', fontSize: '14px', lineHeight: 1, background: 'rgba(16,14,11,0.85)', border: '1px solid #2e2820', color: '#b3a894', borderRadius: '3px', cursor: 'pointer' };
+
+    // ---- elevation view -------------------------------------------------
+    // frame the selected phase automatically, so you always land looking at its buildings
+    let ew = st.ew, ex = st.ex, eyTop = st.eyTop;
+    if (!st.eManual && V) {
+      const bs = V.buildings.filter(b => b.per === aid);
+      if (bs.length) {
+        let x0 = 1e9, x1 = -1e9;
+        bs.forEach(b => {
+          const bx0 = b.line ? Math.min.apply(null, b.line.map(p => p[0])) : b.x;
+          const bx1 = b.line ? Math.max.apply(null, b.line.map(p => p[0])) : b.x + b.w;
+          x0 = Math.min(x0, bx0); x1 = Math.max(x1, bx1);
+        });
+        // At true 1:1 a 600 m phase cannot show a 7 m house, so frame the densest part and let
+        // the viewer pan. The window always stays full of ground — never empty fill.
+        ew = Math.max(110, Math.min(300, (x1 - x0) * 1.15 + 30));
+        const cx = Math.max(ew / 2 - 10, Math.min(710 - ew / 2, (x0 + x1) / 2));
+        ex = cx - ew / 2;
+        let gTop = 1e9, gBot = -1e9;
+        for (let q = Math.max(0, ex); q <= Math.min(700, ex + ew); q += 4) {
+          const gg = V.ground(q); gTop = Math.min(gTop, gg); gBot = Math.max(gBot, gg);
+        }
+        bs.forEach(b => {
+          if (b.line ? b.line[0][0] > ex + ew || b.line[b.line.length - 1][0] < ex : (b.x > ex + ew || b.x + b.w < ex)) return;
+          const t = b.line ? Math.max.apply(null, b.line.map(p => p[1])) : (b.elev != null ? b.elev + b.h : V.ground(b.x) + (b.dz || 0) + b.h);
+          const bo = b.line ? Math.min.apply(null, b.line.map(p => p[1])) : (b.elev != null ? b.elev : V.ground(b.x) + (b.dz || 0));
+          gBot = Math.max(gBot, t); gTop = Math.min(gTop, bo);
+        });
+        const need = (gBot - gTop) + 26;
+        if (need > ew * 0.704) { ew = Math.min(430, need / 0.704); ex = cx - ew / 2; }
+        eyTop = (gTop + gBot) / 2 + ew * 0.704 / 2;   // centre the ground band in the panel
+      }
+    }
+    const eh = ew * 0.704, eTop = this.eY(st.eyTop);
+    const elevShapes = [], elevLabels = [];
+    if (V) {
+      const drawB = (b, col, op, ctx) => {
+        const c = CAT[b.cat] || CAT.domestic, hl = hoverId === b.uid;
+        const base = b.line ? 0 : (b.elev != null ? b.elev : V.ground(b.x) + (b.dz || 0));
+        const stroke = hl ? '#fdf6e6' : (ctx ? '#9a9184' : col);
+        elevShapes.push({
+          key: b.uid + (ctx ? 'c' : ''), d: b.line ? this.lineD(b.line) : this.boxD(b, base),
+          fill: b.line || b.shape === 'pool' ? 'none' : this.rgba(ctx ? '#9a9184' : col, (c.fill || 0.18) + (hl ? 0.15 : 0)),
+          stroke: stroke, sw: b.line ? b.th : (b.elev != null ? 0.7 : 0.55) * (hl ? 2 : 1),
+          dash: ctx ? '2 3' : CONF[b.conf].dash, op: op,
+          enter: setHover(b.uid), click: setPin(b.uid)
+        });
+        if (!ctx && st.labels && b.per === aid) elevLabels.push({ ax: b.line ? b.line[0][0] : b.x + b.w / 2, ay: this.eY(b.line ? b.line[0][1] : base + b.h), x: b.line ? b.line[0][0] : b.x, y: this.eY((b.line ? b.line[0][1] : base + b.h)) - 2.2, a: 'start', t: (PL.lookup(b.n) || {}).short || b.n, f: '#f0e7d5', s: 3.4 });
+      };
+      V.buildings.forEach((b, i) => { b.uid = 'ev' + i; });
+      P.map(p => p.id).filter(id => visSet[id] && id !== aid).forEach(pid => {
+        const per = P.find(p => p.id === pid);
+        V.buildings.filter(b => b.per === pid).forEach(b => drawB(b, per.c, ctxOp, false));
+      });
+      if (mOp > 0.02 && aid !== 'modern' && !visSet.modern) {
+        const mp = P.find(p => p.id === 'modern');
+        V.buildings.filter(b => b.per === 'modern' && b.cat === 'modern').forEach(b => drawB(b, mp.c, mOp, false));
+      }
+      V.buildings.filter(b => b.per === aid).forEach(b => drawB(b, A.c, 1, false));
+      V.landmarks.filter(l => !/^(NORTH|SOUTH)/.test(l.t)).forEach(l => elevLabels.push({ x: l.x, y: this.eY(l.elev), a: l.a, t: l.t, f: '#b6a385', s: 3.6 }));
+      // 1.7 m human figure — the quickest way for anyone to read the true scale
+      [420, 560].forEach((hx, i) => {
+        const gy = this.eY(V.ground(hx));
+        elevShapes.push({
+          key: 'human' + i, op: 0.75, fill: '#efe6d3', stroke: 'none', sw: 0, dash: '',
+          d: 'M' + hx + ' ' + (gy - 1.7) + ' a0.28 0.28 0 1 1 0.01 0 z'
+             + ' M' + (hx - 0.26) + ' ' + (gy - 1.36) + ' h0.52 v0.72 h-0.52 z'
+             + ' M' + (hx - 0.24) + ' ' + (gy - 0.64) + ' h0.16 v0.64 h-0.16 z'
+             + ' M' + (hx + 0.08) + ' ' + (gy - 0.64) + ' h0.16 v0.64 h-0.16 z',
+          enter: setHover(null), click: setPin(null)
+        });
+      });
+      elevLabels.push({ x: 421.4, y: this.eY(V.ground(420)) - 2.1, a: 'start', t: 'person, 1.7 m', f: '#a89a80', s: 2.6 });
+      elevShapes.push({ key: 'spring', d: 'M' + (V.spring.x - 5) + ' ' + this.eY(V.spring.elev) + ' a5 3.4 0 0 1 10 0 z', fill: '#a6d3e6', stroke: '#a6d3e6', sw: 0.5, dash: '', op: 0.85, enter: setHover(null), click: setPin(null) });
+    }
+
+    const cz = st.view === 'plan' ? [260, 490] : [490, 376];
+    const tf = 'translate(' + cz[0] + ' ' + cz[1] + ') scale(' + st.zoom + ') translate(' + (-cz[0]) + ' ' + (-cz[1]) + ') translate(' + st.tx + ' ' + st.ty + ')';
+
+    const stackedLabels = this.destack(elevLabels
+      .filter(l => l.x > ex - 4 && l.x < ex + ew - 6 && l.y > eTop - 2 && l.y < eTop + eh - 12)
+      .map(l => Object.assign({}, l, {
+        x: Math.max(ex + 2, Math.min(ex + ew - 2 - String(l.t).length * (l.s || 3.4) * 0.6, l.x)),
+        y: Math.max(eTop + 9, Math.min(eTop + eh - 12, l.y))
+      })));
+    (this._leaders || []).forEach(l => elevShapes.push(l));
+
+    return {
+      ready: true, isPlan: st.view === 'plan', isSection: st.view === 'section', isElev: st.view === 'elev', is3d: st.view === '3d',
+      viewTitle: st.view === 'plan' ? 'Plan view · looking down' : (st.view === 'section' ? 'Section · projected along the ridge, north at left' : (st.view === '3d' ? '3D · modelled topography, buildings at true scale' : 'Elevation · true scale, no exaggeration · north at left')),
+      elevVB: ex + ' ' + eTop + ' ' + ew + ' ' + eh,
+      elevShapes: elevShapes,
+      _frame: (this._fx = ex, this._fy = eyTop, this._fw = ew, null),
+      elevGround: V ? [
+        { key: 'eg', d: this.lineD(V.profile.map(p => [p[0], p[1]])) + ' L700 ' + this.eY(540) + ' L0 ' + this.eY(540) + ' Z', f: '#332c22', s: 'none', sw: 0 },
+        { key: 'egl', d: this.lineD(V.profile.map(p => [p[0], p[1]])), f: 'none', s: '#9d8a6c', sw: 2 },
+        { key: 'egb', d: this.lineD(V.profile.map(p => [p[0], p[1] - 8])), f: 'none', s: '#5d5140', sw: 1.4, dash: '6 5' }
+      ] : [],
+      elevGridEls: V ? React.createElement('g', { key: 'eg' }, [600, 610, 620, 630, 640, 650, 660, 670, 680, 690, 700, 710, 720, 730, 740, 750].map(m => React.createElement('g', { key: m }, [
+        React.createElement('path', { key: 'l', d: 'M0 ' + this.eY(m) + ' L700 ' + this.eY(m), stroke: m % 50 === 0 ? '#3a3228' : '#241f19', strokeWidth: 1, vectorEffect: 'non-scaling-stroke', fill: 'none' }),
+        React.createElement('text', { key: 't', x: ex + 1.5, y: this.eY(m) - 1, fontSize: 2.9, fill: m % 50 === 0 ? '#a29177' : '#6b6152', fontFamily: "'IBM Plex Mono', monospace", style: { pointerEvents: 'none' } }, m + ' m')
+      ]))) : null,
+      elevRulerEls: V ? React.createElement('g', { key: 'sr', style: { pointerEvents: 'none' } }, [React.createElement('path', { key: 'bg', d: 'M' + ex + ' ' + (eTop + eh - 9) + ' L' + (ex + ew) + ' ' + (eTop + eh - 9) + ' L' + (ex + ew) + ' ' + (eTop + eh) + ' L' + st.ex + ' ' + (eTop + eh) + ' Z', fill: 'rgba(13,11,9,0.88)', stroke: 'none' })].concat(
+        [0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700].map(x => React.createElement('g', { key: 'st' + x }, [
+          React.createElement('path', { key: 'l', d: 'M' + x + ' ' + (eTop + eh - 9) + ' L' + x + ' ' + (eTop + eh - (x % 100 === 0 ? 6 : 7.6)), stroke: '#7a6a52', strokeWidth: 1, vectorEffect: 'non-scaling-stroke', fill: 'none' }),
+          x % 100 === 0 ? React.createElement('text', { key: 't', x: x, y: eTop + eh - 1.8, fontSize: 3, fill: '#a29177', textAnchor: 'middle', fontFamily: "'IBM Plex Mono', monospace" }, x + ' m') : null
+        ])))) : null,
+      elevFigureEls: V ? React.createElement('g', { key: 'ef' }, [this.elevRuler(st, eTop, eh)].concat(V.figures.map(x => {
+        const b = V.ground(x);
+        return React.createElement('g', { key: x }, [
+          React.createElement('path', { key: 'b', d: 'M' + x + ' ' + this.eY(b) + ' L' + x + ' ' + this.eY(b + 1.2) + ' M' + (x - 0.5) + ' ' + this.eY(b + 1.15) + ' L' + (x + 0.5) + ' ' + this.eY(b + 1.15), stroke: '#efe6d3', strokeWidth: 0.34, fill: 'none', strokeLinecap: 'round' }),
+          React.createElement('circle', { key: 'h', cx: x, cy: this.eY(b + 1.45), r: 0.3, fill: '#efe6d3' }),
+          React.createElement('text', { key: 't', x: x + 1.1, y: this.eY(b + 0.4), fontSize: 2.2, fill: '#8a7c66', fontFamily: "'IBM Plex Mono', monospace" }, '1.7 m')
+        ]);
+      }))) : null,
+      // cull captions whose feature is off camera — on a 1:1 view a clamped caption lies about
+      // where the thing is; only nudge survivors clear of the ruler strip and the top edge
+      elevLabelEls: this.texts('el', stackedLabels, 3.4, 0),
+      setElev: () => this.setState({ view: 'elev', eManual: false }),
+      elevBtn: Object.assign({ gridColumn: '1 / -1' }, btn(st.view === 'elev')),
+      set3d: () => this.setState({ view: '3d' }),
+      hasSat: !!st.sat, satHref: st.sat || '', satOp: st.satOp / 100,
+      satX: satBox.x, satY: satBox.y, satW: satBox.w, satH: satBox.h,
+      satRot: 'rotate(' + st.satRot + ' 260 490)',
+      satPrompt: st.sat ? 'Choose a different image…' : 'Choose a satellite image…',
+      satDropStyle: { display: 'block', padding: '10px 12px', textAlign: 'center', fontSize: '10.5px', letterSpacing: '0.06em', color: st.sat ? '#c3b9a6' : '#8a7f6d', border: '1px dashed ' + (st.sat ? '#4a4034' : '#332c24'), borderRadius: '3px', cursor: 'pointer', background: st.sat ? 'rgba(255,255,255,0.03)' : 'transparent' },
+      satCtlStyle: { display: st.sat ? 'block' : 'none' },
+      satOpVal: st.satOp, satOpPct: st.satOp + '%',
+      satScaleVal: st.satScale, satRotVal: st.satRot, satDxVal: st.satDx, satDyVal: st.satDy, satAspVal: st.satAsp,
+      setSatOp: (e) => this.setState({ satOp: +e.target.value }),
+      setSatScale: (e) => this.setState({ satScale: +e.target.value }),
+      setSatRot: (e) => this.setState({ satRot: +e.target.value }),
+      setSatDx: (e) => this.setState({ satDx: +e.target.value }),
+      setSatDy: (e) => this.setState({ satDy: +e.target.value }),
+      setSatAsp: (e) => this.setState({ satAsp: +e.target.value }),
+      satReset: () => this.setState({ satScale: 100, satRot: 0, satDx: 0, satDy: 0, satAsp: 100 }),
+      satClear: () => { try { localStorage.removeItem('cod.sat'); } catch (err) {} this.setState({ sat: null }); },
+      satLoad: (e) => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = () => {
+          const url = String(r.result);
+          try { localStorage.setItem('cod.sat', url); } catch (err) {}
+          this.setState({ sat: url, view: 'plan' });
+        };
+        r.readAsDataURL(f);
+      },
+      satMiniBtn: { flex: 1, padding: '6px 0', fontFamily: 'inherit', fontSize: '9.5px', letterSpacing: '0.1em', textTransform: 'uppercase', background: 'none', border: '1px solid #2e2820', color: '#8a7f6d', borderRadius: '3px', cursor: 'pointer' },
+      satHelp: st.sat
+        ? 'Align the photo so the Gihon Spring marker sits on the spring house and the ridge runs along the drawn crest. The photo sits under every period overlay.'
+        : 'Drop in your own aerial or satellite screenshot of the ridge — I cannot fetch map tiles from inside this page. Grab one covering the Gihon Spring down to the Pool of Siloam, north at the top.',
+      vexStr: (st.vex / 10).toFixed(1),
+      vexVal: st.vex,
+      vexLabel: st.vex === 10 ? 'true 1:1' : '×' + (st.vex / 10).toFixed(1),
+      setVex: (e) => this.setState({ vex: +e.target.value }),
+      xrayVal: st.xray,
+      xrayStr: (st.xray / 100).toFixed(2),
+      xrayLabel: st.xray >= 100 ? 'solid rock' : st.xray <= 20 ? 'nearly clear' : st.xray + '% opaque',
+      setXray: (e) => this.setState({ xray: +e.target.value }),
+      vexRow: { display: st.view === '3d' ? 'block' : 'none' },
+      hatchColor: A.c,
+      sceneOne: scene.one, sceneTwo: scene.two,
+      viewHint: (st.view === 'plan' ? 'Looking straight down · numbers key to the element list'
+        : st.view === 'section' ? 'Cut along the ridge · 2.5× vertical exaggeration'
+        : st.view === 'elev' ? 'True-scale side view · 1 m on screen is 1 m on the ground'
+        : 'Modelled landform · buildings at true scale') + ' · ← → arrow keys step through phases',
+      toggleHelp: () => this.setState({ help: !st.help }),
+      goRead: () => this.setState({ tab: 'read' }),
+      goModel: () => this.setState({ tab: 'model' }),
+      goAuthor: () => this.setState({ tab: 'author' }),
+      tabReadBtn: tabBtn((st.tab || 'read') === 'read'),
+      tabModelBtn: tabBtn(st.tab === 'model'),
+      tabAuthorBtn: tabBtn(st.tab === 'author'),
+      paneRead: { display: (st.tab || 'read') === 'read' ? 'block' : 'none' },
+      paneModel: { display: st.tab === 'model' ? 'block' : 'none' },
+      paneAuthor: { display: st.tab === 'author' ? 'block' : 'none' },
+      helpBtn: { background: st.help ? this.rgba(acc, 0.2) : 'none', border: '1px solid ' + this.rgba(acc, 0.5), color: '#e6dcc8', fontFamily: 'inherit', fontSize: '9.5px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '6px 11px', borderRadius: '3px', cursor: 'pointer', whiteSpace: 'nowrap' },
+      helpStyle: { position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(9,8,6,0.94)', backdropFilter: 'blur(4px)', display: st.help ? 'block' : 'none', overflowY: 'auto' },
+      d3Btn: Object.assign({ gridColumn: '1 / -1' }, btn(st.view === '3d')),
+      activeIdStr: aid,
+      visibleIds: Object.keys(visSet).join(','),
+      ctxOpStr: String(ctxOp),
+      modernOpStr: String(mOp),
+      modernPct: st.present ? st.mop + '%' : 'off',
+      modernVal: st.mop,
+      setModern: (e) => this.setState({ mop: +e.target.value, present: +e.target.value > 0 }),
+      activeName: A.n, activeSpan: A.span, activeColor: A.c, activeIndex: ai + 1,
+      eras: eras, elements: elements, essay: essay, bands: bands, ticks: ticks,
+      scrGroups: scrGroups,
+      scrOn: st.scr,
+      toggleScr: () => this.setState({ scr: !st.scr }),
+      scrBlockStyle: { display: scrGroups.length ? 'block' : 'none', margin: '0 0 26px', paddingBottom: '22px', borderBottom: '1px solid #241f19' },
+      planShapes: planShapes, secShapes: secShapes, planLabels: planLabels, secLabels: secLabels,
+      terrainPlan: D.terrainPlan.map((s, i) => Object.assign({ key: 't' + i }, s)),
+      terrainLines: D.terrainLines.map((s, i) => Object.assign({ key: 'tl' + i }, s)),
+      terrainSec: D.terrainSec.map((s, i) => Object.assign({ key: 'ts' + i, f: s.f || 'none' }, s)),
+      secAxis: D.secAxis.map(a => ({ key: a.m, d: 'M62 ' + a.y + ' L960 ' + a.y })),
+      // vertical exaggeration 2.5x: section geometry is scaled y' = 1.6y - 24; labels use the same map
+      
+      terrainLabelEls: this.texts('tl', D.terrainLabels.map(l => Object.assign({}, l, { ls: '0.1em', s: Math.round((l.s || 9) * 2.6), tr: l.r ? 'rotate(' + l.r + ' ' + l.x + ' ' + l.y + ')' : null })), 24, 0),
+      planLabelEls: this.badges(planBadges),
+      secAxisEls: this.texts('sa', D.secAxis.map(a => ({ x: 58, y: 1.6 * a.y - 18, a: 'end', t: a.m + ' m', f: '#6b6152', s: 18 })), 18, 0),
+      secBaseLabelEls: this.texts('sb', D.secLabels.map(l => Object.assign({}, l, { ls: '0.12em', s: Math.round((l.s || 9) * 2.2), y: 1.6 * l.y - 24 })), 20, 0),
+      secLabelEls: this.texts('sl', secLabels.map(l => Object.assign({}, l, { y: 1.6 * l.y - 24 })), 17, 5),
+      catKey: KEYCAT.filter(k => onScreenCats[k]).map(k => ({
+        key: k, n: CAT[k].n, stroke: A.c,
+        d: k === 'street' || k === 'agri' ? 'M2 8 L32 8' : 'M2 2 L32 2 L32 14 L2 14 Z',
+        fill: k === 'destruction' ? 'url(#hatchkey)' : (CAT[k].fill ? this.rgba(A.c, CAT[k].fill) : 'none'),
+        sw: Math.min(CAT[k].sw, 4)
+      })),
+      confKey: Object.keys(CONF).map(k => ({ key: k, n: CONF[k].n, d: CONF[k].d, dash: CONF[k].dash })),
+      pos: st.pos, yearLabel: this.yearStr(this.p2y(st.pos)),
+      setPos: (e) => this.setState({ pos: +e.target.value, pin: null }),
+      opVal: st.op, opPct: st.op + '%', setOp: (e) => this.setState({ op: +e.target.value }),
+      present: st.present, togglePresent: () => this.setState({ present: !st.present }),
+      labelsOn: st.labels, toggleLabels: () => this.setState({ labels: !st.labels }),
+      soloActive: () => this.setState({ vis: {} }),
+      setPlan: () => this.setState({ view: 'plan', tx: 0, ty: 0, zoom: 1 }),
+      setSection: () => this.setState({ view: 'section', tx: 0, ty: 0, zoom: 1 }),
+      planBtn: btn(st.view === 'plan'), sectionBtn: btn(st.view === 'section'),
+      zoomBtn: zb, resetBtn: Object.assign({}, zb, { width: 'auto', padding: '0 10px', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase' }),
+      zoomIn: () => this.setState(s => s.view === 'elev'
+        ? { ew: Math.max(26, s.ew / 1.35), ex: s.ex + s.ew * (1 - 1 / 1.35) / 2, eyTop: s.eyTop - s.ew * 0.704 * (1 - 1 / 1.35) / 2 }
+        : { zoom: Math.min(5, s.zoom * 1.3) }),
+      zoomOut: () => this.setState(s => s.view === 'elev'
+        ? { ew: Math.min(760, s.ew * 1.35), ex: s.ex - s.ew * 0.35 / 2, eyTop: s.eyTop + s.ew * 0.704 * 0.35 / 2 }
+        : { zoom: Math.max(0.35, s.zoom / 1.3) }),
+      resetView: () => this.setState(s => s.view === 'elev' ? { ex: 96, eyTop: 748, ew: 150 } : { zoom: 1, tx: 0, ty: 0 }),
+      planTransform: tf, secTransform: tf,
+      dragStart: this.dragStart, dragMove: this.dragMove, dragEnd: this.dragEnd,
+      tipStyle: { marginTop: '18px', padding: '13px 15px', background: '#16130f', border: '1px solid #2e2820', borderLeft: '2px solid ' + (hp ? hp.c : '#2e2820'), borderRadius: '4px', display: hf ? 'block' : 'none' },
+      tipName: hf ? (hpl ? hpl.short : hf.n) : '',
+      tipWhy: hpl ? hpl.why : '',
+      tipFormal: hpl && hpl.short !== hf.n ? hf.n : '',
+      tipNote: hfNote, tipPeriod: hp ? hp.n : '', tipColor: hp ? hp.c : '#7d715e',
+      tipConf: hf ? CONF[hf.conf].n.toLowerCase() : '',
+      tipConfStyle: { fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: '2px', border: '1px solid #3a332a', color: '#a1957f' },
+      wordNote: 'Essay: about ' + words + ' words. Every element on the drawing carries a confidence tag — hover or tap it to read what is actually known. Nothing on this map is a photograph of the past; it is a reading of published excavation, and the disagreements are shown rather than smoothed over.'
+    };
+  }
+
+  rgba(hex, a) {
+    const h = hex.replace('#', '');
+    const n = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16);
+    return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Church of the Holy Sepulchre — a site through time</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Archivo:wght@400;500;600;700&family=Archivo+Narrow:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #16140f; }
+  * { box-sizing: border-box; }
+  a { color: #c9814c; text-decoration: none; border-bottom: 1px solid rgba(201,129,76,0.4); }
+  a:hover { color: #e6a06a; border-bottom-color: #e6a06a; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #16140f; }
+  ::-webkit-scrollbar-thumb { background: #3a342b; border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: #52493c; }
+  input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; }
+  input[type=range]::-webkit-slider-runnable-track { height: 4px; background: #464034; border-radius: 2px; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; margin-top: -8px; border-radius: 50%; background: #e8e0d0; border: 3px solid #16140f; box-shadow: 0 0 0 1px #6b6053; cursor: grab; }
+  input[type=range]::-moz-range-track { height: 4px; background: #464034; border-radius: 2px; }
+  input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #e8e0d0; border: 3px solid #16140f; cursor: grab; }
+</style>
+</helmet>
+
+<div style="display: grid; grid-template-columns: 296px minmax(0, 1fr) 430px; height: 100vh; width: 100%; min-width: 1240px; background: #16140f; color: #e8e0d0; font-family: Archivo, system-ui, sans-serif; overflow: hidden;">
+
+  <aside style="border-right: 1px solid #2e2921; overflow-y: auto; padding: 20px 18px 40px 20px; display: flex; flex-direction: column; gap: 26px;">
+
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: 0.22em; color: #8d8371; text-transform: uppercase;">Jerusalem</div>
+        <span style="font-family: 'Archivo Narrow', sans-serif; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #e0a08d; background: rgba(184,69,47,0.16); border: 1px solid rgba(184,69,47,0.5); border-radius: 2px; padding: 2px 6px 1px 6px;">Beta</span>
+      </div>
+      <div style="font-family: Newsreader, serif; font-size: 25px; line-height: 1.1; color: #f3ecdd; font-weight: 500;">The Church of the Holy Sepulchre</div>
+      <div style="font-size: 12.5px; line-height: 1.5; color: #9d9384;">One patch of hillside, 2,800 years. Drag the timeline to change the plan; layer any period over any other.</div>
+      <div style="font-size: 11.5px; color: #7d7464;">Prepared by Taylor Halverson, Ph.D.</div>
+      <button onClick="{{ openAbout }}" style="margin-top: 6px; align-self: flex-start; padding: 6px 12px; border: 1px solid #47433c; background: transparent; color: #cfc6b5; border-radius: 3px; cursor: pointer; font-family: Archivo, sans-serif; font-size: 11.5px; letter-spacing: 0.04em;" style-hover="border-color: #c9814c; color: #e6a06a;">About this tool</button>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: 0.2em; color: #8d8371; text-transform: uppercase; border-bottom: 1px solid #2e2921; padding-bottom: 7px;">View</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+        <sc-for list="{{ modes }}" as="m" hint-placeholder-count="4">
+          <button onClick="{{ m.go }}" style="{{ m.style }}">{{ m.label }}</button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ showFrames }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; gap: 6px;">
+          <sc-for list="{{ views }}" as="v" hint-placeholder-count="3">
+            <button onClick="{{ v.go }}" style="{{ v.style }}">{{ v.label }}</button>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCut }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 11px; padding: 12px; border: 1px solid #35302a; border-radius: 4px; background: rgba(255,255,255,0.02);">
+          <div style="font-size: 11.5px; line-height: 1.5; color: #857c6c;">A west&#8211;east slice through the rock, cut through the tomb, the Rotunda and Golgotha. Drag the slider and the model rebuilds itself: the quarry fills, the platform rises, the tomb is cut free, the roof closes over.</div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #8d8371;"><span>Stage</span><span style="color: #cfc6b5; font-variant-numeric: tabular-nums;">{{ stageLabel }}</span></div>
+            <input type="range" min="0" max="3" step="0.02" value="{{ stageVal }}" onChange="{{ onStage }}" style="width: 100%;" />
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <sc-for list="{{ stageStops }}" as="s" hint-placeholder-count="4">
+              <button onClick="{{ s.go }}" title="{{ s.title }}" style="{{ s.style }}">{{ s.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; border-top: 1px solid #35302a; padding-top: 10px;">
+            <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">{{ cutStage.date }}</div>
+            <div style="font-family: Newsreader, serif; font-size: 16px; line-height: 1.3; color: #f0e8d8;">{{ cutStage.label }}</div>
+            <div style="font-size: 12px; line-height: 1.6; color: #b8af9e; text-wrap: pretty;">{{ cutStage.text }}</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #857c6c; font-style: italic; text-wrap: pretty;">{{ cutStage.verse }}</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCity }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 11px; padding: 12px; border: 1px solid #35302a; border-radius: 4px; background: rgba(255,255,255,0.02);">
+          <div style="font-size: 11.5px; line-height: 1.5; color: #857c6c;">Why is the church in the middle of the Old City if the crucifixion was &#8220;without the gate&#8221;? Because the gate moved. Switch the circuits on and off and watch the boundary travel past a site that never moved at all.</div>
+          <div style="display: flex; flex-direction: column; gap: 9px;">
+            <sc-for list="{{ wallList }}" as="w" hint-placeholder-count="4">
+              <label style="display: flex; align-items: flex-start; gap: 9px; cursor: pointer;">
+                <input type="checkbox" checked="{{ w.on }}" onChange="{{ w.toggle }}" style="accent-color: #c9814c; width: 14px; height: 14px; margin-top: 3px; cursor: pointer; flex-shrink: 0;" />
+                <span style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+                  <span style="display: flex; align-items: center; gap: 7px;">
+                    <span style="{{ w.swatch }}"></span>
+                    <span style="font-size: 12.5px; font-weight: 600; color: #d5d0c2;">{{ w.label }}</span>
+                  </span>
+                  <span style="font-size: 11px; color: #857c6c;">{{ w.date }}</span>
+                </span>
+              </label>
+            </sc-for>
+          </div>
+          <div style="font-size: 11.5px; line-height: 1.6; color: #a08c80; border-top: 1px solid #35302a; padding-top: 10px; text-wrap: pretty;">Hebrews 13:12 &#8212; &#8220;Jesus also, that he might sanctify the people with his own blood, suffered without the gate.&#8221; In AD 33 the quarry lay outside the Second North Wall. Herod Agrippa&#8217;s Third Wall, begun about AD 41, brought it inside. Suleiman&#8217;s wall of 1538 put it near the centre.</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ is3d }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 11px; padding: 12px; border: 1px solid #35302a; border-radius: 4px; background: rgba(255,255,255,0.02);">
+          <div style="font-size: 11.5px; line-height: 1.5; color: #857c6c;">Drag the drawing to swing round the site and change the eye height. Sunken shapes are cut into the ground; solid shapes stand above it. The rock surface falls about 11 m from the north-west down to the valley on the east &#8212; dashed lines on the ground are 2 m contours.</div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #8d8371;"><span>Rotate</span><span style="color: #cfc6b5; font-variant-numeric: tabular-nums;">{{ yawLabel }}</span></div>
+            <input type="range" min="-180" max="180" step="1" value="{{ yaw }}" onChange="{{ onYaw }}" style="width: 100%;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #8d8371;"><span>Eye height</span><span style="color: #cfc6b5; font-variant-numeric: tabular-nums;">{{ elevLabel }}</span></div>
+            <input type="range" min="12" max="85" step="1" value="{{ elev }}" onChange="{{ onElev }}" style="width: 100%;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #8d8371;"><span>Height exaggeration</span><span style="color: #cfc6b5; font-variant-numeric: tabular-nums;">{{ exLabel }}</span></div>
+            <input type="range" min="0.4" max="2.4" step="0.1" value="{{ ex }}" onChange="{{ onEx }}" style="width: 100%;" />
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button onClick="{{ spinLeft }}" style="flex: 1; padding: 6px; border: 1px solid #35302a; background: transparent; color: #9d9384; border-radius: 3px; cursor: pointer; font-size: 13px;">&#8630; 45&#176;</button>
+            <button onClick="{{ spinRight }}" style="flex: 1; padding: 6px; border: 1px solid #35302a; background: transparent; color: #9d9384; border-radius: 3px; cursor: pointer; font-size: 13px;">45&#176; &#8631;</button>
+            <button onClick="{{ reset }}" style="flex: 1; padding: 6px; border: 1px solid #35302a; background: transparent; color: #9d9384; border-radius: 3px; cursor: pointer; font-size: 11px;">Reset</button>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ showLayers }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 11px;">
+      <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: 0.2em; color: #8d8371; text-transform: uppercase; border-bottom: 1px solid #2e2921; padding-bottom: 7px;">Overlay other periods</div>
+      <div style="font-size: 11.5px; line-height: 1.5; color: #857c6c;">Ghost any period over the one on screen, drawn as a coloured tracing.</div>
+
+      <div style="display: flex; flex-direction: column; gap: 9px; padding: 10px; background: rgba(184,69,47,0.1); border: 1px solid rgba(184,69,47,0.45); border-radius: 4px;">
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+          <input type="checkbox" checked="{{ todayOn }}" onChange="{{ toggleToday }}" style="accent-color: #b8452f; width: 14px; height: 14px; cursor: pointer;" />
+          <span style="font-size: 12.5px; font-weight: 600; color: #e0a08d;">Present-day church</span>
+        </label>
+        <div style="display: flex; gap: 6px;">
+          <sc-for list="{{ todayModes }}" as="tm" hint-placeholder-count="2">
+            <button onClick="{{ tm.go }}" style="{{ tm.style }}">{{ tm.label }}</button>
+          </sc-for>
+        </div>
+        <div style="font-size: 11px; line-height: 1.5; color: #a08c80;">Solid mode builds the church as a massing model at measured heights &#8212; rotunda dome 34 m, Katholikon 27 m, bell tower 22 m &#8212; in the 2.5D view.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 9px; padding: 10px; background: rgba(210,205,190,0.06); border: 1px solid #47433c; border-radius: 4px;">
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+          <input type="checkbox" checked="{{ modernOn }}" onChange="{{ toggleModern }}" style="accent-color: #b6b0a2; width: 14px; height: 14px; cursor: pointer;" />
+          <span style="font-size: 12.5px; font-weight: 600; color: #d5d0c2;">Modern city map</span>
+        </label>
+        <div style="font-size: 11px; line-height: 1.5; color: #857c6c;">Today&#8217;s streets, souqs, convents and minarets of the Christian Quarter, to scale — solid in the 2.5D view, footprints in plan.</div>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #8d8371;">
+          <span>Map transparency</span><span style="color: #cfc6b5; font-variant-numeric: tabular-nums;">{{ modOpLabel }}</span>
+        </div>
+        <input type="range" min="0" max="100" step="1" value="{{ modOpVal }}" onChange="{{ onModOp }}" style="width: 100%;" />
+      </div>
+
+      <div onDrop="{{ onSatDrop }}" onDragOver="{{ onSatOver }}" style="display: flex; flex-direction: column; gap: 9px; padding: 10px; background: rgba(120,150,170,0.07); border: 1px solid #3f4a50; border-radius: 4px;">
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+          <input type="checkbox" checked="{{ satOn }}" onChange="{{ toggleSat }}" style="accent-color: #7ba3bd; width: 14px; height: 14px; cursor: pointer;" />
+          <span style="font-size: 12.5px; font-weight: 600; color: #b9cfdd;">Satellite photo</span>
+        </label>
+
+        <sc-if value="{{ satHas }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #8d8371;"><span>Transparency</span><span style="color: #cfc6b5; font-variant-numeric: tabular-nums;">{{ satOpLabel }}</span></div>
+            <input type="range" min="0" max="100" step="1" value="{{ satOpVal }}" onChange="{{ onSatOp }}" style="width: 100%;" />
+
+            <div style="height: 1px; background: #3f4a50;"></div>
+            <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #7ba3bd;">Fit by landmarks</div>
+            <sc-if value="{{ satPinning }}" hint-placeholder-val="{{ true }}">
+              <div style="display: flex; flex-direction: column; gap: 7px; padding: 9px; border: 1px solid #6d4a3e; border-radius: 3px; background: rgba(184,69,47,0.12);">
+                <div style="font-size: 11.5px; line-height: 1.5; color: #e0b3a4;">Click point {{ satPinStep }} of 2 on the photo &#8212; match the ringed marker on the plan. Scale and rotation are then computed for you.</div>
+                <button onClick="{{ cancelPin }}" style="padding: 5px; border: 1px solid #6d4a3e; background: transparent; color: #d3a394; border-radius: 3px; cursor: pointer; font-size: 11px;">Cancel</button>
+              </div>
+            </sc-if>
+            <button onClick="{{ startPin }}" style="padding: 7px; border: 1px solid #4e5a61; background: rgba(123,163,189,0.1); color: #b9cfdd; border-radius: 3px; cursor: pointer; font-size: 11.5px;">Align by two points&#8230;</button>
+
+            <div style="height: 1px; background: #3f4a50;"></div>
+            <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #7ba3bd;">Fit by numbers</div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 11px; color: #8d8371; flex: 1;">Photo width covers</span>
+              <input type="number" min="10" max="2000" step="1" value="{{ satMetresVal }}" onChange="{{ onSatMetres }}" style="width: 66px; padding: 4px 6px; background: #1b1913; border: 1px solid #47433c; color: #e8e0d0; border-radius: 3px; font-size: 12px; font-family: Archivo, sans-serif;" />
+              <span style="font-size: 11px; color: #8d8371;">m</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #8d8371;"><span>Scale</span><span style="color: #cfc6b5; font-variant-numeric: tabular-nums;">{{ satScaleLabel }}</span></div>
+            <input type="range" min="0.05" max="6" step="0.01" value="{{ satScaleVal }}" onChange="{{ onSatScale }}" style="width: 100%;" />
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #8d8371;"><span>Stretch width only</span><span style="color: #cfc6b5; font-variant-numeric: tabular-nums;">{{ satAspectLabel }}</span></div>
+            <input type="range" min="0.5" max="2" step="0.01" value="{{ satAspectVal }}" onChange="{{ onSatAspect }}" style="width: 100%;" />
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #8d8371;">
+              <span>Rotate to north</span>
+              <span style="display: flex; align-items: center; gap: 5px;">
+                <button onClick="{{ rotL }}" title="Rotate 0.5&#176; anticlockwise" style="width: 22px; height: 20px; border: 1px solid #47433c; background: transparent; color: #cfc6b5; border-radius: 3px; cursor: pointer; font-size: 12px; line-height: 1;">&#8630;</button>
+                <span style="color: #cfc6b5; font-variant-numeric: tabular-nums; min-width: 42px; text-align: right;">{{ satRotLabel }}</span>
+                <button onClick="{{ rotR }}" title="Rotate 0.5&#176; clockwise" style="width: 22px; height: 20px; border: 1px solid #47433c; background: transparent; color: #cfc6b5; border-radius: 3px; cursor: pointer; font-size: 12px; line-height: 1;">&#8631;</button>
+              </span>
+            </div>
+            <input type="range" min="-180" max="180" step="0.5" value="{{ satRotVal }}" onChange="{{ onSatRot }}" style="width: 100%;" />
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 10.5px; color: #8d8371;">Move east&#8211;west</span>
+                <input type="range" min="-600" max="600" step="1" value="{{ satXVal }}" onChange="{{ onSatX }}" style="width: 100%;" />
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 10.5px; color: #8d8371;">Move north&#8211;south</span>
+                <input type="range" min="-600" max="600" step="1" value="{{ satYVal }}" onChange="{{ onSatY }}" style="width: 100%;" />
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 10.5px; color: #8d8371; flex: 1;">Nudge 1 unit</span>
+              <button onClick="{{ nudgeL }}" style="width: 24px; height: 22px; border: 1px solid #47433c; background: transparent; color: #cfc6b5; border-radius: 3px; cursor: pointer; font-size: 11px;">&#8592;</button>
+              <button onClick="{{ nudgeR }}" style="width: 24px; height: 22px; border: 1px solid #47433c; background: transparent; color: #cfc6b5; border-radius: 3px; cursor: pointer; font-size: 11px;">&#8594;</button>
+              <button onClick="{{ nudgeU }}" style="width: 24px; height: 22px; border: 1px solid #47433c; background: transparent; color: #cfc6b5; border-radius: 3px; cursor: pointer; font-size: 11px;">&#8593;</button>
+              <button onClick="{{ nudgeD }}" style="width: 24px; height: 22px; border: 1px solid #47433c; background: transparent; color: #cfc6b5; border-radius: 3px; cursor: pointer; font-size: 11px;">&#8595;</button>
+            </div>
+
+            <div style="display: flex; gap: 6px;">
+              <button onClick="{{ flipX }}" style="flex: 1; padding: 5px; border: 1px solid #47433c; background: transparent; color: #9d9384; border-radius: 3px; cursor: pointer; font-size: 11px;">Flip &#8596;</button>
+              <button onClick="{{ flipY }}" style="flex: 1; padding: 5px; border: 1px solid #47433c; background: transparent; color: #9d9384; border-radius: 3px; cursor: pointer; font-size: 11px;">Flip &#8597;</button>
+              <button onClick="{{ resetSat }}" style="flex: 1; padding: 5px; border: 1px solid #47433c; background: transparent; color: #9d9384; border-radius: 3px; cursor: pointer; font-size: 11px;">Reset fit</button>
+            </div>
+
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <label style="display: flex; align-items: center; gap: 7px; flex: 1; cursor: pointer; font-size: 11px; color: #9d9384;">
+                <input type="checkbox" checked="{{ satGrey }}" onChange="{{ toggleSatGrey }}" style="accent-color: #7ba3bd; width: 13px; height: 13px; cursor: pointer;" />
+                Desaturate
+              </label>
+              <button onClick="{{ clearSat }}" style="padding: 5px 9px; border: 1px solid #4a4038; background: transparent; color: #9d9384; border-radius: 3px; cursor: pointer; font-size: 11px;">Remove</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <label style="display: block; padding: 12px 10px; border: 1px dashed #4e5a61; border-radius: 3px; text-align: center; cursor: pointer; font-size: 11px; line-height: 1.5; color: #869aa6;">
+          Drop a satellite screenshot here, or click to choose a file. Then use the sliders to line the rotunda and parvis up with the plan.
+          <input type="file" accept="image/*" onChange="{{ onSatFile }}" style="display: none;" />
+        </label>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <sc-for list="{{ overlayList }}" as="o" hint-placeholder-count="11">
+          <label style="{{ o.rowStyle }}">
+            <input type="checkbox" checked="{{ o.on }}" onChange="{{ o.toggle }}" style="{{ o.boxStyle }}" />
+            <span style="{{ o.swatchStyle }}"></span>
+            <span style="flex: 1; font-size: 12px; color: #cfc6b5;">{{ o.label }}</span>
+            <span style="font-size: 10.5px; color: #7d7464; font-variant-numeric: tabular-nums;">{{ o.short }}</span>
+          </label>
+        </sc-for>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 4px;">
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #8d8371;">
+          <span>Overlay opacity</span><span style="font-variant-numeric: tabular-nums; color: #cfc6b5;">{{ opacityLabel }}</span>
+        </div>
+        <input type="range" min="10" max="100" step="5" value="{{ overlayOpacity }}" onChange="{{ onOpacity }}" style="width: 100%;" />
+      </div>
+    </div>
+    </sc-if>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: 0.2em; color: #8d8371; text-transform: uppercase; border-bottom: 1px solid #2e2921; padding-bottom: 7px;">Confidence</div>
+      <div style="display: grid; grid-template-columns: 14px 1fr; gap: 8px 10px; align-items: start; font-size: 11.5px; line-height: 1.45;">
+        <span style="width: 14px; height: 14px; margin-top: 1px; background: #2b2620; border: 1px solid #efe6d4; border-radius: 2px;"></span>
+        <span><b style="color: #7fbf95; font-size: 10.5px; letter-spacing: 0.09em;">SECURE</b><br /><span style="color: #8d8371;">Excavated, surveyed or standing today.</span></span>
+        <span style="width: 14px; height: 14px; margin-top: 1px; background: #7a6d5c; border: 1px solid #b7ab96; border-radius: 2px;"></span>
+        <span><b style="color: #d6a951; font-size: 10.5px; letter-spacing: 0.09em;">PROBABLE</b><br /><span style="color: #8d8371;">Strong indirect evidence: fragments, foundations, engineering necessity.</span></span>
+        <span style="width: 14px; height: 14px; margin-top: 1px; background: transparent; border: 1.5px dashed #b7ab96; border-radius: 2px;"></span>
+        <span><b style="color: #d9836c; font-size: 10.5px; letter-spacing: 0.09em;">RECONSTRUCTED</b><br /><span style="color: #8d8371;">From texts, pilgrim accounts or comparable buildings elsewhere.</span></span>
+        <span style="width: 14px; height: 14px; margin-top: 1px; border-radius: 50%; background: #b8452f; color: #fff; font-size: 10px; line-height: 14px; text-align: center; font-weight: 700;">!</span>
+        <span><b style="color: #e0a08d; font-size: 10.5px; letter-spacing: 0.09em;">DISPUTED</b><br /><span style="color: #8d8371;">Scholars actively disagree. Listed in the panel on the right.</span></span>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: 0.2em; color: #8d8371; text-transform: uppercase; border-bottom: 1px solid #2e2921; padding-bottom: 7px;">Key</div>
+      <div style="display: grid; grid-template-columns: 26px 1fr; gap: 7px 10px; align-items: center; font-size: 11.5px; color: #b8af9e;">
+        <span style="height: 13px; background: #e8dfcb; border: 1px solid #b3a284;"></span><span>Natural bedrock (meleke limestone)</span>
+        <span style="height: 13px; background: #d2c3a2; border: 1px solid #b3a284;"></span><span>Quarry floor / working level</span>
+        <span style="height: 13px; background: linear-gradient(#6f5f42, #6f5f42) center/100% 3px no-repeat;"></span><span>Quarried rock face (scarp), ticks point downslope</span>
+        <span style="height: 13px; background: #332c24; border: 1px solid #1b1712;"></span><span>Rock-cut tomb chamber or shaft</span>
+        <span style="height: 13px; background: #e9dcc0; border: 1px solid #1b1712;"></span><span>Burial shelf (arcosolium)</span>
+        <span style="height: 13px; background: #b9a37c; border: 2px solid #5e4f36;"></span><span>Standing rock mass (Golgotha)</span>
+        <span style="height: 13px; background: #8fa06a;"></span><span>Garden soil, cultivated ground</span>
+        <span style="height: 13px; background: #cbbb9a; border: 1px dotted #6b5b3e;"></span><span>Fill, made ground and podium</span>
+        <span style="height: 13px; background: #2b2620;"></span><span>Wall standing or excavated</span>
+        <span style="height: 13px; background: #7a6d5c;"></span><span>Wall reconstructed from remains</span>
+        <span style="height: 13px; border: 1.5px dashed #8a7f6b;"></span><span>Wall hypothetical, or vanished footprint</span>
+        <span style="height: 13px; background: #f2ead8; border: 1px solid #c8b99b;"></span><span>Floor / paved interior</span>
+        <span style="height: 13px; display: flex; align-items: center; justify-content: space-around;"><span style="width: 5px; height: 5px; border-radius: 50%; background: #2b2620;"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #2b2620;"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #2b2620;"></span></span><span>Columns and piers</span>
+        <span style="height: 13px; background: #8a4b3c;"></span><span>Later addition (Ottoman / modern)</span>
+        <span style="height: 13px; background: #9a8f7d; border: 1px dashed #4a4238;"></span><span>Rubble and demolition</span>
+        <span style="height: 13px; background: rgba(190,176,148,0.28); border: 1px solid #b3a487;"></span><span>Surrounding city fabric (houses, convents)</span>
+        <span style="height: 13px; border: 1.8px dashed #2f6b8c;"></span><span>Modern excavation trench</span>
+        <span style="height: 13px; border: 2px solid #b8452f;"></span><span>Present-day church outline</span>
+        <span style="height: 13px; background: #a9a396; border: 1px solid #726c60;"></span><span>Modern buildings (heights to scale)</span>
+        <span style="height: 13px; background: #d6d1c4; border: 1px solid #8f897c;"></span><span>Modern streets and souqs</span>
+        <span style="height: 13px; background: linear-gradient(#8a9298, #6d757b); border: 1px solid #4e5a61;"></span><span>Satellite photo, if you supply one</span>
+      </div>
+    </div>
+
+    <div style="font-size: 10.5px; line-height: 1.6; color: #6f675a; border-top: 1px solid #2e2921; padding-top: 12px;">Drawn to a common frame at roughly 1:180. North is up; the Cardo Maximus runs down the eastern edge. Every plan on this page is an interpretation — the confidence marks tell you how much weight each line can carry.</div>
+  </aside>
+
+  <main style="display: flex; flex-direction: column; min-width: 0; overflow: hidden;">
+
+    <header style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 18px 26px 14px 26px; border-bottom: 1px solid #2e2921;">
+      <div style="display: flex; align-items: baseline; gap: 14px; flex: 1 1 auto; min-width: 0;">
+        <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 34px; line-height: 1; color: #464034; font-weight: 700; flex-shrink: 0;">{{ period.n }}</div>
+        <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+          <div style="font-family: Newsreader, serif; font-size: clamp(19px, 1.7vw, 27px); line-height: 1.1; color: #f3ecdd; font-weight: 500; text-wrap: balance;">{{ period.label }}</div>
+          <div style="font-size: 12px; line-height: 1.35; color: #9d9384; text-wrap: pretty;">{{ period.strap }}</div>
+        </div>
+      </div>
+      <div style="text-align: right; flex: 0 1 auto; min-width: 0;">
+        <div style="font-family: 'Archivo Narrow', sans-serif; font-size: clamp(15px, 1.2vw, 19px); color: #d9cfba; letter-spacing: 0.02em; white-space: nowrap;">{{ period.date }}</div>
+        <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8d8371; line-height: 1.35; text-wrap: pretty;">{{ period.era }}</div>
+      </div>
+    </header>
+
+    <div ref="{{ planRef }}" style="flex: 1; min-height: 0; position: relative; background: #100f0b; display: flex; align-items: center; justify-content: center; padding: 12px 18px;">
+      {{ plan }}
+      <div style="position: absolute; right: 28px; bottom: 22px; display: flex; align-items: center; gap: 6px; padding: 5px 6px; background: rgba(22,20,15,0.86); border: 1px solid #3d372e; border-radius: 4px; backdrop-filter: blur(3px);">
+        <button onClick="{{ zoomOut }}" title="Zoom out" style="width: 28px; height: 28px; border: 1px solid #464036; background: transparent; color: #cfc6b5; border-radius: 3px; cursor: pointer; font-size: 17px; line-height: 1; display: flex; align-items: center; justify-content: center;" style-hover="border-color: #c9814c; color: #e6a06a;">&#8722;</button>
+        <button onClick="{{ zoomReset }}" title="Fit to frame" style="min-width: 54px; height: 28px; padding: 0 8px; border: 1px solid #464036; background: transparent; color: #cfc6b5; border-radius: 3px; cursor: pointer; font-size: 11.5px; font-variant-numeric: tabular-nums; font-family: Archivo, sans-serif;" style-hover="border-color: #c9814c; color: #e6a06a;">{{ zoomLabel }}</button>
+        <button onClick="{{ zoomIn }}" title="Zoom in" style="width: 28px; height: 28px; border: 1px solid #464036; background: transparent; color: #cfc6b5; border-radius: 3px; cursor: pointer; font-size: 17px; line-height: 1; display: flex; align-items: center; justify-content: center;" style-hover="border-color: #c9814c; color: #e6a06a;">+</button>
+      </div>
+      <div style="position: absolute; right: 28px; top: 20px; font-size: 10.5px; letter-spacing: 0.05em; color: #6d6558; text-align: right; pointer-events: none;">{{ zoomHint }}</div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 14px; padding: 11px 26px; border-top: 1px solid #2e2921; border-bottom: 1px solid #2e2921; background: #1b1913; min-height: 62px;">
+      <span style="{{ sel.chipStyle }}">{{ sel.conf }}</span>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 13px; line-height: 1.45; color: #ded5c3;">{{ sel.label }}</div>
+        <div style="font-size: 11px; color: #7d7464;">{{ sel.hint }}</div>
+      </div>
+    </div>
+
+    <div style="padding: 16px 26px 20px 26px;">
+      <input type="range" min="0" max="10" step="1" value="{{ idx }}" onChange="{{ onSlide }}" style="width: 100%; display: block;" />
+      <div style="display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 4px; margin-top: 10px;">
+        <sc-for list="{{ ticks }}" as="t" hint-placeholder-count="11">
+          <button onClick="{{ t.go }}" title="{{ t.title }}" style="{{ t.style }}">
+            <span style="font-family: 'Archivo Narrow', sans-serif; font-size: 13px; letter-spacing: 0.06em; display: block; text-align: center; font-variant-numeric: tabular-nums;">{{ t.short }}</span>
+            <span style="{{ t.barStyle }}"></span>
+          </button>
+        </sc-for>
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 9px; min-height: 17px;">
+        <span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #7d7464;">Period {{ period.n }}</span>
+        <span style="font-size: 13px; color: #d9cfba;">{{ period.label }}</span>
+        <span style="font-size: 12px; color: #7d7464;">{{ period.date }}</span>
+      </div>
+    </div>
+  </main>
+
+  <aside style="border-left: 1px solid #2e2921; overflow-y: auto; background: #1b1913;">
+    <div style="padding: 24px 26px 60px 26px; display: flex; flex-direction: column; gap: 16px;">
+
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <sc-for list="{{ facts }}" as="f" hint-placeholder-count="3">
+          <span style="display: inline-flex; gap: 6px; padding: 4px 9px; border: 1px solid #35302a; border-radius: 3px; font-size: 10.5px;">
+            <span style="color: #7d7464; letter-spacing: 0.07em; text-transform: uppercase;">{{ f.k }}</span>
+            <span style="color: #d9cfba;">{{ f.v }}</span>
+          </span>
+        </sc-for>
+      </div>
+
+      <p style="margin: 0; font-family: Newsreader, serif; font-size: 19px; line-height: 1.45; color: #f0e8d8; font-weight: 400; text-wrap: pretty;">{{ essay.lede }}</p>
+
+      <div style="height: 1px; background: #35302a;"></div>
+
+      <sc-for list="{{ essay.paras }}" as="p" hint-placeholder-count="14">
+        <div>
+          <sc-if value="{{ p.isH }}" hint-placeholder-val="{{ true }}">
+            <h3 style="margin: 18px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">{{ p.text }}</h3>
+          </sc-if>
+          <sc-if value="{{ p.isP }}" hint-placeholder-val="{{ true }}">
+            <p style="margin: 11px 0 0 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">{{ p.text }}</p>
+          </sc-if>
+        </div>
+      </sc-for>
+
+      <div style="margin-top: 22px; border: 1px solid #4a3b2e; border-radius: 4px; background: rgba(184,69,47,0.07); padding: 15px 16px;">
+        <div style="font-family: 'Archivo Narrow', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #e0a08d; font-weight: 700; margin-bottom: 9px;">Where scholars disagree</div>
+        <ul style="margin: 0; padding: 0 0 0 16px; display: flex; flex-direction: column; gap: 9px;">
+          <sc-for list="{{ debates }}" as="d" hint-placeholder-count="3">
+            <li style="font-size: 13px; line-height: 1.55; color: #b8af9e; text-wrap: pretty;">{{ d.text }}</li>
+          </sc-for>
+        </ul>
+      </div>
+
+      <div style="font-size: 11px; line-height: 1.6; color: #6f675a; border-top: 1px solid #35302a; padding-top: 12px; margin-top: 8px;">Plans after the published surveys of Corbo, Coüasnon and Biddle, the Madaba mosaic map, and preliminary reports from the Sapienza University of Rome excavations of 2022 onwards. Where those sources conflict, the disagreement is shown rather than smoothed away.</div>
+    </div>
+  </aside>
+
+  <sc-if value="{{ aboutOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 90; background: rgba(10,9,6,0.78); backdrop-filter: blur(4px); display: flex; align-items: flex-start; justify-content: center; padding: 44px 24px;">
+      <div style="width: 100%; max-width: 840px; max-height: 100%; display: flex; flex-direction: column; background: #1b1913; border: 1px solid #3d372e; border-radius: 6px; box-shadow: 0 30px 80px rgba(0,0,0,0.6); overflow: hidden;">
+
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 22px 26px 0 26px;">
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="font-family: Newsreader, serif; font-size: 27px; line-height: 1.1; color: #f3ecdd; font-weight: 500;">The Church of the Holy Sepulchre</div>
+            <div style="font-size: 12.5px; color: #9d9384;">Prepared by Taylor Halverson, Ph.D.</div>
+          </div>
+          <button onClick="{{ closeAbout }}" style="flex-shrink: 0; padding: 7px 12px; border: 1px solid #47433c; background: transparent; color: #cfc6b5; border-radius: 3px; cursor: pointer; font-family: Archivo, sans-serif; font-size: 11.5px;" style-hover="border-color: #c9814c; color: #e6a06a;">Close &#10005;</button>
+        </div>
+
+        <div style="display: flex; gap: 26px; padding: 14px 26px 0 26px; border-bottom: 1px solid #35302a;">
+          <sc-for list="{{ aboutTabs }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.go }}" style="{{ t.style }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+
+        <div style="overflow-y: auto; padding: 22px 26px 34px 26px;">
+
+          <sc-if value="{{ tabSite }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; gap: 12px; align-items: flex-start; padding: 13px 15px; border: 1px solid rgba(184,69,47,0.45); background: rgba(184,69,47,0.09); border-radius: 4px;">
+                <span style="flex-shrink: 0; font-family: 'Archivo Narrow', sans-serif; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #e0a08d; background: rgba(184,69,47,0.2); border: 1px solid rgba(184,69,47,0.55); border-radius: 2px; padding: 3px 7px 2px 7px; margin-top: 2px;">Beta</span>
+                <div style="font-size: 13px; line-height: 1.6; color: #cbb8ae; text-wrap: pretty;">Plans, dates and identifications are still being reviewed. Where scholars disagree &#8212; whether the quarry was still open when Jesus was buried, how much of the tomb survived Hadrian&#8217;s podium and al-Hakim&#8217;s demolition of 1009, where the walls of the Constantinian basilica actually ran, whether the Rotunda was roofed in stone or timber &#8212; the model follows the reading most excavators have accepted, and the essay says so.</div>
+              </div>
+
+              <h3 style="margin: 8px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">What this is</h3>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">Eleven building phases in one patch of hillside, from the working limestone quarry of the eighth century BC to the church you can walk into today. Each phase is a reconstructed model of what actually stood on the ground, drawn in a common set of coordinates so that the phases sit on top of one another exactly as the archaeology does &#8212; and each is paired with an essay written to be read straight through rather than consulted.</p>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">The point of building it this way is that no photograph of the Holy Sepulchre can show what the site is. Standing under the Rotunda dome you are looking at eleven sites at once, stacked: a quarry face, a hillside of tombs, a garden, a Roman platform, Constantine&#8217;s courtyard, a ruin, a Crusader church, and four centuries of repair. A model you can turn, fade, ghost against another age, and lay over the present-day aerial photograph can show that. A picture cannot.</p>
+
+              <h3 style="margin: 12px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">Accuracy &amp; limits</h3>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">The plan is redrawn from published excavation reports: Virgilio Corbo&#8217;s survey of 1961&#8211;81, Charles Coüasnon&#8217;s drawings from the restoration campaigns, Martin Biddle&#8217;s study of the Edicule, and the reports of the Sapienza University of Rome excavations begun in 2022. Horizontal positions are approximate; heights, roofing and vaulting are reconstruction throughout, and anything drawn with a dashed outline is reconstructed or disputed. Most of the site lies under a working church that cannot be dug, so large areas are inference from small soundings &#8212; the northern and western edges of the Constantinian complex are the most conjectural things here. Every element carries a confidence mark, and those marks are the honest part of the drawing.</p>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">The aerial overlay is not supplied with the tool: you drop in your own image and align it on two landmarks you choose, so the fit is one you can check yourself rather than one you have to take on trust. The nudge, rotate and scale controls are there for exactly that.</p>
+
+              <h3 style="margin: 12px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">Sources</h3>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; line-height: 1.6; color: #b8af9e;">
+                <div><span style="color: #8d8371;">Excavation reports:</span> V. C. Corbo, <em>Il Santo Sepolcro di Gerusalemme</em> (1981); C. Coüasnon, <em>The Church of the Holy Sepulchre in Jerusalem</em> (1974); M. Biddle, <em>The Tomb of Christ</em> (1999); K. Galor and H. Bloedhorn on the archaeology of Jerusalem; preliminary reports of the Sapienza University of Rome excavations, 2022 onwards.</div>
+                <div><span style="color: #8d8371;">Ancient sources:</span> the burial accounts of the four Gospels; Eusebius, <em>Life of Constantine</em> and <em>Onomasticon</em>; Cyril of Jerusalem, <em>Catecheses</em>; the Bordeaux Pilgrim (333); Egeria (c. 381&#8211;84); the Breviarius and the Piacenza Pilgrim (c. 570); Yahya ibn Sa&#8216;id of Antioch on the destruction of 1009; the Crusader-period accounts of Saewulf, Daniel the Abbot and Theoderich; the Status Quo firmans of 1757 and 1852.</div>
+                <div><span style="color: #8d8371;">Aerial imagery:</span> supplied by you; align it on landmarks of your own choosing.</div>
+                <div><span style="color: #8d8371;">Coordinates:</span> the Edicule, 31.7784 N, 35.2297 E; the site lies inside the Christian Quarter, west of the Roman Cardo Maximus, now the Souq Khan al-Zeit.</div>
+              </div>
+              <p style="margin: 8px 0 0 0; font-size: 12.5px; line-height: 1.6; color: #7d7464;">Plans are schematic reconstructions in a common coordinate frame, not survey drawings; the model is a teaching aid, not a measured record. Corrections welcome &#8212; this is a Beta.</p>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabUse }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">Everything here is controlled from two places: the timeline along the bottom of the drawing, and the panel on the left. Nothing is hidden in a menu.</p>
+
+              <h3 style="margin: 8px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">Move through time</h3>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">Drag the slider under the drawing, or click any of the eleven numbered stops. The plan, the heading and the whole essay on the right change together, so the words you are reading always describe the drawing in front of you. Read straight down the essay before moving on; the phases build on one another.</p>
+
+              <h3 style="margin: 12px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">Plan and 2.5D</h3>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">Plan looks straight down and is the view to measure things in. 2.5D lifts the same drawing into an axonometric model with real heights: quarry cuts sink into the rock, domes and towers stand above it, and the rock surface falls about eleven metres from north-west down to the valley on the east. Drag the drawing to swing round the site and raise or lower the eye; the Rotate and Eye height sliders do the same thing precisely. Height exaggeration stretches the vertical only &#8212; useful for reading the quarry, misleading if you leave it high.</p>
+
+              <h3 style="margin: 12px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">Layer one age over another</h3>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">Under Overlays, tick any period to ghost it over the one on screen as a coloured tracing, and set how strong the tracing is. This is the single most useful thing in the tool: put the present-day church over the Roman quarry and you can see why the tomb sits where it does. Present-day church outline draws today&#8217;s walls on every phase as a fixed reference. Modern city map adds the streets, souqs, convents and minarets of the Christian Quarter at true scale, at any transparency from nothing to solid.</p>
+
+              <h3 style="margin: 12px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">Your own aerial photograph</h3>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">Drag an image file onto the satellite panel, or click it to choose one. Then fit it: <em>Fit by landmarks</em> asks you to click two points on the photo that match two ringed markers on the plan, and works out scale and rotation from the pair. <em>Fit by numbers</em> lets you type how many metres across the photo covers instead. After that, nudge, rotate in half-degree steps, flip, stretch, and desaturate until the built lines agree with the plan. Your photograph and its alignment are remembered in this browser.</p>
+
+              <h3 style="margin: 12px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">Zoom, pan, and frame</h3>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">Scroll or use the buttons at the lower right to zoom from 60% to 800%; drag to pan; click the percentage to fit the drawing back into the frame. The three frame buttons &#8212; Whole site, Church, Tomb &#8212; jump to standard framings so you can compare the same crop across phases. The scale bar in the corner always shows a round number of metres for the zoom you are at.</p>
+
+              <h3 style="margin: 12px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">How much to trust each line</h3>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">Every element is marked <span style="color: #9ad8b1;">SECURE</span> (excavated, surveyed, or standing today), <span style="color: #e6c477;">PROBABLE</span> (strong indirect evidence), or <span style="color: #eda992;">RECONSTRUCTED</span> (from texts, pilgrim accounts, or comparable buildings elsewhere). Hover or tap any element to see its mark and a one-line note in the bar under the drawing. The Key in the left panel explains the fills and line types; <em>Where scholars disagree</em> at the foot of each essay names the open questions for that phase.</p>
+
+              <p style="margin: 10px 0 0 0; font-size: 12.5px; line-height: 1.6; color: #7d7464;">If you are teaching from this: pick one phase, one overlay, and one question. The tool will happily show you forty things at once, and forty things at once teach nothing.</p>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabAuthor }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <div style="font-family: Newsreader, serif; font-size: 24px; line-height: 1.15; color: #f3ecdd; font-weight: 500;">Taylor Halverson, Ph.D.</div>
+                <div style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #8d8371;">Author &#183; Teacher &#183; Tour leader &#183; Scripture scholar</div>
+              </div>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">Taylor Halverson is a scholar of scripture and a teacher of learners &#8212; an entrepreneurship professor in the BYU Marriott School of Business who spends his working life helping people find and act on the best ideas and tools available to them.</p>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">He is the author and editor of more than fifty books and nearly a thousand articles and blog posts, and a builder of scripture study resources: the ScripturePlus app with Scripture Central, whose scripture YouTube channel he co-hosted to more than fifty million views, and BYU&#8217;s Virtual Scripture Group, whose team spent more than five years reconstructing New Testament Jerusalem in three dimensions. This atlas of the Holy Sepulchre belongs to that same body of work &#8212; tools made so that ordinary readers can see what specialists see.</p>
+              <p style="margin: 0; font-family: Newsreader, serif; font-size: 16px; line-height: 1.62; color: #cfc6b5; text-wrap: pretty;">He leads tours to Israel and the Middle East, China, India, Central America, Europe, and the national parks of the American West, where he unfolds how geology, geography, civilization, and scriptural texts created our beautiful present day.</p>
+
+              <h3 style="margin: 10px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">Academic training</h3>
+              <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; line-height: 1.5; color: #b8af9e;">
+                <div>Ph.D., Judaism &amp; Christianity in Antiquity &#8212; Indiana University</div>
+                <div>Ph.D., Instructional Systems Technology &#8212; Indiana University</div>
+                <div>M.A., Biblical Studies &#8212; Yale University</div>
+                <div>B.A., Ancient Near Eastern Studies &#8212; Brigham Young University</div>
+              </div>
+              <p style="margin: 4px 0 0 0; font-size: 12.5px; line-height: 1.6; color: #7d7464;">Two doctorates in two separate fields &#8212; the ancient world, and the design of learning. Both of them are in this tool.</p>
+
+              <h3 style="margin: 10px 0 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #c9814c; font-weight: 700;">Elsewhere</h3>
+              <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; line-height: 1.5;">
+                <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>
+                <a href="https://books.taylorhalverson.com" target="_blank" rel="noopener">books.taylorhalverson.com</a>
+                <a href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com</a>
+              </div>
+            </div>
+          </sc-if>
+
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1600,&quot;height&quot;:1000},&quot;overlayOpacity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:45,&quot;min&quot;:10,&quot;max&quot;:100,&quot;step&quot;:5,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Overlays&quot;},&quot;modernOpacity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:55,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Overlays&quot;},&quot;heightScale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.4,&quot;max&quot;:2.4,&quot;step&quot;:0.1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;2.5D view&quot;},&quot;showAnnotations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Plan&quot;}}">
+const CONF = {
+  s: { name: 'SECURE', hint: 'Excavated, surveyed, or standing in the building today.', col: '#2f6b4a', tx: '#9ad8b1' },
+  p: { name: 'PROBABLE', hint: 'Strong indirect evidence — fragments, foundations, or engineering necessity.', col: '#7a5c1e', tx: '#e6c477' },
+  r: { name: 'RECONSTRUCTED', hint: 'From written sources, pilgrim accounts, or comparable buildings elsewhere.', col: '#7a3427', tx: '#eda992' }
+};
+
+const STY = {
+  bedrock: { fill: '#e8dfcb' },
+  slope: { fill: '#e1d6be' },
+  floorA: { fill: '#ddd0b4', stroke: '#b3a284', sw: 1 },
+  floorB: { fill: '#d2c3a2', stroke: '#b3a284', sw: 1 },
+  floorC: { fill: '#c6b592', stroke: '#a2916f', sw: 1 },
+  scarp: { stroke: '#6f5f42', sw: 3.2, tick: 8 },
+  scarp2: { stroke: '#8b7a5c', sw: 2, tick: 6 },
+  knoll: { fill: '#b9a37c', stroke: '#5e4f36', sw: 2.2 },
+  tombrock: { fill: '#cbb894', stroke: '#6b5b3e', sw: 1.5 },
+  tomb: { fill: '#332c24', stroke: '#15120e', sw: 1 },
+  bench: { fill: '#efe2c6', stroke: '#15120e', sw: 1 },
+  stone: { fill: '#8c7a5a', stroke: '#3b3225', sw: 1 },
+  soil: { fill: '#8fa06a', op: 0.5 },
+  citywall: { fill: '#7a6a55', stroke: '#463b2c', sw: 2 },
+  fillmass: { fill: 'url(#dots)', stroke: '#9a8a68', sw: 1 },
+  vault: { stroke: '#9a8a68', sw: 1.4 },
+  podium: { fill: '#cbbb9a', stroke: '#5b5040', sw: 2 },
+  terrace: { fill: '#e3d8c0', stroke: '#bdae90', sw: 1 },
+  street: { fill: '#e9e0cc', stroke: '#bdae90', sw: 1 },
+  steps: { fill: '#ded2b6', stroke: '#7d6f52', sw: 1.4 },
+  court: { fill: '#e7dcc2', stroke: '#c0b193', sw: 1 },
+  floor: { fill: '#f2ead8', stroke: '#c8b99b', sw: 1 },
+  wallS: { fill: '#2b2620', stroke: '#15120e', sw: 1 },
+  wallP: { fill: '#7a6d5c', stroke: '#413828', sw: 1 },
+  wallRuin: { fill: '#9a8f7d', stroke: '#4a4238', sw: 1.2 },
+  rubble: { fill: 'url(#rub)', stroke: '#7d7362', sw: 1 },
+  rubblef: { fill: 'url(#rub)', stroke: 'none', sw: 0 },
+  ghost: { fill: 'none', stroke: '#8a7f6b', sw: 1.5, dash: '9 6' },
+  burn: { fill: 'url(#burn)', stroke: '#8a4a2a', sw: 1 },
+  rockcut: { fill: '#c2ae86', stroke: '#4d4131', sw: 2 },
+  hacked: { fill: '#a8543f', stroke: '#5a251d', sw: 1.6 },
+  edicule: { fill: '#7a6d5c', stroke: '#3d362c', sw: 1.4 },
+  column: { fill: '#2b2620', stroke: 'none', sw: 0 },
+  addition: { fill: '#8a4b3c', stroke: '#57291f', sw: 1 },
+  cross: { fill: '#b08a2f', stroke: '#5a4718', sw: 1 },
+  dig: { fill: 'rgba(47,107,140,0.07)', stroke: '#2f6b8c', sw: 1.8, dash: '7 4' },
+  tool: { stroke: '#a2916f', sw: 0.9 },
+  urban: { fill: 'rgba(190,176,148,0.28)', stroke: '#b3a487', sw: 1 },
+  modBlock: { fill: '#a9a396', stroke: '#726c60', sw: 1 },
+  todaySolid: { fill: '#b8452f', stroke: '#712a1c', sw: 1 },
+  modStreet: { fill: '#d6d1c4', stroke: '#8f897c', sw: 1 },
+  modtxt: { fill: '#5d5850' },
+  today: { fill: 'none', stroke: '#b8452f', sw: 2.4 },
+  anno: { fill: '#6a5c46' }
+};
+
+// Elevation model: base level (z) and extrusion (hh) per element class, in plan
+// units (5.46 = 1 m). inv marks hollows cut DOWN into the ground.
+const HGT = {
+  bedrock: { z: 0, hh: 0 }, slope: { z: 0, hh: 0 },
+  floorA: { z: -10, hh: 10, inv: 1 }, floorB: { z: -22, hh: 12, inv: 1 }, floorC: { z: -34, hh: 12, inv: 1 },
+  soil: { z: -21, hh: 2 }, knoll: { z: -10, hh: 52 }, tombrock: { z: -22, hh: 24 },
+  tomb: { z: -20, hh: 13, inv: 1 }, bench: { z: -19, hh: 3 }, stone: { z: -20, hh: 13 },
+  citywall: { z: 0, hh: 64 }, fillmass: { z: -34, hh: 38 }, podium: { z: 4, hh: 14 },
+  terrace: { z: 0, hh: 6 }, street: { z: 0, hh: 1 }, steps: { z: 0, hh: 11 },
+  court: { z: 0, hh: 1 }, floor: { z: 0, hh: 1.5 }, wallS: { z: 0, hh: 62 },
+  wallP: { z: 0, hh: 40 }, wallRuin: { z: 0, hh: 22 }, rubble: { z: 0, hh: 9 },
+  rubblef: { z: 0, hh: 5 }, ghost: { z: 0, hh: 0 }, burn: { z: 0, hh: 2 },
+  rockcut: { z: -4, hh: 34 }, hacked: { z: -4, hh: 13 }, edicule: { z: 0, hh: 34 },
+  column: { z: 0, hh: 48 }, addition: { z: 0, hh: 46 }, cross: { z: 38, hh: 14 },
+  dig: { z: 0, hh: 0 }, urban: { z: 0, hh: 30 }, today: { z: 0, hh: 0 },
+  modBlock: { z: 0, hh: 60 }, modStreet: { z: 0, hh: 0.6 }, todaySolid: { z: 0, hh: 110 },
+  vault: null, anno: null, tool: null, scarp: null, scarp2: null, modtxt: null
+};
+
+// Ancient rock surface: the hillside falls away east towards the valley the Cardo
+// runs along, and rises towards the north-west. ~11 m of relief across the plan.
+function TERRAIN(x, y) {
+  return -((x - 140) / 860) * 58 + ((380 - y) / 380) * 16;
+}
+const PATFILL = { dots: '#cfbf9d', rub: '#b3a893', burn: '#cbae8d' };
+// Model colours for the 2.5D view: plan fills are near-black ink, which reads as
+// a blob once extruded, so masonry gets stone tones instead.
+const F3 = {
+  wallS: '#c3b59b', wallP: '#a89880', wallRuin: '#9c9075', column: '#c7b99e',
+  citywall: '#b0a086', addition: '#b8836b', edicule: '#cbbb9d', rockcut: '#c9b590',
+  hacked: '#ae6a55', tomb: '#4c4238', bench: '#efe2c6', stone: '#9a8968',
+  tombrock: '#cbb894', podium: '#cfc0a0', terrace: '#e2d7bf', urban: '#ded3ba',
+  knoll: '#c2ad86', steps: '#d6c9ab', rubble: '#b3a893', fillmass: '#cfbf9d',
+  cross: '#c0982f', modBlock: '#b6b0a2', modStreet: '#dcd7ca', todaySolid: '#c07158'
+};
+
+// Short forms for the timeline buttons; the full names stay in the header.
+const TICK = {
+  quarry: 'Quarry', garden: 'Garden & tombs', thirdwall: 'Inside city',
+  hadrian: 'Aelia', constantine: 'Constantine', modestus: 'Sack & repair',
+  hakim: 'Destroyed', monomachos: 'Monomachos', crusader: 'Crusader',
+  komnenos: 'Fire & rebuild', today: 'Today'
+};
+
+const VIEWS = [
+  { id: 'site', label: 'Whole site', box: '0 0 1000 760' },
+  { id: 'church', label: 'Church', box: '110 240 500 400' },
+  { id: 'rot', label: 'Tomb', box: '96 232 300 268' },
+  { id: 'golg', label: 'Golgotha', box: '330 370 260 220' }
+];
+
+class Component extends DCLogic {
+  state = {
+    idx: 0, overlays: {}, today: false, view: 'site',
+    op: null, sel: null, hover: null, data: null,
+    mode: 'plan', yaw: -32, elev: 34, ex: null,
+    modern: false, modOp: null, todayMode: 'outline',
+    sat: null, satOn: false, satOp: 65, satScale: 1, satX: 0, satY: 0, satRot: 0, satGrey: true,
+    satAspect: 1, satFlipX: false, satFlipY: false, satTop: false, satPin: null, satW: 0, satH: 0,
+    zoom: 1, panX: 0, panY: 0,
+    about: false, aboutTab: 0,
+    stage: 0, walls: { first: false, second: true, third: false, ottoman: true }
+  };
+
+  componentDidMount() {
+    try {
+      const raw = localStorage.getItem('hs-sat-v1');
+      if (raw) { const o = JSON.parse(raw); this.setState({ sat: o.sat, satOn: true, satScale: o.s || 1, satX: o.x || 0, satY: o.y || 0, satRot: o.r || 0, satAspect: o.a || 1, satFlipX: !!o.fx, satFlipY: !!o.fy, satW: o.w || 0, satH: o.h || 0 }); }
+    } catch (e) {}
+    this.measure();
+    if (window.ResizeObserver) {
+      this._ro = new ResizeObserver(() => this.measure());
+      if (this._panel) this._ro.observe(this._panel);
+    }
+    window.addEventListener('resize', this._onWin = () => this.measure());
+    const u = (f) => new URL(f, document.baseURI).href;
+    Promise.all([import(u('./site-data.js')), import(u('./essays-a.js')), import(u('./essays-b.js')), import(u('./cutaway.js'))])
+      .then((m) => {
+        const essays = Object.assign({}, m[1].default, m[2].default);
+        this.setState({ data: { periods: m[0].PERIODS, outline: m[0].TODAY_OUTLINE, modern: m[0].MODERN, essays: essays,
+          cut: m[3].CUT, cutStages: m[3].CUT_STAGES, cutLabels: m[3].CUT_LABELS, city: m[3].CITY } });
+      })
+      .catch((e) => { console.error('data load failed', e); });
+  }
+
+  componentWillUnmount() {
+    if (this._ro) this._ro.disconnect();
+    if (this._onWin) window.removeEventListener('resize', this._onWin);
+  }
+
+  measure() {
+    const n = this._panel;
+    if (!n) return;
+    const r = n.getBoundingClientRect();
+    if (Math.abs((this.state.pw || 0) - r.width) > 2 || Math.abs((this.state.ph || 0) - r.height) > 2) {
+      this.setState({ pw: r.width, ph: r.height });
+    }
+  }
+
+  // zoom + pan applied to a fitted viewBox, clamped so the drawing cannot be lost
+  zoomBox(vb) {
+    const z = this.state.zoom, w = vb[2] / z, h = vb[3] / z;
+    const cx = vb[0] + vb[2] / 2 + this.state.panX * vb[2];
+    const cy = vb[1] + vb[3] / 2 + this.state.panY * vb[3];
+    const out = [cx - w / 2, cy - h / 2, w, h];
+    this._vb = out;
+    return out;
+  }
+
+  setZoom(z, ox, oy) {
+    // Floor is relative to the current frame: the tight Tomb/Golgotha frames must
+    // be able to zoom back out far enough to show the whole church.
+    const view = VIEWS.filter((v) => v.id === this.state.view)[0] || VIEWS[0];
+    const fit = view.box.split(' ').map(Number);
+    const floor = Math.min(0.5, Math.max(0.08, fit[2] / 1400));
+    const nz = Math.max(floor, Math.min(10, z));
+    const st = { zoom: nz };
+    if (ox != null) {
+      const k = 1 / this.state.zoom - 1 / nz;
+      st.panX = this.state.panX + ox * k;
+      st.panY = this.state.panY + oy * k;
+    }
+    this.setState(st);
+  }
+
+  onWheel(e) {
+    e.preventDefault();
+    const r = e.currentTarget.getBoundingClientRect();
+    const ox = (e.clientX - r.left) / r.width - 0.5;
+    const oy = (e.clientY - r.top) / r.height - 0.5;
+    this.setZoom(this.state.zoom * (e.deltaY < 0 ? 1.14 : 1 / 1.14), ox, oy);
+  }
+
+  panHandlers() {
+    return {
+      onPointerDown: (e) => {
+        if (e.button === 2) return;
+        this._pan = { x: e.clientX, y: e.clientY, px: this.state.panX, py: this.state.panY, w: e.currentTarget.getBoundingClientRect().width, h: e.currentTarget.getBoundingClientRect().height };
+        e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId);
+      },
+      onPointerMove: (e) => {
+        if (!this._pan) return;
+        this.setState({
+          panX: this._pan.px - ((e.clientX - this._pan.x) / this._pan.w) / this.state.zoom,
+          panY: this._pan.py - ((e.clientY - this._pan.y) / this._pan.h) / this.state.zoom
+        });
+      },
+      onPointerUp: () => { this._pan = null; },
+      onPointerLeave: () => { this._pan = null; }
+    };
+  }
+
+  // px → user units, so SVG labels keep a real on-screen size whatever the fit
+  u(px) {
+    const vb = this._vb || [0, 0, 1000, 760];
+    const pw = this.state.pw || 800, ph = this.state.ph || 400;
+    const s = Math.min(pw / vb[2], ph / vb[3]);
+    return s > 0.001 ? px / s : px * 2;
+  }
+
+  // ── geometry helpers ──────────────────────────────────────────────────────
+  pts(s) { return s.trim().split(/\s+/).map((p) => p.split(',').map(Number)); }
+
+  scarpTicks(el, st) {
+    const P = this.pts(el.pts), out = [], len = st.tick || 7, side = el.side || -1;
+    for (let i = 0; i < P.length - 1; i++) {
+      const a = P[i], b = P[i + 1];
+      const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy);
+      if (!L) continue;
+      const ux = dx / L, uy = dy / L, px = -uy * side, py = ux * side;
+      for (let d = 6; d < L; d += 15) {
+        const x = a[0] + ux * d, y = a[1] + uy * d;
+        out.push(`M${x.toFixed(1)},${y.toFixed(1)} l${(px * len).toFixed(1)},${(py * len).toFixed(1)}`);
+      }
+    }
+    return out.join(' ');
+  }
+
+  // ── one element → svg node(s) ─────────────────────────────────────────────
+  node(el, key, trace, accent) {
+    const st = STY[el.c] || {};
+    const R = React.createElement;
+    let fill = st.fill || 'none';
+    let stroke = st.stroke || 'none';
+    let sw = st.sw == null ? 1 : st.sw;
+    let dash = el.dash ? '6 5' : (st.dash || null);
+    let op = st.op == null ? 1 : st.op;
+
+    if (el.q === 'r' && el.c !== 'anno') { dash = dash || '5 4'; op = op * 0.62; }
+    else if (el.q === 'p' && fill !== 'none') { op = op * 0.9; }
+
+    if (trace) {
+      fill = 'none'; stroke = accent; sw = Math.max(1.2, sw * 0.9); op = 1;
+      if (el.c === 'anno' || el.c === 'bedrock' || el.c === 'slope' || el.c === 'soil') return null;
+    }
+
+    const base = { fill: fill, stroke: stroke, strokeWidth: sw, strokeDasharray: dash, opacity: op, vectorEffect: 'non-scaling-stroke' };
+    const kids = [];
+
+    if (el.t === 'rect') {
+      if (el.hollow) {
+        const h = el.hollow;
+        kids.push(R('rect', Object.assign({ key: 'a' }, base, { fill: 'none', stroke: trace ? accent : (st.fill || stroke), strokeWidth: h, x: el.x + h / 2, y: el.y + h / 2, width: Math.max(0, el.w - h), height: Math.max(0, el.h - h) })));
+      } else {
+        kids.push(R('rect', Object.assign({ key: 'a' }, base, { x: el.x, y: el.y, width: el.w, height: el.h })));
+      }
+    } else if (el.t === 'path') {
+      if (el.hollow) {
+        kids.push(R('path', Object.assign({ key: 'a' }, base, { d: el.d, fill: 'none', stroke: trace ? accent : (st.fill || stroke), strokeWidth: el.hollow })));
+      } else {
+        kids.push(R('path', Object.assign({ key: 'a' }, base, { d: el.d, fillRule: el.fr ? 'evenodd' : null })));
+      }
+    } else if (el.t === 'poly' || el.t === 'ghost') {
+      const s2 = el.t === 'ghost' ? Object.assign({}, base, { fill: 'none' }) : base;
+      kids.push(R('polygon', Object.assign({ key: 'a' }, s2, { points: el.pts })));
+    } else if (el.t === 'circ') {
+      kids.push(R('circle', Object.assign({ key: 'a' }, base, { cx: el.cx, cy: el.cy, r: el.r })));
+    } else if (el.t === 'scarp') {
+      kids.push(R('polyline', { key: 'a', points: el.pts, fill: 'none', stroke: trace ? accent : st.stroke, strokeWidth: sw, opacity: op }));
+      kids.push(R('path', { key: 'b', d: this.scarpTicks(el, st), fill: 'none', stroke: trace ? accent : st.stroke, strokeWidth: Math.max(0.9, sw * 0.45), opacity: op * 0.9 }));
+    } else if (el.t === 'cols') {
+      for (let i = 0; i < el.n; i++) {
+        const a = (i / el.n) * Math.PI * 2 - Math.PI / 2;
+        kids.push(R('circle', { key: i, cx: el.cx + Math.cos(a) * el.r, cy: el.cy + Math.sin(a) * el.r, r: el.rad, fill: trace ? 'none' : fill, stroke: trace ? accent : (st.stroke || 'none'), strokeWidth: trace ? 1.1 : sw, opacity: op }));
+      }
+    } else if (el.t === 'piers') {
+      for (let i = 0; i < 4; i++) {
+        const a = (i / 4) * Math.PI * 2 + Math.PI / 4;
+        const x = el.cx + Math.cos(a) * el.r, y = el.cy + Math.sin(a) * el.r;
+        kids.push(R('rect', { key: i, x: x - 9, y: y - 9, width: 18, height: 18, fill: trace ? 'none' : fill, stroke: trace ? accent : (st.stroke || 'none'), strokeWidth: trace ? 1.1 : sw, opacity: op, transform: `rotate(${(a * 180) / Math.PI} ${x} ${y})` }));
+      }
+    } else if (el.t === 'colrow') {
+      const n = el.n;
+      for (let i = 0; i < n; i++) {
+        const t = n === 1 ? 0 : i / (n - 1);
+        kids.push(R('circle', { key: i, cx: el.x1 + (el.x2 - el.x1) * t, cy: el.y1 + (el.y2 - el.y1) * t, r: el.rad, fill: trace ? 'none' : (STY.column.fill), stroke: trace ? accent : 'none', strokeWidth: 1.1, opacity: op }));
+      }
+    } else if (el.t === 'chisel') {
+      const d = [];
+      for (let y = el.y; y < el.y + el.h - 10; y += 15) {
+        for (let x = el.x; x < el.x + el.w - 16; x += 26) {
+          d.push(`M${x},${y} h22 v11 h-22 z`);
+        }
+      }
+      kids.push(R('path', { key: 'a', d: d.join(' '), fill: 'none', stroke: trace ? accent : st.stroke, strokeWidth: st.sw, opacity: 0.75 }));
+    } else if (el.t === 'vaults') {
+      const d = [];
+      for (let x = el.x; x <= el.x + el.w; x += 46) {
+        d.push(`M${x},${el.y} C${x + 26},${el.y + el.h * 0.32} ${x + 26},${el.y + el.h * 0.68} ${x},${el.y + el.h}`);
+      }
+      kids.push(R('path', { key: 'a', d: d.join(' '), fill: 'none', stroke: trace ? accent : st.stroke, strokeWidth: st.sw, strokeDasharray: '5 4', opacity: 0.8 }));
+    } else if (el.t === 'urban') {
+      kids.push(R('rect', Object.assign({ key: 'a' }, base, { x: el.x, y: el.y, width: el.w, height: el.h })));
+      const d = [];
+      for (let y = el.y + 16; y < el.y + el.h - 8; y += 34) {
+        for (let x = el.x + 14; x < el.x + el.w - 20; x += 42) {
+          const w = 24 + ((x + y) % 3) * 6, h = 17 + ((x * 7 + y) % 3) * 5;
+          d.push(`M${x},${y} h${w} v${h} h${-w} z`);
+        }
+      }
+      kids.push(R('path', { key: 'b', d: d.join(' '), fill: 'none', stroke: trace ? accent : '#b3a487', strokeWidth: 0.9, opacity: 0.85 }));
+    } else if (el.t === 'rubble') {
+      kids.push(R('rect', Object.assign({ key: 'a' }, base, { x: el.x, y: el.y, width: el.w, height: el.h })));
+    } else if (el.t === 'arrow') {
+      const a = Math.atan2(el.y2 - el.y1, el.x2 - el.x1);
+      kids.push(R('line', { key: 'a', x1: el.x1, y1: el.y1, x2: el.x2, y2: el.y2, stroke: trace ? accent : '#6a5c46', strokeWidth: 1.6 }));
+      kids.push(R('path', { key: 'b', d: `M${el.x2},${el.y2} L${el.x2 - Math.cos(a - 0.4) * 14},${el.y2 - Math.sin(a - 0.4) * 14} L${el.x2 - Math.cos(a + 0.4) * 14},${el.y2 - Math.sin(a + 0.4) * 14} Z`, fill: trace ? accent : '#6a5c46' }));
+    } else if (el.t === 'txt') {
+      if (trace || !this.showAnno()) return null;
+      const vb = this._vb || [0, 0, 1000, 760];
+      let fs = this.u(el.s === 16 ? 14 : 12);
+      const lay = (this._labelLayout && this._labelLayout.get(el)) || null;
+      // Archivo Narrow averages ~0.46 em per character
+      const wOf = (sz) => el.text.length * sz * 0.46;
+      const room = vb[0] + vb[2] - this.u(14) - el.x;
+      let x = el.x, anchor = 'start';
+      if (wOf(fs) > room) {
+        // try right-anchoring against the frame edge before shrinking
+        const rx = vb[0] + vb[2] - this.u(14);
+        if (wOf(fs) < rx - vb[0] - this.u(14)) { x = rx; anchor = 'end'; }
+        else fs = Math.max(this.u(8.5), (vb[2] - this.u(28)) / (el.text.length * 0.46));
+      }
+      let y = lay ? lay.y : el.y;
+      y = Math.max(vb[1] + fs, Math.min(y, vb[1] + vb[3] - this.u(10)));
+      kids.push(R('text', { key: 'a', x: x, y: y, fontSize: fs, textAnchor: anchor, fill: el.c === 'modtxt' ? '#5d5850' : '#6a5c46', fontFamily: 'Archivo Narrow, sans-serif', letterSpacing: '0.04em' }, el.text));
+    }
+
+    if (el.dis && !trace) {
+      const c = this.centroid(el);
+      if (c) {
+        const rr = this.u(8);
+        kids.push(R('circle', { key: 'd1', cx: c[0], cy: c[1], r: rr, fill: '#b8452f', stroke: '#efe6d4', strokeWidth: rr * 0.18 }));
+        kids.push(R('text', { key: 'd2', x: c[0], y: c[1] + rr * 0.5, fontSize: rr * 1.35, fontWeight: 700, textAnchor: 'middle', fill: '#fff', fontFamily: 'Archivo, sans-serif' }, '!'));
+      }
+    }
+
+    const interactive = el.l && !trace;
+    return R('g', {
+      key: key,
+      style: interactive ? { cursor: 'pointer' } : null,
+      onMouseEnter: interactive ? () => this.setState({ hover: el }) : null,
+      onMouseLeave: interactive ? () => this.setState({ hover: null }) : null,
+      onClick: interactive ? () => this.setState({ sel: el }) : null
+    }, kids);
+  }
+
+  centroid(el) {
+    if (el.t === 'rect') return [el.x + el.w / 2, el.y + el.h / 2];
+    if (el.t === 'circ') return [el.cx, el.cy];
+    if (el.t === 'poly' || el.t === 'ghost') {
+      const P = this.pts(el.pts);
+      return [P.reduce((s, p) => s + p[0], 0) / P.length, P.reduce((s, p) => s + p[1], 0) / P.length];
+    }
+    if (el.t === 'path') {
+      const nums = el.d.match(/-?\d+(\.\d+)?/g);
+      if (nums && nums.length >= 2) return [Number(nums[0]), Number(nums[1])];
+    }
+    return null;
+  }
+
+  showAnno() { return this.props.showAnnotations !== false; }
+
+  // Lay out every text label for one pass: measure boxes, push overlapping ones
+  // apart, and keep them clear of the scale bar's reserved corner.
+  layoutLabels(list) {
+    const vb = this._vb || [0, 0, 1000, 760];
+    const m = new Map();
+    const lh = this.u(15);
+    const reserved = { x0: vb[0], x1: vb[0] + this.u(150), y0: vb[1] + vb[3] - this.u(52), y1: vb[1] + vb[3] };
+    const placed = [];
+    list.filter((e) => e.t === 'txt').forEach((el) => {
+      const fs = this.u(el.s === 16 ? 14 : 12);
+      const w = el.text.length * fs * 0.46;
+      let y = el.y;
+      for (let guard = 0; guard < 24; guard++) {
+        const box = { x0: el.x, x1: el.x + w, y0: y - fs, y1: y + fs * 0.3 };
+        const hitScale = box.x0 < reserved.x1 && box.x1 > reserved.x0 && box.y1 > reserved.y0 && box.y0 < reserved.y1;
+        const hit = placed.filter((p) => box.x0 < p.x1 && box.x1 > p.x0 && box.y0 < p.y1 && box.y1 > p.y0)[0];
+        if (!hit && !hitScale) break;
+        y = hitScale ? reserved.y0 - fs * 0.4 : hit.y1 + lh;
+      }
+      placed.push({ x0: el.x, x1: el.x + w, y0: y - fs, y1: y + fs * 0.3 });
+      m.set(el, { y: y });
+    });
+    this._labelLayout = m;
+  }
+
+  saveSat() {
+    try {
+      localStorage.setItem('hs-sat-v1', JSON.stringify({
+        sat: this.state.sat, s: this.state.satScale, x: this.state.satX, y: this.state.satY, r: this.state.satRot,
+        a: this.state.satAspect, fx: this.state.satFlipX, fy: this.state.satFlipY, w: this.state.satW, h: this.state.satH
+      }));
+    } catch (e) {}
+  }
+
+  readSat(file) {
+    if (!file || file.type.indexOf('image') !== 0) return;
+    const fr = new FileReader();
+    fr.onload = () => {
+      const im = new Image();
+      im.onload = () => this.setState({
+        sat: fr.result, satOn: true, satW: im.naturalWidth, satH: im.naturalHeight,
+        satAspect: 1, satFlipX: false, satFlipY: false, satScale: 1, satX: 0, satY: 0, satRot: 0
+      }, () => this.saveSat());
+      im.onerror = () => this.setState({ sat: fr.result, satOn: true }, () => this.saveSat());
+      im.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  }
+
+  // The satellite photo is pinned to the church footprint: the user scales and
+  // nudges it until the rotunda and parvis line up with the drawn plan.
+  satLayer(P) {
+    if (!this.state.satOn || !this.state.sat) return null;
+    const R = React.createElement;
+    const s = this.state.satScale;
+    // base the frame on the photo's own aspect ratio so it is never squashed
+    const ar = this.state.satW && this.state.satH ? this.state.satW / this.state.satH : 900 / 684;
+    const base = 900;
+    let w = base * s, h = (base / ar) * s;
+    w *= this.state.satAspect;
+    const cx = 360 + this.state.satX, cy = 400 + this.state.satY;
+    const flip = (this.state.satFlipX ? ' translate(' + (2 * cx) + ' 0) scale(-1 1)' : '') +
+      (this.state.satFlipY ? ' translate(0 ' + (2 * cy) + ') scale(1 -1)' : '');
+    const img = R('image', {
+      href: this.state.sat, x: cx - w / 2, y: cy - h / 2, width: w, height: h,
+      preserveAspectRatio: 'none',
+      opacity: this.state.satOp / 100,
+      filter: this.state.satGrey ? 'url(#satgrey)' : null,
+      transform: 'rotate(' + this.state.satRot + ' ' + cx + ' ' + cy + ')' + flip,
+      style: { pointerEvents: 'none' }
+    });
+    if (!P) return R('g', { key: 'sat' }, img);
+    // in 2.5D, drape it on the ground plane via the same projection matrix
+    const a = P(0, 0, TERRAIN(0, 0)), b = P(1000, 0, TERRAIN(1000, 0)), c = P(0, 760, TERRAIN(0, 760));
+    const m = [(b[0] - a[0]) / 1000, (b[1] - a[1]) / 1000, (c[0] - a[0]) / 760, (c[1] - a[1]) / 760, a[0], a[1]];
+    return R('g', { key: 'sat', transform: 'matrix(' + m.join(' ') + ')' }, img);
+  }
+
+  // Two-point fit. The user clicks two landmarks on the photo; the known
+  // distance between the same two points on the plan gives scale and rotation.
+  // Pair A: centre of the rotunda (230,365). Pair B: centre of the parvis (420,572).
+  satPinTargets() {
+    return [
+      { x: 230, y: 365, name: 'centre of the rotunda dome' },
+      { x: 420, y: 572, name: 'centre of the parvis courtyard' }
+    ];
+  }
+
+  satClick(e) {
+    if (!this.state.satPin) return;
+    const svg = e.currentTarget;
+    const pt = svg.createSVGPoint ? svg.createSVGPoint() : null;
+    if (!pt) return;
+    pt.x = e.clientX; pt.y = e.clientY;
+    const loc = pt.matrixTransform(svg.getScreenCTM().inverse());
+    const pins = (this.state.satPin.pts || []).concat([[loc.x, loc.y]]);
+    if (pins.length < 2) { this.setState({ satPin: { pts: pins } }); return; }
+    this.solveSat(pins);
+  }
+
+  solveSat(pins) {
+    const T = this.satPinTargets();
+    const dPhoto = Math.hypot(pins[1][0] - pins[0][0], pins[1][1] - pins[0][1]);
+    const dPlan = Math.hypot(T[1].x - T[0].x, T[1].y - T[0].y);
+    if (dPhoto < 4) { this.setState({ satPin: null }); return; }
+    const k = dPlan / dPhoto;
+    const aPhoto = Math.atan2(pins[1][1] - pins[0][1], pins[1][0] - pins[0][0]);
+    const aPlan = Math.atan2(T[1].y - T[0].y, T[1].x - T[0].x);
+    const rot = ((aPlan - aPhoto) * 180) / Math.PI;
+    // scale about the current centre, then translate so pin 0 lands on target 0
+    const cx = 360 + this.state.satX, cy = 400 + this.state.satY;
+    const rad = (rot * Math.PI) / 180;
+    const vx = (pins[0][0] - cx) * k, vy = (pins[0][1] - cy) * k;
+    const rx = vx * Math.cos(rad) - vy * Math.sin(rad), ry = vx * Math.sin(rad) + vy * Math.cos(rad);
+    this.setState({
+      satScale: Math.max(0.05, Math.min(12, this.state.satScale * k)),
+      satRot: Math.round(((rot + 180) % 360 + 360) % 360 - 180),
+      satX: this.state.satX + (T[0].x - (cx + rx)),
+      satY: this.state.satY + (T[0].y - (cy + ry)),
+      satPin: null
+    }, () => this.saveSat());
+  }
+
+  satPinMarks() {
+    const R = React.createElement;
+    if (!this.state.satPin) return null;
+    const done = this.state.satPin.pts || [];
+    const T = this.satPinTargets();
+    const kids = [];
+    T.forEach((t, i) => {
+      const r = this.u(9);
+      kids.push(R('circle', { key: 'tg' + i, cx: t.x, cy: t.y, r: r, fill: 'none', stroke: i === done.length ? '#b8452f' : '#7ba3bd', strokeWidth: this.u(2), strokeDasharray: this.u(3) + ' ' + this.u(3) }));
+      kids.push(R('circle', { key: 'td' + i, cx: t.x, cy: t.y, r: this.u(2), fill: i === done.length ? '#b8452f' : '#7ba3bd' }));
+      kids.push(R('text', { key: 'tt' + i, x: t.x + r + this.u(5), y: t.y + this.u(4), fontSize: this.u(11.5), fill: i === done.length ? '#8c3222' : '#4f6b7d', fontFamily: 'Archivo Narrow, sans-serif' }, (i + 1) + '. ' + t.name));
+    });
+    done.forEach((p, i) => {
+      kids.push(R('circle', { key: 'p' + i, cx: p[0], cy: p[1], r: this.u(5), fill: '#b8452f', stroke: '#fff', strokeWidth: this.u(1.5) }));
+    });
+    return R('g', { key: 'pins', style: { pointerEvents: 'none' } }, kids);
+  }
+
+  modOp() {
+    const v = this.state.modOp == null ? (this.props.modernOpacity == null ? 40 : this.props.modernOpacity) : this.state.modOp;
+    return v / 100;
+  }
+
+  // ══ 2.5 D ════════════════════════════════════════════════════════════════
+  probe() {
+    if (!this._probe) {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      svg.appendChild(p); document.body.appendChild(svg);
+      this._probe = p;
+    }
+    return this._probe;
+  }
+
+  sample(d, n) {
+    const p = this.probe(); p.setAttribute('d', d);
+    let L = 0;
+    try { L = p.getTotalLength(); } catch (e) { return []; }
+    if (!L) return [];
+    const out = [];
+    for (let i = 0; i < n; i++) { const q = p.getPointAtLength((L * i) / n); out.push([q.x, q.y]); }
+    return out;
+  }
+
+  inset(ring, amt) {
+    const n = ring.length;
+    const cx = ring.reduce((s, p) => s + p[0], 0) / n, cy = ring.reduce((s, p) => s + p[1], 0) / n;
+    const rad = ring.reduce((s, p) => s + Math.hypot(p[0] - cx, p[1] - cy), 0) / n;
+    const f = Math.max(0.2, 1 - amt / Math.max(1, rad));
+    return ring.map((p) => [cx + (p[0] - cx) * f, cy + (p[1] - cy) * f]);
+  }
+
+  ccw(ring) {
+    let a = 0;
+    for (let i = 0; i < ring.length; i++) {
+      const p = ring[i], q = ring[(i + 1) % ring.length];
+      a += p[0] * q[1] - q[0] * p[1];
+    }
+    return a > 0 ? ring : ring.slice().reverse();
+  }
+
+  circleRing(cx, cy, r, n) {
+    const out = [];
+    for (let i = 0; i < n; i++) { const a = (i / n) * Math.PI * 2; out.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); }
+    return out;
+  }
+
+  rings(el) {
+    if (!this._cache) this._cache = new Map();
+    if (this._cache.has(el)) return this._cache.get(el);
+    let out = null;
+    if (el.t === 'rect') {
+      const o = [[el.x, el.y], [el.x + el.w, el.y], [el.x + el.w, el.y + el.h], [el.x, el.y + el.h]];
+      out = { rings: el.hollow ? [o, this.inset(o, el.hollow)] : [o] };
+    } else if (el.t === 'poly' || el.t === 'ghost') {
+      out = { rings: [this.pts(el.pts)] };
+    } else if (el.t === 'circ') {
+      out = { rings: [this.circleRing(el.cx, el.cy, el.r, 26)] };
+    } else if (el.t === 'path' && el.c === 'citywall') {
+      // open polyline: thicken into a wall ribbon so it does not extrude as a slab
+      const line = this.sample(el.d, 26), w = 5, L = [], Rr = [];
+      for (let i = 0; i < line.length; i++) {
+        const a = line[Math.max(0, i - 1)], b = line[Math.min(line.length - 1, i + 1)];
+        const dx = b[0] - a[0], dy = b[1] - a[1], m = Math.hypot(dx, dy) || 1;
+        L.push([line[i][0] + (dy / m) * w, line[i][1] - (dx / m) * w]);
+        Rr.push([line[i][0] - (dy / m) * w, line[i][1] + (dx / m) * w]);
+      }
+      out = { rings: [L.concat(Rr.reverse())] };
+    } else if (el.t === 'path') {
+      const subs = el.d.split(/(?=M)/).filter((s) => s.trim().length > 2);
+      let rs = subs.map((s) => this.sample(s, 54)).filter((r) => r.length > 2);
+      if (el.hollow && rs.length === 1) rs = [rs[0], this.inset(rs[0], el.hollow)];
+      out = rs.length ? { rings: rs } : null;
+    } else if (el.t === 'cols') {
+      const m = [];
+      for (let i = 0; i < el.n; i++) {
+        const a = (i / el.n) * Math.PI * 2 - Math.PI / 2;
+        m.push(this.circleRing(el.cx + Math.cos(a) * el.r, el.cy + Math.sin(a) * el.r, el.rad, 10));
+      }
+      out = { multi: m };
+    } else if (el.t === 'colrow') {
+      const m = [];
+      for (let i = 0; i < el.n; i++) {
+        const t = el.n === 1 ? 0 : i / (el.n - 1);
+        m.push(this.circleRing(el.x1 + (el.x2 - el.x1) * t, el.y1 + (el.y2 - el.y1) * t, el.rad, 10));
+      }
+      out = { multi: m };
+    } else if (el.t === 'piers') {
+      const m = [];
+      for (let i = 0; i < 4; i++) {
+        const a = (i / 4) * Math.PI * 2 + Math.PI / 4;
+        const x = el.cx + Math.cos(a) * el.r, y = el.cy + Math.sin(a) * el.r;
+        const c = Math.cos(a), s = Math.sin(a), k = 9;
+        m.push([[-k, -k], [k, -k], [k, k], [-k, k]].map((p) => [x + p[0] * c - p[1] * s, y + p[0] * s + p[1] * c]));
+      }
+      out = { multi: m };
+    } else if (el.t === 'rubble' || el.t === 'urban' || el.t === 'vaults' || el.t === 'chisel') {
+      out = { rings: [[[el.x, el.y], [el.x + el.w, el.y], [el.x + el.w, el.y + el.h], [el.x, el.y + el.h]]] };
+    }
+    this._cache.set(el, out);
+    return out;
+  }
+
+  shade(hex, f) {
+    let h = hex;
+    if (h.indexOf('url') === 0 || h === 'none') return h;
+    if (h.indexOf('rgba') === 0) return h;
+    if (h[0] !== '#') return h;
+    if (h.length === 4) h = '#' + h[1] + h[1] + h[2] + h[2] + h[3] + h[3];
+    const c = [1, 3, 5].map((i) => Math.max(0, Math.min(255, Math.round(parseInt(h.substr(i, 2), 16) * f))));
+    return 'rgb(' + c.join(',') + ')';
+  }
+
+  solidFill(st, cls) {
+    if (F3[cls]) return F3[cls];
+    const f = st.fill || '#c9bda3';
+    if (f.indexOf('url(#') === 0) return PATFILL[f.slice(5, -1)] || '#c9bda3';
+    return f;
+  }
+
+  projector() {
+    const st = this.state;
+    const a = (st.yaw * Math.PI) / 180;
+    const e = (st.elev * Math.PI) / 180;
+    const ca = Math.cos(a), sa = Math.sin(a);
+    const tilt = Math.sin(e), zs = Math.cos(e) * (this.state.ex == null ? (this.props.heightScale == null ? 1 : this.props.heightScale) : this.state.ex);
+    return (x, y, z) => {
+      const dx = x - 500, dy = y - 380;
+      const rx = dx * ca - dy * sa, ry = dx * sa + dy * ca;
+      return [500 + rx, 380 + ry * tilt - (z || 0) * zs, ry];
+    };
+  }
+
+  solid(el, key, trace, accent, P) {
+    const st = STY[el.c] || {};
+    const g = HGT[el.c];
+    if (!g || el.t === 'txt' || el.t === 'arrow' || el.t === 'scarp') return null;
+    const rg = this.rings(el);
+    if (!rg) return null;
+    const R = React.createElement;
+    const hh = el.hz != null ? el.hz : (g.hh || 0);
+    const c0 = this.centroid(el) || [500, 380];
+    const t = TERRAIN(c0[0], c0[1]);
+    const z0 = g.z + t, z1 = g.z + t + hh;
+    const groups = rg.multi ? rg.multi.map((r) => [r]) : [rg.rings];
+    const kids = [];
+    const base = this.solidFill(st, el.c);
+    const flat = !hh;
+
+    groups.forEach((rings, gi) => {
+      const buckets = [[], [], []];
+      const topD = [];
+      rings.forEach((raw, ri) => {
+        const ring = this.ccw(raw);
+        const proj1 = ring.map((p) => P(p[0], p[1], z1));
+        topD.push('M' + proj1.map((p) => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('L') + 'Z');
+        if (flat) return;
+        const proj0 = ring.map((p) => P(p[0], p[1], z0));
+        const sign = (ri === 0 ? 1 : -1) * (g.inv ? -1 : 1);
+        const a = (this.state.yaw * Math.PI) / 180, ca = Math.cos(a), sa = Math.sin(a);
+        for (let i = 0; i < ring.length; i++) {
+          const j = (i + 1) % ring.length;
+          const dx = ring[j][0] - ring[i][0], dy = ring[j][1] - ring[i][1];
+          const L = Math.hypot(dx, dy); if (L < 0.4) continue;
+          const nx = dy / L, ny = -dx / L;
+          const rny = nx * sa + ny * ca, rnx = nx * ca - ny * sa;
+          if (rny * sign <= 0.02) continue;
+          const lit = rnx * 0.62 + rny * 0.42;
+          const b = lit > 0.28 ? 0 : (lit > -0.25 ? 1 : 2);
+          buckets[b].push('M' + [proj0[i], proj1[i], proj1[j], proj0[j]].map((p) => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('L') + 'Z');
+        }
+      });
+
+      if (trace) {
+        kids.push(R('path', { key: 't' + gi, d: topD.join(' '), fill: 'none', stroke: accent, strokeWidth: 1.3, fillRule: 'evenodd', vectorEffect: 'non-scaling-stroke' }));
+        return;
+      }
+      const fac = [1.0, 0.84, 0.68];
+      const rec = el.q === 'r', prob = el.q === 'p';
+      const vol = rec ? 0.4 : (prob ? 0.78 : 1);
+      buckets.forEach((d, bi) => {
+        if (!d.length) return;
+        kids.push(R('path', {
+          key: 's' + gi + bi, d: d.join(' '),
+          fill: this.shade(base, fac[bi]), opacity: vol,
+          stroke: this.shade(base, rec ? 0.42 : 0.55),
+          strokeWidth: rec ? 0.7 : 0.4,
+          strokeDasharray: rec ? '5 4' : null,
+          strokeLinejoin: 'round'
+        }));
+      });
+      const isOutline = el.c === 'ghost' || el.c === 'today' || el.c === 'dig';
+      kids.push(R('path', {
+        key: 'tp' + gi, d: topD.join(' '), fillRule: 'evenodd',
+        fill: isOutline ? 'none' : this.shade(base, flat ? 1 : 1.12),
+        stroke: isOutline ? st.stroke : this.shade(base, 0.5),
+        strokeWidth: isOutline ? st.sw : 0.6,
+        strokeDasharray: isOutline || rec ? (st.dash || '5 4') : null,
+        opacity: (rec ? 0.55 : (prob ? 0.86 : 1)) * (st.op == null ? 1 : st.op)
+      }));
+    });
+
+    if (el.dis) {
+      const c = this.centroid(el);
+      if (c) {
+        const p = P(c[0], c[1], z1 + 10), rr = this.u(8);
+        kids.push(R('circle', { key: 'd1', cx: p[0], cy: p[1], r: rr, fill: '#b8452f', stroke: '#efe6d4', strokeWidth: rr * 0.18 }));
+        kids.push(R('text', { key: 'd2', x: p[0], y: p[1] + rr * 0.5, fontSize: rr * 1.35, fontWeight: 700, textAnchor: 'middle', fill: '#fff', fontFamily: 'Archivo, sans-serif' }, '!'));
+      }
+    }
+
+    const interactive = el.l && !trace;
+    return R('g', {
+      key: key,
+      style: interactive ? { cursor: 'pointer' } : null,
+      onMouseEnter: interactive ? () => this.setState({ hover: el }) : null,
+      onMouseLeave: interactive ? () => this.setState({ hover: null }) : null,
+      onClick: interactive ? () => this.setState({ sel: el }) : null
+    }, kids);
+  }
+
+  depthOf(el, P) {
+    const c = this.centroid(el) || [500, 380];
+    const g = HGT[el.c];
+    const d = P(c[0], c[1], 0)[2];
+    return (g && !g.hh ? -100000 : 0) + d;
+  }
+
+  terrainMesh(P) {
+    const R = React.createElement;
+    const NX = 18, NY = 14, cells = [];
+    for (let j = 0; j < NY; j++) {
+      for (let i = 0; i < NX; i++) {
+        const x0 = (i / NX) * 1000, x1 = ((i + 1) / NX) * 1000;
+        const y0 = (j / NY) * 760, y1 = ((j + 1) / NY) * 760;
+        const q = [[x0, y0], [x1, y0], [x1, y1], [x0, y1]].map((p) => P(p[0], p[1], TERRAIN(p[0], p[1])));
+        const lift = (TERRAIN(x0, y0) + TERRAIN(x1, y1)) / 2;
+        cells.push({ d: 'M' + q.map((p) => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('L') + 'Z', f: lift });
+      }
+    }
+    const paths = cells.map((c, i) => R('path', {
+      key: i, d: c.d,
+      fill: this.shade('#e6dcc6', 0.87 + ((c.f + 46) / 62) * 0.19),
+      stroke: 'rgba(150,136,108,0.28)', strokeWidth: 0.5
+    }));
+    // contour lines every 2 m of the ancient rock surface
+    const cont = [];
+    for (let lv = -50; lv <= 14; lv += 11) {
+      const pts = [];
+      for (let j = 0; j <= 60; j++) {
+        const y = (j / 60) * 760;
+        const x = 140 + ((((380 - y) / 380) * 16 - lv) * 860) / 58;
+        if (x >= -20 && x <= 1020) { const p = P(x, y, TERRAIN(x, y)); pts.push(p[0].toFixed(1) + ',' + p[1].toFixed(1)); }
+      }
+      if (pts.length > 2) cont.push(R('polyline', { key: 'c' + lv, points: pts.join(' '), fill: 'none', stroke: 'rgba(112,96,66,0.6)', strokeWidth: 1.1, strokeDasharray: '7 5' }));
+    }
+    // earth skirt, so the slope of the ground is legible from any angle
+    const a = (this.state.yaw * Math.PI) / 180, ca = Math.cos(a), sa = Math.sin(a);
+    const edges = [[[0, 0], [1000, 0]], [[1000, 0], [1000, 760]], [[1000, 760], [0, 760]], [[0, 760], [0, 0]]];
+    const skirt = [];
+    edges.forEach((e, i) => {
+      const dx = e[1][0] - e[0][0], dy = e[1][1] - e[0][1], L = Math.hypot(dx, dy);
+      const nx = dy / L, ny = -dx / L;
+      if (nx * sa + ny * ca <= 0) return;
+      const steps = 12, top = [], bot = [];
+      for (let k = 0; k <= steps; k++) {
+        const x = e[0][0] + dx * (k / steps), y = e[0][1] + dy * (k / steps);
+        top.push(P(x, y, TERRAIN(x, y)));
+        bot.push(P(x, y, -150));
+      }
+      const d = 'M' + top.concat(bot.reverse()).map((q) => q[0].toFixed(1) + ',' + q[1].toFixed(1)).join('L') + 'Z';
+      skirt.push(R('path', { key: 'sk' + i, d: d, fill: this.shade('#cdbf9f', i % 2 ? 0.74 : 0.86), stroke: 'rgba(90,78,56,0.5)', strokeWidth: 0.8 }));
+    });
+    return R('g', { key: 'terrain' }, skirt.concat(paths, cont));
+  }
+
+  isoChrome(P, vb) {
+    const R = React.createElement;
+    const n0 = P(500, 380, 0), n1 = P(500, 250, 0);
+    const ang = (Math.atan2(n1[1] - n0[1], n1[0] - n0[0]) * 180) / Math.PI;
+    const cx = vb[0] + this.u(38), cy = vb[1] + this.u(42), k = this.u(1);
+    const ex = this.state.ex == null ? (this.props.heightScale == null ? 1 : this.props.heightScale) : this.state.ex;
+    return R('g', { key: 'chrome', style: { pointerEvents: 'none' } }, [
+      R('g', { key: 'n', transform: 'translate(' + cx + ',' + cy + ') scale(' + k + ') rotate(' + (ang + 90) + ')' }, [
+        R('path', { key: 'a', d: 'M0,-22 L8,10 L0,4 L-8,10 Z', fill: '#4d4131' })
+      ]),
+      R('text', { key: 'nt', x: cx, y: cy + this.u(34), fontSize: this.u(13), textAnchor: 'middle', fill: '#6a5c46', fontFamily: 'Archivo Narrow, sans-serif' }, 'N'),
+      this.isoScaleBar(P, vb),
+      R('text', { key: 'h', x: vb[0] + this.u(22), y: vb[1] + vb[3] - this.u(44), fontSize: this.u(12), fill: '#4d4131', fontFamily: 'Archivo Narrow, sans-serif' },
+        'vertical scale \u00d7 ' + Number(ex).toFixed(1))
+    ]);
+  }
+
+  // Scale bar laid along the ground plane, so it foreshortens with the model.
+  isoScaleBar(P, vb) {
+    const R = React.createElement;
+    const perM = 5.46, steps = [5, 10, 20, 50], f2 = this.u(12);
+    let m = 20;
+    for (let i = 0; i < steps.length; i++) {
+      const a = P(0, 0, 0), b = P(steps[i] * perM, 0, 0);
+      const px = Math.hypot(b[0] - a[0], b[1] - a[1]) / this.u(1);
+      if (px >= 80) { m = steps[i]; break; }
+      m = steps[i];
+    }
+    const y = 740, x0 = 40, L = m * perM;
+    const a = P(x0, y, TERRAIN(x0, y)), mid = P(x0 + L / 2, y, TERRAIN(x0 + L / 2, y)), b = P(x0 + L, y, TERRAIN(x0 + L, y));
+    const th = this.u(5);
+    const seg = (p, q, filled) => R('path', {
+      key: filled ? 'f' : 'e',
+      d: 'M' + p[0] + ',' + p[1] + ' L' + q[0] + ',' + q[1] + ' L' + q[0] + ',' + (q[1] + th) + ' L' + p[0] + ',' + (p[1] + th) + ' Z',
+      fill: filled ? '#4d4131' : 'none', stroke: '#4d4131', strokeWidth: this.u(1)
+    });
+    const tx = { fontFamily: 'Archivo Narrow, sans-serif', fill: '#4d4131', fontSize: f2 };
+    return R('g', { key: 'isoscale' }, [
+      seg(a, mid, true), seg(mid, b, false),
+      R('text', Object.assign({ key: 't0', x: a[0], y: a[1] + this.u(20) }, tx), '0'),
+      R('text', Object.assign({ key: 't1', x: b[0], y: b[1] + this.u(20), textAnchor: 'end' }, tx), m + ' m')
+    ]);
+  }
+
+  renderIso(data) {
+    const R = React.createElement;
+    const p = data.periods[this.state.idx];
+    const P = this.projector();
+    const layers = [];
+
+    const gp = [[0, 0], [1000, 0], [1000, 760], [0, 760]].map((q) => P(q[0], q[1], TERRAIN(q[0], q[1])));
+    layers.push(this.terrainMesh(P));
+    const sl = this.satLayer(P); if (sl) layers.push(sl);
+
+    const vw = (VIEWS.filter((v) => v.id === this.state.view)[0] || VIEWS[0]).box.split(' ').map(Number);
+    const focus = this.state.view === 'site' ? [60, 130, 920, 540] : [vw[0] - 30, vw[1] - 30, vw[2] + 60, vw[3] + 60];
+    const fp = [[focus[0], focus[1]], [focus[0] + focus[2], focus[1]], [focus[0] + focus[2], focus[1] + focus[3]], [focus[0], focus[1] + focus[3]]].map((q) => P(q[0], q[1], TERRAIN(q[0], q[1])));
+    const zs = P(500, 380, 100)[1] - P(500, 380, 0)[1];
+    const xs = fp.map((q) => q[0]), ys = fp.map((q) => q[1]);
+    const x0 = Math.min.apply(null, xs) - 26, x1 = Math.max.apply(null, xs) + 26;
+    const y0 = Math.min.apply(null, ys) + zs * 0.85 - 24, y1 = Math.max.apply(null, ys) - zs * 1.6 + 40;
+    const vb = this.zoomBox([x0, y0, x1 - x0, y1 - y0]);
+
+    // period and modern city are depth-sorted together so they occlude each other
+    // correctly; the modern layer keeps its own transparency per element.
+    const mo = this.modOp();
+    const solidToday = this.state.today && p.id !== 'today' && this.state.todayMode === 'solid';
+    let els = p.els.map((el) => ({ el: el, op: 1 }));
+    if (this.state.modern && data.modern) els = els.concat(data.modern.map((el) => ({ el: el, op: mo })));
+    if (solidToday) els = els.concat(data.outline.map((el) => ({ el: Object.assign({}, el, { c: 'todaySolid' }), op: 0.82 })));
+    els.sort((a, b) => this.depthOf(a.el, P) - this.depthOf(b.el, P));
+    els.forEach((it, i) => {
+      const n = this.solid(it.el, 'b' + i, false, p.accent, P);
+      if (!n) return;
+      layers.push(it.op < 1 ? R('g', { key: 'ow' + i, opacity: it.op }, n) : n);
+    });
+
+    data.periods.forEach((q, qi) => {
+      if (!this.state.overlays[q.id] || qi === this.state.idx) return;
+      const op = (this.state.op == null ? (this.props.overlayOpacity == null ? 45 : this.props.overlayOpacity) : this.state.op) / 100;
+      layers.push(R('g', { key: 'ov' + q.id, opacity: op },
+        q.els.slice().sort((a, b) => this.depthOf(a, P) - this.depthOf(b, P))
+          .map((el, i) => this.solid(el, 'o' + i, true, q.accent, P))));
+    });
+
+    if (this.state.today && p.id !== 'today' && !solidToday) {
+      layers.push(R('g', { key: 'today', opacity: 0.95 },
+        data.outline.map((el, i) => this.solid(el, 't' + i, true, '#b8452f', P))));
+    }
+
+    this.layoutLabels(p.els.concat(this.state.modern && data.modern ? data.modern : []));
+    layers.push(this.isoChrome(P, vb));
+
+    const down = (e) => {
+      if (e.shiftKey || e.button === 1) {
+        const r = e.currentTarget.getBoundingClientRect();
+        this._pan = { x: e.clientX, y: e.clientY, px: this.state.panX, py: this.state.panY, w: r.width, h: r.height };
+        e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId);
+        return;
+      }
+      this._drag = { x: e.clientX, yaw: this.state.yaw, y: e.clientY, el: this.state.elev };
+      e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId);
+    };
+    const move = (e) => {
+      if (this._pan) {
+        this.setState({
+          panX: this._pan.px - ((e.clientX - this._pan.x) / this._pan.w) / this.state.zoom,
+          panY: this._pan.py - ((e.clientY - this._pan.y) / this._pan.h) / this.state.zoom
+        });
+        return;
+      }
+      if (!this._drag) return;
+      const dy = e.clientY - this._drag.y;
+      this.setState({
+        yaw: this._drag.yaw + (e.clientX - this._drag.x) * 0.35,
+        elev: Math.max(12, Math.min(85, this._drag.el - dy * 0.22))
+      });
+    };
+    const up = () => { this._drag = null; this._pan = null; };
+
+    return R('svg', {
+      viewBox: vb.join(' '),
+      preserveAspectRatio: 'xMidYMid meet',
+      style: { width: '100%', height: '100%', display: 'block', background: '#efe6d4', borderRadius: '3px', boxShadow: '0 18px 50px rgba(0,0,0,0.5)', touchAction: 'none', cursor: this._drag ? 'grabbing' : 'grab' },
+      onPointerDown: down, onPointerMove: move, onPointerUp: up, onPointerLeave: up,
+      onWheel: (e) => this.onWheel(e)
+    }, layers);
+  }
+
+  defs() {
+    const R = React.createElement;
+    return R('defs', { key: 'defs' }, [
+      R('pattern', { key: 'p1', id: 'dots', width: 11, height: 11, patternUnits: 'userSpaceOnUse' }, [
+        R('rect', { key: 'r', width: 11, height: 11, fill: '#cfbf9d' }),
+        R('circle', { key: 'c', cx: 3, cy: 3, r: 1.5, fill: '#9d8b64' }),
+        R('circle', { key: 'c2', cx: 8, cy: 8, r: 1.1, fill: '#9d8b64' })
+      ]),
+      R('pattern', { key: 'p2', id: 'rub', width: 14, height: 14, patternUnits: 'userSpaceOnUse' }, [
+        R('rect', { key: 'r', width: 14, height: 14, fill: '#b3a893' }),
+        R('path', { key: 'a', d: 'M1,3 l4,-2 l3,3 l-3,2 z M8,9 l4,-1 l1,4 l-4,1 z', fill: '#8e836f' })
+      ]),
+      R('filter', { key: 'fg', id: 'satgrey' }, [
+        R('feColorMatrix', { key: 'm', type: 'saturate', values: '0.15' }),
+        R('feComponentTransfer', { key: 't' }, [R('feFuncA', { key: 'a', type: 'linear', slope: '1' })])
+      ]),
+      R('pattern', { key: 'p3', id: 'burn', width: 9, height: 9, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)' }, [
+        R('rect', { key: 'r', width: 9, height: 9, fill: '#d9c9ac' }),
+        R('rect', { key: 'l', width: 3.4, height: 9, fill: '#a2705a' })
+      ])
+    ]);
+  }
+
+  // A bar of a round number of metres, chosen so it is always 90–150 px long.
+  scaleBar(sx, sy, tx, f2) {
+    const R = React.createElement;
+    const perM = 5.46, target = this.u(115);
+    const steps = [1, 2, 5, 10, 20, 50, 100];
+    let m = steps.filter((v) => v * perM >= target)[0] || 100;
+    const prev = steps[Math.max(0, steps.indexOf(m) - 1)];
+    if (Math.abs(prev * perM - target) < Math.abs(m * perM - target)) m = prev;
+    const L = m * perM, h = this.u(6);
+    return R('g', { key: 's' }, [
+      R('rect', { key: 'r0', x: sx, y: sy, width: L / 2, height: h, fill: '#4d4131' }),
+      R('rect', { key: 'r1', x: sx + L / 2, y: sy, width: L / 2, height: h, fill: 'none', stroke: '#4d4131', strokeWidth: this.u(1.2) }),
+      R('text', Object.assign({ key: 't', x: sx, y: sy + this.u(19), fontSize: f2 }, tx), '0'),
+      R('text', Object.assign({ key: 't3', x: sx + L, y: sy + this.u(19), fontSize: f2, textAnchor: 'end' }, tx), m + ' m')
+    ]);
+  }
+
+  chrome() {
+    const R = React.createElement;
+    const vb = this._vb || [0, 0, 1000, 760];
+    const tx = { fontFamily: 'Archivo Narrow, sans-serif', fill: '#6a5c46' };
+    const k = this.u(1), f2 = this.u(12.5);
+    const nx = vb[0] + this.u(34), ny = vb[1] + this.u(40);
+    const sx = vb[0] + this.u(30), sy = vb[1] + vb[3] - this.u(40);
+    return R('g', { key: 'chrome', style: { pointerEvents: 'none' } }, [
+      R('g', { key: 'n', transform: 'translate(' + nx + ',' + ny + ') scale(' + k + ')' }, [
+        R('path', { key: 'a', d: 'M0,-24 L8,12 L0,5 L-8,12 Z', fill: '#4d4131' }),
+        R('text', Object.assign({ key: 't', x: 0, y: 28, fontSize: 13, textAnchor: 'middle' }, tx), 'N')
+      ]),
+      this.scaleBar(sx, sy, tx, f2)
+    ]);
+  }
+
+  renderPlan(data) {
+    const R = React.createElement;
+    const p = data.periods[this.state.idx];
+    const view = VIEWS.filter((v) => v.id === this.state.view)[0] || VIEWS[0];
+    const fitBox = view.box.split(' ').map(Number);
+    const zbox = this.zoomBox(fitBox);
+    const op = (this.state.op == null ? (this.props.overlayOpacity == null ? 45 : this.props.overlayOpacity) : this.state.op) / 100;
+
+    this.layoutLabels(p.els.concat(this.state.modern && data.modern ? data.modern : []));
+    const layers = [
+      R('rect', { key: 'paper', x: 0, y: 0, width: 1000, height: 760, fill: '#efe6d4' }),
+      this.satLayer(null),
+      R('g', { key: 'base' }, p.els.map((el, i) => this.node(el, 'b' + i, false, p.accent)))
+    ];
+
+    data.periods.forEach((q, qi) => {
+      if (!this.state.overlays[q.id] || qi === this.state.idx) return;
+      layers.push(R('g', { key: 'ov' + q.id, opacity: op },
+        q.els.map((el, i) => this.node(el, 'o' + i, true, q.accent))));
+    });
+
+    if (this.state.today && p.id !== 'today') {
+      layers.push(R('g', { key: 'today', opacity: Math.max(0.55, op) },
+        data.outline.map((el, i) => this.node(el, 't' + i, false, '#b8452f'))));
+    }
+
+    if (this.state.modern && data.modern) {
+      layers.push(R('g', { key: 'mod', opacity: this.modOp() },
+        data.modern.map((el, i) => this.node(el, 'm' + i, false, '#7a7468'))));
+    }
+
+    layers.push(this.chrome());
+    const pm = this.satPinMarks(); if (pm) layers.push(pm);
+
+    return R('svg', Object.assign({
+      viewBox: zbox.join(' '),
+      preserveAspectRatio: 'xMidYMid meet',
+      style: { width: '100%', height: '100%', display: 'block', background: '#efe6d4', borderRadius: '3px', boxShadow: '0 18px 50px rgba(0,0,0,0.5)', touchAction: 'none', cursor: this._pan ? 'grabbing' : 'grab' },
+      onWheel: (e) => this.onWheel(e),
+      onClick: (e) => {
+        if (this.state.satPin) { this.satClick(e); return; }
+        if (e.target.tagName === 'svg') this.setState({ sel: null });
+      }
+    }, this.state.satPin ? {} : this.panHandlers()), [this.defs()].concat(layers));
+  }
+
+  // ── bedrock cutaway ───────────────────────────────────────────────────────
+  stageParts() {
+    const s = Math.max(0, Math.min(3, this.state.stage));
+    const i0 = Math.min(3, Math.floor(s)), i1 = Math.min(3, i0 + 1);
+    return { i0: i0, i1: i1, t: s - i0 };
+  }
+
+  lerpPts(a, b, t) {
+    const A = a.trim().split(/\s+/), B = b.trim().split(/\s+/);
+    if (A.length !== B.length) return t < 0.5 ? a : b;
+    return A.map((p, i) => {
+      const u = p.split(','), v = B[i].split(',');
+      return (Number(u[0]) + (Number(v[0]) - Number(u[0])) * t).toFixed(1) + ',' +
+             (Number(u[1]) + (Number(v[1]) - Number(u[1])) * t).toFixed(1);
+    }).join(' ');
+  }
+
+  renderCut(data) {
+    const R = React.createElement;
+    const P = this.stageParts();
+    const shapes = [];
+    (data.cut || []).forEach((el, i) => {
+      const k0 = el.k[P.i0], k1 = el.k[P.i1];
+      let pts = null, fade = 1;
+      if (k0 && k1) pts = P.i0 === P.i1 ? k0 : this.lerpPts(k0, k1, P.t);
+      else if (k0) { pts = k0; fade = 1 - P.t; }
+      else if (k1) { pts = k1; fade = P.t; }
+      if (!pts || fade <= 0.02) return;
+      const hovered = this.state.hover === el || this.state.sel === el;
+      shapes.push(R(el.line ? 'polyline' : 'polygon', {
+        key: el.id + i, points: pts,
+        fill: el.line ? 'none' : el.fill,
+        stroke: hovered ? '#b8452f' : el.stroke,
+        strokeWidth: el.sw, strokeDasharray: el.dash || null,
+        strokeLinejoin: 'round', strokeLinecap: 'round',
+        opacity: fade * (el.op == null ? 1 : el.op),
+        style: { cursor: 'pointer' },
+        onMouseEnter: () => this.setState({ hover: el }),
+        onMouseLeave: () => this.setState({ hover: null }),
+        onClick: (e) => { e.stopPropagation(); this.setState({ sel: el }); }
+      }));
+    });
+
+    const labs = [];
+    (data.cutLabels || []).forEach((L, i) => {
+      const in0 = L.st.indexOf(P.i0 + 1) >= 0, in1 = L.st.indexOf(P.i1 + 1) >= 0;
+      const o = in0 && in1 ? 1 : in0 ? 1 - P.t : in1 ? P.t : 0;
+      if (o <= 0.03 || !this.showAnno()) return;
+      labs.push(R('text', {
+        key: 'L' + i, x: L.x, y: L.y, textAnchor: L.a, opacity: o,
+        style: { fontFamily: 'Archivo Narrow, sans-serif', fontSize: '15px', letterSpacing: '0.06em', fill: '#4a4031', paintOrder: 'stroke', stroke: '#efe6d4', strokeWidth: '4px', pointerEvents: 'none' }
+      }, L.text));
+    });
+
+    // 10 m scale bar (7 px = 1 m in this section)
+    const bar = R('g', { key: 'bar', opacity: 0.8 }, [
+      R('line', { key: 'a', x1: 700, y1: 500, x2: 770, y2: 500, stroke: '#5c5342', strokeWidth: 2 }),
+      R('line', { key: 'b', x1: 700, y1: 494, x2: 700, y2: 506, stroke: '#5c5342', strokeWidth: 2 }),
+      R('line', { key: 'c', x1: 770, y1: 494, x2: 770, y2: 506, stroke: '#5c5342', strokeWidth: 2 }),
+      R('text', { key: 'd', x: 778, y: 505, style: { fontFamily: 'Archivo Narrow, sans-serif', fontSize: '14px', fill: '#5c5342' } }, '10 m')
+    ]);
+
+    return R('svg', Object.assign({
+      viewBox: this.zoomBox([24, 146, 952, 382]).join(' '),
+      preserveAspectRatio: 'xMidYMid meet',
+      style: { width: '100%', height: '100%', display: 'block', background: '#efe6d4', borderRadius: '3px', boxShadow: '0 18px 50px rgba(0,0,0,0.5)', touchAction: 'none', cursor: this._pan ? 'grabbing' : 'grab' },
+      onWheel: (e) => this.onWheel(e),
+      onClick: (e) => { if (e.target.tagName === 'svg') this.setState({ sel: null }); }
+    }, this.panHandlers()), [
+      R('rect', { key: 'paper', x: -400, y: -200, width: 1800, height: 1100, fill: '#efe6d4' })
+    ].concat(shapes, labs, [bar]));
+  }
+
+  // ── city wall circuits ────────────────────────────────────────────────────
+  renderCity(data) {
+    const R = React.createElement;
+    const C = data.city;
+    if (!C) return null;
+    const kids = [R('rect', { key: 'paper', x: -400, y: -200, width: 1800, height: 1200, fill: '#efe6d4' })];
+
+    C.landmarks.forEach((m, i) => {
+      kids.push(R('rect', { key: 'lm' + i, x: m.x, y: m.y, width: m.w, height: m.h, fill: 'rgba(190,176,148,0.4)', stroke: '#b3a487', strokeWidth: 1.4 }));
+      kids.push(R('text', { key: 'lt' + i, x: m.x + m.w / 2, y: m.y + m.h / 2 - 2, textAnchor: 'middle', style: { fontFamily: 'Archivo Narrow, sans-serif', fontSize: '16px', letterSpacing: '0.08em', fill: '#6a6152' } }, m.text));
+      kids.push(R('text', { key: 'ls' + i, x: m.x + m.w / 2, y: m.y + m.h / 2 + 16, textAnchor: 'middle', style: { fontFamily: 'Archivo, sans-serif', fontSize: '12px', fill: '#8d8371' } }, m.sub));
+    });
+
+    C.circuits.forEach((w) => {
+      if (!this.state.walls[w.id]) return;
+      kids.push(R(w.closed ? 'polygon' : 'polyline', {
+        key: 'w' + w.id, points: w.pts, fill: 'none', stroke: w.colour,
+        strokeWidth: w.id === 'second' ? 6 : 5,
+        strokeDasharray: w.q === 'r' ? '12 7' : w.q === 'p' ? '18 8' : null,
+        strokeLinejoin: 'round', strokeLinecap: 'round',
+        style: { cursor: 'pointer' },
+        onMouseEnter: () => this.setState({ hover: { l: w.label + ' — ' + w.date + '. ' + w.note, q: w.q, dis: w.dis } }),
+        onMouseLeave: () => this.setState({ hover: null }),
+        onClick: (e) => { e.stopPropagation(); this.setState({ sel: { l: w.label + ' — ' + w.date + '. ' + w.note, q: w.q, dis: w.dis } }); }
+      }));
+      kids.push(R('text', {
+        key: 'wt' + w.id, x: w.lx, y: w.ly, textAnchor: w.la,
+        style: { fontFamily: 'Archivo Narrow, sans-serif', fontSize: '17px', letterSpacing: '0.06em', fill: w.colour, paintOrder: 'stroke', stroke: '#efe6d4', strokeWidth: '4px', pointerEvents: 'none' }
+      }, w.label));
+    });
+
+    C.gates.forEach((g, i) => {
+      kids.push(R('circle', { key: 'gc' + i, cx: g.x, cy: g.y, r: 4, fill: '#3f5a70' }));
+      kids.push(R('text', { key: 'gt' + i, x: g.x, y: g.y - 12, textAnchor: 'middle', style: { fontFamily: 'Archivo, sans-serif', fontSize: '12.5px', fill: '#6d7f8c' } }, g.text));
+    });
+
+    kids.push(R('circle', { key: 'ch1', cx: C.church.x, cy: C.church.y, r: 18, fill: 'none', stroke: '#b8452f', strokeWidth: 1.4, opacity: 0.5 }));
+    kids.push(R('circle', { key: 'ch2', cx: C.church.x, cy: C.church.y, r: C.church.r, fill: '#b8452f' }));
+    kids.push(R('text', {
+      key: 'ch3', x: C.church.x, y: C.church.y - 28, textAnchor: 'middle',
+      style: { fontFamily: 'Newsreader, serif', fontSize: '18px', fill: '#8f3524', paintOrder: 'stroke', stroke: '#efe6d4', strokeWidth: '2px' }
+    }, 'Golgotha and the tomb'));
+
+    kids.push(R('g', { key: 'n' }, [
+      R('line', { key: 'a', x1: 862, y1: 600, x2: 862, y2: 552, stroke: '#5c5342', strokeWidth: 2 }),
+      R('path', { key: 'b', d: 'M856,562 L862,548 L868,562 Z', fill: '#5c5342' }),
+      R('text', { key: 'c', x: 862, y: 622, textAnchor: 'middle', style: { fontFamily: 'Archivo Narrow, sans-serif', fontSize: '14px', letterSpacing: '0.1em', fill: '#5c5342' } }, 'N')
+    ]));
+
+    return R('svg', Object.assign({
+      viewBox: this.zoomBox([160, 118, 750, 528]).join(' '),
+      preserveAspectRatio: 'xMidYMid meet',
+      style: { width: '100%', height: '100%', display: 'block', background: '#efe6d4', borderRadius: '3px', boxShadow: '0 18px 50px rgba(0,0,0,0.5)', touchAction: 'none', cursor: this._pan ? 'grabbing' : 'grab' },
+      onWheel: (e) => this.onWheel(e),
+      onClick: (e) => { if (e.target.tagName === 'svg') this.setState({ sel: null }); }
+    }, this.panHandlers()), kids);
+  }
+
+  // ── outputs ───────────────────────────────────────────────────────────────
+  renderVals() {
+    const d = this.state.data;
+    const btn = (on) => 'flex:1;padding:7px 4px;border-radius:3px;cursor:pointer;font-family:Archivo,sans-serif;font-size:11px;border:1px solid ' +
+      (on ? '#c9814c' : '#35302a') + ';background:' + (on ? 'rgba(201,129,76,0.16)' : 'transparent') + ';color:' + (on ? '#e6a06a' : '#9d9384') + ';';
+
+    const views = VIEWS.map((v) => ({
+      label: v.label, style: btn(this.state.view === v.id),
+      go: () => this.setState({ view: v.id, zoom: 1, panX: 0, panY: 0 })
+    }));
+    const at = this.state.aboutTab;
+    const tabBtn = (on) => 'padding:9px 2px 10px 2px;background:transparent;border:0;border-bottom:2px solid ' +
+      (on ? '#c9814c' : 'transparent') + ';color:' + (on ? '#f3ecdd' : '#8d8371') +
+      ';cursor:pointer;font-family:Archivo,sans-serif;font-size:12.5px;font-weight:' + (on ? '600' : '400') + ';text-align:left;';
+    const aboutVals = {
+      aboutOpen: this.state.about,
+      openAbout: () => this.setState({ about: true }),
+      closeAbout: () => this.setState({ about: false }),
+      tabSite: at === 0, tabUse: at === 1, tabAuthor: at === 2,
+      aboutTabs: [
+        { label: 'The site', style: tabBtn(at === 0), go: () => this.setState({ aboutTab: 0 }) },
+        { label: 'How to use it', style: tabBtn(at === 1), go: () => this.setState({ aboutTab: 1 }) },
+        { label: 'Taylor Halverson, Ph.D.', style: tabBtn(at === 2), go: () => this.setState({ aboutTab: 2 }) }
+      ]
+    };
+    const mode = this.state.mode;
+    const iso = mode === 'iso';
+    const isCut = mode === 'cut', isCity = mode === 'city';
+    const goMode = (id) => () => this.setState({ mode: id, zoom: 1, panX: 0, panY: 0, sel: null, hover: null });
+    const modes = [
+      { label: 'Plan', style: btn(mode === 'plan'), go: goMode('plan') },
+      { label: '2.5D view', style: btn(iso), go: goMode('iso') },
+      { label: 'Cutaway', style: btn(isCut), go: goMode('cut') },
+      { label: 'City walls', style: btn(isCity), go: goMode('city') }
+    ];
+
+    const sp = this.stageParts();
+    const stages = (d && d.cutStages) || [];
+    const cutNow = stages[sp.t > 0.5 ? sp.i1 : sp.i0] || { n: '', date: '', label: '', text: '', verse: '' };
+    const cutVals = {
+      isCut: isCut, isCity: isCity, showFrames: !isCut && !isCity, showLayers: !isCut && !isCity,
+      stageVal: this.state.stage, stageLabel: cutNow.date,
+      onStage: (ev) => this.setState({ stage: Number(ev.target.value) }),
+      cutStage: cutNow,
+      stageStops: stages.map((s, i) => ({
+        label: s.n, title: s.date + ' — ' + s.label,
+        style: btn(Math.round(this.state.stage) === i),
+        go: () => this.setState({ stage: i })
+      })),
+      wallList: (d && d.city ? d.city.circuits : []).map((w) => ({
+        label: w.label, date: w.date, note: w.note,
+        on: !!this.state.walls[w.id],
+        swatch: 'width:26px;height:0;border-top:4px ' + (w.q === 's' ? 'solid' : 'dashed') + ' ' + w.colour + ';flex-shrink:0;',
+        toggle: () => this.setState({ walls: Object.assign({}, this.state.walls, { [w.id]: !this.state.walls[w.id] }) })
+      }))
+    };
+    const exVal = this.state.ex == null ? (this.props.heightScale == null ? 1 : this.props.heightScale) : this.state.ex;
+    const mOp = Math.round(this.modOp() * 100);
+    const modVals = {
+      modernOn: this.state.modern, modOpVal: mOp, modOpLabel: mOp + '%',
+      toggleModern: () => this.setState({ modern: !this.state.modern }),
+      satHas: !!this.state.sat,
+      satOn: this.state.satOn,
+      satOpVal: this.state.satOp, satOpLabel: this.state.satOp + '%',
+      satScaleVal: this.state.satScale, satScaleLabel: '\u00d7 ' + this.state.satScale.toFixed(2),
+      satRotVal: this.state.satRot, satRotLabel: this.state.satRot + '\u00b0',
+      satXVal: this.state.satX, satYVal: this.state.satY,
+      satGrey: this.state.satGrey,
+      toggleSat: () => this.setState({ satOn: !this.state.satOn }),
+      toggleSatGrey: () => this.setState({ satGrey: !this.state.satGrey }),
+      onSatOp: (ev) => this.setState({ satOp: Number(ev.target.value) }),
+      onSatScale: (ev) => this.setState({ satScale: Number(ev.target.value) }, () => this.saveSat()),
+      onSatRot: (ev) => this.setState({ satRot: Number(ev.target.value) }, () => this.saveSat()),
+      onSatX: (ev) => this.setState({ satX: Number(ev.target.value) }, () => this.saveSat()),
+      onSatY: (ev) => this.setState({ satY: Number(ev.target.value) }, () => this.saveSat()),
+      onSatFile: (ev) => { const fl = ev.target.files && ev.target.files[0]; this.readSat(fl); ev.target.value = ''; },
+      satAspectVal: this.state.satAspect, satAspectLabel: this.state.satAspect.toFixed(2),
+      onSatAspect: (ev) => this.setState({ satAspect: Number(ev.target.value) }, () => this.saveSat()),
+      satFlipX: this.state.satFlipX, satFlipY: this.state.satFlipY,
+      flipX: () => this.setState({ satFlipX: !this.state.satFlipX }, () => this.saveSat()),
+      flipY: () => this.setState({ satFlipY: !this.state.satFlipY }, () => this.saveSat()),
+      satNudge: (dx, dy) => () => this.setState({ satX: this.state.satX + dx, satY: this.state.satY + dy }, () => this.saveSat()),
+      nudgeL: () => this.setState({ satX: this.state.satX - 1 }, () => this.saveSat()),
+      nudgeR: () => this.setState({ satX: this.state.satX + 1 }, () => this.saveSat()),
+      nudgeU: () => this.setState({ satY: this.state.satY - 1 }, () => this.saveSat()),
+      nudgeD: () => this.setState({ satY: this.state.satY + 1 }, () => this.saveSat()),
+      rotFine: (d) => () => this.setState({ satRot: this.state.satRot + d }, () => this.saveSat()),
+      rotL: () => this.setState({ satRot: this.state.satRot - 0.5 }, () => this.saveSat()),
+      rotR: () => this.setState({ satRot: this.state.satRot + 0.5 }, () => this.saveSat()),
+      // scale by stating how many metres the photo's full width covers
+      satMetresVal: (() => {
+        const ar = this.state.satW && this.state.satH ? this.state.satW / this.state.satH : 900 / 684;
+        return Math.round((900 * this.state.satScale * this.state.satAspect) / 5.46);
+      })(),
+      onSatMetres: (ev) => {
+        const m = Number(ev.target.value);
+        if (!m || m < 5) return;
+        this.setState({ satScale: (m * 5.46) / (900 * this.state.satAspect) }, () => this.saveSat());
+      },
+      satPinning: !!this.state.satPin,
+      satPinStep: this.state.satPin ? ((this.state.satPin.pts || []).length + 1) : 0,
+      startPin: () => this.setState({ satPin: { pts: [] }, satOn: true, mode: 'plan' }),
+      cancelPin: () => this.setState({ satPin: null }),
+      resetSat: () => this.setState({ satScale: 1, satX: 0, satY: 0, satRot: 0, satAspect: 1, satFlipX: false, satFlipY: false }, () => this.saveSat()),
+      onSatDrop: (ev) => { ev.preventDefault(); const dt = ev.dataTransfer; if (dt && dt.files && dt.files[0]) this.readSat(dt.files[0]); },
+      onSatOver: (ev) => ev.preventDefault(),
+      clearSat: () => { try { localStorage.removeItem('hs-sat-v1'); } catch (e) {} this.setState({ sat: null, satOn: false }); },
+      todayModes: [
+        { label: 'Outline', style: btn(this.state.todayMode === 'outline'), go: () => this.setState({ todayMode: 'outline' }) },
+        { label: 'Solid, to scale', style: btn(this.state.todayMode === 'solid'), go: () => this.setState({ todayMode: 'solid' }) }
+      ],
+      onModOp: (ev) => this.setState({ modOp: Number(ev.target.value) })
+    };
+    const isoVals = {
+      is3d: iso, modes: modes,
+      yaw: this.state.yaw, elev: this.state.elev, ex: exVal,
+      yawLabel: Math.round(((this.state.yaw % 360) + 360) % 360) + '\u00b0',
+      elevLabel: Math.round(this.state.elev) + '\u00b0',
+      exLabel: '\u00d7 ' + Number(exVal).toFixed(1),
+      onYaw: (ev) => this.setState({ yaw: Number(ev.target.value) }),
+      onElev: (ev) => this.setState({ elev: Number(ev.target.value) }),
+      onEx: (ev) => this.setState({ ex: Number(ev.target.value) }),
+      spinLeft: () => this.setState({ yaw: this.state.yaw - 45 }),
+      spinRight: () => this.setState({ yaw: this.state.yaw + 45 }),
+      reset: () => this.setState({ yaw: -32, elev: 34, ex: null })
+    };
+
+    const opVal = this.state.op == null ? (this.props.overlayOpacity == null ? 45 : this.props.overlayOpacity) : this.state.op;
+
+    if (!d) {
+      return Object.assign({}, aboutVals, cutVals, {
+        period: { n: '—', label: 'Loading the site plans', date: '', era: '', strap: '' },
+        idx: this.state.idx, views: views, ticks: [], overlayList: [], facts: [], debates: [],
+        essay: { lede: '', paras: [] }, overlayOpacity: opVal, opacityLabel: opVal + '%',
+        sel: { conf: '', label: '', hint: '', chipStyle: 'display:none;' },
+        todayOn: this.state.today, plan: null,
+        onSlide: () => {}, onOpacity: () => {}, toggleToday: () => {},
+        zoomLabel: '100%', zoomIn: () => {}, zoomOut: () => {}, zoomReset: () => {}, zoomCanReset: false, zoomHint: '',
+        planRef: (n) => { if (n && n !== this._panel) { this._panel = n; if (this._ro) this._ro.observe(n); this.measure(); } },
+        modernOn: false, modOpVal: mOp, modOpLabel: mOp + '%', todayModes: [],
+        satHas: false, satOn: false, satOpVal: 65, satOpLabel: '65%', satScaleVal: 1, satScaleLabel: '\u00d7 1.00',
+        satRotVal: 0, satRotLabel: '0\u00b0', satXVal: 0, satYVal: 0, satGrey: true,
+        toggleSat: () => {}, toggleSatGrey: () => {}, onSatOp: () => {}, onSatScale: () => {}, onSatRot: () => {},
+        onSatX: () => {}, onSatY: () => {}, onSatFile: () => {}, onSatDrop: () => {}, onSatOver: () => {}, clearSat: () => {},
+        satAspectVal: 1, satAspectLabel: '1.00', onSatAspect: () => {}, satFlipX: false, satFlipY: false,
+        flipX: () => {}, flipY: () => {}, nudgeL: () => {}, nudgeR: () => {}, nudgeU: () => {}, nudgeD: () => {},
+        rotL: () => {}, rotR: () => {}, satMetresVal: 165, onSatMetres: () => {},
+        satPinning: false, satPinStep: 0, startPin: () => {}, cancelPin: () => {}, resetSat: () => {},
+        toggleModern: () => {}, onModOp: () => {},
+        is3d: false, modes: modes, yaw: 0, elev: 34, ex: 1,
+        yawLabel: '', elevLabel: '', exLabel: '',
+        onYaw: () => {}, onElev: () => {}, onEx: () => {},
+        spinLeft: () => {}, spinRight: () => {}, reset: () => {}
+      });
+    }
+
+    const p = d.periods[this.state.idx];
+    const e = d.essays[p.id] || { lede: '', paras: [], debates: [], facts: [] };
+    const shown = this.state.hover || this.state.sel;
+    const c = shown ? CONF[shown.q] || CONF.p : null;
+
+    return Object.assign({}, isoVals, modVals, aboutVals, cutVals, {
+      period: { n: p.n, label: p.label, date: p.date, era: p.era, strap: p.strap },
+      idx: this.state.idx,
+      plan: isCut ? this.renderCut(d) : isCity ? this.renderCity(d) : iso ? this.renderIso(d) : this.renderPlan(d),
+      views: views,
+      zoomLabel: Math.round(this.state.zoom * 100) + '%',
+      zoomIn: () => this.setZoom(this.state.zoom * 1.35),
+      zoomOut: () => this.setZoom(this.state.zoom / 1.35),
+      zoomReset: () => this.setState({ zoom: 1, panX: 0, panY: 0 }),
+      zoomCanReset: this.state.zoom !== 1 || this.state.panX !== 0 || this.state.panY !== 0,
+      zoomHint: iso ? 'scroll to zoom \u00b7 drag to rotate \u00b7 shift-drag to pan' : 'scroll to zoom \u00b7 drag to pan',
+      planRef: (n) => { if (n && n !== this._panel) { this._panel = n; if (this._ro) this._ro.observe(n); this.measure(); } },
+      onSlide: (ev) => this.setState({ idx: Number(ev.target.value), sel: null }),
+      onOpacity: (ev) => this.setState({ op: Number(ev.target.value) }),
+      overlayOpacity: opVal,
+      opacityLabel: opVal + '%',
+      todayOn: this.state.today,
+      toggleToday: () => this.setState({ today: !this.state.today }),
+
+      ticks: d.periods.map((q, i) => ({
+        short: q.n, label: TICK[q.id] || q.label,
+        title: q.label + ' \u2014 ' + q.date,
+        style: 'padding:6px 2px 5px;border-radius:3px;cursor:pointer;font-family:Archivo,sans-serif;border:1px solid ' +
+          (i === this.state.idx ? q.accent : '#2e2921') + ';background:' +
+          (i === this.state.idx ? 'rgba(255,255,255,0.05)' : 'transparent') + ';color:' +
+          (i === this.state.idx ? '#f3ecdd' : '#7d7464') + ';',
+        barStyle: 'display:block;height:3px;margin-top:5px;border-radius:2px;background:' +
+          (i === this.state.idx ? q.accent : '#2e2921') + ';',
+        go: () => this.setState({ idx: i, sel: null })
+      })),
+
+      overlayList: d.periods.map((q, i) => ({
+        label: q.label, short: q.n, on: !!this.state.overlays[q.id],
+        rowStyle: 'display:flex;align-items:center;gap:9px;padding:5px 7px;border-radius:3px;cursor:' +
+          (i === this.state.idx ? 'default' : 'pointer') + ';opacity:' + (i === this.state.idx ? 0.35 : 1) +
+          ';background:' + (this.state.overlays[q.id] ? 'rgba(255,255,255,0.04)' : 'transparent') + ';',
+        boxStyle: 'accent-color:' + q.accent + ';width:13px;height:13px;cursor:pointer;',
+        swatchStyle: 'width:12px;height:3px;border-radius:2px;background:' + q.accent + ';',
+        toggle: () => {
+          const o = Object.assign({}, this.state.overlays);
+          o[q.id] = !o[q.id];
+          this.setState({ overlays: o });
+        }
+      })),
+
+      sel: shown ? {
+        conf: c.name, label: shown.l,
+        hint: (shown.dis ? 'Disputed — see the panel at right. ' : '') + c.hint,
+        chipStyle: 'flex-shrink:0;padding:4px 9px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:0.11em;font-family:Archivo,sans-serif;background:' + c.col + ';color:' + c.tx + ';'
+      } : {
+        conf: '', label: 'Hover or click anything on the plan.',
+        hint: 'Every element carries a confidence rating and a note on what it is and how we know.',
+        chipStyle: 'display:none;'
+      },
+
+      facts: (e.facts || []).map((f) => ({ k: f[0], v: f[1] })),
+      debates: (e.debates || []).map((t) => ({ text: t })),
+      essay: {
+        lede: e.lede,
+        paras: (e.paras || []).map((x) => ({ isH: !!x.h, isP: !x.h, text: x.h || x.text }))
+      }
+    });
+  }
+}
+
+</script>
+</body>
+</html>

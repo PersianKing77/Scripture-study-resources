@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="start-view" content="">
+<title>Herod's Temple — Jerusalem, c. 30 CE</title>
+<meta name="description" content="An explorable 3D reconstruction of Herod's Temple as it stood in the time of Christ. Forty-three annotated locations with 162 King James passages, Josephus, the Mishnah and the Talmud. Prepared by Taylor Halverson, Ph.D.">
+<meta name="author" content="Taylor Halverson">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Herod's Temple — Jerusalem, c. 30 CE">
+<meta property="og:description" content="Walk into the temple of the Gospels. 43 annotated locations, 162 King James passages, with Josephus, the Mishnah and the Talmud.">
+<meta property="og:image" content="og-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Herod's Temple — Jerusalem, c. 30 CE">
+<meta name="twitter:description" content="Walk into the temple of the Gospels. 43 annotated locations, every note cited.">
+<meta name="twitter:image" content="og-preview.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2314130f'/%3E%3Cpath d='M6 26V13l10-7 10 7v13z' fill='none' stroke='%23d9b451' stroke-width='2'/%3E%3Crect x='13' y='17' width='6' height='9' fill='%23d9b451'/%3E%3C/svg%3E">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1d1b16;
+    --parch: #f4efe3;
+    --parch2: #e9e1cf;
+    --stone: #2a2823;
+    --gold: #b08a2e;
+    --gold-lt: #d9b451;
+    --rule: rgba(29,27,22,.16);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #14130f; color: var(--ink);
+    font-family: "EB Garamond", Georgia, serif; }
+  a { color: var(--gold); } a:hover { color: var(--gold-lt); }
+  #stage { position: fixed; inset: 0; }
+  #stage canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
+
+  /* ---- chrome ---- */
+  .bar { position: fixed; top: 0; left: 0; right: 0; min-height: 56px; display: flex; align-items: center;
+    flex-wrap: wrap; gap: 10px 16px; padding: 8px 16px;
+    background: linear-gradient(180deg, rgba(14,13,10,.94), rgba(14,13,10,.72));
+    color: var(--parch); z-index: 20; }
+  .seg { flex: 0 0 auto; }
+  .group { flex-wrap: wrap; }
+  .bar h1 { font-family: "Cormorant Garamond", serif; font-weight: 600; font-size: 21px; margin: 0;
+    letter-spacing: .01em; white-space: nowrap; }
+  .bar h1 small { display: block; font-family: "EB Garamond", serif; font-size: 11px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--gold-lt); font-weight: 400; margin-top: 1px; }
+  .spacer { flex: 1; }
+  .seg { display: flex; border: 1px solid rgba(244,239,227,.28); border-radius: 2px; overflow: hidden; }
+  .seg button, .tog, .exp {
+    font-family: "EB Garamond", serif; font-size: 12.5px; letter-spacing: .13em; text-transform: uppercase;
+    background: transparent; color: rgba(244,239,227,.72); border: 0; padding: 8px 13px; cursor: pointer; }
+  .seg button + button { border-left: 1px solid rgba(244,239,227,.22); }
+  .seg button.on { background: var(--gold); color: #16150f; }
+  .tog, .exp { border: 1px solid rgba(244,239,227,.24); border-radius: 2px; }
+  .tog.off { color: rgba(244,239,227,.34); border-color: rgba(244,239,227,.12); }
+  .tog.on { border-color: var(--gold-lt); color: var(--gold-lt); }
+  .tog:hover, .exp:hover, .seg button:hover { color: var(--parch); }
+  .group { display: flex; gap: 8px; flex: 0 1 auto; }
+
+  /* ---- index ---- */
+  #index { position: fixed; top: var(--bar-h, 56px); bottom: 0; left: 0; width: 246px; overflow-y: auto; z-index: 15;
+    padding: 16px 14px 90px; background: linear-gradient(90deg, rgba(14,13,10,.86), rgba(14,13,10,.52)); }
+  #index h4 { font-family: "EB Garamond", serif; font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase;
+    color: var(--gold-lt); margin: 20px 0 7px; font-weight: 400; }
+  #index h4:first-child { margin-top: 2px; }
+  #index button { display: block; width: 100%; text-align: left; background: none; border: 0; cursor: pointer;
+    color: rgba(244,239,227,.8); font-family: "EB Garamond", serif; font-size: 16px; padding: 4px 8px;
+    border-left: 2px solid transparent; line-height: 1.25; }
+  #index button:hover { color: #fff; background: rgba(244,239,227,.07); }
+  #index button.active { color: var(--gold-lt); border-left-color: var(--gold); background: rgba(176,138,46,.14); }
+
+  /* ---- label panel ---- */
+  #panel { position: fixed; top: var(--bar-h, 56px); right: 0; bottom: 0; width: 430px; max-width: 92vw; z-index: 18;
+    background: var(--parch); border-left: 1px solid #cdc3ab; display: flex; flex-direction: column;
+    transform: translateX(102%); transition: transform .42s cubic-bezier(.2,.8,.2,1);
+    box-shadow: -18px 0 44px rgba(0,0,0,.35); }
+  #panel.open { transform: none; }
+  .p-head { padding: 20px 26px 14px; border-bottom: 1px solid var(--rule); background: var(--parch2); }
+  #p-title { font-family: "Cormorant Garamond", serif; font-size: 27px; font-weight: 600; margin: 0 0 3px;
+    line-height: 1.12; }
+  #p-sub { font-size: 14.5px; font-style: italic; color: #6b6353; }
+  .p-body { padding: 18px 26px 30px; overflow-y: auto; }
+  #p-body { font-size: 17px; line-height: 1.58; text-wrap: pretty; margin: 0; }
+  h5 { font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase; color: #8a7c5c; margin: 24px 0 7px;
+    font-weight: 400; }
+  #p-sources { margin: 0; padding: 0; list-style: none; font-size: 14.5px; line-height: 1.5; color: #4a4436; }
+  #p-sources li { padding: 4px 0 4px 13px; border-left: 2px solid var(--gold); margin-bottom: 4px; }
+  #p-narration { font-size: 16.5px; line-height: 1.5; font-style: italic; color: #5d4d2a;
+    border-left: 3px solid var(--gold); padding: 2px 0 2px 13px; margin: 0 0 15px; }
+  #tour-select { font-family: "EB Garamond", serif; font-size: 12.5px; letter-spacing: .1em;
+    text-transform: uppercase; background: transparent; color: rgba(244,239,227,.78);
+    border: 1px solid rgba(244,239,227,.24); border-radius: 2px; padding: 7px 8px; }
+  #tour-select option { background: #14130f; color: var(--parch); text-transform: none; letter-spacing: 0; }
+  a.exp { text-decoration: none; display: inline-flex; align-items: center; }
+  #p-verses blockquote { margin: 0 0 14px; padding: 11px 14px; background: #ece5d2; border: 1px solid #dbd0b4;
+    font-size: 15.5px; line-height: 1.5; color: #33301f; }
+  #p-verses cite { display: block; font-style: normal; font-size: 10.5px; letter-spacing: .2em;
+    text-transform: uppercase; color: #8a7042; margin-bottom: 6px; }
+  #p-note { font-size: 14.5px; line-height: 1.5; background: #ece3cc; border: 1px solid #d9cdac;
+    padding: 12px 14px; margin-top: 20px; color: #4a4436; }
+  #p-note span { display: block; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase;
+    color: #8a7042; margin-bottom: 5px; }
+  .p-foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px 20px; flex-wrap: nowrap;
+    border-top: 1px solid var(--rule); background: var(--parch2); }
+  .p-foot button { font-family: "EB Garamond", serif; font-size: 12.5px; letter-spacing: .13em; text-transform: uppercase;
+    background: none; border: 1px solid #c6bba1; padding: 7px 12px; cursor: pointer; color: #3a352a; }
+  .p-foot button:hover { background: #ded3b9; }
+  #p-pos { font-size: 12.5px; letter-spacing: .16em; color: #8a7c5c; margin-left: auto; white-space: nowrap; }
+  .p-foot button { white-space: nowrap; }
+
+  /* ---- pins ---- */
+  #pins { position: fixed; inset: 0; z-index: 12; pointer-events: none; }
+  .pin { position: absolute; top: 0; left: 0; pointer-events: auto; display: flex; align-items: center; gap: 6px;
+    background: rgba(20,18,14,.78); color: var(--parch); border: 1px solid rgba(217,180,81,.55);
+    font-family: "EB Garamond", serif; font-size: 12.5px; letter-spacing: .06em; padding: 3px 8px 3px 5px;
+    border-radius: 2px; cursor: pointer; white-space: nowrap; backdrop-filter: blur(2px); }
+  .pin i { width: 6px; height: 6px; background: var(--gold-lt); border-radius: 50%; flex: 0 0 auto; }
+  .pin span { max-width: 0; overflow: hidden; opacity: 0; transition: max-width .25s, opacity .2s; }
+  .pin.near span, .pin:hover span, .pin.sel span { max-width: 260px; opacity: 1; }
+  .pin.sel { border-color: var(--gold-lt); background: rgba(176,138,46,.9); color: #16150f; }
+  body.walking .pin { font-size: 12px; }
+
+  #hint { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 14; max-width: min(560px, 90vw);
+    color: rgba(244,239,227,.66); font-size: 13.5px; letter-spacing: .04em; text-align: center;
+    background: rgba(14,13,10,.6); padding: 7px 16px; border-radius: 2px; }
+  #hint b { color: var(--gold-lt); font-weight: 500; }
+  #coords { font-size: 12px; letter-spacing: .12em; color: rgba(244,239,227,.45); margin-top: 3px; }
+  body:not(.walking) #coords { display: none; }
+  #crosshair { position: fixed; left: 50%; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px;
+    z-index: 14; display: none; }
+  body.walking #crosshair { display: block; }
+  #crosshair::before, #crosshair::after { content: ""; position: absolute; background: rgba(244,239,227,.7); }
+  #crosshair::before { left: 5px; top: 0; width: 2px; height: 12px; }
+  #crosshair::after { top: 5px; left: 0; height: 2px; width: 12px; }
+
+  #compass { position: fixed; left: 22px; top: calc(var(--bar-h, 56px) + 14px); width: 72px; height: 72px; z-index: 16;
+    border-radius: 50%; background: rgba(14,13,10,.62); border: 1px solid rgba(217,180,81,.45); }
+  #compass-dial { position: absolute; inset: 0; }
+  #plan { position: fixed; left: 22px; top: calc(var(--bar-h, 56px) + 100px); width: 118px; height: 150px;
+    z-index: 16; background: rgba(14,13,10,.62); border: 1px solid rgba(217,180,81,.45); border-radius: 2px; }
+  #plan.hidden { display: none; }
+  #compass-dial span { position: absolute; left: 50%; transform: translateX(-50%);
+    font-size: 11px; letter-spacing: .1em; color: rgba(244,239,227,.6); }
+  #compass-dial span.n { top: 5px; color: var(--gold-lt); font-size: 13px; }
+  #compass-dial span.s { bottom: 5px; }
+  #compass-dial span.e { top: 50%; left: auto; right: 6px; transform: translateY(-50%); }
+  #compass-dial span.w { top: 50%; left: 6px; transform: translateY(-50%); }
+  #compass-dial i { position: absolute; left: 50%; top: 15px; width: 0; height: 0; margin-left: -5px;
+    border: 5px solid transparent; border-bottom: 15px solid var(--gold); }
+  #compass-dial b { position: absolute; left: 50%; bottom: 18px; width: 2px; height: 15px; margin-left: -1px;
+    background: rgba(244,239,227,.3); }
+
+  #handout-overlay { position: fixed; inset: 0; z-index: 30; display: none; flex-direction: column;
+    background: rgba(14,13,10,.86); }
+  .ho-bar { display: flex; align-items: center; gap: 12px; padding: 10px 16px; color: var(--parch);
+    font-size: 13px; letter-spacing: .14em; text-transform: uppercase; background: #14130f; }
+  .ho-bar span { flex: 1; }
+  .ho-bar .exp { white-space: nowrap; }
+  .ho-bar .back { background: var(--gold); border-color: var(--gold); color: #191509; font-weight: 600; }
+  .ho-bar .back:hover { background: #e2c877; border-color: #e2c877; }
+  .ho-esc { flex: 0 0 auto; font-size: 11px; letter-spacing: .1em; color: rgba(244,239,227,.5); text-transform: none; }
+  #handout-frame { flex: 1; width: 100%; border: 0; background: #fbf7ee; }
+
+  .beta { display: inline-block; vertical-align: 5px; margin-left: 9px; padding: 2px 7px 1px;
+    font-family: "EB Garamond", serif; font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid rgba(200,171,85,.55); border-radius: 2px; }
+
+  #about-overlay { position: fixed; inset: 0; z-index: 32; display: none; align-items: center;
+    justify-content: center; padding: 24px; background: rgba(14,13,10,.82); }
+  .about-card { width: 640px; max-width: 100%; max-height: 88vh; display: flex; flex-direction: column;
+    padding: 26px 0 0; background: #14130f;
+    border: 1px solid rgba(200,171,85,.35); border-radius: 3px; color: var(--parch); }
+  .about-card h2 { margin: 0 34px; font-family: "EB Garamond", serif; font-weight: 400; font-size: 30px;
+    letter-spacing: .02em; color: var(--gold); }
+  .about-card p { font-family: "EB Garamond", serif; font-size: 16.5px; line-height: 1.62;
+    color: rgba(232,224,207,.82); margin: 12px 0 0; text-wrap: pretty; }
+  .ab-cred { font-size: 18px !important; color: var(--parch) !important; margin: 4px 34px 0 !important;
+    letter-spacing: .01em; }
+  .ab-note { font-style: italic; font-size: 14.5px !important; color: rgba(232,224,207,.55) !important;
+    padding-top: 14px; margin-top: 16px !important; border-top: 1px solid rgba(200,171,85,.2); }
+
+  .ab-tabs { display: flex; gap: 0; margin: 20px 34px 0; border-bottom: 1px solid rgba(200,171,85,.22); }
+  .ab-tabs button { flex: 0 1 auto; background: none; border: 0; border-bottom: 2px solid transparent;
+    padding: 9px 0; margin-right: 26px; cursor: pointer; color: rgba(232,224,207,.5);
+    font-family: inherit; font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase;
+    white-space: nowrap; transition: color .18s, border-color .18s; }
+  .ab-tabs button:hover { color: var(--parch); }
+  .ab-tabs button[aria-selected="true"] { color: var(--gold-lt); border-bottom-color: var(--gold); }
+  .ab-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 34px 22px; }
+  .ab-pane { display: none; }
+  .ab-pane.on { display: block; }
+  .ab-pane h3 { margin: 20px 0 0; font-family: "EB Garamond", serif; font-weight: 400; font-size: 20px;
+    color: var(--gold-lt); letter-spacing: .01em; }
+  .ab-pane h3:first-child { margin-top: 14px; }
+  .ab-pane .role { font-size: 11px !important; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold) !important; margin-top: 6px !important; font-family: var(--sans, inherit); }
+  .ab-pane ul { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .ab-pane li { font-family: "EB Garamond", serif; font-size: 16px; line-height: 1.5;
+    color: rgba(232,224,207,.78); padding-left: 14px; border-left: 2px solid rgba(200,171,85,.4);
+    text-wrap: pretty; }
+  .ab-pane li b { color: var(--parch); font-weight: 600; }
+  .ab-pane .deg li { border-left-color: rgba(200,171,85,.22); font-size: 15.5px; }
+  .ab-pane .links { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; }
+  .ab-pane .links a { font-family: "EB Garamond", serif; font-size: 16px; color: var(--gold-lt);
+    text-decoration: none; border-bottom: 1px solid rgba(200,171,85,.35); }
+  .ab-pane .links a:hover { color: var(--parch); border-bottom-color: var(--parch); }
+  .ab-foot { flex: 0 0 auto; padding: 14px 34px 20px; border-top: 1px solid rgba(200,171,85,.2); }
+  .ab-foot .exp { margin: 0; }
+
+  #loading { position: fixed; inset: 0; z-index: 40; display: grid; place-content: center; gap: 10px;
+    background: #14130f; color: var(--parch); text-align: center; }
+  #loading em { font-family: "Cormorant Garamond", serif; font-size: 26px; font-style: normal; }
+  #loading small { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--gold-lt); }
+  @media (max-width: 1100px) { #index { width: 200px; } #panel { width: 380px; } }
+
+  /* ---- first-visit welcome ---- */
+  #welcome { position: fixed; inset: 0; z-index: 34; display: none; align-items: center; justify-content: center;
+    padding: 24px; background: rgba(14,13,10,.9); }
+  .wel-card { max-width: 520px; max-height: 86vh; overflow-y: auto; overflow-x: hidden; text-align: center; padding: 34px 32px 28px;
+    background: #14130f; border: 1px solid rgba(200,171,85,.4); border-radius: 3px; }
+  .wel-card h2 { font-family: "Cormorant Garamond", serif; font-weight: 600; font-size: 34px; margin: 0 0 4px;
+    color: var(--parch); letter-spacing: .01em; }
+  .wel-card .wel-sub { font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--gold-lt); }
+  .wel-card ul { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 10px; text-align: left; }
+  .wel-card li { font-size: 16.5px; line-height: 1.45; color: rgba(232,224,207,.8); padding-left: 15px;
+    border-left: 2px solid var(--gold); text-wrap: pretty; }
+  .wel-card .exp { margin-top: 24px; width: 100%; padding: 13px; font-size: 13.5px; border-color: var(--gold);
+    color: var(--gold-lt); }
+  .wel-card .wel-cred { font-size: 13.5px; font-style: italic; color: rgba(232,224,207,.5); margin: 16px 0 0; }
+
+  /* ---- no WebGL ---- */
+  #nogl { position: fixed; inset: 0; z-index: 45; display: none; align-items: center; justify-content: center;
+    padding: 24px; background: #14130f; }
+  #nogl div { max-width: 520px; color: var(--parch); }
+  #nogl h2 { font-family: "Cormorant Garamond", serif; font-weight: 600; font-size: 30px; margin: 0 0 12px;
+    color: var(--gold-lt); }
+  #nogl p { font-size: 17px; line-height: 1.6; color: rgba(232,224,207,.8); margin: 0 0 14px; text-wrap: pretty; }
+
+  /* ---- touch drive pad (walk mode on touch devices) ---- */
+  #touchpad { position: fixed; right: 16px; bottom: 16px; z-index: 19; display: none;
+    grid-template-columns: repeat(3, 56px); grid-template-rows: repeat(2, 56px); gap: 6px; }
+  body.mobile.walking #touchpad { display: grid; }
+  body.mobile.walking #panel.open ~ #touchpad { display: none; }
+  #touchpad button { -webkit-user-select: none; user-select: none; touch-action: none;
+    background: rgba(20,18,14,.72); border: 1px solid rgba(217,180,81,.5); color: var(--gold-lt);
+    font-size: 20px; border-radius: 3px; cursor: pointer; }
+  #touchpad button:active { background: rgba(176,138,46,.85); color: #16150f; }
+  #touchpad button.wide { grid-column: span 1; }
+  #tp-fwd { grid-column: 2; grid-row: 1; }
+  #tp-l { grid-column: 1; grid-row: 2; }
+  #tp-back { grid-column: 2; grid-row: 2; }
+  #tp-r { grid-column: 3; grid-row: 2; }
+  #tp-run { grid-column: 3; grid-row: 1; font-size: 10px; letter-spacing: .12em; }
+
+  .mobonly { display: none !important; }
+
+  /* ---- phones & small tablets ---- */
+  @media (max-width: 780px) {
+    .mobonly { display: inline-flex !important; }
+    .bar { min-height: 50px; flex-wrap: nowrap; gap: 8px; padding: 6px 10px; }
+    .bar h1 { font-size: 16.5px; min-width: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; }
+    #m-places { display: none !important; }
+    #m-menu { flex: 0 0 auto; }
+    .bar h1 small, .bar h1 .beta { display: none; }
+    .seg button { padding: 10px 10px; font-size: 11.5px; letter-spacing: .08em; }
+    .seg { flex: 0 0 auto; }
+    .bar .tog { padding: 10px 12px; font-size: 11.5px; letter-spacing: .08em; }
+    #tools .idx-inline { display: block; }
+
+    #tools { position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 24;
+      flex-direction: column; align-items: stretch; gap: 9px; padding: 16px 16px 26px;
+      background: #14130f; border-top: 1px solid rgba(200,171,85,.4);
+      box-shadow: 0 -20px 44px rgba(0,0,0,.5);
+      transform: translateY(106%); transition: transform .34s cubic-bezier(.2,.8,.2,1); }
+    #tools.open { transform: none; }
+    #tools .tog, #tools .exp, #tools #tour-select { width: 100%; min-height: 48px; padding: 13px;
+      font-size: 13.5px; text-align: center; justify-content: center; }
+
+    #index { top: auto; bottom: 0; left: 0; width: 100%; max-height: 64vh; z-index: 25;
+      background: #14130f; border-top: 1px solid rgba(200,171,85,.4); padding: 14px 14px 28px;
+      box-shadow: 0 -20px 44px rgba(0,0,0,.5);
+      transform: translateY(106%); transition: transform .34s cubic-bezier(.2,.8,.2,1); }
+    #index.open { transform: none; }
+    #index button { padding: 11px 8px; font-size: 17px; min-height: 44px; }
+
+    #panel { top: auto; left: 0; right: 0; bottom: 0; width: 100%; max-width: none; height: 82vh;
+      border-left: 0; border-top: 1px solid #cdc3ab; box-shadow: 0 -20px 44px rgba(0,0,0,.45);
+      transform: translateY(103%); }
+    #panel.open { transform: none; }
+    .p-head { padding: 15px 18px 12px; }
+    #p-title { font-size: 23px; }
+    .p-body { padding: 14px 18px 22px; }
+    #p-body { font-size: 16.5px; }
+    .p-foot { padding: 9px 12px; gap: 7px; }
+    .p-foot button { padding: 11px 10px; font-size: 11.5px; letter-spacing: .1em; min-height: 44px; }
+    #p-pos { display: none; }
+
+    #compass { display: none; }
+    #plan { display: none; }
+    #hint { font-size: 12px; bottom: 10px; padding: 6px 12px; }
+    body.walking #hint { display: none; }
+    #crosshair { display: none !important; }
+    .about-card { padding: 22px 0 0; max-height: 88vh; }
+    .about-card h2 { font-size: 25px; margin: 0 20px; }
+    .ab-cred { margin: 4px 20px 0 !important; }
+    .ab-tabs { margin: 16px 20px 0; overflow-x: auto; }
+    .ab-tabs button { margin-right: 20px; font-size: 11px; letter-spacing: .1em; }
+    .ab-scroll { padding: 4px 20px 18px; }
+    .ab-foot { padding: 12px 20px 18px; }
+    .ab-foot .exp { width: 100%; min-height: 46px; }
+    .about-card p { font-size: 15.5px; }
+    .wel-card { padding: 26px 22px 22px; }
+    .wel-card h2 { font-size: 27px; }
+    .ho-bar { font-size: 11px; letter-spacing: .1em; gap: 8px; padding: 9px 10px; }
+    .ho-bar span { display: none; }
+    @media (max-width: 430px) {
+      .bar h1 { font-size: 14.5px; }
+      .seg button { padding: 10px 8px; font-size: 11px; }
+      .bar .tog { padding: 10px 10px; }
+    }
+  }
+  @media (max-width: 780px) and (orientation: landscape) {
+    #panel { height: 92vh; }
+    #index { max-height: 78vh; }
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="pins"></div>
+<div id="crosshair"></div>
+<div id="compass" title="The temple faces east; north is up on the dial">
+  <div id="compass-dial"><i></i><b></b><span class="n">N</span><span class="e">E</span><span class="s">S</span><span class="w">W</span></div>
+</div>
+<canvas id="plan" width="236" height="300" title="Plan of the precinct, north up — the wedge is where you are looking"></canvas>
+
+<div class="bar">
+  <h1>Herod's Temple<span class="beta">Beta</span><small>Jerusalem · c. 30 CE</small></h1>
+  <div class="seg">
+    <button id="m-orbit" class="on">Orbit</button>
+    <button id="m-walk">Walk in</button>
+  </div>
+  <div class="spacer"></div>
+  <button class="tog mobonly" id="m-menu">Menu</button>
+  <div class="group" id="tools">
+    <button class="exp mobonly idx-inline" id="m-places2">All 43 places</button>
+    <button class="tog" id="t-roofs">Roofs</button>
+    <button class="tog" id="t-cutaway">Cutaway</button>
+    <button class="tog" id="t-pins">Labels</button>
+    <button class="tog" id="t-city">City</button>
+    <button class="tog" id="t-plan">Plan</button>
+    <button class="tog" id="t-hour">Morning</button>
+    <select id="tour-select" title="Guided sequence">
+      <option value="full">Full tour</option>
+      <option value="atonement">Day of Atonement</option>
+      <option value="ascent">Into greater light</option>
+      <option value="passover">Passover pilgrimage</option>
+    </select>
+    <button class="exp" id="start-tour">Begin</button>
+    <button class="exp" id="about-btn">About</button>
+    <a class="exp" id="handout" href="study-guide.html" rel="noopener">Handout</a>
+  </div>
+</div>
+
+<nav id="index"></nav>
+
+<aside id="panel">
+  <div class="p-head">
+    <h2 id="p-title"></h2>
+    <div id="p-sub"></div>
+  </div>
+  <div class="p-body">
+    <p id="p-narration"></p>
+    <p id="p-body"></p>
+    <div id="p-scripture">
+      <h5 id="p-scripture-head">Scripture &mdash; King James Version</h5>
+      <div id="p-verses"></div>
+    </div>
+    <h5>Sources</h5>
+    <ul id="p-sources"></ul>
+    <div id="p-note"></div>
+  </div>
+  <div class="p-foot">
+    <button id="p-prev">‹ Prev</button>
+    <button id="p-next">Next ›</button>
+    <button id="p-close">Close</button>
+    <button id="p-link" title="Copy a link straight to this location">Copy link</button>
+    <span id="p-pos"></span>
+  </div>
+</aside>
+
+<div id="hint">
+  Click anything to read it · drag to orbit, scroll to zoom · <b>Walk in:</b> <b>drag</b> to look, <b>&larr; &rarr;</b> to turn, <b>WASD</b> to move, <b>Shift</b> to run
+  <div id="coords"></div>
+</div>
+
+<div id="about-overlay">
+  <div class="about-card">
+    <h2>Herod's Temple <span class="beta">Beta</span></h2>
+    <p class="ab-cred">Prepared by Taylor Halverson, Ph.D.</p>
+    <div class="ab-tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-pane="ab-model">The reconstruction</button>
+      <button role="tab" aria-selected="false" data-pane="ab-use">How to use it</button>
+      <button role="tab" aria-selected="false" data-pane="ab-author">Taylor Halverson, Ph.D.</button>
+    </div>
+    <div class="ab-scroll">
+      <div class="ab-pane on" id="ab-model">
+        <p>An explorable reconstruction of the Temple Mount as it stood in the time of Christ, c. 30 CE &mdash;
+        the platform and its walls, the outer court and porticoes, the Court of the Women, the Court of Israel,
+        the altar and laver, the sanctuary, the veil, and the Holy of Holies with the Foundation Stone within it.</p>
+        <p>Every location is annotated from the King James New Testament, Josephus, the Mishnah and the Talmud,
+        with notes where the sources disagree. Forty-three locations, one hundred sixty-two passages.</p>
+        <h3>Beta</h3>
+        <p>A work in progress. The reconstruction follows the majority reading of the sources; dimensions,
+        decoration and the lines of the city walls remain debated. Where the sources conflict, the model shows
+        the majority reconstruction and the location's note records the dissent rather than quietly settling it.</p>
+        <h3>On the measurements</h3>
+        <p>Dimensions come from the Mishnah's tractate Middot, with the cubit taken at 0.5 m &mdash; a round
+        figure within the range scholars propose &mdash; and cross-checked against Josephus. Small differences
+        of a cubit or two are inside the margin of the sources themselves.</p>
+        <p class="ab-note">&copy; 2026 Taylor Halverson. All rights reserved.</p>
+      </div>
+      <div class="ab-pane" id="ab-use">
+        <p>The temple stands in the middle and everything else is a way of asking a question about it.
+        Click any structure to read it.</p>
+        <h3>Moving around</h3>
+        <ul>
+          <li><b>Orbit</b> surveys the whole site from above: drag to turn, scroll to zoom. The compass keeps
+          you oriented &mdash; the facade genuinely faces the rising sun.</li>
+          <li><b>Walk in</b> puts you on the ground: <b>WASD</b> to move, drag or <b>&larr; &rarr;</b> to look,
+          <b>Shift</b> to run. On a phone a drive pad appears at the corner.</li>
+          <li><b>All 43 places</b> lists every annotated location; <b>&lsaquo; Prev</b> and <b>Next &rsaquo;</b>
+          step through them in order, and <b>Esc</b> closes whatever is open.</li>
+        </ul>
+        <h3>Seeing inside</h3>
+        <ul>
+          <li><b>Roofs</b> and <b>Cutaway</b> lift the porticoes and open the sanctuary so the Holy Place and
+          the Holy of Holies can be seen from outside.</li>
+          <li><b>Labels</b> pins the names to the model; <b>City</b> adds Jerusalem around the mount &mdash;
+          Olivet, Siloam, Golgotha, Hinnom &mdash; and can be turned off on a slower device.</li>
+          <li><b>Plan</b> shows a small schematic of the precinct, north up, with a wedge marking where you
+          stand and which way you face &mdash; useful when the courts start to look alike.</li>
+          <li><b>Morning</b> cycles the hour: dawn, morning, noon, dusk. The light is the same light the
+          pilgrims climbed in.</li>
+        </ul>
+        <h3>Reading and teaching</h3>
+        <ul>
+          <li>Each panel carries the KJV passages for that place, a scholarly note, its sources, and
+          &ldquo;where the sources differ.&rdquo;</li>
+          <li><b>Begin</b> runs a guided sequence &mdash; the full tour, the Day of Atonement, a Passover
+          pilgrimage, or <i>Into greater light</i>, which climbs the gradient of access from the open outer
+          court to the Holy of Holies &mdash; visiting the places in the order the day required.</li>
+          <li><b>Handout</b> opens the whole study guide, all 43 locations and 162 passages, ready to print
+          or save as PDF.</li>
+          <li><b>Copy link</b> gives a link straight to one place, in orbit or on foot, to paste into a lesson.</li>
+        </ul>
+        <h3>Sources</h3>
+        <ul>
+          <li>Dimensions and courts: Mishnah <i>Middot</i>, with <i>Tamid</i>, <i>Yoma</i> and Talmudic
+          material for the service.</li>
+          <li>Elevations, porticoes and the fabric of the building: Josephus, <i>Jewish War</i> and
+          <i>Antiquities</i>.</li>
+          <li>Scripture quoted from the King James Version.</li>
+        </ul>
+      </div>
+      <div class="ab-pane" id="ab-author">
+        <h3>Taylor Halverson, Ph.D.</h3>
+        <p class="role">Author &middot; Teacher &middot; Tour leader &middot; Scripture scholar</p>
+        <p>Taylor Halverson is a scholar of scripture and a teacher of learners &mdash; an entrepreneurship
+        professor in the BYU Marriott School of Business who spends his working life helping people find and
+        act on the best ideas and tools available to them.</p>
+        <p>He is the author and editor of more than fifty books and nearly a thousand articles and blog posts,
+        and a builder of scripture study resources: the ScripturePlus app with Scripture Central, whose
+        scripture YouTube channel he co-hosted to more than fifty million views, and BYU's Virtual Scripture
+        Group, whose team spent more than five years reconstructing New Testament Jerusalem in three
+        dimensions. This reconstruction of Herod's Temple belongs to that same body of work &mdash; tools made
+        so that ordinary readers can see what specialists see.</p>
+        <p>He leads tours to Israel and the Middle East, China, India, Central America, Europe, and the
+        national parks of the American West, where he unfolds how geology, geography, civilization, and
+        scriptural texts created our beautiful present day.</p>
+        <h3>Academic training</h3>
+        <ul class="deg">
+          <li>Ph.D., Judaism &amp; Christianity in Antiquity &mdash; Indiana University</li>
+          <li>Ph.D., Instructional Systems Technology &mdash; Indiana University</li>
+          <li>M.A., Biblical Studies &mdash; Yale University</li>
+          <li>B.A., Ancient Near Eastern Studies &mdash; Brigham Young University</li>
+        </ul>
+        <p>Two doctorates in two separate fields &mdash; the ancient world, and the design of learning.
+        Both of them are in this model.</p>
+        <h3>Elsewhere</h3>
+        <div class="links">
+          <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>
+          <a href="https://books.taylorhalverson.com" target="_blank" rel="noopener">books.taylorhalverson.com</a>
+          <a href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com</a>
+        </div>
+      </div>
+    </div>
+    <div class="ab-foot"><button class="exp" id="about-close">Close</button></div>
+  </div>
+  <script>
+  document.querySelector('.ab-tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-pane]'); if (!b) return;
+    this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-selected', String(x === b)); });
+    document.querySelectorAll('.ab-pane').forEach(function (p) { p.classList.toggle('on', p.id === b.dataset.pane); });
+    document.querySelector('.ab-scroll').scrollTop = 0;
+  });
+  </script>
+</div>
+
+<div id="handout-overlay">
+  <div class="ho-bar">
+    <button class="exp back" id="handout-close">&#8592;&nbsp; Back to the temple</button>
+    <span>Study handout &mdash; 43 locations, 162 passages</span>
+    <button class="exp" id="handout-print">Print / save PDF</button>
+    <span class="ho-esc">or press Esc</span>
+  </div>
+  <iframe id="handout-frame" title="Study handout"></iframe>
+</div>
+
+<div id="touchpad">
+  <button id="tp-fwd" aria-label="Walk forward">&#9650;</button>
+  <button id="tp-run" aria-label="Run">RUN</button>
+  <button id="tp-l" aria-label="Turn left">&#8249;</button>
+  <button id="tp-back" aria-label="Walk back">&#9660;</button>
+  <button id="tp-r" aria-label="Turn right">&#8250;</button>
+</div>
+
+<div id="welcome">
+  <div class="wel-card">
+    <h2>Herod's Temple</h2>
+    <div class="wel-sub">Jerusalem &middot; c. 30 CE</div>
+    <ul>
+      <li><b>43 annotated locations</b> &mdash; from the southern stairs to the rock in the Holy of Holies.</li>
+      <li><b>Orbit or walk in.</b> Drag to look, click anything to read it.</li>
+      <li><b>Every note is cited</b> &mdash; the King James New Testament, Josephus, the Mishnah, the Talmud, with dissent noted.</li>
+    </ul>
+    <button class="exp" id="welcome-go">Begin exploring</button>
+    <p class="wel-cred">Prepared by Taylor Halverson, Ph.D. &middot; Beta</p>
+  </div>
+</div>
+
+<div id="nogl">
+  <div>
+    <h2>This reconstruction needs 3D graphics</h2>
+    <p>The temple is drawn live in three dimensions, which asks your browser for hardware graphics (WebGL).
+    This device or browser has it switched off or unavailable &mdash; often the case on older phones, or on
+    managed computers where graphics acceleration is disabled.</p>
+    <p>Try a current version of Chrome, Safari, Edge or Firefox with hardware acceleration enabled. In the
+    meantime, the whole commentary is readable as text:</p>
+    <p><a href="study-guide.html">Open the study handout &mdash; 43 locations, 162 King James passages &rsaquo;</a></p>
+  </div>
+</div>
+
+<div id="loading"><em>Raising the House…</em><small>Building the Temple Mount</small></div>
+<script>
+  (function () {
+    var ok = false;
+    try {
+      var c = document.createElement('canvas');
+      ok = !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
+    } catch (e) { ok = false; }
+    if (!ok) {
+      document.getElementById('nogl').style.display = 'flex';
+      document.getElementById('loading').style.display = 'none';
+      return;
+    }
+    var failed = false;
+    addEventListener('error', function (ev) {
+      if (failed) return;
+      if (document.getElementById('loading').style.display === 'none') return;
+      failed = true;
+      document.getElementById('nogl').style.display = 'flex';
+      document.getElementById('loading').style.display = 'none';
+    }, true);
+  })();
+</script>
+
+<script type="module" src="temple-app.js"></script>
+</body>
+</html>
