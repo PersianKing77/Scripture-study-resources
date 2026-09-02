@@ -637,9 +637,40 @@ class Component extends DCLogic {
       .then((m) => {
         const essays = Object.assign({}, m[1].default, m[2].default);
         this.setState({ data: { periods: m[0].PERIODS, outline: m[0].TODAY_OUTLINE, modern: m[0].MODERN, essays: essays,
-          cut: m[3].CUT, cutStages: m[3].CUT_STAGES, cutLabels: m[3].CUT_LABELS, city: m[3].CITY } });
+          cut: m[3].CUT, cutStages: m[3].CUT_STAGES, cutLabels: m[3].CUT_LABELS, city: m[3].CITY } }, () => this.readHash());
       })
       .catch((e) => { console.error('data load failed', e); });
+  }
+
+  /* ——— shareable links: #period=N&mode=plan|iso|cut|city&stage=N ——— */
+  writeHash() {
+    if (this._hashLock) return;
+    const { idx, mode, stage } = this.state;
+    const bits = ['period=' + idx];
+    if (mode && mode !== 'plan') bits.push('mode=' + mode);
+    if (mode === 'cut' && stage) bits.push('stage=' + stage);
+    const h = bits.join('&');
+    history.replaceState(null, '', location.pathname + location.search + (h ? '#' + h : ''));
+  }
+  readHash() {
+    const raw = location.hash.replace(/^#/, '');
+    if (!raw) return;
+    const q = {};
+    raw.split('&').forEach((kv) => { const i = kv.indexOf('='); if (i > 0) q[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1)); });
+    const periods = this.state.data && this.state.data.periods;
+    const patch = {};
+    if (q.period !== undefined && periods && periods[+q.period]) patch.idx = +q.period;
+    if (q.mode && ['plan', 'iso', 'cut', 'city'].includes(q.mode)) patch.mode = q.mode;
+    if (q.stage !== undefined) patch.stage = +q.stage;
+    if (Object.keys(patch).length) {
+      this._hashLock = true;
+      this.setState(patch, () => { this._hashLock = false; });
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.idx !== this.state.idx || prevState.mode !== this.state.mode || prevState.stage !== this.state.stage) {
+      this.writeHash();
+    }
   }
 
   componentWillUnmount() {
