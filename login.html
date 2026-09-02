@@ -54,7 +54,11 @@
         status.textContent = 'Welcome — taking you in…';
         window.location.href = next;
       } else {
-        status.textContent = data.error || "We couldn't verify that subscription.";
+        let message = data.error || "We couldn't verify that subscription.";
+        if (data.debug) {
+          message += ' — debug: ' + JSON.stringify(data.debug);
+        }
+        status.textContent = message;
         status.className = 'login-status error';
         btn.disabled = false;
       }

@@ -6,6 +6,7 @@ const PUBLIC_PATHS = [
   "/login",
   "/api/login",
   "/favicon.ico",
+  "/diag.html",
 ];
 
 function isPublicPath(pathname) {
