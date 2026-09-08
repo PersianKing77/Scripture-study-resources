@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attributions &amp; licences — New Testament Atlas</title>
+<meta name="description" content="Attributions and licence notices for the New Testament Atlas — scripture, ancient sources, scholarly literature, map data, software and typefaces.">
+<link href="fonts/nt-fonts.css" rel="stylesheet">
+<style>
+  :root{
+    --ink:#241c14; --ink-2:#4a3d2e; --ink-3:#645436;
+    --parch:#e9dcc0; --parch-2:#f3e9d4; --rule:#c3b190; --rule-2:#a8926c;
+    --red:#8c3a2b; --red-2:#b0442e;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;font-family:'Spectral',Georgia,serif;color:var(--ink);line-height:1.62;
+    background:var(--parch);
+    background-image:
+      radial-gradient(ellipse at 22% 12%, rgba(243,233,212,.55), rgba(190,168,126,.22) 76%),
+      repeating-linear-gradient(112deg, rgba(160,136,96,.045) 0 2px, transparent 2px 5px);
+    -webkit-font-smoothing:antialiased;text-wrap:pretty;
+  }
+  a{color:var(--red)}
+  a:hover{color:var(--red-2)}
+  h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:0;line-height:1.14}
+  .wrap{max-width:940px;margin:0 auto;padding:0 24px}
+  .rule{border:0;border-top:1px solid var(--rule);margin:0}
+
+  header.top{border-bottom:1px solid var(--rule-2);background:rgba(243,233,212,.72)}
+  header.top .wrap{display:flex;align-items:baseline;gap:14px;padding:15px 24px 0;flex-wrap:wrap}
+  .mark{font-family:'Cormorant Garamond',serif;font-size:19px;letter-spacing:.09em;text-transform:uppercase;
+    text-decoration:none;color:var(--ink)}
+  .mark:hover{color:var(--red)}
+  .beta{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);
+    border:1px solid var(--red);padding:2px 6px;vertical-align:2px}
+  header.top .sp{flex:1}
+  .tabs{display:flex;gap:0;flex-wrap:wrap;margin-top:11px}
+  .tabs a{
+    font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;text-decoration:none;
+    color:var(--ink-2);padding:9px 15px;border:1px solid transparent;border-bottom:0;
+    background:transparent;white-space:nowrap;
+  }
+  .tabs a:hover{color:var(--red)}
+  .tabs a.on{color:var(--ink);background:var(--parch-2);border-color:var(--rule-2);position:relative;top:1px}
+  .tabs .sp{flex:1;border-bottom:1px solid var(--rule-2);min-width:0}
+  .tabs a:not(.on){border-bottom:1px solid var(--rule-2)}
+
+  .hero{padding:48px 0 30px;padding-inline:24px}
+  .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3);margin-bottom:16px}
+  .hero h1{font-size:clamp(32px,5vw,48px);letter-spacing:-.005em}
+  .hero .lede{font-size:clamp(15.5px,1.9vw,18px);color:var(--ink-2);max-width:56ch;margin:18px 0 0}
+
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+  .toc a{
+    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;
+    color:var(--ink-2);border:1px solid var(--rule);background:rgba(243,233,212,.6);
+    padding:7px 12px;white-space:nowrap;
+  }
+  .toc a:hover{border-color:var(--red);color:var(--red)}
+
+  section{padding:36px 0;padding-inline:24px;scroll-margin-top:20px}
+  section h2{font-size:clamp(22px,2.9vw,29px)}
+  section .sub{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:11px}
+  section p{max-width:66ch;margin:12px 0 0}
+  section p.first{margin-top:14px}
+
+  .attr{border-top:1px solid var(--rule);margin-top:22px}
+  .row{display:grid;grid-template-columns:230px 1fr;gap:26px;padding:18px 0;border-bottom:1px solid var(--rule)}
+  @media (max-width:700px){.row{grid-template-columns:1fr;gap:8px}}
+  .row .what{min-width:0}
+  .row .what h3{font-size:17.5px}
+  .row .lic{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-top:6px}
+  .row .lic b{font-weight:500;color:var(--red)}
+  .row .body{min-width:0}
+  .row .body p{margin:0;font-size:14px;color:var(--ink-2);max-width:60ch}
+  .row .body p + p{margin-top:9px}
+  .row .body ul{margin:2px 0 0;padding-left:19px;font-size:13.5px;color:var(--ink-2)}
+  .row .body li{margin-bottom:5px}
+  .row .body .note{font-size:12.5px;color:var(--ink-3);margin-top:9px}
+
+  .notice{
+    background:rgba(243,233,212,.72);border-left:3px solid var(--rule-2);
+    padding:15px 18px;margin-top:20px;font-size:13.5px;color:var(--ink-2);max-width:66ch;
+  }
+  .notice b{font-weight:500;color:var(--ink)}
+  .cite{
+    font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;
+    background:rgba(243,233,212,.72);border:1px solid var(--rule);
+    padding:13px 16px;margin-top:12px;max-width:66ch;color:var(--ink)
+  }
+  .mono{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.55;
+    background:rgba(243,233,212,.72);border:1px solid var(--rule);
+    padding:13px 16px;margin-top:14px;max-width:66ch;color:var(--ink-2);
+    white-space:pre-wrap;overflow-wrap:anywhere;
+  }
+  .srclist{margin:14px 0 0;padding-left:19px;font-size:14px;color:var(--ink-2);max-width:66ch}
+  .srclist li{margin-bottom:7px}
+
+  .lictable{width:100%;border-collapse:collapse;margin-top:22px;font-size:13.5px}
+  .lictable caption{text-align:left;font-size:12.5px;color:var(--ink-3);padding-bottom:10px}
+  .lictable th,.lictable td{text-align:left;padding:10px 12px;border:1px solid var(--rule);vertical-align:top}
+  .lictable th{
+    font-family:'Spectral',serif;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+    font-weight:400;color:var(--ink-3);background:rgba(243,233,212,.8);
+  }
+  .lictable td{background:rgba(243,233,212,.5);color:var(--ink-2)}
+  .lictable td b{font-weight:500;color:var(--ink)}
+  .lictable tr td:first-child{width:29%}
+  @media (max-width:640px){
+    .lictable,.lictable tbody,.lictable tr,.lictable td{display:block;width:100%}
+    .lictable thead{display:none}
+    .lictable tr{margin-bottom:12px;border:1px solid var(--rule-2)}
+    .lictable td{border:0;border-bottom:1px solid var(--rule);padding:9px 12px}
+    .lictable tr td:first-child{width:100%;background:rgba(243,233,212,.85)}
+    .lictable tr td:last-child{border-bottom:0}
+  }
+
+  footer{padding:34px 0 52px;padding-inline:24px;font-size:12px;color:var(--ink-3);line-height:1.6}
+  footer .cred{color:var(--ink-2)}
+  footer a{color:var(--ink-2)}
+  footer .fl{margin-top:8px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="index.html">New Testament Atlas</a> <span class="beta">beta</span>
+    <span class="sp"></span>
+    <nav class="tabs">
+      <a href="index.html">The atlas</a>
+      <a href="about.html">About</a>
+      <a class="on" href="attributions.html">Attributions &amp; licences</a>
+      <span class="sp"></span>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap hero">
+  <div class="kicker">New Testament Atlas</div>
+  <h1>Attributions &amp; licences</h1>
+  <p class="lede">The sources, data, software and typefaces the atlas is built from, with the licence
+    under which each is used, and the preferred form of citation.</p>
+  <nav class="toc">
+    <a href="#authorship">Authorship</a>
+    <a href="#citation">Citation</a>
+    <a href="#scripture">Scripture</a>
+    <a href="#ancient">Ancient sources</a>
+    <a href="#scholarship">Modern scholarship</a>
+    <a href="#mapdata">Map data</a>
+    <a href="#software">Software &amp; typefaces</a>
+    <a href="#summary">Licence summary</a>
+    <a href="#notices">Licence notices</a>
+    <a href="#independence">Independence</a>
+    <a href="#corrections">Corrections</a>
+  </nav>
+</div>
+
+<hr class="rule">
+
+<section class="wrap" id="authorship">
+  <div class="sub">Authorship</div>
+  <h2>Authorship and scope</h2>
+  <p class="first">The place descriptions, context essays, discussion prompts, confidence gradings and
+    route traces were written and compiled by Taylor Halverson, PhD, as were the interface, the code and
+    the visual design. Copyright in the text, the compilation and the software is held by the author.</p>
+  <p>The atlas covers 85 identified places, 61 events, 15 traced journeys and 53 weekly selections keyed to
+    the 2027 New Testament reading year. Every place carries a graded identification — secure, probable,
+    contested or conjectural — and a source list.</p>
+  <p>The atlas contains no photographs, no reproduced map plates and no generated imagery. Its only
+    graphics are the map itself, drawn from the data credited below, and the diagrams and elevation
+    profiles prepared by the author.</p>
+</section>
+
+<hr class="rule">
+
+<section class="wrap" id="citation">
+  <div class="sub">Citation</div>
+  <h2>How to cite</h2>
+  <p class="first">Claims drawn from a place panel should cite the atlas. Claims the panel attributes to a
+    named work should cite that work.</p>
+
+  <div class="attr">
+    <div class="row">
+      <div class="what"><h3>Note</h3><div class="lic">Full work</div></div>
+      <div class="body">
+        <div class="cite">Taylor Halverson, <i>New Testament Atlas</i>, <span class="yr">2026</span>,
+          insights.taylorhalverson.com.</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="what"><h3>Note</h3><div class="lic">Single place entry</div></div>
+      <div class="body">
+        <div class="cite">Taylor Halverson, “Bethsaida,” <i>New Testament Atlas</i>,
+          <span class="yr">2026</span>, insights.taylorhalverson.com.</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="what"><h3>Bibliography</h3><div class="lic">Author-first</div></div>
+      <div class="body">
+        <div class="cite">Halverson, Taylor. <i>New Testament Atlas</i>. <span class="yr">2026</span>.
+          insights.taylorhalverson.com.</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="what"><h3>Map views</h3><div class="lic">Two credits required</div></div>
+      <div class="body">
+        <p>A reproduced map view carries both the atlas and the map data beneath it. Images exported from
+          the atlas have both printed in.</p>
+        <div class="cite"><i>New Testament Atlas</i>, Taylor Halverson · base map © OpenTopoMap contributors, data ©
+          OpenStreetMap contributors</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="what"><h3>Printed sheets</h3><div class="lic">Credit on the page</div></div>
+      <div class="body">
+        <p>Study sheets and week handouts print with their own credit and attribution block.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="wrap" id="scripture">
+  <div class="sub">Scripture</div>
+  <h2>Scripture</h2>
+  <p class="first">Scripture is quoted from the World English Bible and cited by book, chapter
+    and verse. The atlas contains 177 quoted passages, each of one verse or a few verses. No continuous
+    text and no complete chapter appears.</p>
+
+  <div class="attr">
+    <div class="row">
+      <div class="what">
+        <h3>World English Bible</h3>
+        <div class="lic">Public domain <b>worldwide</b></div>
+      </div>
+      <div class="body">
+        <p>In the public domain in the United States and in most jurisdictions. No modern edition’s
+          apparatus, notes, headings or formatting is used.</p>
+        <p>Released into the public domain with no territorial restrictions — no licence or permission is needed
+          anywhere it is sold.</p>
+        <div class="cite">Scripture quotations from the World English Bible, a public-domain translation.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="wrap" id="ancient">
+  <div class="sub">Ancient sources</div>
+  <h2>Ancient sources</h2>
+  <p class="first">Ancient authors are cited by book and section. Their statements are reported in the
+    author’s own words rather than quoted from a translation.</p>
+
+  <div class="attr">
+    <div class="row">
+      <div class="what">
+        <h3>Authors cited</h3>
+        <div class="lic">Public domain</div>
+      </div>
+      <div class="body">
+        <ul>
+          <li>Flavius Josephus, <i>The Jewish War</i>, <i>Jewish Antiquities</i>, <i>Life</i></li>
+          <li>The Mishnah</li>
+          <li>Strabo, <i>Geography</i></li>
+          <li>Pliny the Elder, <i>Natural History</i></li>
+          <li>Pausanias, <i>Description of Greece</i></li>
+          <li>Eusebius, <i>Onomasticon</i></li>
+        </ul>
+        <p class="note">Editions are named in the source lists by author, title and year.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="wrap" id="scholarship">
+  <div class="sub">Modern scholarship</div>
+  <h2>Modern scholarship</h2>
+  <p class="first">Each place panel carries its own source list. Where an identification is disputed, the
+    panel names the competing candidates and the works arguing for each. The following are cited
+    throughout:</p>
+  <ul class="srclist">
+    <li>Josephus, <i>The Jewish War</i> and <i>Jewish Antiquities</i> (Loeb Classical Library edition)</li>
+    <li>E. Stern, ed., <i>The New Encyclopedia of Archaeological Excavations in the Holy Land</i> (NEAEHL)</li>
+    <li>Y. Tsafrir, L. Di Segni &amp; J. Green, <i>Tabula Imperii Romani: Iudaea–Palaestina</i> (1994)</li>
+    <li>J. Murphy-O’Connor, <i>The Holy Land: An Oxford Archaeological Guide</i> (5th ed., 2008)</li>
+    <li>R. Talbert, ed., <i>Barrington Atlas of the Greek and Roman World</i> (2000)</li>
+    <li>Eusebius, <i>Onomasticon</i> (ed. Freeman-Grenville, Chapman &amp; Taylor, 2003)</li>
+    <li>D. N. Freedman, ed., <i>The Anchor Bible Dictionary</i> (1992)</li>
+  </ul>
+  <p>Source lists give author, title and year. Page references are not supplied.</p>
+</section>
+
+<hr class="rule">
+
+<section class="wrap" id="mapdata">
+  <div class="sub">Map data</div>
+  <h2>Map data and coordinates</h2>
+
+  <div class="attr">
+    <div class="row">
+      <div class="what">
+        <h3>OpenStreetMap</h3>
+        <div class="lic">ODbL 1.0 · <b>© OpenStreetMap contributors</b></div>
+      </div>
+      <div class="body">
+        <p>Modern coastlines, roads, settlements, water bodies and terrain are from OpenStreetMap,
+          licensed under the
+          <a href="https://opendatacommons.org/licenses/odbl/" target="_blank" rel="noopener">Open Database
+          License 1.0</a>. The parchment view is the same data, tinted; the Modern view is untinted.</p>
+        <p>Attribution appears on screen, on printed sheets and in exported images, as the licence
+          requires.</p>
+        <div class="cite">© OpenStreetMap contributors ·
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">openstreetmap.org/copyright</a></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="what">
+        <h3>Tile service</h3>
+        <div class="lic">OpenTopoMap (donation-funded, fair use)</div>
+      </div>
+      <div class="body">
+        <p>Rendered map imagery is served by <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a> — no API key, no account, free for light, non-bulk traffic under its fair-use policy, licensed
+          <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>. OpenTopoMap's server is best-effort and may be unavailable. The atlas
+          temporarily caches a limited number of tiles that a user has viewed so recently studied views may
+          reappear with poor connectivity; it does not prefetch regions or distribute a tile archive. Reuse of
+          the map-rendering portion of any exported or printed image remains under CC BY-SA.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="what">
+        <h3>Coordinates and elevations</h3>
+        <div class="lic">Facts · <b>compilation © author</b></div>
+      </div>
+      <div class="body">
+        <p>Coordinates are WGS84, verifiable against published survey data and excavation reports.
+          Individual coordinates carry no copyright; the compilation, and the choice of which point on a
+          multi-candidate site to plot, is the author’s.</p>
+        <p>Elevation figures and rift profiles are compiled from published topographic and survey figures.
+          Ancient boundaries, road alignments and journey routes are interpretive reconstructions drawn
+          from the literature and are approximate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="wrap" id="software">
+  <div class="sub">Software &amp; typefaces</div>
+  <h2>Software and typefaces</h2>
+
+  <div class="attr">
+    <div class="row">
+      <div class="what">
+        <h3>Leaflet 1.9.4</h3>
+        <div class="lic">BSD 2-Clause · <b>Volodymyr Agafonkin</b></div>
+      </div>
+      <div class="body">
+        <p>Mapping library: projection, panning, zoom, markers and vector overlays.
+          <a href="https://leafletjs.com" target="_blank" rel="noopener">leafletjs.com</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="what">
+        <h3>Cormorant Garamond</h3>
+        <div class="lic">SIL OFL 1.1 · <b>Christian Thalmann</b></div>
+      </div>
+      <div class="body">
+        <p>Display typeface — titles, place names, scripture. Designed by Christian Thalmann,
+          Catharsis Fonts.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="what">
+        <h3>Spectral</h3>
+        <div class="lic">SIL OFL 1.1 · <b>Production Type</b></div>
+      </div>
+      <div class="body">
+        <p>Text and interface typeface — body prose, labels, controls, printed sheets. Designed by
+          Production Type.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="wrap" id="summary">
+  <div class="sub">Licence summary</div>
+  <h2>Licence summary</h2>
+  <table class="lictable">
+    <caption>Components, licences and rights holders.</caption>
+    <thead>
+      <tr><th scope="col">Component</th><th scope="col">Licence</th><th scope="col">Rights holder</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Atlas text, code and design</b></td>
+        <td>© All rights reserved</td>
+        <td>Taylor Halverson, PhD</td>
+      </tr>
+      <tr>
+        <td><b>World English Bible</b><br>177 quoted passages</td>
+        <td>Public domain (worldwide)</td>
+        <td>No rights holder; released into the public domain</td>
+      </tr>
+      <tr>
+        <td><b>Ancient authors</b><br>Cited by book and section</td>
+        <td>Public domain</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><b>Scholarly literature</b><br>Author, title and year</td>
+        <td>Bibliographic facts</td>
+        <td>Respective publishers</td>
+      </tr>
+      <tr>
+        <td><b>OpenStreetMap data</b></td>
+        <td>ODbL 1.0</td>
+        <td>© OpenStreetMap contributors</td>
+      </tr>
+      <tr>
+        <td><b>Tile service</b></td>
+        <td>Free, no key, fair-use policy</td>
+        <td>OpenTopoMap</td>
+      </tr>
+      <tr>
+        <td><b>Leaflet 1.9.4</b></td>
+        <td>BSD 2-Clause</td>
+        <td>© 2010–2024 Volodymyr Agafonkin; © 2010–2011 CloudMade</td>
+      </tr>
+      <tr>
+        <td><b>Cormorant Garamond</b></td>
+        <td>SIL OFL 1.1</td>
+        <td>Christian Thalmann, Catharsis Fonts</td>
+      </tr>
+      <tr>
+        <td><b>Spectral</b></td>
+        <td>SIL OFL 1.1</td>
+        <td>Production Type</td>
+      </tr>
+      <tr>
+        <td><b>Coordinates and elevations</b></td>
+        <td>Facts; compilation ©</td>
+        <td>Taylor Halverson, PhD</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<hr class="rule">
+
+<section class="wrap" id="notices">
+  <div class="sub">Licence notices</div>
+  <h2>Licence notices</h2>
+  <p class="first">Reproduced as the respective licences require.</p>
+
+  <div class="attr">
+    <div class="row">
+      <div class="what"><h3>Leaflet</h3><div class="lic">BSD 2-Clause</div></div>
+      <div class="body">
+        <div class="mono">Copyright (c) 2010-2024, Volodymyr Agafonkin
+Copyright (c) 2010-2011, CloudMade
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="what"><h3>Cormorant Garamond &amp; Spectral</h3><div class="lic">SIL OFL 1.1</div></div>
+      <div class="body">
+        <p>Cormorant Garamond © Christian Thalmann, Catharsis Fonts. Spectral © Production Type. Both are
+          licensed under the SIL Open Font License, Version 1.1, which permits use, study, modification
+          and redistribution, including commercially and including embedding, on condition that the fonts
+          are not sold on their own, that a modified version carries a different name, and that the licence
+          accompanies the font files.</p>
+        <p class="note">Licence text:
+          <a href="https://openfontlicense.org" target="_blank" rel="noopener">openfontlicense.org</a></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="what"><h3>OpenStreetMap</h3><div class="lic">ODbL 1.0</div></div>
+      <div class="body">
+        <p>Map data © OpenStreetMap contributors, available under the Open Database License, which permits
+          copying, distribution and adaptation on condition that OpenStreetMap and its contributors are
+          credited and that any adapted database is offered under the same licence.</p>
+        <p class="note">Licence text:
+          <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">opendatacommons.org/licenses/odbl/1-0</a>
+          · Attribution guidance:
+          <a href="https://osmfoundation.org/wiki/Licence/Attribution_Guidelines" target="_blank" rel="noopener">osmfoundation.org</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="wrap" id="independence">
+  <div class="sub">Independence</div>
+  <h2>Independence</h2>
+  <p class="first">The atlas keys its 53 weekly selections to the 2027 New Testament reading year, using
+    the reading blocks and week dates, and links each week to the official lesson.</p>
+  <div class="notice">
+    <b>New Testament Atlas is an independent work by Taylor Halverson.</b> It is not affiliated with,
+    endorsed by, or produced by The Church of Jesus Christ of Latter-day Saints or Intellectual Reserve,
+    Inc. Come, Follow Me and Gospel Library are trademarks of Intellectual Reserve, Inc. No curriculum
+    text, illustration, activity or artwork is reproduced in this atlas, and no Church logo, wordmark or
+    symbol appears in it.
+  </div>
+  <p>The author’s professional background includes work with Brigham Young University, Scripture Central
+    and ScripturePlus. Those affiliations are biographical. None of those institutions is connected with
+    this atlas or has endorsed it.</p>
+</section>
+
+<hr class="rule">
+
+<section class="wrap" id="corrections">
+  <div class="sub">Corrections</div>
+  <h2>Corrections</h2>
+  <p class="first">Reports of a miscited work, a misstated licence or an omitted credit are welcome, and
+    corrections are made in the next revision.</p>
+  <p><a href="mailto:insights@taylorhalverson.com?subject=New%20Testament%20Atlas%20%E2%80%94%20attribution%20correction">insights@taylorhalverson.com</a></p>
+</section>
+
+<hr class="rule">
+
+<footer class="wrap">
+  <div class="cred"><b style="font-weight:500">Project Created by Taylor Halverson, Ph.D. (Beta mode)</b></div>
+  <div>New Testament Atlas — created, written and owned by Taylor Halverson, PhD.
+    © <span id="yr">2026</span> Taylor Halverson. All rights reserved.</div>
+  <div class="fl">Scripture from the World English Bible (public domain) · historical context after Josephus, the Mishnah
+    and modern excavation reports · boundaries and routes approximate · base map ©
+    <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a> contributors, data ©
+    <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</div>
+  <div class="fl"><a href="index.html">The atlas</a> · <a href="about.html">About</a></div>
+</footer>
+
+<script>
+  var y = new Date().getFullYear();
+  document.getElementById('yr').textContent = y;
+  Array.prototype.forEach.call(document.querySelectorAll('.yr'), function(el){ el.textContent = y; });
+</script>
+</body>
+</html>

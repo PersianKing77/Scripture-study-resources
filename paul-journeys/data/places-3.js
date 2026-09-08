@@ -11,7 +11,7 @@ assos: {
   people: ["Luke", "Timothy", "Tychicus", "Trophimus", "Aristarchus", "Sopater", "Secundus", "Gaius"],
   epistles: [],
   scripture: [
-    { ref: "Acts 20:13", text: "And we went before to ship, and sailed unto Assos, there intending to take in Paul: for so had he appointed, minding himself to go afoot." }
+    { ref: "Acts 20:13", text: "But we who went ahead to the ship set sail for Assos, intending to take Paul aboard there, for he had so arranged, intending himself to go by land." }
   ]
 },
 
@@ -24,7 +24,7 @@ mitylene: {
   people: ["Luke and the delegation carrying the collection"],
   epistles: [],
   scripture: [
-    { ref: "Acts 20:14", text: "And when he met with us at Assos, we took him in, and came to Mitylene." }
+    { ref: "Acts 20:14", text: "When he met us at Assos, we took him aboard, and came to Mitylene." }
   ]
 },
 
@@ -37,7 +37,7 @@ chios: {
   people: [],
   epistles: [],
   scripture: [
-    { ref: "Acts 20:15", text: "And we sailed thence, and came the next day over against Chios; and the next day we arrived at Samos, and tarried at Trogyllium; and the next day we came to Miletus." }
+    { ref: "Acts 20:15", text: "Sailing from there, we came the following day opposite Chios. The next day we touched at Samos and stayed at Trogyllium, and the day after we came to Miletus." }
   ]
 },
 
@@ -50,7 +50,7 @@ samos: {
   people: [],
   epistles: [],
   scripture: [
-    { ref: "Acts 20:15", text: "And we sailed thence, and came the next day over against Chios; and the next day we arrived at Samos, and tarried at Trogyllium; and the next day we came to Miletus." }
+    { ref: "Acts 20:15", text: "Sailing from there, we came the following day opposite Chios. The next day we touched at Samos and stayed at Trogyllium, and the day after we came to Miletus." }
   ]
 },
 
@@ -63,11 +63,11 @@ miletus: {
   people: ["The elders of the church at Ephesus", "Trophimus (2 Tim 4:20)", "Luke"],
   epistles: [],
   scripture: [
-    { ref: "Acts 20:17", text: "And from Miletus he sent to Ephesus, and called the elders of the church." },
-    { ref: "Acts 20:24", text: "But none of these things move me, neither count I my life dear unto myself, so that I might finish my course with joy, and the ministry, which I have received of the Lord Jesus, to testify the gospel of the grace of God." },
-    { ref: "Acts 20:28", text: "Take heed therefore unto yourselves, and to all the flock, over the which the Holy Ghost hath made you overseers, to feed the church of God, which he hath purchased with his own blood." },
-    { ref: "Acts 20:35", text: "I have shewed you all things, how that so labouring ye ought to support the weak, and to remember the words of the Lord Jesus, how he said, It is more blessed to give than to receive." },
-    { ref: "Acts 20:37–38", text: "And they all wept sore, and fell on Paul's neck, and kissed him, Sorrowing most of all for the words which he spake, that they should see his face no more." }
+    { ref: "Acts 20:17", text: "From Miletus he sent to Ephesus, and called to himself the elders of the assembly." },
+    { ref: "Acts 20:24", text: "But these things don’t count; nor do I hold my life dear to myself, so that I may finish my race with joy, and the ministry which I received from the Lord Jesus, to fully testify to the Good News of the grace of God." },
+    { ref: "Acts 20:28", text: "Take heed, therefore, to yourselves, and to all the flock, in which the Holy Spirit has made you overseers, to shepherd the assembly of the Lord and God which he purchased with his own blood." },
+    { ref: "Acts 20:35", text: "In all things I gave you an example, that so laboring you ought to help the weak, and to remember the words of the Lord Jesus, that he himself said, ‘It is more blessed to give than to receive.’”" },
+    { ref: "Acts 20:37–38", text: "They all wept a lot, and fell on Paul’s neck and kissed him, sorrowing most of all because of the word which he had spoken, that they should see his face no more. And they accompanied him to the ship." }
   ]
 },
 
@@ -80,7 +80,7 @@ cos: {
   people: [],
   epistles: [],
   scripture: [
-    { ref: "Acts 21:1", text: "And it came to pass, that after we were gotten from them, and had launched, we came with a straight course unto Coos, and the day following unto Rhodes, and from thence unto Patara." }
+    { ref: "Acts 21:1", text: "When it happened that we had parted from them and had set sail, we came with a straight course to Cos, and the next day to Rhodes, and from there to Patara." }
   ]
 },
 
@@ -93,21 +93,21 @@ rhodes: {
   people: [],
   epistles: [],
   scripture: [
-    { ref: "Acts 21:1", text: "And it came to pass, that after we were gotten from them, and had launched, we came with a straight course unto Coos, and the day following unto Rhodes, and from thence unto Patara." }
+    { ref: "Acts 21:1", text: "When it happened that we had parted from them and had set sail, we came with a straight course to Cos, and the next day to Rhodes, and from there to Patara." }
   ]
 },
 
 patara: {
   name: "Patara", modern: "Gelemiş, Antalya Province, Türkiye", region: "Lycia", lat: 36.2686, lng: 29.3167, tier: "stop",
   dates: "Spring AD 57",
-  narrative: "At Patara the party left the coasting vessel and found a ship 'sailing over unto Phenicia' — a large grain freighter able to run the 700 km open sea to Tyre in about five days. Luke notes they sighted Cyprus and left it on the left hand.",
+  narrative: "At Patara the party left the coasting vessel and found a ship 'sailing over unto Phenicia', able to run the 700 km open sea to Tyre in about five days; Acts does not identify its cargo or vessel class. Luke notes they sighted Cyprus and left it on the left hand.",
   greco: "The chief harbour and, with Xanthos, the political centre of the Lycian League; Rome made Lycia a province in AD 43. Patara held an oracle of Apollo second only to Delphi's, and the Stadiasmus Patarensis — a monumental Claudian road register — was set up here. It is also the birthplace of St Nicholas.",
   archaeology: "The Roman lighthouse of Nero (one of the oldest known anywhere in the Mediterranean, partly re-erected), the bouleuterion of the Lycian League, the theatre, the triple-arched gate of Mettius Modestus, the granaries of Hadrian, and the Stadiasmus pillar listing distances on Lycian roads.",
   people: ["Luke and the collection delegation"],
   epistles: [],
   scripture: [
-    { ref: "Acts 21:2", text: "And finding a ship sailing over unto Phenicia, we went aboard, and set forth." },
-    { ref: "Acts 21:3", text: "Now when we had discovered Cyprus, we left it on the left hand, and sailed into Syria, and landed at Tyre: for there the ship was to unlade her burden." }
+    { ref: "Acts 21:2", text: "Having found a ship crossing over to Phoenicia, we went aboard, and set sail." },
+    { ref: "Acts 21:3", text: "When we had come in sight of Cyprus, leaving it on the left hand, we sailed to Syria, and landed at Tyre, for there the ship was to unload her cargo." }
   ]
 },
 
@@ -120,8 +120,8 @@ tyre: {
   people: ["The disciples of Tyre and their families"],
   epistles: [],
   scripture: [
-    { ref: "Acts 21:4", text: "And finding disciples, we tarried there seven days: who said to Paul through the Spirit, that he should not go up to Jerusalem." },
-    { ref: "Acts 21:5", text: "And when we had accomplished those days, we departed and went our way; and they all brought us on our way, with wives and children, till we were out of the city: and we kneeled down on the shore, and prayed." }
+    { ref: "Acts 21:4", text: "Having found disciples, we stayed there seven days. These said to Paul through the Spirit, that he should not go up to Jerusalem." },
+    { ref: "Acts 21:5", text: "When it happened that we had accomplished the days, we departed and went on our journey. They all, with wives and children, brought us on our way until we were out of the city. Kneeling down on the beach, we prayed." }
   ]
 },
 
@@ -134,7 +134,7 @@ ptolemais: {
   people: ["The brethren of Ptolemais"],
   epistles: [],
   scripture: [
-    { ref: "Acts 21:7", text: "And when we had finished our course from Tyre, we came to Ptolemais, and saluted the brethren, and abode with them one day." }
+    { ref: "Acts 21:7", text: "When we had finished the voyage from Tyre, we arrived at Ptolemais. We greeted the brothers, and stayed with them one day." }
   ]
 },
 
@@ -147,9 +147,9 @@ colossae: {
   people: ["Epaphras", "Philemon", "Onesimus", "Apphia", "Archippus", "Tychicus"],
   epistles: ["Colossians and Philemon; Colossians 4:16 also mentions a lost letter to Laodicea"],
   scripture: [
-    { ref: "Colossians 2:1", text: "For I would that ye knew what great conflict I have for you, and for them at Laodicea, and for as many as have not seen my face in the flesh." },
-    { ref: "Colossians 1:7", text: "As ye also learned of Epaphras our dear fellowservant, who is for you a faithful minister of Christ." },
-    { ref: "Philemon 1:10", text: "I beseech thee for my son Onesimus, whom I have begotten in my bonds." }
+    { ref: "Colossians 2:1", text: "For I desire to have you know how greatly I struggle for you, and for those at Laodicea, and for as many as have not seen my face in the flesh;" },
+    { ref: "Colossians 1:7", text: "even as you learned of Epaphras our beloved fellow servant, who is a faithful servant of Christ on our behalf," },
+    { ref: "Philemon 1:10", text: "I beg you for my child, whom I have become the father of in my chains, Onesimus," }
   ]
 }
 

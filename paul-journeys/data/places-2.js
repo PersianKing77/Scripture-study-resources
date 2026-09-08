@@ -11,8 +11,8 @@ cilicianGates: {
   people: ["Silas"],
   epistles: [],
   scripture: [
-    { ref: "Acts 15:41", text: "And he went through Syria and Cilicia, confirming the churches." },
-    { ref: "Acts 16:4", text: "And as they went through the cities, they delivered them the decrees for to keep, that were ordained of the apostles and elders which were at Jerusalem." }
+    { ref: "Acts 15:41", text: "He went through Syria and Cilicia, strengthening the assemblies." },
+    { ref: "Acts 16:4", text: "As they went on their way through the cities, they delivered the decrees to them to keep which had been ordained by the apostles and elders who were at Jerusalem." }
   ]
 },
 
@@ -25,11 +25,11 @@ troas: {
   people: ["Luke (the 'we' passages begin here)", "Timothy", "Silas", "Eutychus", "Carpus (2 Tim 4:13)"],
   epistles: ["2 Corinthians 2:12 recalls a door opened here; 2 Timothy 4:13 asks for the cloak and books left with Carpus"],
   scripture: [
-    { ref: "Acts 16:8–9", text: "And they passing by Mysia came down to Troas. And a vision appeared to Paul in the night; There stood a man of Macedonia, and prayed him, saying, Come over into Macedonia, and help us." },
-    { ref: "Acts 16:10", text: "And after he had seen the vision, immediately we endeavoured to go into Macedonia, assuredly gathering that the Lord had called us for to preach the gospel unto them." },
-    { ref: "Acts 20:7", text: "And upon the first day of the week, when the disciples came together to break bread, Paul preached unto them, ready to depart on the morrow; and continued his speech until midnight." },
-    { ref: "Acts 20:9", text: "And there sat in a window a certain young man named Eutychus, being fallen into a deep sleep: and as Paul was long preaching, he sunk down with sleep, and fell down from the third loft, and was taken up dead." },
-    { ref: "2 Timothy 4:13", text: "The cloke that I left at Troas with Carpus, when thou comest, bring with thee, and the books, but especially the parchments." }
+    { ref: "Acts 16:8–9", text: "Passing by Mysia, they came down to Troas. A vision appeared to Paul in the night. There was a man of Macedonia standing, begging him, and saying, “Come over into Macedonia and help us.”" },
+    { ref: "Acts 16:10", text: "When he had seen the vision, immediately we sought to go out to Macedonia, concluding that the Lord had called us to preach the Good News to them." },
+    { ref: "Acts 20:7", text: "On the first day of the week, when the disciples were gathered together to break bread, Paul talked with them, intending to depart on the next day, and continued his speech until midnight." },
+    { ref: "Acts 20:9", text: "A certain young man named Eutychus sat in the window, weighed down with deep sleep. As Paul spoke still longer, being weighed down by his sleep, he fell down from the third story, and was taken up dead." },
+    { ref: "2 Timothy 4:13", text: "Bring the cloak that I left at Troas with Carpus when you come, and the books, especially the parchments." }
   ]
 },
 
@@ -42,7 +42,7 @@ samothrace: {
   people: ["Luke", "Silas", "Timothy"],
   epistles: [],
   scripture: [
-    { ref: "Acts 16:11", text: "Therefore loosing from Troas, we came with a straight course to Samothracia, and the next day to Neapolis." }
+    { ref: "Acts 16:11", text: "Setting sail therefore from Troas, we made a straight course to Samothrace, and the day following to Neapolis;" }
   ]
 },
 
@@ -55,7 +55,7 @@ neapolis: {
   people: ["Luke", "Silas", "Timothy"],
   epistles: [],
   scripture: [
-    { ref: "Acts 16:11–12", text: "Therefore loosing from Troas, we came with a straight course to Samothracia, and the next day to Neapolis; And from thence to Philippi, which is the chief city of that part of Macedonia, and a colony: and we were in that city abiding certain days." }
+    { ref: "Acts 16:11–12", text: "Setting sail therefore from Troas, we made a straight course to Samothrace, and the day following to Neapolis; and from there to Philippi, which is a city of Macedonia, the foremost of the district, a Roman colony. We were staying some days in this city." }
   ]
 },
 
@@ -68,12 +68,12 @@ philippi: {
   people: ["Lydia", "the Philippian jailer and his household", "the slave girl with a spirit of divination", "Euodias and Syntyche (Phil 4:2)", "Clement", "Epaphroditus", "Luke (likely left here)", "Silas", "Timothy"],
   epistles: ["Philippians is written to this church from prison; 2 Corinthians is likely written from Macedonia, probably here"],
   scripture: [
-    { ref: "Acts 16:13", text: "And on the sabbath we went out of the city by a river side, where prayer was wont to be made; and we sat down, and spake unto the women which resorted thither." },
-    { ref: "Acts 16:14", text: "And a certain woman named Lydia, a seller of purple, of the city of Thyatira, which worshipped God, heard us: whose heart the Lord opened, that she attended unto the things which were spoken of Paul." },
-    { ref: "Acts 16:25–26", text: "And at midnight Paul and Silas prayed, and sang praises unto God: and the prisoners heard them. And suddenly there was a great earthquake, so that the foundations of the prison were shaken: and immediately all the doors were opened, and every one's bands were loosed." },
-    { ref: "Acts 16:31", text: "And they said, Believe on the Lord Jesus Christ, and thou shalt be saved, and thy house." },
-    { ref: "Acts 16:37", text: "But Paul said unto them, They have beaten us openly uncondemned, being Romans, and have cast us into prison; and now do they thrust us out privily? nay verily; but let them come themselves and fetch us out." },
-    { ref: "Philippians 4:15", text: "Now ye Philippians know, that in the beginning of the gospel, when I departed from Macedonia, no church communicated with me as concerning giving and receiving, but ye only." }
+    { ref: "Acts 16:13", text: "On the Sabbath day we went forth outside of the city by a riverside, where we supposed there was a place of prayer, and we sat down, and spoke to the women who had come together." },
+    { ref: "Acts 16:14", text: "A certain woman named Lydia, a seller of purple, of the city of Thyatira, one who worshiped God, heard us; whose heart the Lord opened to listen to the things which were spoken by Paul." },
+    { ref: "Acts 16:25–26", text: "But about midnight Paul and Silas were praying and singing hymns to God, and the prisoners were listening to them. Suddenly there was a great earthquake, so that the foundations of the prison were shaken; and immediately all the doors were opened, and everyone’s bonds were loosened." },
+    { ref: "Acts 16:31", text: "They said, “Believe in the Lord Jesus Christ, and you will be saved, you and your household.”" },
+    { ref: "Acts 16:37", text: "But Paul said to them, “They have beaten us publicly, without a trial, men who are Romans, and have cast us into prison! Do they now release us secretly? No, most certainly, but let them come themselves and bring us out!”" },
+    { ref: "Philippians 4:15", text: "You yourselves also know, you Philippians, that in the beginning of the Good News, when I departed from Macedonia, no assembly shared with me in the matter of giving and receiving but you only." }
   ]
 },
 
@@ -86,7 +86,7 @@ amphipolis: {
   people: ["Silas", "Timothy"],
   epistles: [],
   scripture: [
-    { ref: "Acts 17:1", text: "Now when they had passed through Amphipolis and Apollonia, they came to Thessalonica, where was a synagogue of the Jews." }
+    { ref: "Acts 17:1", text: "Now when they had passed through Amphipolis and Apollonia, they came to Thessalonica, where there was a Jewish synagogue." }
   ]
 },
 
@@ -99,7 +99,7 @@ apollonia: {
   people: ["Silas", "Timothy"],
   epistles: [],
   scripture: [
-    { ref: "Acts 17:1", text: "Now when they had passed through Amphipolis and Apollonia, they came to Thessalonica, where was a synagogue of the Jews." }
+    { ref: "Acts 17:1", text: "Now when they had passed through Amphipolis and Apollonia, they came to Thessalonica, where there was a Jewish synagogue." }
   ]
 },
 
@@ -112,11 +112,11 @@ thessalonica: {
   people: ["Jason", "Aristarchus", "Secundus", "the 'chief women' who believed", "Silas", "Timothy"],
   epistles: ["1 and 2 Thessalonians, written from Corinth c. AD 50–51 — probably the oldest books of the New Testament"],
   scripture: [
-    { ref: "Acts 17:2–3", text: "And Paul, as his manner was, went in unto them, and three sabbath days reasoned with them out of the scriptures, Opening and alleging, that Christ must needs have suffered, and risen again from the dead; and that this Jesus, whom I preach unto you, is Christ." },
-    { ref: "Acts 17:6", text: "And when they found them not, they drew Jason and certain brethren unto the rulers of the city, crying, These that have turned the world upside down are come hither also." },
-    { ref: "Acts 17:7", text: "Whom Jason hath received: and these all do contrary to the decrees of Caesar, saying that there is another king, one Jesus." },
-    { ref: "1 Thessalonians 1:9", text: "For they themselves shew of us what manner of entering in we had unto you, and how ye turned to God from idols to serve the living and true God." },
-    { ref: "1 Thessalonians 2:9", text: "For ye remember, brethren, our labour and travail: for labouring night and day, because we would not be chargeable unto any of you, we preached unto you the gospel of God." }
+    { ref: "Acts 17:2–3", text: "Paul, as was his custom, went in to them, and for three Sabbath days reasoned with them from the Scriptures, explaining and demonstrating that the Christ had to suffer and rise again from the dead, and saying, “This Jesus, whom I proclaim to you, is the Christ.”" },
+    { ref: "Acts 17:6", text: "When they didn’t find them, they dragged Jason and certain brothers before the rulers of the city, crying, “These who have turned the world upside down have come here also," },
+    { ref: "Acts 17:7", text: "whom Jason has received. These all act contrary to the decrees of Caesar, saying that there is another king, Jesus!”" },
+    { ref: "1 Thessalonians 1:9", text: "For they themselves report concerning us what kind of a reception we had from you; and how you turned to God from idols, to serve a living and true God," },
+    { ref: "1 Thessalonians 2:9", text: "For you remember, brothers, our labor and travail; for working night and day, that we might not burden any of you, we preached to you the Good News of God." }
   ]
 },
 
@@ -129,9 +129,9 @@ berea: {
   people: ["Sopater of Berea (Acts 20:4)", "Silas", "Timothy"],
   epistles: [],
   scripture: [
-    { ref: "Acts 17:10", text: "And the brethren immediately sent away Paul and Silas by night unto Berea: who coming thither went into the synagogue of the Jews." },
-    { ref: "Acts 17:11", text: "These were more noble than those in Thessalonica, in that they received the word with all readiness of mind, and searched the scriptures daily, whether those things were so." },
-    { ref: "Acts 17:14", text: "And then immediately the brethren sent away Paul to go as it were to the sea: but Silas and Timotheus abode there still." }
+    { ref: "Acts 17:10", text: "The brothers immediately sent Paul and Silas away by night to Beroea. When they arrived, they went into the Jewish synagogue." },
+    { ref: "Acts 17:11", text: "Now these were more noble than those in Thessalonica, in that they received the word with all readiness of the mind, examining the Scriptures daily to see whether these things were so." },
+    { ref: "Acts 17:14", text: "Then the brothers immediately sent out Paul to go as far as to the sea, and Silas and Timothy still stayed there." }
   ]
 },
 
@@ -144,11 +144,11 @@ athens: {
   people: ["Dionysius the Areopagite", "Damaris", "Epicurean and Stoic philosophers"],
   epistles: ["1 Thessalonians 3:1 refers to being 'left at Athens alone'"],
   scripture: [
-    { ref: "Acts 17:16", text: "Now while Paul waited for them at Athens, his spirit was stirred in him, when he saw the city wholly given to idolatry." },
-    { ref: "Acts 17:21", text: "(For all the Athenians and strangers which were there spent their time in nothing else, but either to tell, or to hear some new thing.)" },
-    { ref: "Acts 17:23", text: "For as I passed by, and beheld your devotions, I found an altar with this inscription, TO THE UNKNOWN GOD. Whom therefore ye ignorantly worship, him declare I unto you." },
-    { ref: "Acts 17:28", text: "For in him we live, and move, and have our being; as certain also of your own poets have said, For we are also his offspring." },
-    { ref: "Acts 17:32", text: "And when they heard of the resurrection of the dead, some mocked: and others said, We will hear thee again of this matter." }
+    { ref: "Acts 17:16", text: "Now while Paul waited for them at Athens, his spirit was provoked within him as he saw the city full of idols." },
+    { ref: "Acts 17:21", text: "Now all the Athenians and the strangers living there spent their time in nothing else, but either to tell or to hear some new thing." },
+    { ref: "Acts 17:23", text: "For as I passed along, and observed the objects of your worship, I found also an altar with this inscription: ‘TO AN UNKNOWN GOD.’ What therefore you worship in ignorance, this I announce to you." },
+    { ref: "Acts 17:28", text: "‘For in him we live, and move, and have our being.’ As some of your own poets have said, ‘For we are also his offspring.’" },
+    { ref: "Acts 17:32", text: "Now when they heard of the resurrection of the dead, some mocked; but others said, “We want to hear you again concerning this.”" }
   ]
 },
 
@@ -161,11 +161,11 @@ corinth: {
   people: ["Aquila and Priscilla", "Titus Justus", "Crispus", "Sosthenes", "Gallio (proconsul)", "Erastus", "Stephanas", "Chloe", "Gaius", "Phebe (of Cenchreae)", "Silas", "Timothy", "Apollos (later)"],
   epistles: ["1 and 2 Thessalonians written here; 1 and 2 Corinthians written to this church; Romans written from here (or Cenchreae) on the third journey"],
   scripture: [
-    { ref: "Acts 18:2–3", text: "And found a certain Jew named Aquila, born in Pontus, lately come from Italy, with his wife Priscilla; (because that Claudius had commanded all Jews to depart from Rome:) and came unto them. And because he was of the same craft, he abode with them, and wrought: for by their occupation they were tentmakers." },
-    { ref: "Acts 18:9–10", text: "Then spake the Lord to Paul in the night by a vision, Be not afraid, but speak, and hold not thy peace: For I am with thee, and no man shall set on thee to hurt thee: for I have much people in this city." },
-    { ref: "Acts 18:12", text: "And when Gallio was the deputy of Achaia, the Jews made insurrection with one accord against Paul, and brought him to the judgment seat." },
-    { ref: "1 Corinthians 2:1–2", text: "And I, brethren, when I came to you, came not with excellency of speech or of wisdom, declaring unto you the testimony of God. For I determined not to know any thing among you, save Jesus Christ, and him crucified." },
-    { ref: "1 Corinthians 9:24", text: "Know ye not that they which run in a race run all, but one receiveth the prize? So run, that ye may obtain." }
+    { ref: "Acts 18:2–3", text: "He found a certain Jew named Aquila, a man of Pontus by race, who had recently come from Italy, with his wife Priscilla, because Claudius had commanded all the Jews to depart from Rome. He came to them, and because he practiced the same trade, he lived with them and worked, for by trade they were tent makers." },
+    { ref: "Acts 18:9–10", text: "The Lord said to Paul in the night by a vision, “Don’t be afraid, but speak and don’t be silent; for I am with you, and no one will attack you to harm you, for I have many people in this city.”" },
+    { ref: "Acts 18:12", text: "But when Gallio was proconsul of Achaia, the Jews with one accord rose up against Paul and brought him before the judgment seat," },
+    { ref: "1 Corinthians 2:1–2", text: "When I came to you, brothers, I didn’t come with excellence of speech or of wisdom, proclaiming to you the testimony of God. For I determined not to know anything among you, except Jesus Christ, and him crucified." },
+    { ref: "1 Corinthians 9:24", text: "Don’t you know that those who run in a race all run, but one receives the prize? Run like that, that you may win." }
   ]
 },
 
@@ -178,8 +178,8 @@ cenchreae: {
   people: ["Phebe", "Aquila and Priscilla"],
   epistles: ["Romans 16:1–2 commends Phebe of Cenchreae"],
   scripture: [
-    { ref: "Acts 18:18", text: "And Paul after this tarried there yet a good while, and then took his leave of the brethren, and sailed thence into Syria, and with him Priscilla and Aquila; having shorn his head in Cenchrea: for he had a vow." },
-    { ref: "Romans 16:1–2", text: "I commend unto you Phebe our sister, which is a servant of the church which is at Cenchrea: That ye receive her in the Lord, as becometh saints, and that ye assist her in whatsoever business she hath need of you." }
+    { ref: "Acts 18:18", text: "Paul, having stayed after this many more days, took his leave of the brothers, and sailed from there for Syria, together with Priscilla and Aquila. He shaved his head in Cenchreae, for he had a vow." },
+    { ref: "Romans 16:1–2", text: "I commend to you Phoebe, our sister, who is a servant of the assembly that is at Cenchreae, that you receive her in the Lord, in a way worthy of the saints, and that you assist her in whatever matter she may need from you, for she herself also has been a helper of many, and of my own self." }
   ]
 },
 
@@ -192,12 +192,12 @@ ephesus: {
   people: ["Aquila and Priscilla", "Apollos", "Tyrannus", "Demetrius the silversmith", "the seven sons of Sceva's exorcism episode", "Gaius and Aristarchus", "Alexander the coppersmith (2 Tim 4:14)", "Timothy (left in charge, 1 Tim 1:3)", "Tychicus", "Trophimus"],
   epistles: ["1 Corinthians written from here; Ephesians written to this church (likely from Roman imprisonment); 1 and 2 Timothy concern its oversight; Revelation 2:1–7 addresses it"],
   scripture: [
-    { ref: "Acts 19:9–10", text: "But when divers were hardened, and believed not, but spake evil of that way before the multitude, he departed from them, and separated the disciples, disputing daily in the school of one Tyrannus. And this continued by the space of two years." },
-    { ref: "Acts 19:19", text: "Many of them also which used curious arts brought their books together, and burned them before all men: and they counted the price of them, and found it fifty thousand pieces of silver." },
-    { ref: "Acts 19:24", text: "For a certain man named Demetrius, a silversmith, which made silver shrines for Diana, brought no small gain unto the craftsmen." },
-    { ref: "Acts 19:34", text: "But when they knew that he was a Jew, all with one voice about the space of two hours cried out, Great is Diana of the Ephesians." },
-    { ref: "1 Corinthians 15:32", text: "If after the manner of men I have fought with beasts at Ephesus, what advantageth it me, if the dead rise not?" },
-    { ref: "1 Corinthians 16:9", text: "For a great door and effectual is opened unto me, and there are many adversaries." }
+    { ref: "Acts 19:9–10", text: "But when some were hardened and disobedient, speaking evil of the Way before the multitude, he departed from them, and separated the disciples, reasoning daily in the school of Tyrannus. This continued for two years, so that all those who lived in Asia heard the word of the Lord Jesus, both Jews and Greeks." },
+    { ref: "Acts 19:19", text: "Many of those who practiced magical arts brought their books together and burned them in the sight of all. They counted their price, and found it to be fifty thousand pieces of silver." },
+    { ref: "Acts 19:24", text: "For a certain man named Demetrius, a silversmith, who made silver shrines of Artemis, brought no little business to the craftsmen," },
+    { ref: "Acts 19:34", text: "But when they perceived that he was a Jew, all with one voice for a time of about two hours cried out, “Great is Artemis of the Ephesians!”" },
+    { ref: "1 Corinthians 15:32", text: "If I fought with animals at Ephesus for human purposes, what does it profit me? If the dead are not raised, then “let us eat and drink, for tomorrow we die.”" },
+    { ref: "1 Corinthians 16:9", text: "for a great and effective door has opened to me, and there are many adversaries." }
   ]
 },
 
@@ -210,11 +210,11 @@ caesarea: {
   people: ["Philip the evangelist and his four prophesying daughters", "Agabus", "Mnason", "Cornelius (earlier, Acts 10)", "Felix and Drusilla", "Porcius Festus", "Herod Agrippa II and Bernice", "Julius the centurion", "Luke and Aristarchus"],
   epistles: ["Some scholars place Ephesians, Philippians, Colossians and Philemon in this imprisonment rather than in Rome"],
   scripture: [
-    { ref: "Acts 21:11", text: "And when he was come unto us, he took Paul's girdle, and bound his own hands and feet, and said, Thus saith the Holy Ghost, So shall the Jews at Jerusalem bind the man that owneth this girdle, and shall deliver him into the hands of the Gentiles." },
-    { ref: "Acts 21:13", text: "Then Paul answered, What mean ye to weep and to break mine heart? for I am ready not to be bound only, but also to die at Jerusalem for the name of the Lord Jesus." },
-    { ref: "Acts 24:27", text: "But after two years Porcius Festus came into Felix' room: and Felix, willing to shew the Jews a pleasure, left Paul bound." },
-    { ref: "Acts 25:11", text: "For if I be an offender, or have committed any thing worthy of death, I refuse not to die: but if there be none of these things whereof these accuse me, no man may deliver me unto them. I appeal unto Caesar." },
-    { ref: "Acts 26:28", text: "Then Agrippa said unto Paul, Almost thou persuadest me to be a Christian." }
+    { ref: "Acts 21:11", text: "Coming to us, and taking Paul’s belt, he bound his own feet and hands, and said, “Thus says the Holy Spirit: ‘So will the Jews at Jerusalem bind the man who owns this belt, and will deliver him into the hands of the Gentiles.’”" },
+    { ref: "Acts 21:13", text: "Then Paul answered, “What are you doing, weeping and breaking my heart? For I am ready not only to be bound, but also to die at Jerusalem for the name of the Lord Jesus.”" },
+    { ref: "Acts 24:27", text: "But when two years were fulfilled, Felix was succeeded by Porcius Festus, and desiring to gain favor with the Jews, Felix left Paul in bonds." },
+    { ref: "Acts 25:11", text: "For if I have done wrong, and have committed anything worthy of death, I don’t refuse to die; but if none of those things is true that they accuse me of, no one can give me up to them. I appeal to Caesar!”" },
+    { ref: "Acts 26:28", text: "Agrippa said to Paul, “With a little persuasion are you trying to make me a Christian?”" }
   ]
 }
 

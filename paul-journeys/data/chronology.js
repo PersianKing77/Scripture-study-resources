@@ -9,7 +9,7 @@ window.PAUL_CHRONOLOGY = {
     { event: "Crucifixion and resurrection", early: "AD 30", std: "AD 30 or 33", late: "AD 27–30", basis: "Pilate's prefecture (AD 26–36); Passover astronomy allows AD 30 and 33." },
     { event: "Paul's conversion near Damascus", early: "AD 33", std: "AD 33–34", late: "AD 31–34", basis: "Counted back from the Damascus escape; Galatians 1–2 counts 3 + 14 years forward." },
     { event: "In Arabia; return to Damascus", early: "AD 33–36", std: "AD 34–36", late: "AD 32–35", basis: "Galatians 1:17–18, 'after three years'." },
-    { event: "Escape from Damascus by basket", early: "AD 36", std: "AD 36–37", late: "AD 35–37", basis: "2 Cor 11:32 names an officer of Aretas IV, who died c. AD 40 — a hard ceiling." },
+    { event: "Escape from Damascus by basket", early: "AD 36", std: "AD 36–37", late: "AD 35–37", basis: "2 Cor 11:32 names an ethnarch under Aretas IV, who died c. AD 40 — a commonly used ceiling, though the ethnarch's exact jurisdiction is disputed." },
     { event: "First Jerusalem visit (fifteen days with Peter)", early: "AD 36", std: "AD 37", late: "AD 35–37", basis: "Galatians 1:18–19." },
     { event: "Years in Syria and Cilicia (Tarsus)", early: "AD 36–43", std: "AD 37–45", late: "AD 37–47", basis: "Galatians 1:21; Acts 9:30, followed by silence." },
     { event: "Famine relief visit to Jerusalem", early: "AD 45–46", std: "AD 46", late: "identified with the Council visit", basis: "Josephus dates the Judean famine to the procuratorship of Tiberius Alexander, c. AD 46–48." },
@@ -34,7 +34,7 @@ window.PAUL_CHRONOLOGY = {
   ],
   anchors: [
     { name: "The Gallio inscription (Delphi)", text: "A rescript of Claudius found at Delphi names Gallio as proconsul of Achaia in the emperor's 26th acclamation — AD 51–52. Since Acts 18:12 puts Paul before Gallio's tribunal during an eighteen-month stay, Corinth is fixed, and the whole chronology hangs from it." },
-    { name: "Aretas IV of Nabataea", text: "2 Corinthians 11:32 has an officer of King Aretas policing Damascus. Aretas died c. AD 40, so the escape — and therefore the conversion three years earlier — cannot be later than the late 30s." },
+    { name: "Aretas IV of Nabataea", text: "2 Corinthians 11:32 names an ethnarch under King Aretas guarding Damascus; no external evidence secures Aretas's political control of the city itself. Aretas died c. AD 40, so if the episode falls under his reign, the escape — and the conversion three years earlier — is usually placed no later than the late 30s." },
     { name: "Claudius' expulsion of Jews from Rome", text: "Suetonius records the expulsion; Orosius dates it to AD 49. Aquila and Priscilla, 'lately come from Italy' when Paul reaches Corinth, fit that year." },
     { name: "The change of procurator", text: "Felix was recalled and Festus arrived c. AD 59 (Josephus). Acts 24:27 gives Paul two years at Caesarea before that change, and Acts 27 begins the voyage in the same autumn." },
     { name: "The Judean famine", text: "Josephus dates a severe famine under Claudius to c. AD 46–48, matching Agabus' prophecy and the relief visit of Acts 11:27–30." }

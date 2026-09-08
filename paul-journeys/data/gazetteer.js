@@ -1,8 +1,9 @@
 /* Gazetteer apparatus: ancient name forms, identification confidence, elevation,
    ancient testimony (with citations), the site's later Christian history, and a
-   Wikipedia title used to pull a photograph at runtime.
+   Wikipedia title used only to link out to that site's article (no image is fetched).
    type: "quote" = short verbatim quotation; "summary" = my précis of the cited passage. */
-window.PAUL_GAZ = {
+window.PAUL_GAZ = window.PAUL_GAZ || {};
+Object.assign(window.PAUL_GAZ, {
 
 tarsus: { names: { greek: "Ταρσός", latin: "Tarsus", other: "Assyrian Tarzi" },
   confidence: { level: "secure", basis: "Continuously inhabited under the same name; the Gözlükule mound and the Roman street are in the modern city." },
@@ -19,7 +20,7 @@ jerusalem: { names: { greek: "Ἱεροσόλυμα", latin: "Hierosolyma", othe
   later: "Levelled by Titus in AD 70 and refounded as a pagan colony in 135; a Christian city from Constantine, and continuously contested since. The Herodian retaining walls Paul knew still stand.",
   sources: [
     { who: "Josephus, Jewish War 5.184–247", type: "summary", text: "Josephus describes the temple, its courts and the barrier beyond which Gentiles could not pass on pain of death — the charge later laid against Paul." },
-    { who: "The Soreg inscription (Istanbul Archaeological Museum)", type: "summary", text: "A Greek notice from the temple balustrade: no foreigner is to enter within the enclosure, and whoever is caught has himself to blame for his death. One complete tablet was found in 1871 (Istanbul Archaeological Museums) and a fragment later in Jerusalem — the only surviving physical words of the barrier at the centre of Paul's arrest." },
+    { who: "The Soreg inscription (Istanbul Archaeological Museum)", type: "summary", text: "A Greek notice from the temple balustrade: no foreigner is to enter within the enclosure, and whoever is caught has himself to blame for his death. One complete tablet was found in 1871 (Istanbul Archaeological Museums) and a second, fragmentary exemplar later in Jerusalem — the surviving physical words of the barrier at the centre of Paul's arrest." },
     { who: "Josephus, Antiquities 20.169–172", type: "summary", text: "An Egyptian 'false prophet' led thousands into the desert and was crushed by Felix — the man the tribune mistakes Paul for in Acts 21:38." }] },
 
 damascus: { names: { greek: "Δαμασκός", latin: "Damascus", other: "Aramaic Dammasq" },
@@ -158,7 +159,7 @@ caesarea: { names: { greek: "Καισάρεια", latin: "Caesarea Maritima", ot
   later: "Home of Origen's library and of Eusebius, the first church historian, whose account of Paul's death is our earliest connected one. Destroyed in 1265 and left as ruins.",
   sources: [
     { who: "Josephus, Antiquities 15.331–341; War 1.408–415", type: "summary", text: "Josephus describes Herod's harbour built with hydraulic concrete sunk in 20 fathoms, the temple to Rome and Augustus, the theatre and the sewers flushed by the sea." },
-    { who: "The Pilate inscription (Israel Museum)", type: "summary", text: "A dedication naming Pontius Pilate, prefect of Judea, reused in the theatre — the only inscription of the man, from the city that governed Paul's imprisonment." },
+    { who: "The Pilate inscription (Israel Museum)", type: "summary", text: "A dedication naming Pontius Pilate, prefect of Judea, reused in the theatre — the only widely accepted contemporary inscription yet identified that names him, from the city that governed Paul's imprisonment." },
     { who: "Josephus, War 2.284–292", type: "summary", text: "The revolt of AD 66 began in Caesarea with a synagogue dispute — seven years after Paul sailed from its harbour." },
     { who: "Eusebius, Ecclesiastical History 2.22", type: "summary", text: "Eusebius reports the tradition that Paul was released after the Acts 28 imprisonment, travelled again, and was martyred at Rome in a second one under Nero." }] },
 
@@ -239,7 +240,165 @@ myra: { names: { greek: "Μύρα", latin: "Myra", other: "Port: Andriake" },
   sources: [
     { who: "Horrea Hadriani inscription, Andriake", type: "summary", text: "Hadrian's granary at Myra's port, still standing, is direct evidence that the Alexandrian grain fleet used this harbour — as Acts 27:6 requires." },
     { who: "Appian, Civil Wars 4.82", type: "summary", text: "Appian records Brutus forcing the harbour chain at Myra — a reminder that this was a serious port, not a village." }] }
-};
+});
+
+/* Minor stops and passages — the same apparatus for the places the atlas had left bare.
+   Many are one-line calls in Acts; the grading says how firmly each is fixed on the ground. */
+Object.assign(window.PAUL_GAZ, {
+
+arabia: { names: { greek: "Ἀραβία", latin: "Arabia (later Provincia Arabia)", other: "Nabataea" },
+  confidence: { level: "traditional", basis: "Paul names a region, not a place. The marker sits at Petra, the Nabataean capital, as the region's centre — no site in Arabia is tied to him by any source." },
+  coord: "Petra, for the kingdom as a whole.", elev: 810, wiki: "Nabataean_Kingdom",
+  later: "Annexed by Trajan in AD 106 as Provincia Arabia; Petra declined as trade shifted to Palmyra and the sea routes.",
+  sources: [
+    { who: "Strabo, Geography 16.4.21–26", type: "summary", text: "Strabo describes the Nabataeans as sober, litigious traders governed by a king with a chief minister, growing rich on the incense road." }] },
+
+seleucia: { names: { greek: "Σελεύκεια Πιερία", latin: "Seleucia Pieria", other: "" },
+  confidence: { level: "secure", basis: "The harbour works, city walls and the rock-cut Titus tunnel survive at the named site below Mount Casius." },
+  coord: "Inner harbour basin.", elev: 15, wiki: "Seleucia_Pieria",
+  later: "Silted up and abandoned; the harbour Paul sailed from is now farmland behind the beach.",
+  sources: [
+    { who: "The Titus and Vespasian tunnel inscriptions", type: "summary", text: "A 1.4 km channel cut through solid rock by Roman soldiers and prisoners to divert the flood water that was choking the harbour — begun under Vespasian and finished under Titus, and still walkable." }] },
+
+salamis: { names: { greek: "Σαλαμίς", latin: "Salamis", other: "later Constantia" },
+  confidence: { level: "secure", basis: "Excavated city with gymnasium, theatre and forum on the east coast of Cyprus, named continuously in ancient sources." },
+  coord: "Gymnasium and palaestra.", elev: 5, wiki: "Salamis,_Cyprus",
+  later: "Levelled by earthquakes in the fourth century, rebuilt as Constantia, then abandoned after the Arab raids of the 640s. Barnabas is traditionally buried nearby.",
+  sources: [
+    { who: "Philo, Embassy to Gaius 282", type: "summary", text: "Philo lists Cyprus among the places with substantial Jewish settlement — the synagogues of Acts 13:5 in the plural are what that looked like." }] },
+
+perga: { names: { greek: "Πέργη", latin: "Perge", other: "" },
+  confidence: { level: "secure", basis: "Fully excavated city with colonnaded street, stadium, theatre and Hellenistic gate towers." },
+  coord: "Hellenistic gate and colonnaded street.", elev: 55, wiki: "Perga",
+  later: "A metropolitan see in the Byzantine period; abandoned after the Seljuk period.",
+  sources: [
+    { who: "Strabo, Geography 14.4.2", type: "summary", text: "Strabo notes the temple of Artemis Pergaia on a height above the city, the sanctuary that gave Perga its standing." }] },
+
+attalia: { names: { greek: "Ἀττάλεια", latin: "Attalia", other: "Turkish Antalya" },
+  confidence: { level: "secure", basis: "Living city; the Hellenistic harbour, the city wall and Hadrian's Gate are in place." },
+  coord: "Old harbour, Kaleiçi.", elev: 30, wiki: "Antalya",
+  later: "Continuously inhabited; the Roman harbour is now the yacht basin of a city of over a million." },
+
+cilicianGates: { names: { greek: "Πύλαι Κιλίκιαι", latin: "Pylae Ciliciae", other: "Turkish Gülek Boğazı" },
+  confidence: { level: "secure", basis: "A single unmistakable defile through the Taurus; the ancient roadbed and rock cuttings are still traceable." },
+  coord: "The narrowest point of the pass.", elev: 1050, wiki: "Cilician_Gates",
+  later: "The road of Cyrus, Alexander, the crusaders and the Baghdad Railway. The modern motorway follows the same line.",
+  sources: [
+    { who: "Xenophon, Anabasis 1.2.21", type: "summary", text: "Xenophon describes the pass as a road wide enough for a single wagon, impossible to force if held — the reason armies bargained rather than fought for it." }] },
+
+samothrace: { names: { greek: "Σαμοθρᾴκη", latin: "Samothrace", other: "" },
+  confidence: { level: "secure", basis: "The island and its Sanctuary of the Great Gods are excavated and unambiguous." },
+  coord: "Anchorage below the sanctuary.", elev: 10, wiki: "Samothrace",
+  later: "The sanctuary of the mystery cult was abandoned in the fourth century; the Winged Victory found here in 1863 is in the Louvre.",
+  sources: [
+    { who: "Diodorus Siculus 5.49", type: "summary", text: "Diodorus says initiates of the Samothracian mysteries were held to be safer at sea and better men for it — the cult of the harbour Paul anchored in." }] },
+
+neapolis: { names: { greek: "Νέα Πόλις", latin: "Neapolis", other: "Greek Kavala" },
+  confidence: { level: "secure", basis: "The port of Philippi, named in Acts and in the Via Egnatia itineraries; the ancient harbour underlies the modern one." },
+  coord: "Ancient harbour mole.", elev: 5, wiki: "Kavala",
+  later: "Renamed Christoupolis in the Byzantine period. Paul's first landing in Europe is marked on the quay." },
+
+amphipolis: { names: { greek: "Ἀμφίπολις", latin: "Amphipolis", other: "" },
+  confidence: { level: "secure", basis: "Excavated city on the Strymon with walls, gymnasium and the colossal Lion monument on the road." },
+  coord: "City walls above the Strymon crossing.", elev: 30, wiki: "Amphipolis",
+  later: "A bishopric with four basilicas in the Byzantine period; the great Kasta tomb mound nearby was excavated in 2012–14.",
+  sources: [
+    { who: "Thucydides 4.102–108", type: "summary", text: "Thucydides — who lost his command over its fall — explains why Amphipolis mattered: it controlled the Strymon crossing, the timber and the road east." }] },
+
+apollonia: { names: { greek: "Ἀπολλωνία", latin: "Apollonia Mygdoniae", other: "" },
+  confidence: { level: "probable", basis: "A station on the Via Egnatia named in the itineraries; the ancient site near Nea Apollonia is identified by survey rather than full excavation." },
+  coord: "Roadside settlement by Lake Volvi.", elev: 60, wiki: "Apollonia_(Mygdonia)" },
+
+cenchreae: { names: { greek: "Κεγχρεαί", latin: "Cenchreae", other: "" },
+  confidence: { level: "secure", basis: "The eastern harbour of Corinth, excavated: moles, warehouses and a sanctuary now partly under water." },
+  coord: "Submerged harbour moles.", elev: 2, wiki: "Kechries",
+  later: "Sank with the coastline after the earthquakes of the fourth and sixth centuries; the glass opus sectile panels found in a flooded room are among the finest from the Roman east.",
+  sources: [
+    { who: "Apuleius, Metamorphoses 10.35–11.5", type: "summary", text: "Apuleius sets the climactic Isis procession of his novel on the beach at Cenchreae — the harbour's religious life a generation after Paul cut his hair there." },
+    { who: "Romans 16:1", type: "summary", text: "Paul commends Phebe, a deacon of the church at Cenchreae, to the Romans — the port had a congregation of its own." }] },
+
+assos: { names: { greek: "Ἄσσος", latin: "Assos", other: "Turkish Behramkale" },
+  confidence: { level: "secure", basis: "Excavated acropolis with the Temple of Athena, city walls and harbour below." },
+  coord: "Harbour below the acropolis.", elev: 12, wiki: "Assos",
+  later: "Aristotle taught here for three years in the 340s BC. The Hellenistic walls are among the best preserved in Anatolia." },
+
+mitylene: { names: { greek: "Μυτιλήνη", latin: "Mytilene", other: "" },
+  confidence: { level: "secure", basis: "Living city on Lesbos with excavated Roman theatre and harbours." },
+  coord: "North harbour.", elev: 10, wiki: "Mytilene" },
+
+chios: { names: { greek: "Χίος", latin: "Chios", other: "" },
+  confidence: { level: "secure", basis: "The island is unmistakable; Acts records an overnight anchorage rather than a landing, so no site is claimed." },
+  coord: "Anchorage off the east coast.", elev: 5, wiki: "Chios" },
+
+samos: { names: { greek: "Σάμος", latin: "Samos", other: "" },
+  confidence: { level: "secure", basis: "Island and Heraion excavated; the Acts passage names a passing call." },
+  coord: "Strait between Samos and Mycale.", elev: 5, wiki: "Samos",
+  sources: [
+    { who: "Herodotus 3.60", type: "summary", text: "Herodotus calls the Samian tunnel of Eupalinos, the mole and the temple the three greatest works of the Greeks — the harbour Paul's ship passed was already ancient." }] },
+
+cos: { names: { greek: "Κῶς", latin: "Cos", other: "" },
+  confidence: { level: "secure", basis: "Island city with excavated agora, harbour and the Asklepieion above it." },
+  coord: "Ancient harbour.", elev: 8, wiki: "Kos",
+  later: "The Asklepieion, the great healing sanctuary of Hippocrates' island, was in full use when Paul's ship called." },
+
+rhodes: { names: { greek: "Ῥόδος", latin: "Rhodus", other: "" },
+  confidence: { level: "secure", basis: "The Hellenistic harbour and city plan underlie the medieval town." },
+  coord: "Mandraki harbour.", elev: 10, wiki: "Rhodes",
+  later: "The Colossus had lain broken since the earthquake of 226 BC and was still lying there when Paul passed; Pliny says few could span its thumb." },
+
+ptolemais: { names: { greek: "Πτολεμαΐς", latin: "Ptolemais", other: "Hebrew Akko; Crusader Acre" },
+  confidence: { level: "secure", basis: "Continuously occupied harbour city; Hellenistic and Roman levels excavated beneath the Crusader town." },
+  coord: "Old harbour.", elev: 10, wiki: "Acre,_Israel",
+  later: "The last Crusader capital, lost in 1291; the Hospitaller halls still stand over the Roman city." },
+
+sidon: { names: { greek: "Σιδών", latin: "Sidon", other: "Arabic Saida" },
+  confidence: { level: "secure", basis: "Living city with excavated Phoenician and Roman harbour works and the temple of Eshmun outside it." },
+  coord: "Northern harbour.", elev: 10, wiki: "Sidon",
+  later: "A glassmaking centre through the Roman period; the sea castle on the harbour rock is Crusader.",
+  sources: [
+    { who: "Mark 7:31", type: "summary", text: "Jesus passed through the borders of Sidon a generation earlier — the same coast road Paul's centurion allowed him to break at Sidon to visit friends." }] },
+
+cnidus: { names: { greek: "Κνίδος", latin: "Cnidus", other: "" },
+  confidence: { level: "secure", basis: "Excavated twin harbours at the tip of the Datça peninsula, with the round temple of Aphrodite above." },
+  coord: "Between the twin harbours.", elev: 8, wiki: "Knidos",
+  later: "Famous for Praxiteles' Aphrodite, the first monumental female nude in Greek sculpture, and for the sundial of Eudoxus.",
+  sources: [
+    { who: "Acts 27:7", type: "summary", text: "Luke's 'scarce were come over against Cnidus' is precise sailing: with the wind against them the ship could not turn the headland into the harbour, and had to run south under Crete." }] },
+
+clauda: { names: { greek: "Καῦδα / Κλαῦδα", latin: "Cauda", other: "Greek Gavdos" },
+  confidence: { level: "secure", basis: "A small island south-west of Crete, named in Acts and in the periploi; its lee is exactly where a ship driven by a north-easter would find shelter." },
+  coord: "Southern lee of the island.", elev: 20, wiki: "Gavdos",
+  later: "The southernmost point of Europe; a few dozen inhabitants today." },
+
+syracuse: { names: { greek: "Συράκουσαι", latin: "Syracusae", other: "Italian Siracusa" },
+  confidence: { level: "secure", basis: "Living city with the Greek theatre, the Ear of Dionysius quarry and the Roman amphitheatre excavated in the Neapolis park." },
+  coord: "Great Harbour, Ortygia.", elev: 12, wiki: "Syracuse,_Sicily",
+  later: "Byzantine capital of the west for five years under Constans II; the temple of Athena is now the cathedral, its Doric columns still visible in the walls." },
+
+rhegium: { names: { greek: "Ῥήγιον", latin: "Rhegium", other: "Italian Reggio Calabria" },
+  confidence: { level: "secure", basis: "Living city on the Straits of Messina; Greek walls and Roman baths are exposed along the seafront." },
+  coord: "Waterfront by the Greek walls.", elev: 15, wiki: "Reggio_Calabria",
+  later: "Destroyed by the earthquake of 1908 and rebuilt; the Riace bronzes are in its museum." },
+
+appianWay: { names: { greek: "—", latin: "Forum Appii; Tres Tabernae", other: "" },
+  confidence: { level: "probable", basis: "Both stations are named in Roman itineraries and their positions on the Via Appia are known within a mile or two; neither is fully excavated." },
+  coord: "Forum Appii, 43 Roman miles from Rome.", elev: 12, wiki: "Via_Appia",
+  sources: [
+    { who: "Horace, Satires 1.5", type: "summary", text: "Horace breaks his journey at Forum Appii, a place he says is crammed with boatmen and grasping innkeepers — the canal-side halt where the Roman brethren met Paul." }] },
+
+nicopolis: { names: { greek: "Νικόπολις", latin: "Nicopolis", other: "" },
+  confidence: { level: "secure", basis: "Augustus' victory city near Actium is excavated — walls, odeon, stadium and the victory monument — though Paul's wintering there rests on Titus 3:12 alone." },
+  coord: "City walls near Preveza.", elev: 20, wiki: "Nicopolis",
+  later: "Epictetus taught here after his expulsion from Rome; the city was refounded by Justinian and abandoned after the Slavic incursions." },
+
+spain: { names: { greek: "Ἰβηρία", latin: "Hispania", other: "" },
+  confidence: { level: "traditional", basis: "Paul states the intention (Romans 15:24, 28); 1 Clement says he reached 'the limit of the west'. No site in Spain has any evidence of him. The marker sits at Tarraco, the provincial capital he would have made for." },
+  coord: "Tarraco (Tarragona), provincial capital.", elev: 60, wiki: "Tarraco",
+  sources: [
+    { who: "1 Clement 5", type: "summary", text: "Writing from Rome c. AD 96, Clement says Paul taught righteousness to the whole world and came to the limit of the west before his witness before the rulers — the only near-contemporary hint of a Spanish journey." },
+    { who: "The Muratorian Fragment", type: "summary", text: "A late second-century list refers to Paul's departure from Rome for Spain, showing the tradition was current within a century." }] }
+
+});
 
 /* Approximate elevation profiles for the significant land legs, sampled along the
    ancient road line (metres above sea level). Illustrative, not surveyed. */

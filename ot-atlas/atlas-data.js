@@ -107,8 +107,8 @@ const S = {
   eziongeber:{q:"Tell el-Kheleifeh is the usual identification; Jezirat Faraun in the gulf has also been proposed.",n:"Ezion-geber / Elath",m:"Gulf of Aqaba",c:[35.000,29.550],
     p:"Wilderness camp; later Solomon's Red Sea shipyard for the Ophir trade.",
     r:"Num 33:35; 1 Kgs 9:26; 2 Chr 20:36",
-    a:"Tell el-Kheleifeh and the copper-smelting district of Timna and Faynan show large-scale Iron Age metal production and caravan traffic exactly in Solomon's window."},
-  hormt:{q:"Unlocated. Tell el-Milh and Tell Masos are the usual candidates.",n:"Mount Hor",m:"near Petra, Jordan",c:[35.444,30.329],
+    a:"Tell el-Kheleifeh preserves an Iron Age fort and evidence of regional trade, but reassessment dates its main occupation mainly to the 8th-6th c. BC, later than Solomon; it does not confirm Solomon's shipyard. Its identification as Ezion-geber or Elath remains debated. The nearby Timna and Faynan copper districts show large-scale Iron Age metal production across a broader span."},
+  hormt:{q:"Unlocated. Jebel Harun near Petra is the traditional identification, attested in late antique pilgrimage tradition; other proposals place Mount Hor nearer Kadesh-barnea. Do not confuse Mount Hor with Hormah, for which Tell el-Milh and Tell Masos have been proposed.",n:"Mount Hor",m:"near Petra, Jordan",c:[35.444,30.329],
     p:"Aaron died on the mountain at Edom's border, and Israel turned aside from the King's Highway.",
     r:"Num 20:22–29; 33:37",
     a:"Jebel Harun above Petra carries the traditional tomb; Edomite highland settlement and the copper of Faynan mark a real polity Israel had to negotiate around."},
@@ -124,10 +124,10 @@ const S = {
     p:"Twelve stones from the riverbed, circumcision, the first Passover in the land, and Israel's base camp.",
     r:"Josh 4–5; 1 Sam 11:15",
     a:"Not securely located; several small Iron Age enclosure sites of stone circles east of Jericho have been proposed as the camp of the crossing."},
-  ai:{q:"Et-Tell is the standard identification; Khirbet el-Maqatir is argued by those holding an earlier conquest date.",n:"Ai",m:"et-Tell (or Khirbet el-Maqatir)",c:[35.283,31.917],
+  ai:{q:"Ai is commonly identified with et-Tell, which was largely unoccupied during the Late Bronze Age — a mismatch central to the historical debate. Khirbet el-Maqatir is a minority alternative proposal.",n:"Ai",m:"et-Tell (or Khirbet el-Maqatir)",c:[35.283,31.917],
     p:"Defeat over Achan's hidden plunder, then victory by ambush and a heap of stones.",
     r:"Josh 7–8",
-    a:"et-Tell shows no Late Bronze town, which drives the alternative identification at nearby Khirbet el-Maqatir, where a small fortified Late Bronze site was destroyed by fire."},
+    a:"Neither identification securely connects an excavated destruction to Joshua's narrative; et-Tell's Late Bronze gap is central to the conquest-dating debate."},
   gibeon:{n:"Gibeon",m:"el-Jib",c:[35.184,31.846],
     p:"The treaty won by mouldy bread and worn sandals; then hailstones and the day the sun stood still.",
     r:"Josh 9–10; 2 Sam 2:12–17",
@@ -135,23 +135,23 @@ const S = {
   lachish:{n:"Lachish",m:"Tel Lachish",c:[34.849,31.565],
     p:"Judah's second city and southern shield: taken by Joshua, stormed by Sennacherib, besieged by Babylon.",
     r:"Josh 10:31; 2 Kgs 18:14; Jer 34:7",
-    a:"Sennacherib carved the 701 BC siege on his palace walls at Nineveh — battering rams up an excavated ramp, Judeans led away; the ramp, arrowheads and destruction are all in the ground. The Lachish Letters, ostraca from the last Babylonian siege, mention the signal fires of Azekah going dark."},
+    a:"Sennacherib carved the 701 BC siege on his palace walls at Nineveh — battering rams up an excavated ramp, Judeans led away; the ramp, arrowheads and destruction are all in the ground. The Lachish letters, discussed below, add a documentary voice to the same campaign—see: The Lachish Letters, ostraca from the last Babylonian siege, mention the signal fires of Azekah going dark."},
   hazor:{n:"Hazor",m:"Tel Hazor",c:[35.569,33.018],
-    p:"'The head of all those kingdoms' — the north's great city, burned by Joshua and fortified by Solomon.",
+    p:"'The head of all those kingdoms' — the north's great city. Biblical narrative: Joshua 11 describes Israel burning Hazor; later fortified by Solomon.",
     r:"Josh 11:10–13; 1 Kgs 9:15; Judg 4",
-    a:"A 200-acre Canaanite capital named repeatedly in the Mari and Amarna archives, with palace archives and a violent Late Bronze burn layer; the Iron Age city has a six-chamber gate of the type also at Megiddo and Gezer."},
+    a:"A 200-acre Canaanite capital named repeatedly in the Mari and Amarna archives, with palace archives. Archaeological evidence: a major Late Bronze Age destruction is archaeologically secure, but its agents are not identified by the remains; the Iron Age city has a six-chamber gate of the type also at Megiddo and Gezer."},
   shiloh:{n:"Shiloh",m:"Khirbet Seilun",c:[35.289,32.056],
     p:"The tabernacle's long home: Hannah's vow, Samuel's call, and the ark carried out to disaster.",
     r:"Josh 18:1; 1 Sam 1–4; Jer 7:12",
-    a:"Iron I storerooms with collar-rim jars and a destruction layer around 1050 BC, matching the Philistine catastrophe Jeremiah still cites centuries later as a warning."},
+    a:"Iron I remains include storerooms, collar-rim jars, and evidence of destruction or abandonment. The cause and agents are uncertain; Jeremiah later invokes Shiloh as a ruined sanctuary, but the archaeological remains do not identify the destruction with the Philistines or the loss of the ark."},
   dan:{n:"Dan (Laish)",m:"Tel Dan",c:[35.652,33.249],
     p:"The Danite migration north, Jeroboam's second calf-shrine, and the proverbial northern limit of Israel.",
     r:"Judg 18; 1 Kgs 12:29–30",
     a:"The Tel Dan Stele — an Aramaic victory inscription of c. 840 BC — names the 'king of Israel' and the 'House of David', the earliest extra-biblical reference to David's dynasty. Also here: a Canaanite mudbrick arched gate, a high place with a horned altar, and a Greek-Aramaic dedication 'to the god who is in Dan'."},
   megiddo:{n:"Megiddo",m:"Tel Megiddo",c:[35.184,32.585],
-    p:"The pass that controls the Jezreel plain: Deborah's battle, Solomon's chariot city, Josiah's death.",
+    p:"The pass that controls the Jezreel plain: Deborah's battle, a later chariot city, Josiah's death.",
     r:"Judg 5:19; 1 Kgs 9:15; 2 Kgs 23:29",
-    a:"Some twenty superimposed occupation layers, a six-chamber gate, pillared stable complexes, a great water shaft, and a fragment of Pharaoh Shishak's victory stele — the campaign of 1 Kgs 14:25. Thutmose III's account of his siege here is the oldest detailed battle narrative known."},
+    a:"Some twenty superimposed occupation layers, a six-chamber gate and pillared stable complexes long debated as Solomon's building program (many now assign them to the northern kingdom, often the Omride period), a great water shaft, and a fragment of Pharaoh Shishak's victory stele — the campaign of 1 Kgs 14:25. Thutmose III's account of his siege here is the oldest detailed battle narrative known."},
   bethshean:{n:"Beth-shean",m:"Tel Beit She'an",c:[35.500,32.500],
     p:"Where the Philistines fastened Saul's body to the wall, and the men of Jabesh came by night.",
     r:"1 Sam 31:10–13",
@@ -183,7 +183,7 @@ const S = {
   elah:{n:"Valley of Elah",m:"Wadi es-Sant",c:[34.968,31.687],
     p:"Two armies on facing ridges, a champion's challenge, and five smooth stones from the brook.",
     r:"1 Sam 17",
-    a:"Khirbet Qeiyafa overlooks the valley: a fortified 10th c. Judahite town with two gates and an early Hebrew ostracon, evidence of state-level building at exactly David's date."},
+    a:"Khirbet Qeiyafa overlooks the valley: a fortified early Iron IIA town with two gates, radiocarbon-dated to about the late 11th–early 10th c. BC. Its ostracon's language, reading, and the site's political affiliation remain disputed."},
   bethlehem:{n:"Bethlehem",m:"Bayt Lahm",c:[35.202,31.705],
     p:"Ruth's harvest field, Boaz's kindness, and the town where Samuel anointed the youngest son.",
     r:"Ruth 1–4; 1 Sam 16; Mic 5:2",
@@ -211,7 +211,7 @@ const S = {
   gezer:{n:"Gezer",m:"Tel Gezer",c:[34.920,31.860],
     p:"Given to Solomon as a dowry and rebuilt as a fortress guarding the coastal approach.",
     r:"Josh 16:10; 1 Kgs 9:15–17",
-    a:"A six-chamber Solomonic gate, a row of standing stones, and the Gezer Calendar — a schoolboy's list of the agricultural year in the oldest substantial Hebrew inscription."},
+    a:"A six-chamber gate long attributed to Solomon (its date and royal attribution remain disputed under revised chronologies), a row of standing stones, and the Gezer Calendar — a short agricultural calendar or writing exercise, and the oldest substantial Hebrew inscription."},
   tyre:{n:"Tyre",m:"Sur, Lebanon",c:[35.196,33.271],
     p:"Hiram's cedar, gold and craftsmen for the temple; later the merchant city of Ezekiel's great oracle.",
     r:"1 Kgs 5; Ezek 26–28",
@@ -439,11 +439,11 @@ const S = {
   pasargadae:{n:"Pasargadae",m:"Fars, Iran",c:[53.167,30.194],
     p:"Cyrus' own capital and burial place — the king Isaiah calls God's shepherd and anointed.",
     r:"cf. Isa 44:28; 45:1; Ezra 1",
-    a:"The Cyrus Cylinder (found at Babylon) proclaims the restoration of sanctuaries and the return of displaced peoples and their gods in Mesopotamia — the imperial policy Ezra 1 reports being applied to Judah. Cyrus' own tomb still stands here."},
+    a:"The Cyrus Cylinder (found at Babylon) describes restoration of Babylonian cults and the return of divine images and displaced communities in Mesopotamia. It does not mention Judah or Jerusalem; it provides comparative context for the kind of imperial policy Ezra 1 reports applied to Judah. Cyrus' own tomb still stands here."},
   casiphia:{q:"Unlocated Babylonian place-name from Ezra 8:17; placed approximately.",n:"Casiphia",m:"N. Babylonia",c:[44.900,33.300],
     p:"The Judean settlement where Ezra sent for Levites before the caravan would leave.",
     r:"Ezra 8:17",
-    a:"One of several exile communities named in Ezra alongside Ahava and Tel-abib; the Al-Yahudu tablets show exactly such clustered Judean villages in the countryside."},
+    a:"One of several exile communities named in Ezra alongside Ahava and Tel-abib; the Al-Yahudu tablets document Judean communities in rural Babylonia of this kind."},
   ahava:{q:"An unidentified canal or river in Babylonia; placed approximately.",n:"River Ahava",m:"Babylonian canal",c:[44.100,32.900],
     p:"Ezra's company camped three days by the canal, fasted and set out unescorted.",
     r:"Ezra 8:15–31",
@@ -471,7 +471,7 @@ const S = {
   qeiyafa:{n:"Khirbet Qeiyafa",m:"Elah valley",c:[34.958,31.697],
     p:"A fortified Judahite town looking down on the Elah battlefield, at the dawn of the monarchy.",
     r:"cf. 1 Sam 17",
-    a:"Two gates, casemate walls, no pig bones, cultic rooms without figurines, and an early Hebrew ostracon — argued as evidence for a centralised Judahite state in the 10th c. BC."},
+    a:"Two gates, casemate walls, no pig bones, and cultic rooms without figurines — argued by some as evidence for a centralised Judahite state; the ostracon's language and reading, and the site's ethnic and political attribution, remain disputed."},
   arad:{n:"Arad",m:"Tel Arad",c:[35.126,31.281],
     p:"Negev fortress town on Judah's desert frontier, opposing Israel's approach in Numbers.",
     r:"Num 21:1; Josh 12:14",
@@ -491,7 +491,7 @@ const S = {
   ebla:{n:"Ebla",m:"Tell Mardikh, Syria",c:[36.798,35.798],
     p:"A third-millennium Syrian kingdom whose archives light up the world before Abraham.",
     r:"cf. Gen 10–11",
-    a:"17,000 tablets of administration and treaties in an early Semitic language, naming west-Semitic gods and cities also in Genesis — proof of literate urban Syria long before the patriarchs."},
+    a:"17,000 tablets of administration and treaties in an early Semitic language, naming west-Semitic gods and cities also in Genesis. The archive documents literate urban culture in Syria centuries before the patriarchal narratives, but does not date Genesis or those narratives."},
   nuzi:{n:"Nuzi",m:"Yorghan Tepe, Iraq",c:[44.290,35.380],
     p:"A Mesopotamian town whose family law reads like footnotes to the patriarchal narratives.",
     r:"cf. Gen 15–16; 31",
@@ -520,13 +520,13 @@ const ERAS = [
 
   { id:"patriarchs", name:"The Patriarchs", short:"Patriarchs", dates:"c. 2000–1700 BC",
     books:"Genesis 12–50",
-    narr:"One family walks a promise across the map. Abram leaves a Sumerian city and travels the whole arc of the Fertile Crescent — up the Euphrates, through Haran and Aleppo, down past Damascus into Canaan — because no caravan crossed the Syrian Desert directly. In Canaan the family moves along the hill-country ridge from Shechem to Beersheba, with famine detours into Egypt.",
+    narr:"One family walks a promise across the map. Abram leaves a Sumerian city and travels the whole arc of the Fertile Crescent — up the Euphrates, through Haran and Aleppo, down past Damascus into Canaan — following the river, settlement and caravan corridors around the Crescent; a direct desert crossing was possible under suitable conditions, but the mapped route follows the better-watered corridor traditionally associated with the journey. In Canaan the family moves along the hill-country ridge from Shechem to Beersheba, with famine detours into Egypt.",
     sites:["ur","haran","damascus","shechem","bethel","hebron","beersheba","gerar","sodom","peniel","goshen","dothan","ebla","nuzi","heshbon"],
     regions:[["CANAAN",34.9,32.5],["ARAM",38.6,35.4],["NEGEV",34.9,30.7],["MITANNI",41.0,37.2]],
     focus:[[29.5,27.5],[48.5,38.5]],
     journeys:[
       { name:"Abram's migration", refs:"Gen 11:31 – 13:18", color:"var(--terra)",
-        note:"Up the Euphrates and around the crescent — the only road there was.",
+        note:"Up the Euphrates and around the crescent, following the river corridor — a common reconstructed route, not the only possible one.",
         path:["ur","nippur","babel",V.sippar,V.anah,V.dura,V.tuttul,"haran",V.emar,V.aleppo,"hamath","damascus",V.hazorV,V.galilee,"shechem","bethel","hebron","beersheba"] },
       { name:"Jacob to Haran", refs:"Gen 28:10 – 29:14", color:"var(--indigo)",
         path:["beersheba","bethel",V.ephraim,V.galilee,V.hazorV,"damascus","hamath",V.aleppo,V.emar,"haran"] },
@@ -537,9 +537,9 @@ const ERAS = [
       { name:"Jacob's household goes down", refs:"Gen 46 – 47", color:"var(--plum)",
         path:["hebron","beersheba",V.negevRd,V.raphia,V.arish,V.wayOfSea,V.pelusium,"goshen"] } ] },
 
-  { id:"exodus", name:"Exodus & Wilderness", short:"Exodus", dates:"c. 1450–1400 BC",
+  { id:"exodus", name:"Exodus & Wilderness", short:"Exodus", dates:"undated; traditional models c. 15th or 13th c. BC",
     books:"Exodus – Deuteronomy",
-    caveat:"Dates follow the early (15th-century) chronology of 1 Kgs 6:1; many scholars place the exodus in the 13th century under Ramesses II. The route is likewise reconstructed — only a minority of the wilderness stations in Num 33 can be located with confidence.",
+    caveat:"Traditional early-date model, c. 15th century BC, follows 1 Kgs 6:1. Other reconstructions place an Exodus setting in the 13th century BC under Ramesses II, while many historians treat the narrative as a layered cultural memory that cannot be assigned a single archaeological date. The route is likewise reconstructed — only a minority of the wilderness stations in Num 33 can be located with confidence.",
     narr:"A slave people becomes a nation on the move. Out of the Delta brick-yards, through the reed sea, down the mining road to a mountain in the south where the law is given. Then a failed approach at Kadesh, a generation of circling, and a long swing east around Edom and Moab to the far bank of the Jordan.",
     sites:["goshen","succoth","seacross","marah","sinai","kadesh","eziongeber","hormt","dibon","heshbon","ashteroth","nebo","jericho","arad","beersheba","memphis"],
     regions:[["EGYPT",31.2,29.6],["WILDERNESS OF SHUR",33.2,30.1],["WILDERNESS OF SIN",33.4,29.0],["EDOM",35.4,30.3],["MOAB",35.95,31.35],["MIDIAN",35.6,28.6]],
@@ -554,8 +554,9 @@ const ERAS = [
       { name:"Conquest east of the Jordan", refs:"Num 21:21–35", color:"var(--gold)",
         path:["heshbon",V.gilead,"ashteroth"] } ] },
 
-  { id:"conquest", name:"Conquest & Settlement", short:"Conquest", dates:"c. 1400–1350 BC",
+  { id:"conquest", name:"Conquest & Settlement", short:"Conquest", dates:"narrative setting traditionally 15th–13th c. BC; archaeological transition chiefly late 13th–12th c. BC",
     books:"Joshua",
+    caveat:"No single conquest horizon is agreed. Settlement archaeology shows highland population growth mainly in the late 13th–12th centuries BC, through varied processes rather than one campaign.",
     narr:"Three campaigns divide the land: a wedge driven into the middle at Jericho and Ai, a southern sweep down the Shephelah, and a northern strike at Hazor. Then the fighting stops and the map becomes a list of allotments, with the tabernacle pitched at Shiloh. Turn on the tribal layer to see how the land was parcelled.",
     sites:["nebo","jericho","gilgal","ai","bethel","gibeon","kiriathjearim","lachish","hebron","arad","hazor","megiddo","shechem","shiloh","gezer","dan","bethshean"],
     regions:[["GALILEE",35.35,32.95],["EPHRAIM",35.15,32.15],["JUDAH",34.95,31.45],["PHILISTIA",34.55,31.6]],
@@ -570,7 +571,7 @@ const ERAS = [
       { name:"The tabernacle to Shiloh", refs:"Josh 18:1", color:"var(--gold)",
         path:["gilgal","bethel","shiloh"] } ] },
 
-  { id:"judges", name:"The Judges", short:"Judges", dates:"c. 1350–1050 BC",
+  { id:"judges", name:"The Judges", short:"Judges", dates:"narrative period; archaeological horizon chiefly Iron I, c. 1200–1000 BC",
     books:"Judges, Ruth, 1 Samuel 1–8",
     narr:"No capital, no king — deliverers rise wherever the pressure falls. Deborah and Barak on the Jezreel plain, Gideon against camel raiders, Samson on the Philistine border, the Danites trekking north to Laish. The ark is captured, carried around Philistia and sent home on a cart.",
     sites:["shiloh","aphek","megiddo","jezreel","bethshean","jabesh","peniel","gaza","ashdod","ashkelon","ekron","gath","kiriathjearim","dan","gibeah","bethlehem","ramah","hazor","dothan","shechem","abelmeholah","debir","tabor","harosheth","ophrah","thebez","zorah","eshtaol","timnah","shunem"],
@@ -590,7 +591,7 @@ const ERAS = [
 
   { id:"kingdom", name:"The United Kingdom", short:"United Kingdom", dates:"c. 1050–930 BC",
     books:"1 Samuel 9 – 1 Kings 11",
-    narr:"Saul, David and Solomon pull the tribes into one state and one city. David's rise runs from Bethlehem through the caves of Adullam and exile in Gath to Hebron and finally Jerusalem; Solomon's reach runs out to Phoenician timber, Egyptian marriage and Red Sea shipping, with fortress gates at Hazor, Megiddo and Gezer.",
+    narr:"Saul, David and Solomon pull the tribes into one state and one city. David's rise runs from Bethlehem through the caves of Adullam and exile in Gath to Hebron and finally Jerusalem; Solomon's reach runs out to Phoenician timber, Egyptian marriage and Red Sea shipping. Monumental gate complexes at Hazor, Megiddo and Gezer were once widely assigned to his reign, though their dates and relationship to any centralized tenth-century building program remain debated.",
     sites:["gibeah","ramah","bethlehem","elah","qeiyafa","gath","ziklag","hebron","jerusalem","kiriathjearim","gibeon","endor","gilboa","bethshean","jabesh","megiddo","gezer","hazor","tyre","sidon","eziongeber","rabbah","damascus","arad","dan","beersheba","nob","keilah","engedi","socoh","adullam","mahanaim","tadmor","tamar","shunem"],
     regions:[["ISRAEL",35.5,32.7],["JUDAH",34.95,31.35],["AMMON",36.15,32.0],["PHOENICIA",35.3,33.8],["ARAM-ZOBAH",37.2,34.6]],
     focus:[[33.6,29.3],[37.2,34.2]],
@@ -781,7 +782,7 @@ EVENTS.push(
   // Judah alone & the fall
   {e:"judah",k:"word",t:"Micah of Moresheth",c:[34.917,31.622],r:"Mic 1:1, 14",p:"From a Shephelah village in the invasion corridor, he names the towns Sennacherib will take, one by one."},
   {e:"judah",k:"word",t:"Jeremiah buys a field at Anathoth",c:[35.263,31.812],r:"Jer 32:6–15",p:"With the Babylonians already at the wall, the prophet pays silver for land — a deed sealed for a future nobody could see."},
-  {e:"judah",k:"battle",t:"Only Lachish and Azekah remain",c:[34.936,31.700],r:"Jer 34:7",p:"Of Judah's fenced cities these two still hold; the Lachish letters watch for Azekah's signal fires and do not see them."},
+  {e:"judah",k:"battle",t:"Only Lachish and Azekah remain",c:[34.936,31.700],r:"Jer 34:7",p:"Of Judah's fenced cities these two still hold; Lachish Letter IV reports the writer watching for the signals of Lachish, because Azekah is not seen — often read as evidence Azekah had fallen, though the ostracon does not state its signal fires went dark."},
   // return
   {e:"exile",k:"judgment",t:"Sanballat's invitation to the plain of Ono",c:[34.848,32.023],r:"Neh 6:1–4",p:"Four times they ask Nehemiah down to the border plain; four times he answers that he is doing a great work."},
   {e:"exile",k:"covenant",t:"The Valley Gate rebuilt by Zanoah",c:[34.983,31.714],r:"Neh 3:13",p:"Village crews are assigned wall by wall — men of Zanoah take the gate and a thousand cubits beyond it."}
@@ -880,8 +881,8 @@ const LAKES = {
   "Lake Urmia":[[45.30,38.10],[45.80,37.90],[45.60,37.30],[45.20,37.50]]
 };
 const SEAS = [
-  ["The Great Sea",32.6,34.0,15], ["Red Sea",35.4,25.4,13], ["Gulf of Aqaba",34.6,28.5,9],
-  ["Gulf of Suez",32.9,28.6,9], ["Persian Gulf",49.8,28.4,13], ["Caspian Sea",50.5,39.5,13]
+  ["The Great Sea",32.6,34.0,15], ["Red Sea",35.4,25.4,13], ["Gulf of Aqaba",34.85,28.3,9],
+  ["Gulf of Suez",32.75,29.0,9], ["Persian Gulf",49.8,28.4,13], ["Caspian Sea",50.5,39.5,13]
 ];
 
 /* ---- Modern overlay ---- */
@@ -1095,7 +1096,7 @@ const CAMPAIGNS = [
   { e:"divided", n:"The siege and fall of Samaria", date:"725–722 BC", side:"assyria",
     who:"Shalmaneser V and Sargon II vs Hoshea of Israel",
     r:"2 Kgs 17:1–6; 18:9–12",
-    p:"Hoshea stops paying and looks to Egypt. The capital holds out three years behind its Omride walls, then falls; Sargon's annals claim 27,290 deportees, and settlers from Babylon, Hamath and Avva are moved in.",
+    p:"Hoshea stops paying and looks to Egypt. The capital holds out three years behind its Omride walls, then falls; Sargon's annals claim roughly 27,000 deportees (published editions give closely varying totals, commonly 27,280 or 27,290), and settlers from Babylon, Hamath and Avva are moved in.",
     path:["nineveh",[41.00,36.90],[39.03,36.60],"carchemish",[37.16,36.20],"hamath","damascus",[35.60,32.90],"samaria"],
     battles:[{n:"Samaria, three-year siege",c:[35.192,32.277],r:"2 Kgs 17:5"}],
     out:"The northern kingdom ends; Israel is resettled with foreign populations." },
@@ -1140,7 +1141,7 @@ const CAMPAIGNS = [
   { e:"judah", n:"The final siege of Jerusalem", date:"588–586 BC", side:"babylon",
     who:"Nebuchadnezzar's army vs Zedekiah, with a short-lived Egyptian relief force",
     r:"2 Kgs 25; Jer 34; 37 – 39; 52",
-    p:"Eighteen months of blockade with famine inside. An Egyptian army briefly lifts the siege; the Lachish letters, written as the outposts fall, report the signal fires of Azekah going dark. The wall is breached, the king caught near Jericho, the temple burned and the city walls pulled down.",
+    p:"Eighteen months of blockade with famine inside. An Egyptian army briefly lifts the siege; the Lachish letters, written as the outposts fall, report the writer watching for Lachish's signals because Azekah is not seen — often read as evidence Azekah had fallen. The wall is breached, the king caught near Jericho, the temple burned and the city walls pulled down.",
     path:["babel",[43.30,33.42],[41.96,34.37],[40.14,35.33],[39.00,35.95],"carchemish",[37.16,36.20],"riblah","damascus",[35.60,32.60],"lachish",[34.99,31.75],"jerusalem",[35.44,31.87]],
     battles:[{n:"Lachish and Azekah fall",c:[34.849,31.565],r:"Jer 34:7"},{n:"Jerusalem breached",c:[35.235,31.778],r:"2 Kgs 25:3–4"},{n:"Zedekiah captured near Jericho",c:[35.444,31.871],r:"2 Kgs 25:5"}],
     out:"Temple, palace and walls destroyed; Judah becomes a Babylonian province." },
@@ -1213,7 +1214,7 @@ const FINDS = [
     p:"A whole palace room carved with the storming of Lachish: siege ramp, five battering rams, archers, impaled defenders and files of Judean families leaving with carts. The only detailed contemporary picture of a biblical battle from the attacker's side." },
   { n:"Lachish Letters", e:["judah"], date:"c. 588 BC", found:"Lachish gate-house", c:[34.849,31.565],
     where:"Israel Museum / British Museum", w:"Lachish_letters", r:"Jer 34:7",
-    p:"Ostraca from the guardroom in the last weeks of the kingdom, one reporting 'we are watching for the signals of Lachish… for we cannot see Azekah' — a garrison going dark exactly as Jeremiah names those two cities as the last to hold out." },
+    p:"Ostraca from the guardroom in the last weeks of the kingdom, one reporting 'we are watching for the signals of Lachish… for we cannot see Azekah' — often interpreted as evidence Azekah had fallen, an inference rather than a stated fact, around the time Jeremiah names those two cities as the last to hold out." },
   { n:"Arad Ostraca", e:["judah"], date:"c. 600 BC", found:"Tel Arad", c:[35.126,31.281],
     where:"Israel Museum", w:"Arad_ostraca", r:"Jer 6:1; 2 Kgs 24",
     p:"Military correspondence from a Negev fort: ration orders, troop movements, a warning about Edom, and blessings 'by YHWH'. Statistical study of the handwriting suggests widespread literacy in Judah's army on the eve of the exile." },
@@ -1234,7 +1235,7 @@ const FINDS = [
     p:"A dedication naming five generations of Ekron's kings, including Ikausu (Achish) son of Padi — and Padi is the king Sennacherib says he freed from Hezekiah's custody. Philistine, Assyrian and biblical records lock together." },
   { n:"Gezer Calendar", e:["kingdom"], date:"10th c. BC", found:"Tel Gezer", c:[34.920,31.860],
     where:"Istanbul Archaeological Museums", w:"Gezer_calendar", r:"1 Kgs 9:15–17",
-    p:"A schoolboy's soft-limestone tablet listing the agricultural year month by month — sowing, flax, barley harvest, vine-pruning — one of the earliest substantial Hebrew inscriptions, from a city Solomon rebuilt." },
+    p:"A short limestone inscription listing agricultural activities through the year month by month — sowing, flax, barley harvest, vine-pruning. It may have been a writing exercise, but its function and the identity of its writer are uncertain; one of the earliest substantial Hebrew inscriptions, from a city Solomon rebuilt." },
   { n:"Babylonian Chronicle (Jerusalem)", e:["judah"], date:"c. 595 BC", found:"Babylonia", c:[44.421,32.536],
     where:"British Museum", w:"Nebuchadnezzar_Chronicle", r:"2 Kgs 24:10–17",
     p:"Nebuchadnezzar's official diary of campaigns: in his seventh year he besieged 'the city of Judah' and on the second day of Adar captured it, appointing a king of his own choice. The deportation of 597 BC, dated to the day." },
@@ -1246,7 +1247,7 @@ const FINDS = [
     p:"Some two hundred business documents from 'Judah-town' and nearby villages: Judeans with names like Neriyahu and Rapa-Yahu leasing fields, paying taxes and witnessing contracts across three generations — Jeremiah's instruction to build houses and plant gardens, in the ledgers." },
   { n:"Cyrus Cylinder", e:["exile"], date:"539 BC", found:"Babylon", c:[44.421,32.536],
     where:"British Museum", w:"Cyrus_Cylinder", r:"Ezra 1:1–4; Isa 44:28",
-    p:"Cyrus' own account of taking Babylon peacefully and restoring sanctuaries and displaced peoples to their places. It names Mesopotamian cults rather than Judah, but it is the imperial policy Ezra says was applied to Jerusalem." },
+    p:"Cyrus' own account of taking Babylon peacefully and restoring sanctuaries and displaced peoples to their places. It names Mesopotamian cults rather than Judah; it provides comparative context for the kind of policy Ezra says was applied to Jerusalem." },
   { n:"Elephantine Papyri", e:["exile"], date:"5th c. BC", found:"Elephantine, Aswan", c:[32.889,24.089],
     where:"Berlin / Brooklyn / Cairo", w:"Elephantine_papyri", r:"cf. Jer 44; Neh 2",
     p:"The archive of a Judean garrison colony in Upper Egypt: their own temple to Yahweh, a letter about keeping Passover, marriage contracts, and correspondence with the Persian governor of Judah — diaspora Judaism in its ordinary paperwork." },
@@ -1261,7 +1262,7 @@ const FINDS = [
     p:"Tablet XI carries a flood story with a warned survivor, a great boat, animals aboard, birds sent out and a sacrifice on a mountain — the closest ancient parallel to Genesis, and the sharpest illustration of how differently the two tell it." },
   { n:"Baal Cycle (Ugaritic tablets)", e:["divided"], date:"c. 1300 BC", found:"Ugarit", c:[35.782,35.602],
     where:"Louvre / Damascus / Aleppo", w:"Baal_Cycle", r:"cf. 1 Kgs 18; Ps 29",
-    p:"The mythology of the god Elijah's opponents, in their own scripture: Baal-Hadad the storm god who dies and revives, El the father, Asherah, and poetry whose parallelism is nearly identical in form to the Psalms." },
+    p:"The mythology of the god Elijah's opponents, in their own scripture: in the fragmentary Baal Cycle, Baal-Hadad is overcome by Mot and later returns to power (whether this counts as death-and-resurrection or a seasonal pattern is debated), El the father, Asherah, and poetry whose parallelism is nearly identical in form to the Psalms." },
   { n:"Nuzi Tablets", e:["patriarchs"], date:"15th c. BC", found:"Nuzi (Yorghan Tepe)", c:[44.290,35.380],
     where:"Harvard Semitic Museum / Baghdad", w:"Nuzi", q:"Nuzi tablet", r:"Gen 15 – 16; 31",
     p:"Family law in daily practice: adopting a servant as heir until a son is born, a barren wife providing a slave as surrogate, and inheritance claims tied to possession of the household gods — the legal logic behind Eliezer, Hagar and Rachel's theft of Laban's teraphim." },
@@ -1325,7 +1326,7 @@ const JERUSALEM = {
   ],
   features:[
     { n:"Temple platform", c:[35.2354,31.7784], r:"1 Kgs 6; 2 Chr 3",
-      p:"Solomon's temple stood on the threshing floor David bought from Araunah — the same rock the later platform enshrines.",
+      p:"According to 2 Samuel 24 and Chronicles, the temple was built at the threshing floor David bought from Araunah; its broad location on the Temple Mount is secure in tradition, but its exact footprint and relation to the exposed rock cannot be archaeologically verified.",
       a:"No excavation is possible on the Haram itself; the platform's Herodian courses and the surrounding Ophel digs frame what is known." },
     { n:"Gihon Spring", c:[35.2364,31.7738], r:"1 Kgs 1:33–40; 2 Chr 32:30",
       p:"The city's only perennial water, in the Kidron below the ridge. Solomon was anointed here.",
@@ -1608,10 +1609,10 @@ const PERSON_GUARDS = ["son of","sons of","daughter of","daughters of","house of
 const TOURS = [
   { id:"abram", n:"Abraham's road", sub:"Ur to Beersheba · 8 stops", era:"patriarchs",
     layers:{routes:true, places:true},
-    intro:"The first journey in the Bible is also the longest: a family walks the whole arc of the Fertile Crescent because no caravan crossed the desert in between.",
+    intro:"The first journey in the Bible is also the longest: a family walks the arc of the Fertile Crescent, following the river corridors and water sources ancient travel normally used rather than a direct crossing of the arid interior.",
     stops:[
       {p:"ur",t:"A city, not a tent",d:"Abram's family begins in one of the most sophisticated cities on earth — ziggurat, schools, written contracts. Leaving it is a downgrade in every worldly sense.",r:"Gen 11:31",k:5},
-      {p:"babel",t:"Up the river road",d:"The only way north is the Euphrates. Every stage of the journey follows water, because the land between the rivers and Canaan is waterless steppe.",r:"Gen 11:31",k:4},
+      {p:"babel",t:"Up the river road",d:"The Euphrates river corridor was the common route north. Every stage of the journey follows water, because the land between the rivers and Canaan is largely waterless steppe, though it was not the only possible path.",r:"Gen 11:31",k:4},
       {p:"haran",t:"Terah stops here",d:"Haran is a moon-god city on the Balikh, and the family settles for years. Abram's call comes to a man already halfway to nowhere.",r:"Gen 12:1–4",k:5},
       {p:"damascus",t:"Down through Aram",d:"The road bends south past Aleppo, Hamath and Damascus — the same route armies, exiles and caravans will take for the next fifteen centuries.",r:"Gen 15:2",k:4},
       {p:"shechem",t:"First altar",d:"He enters the land at its centre, in the pass between Ebal and Gerizim, and builds an altar to a God who has promised him ground he does not own.",r:"Gen 12:6–7",k:6},
@@ -1678,7 +1679,7 @@ const TOURS = [
       {p:"carchemish",t:"605 BC: the balance tips",d:"Babylon destroys Egypt's army at the Euphrates crossing. Judah's overlord changes without a single soldier entering Judah.",r:"Jer 46:2",k:6},
       {p:"megiddo",t:"Josiah's last ride",d:"Four years earlier the reforming king had died in this pass trying to stop Egypt marching north. Judah has been on borrowed time since.",r:"2 Kgs 23:29",k:8},
       {p:"jerusalem",t:"597 BC: the first deportation",d:"Three months of siege, then surrender. Ten thousand of the elite go east — including a priest named Ezekiel. The Babylonian Chronicle dates the capture to 2 Adar.",r:"2 Kgs 24:10–17",k:9},
-      {p:"lachish",t:"588 BC: the signal fires go out",d:"Ostraca from this gatehouse report watching for Lachish's signals 'for we cannot see Azekah' — the outposts falling one by one.",r:"Jer 34:7",k:8},
+      {p:"lachish",t:"588 BC: watching for Lachish's signals",d:"Ostraca from this gatehouse report watching for Lachish's signals 'for we cannot see Azekah' — often read as evidence the outposts were falling one by one.",r:"Jer 34:7",k:8},
       {p:"jerusalem",t:"586 BC: the wall is breached",d:"Eighteen months of blockade and famine, a brief Egyptian relief, then the breach, the fire, and the temple vessels carried off.",r:"2 Kgs 25:1–10",k:9},
       {p:"riblah",t:"Sentence at Riblah",d:"The king is caught near Jericho and brought to Nebuchadnezzar's headquarters on the Orontes. His sons are killed in front of him; then his eyes.",r:"2 Kgs 25:6–7",k:6},
       {p:"babel",t:"By the rivers of Babylon",d:"Business tablets from 'Judah-town' show three generations of exiles farming and lending in Babylonia — Jeremiah's advice, in the ledgers.",r:"Ps 137; Jer 29:4–7",k:6}
@@ -1698,7 +1699,7 @@ const TOURS = [
 
 
 /* ============================================================
-   Come, Follow Me — Old Testament, 52 weeks.
+   CFM — Old Testament, 52 weeks.
    Each week names the ground its reading stands on: the era to
    set, the layers worth showing, the places to mark, and one
    note on what the map adds that the text alone does not.
@@ -1707,12 +1708,12 @@ const TOURS = [
 const CFM = [
  {w:1,t:"Introduction to the Old Testament",era:"primeval",lay:"places roads",
   pl:["memphis","jerusalem","babel","nineveh","ur"],box:[[29,23],[55,42]],
-  note:"Start with the shape of the whole board. Israel sits on the only land bridge between the Nile and the Euphrates — which is why almost every empire in this book marches through it. Turn on Trade roads."},
+  note:"Start with the shape of the whole board. Israel sits on the principal overland corridor between the Nile and the Euphrates — which is why so many empires in this book march through it. Turn on Trade roads."},
  {w:2,t:"Moses 1; Abraham 3",era:"patriarchs",lay:"places",pl:["ur","haran"],
   note:"Neither chapter has an earthly setting: one is a mountain vision, one is astronomy. The map can only show where Abraham stood when he received it — the Mesopotamian cities he was called out of."},
  {w:3,t:"Genesis 1–2; Moses 2–3; Abraham 4–5",era:"primeval",lay:"places terrain",
   pl:["ur","nippur","babel"],box:[[38,28],[50,38]],refs:["Gen 2"],
-  note:"Genesis 2 gives Eden two rivers a reader can find: Hiddekel (Tigris) and Euphrates. Turn on Land + rainfall to see why civilisation begins exactly there."},
+  note:"Genesis 2 gives Eden two rivers a reader can find: Hiddekel (Tigris) and Euphrates. Turn on Land + rainfall to see why southern Mesopotamia was one major early center of urban civilization."},
  {w:4,t:"Genesis 3–4; Moses 4–5",era:"primeval",lay:"places",pl:["babel","nippur","ur"],
   refs:["Gen 4"],box:[[40,28],[50,37]],
   note:"Cain goes out 'east of Eden' and builds the first city. The story's centre of gravity is still lower Mesopotamia — the plain of Shinar, not Canaan."},
@@ -1727,7 +1728,7 @@ const CFM = [
  {w:8,t:"Genesis 12–17; Abraham 1–2",era:"patriarchs",lay:"routes places roads",
   pl:["ur","haran","damascus","shechem","bethel","hebron","beersheba","goshen"],
   refs:["Gen 12","Gen 13","Gen 15","Gen 17"],
-  note:"The longest journey in the book, and the reason for it: no caravan crossed the desert, so Abram walks the whole arc of the Crescent to reach a land two weeks' ride from home. Click the Abram route for stage distances."},
+  note:"The longest journey in the book: travel between lower Mesopotamia and the Levant normally followed river corridors, so Abram walks the arc of the Crescent to reach a land two weeks' ride from home; Genesis names Ur, Haran and Canaan but does not preserve his full route. Click the Abram route for stage distances."},
  {w:9,t:"Genesis 18–23",era:"patriarchs",lay:"routes places events",
   pl:["hebron","sodom","engedi","beersheba","gerar","jerusalem"],
   refs:["Gen 18","Gen 19","Gen 22","Gen 23"],
@@ -1746,13 +1747,13 @@ const CFM = [
   note:"Famine drives the family down the Way of the Sea into the Delta — the same road Abraham took, the same road the Exodus will take back out. Note the burial party going the other way in ch. 50."},
  {w:13,t:"Exodus 1–6",era:"exodus",lay:"places events",
   pl:["goshen","memphis","succoth","sinai"],refs:["Exod 1","Exod 2","Exod 3"],
-  note:"Two worlds, four hundred miles apart: the brick-yards of the eastern Delta, and the Midianite pasture at the far end of the peninsula where Moses is hiding when he is called."},
+  note:"Two worlds, three hundred kilometres apart: the brick-yards of the eastern Delta, and the Midianite pasture at the far end of the peninsula where Moses is hiding when he is called."},
  {w:14,t:"Easter",era:"kingdom",lay:"places city",pl:["jerusalem"],
   note:"An Old Testament atlas can still set the stage: turn on the Jerusalem plan (key J) and look at the ridge, the valleys and the temple mount that the Easter story happens on."},
  {w:15,t:"Exodus 7–13",era:"exodus",lay:"places events",
   pl:["goshen","memphis","succoth"],box:[[30.2,28.4],[33.6,31.6]],
   refs:["Exod 7","Exod 12"],
-  note:"The plagues are Delta weather and Delta water pushed to their limits — Nile, hail, locusts, darkness. Zoom into Goshen and stay there; nothing has moved yet."},
+  note:"Several plague scenes draw on Nile, Delta and agricultural imagery familiar from Egypt; the text frames them as divine signs and judgments, and proposed natural mechanisms remain speculative. Zoom into Goshen and stay there; nothing has moved yet."},
  {w:16,t:"Exodus 14–18",era:"exodus",lay:"routes places events distances",
   pl:["succoth","seacross","marah","sinai"],refs:["Exod 14","Exod 16","Exod 17"],
   note:"The crossing point is disputed and the atlas says so. What is not disputed is the shape of the march: reed lagoons on the isthmus, three waterless days, then the long haul south. Turn on Distances."},
@@ -1855,7 +1856,7 @@ const CFM = [
  {w:44,t:"Jeremiah 31–33; 36–38; Lamentations 1; 3",era:"judah",lay:"campaigns places finds",
   pl:["jerusalem","lachish","azekah","mizpah","babel","tahpanhes"],
   refs:["Jer 31","Jer 32","Jer 34","Lam 3"],
-  note:"The Lachish letters were written during these chapters: an officer reports he can no longer see Azekah's signal fires. Turn on Finds and read the ostracon beside the text."},
+  note:"The Lachish letters were written during these chapters: an officer reports watching for Lachish's signals because Azekah is not seen — often read as evidence Azekah had fallen. Turn on Finds and read the ostracon beside the text."},
  {w:45,t:"Ezekiel 1–3; 33–34; 36–37; 47",era:"exile",lay:"places terrain",
   pl:["telabib","babel","nippur","jerusalem","engedi"],
   refs:["Ezek 1","Ezek 37","Ezek 47"],
@@ -1875,7 +1876,7 @@ const CFM = [
  {w:49,t:"Micah; Nahum; Habakkuk; Zephaniah",era:"judah",lay:"campaigns places",
   pl:["moresheth","lachish","jerusalem","nineveh","gaza","ashkelon"],
   refs:["Mic 1","Mic 5","Nah 1","Hab 2","Zeph 2"],
-  note:"Micah 1 is a lament that walks town by town through the Shephelah — his own country, in the path of the Assyrian advance. Nahum watches Nineveh fall from eight hundred miles away."},
+  note:"Micah 1 is a lament that walks town by town through the Shephelah — his own country, in the path of the Assyrian advance. Nahum watches Nineveh fall from five hundred miles away."},
  {w:50,t:"Haggai; Zechariah 1–3; 7–14",era:"exile",lay:"places city finds",
   pl:["jerusalem","mizpah","babel"],refs:["Hag 1","Zech 2","Zech 8","Zech 14"],
   note:"A small province with an unfinished temple. Zechariah's visions measure the city with a line — worth reading with the Jerusalem plan open and the wall still down."},
@@ -1886,6 +1887,40 @@ const CFM = [
   pl:["bethlehem","jerusalem","memphis"],refs:["Mic 5","Isa 9"],
   note:"The Old Testament ends where the Christmas story starts: a village six miles from Jerusalem on the ridge road, and a flight down the old Egypt road when Herod hears."}
 ];
+/* Chronology models: the Exodus/Conquest/Judges date bands are genuinely disputed.
+   Rather than pick one silently, the interface lets a reader choose which model's
+   dates are shown; underlying event/site data never moves between models — only
+   these display strings change. */
+const CHRONO_MODELS = [
+  ["neutral","Both models"],
+  ["early","Traditional (15th c. BC)"],
+  ["late","Archaeological (13th c. BC)"]
+];
+const CHRONO_DATES = {
+  exodus: {
+    neutral: "undated; traditional models c. 15th or 13th c. BC",
+    early: "c. 1450\u20131400 BC (traditional early-date model)",
+    late: "c. 1250\u20131200 BC (Ramesside/archaeological model)"
+  },
+  conquest: {
+    neutral: "narrative setting traditionally 15th\u201313th c. BC; archaeological transition chiefly late 13th\u201312th c. BC",
+    early: "narrative setting c. 1400\u20131350 BC (early-date model); highland settlement archaeology still points to the late 13th\u201312th c. BC",
+    late: "narrative setting c. 1200\u20131150 BC (late-date model); highland settlement archaeology chiefly late 13th\u201312th c. BC"
+  },
+  judges: {
+    neutral: "narrative period; archaeological horizon chiefly Iron I, c. 1200\u20131000 BC",
+    early: "c. 1350\u20131050 BC (narrative span under the early-date model)",
+    late: "c. 1150\u20131000 BC (narrative span under the late-date model); archaeological horizon Iron I, c. 1200\u20131000 BC"
+  }
+};
+/* Numeric year ranges for the timeline chart's Exodus/Conquest/Judges bands, per model —
+   the chart bars must move with the selector, not just the displayed date text. */
+const CHRONO_SPANS = {
+  exodus:   { early:[-1450,-1400], late:[-1250,-1200] },
+  conquest: { early:[-1400,-1350], late:[-1200,-1150] },
+  judges:   { early:[-1350,-1050], late:[-1150,-1000] }
+};
+
 /* Week 1 of the reading year begins the Monday before 1 January. */
 const CFM_START = "2025-12-29";
 
@@ -1939,7 +1974,7 @@ const PREC = {
    at:"A large mound in the Besor streambed, 20 km northwest of Beersheba on the edge of the loess plain."},
  sodom:{cf:"disputed",id:"No site is agreed. Traditional readings place the cities under the shallow southern basin; Bab edh-Dhra and Tall el-Hammam are both argued.",
    at:"The atlas marks the southern Dead Sea basin — the salt flats and the Lisan peninsula, 400 m below sea level."},
- goshen:{el:5,cf:"probable",id:"The eastern Delta district; Tell el-Dab'a (Avaris) shows exactly the Asiatic settlement the texts describe.",
+ goshen:{el:5,cf:"probable",id:"The eastern Delta district; Tell el-Dab'a (Avaris) supplies comparative evidence for Levantine settlement here, but cannot identify biblical Israelites or locate Goshen precisely.",
    at:"The farmland around Faqus in the eastern Nile Delta, 100 km northeast of Cairo, on the old Pelusiac branch."},
  memphis:{el:20,cf:"secure",id:"Named in Egyptian, Greek and Hebrew sources; the necropolis is unmistakable.",
    at:"Mit Rahina and the Saqqara plateau, 25 km south of Cairo on the west bank."},
@@ -1961,7 +1996,7 @@ const PREC = {
    at:"A small steep mound at the foot of the Judean escarpment, 10 km north of the Dead Sea and 258 m below sea level — the lowest city on earth."},
  gilgal:{cf:"disputed",id:"Several camps bear the name; no excavated site is agreed for the Joshua 4 Gilgal.",
    at:"The atlas marks the plain east of Jericho, between the mound and the Jordan fords."},
- ai:{el:880,cf:"probable",id:"Et-Tell fits Joshua's topography; its destruction layer is earlier than most Conquest datings, which keeps the question open.",
+ ai:{el:880,cf:"disputed",id:"Et-Tell fits Joshua's topography but was largely unoccupied in the Late Bronze Age; Khirbet el-Maqatir is a minority alternative. Neither is a secure match.",
    at:"A ruin field above Deir Dibwan, 3 km east of Beitin, looking down the Wadi el-Jaya toward Jericho."},
  gibeon:{el:720,cf:"secure",id:"Jar handles inscribed gb'n were found in the great pool at el-Jib.",
    at:"The village of el-Jib on a low hill 9 km northwest of Jerusalem, with its rock-cut pool and spring."},
@@ -1991,7 +2026,7 @@ const PREC = {
    at:"A high mound above the Elah streambed, 10 km east of Kiryat Gat, in full view of the Judean hills."},
  elah:{cf:"secure",id:"The valley is a landform, and the towns named on both its sides are located.",
    at:"The broad streambed between Socoh and Azekah, 25 km southwest of Jerusalem — the road from Philistia into the Judean hills."},
- qeiyafa:{el:325,cf:"probable",id:"Excavated tenth-century fortress with two gates; its biblical name is debated (Shaaraim is proposed).",
+ qeiyafa:{el:325,cf:"probable",id:"Excavated early Iron IIA fortress with two gates, radiocarbon-dated to the late 11th–early 10th c. BC; its biblical name is debated (Shaaraim is proposed), as is its ostracon's language and the site's political affiliation.",
    at:"A walled hilltop on the north side of the Elah valley, directly opposite Socoh."},
  socoh:{cf:"probable",id:"Khirbet Abbad preserves the name and the position 1 Samuel 17 requires.",
    at:"A hill on the south side of the Elah valley, above the modern Beit Shemesh–Hebron road."},
@@ -2103,7 +2138,7 @@ const PREC = {
  kiriathjearim:{cf:"probable",id:"Deir el-Azar above Abu Ghosh is the usual identification.",
    at:"A hilltop above the Jerusalem–Tel Aviv road, 13 km west of the Old City."},
  gezer:{cf:"secure",id:"Boundary stones inscribed 'boundary of Gezer' were found around the mound.",
-   at:"Tel Gezer above the Ayalon valley, guarding the road up from the coast — one of Solomon's three fortresses."},
+   at:"Tel Gezer above the Ayalon valley, guarding the road up from the coast; its gate was once grouped with Hazor and Megiddo as a Solomonic building program, a link now debated."},
  aphek:{cf:"secure",id:"Tel Afek at the Yarkon springs; named in Egyptian and Assyrian sources.",
    at:"Beside the source of the Yarkon at Rosh HaAyin, where the coastal road narrows to a 2 km gap between river and hills."},
  jabesh:{cf:"probable",id:"Tell el-Maqlub in the Wadi Yabis is the usual candidate.",
@@ -2132,7 +2167,7 @@ const PREC = {
    at:"Ras Shamra on the Syrian coast, 11 km north of Latakia, 1 km inland from the sea."},
  ebla:{cf:"secure",id:"Named in its own cuneiform archive of some 17 000 tablets.",
    at:"Tell Mardikh, 55 km southwest of Aleppo on the road to Hama."},
- nuzi:{cf:"secure",id:"Named in its own tablets, whose family law parallels the patriarchal narratives.",
+ nuzi:{cf:"secure",id:"Named in its own tablets. Its family law offers broad ancient Near Eastern legal analogies to the patriarchal narratives, not a unique or exclusive chronological marker — similar practices persisted across regions and periods.",
    at:"Yorghan Tepe, 13 km southwest of Kirkuk in northern Iraq."},
  marah:{cf:"disputed",id:"Ain Hawara is the traditional spot; the wilderness stations cannot be fixed with confidence.",
    at:"The atlas marks the Gulf of Suez coastal route, three days' march south of the crossing."},

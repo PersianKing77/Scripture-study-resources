@@ -4,12 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; form-action 'self';
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
+  font-src 'self' https://fonts.gstatic.com;
+  img-src 'self' data: blob:;
+  connect-src 'self';
+  object-src 'none'; frame-src 'none'">
 <title>The Journeys of Paul — An Interactive Study Atlas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0" crossorigin="anonymous"></script>
 <style>
   :root {
     --ink: #0e1418;
@@ -21,6 +29,9 @@
     --muted: #8d9a9c;
     --gold: #c9a227;
     --gold-dim: #8a7220;
+    --warn: #d99a7c;
+    --caution: #d9b45c;
+    --carrier: #d7a3bd;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: var(--ink); color: var(--parch);
@@ -35,8 +46,7 @@
   #app { display: grid; height: 100%;
     grid-template-columns: 306px 1fr 0px;
     grid-template-rows: 58px 1fr 196px;
-    grid-template-areas: "head head head" "rail map detail" "foot foot foot";
-    transition: grid-template-columns .28s ease; }
+    grid-template-areas: "head head head" "rail map detail" "foot foot foot"; }
   #app.detail-open { grid-template-columns: 306px 1fr 430px; }
 
   /* ---------- header ---------- */
@@ -66,10 +76,22 @@
     font-family: "IBM Plex Mono", monospace; }
   .res p { margin: 3px 0 0; font-size: 12px; color: var(--parch-dim); line-height: 1.45; }
   .res mark { background: #4a3c10; color: #f0d980; }
-  .tools { display: flex; gap: 7px; margin-left: auto; flex: none; max-width: 62%; overflow-x: auto;
+  .tools { display: flex; gap: 7px; margin-left: auto; flex: 0 1 auto; min-width: 0; overflow: hidden;
     scrollbar-width: none; }
   .tools::-webkit-scrollbar { height: 0; }
-  header { overflow: hidden; }
+  header { overflow: visible; }
+  /* overflow menu: buttons that will not fit the header move in here */
+  /* always-visible controls: never collapse into the More menu */
+  .pinned { display: flex; gap: 7px; flex: none; }
+  .morewrap { position: relative; flex: none; display: none; }
+  .morewrap.on { display: block; }
+  .moremenu { position: absolute; top: calc(100% + 6px); right: 0; display: none; flex-direction: column;
+    gap: 4px; min-width: 178px; max-height: calc(100vh - 74px); overflow-y: auto;
+    padding: 7px; background: var(--ink-2); border: 1px solid var(--line);
+    border-radius: 4px; box-shadow: 0 18px 40px #000b; z-index: 950; }
+  body.railfocus #rail > .tools { display: none; }
+  .moremenu.open { display: flex; }
+  .moremenu button.tool { text-align: left; width: 100%; }
   button.tool { background: var(--ink); border: 1px solid var(--line); color: var(--parch-dim);
     font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .1em;
     text-transform: uppercase; padding: 7px 11px; border-radius: 3px; cursor: pointer; white-space: nowrap; }
@@ -83,6 +105,7 @@
     text-transform: uppercase; color: var(--muted); padding: 15px 16px 7px; }
   .jrow { display: flex; align-items: flex-start; gap: 9px; padding: 9px 14px; cursor: pointer;
     border-left: 3px solid transparent; }
+  .jrow:focus-visible, .stop:focus-visible, .res:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
   .jrow:hover { background: var(--ink-3); }
   .jrow.active { background: #1c262b; }
   .jswatch { width: 12px; height: 12px; border-radius: 50%; flex: none; margin-top: 4px;
@@ -100,14 +123,14 @@
     padding-top: 2px; text-align: right; }
   .stop .nm { color: var(--parch-dim); }
   .stop.now .nm { color: var(--gold); }
-  .stop .mode { color: #5f7079; font-size: 10px; }
+  .stop .mode { color: var(--muted); font-size: 10px; }
   .railnote { padding: 12px 16px; font-size: 11.5px; color: var(--muted); line-height: 1.5;
     border-top: 1px solid var(--line); margin-top: 8px; }
 
   /* ---------- map ---------- */
-  #map { grid-area: map; background: #0b1013; position: relative; }
+  #map { grid-area: map; background: #7fa0a6; position: relative; }
   .leaflet-tile-pane { filter: saturate(1.3) contrast(1.06) brightness(.95) sepia(.07); }
-  .leaflet-container { background: #0b1013; font-family: "IBM Plex Sans", sans-serif; }
+  .leaflet-container { background: #7fa0a6; font-family: "IBM Plex Sans", sans-serif; }
   .leaflet-bar a, .leaflet-control-attribution { background: #16202688 !important; color: #b9c3c0 !important;
     border-color: #2b3a42 !important; }
   .leaflet-control-attribution a { color: var(--gold) !important; }
@@ -115,14 +138,23 @@
     border-radius: 2px; font-family: "EB Garamond", serif; font-size: 13px; color: #f7efdc;
     text-shadow: none; padding: 1px 5px 2px; white-space: nowrap; }
   .plabel.small { font-size: 11.5px; color: #e2dac6; background: #0e1418c9; padding: 0 4px 1px; }
+  /* Gospel-era sites read cool against Paul's parchment labels */
+  .plabel.gospel { color: #dff0f6; border-color: #a9d2e04d; background: #0b1720e8; }
+  .plabel.gospel.small { color: #c6dfe9; background: #0b1720cc; }
   .leaflet-tooltip-left.plabel::before, .leaflet-tooltip-right.plabel::before { display: none; }
   .marker-dot { border-radius: 50%; }
   .pulse { animation: pulse 1.8s ease-out infinite; transform-origin: center; }
   @keyframes pulse { 0% { r: 7; opacity: .9 } 100% { r: 20; opacity: 0 } }
+  @media (prefers-reduced-motion: reduce) {
+    .pulse { animation: none !important; }
+    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  }
 
   /* ---------- detail ---------- */
   #detail { grid-area: detail; background: var(--ink-2); border-left: 1px solid var(--line);
     overflow-y: auto; display: none; }
+  /* No transition on the grid track and no entrance animation with a hidden from-state:
+     an interpolating track or a stalled clock must never be able to hide the panel. */
   #app.detail-open #detail { display: block; }
   .dhead { padding: 16px 20px 14px; border-bottom: 1px solid var(--line); position: sticky; top: 0;
     background: linear-gradient(180deg, #1b262c, #151e24); z-index: 5; }
@@ -177,9 +209,12 @@
     margin-top: -19px; cursor: ew-resize; box-shadow: 0 0 8px #c9a22788; }
   #scrub::-moz-range-thumb { width: 3px; height: 30px; border: none; background: var(--gold); }
   .ticks { position: absolute; left: 0; right: 0; bottom: -3px; height: 14px; }
-  .tick { position: absolute; font-family: "IBM Plex Mono", monospace; font-size: 9px; color: #63757c;
+  .tick { position: absolute; font-family: "IBM Plex Mono", monospace; font-size: 9px; color: var(--muted);
     transform: translateX(-50%); }
   .tick::before { content: ""; position: absolute; left: 50%; top: -6px; width: 1px; height: 4px; background: #3b4c54; }
+  /* a Gospel-era lesson week: Paul's clock does not apply, so the bands step back */
+  body.gweek .bands, body.gweek #year { opacity: .3; }
+  body.gweek #eventlabel { color: var(--parch); }
 
   /* ---------- modal ---------- */
   .modal { position: fixed; inset: 0; background: #060a0cd9; display: none; z-index: 1000;
@@ -213,8 +248,30 @@
     border: 1px solid var(--line); border-radius: 3px; padding: 1px 5px; }
   /* rail tabs, layers, reading plan */
   #btnMenu { display: none; }
+  .railtoggle { display: none; width: 100%; background: none; border: none;
+    border-bottom: 1px solid var(--line); color: var(--muted); cursor: pointer; min-height: 46px;
+    font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .14em;
+    text-transform: uppercase; text-align: left; padding: 0 16px; }
+  .railtoggle.on { color: var(--gold); }
+  .viewtoggle { display: none; }
+  .viewtoggle.on { color: var(--gold); border-color: var(--gold-dim); }
+  /* bottom action bar — phone and tablet portrait only; one button always returns to the map */
+  #tabbar { grid-area: bar; display: none; grid-auto-flow: column; grid-auto-columns: 1fr;
+    border-top: 1px solid var(--line); background: var(--ink-2); z-index: 830;
+    padding-bottom: env(safe-area-inset-bottom, 0); }
+  #tabbar button { background: none; border: none; color: var(--muted); cursor: pointer;
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; letter-spacing: .12em;
+    text-transform: uppercase; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 3px; min-height: 44px; padding: 0; }
+  #tabbar button b { font-family: "EB Garamond", serif; font-size: 17px; font-weight: 400;
+    line-height: 1; letter-spacing: 0; }
+  #tabbar button.on { color: var(--gold); }
+  body.light #tabbar { background: var(--ink-2); }
   .railtabs { display: flex; border-bottom: 1px solid var(--line); position: sticky; top: 0;
     background: var(--ink-2); z-index: 3; }
+  #railClose { flex: 0 0 auto; width: 40px; min-height: 40px; background: none; border: none;
+    border-left: 1px solid var(--line); color: var(--muted); font-size: 19px; cursor: pointer; }
+  #railClose:hover { color: var(--gold); }
   .rtab { flex: 1; background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted);
     font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
     padding: 11px 4px; cursor: pointer; }
@@ -243,10 +300,16 @@
   .letterlabel .carrier { display: block; font-family: "IBM Plex Mono", monospace; font-size: 8.5px;
     letter-spacing: .1em; text-transform: uppercase; color: #d7a3bd; margin-top: 1px; }
 
+  /* land, drawn from a static public-domain coastline file (Natural Earth via world-atlas), not
+     a live tile service — no per-request usage policy applies, and it renders even if the fetch
+     that loads it fails (see .notiles fallback below). */
+  .landmass { fill: #d8cca4; stroke: #7a6a45; stroke-width: .8; fill-opacity: 1; stroke-opacity: .8; }
+
+
   /* no basemap available (offline): a plain sea ground, so routes and labels still read */
   body.notiles #map { background:
-      repeating-linear-gradient(0deg, #17262e 0 1px, transparent 1px 56px),
-      repeating-linear-gradient(90deg, #17262e 0 1px, transparent 1px 56px), #0d1a20; }
+      repeating-linear-gradient(0deg, #a9c1c7 0 1px, transparent 1px 56px),
+      repeating-linear-gradient(90deg, #a9c1c7 0 1px, transparent 1px 56px), #b7cdd2; }
   body.notiles #map .leaflet-tile-pane { display: none; }
   body.notiles #map::before { content: "No basemap — offline. Routes, cities and every article still work.";
     position: absolute; left: 50%; transform: translateX(-50%); bottom: 12px; z-index: 700;
@@ -314,7 +377,7 @@
   body.present .jrow .jname { font-size: 18px; }
   body.present .ritem .rttl { font-size: 18px; }
   body.present .cfmrow .cname { font-size: 17px; }
-  /* Come, Follow Me */
+  /* study weeks */
   .cfmbar { display: flex; gap: 6px; padding: 0 16px 10px; }
   .cfmbar button { flex: 1; }
   .cfmbar button.wide { flex: 1.6; }
@@ -334,7 +397,6 @@
   #focusbadge { position: absolute; left: 50%; transform: translateX(-50%); top: 12px; z-index: 700;
     display: none; align-items: center; gap: 10px; background: #12181ceb; border: 1px solid var(--gold-dim);
     border-radius: 3px; padding: 7px 9px 7px 13px; box-shadow: 0 8px 26px #0009; max-width: min(620px, 88vw); }
-  #focusbadge.on { display: flex; }
   #focusbadge .fl { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; letter-spacing: .14em;
     text-transform: uppercase; color: var(--gold); }
   #focusbadge .ft { font-family: "EB Garamond", serif; font-size: 15px; color: var(--parch);
@@ -343,6 +405,58 @@
     font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .08em; border-radius: 2px;
     padding: 5px 8px; cursor: pointer; }
   #focusbadge button:hover { border-color: var(--gold-dim); color: var(--gold); }
+  /* comparison badge — same shell as the lesson-focus badge, sits below it */
+  #cmpbadge { position: absolute; left: 50%; transform: translateX(-50%); top: 12px; z-index: 700;
+    display: none; align-items: center; gap: 10px; background: #12181ceb; border: 1px solid var(--gold-dim);
+    border-radius: 3px; padding: 7px 9px 7px 13px; box-shadow: 0 8px 26px #0009; max-width: min(660px, 90vw); }
+  #cmpbadge.on { display: flex; }
+  #cmpbadge .fl { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--gold); }
+  #cmpbadge .ft { font-family: "EB Garamond", serif; font-size: 15px; color: var(--parch);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #cmpbadge button { background: none; border: 1px solid var(--line); color: var(--parch-dim);
+    font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .08em; border-radius: 2px;
+    padding: 5px 8px; cursor: pointer; white-space: nowrap; }
+  #cmpbadge button:hover, #cmpbadge button.on { border-color: var(--gold-dim); color: var(--gold); }
+  /* quiz badge */
+  #quizbadge { position: absolute; left: 50%; transform: translateX(-50%); top: 12px; z-index: 700;
+    display: none; align-items: center; gap: 10px; background: #12181ceb; border: 1px solid var(--gold-dim);
+    border-radius: 3px; padding: 7px 9px 7px 13px; box-shadow: 0 8px 26px #0009; max-width: min(660px, 90vw); }
+  #quizbadge.on { display: flex; }
+  #quizbadge .fl { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--gold); }
+  #quizbadge .ft { font-family: "EB Garamond", serif; font-size: 17px; color: var(--parch);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #quizbadge button { background: none; border: 1px solid var(--line); color: var(--parch-dim);
+    font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .08em; border-radius: 2px;
+    padding: 5px 8px; cursor: pointer; }
+  #quizbadge button:hover { border-color: var(--gold-dim); color: var(--gold); }
+  #quizbadge.right { border-color: #8fd0a8; }
+  #quizbadge.wrong { border-color: #d99a7c; }
+  /* keyboard focus: visible everywhere, never on mouse clicks */
+  :focus { outline: none; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .skiplink { position: absolute; left: -9999px; top: 0; z-index: 1400; background: var(--ink-2);
+    color: var(--parch); border: 1px solid var(--gold-dim); border-radius: 3px; padding: 8px 12px;
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; }
+  .skiplink:focus { left: 12px; top: 10px; }
+
+  /* ---- first-run tour ---- */
+  .intro { position: fixed; inset: 0; z-index: 1200; display: none; background: #05080ab8; }
+  .intro.on { display: block; }
+  .introcard { position: absolute; width: min(360px, 88vw); background: var(--ink-2);
+    border: 1px solid var(--gold-dim); border-radius: 4px; padding: 18px 20px 15px;
+    box-shadow: 0 26px 70px #000b; }
+  .introcard .istep { font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--gold); }
+  .introcard h3 { font-size: 22px; margin: 5px 0 7px; }
+  .introcard p { font-size: 13.5px; line-height: 1.6; color: var(--parch-dim); margin: 0 0 14px;
+    text-wrap: pretty; }
+  .irow { display: flex; align-items: center; gap: 8px; }
+  .idots { display: flex; gap: 5px; margin-right: auto; }
+  .idots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line); display: block; }
+  .idots i.on { background: var(--gold); }
+  .coach { position: relative; z-index: 1210; box-shadow: 0 0 0 2px var(--gold), 0 0 40px #c9a22755; }
 
   /* tables */
   table.chron { width: 100%; border-collapse: collapse; font-size: 12.5px; }
@@ -387,7 +501,7 @@
   .ctxlanes { margin-top: 15px; display: grid; gap: 6px; }
   .lane { position: relative; height: 15px; }
   .lane .lbl { position: absolute; left: 0; top: 1px; font-family: "IBM Plex Mono", monospace;
-    font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: #63757c; white-space: nowrap; }
+    font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
   .lane .strip { position: absolute; left: 96px; right: 0; top: 0; bottom: 0; }
   .seg { position: absolute; top: 0; height: 15px; border-radius: 2px; overflow: hidden;
     text-overflow: ellipsis; font-family: "IBM Plex Mono", monospace; font-size: 8.5px; line-height: 15px;
@@ -443,7 +557,18 @@
     .brand { font-size: 18px; }
     button.tool { padding: 7px 8px; letter-spacing: .06em; }
   }
-  @media (max-width: 1080px) and (min-width: 761px) {
+  /* tablet-class widths: the timeline is collapsible there too, from the rail */
+  @media (max-width: 1180px) and (min-width: 821px) and (min-height: 541px) {
+    .viewtoggle { display: inline-flex; }
+    body:not(.timeline-on) footer { display: none; }
+    body:not(.timeline-on) #app, body:not(.timeline-on) #app.detail-open {
+      grid-template-rows: 58px 1fr 0px; }
+    body:not(.timeline-on) #detail { bottom: 0; }
+    body.rail-collapsed #app { grid-template-columns: 0px 1fr 0px; }
+    body.rail-collapsed #app.detail-open { grid-template-columns: 0px 1fr 430px; }
+    body.rail-collapsed #rail { display: none; }
+  }
+  @media (max-width: 1080px) and (min-width: 821px) {
     /* the article panel becomes an overlay drawer rather than a grid column, so the map keeps
        its full width and the panel can never be squeezed by the grid */
     #app, #app.detail-open { grid-template: "head head head" 58px "rail map detail" 1fr
@@ -466,24 +591,29 @@
     .res { padding: 13px 12px; }
     .occ { padding: 4px 0; }
   }
-  @media (max-width: 760px) {
-    #app, #app.detail-open { grid-template-columns: 1fr; grid-template-rows: 52px 1fr 78px;
-      grid-template-areas: "head" "map" "foot"; }
+  @media (max-width: 820px) {
+    #app, #app.detail-open { grid-template-columns: 1fr; grid-template-rows: 52px 1fr 0px 58px;
+      grid-template-areas: "head" "map" "foot" "bar"; }
+    body.timeline-on #app, body.timeline-on #app.detail-open {
+      grid-template-rows: 52px 1fr 78px 58px; }
+    body:not(.timeline-on) footer { display: none; }
+    .railtoggle { display: block; }
+    #tabbar { display: grid; }
     .ctxlanes { display: none; }
-    #btnMenu { display: block; }
     .brand { display: inline; font-size: 0; }
     .brand .beta { font-size: 9px; margin-left: 0; }
     header { gap: 8px; padding: 0 10px; }
     .searchwrap { flex: 1 1 auto; min-width: 0; }
-    #rail { position: fixed; top: 52px; bottom: 0; left: 0; width: 288px; max-width: 86vw;
+    #rail { position: fixed; top: 52px; bottom: 58px; left: 0; width: 288px; max-width: 86vw;
       transform: translateX(-101%); transition: transform .26s ease; z-index: 820;
       box-shadow: 12px 0 40px #000a; }
     body.rail-open #rail { transform: none; }
     #rail .tools { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px 20px;
       border-top: 1px solid var(--line); margin-top: 10px; }
-    #detail { position: fixed; top: 52px; left: 0; right: 0; bottom: 78px; border-left: none;
+    #detail { position: fixed; top: 52px; left: 0; right: 0; bottom: 58px; border-left: none;
       border-top: 1px solid var(--line); z-index: 810;
       padding-bottom: env(safe-area-inset-bottom, 0); }
+    body.timeline-on #detail { bottom: 136px; }
     .dhead { padding: 14px 16px 12px; }
     .sect { padding: 14px 16px; }
     #results { max-height: 56vh; }
@@ -503,6 +633,57 @@
     .modal { padding: 10px; }
     table.chron td.bs { display: none; }
   }
+  /* --- phone portrait: panels are a half-height sheet, so the map stays visible above ---
+     Drag-bar at the top of the sheet expands it to full height. */
+  @media (max-width: 820px) and (orientation: portrait) {
+    #detail { top: auto; height: 46vh; bottom: 58px; border-top: 1px solid var(--line);
+      border-radius: 14px 14px 0 0; box-shadow: 0 -20px 44px #000b; }
+    #detail .dhead::before { content: ""; position: absolute; top: 8px; left: 50%; width: 46px;
+      height: 4px; transform: translateX(-50%); border-radius: 3px; background: var(--line); }
+    #detail .dhead { padding-top: 20px; cursor: pointer; }
+    body.timeline-on #detail { height: 44vh; bottom: 136px; }
+    body.sheet-full #detail { height: auto; top: 52px; border-radius: 0; }
+  }
+
+  /* --- phone landscape: the screen is short, so panels go to the left of the map,
+     the chrome thins down, and nothing stacks on top of the canvas --- */
+  @media (max-height: 540px) and (max-width: 1000px) {
+    #app, #app.detail-open { grid-template-columns: 1fr; grid-template-rows: 46px 1fr 0px 46px;
+      grid-template-areas: "head" "map" "foot" "bar"; }
+    body.timeline-on #app, body.timeline-on #app.detail-open {
+      grid-template-rows: 46px 1fr 58px 46px; }
+    body:not(.timeline-on) footer { display: none; }
+    .viewtoggle { display: none; }
+    #tabbar { display: grid; }
+    #tabbar button { font-size: 8.5px; letter-spacing: .1em; min-height: 40px; }
+    #tabbar button b { font-size: 15px; }
+    .ctxlanes, #eventlabel { display: none; }
+    .brand { display: inline; font-size: 0; }
+    header { gap: 8px; padding: 0 10px; }
+    .searchwrap { flex: 1 1 auto; min-width: 0; }
+    #rail { position: fixed; top: 46px; bottom: 46px; left: 0; width: 264px; max-width: 42vw;
+      transform: translateX(-101%); transition: transform .26s ease; z-index: 820;
+      box-shadow: 12px 0 40px #000a; }
+    body.rail-open #rail { transform: none; }
+    #rail .tools { display: flex; flex-wrap: wrap; gap: 5px; padding: 10px 12px 16px;
+      border-top: 1px solid var(--line); margin-top: 8px; }
+    #rail .tools button.tool { flex: 1 1 44%; font-size: 8.5px; padding: 6px 4px; }
+    #detail { position: fixed; top: 46px; bottom: 46px; left: 0; right: auto;
+      width: 46%; min-width: 296px; max-width: 430px; border-left: none;
+      border-right: 1px solid var(--line); box-shadow: 14px 0 40px #000a; z-index: 810; }
+    #focusbadge, #cmpbadge { top: 6px; left: auto; right: 8px; transform: none;
+      max-width: min(300px, 46vw); padding: 5px 7px 5px 10px; }
+    #focusbadge .ft { font-size: 13px; }
+    #focusbadge .fl, #cmpbadge .fl { font-size: 8.5px; }
+    .dhead { padding: 11px 14px 10px; }
+    .dhead h2 { font-size: 20px; }
+    .sect { padding: 11px 14px; }
+    footer { padding: 5px 12px 7px; }
+    #year { font-size: 16px; min-width: 68px; }
+    .prof { height: 30px; }
+    #results { max-height: 44vh; }
+  }
+
   @media (max-width: 420px) {
     .searchwrap::before { display: none; }
     #search { padding-left: 11px; font-size: 12.5px; }
@@ -511,13 +692,98 @@
     #year { font-size: 17px; min-width: 72px; }
     .dhead h2 { font-size: 21px; }
   }
+  /* ================= LIGHT MODE =================
+     Same atlas, daylight palette: warm paper ground, ink text, darker gold so it
+     stays legible on white. Toggled by the Light/Dark button (body.light). */
+  body.light {
+    --ink: #f4efe3;
+    --ink-2: #fdfaf3;
+    --ink-3: #eae2d0;
+    --line: #d5c9b1;
+    --parch: #1a2226;
+    --parch-dim: #3b464b;
+    --muted: #6c7a7f;
+    --gold: #8a6a12;
+    --gold-dim: #b3922f;
+    --muted: #5a686d;
+    --warn: #9c3f2e;
+    --caution: #7d5f14;
+    --carrier: #8d4f74;
+  }
+  body.light a:hover { color: #6d520a; }
+  body.light ::-webkit-scrollbar-thumb { background: #cabda3; }
+  body.light header { background: linear-gradient(180deg, #ffffff, #00000000), var(--ink-2); }
+  body.light .res { border-bottom-color: var(--line); }
+  body.light .res mark { background: #f6e5a6; color: #4a3c10; }
+  body.light button.tool.on { background: #f5e8c2; }
+  body.light .moremenu { box-shadow: 0 18px 40px #3a301c33; }
+  body.light #results, body.light .sheet { box-shadow: 0 22px 60px #3a301c2e; }
+  body.light .jrow.active, body.light .ritem.on { background: #ece3cf; }
+  body.light .witem.on { background: #f3e7c4; }
+  body.light .stop .mode, body.light .tick, body.light .lane .lbl { color: var(--muted); }
+  body.light .tick::before { background: #bdb29c; }
+  body.light #scrub::-webkit-slider-runnable-track { background: #cabda3; }
+  body.light .band.dash { background-image: repeating-linear-gradient(90deg, #0004 0 5px, #0000 5px 10px); }
+  /* map surface */
+  body.light #map, body.light .leaflet-container { background: #dfe6e8; }
+  body.light .leaflet-tile-pane { filter: saturate(1.02) contrast(1.02) brightness(1.03) sepia(.05); }
+  body.light .leaflet-bar a, body.light .leaflet-control-attribution {
+    background: #fdfaf3d9 !important; color: #3b464b !important; border-color: #d5c9b1 !important; }
+  body.light .plabel { background: #fdfaf3ee; border-color: #00000026; color: #1a2226;
+    box-shadow: 0 1px 4px #3a301c33; }
+  body.light .plabel.small { background: #fdfaf3d6; color: #3b464b; }
+  body.light .plabel.gospel { background: #f0f7faee; border-color: #2c5f7526; color: #123243; }
+  body.light .plabel.gospel.small { background: #f0f7fad6; color: #234c5e; }
+  body.light .provlabel { color: #6b5a34; text-shadow: 0 0 4px #fffc, 0 0 8px #fff9; }
+  body.light .letterlabel { background: #f6e9f1f0; border-color: #00000026; color: #3a2436; }
+  body.light .letterlabel .carrier { color: #8d4f74; }
+  body.light.sat .placelabel { background: #0b1013f2; border-color: #ffffff40; }
+  body.light.sat .letterlabel { background: #1d0f1ff5; color: #f0dcc4; }
+  body.light.present .provlabel { color: #4a3f27; }
+  body.light.present #btnPresent { color: #fdfaf3; }
+  /* panels, sheets and tables */
+  body.light .dhead { background: linear-gradient(180deg, #fffdf7, #f6f1e5); }
+  body.light .sect, body.light .statrow, body.light .bmk, body.light .prow,
+  body.light table.chron td { border-bottom-color: var(--line); }
+  body.light .sect p, body.light .help p, body.light .statrow span:last-child,
+  body.light .prow p, body.light .src p, body.light table.chron td { color: #3b464b; }
+  body.light .prow .pref { color: #6c7a7f; }
+  body.light .modal { background: #2b241799; }
+  body.light table.net td.who, body.light .statrow span:last-child { color: #3b464b; }
+  body.light .prow .pref, body.light table.net td { color: #4a565b; }
+  body.light table.net td { border-bottom-color: #e3dac6; }
+  body.light .cell { border-color: #00000014; }
+  body.light table.chron tr.std td.std { background: #c9a2271f; }
+  body.light #focusbadge { background: #fdfaf3f2; box-shadow: 0 8px 26px #3a301c33; }
+  body.light #cmpbadge { background: #fdfaf3f2; box-shadow: 0 8px 26px #3a301c33; }
+  body.light #quizbadge { background: #fdfaf3f2; box-shadow: 0 8px 26px #3a301c33; }
+  body.light .intro { background: #2b241799; }
+  body.light .introcard { box-shadow: 0 26px 70px #3a301c40; }
+  body.light .witem .wo { color: var(--muted); border-color: var(--line); }
+  body.light .conf.secure { color: #2f6b46; border-color: #a9cbb6; }
+  body.light .conf.probable { color: #7d5f14; border-color: #d3bd7e; }
+  body.light .conf.traditional, body.light .conf.unlocated { color: #8a4a2c; border-color: #d8b09b; }
+  body.light .seg { color: #100d06; font-weight: 500; border-color: #00000029; }
+  body.light .seg.now { color: #000; }
+  body.light .mon.on { background: #f5e8c2; }
+  body.light .mon.closed { color: #9c3f2e; border-color: #d8ab9f; }
+  body.light .mon.risky { color: #8a6a12; }
+  body.light .passage .pl { color: #8a6a12; border-bottom-color: #b3922f; }
+  body.light .passage .pl:hover { color: #6d520a; }
+  body.light .prof i { background: linear-gradient(180deg, #c9a227, #8a6a2f); }
+  body.light .evt { background: #b9863a; border-color: #6b4a1c; }
+  body.light body.notiles #map, body.light.notiles #map { background:
+      repeating-linear-gradient(0deg, #cdd9dd 0 1px, transparent 1px 56px),
+      repeating-linear-gradient(90deg, #cdd9dd 0 1px, transparent 1px 56px), #e3ecee; }
+  body.light.notiles #map::before { background: #fdfaf3ee; }
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <button class="tool" id="btnMenu" title="Menu">☰</button>
-    <div class="brand">The Journeys of <span>Paul</span> <em class="beta">Beta</em><small>Interactive Study Atlas · Acts &amp; the Epistles · KJV</small></div>
+    <a class="skiplink" href="#search">Skip to search</a>
+    <button class="tool" id="btnMenu" title="Menu" aria-label="Open the itinerary rail">☰</button>
+    <div class="brand">The Journeys of <span>Paul</span><small>Interactive Study Atlas · Acts &amp; the Epistles · WEB</small><span class="beta">PAID BETA</span></div>
     <div class="searchwrap">
       <input id="search" type="text" placeholder="Search cities, people, scripture, archaeology…" autocomplete="off">
       <div id="results"></div>
@@ -527,19 +793,27 @@
       <button class="tool" id="btnPeople">People</button>
       <button class="tool" id="btnLetters">Letters</button>
       <button class="tool" id="btnDates">Chronology</button>
-      <button class="tool" id="btnCompare">Compare</button>
-      <button class="tool" id="btnCalc">Distance</button>
-      <button class="tool" id="btnMarks">Bookmarks</button>
-      <button class="tool" id="btnNet">Companions</button>
-      <button class="tool" id="btnCFM">Come, Follow Me</button>
-      <button class="tool" id="btnBase" title="Basemap: topographic, satellite, or shaded relief">Map</button>
-      <button class="tool" id="btnPresent" title="Larger type and heavier routes for classroom projection">Present</button>
-      <button class="tool" id="btnUnits">km</button>
-      <button class="tool" id="btnHelp">?</button>
-      <button class="tool" id="btnPrint" title="Printable study sheets">Print</button>
-      <button class="tool" id="btnLink" title="Copy a link to exactly this view">Copy link</button>
-      <button class="tool" id="btnSources">Sources</button>
-      <button class="tool" id="btnAbout">About</button>
+      <button class="tool" id="btnCFM" title="The 52-week New Testament reading year, mapped">Weeks</button>
+      <button class="tool" id="btnCompare" data-secondary>Compare</button>
+      <button class="tool" id="btnCalc" data-secondary>Distance</button>
+      <button class="tool" id="btnMarks" data-secondary>Bookmarks</button>
+      <button class="tool" id="btnNet" data-secondary>Companions</button>
+      <button class="tool" id="btnExport" data-secondary title="Copy a link and print handouts for this view">Export</button>
+      <button class="tool" id="btnQuiz" data-secondary title="Map recall drill">Quiz</button>
+      <button class="tool" id="btnUnits" data-secondary>km</button>
+      <button class="tool" id="btnHelp" data-secondary>?</button>
+      <button class="tool" id="btnSources" data-secondary>Sources</button>
+      <button class="tool" id="btnAbout" data-secondary>About</button>
+      <button class="tool" id="btnLicence" data-secondary>Credits</button>
+      <button class="tool" id="btnPresent" data-secondary title="Larger type and heavier routes for classroom projection">Present</button>
+    </div>
+    <div class="pinned">
+      <button class="tool viewtoggle" id="btnRailToggle" title="Show or hide the index column">Index</button>
+      <button class="tool viewtoggle" id="btnTimeTop" title="Show or hide the timeline">Timeline</button>
+      <button class="tool" id="btnTheme" title="Switch between light and dark">Light</button>
+    </div>
+    <div class="morewrap" id="moreWrap"><button class="tool" id="btnMore" title="More tools">More ▾</button>
+      <div class="moremenu" id="moreMenu"></div>
     </div>
   </header>
 
@@ -547,7 +821,8 @@
     <div class="railtabs">
       <button class="rtab on" data-tab="itin">Itineraries</button>
       <button class="rtab" data-tab="read">Read Acts</button>
-      <button class="rtab" data-tab="cfm">Come, Follow Me</button>
+      <button class="rtab" data-tab="cfm">Weeks</button>
+      <button id="railClose" aria-label="Close index" title="Close index">×</button>
     </div>
     <div class="tabpane" data-pane="itin">
       <div class="railhead">Click a name to focus, ● to hide</div>
@@ -557,6 +832,7 @@
         <label class="lay"><input type="checkbox" data-layer="roads"> Roman roads</label>
         <label class="lay"><input type="checkbox" data-layer="provinces"> Roman provinces</label>
         <label class="lay"><input type="checkbox" data-layer="letters"> Epistles — written &amp; sent</label>
+        <label class="lay"><input type="checkbox" data-layer="gospel"> Gospel sites — the life of Jesus</label>
       </div>
       <div class="railnote" id="railnote"></div>
     </div>
@@ -569,8 +845,8 @@
       <div id="readlist"></div>
     </div>
     <div class="tabpane" data-pane="cfm" hidden>
-      <div class="railhead">Come, Follow Me — New Testament, 52 weeks</div>
-      <select id="cfmsel"></select>
+      <div class="railhead">Study weeks — a reading year through the New Testament</div>
+      <select id="cfmsel" aria-label="Choose a study week"></select>
       <div class="cfmbar">
         <button class="tool" id="cfmPrev">← Week</button>
         <button class="tool" id="cfmNext">Week →</button>
@@ -593,6 +869,22 @@
       <button id="fbNext" title="Next week">→</button>
       <button id="fbExit" title="Leave focus mode">✕</button>
     </div>
+    <div id="cmpbadge">
+      <div style="min-width:0">
+        <div class="fl">Comparing itineraries</div>
+        <div class="ft" id="cbtitle"></div>
+      </div>
+      <button id="cbSwap" title="Show only the cities both journeys touch">Shared only</button>
+      <button id="cbExit" title="Leave comparison">✕</button>
+    </div>
+    <div id="quizbadge">
+      <div style="min-width:0">
+        <div class="fl" id="qzstep">Find the city</div>
+        <div class="ft" id="qztitle"></div>
+      </div>
+      <button id="qzSkip" title="Skip this one">Skip</button>
+      <button id="qzExit" title="End the drill" aria-label="End the drill">✕</button>
+    </div>
   </div>
 
   <aside id="detail"></aside>
@@ -604,14 +896,33 @@
     </div>
     <div class="tl-track">
       <div class="bands" id="bands"></div>
-      <input id="scrub" type="range" min="4" max="69" step="0.02" value="46">
+      <input id="scrub" type="range" min="4" max="69" step="0.02" value="46" aria-label="Year — drag to move through the timeline">
       <div class="ticks" id="ticks"></div>
     </div>
     <div class="ctxlanes" id="ctxlanes"></div>
   </footer>
+
+  <nav id="tabbar" aria-label="Primary">
+    <button id="tbIndex" aria-label="Open the index, weeks and tools"><b>&#9776;</b>Menu</button>
+    <button id="tbMap" class="on" aria-label="Back to the map"><b>&#9678;</b>Map</button>
+    <button id="tbTime" aria-label="Show or hide the timeline"><b>&#9201;</b>Timeline</button>
+  </nav>
 </div>
 
-<div class="modal" id="modal"><div class="sheet">
+<div class="intro" id="intro">
+  <div class="introcard" id="introcard">
+    <div class="istep" id="istep"></div>
+    <h3 id="ititle"></h3>
+    <p id="itext"></p>
+    <div class="irow">
+      <div class="idots" id="idots"></div>
+      <button class="tool" id="iskip">Skip</button>
+      <button class="tool" id="inext">Next</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle"><div class="sheet">
   <div class="sh"><h3 id="mtitle"></h3><button class="tool" id="mclose" style="margin-left:auto">Close</button></div>
   <div class="sb" id="mbody"></div>
 </div></div>
@@ -620,6 +931,8 @@
 <script src="data/places-2.js"></script>
 <script src="data/places-3.js"></script>
 <script src="data/places-4.js"></script>
+<script src="data/gospels.js"></script>
+<script src="data/variants.js"></script>
 <script src="data/journeys.js"></script>
 <script src="data/people.js"></script>
 <script src="data/letters.js"></script>

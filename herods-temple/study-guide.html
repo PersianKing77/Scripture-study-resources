@@ -47,52 +47,129 @@
     .colophon { margin-bottom: 4mm; }
   }
   @media screen { .sheet { padding-bottom: 46px; } }
+
+  /* narration, note space, certainty, curriculum */
+  .narr { font-size: 15px; line-height: 1.5; font-style: italic; color: #5d4d2a;
+    border-left: 3px solid #c8ab55; padding: 2px 0 2px 12px; margin: 0 0 10px; }
+  .lines { margin-top: 9px; }
+  .lines i { display: block; height: 26px; border-bottom: 1px solid #ded3b8; }
+  .lines span { display: block; font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+    color: #8a7042; margin-bottom: 3px; }
+  .cert { float: right; margin-left: 12px; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase;
+    padding: 3px 7px 2px; border: 1px solid #d8cdb2; color: #6b6353; border-radius: 2px; }
+  .cert.attested { border-color: #8fae7a; color: #4f6b3f; }
+  .cert.conjectural { border-color: #c08a70; color: #8a4b32; }
+  .curric { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .curric th { text-align: left; font-weight: 400; font-size: 10px; letter-spacing: .18em;
+    text-transform: uppercase; color: #8a7042; border-bottom: 1px solid #d8cdb2; padding: 4px 10px 4px 0; }
+  .curric td { padding: 6px 10px 6px 0; border-bottom: 1px solid #e6dcc4; vertical-align: top; line-height: 1.4; }
+  .curric td.ref { white-space: nowrap; font-weight: 500; }
+  .curric td.places { color: #57503f; font-size: 13px; }
+  .curric tr { break-inside: avoid; }
+  h4.vol { font-family: "Cormorant Garamond", serif; font-size: 19px; font-weight: 600; margin: 20px 0 4px; }
 </style>
 </head>
 <body>
 <div class="sheet" id="sheet">
-  <div class="lede">Jerusalem &middot; c. 30 CE</div>
-  <h1>Herod’s Temple <span class="beta">Beta</span></h1>
-  <p class="intro">A station-by-station handout to the 3D reconstruction: every location with its description,
-  the scripture read there in the King James Version, the primary sources behind it, and a note wherever
-  those sources disagree. Sources: KJV; Josephus, <i>War</i> and <i>Antiquities</i>; the Mishnah
+  <div class="lede" id="lede">Jerusalem &middot; c. 30 CE</div>
+  <h1 id="h1">Herod’s Temple <span class="beta">Beta</span></h1>
+  <p class="intro" id="intro">A station-by-station handout to the 3D reconstruction: every location with its description,
+  the scripture read there, paraphrased and cited by reference, the primary sources behind it, and a note
+  wherever those sources disagree. Sources: the New Testament; Josephus, <i>War</i> and <i>Antiquities</i>; the Mishnah
   (Middot, Tamid, Yoma, Shekalim, Sukkah, Parah); the Babylonian Talmud.</p>
   <p class="credit">Prepared by Taylor Halverson, Ph.D.</p>
-  <p class="beta-note">Beta &mdash; a work in progress. The reconstruction follows the majority reading of the
-  sources, but dimensions, decoration and the lines of the city walls remain debated; see the notes marked
-  &ldquo;where the sources differ.&rdquo;</p>
+  <p class="beta-note">Beta &mdash; a work in progress. The reconstruction follows Middot for the inner plan, Josephus for elevations and outer works, and Leen Ritmeyer for the platform's building phases and sanctuary placement; dimensions, decoration and the lines of the city walls remain debated; see the notes marked
+  &ldquo;where the sources differ.&rdquo; The ancient sources are not contemporary with each other: the New Testament and Josephus are first-century evidence, the Mishnah was compiled around 200 CE preserving earlier tradition, and the Babylonian Talmud is later still (mainly fifth&ndash;sixth century), so equal-looking citations are not equally close to the destroyed temple.</p>
   <div id="out"></div>
   <div class="colophon">
     <h4>About this handout</h4>
     <p>Prepared by <b>Taylor Halverson, Ph.D.</b>, to accompany <i>Herod’s Temple &mdash; Jerusalem, c. 30 CE</i>,
     an explorable three-dimensional reconstruction of the temple as it stood in the time of Christ. Forty-three
     annotated locations; one hundred sixty-two passages of scripture.</p>
-    <p>Every description is drawn from the King James New Testament, Josephus’ <i>War</i> and <i>Antiquities</i>,
+    <p>Every description is drawn from the New Testament, Josephus’ <i>War</i> and <i>Antiquities</i>,
     the Mishnah (Middot, Tamid, Yoma, Shekalim, Sukkah, Parah) and the Babylonian Talmud, with the disagreements
     among them noted rather than smoothed over.</p>
     <p class="rights">&copy; 2026 Taylor Halverson. All rights reserved. Beta &mdash; a work in progress.
     May be printed for personal study and classroom teaching with attribution retained.</p>
+    <p class="rights">Scripture passages are paraphrased in the author&rsquo;s own words and cited by book,
+    chapter and verse; no modern translation is quoted verbatim, so no translation licence is required.
+    Josephus, the Mishnah and the Talmud are likewise cited by book and line and described in the author&rsquo;s
+    own words. Excavated measurements and
+    the building phases of the platform follow Leen Ritmeyer, <i>The Quest: Revealing the Temple Mount in
+    Jerusalem</i> (Carta, 2006), from Benjamin Mazar&rsquo;s Temple Mount excavations of 1968&ndash;78. The
+    Weekly Reading index is a generic reading-block guide and does not name any single publisher&rsquo;s
+    curriculum; this handout is not affiliated with, endorsed by or
+    sponsored by The Church of Jesus Christ of Latter-day Saints. Rendered with three.js, &copy; 2010&ndash;2025
+    three.js authors, under the MIT License. Set in EB Garamond and Cormorant Garamond (SIL Open Font
+    License 1.1).</p>
   </div>
 </div>
-<div class="runfoot">Herod’s Temple &middot; Jerusalem, c. 30 CE &mdash; prepared by Taylor Halverson, Ph.D. &middot; &copy; 2026</div>
+<div class="runfoot">Herod’s Temple &middot; Jerusalem, c. 30 CE &middot; Project Created by Taylor Halverson, Ph.D. (Beta mode)</div>
 <script type="module">
-import { LABELS, GROUPS, VERSES, typo } from './temple-labels.js';
+import { LABELS, GROUPS, VERSES, PATHS, CERTAINTY, CERT_LEVELS, CURRICULUM, typo } from './temple-labels.js';
 const out = document.getElementById('out');
+const tourKey = new URLSearchParams(location.search).get('tour');
+const tour = tourKey && PATHS[tourKey] ? PATHS[tourKey] : null;
+
+const certTag = id => {
+  const k = CERTAINTY[id] || 'inferred';
+  return `<span class="cert ${k}" title="${CERT_LEVELS[k].blurb}">${CERT_LEVELS[k].name}</span>`;
+};
+const station = (id, opts = {}) => {
+  const L = LABELS[id]; if (!L) return '';
+  const vs = VERSES[id] || [];
+  const nar = opts.narration ? `<p class="narr">${typo(opts.narration)}</p>` : '';
+  const lines = opts.lines ? '<div class="lines"><span>Notes</span><i></i><i></i><i></i></div>' : '';
+  return '<article>' + certTag(id) + '<h3>' + typo(L.title) + '</h3><div class="sub">' + typo(L.sub) + '</div>' + nar +
+    '<p class="body">' + typo(L.body) + '</p>' +
+    (vs.length ? '<ul class="verses">' + vs.map(v => '<li><b>' + typo(v.ref) + '</b>' + typo(v.text) + '</li>').join('') + '</ul>' : '') +
+    '<div class="srcs">' + typo(L.sources.join(' &nbsp;·&nbsp; ')) + '</div>' +
+    (L.note ? '<div class="note"><b>Where the sources differ</b>' + typo(L.note) + '</div>' : '') +
+    lines + '</article>';
+};
+
 let html = '';
-for (const g of GROUPS) {
-  html += '<h2>' + g.name + '</h2>';
-  for (const id of g.ids) {
-    const L = LABELS[id]; if (!L) continue;
-    const vs = VERSES[id] || [];
-    html += '<article><h3>' + typo(L.title) + '</h3><div class="sub">' + typo(L.sub) + '</div>' +
-      '<p class="body">' + typo(L.body) + '</p>' +
-      (vs.length ? '<ul class="verses">' + vs.map(v => '<li><b>' + typo(v.ref) + '</b>' + typo(v.text) + '</li>').join('') + '</ul>' : '') +
-      '<div class="srcs">' + typo(L.sources.join(' &nbsp;·&nbsp; ')) + '</div>' +
-      (L.note ? '<div class="note"><b>Where the sources differ</b>' + typo(L.note) + '</div>' : '') +
-      '</article>';
+if (tour) {
+  document.title = 'Herod’s Temple — ' + tour.name;
+  document.getElementById('lede').textContent = 'A guided sequence · Jerusalem, c. 30 CE';
+  document.getElementById('h1').innerHTML = typo(tour.name) + ' <span class="beta">Beta</span>';
+  document.getElementById('intro').innerHTML =
+    `A teaching handout for one guided sequence through the reconstruction: ${tour.ids.length} stations in the order ` +
+    'the day required, each with the narration used in the model, its description, the scripture passages read there, ' +
+    'the primary sources behind it, and room to write. The full handout to all forty-three locations is the same page without the tour.';
+  html += '<h2>' + typo(tour.name) + ' — ' + tour.ids.length + ' stations</h2>';
+  tour.ids.forEach((id, i) => {
+    html += station(id, { narration: tour.notes && tour.notes[id], lines: true });
+  });
+} else {
+  for (const g of GROUPS) {
+    html += '<h2>' + g.name + '</h2>';
+    for (const id of g.ids) html += station(id);
+  }
+  // how much of each thing is known
+  html += '<h2>How much of this is known</h2>' +
+    '<p class="body">Every station above carries one of three tags. They are not a judgement on the sources but on ' +
+    'the reconstruction: how much of what you see is measured, how much is described, and how much is a defensible guess.</p>' +
+    Object.entries(CERT_LEVELS).map(([k, v]) =>
+      `<p class="body"><span class="cert ${k}">${v.name}</span> ${v.blurb}</p>`).join('');
+  // curriculum index
+  html += '<h2 id="cfm">Where this model does the most work</h2>' +
+    '<p class="body">An index from the reading to the place. The reading calendar rotates volumes and renumbers its weeks ' +
+    'year by year, so this is keyed to the reading block rather than to a week number: find the block, and the ' +
+    'stations named are the ones worth opening in class. Each station name is what appears in the model’s list of places.</p>';
+  for (const vol of CURRICULUM) {
+    html += `<h4 class="vol">${vol.vol}</h4><table class="curric"><thead><tr>` +
+      '<th>Reading</th><th>What it turns on</th><th>Stations in the model</th></tr></thead><tbody>' +
+      vol.blocks.map(b => `<tr><td class="ref">${typo(b.ref)}</td><td>${typo(b.theme)}</td>` +
+        `<td class="places">${b.ids.map(id => LABELS[id] ? typo(LABELS[id].title) : id).join(' · ')}</td></tr>`).join('') +
+      '</tbody></table>';
   }
 }
 out.innerHTML = html;
+if (location.hash) {
+  const t = document.getElementById(location.hash.slice(1));
+  if (t) window.scrollTo(0, t.getBoundingClientRect().top + window.scrollY - 12);
+}
 </script>
 </body>
 </html>

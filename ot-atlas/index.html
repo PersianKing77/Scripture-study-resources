@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>The Old Testament Atlas</title>
+<title>The Old Testament &amp; Intertestamental Atlas</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://gibs.earthdata.nasa.gov; connect-src 'self' https://cdn.jsdelivr.net https://bible-api.com https://gibs.earthdata.nasa.gov; frame-src 'none'; object-src 'none'; base-uri 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -16,30 +17,75 @@
     --gold:#b0842a; --plum:#6d3355;
   }
   *{box-sizing:border-box}
-  header,main,footer{min-width:0; overflow:hidden}
+  header{min-width:0; overflow:visible}
+  main,footer{min-width:0; overflow:hidden}
   html,body{height:100%;margin:0}
   body{
     max-width:100vw; background:var(--parch); color:var(--ink);
     font-family:"EB Garamond",Georgia,serif; font-size:16px;
-    display:grid; grid-template-rows:auto 1fr auto; grid-template-columns:minmax(0,1fr);
+    display:grid; grid-template-rows:auto minmax(300px,1fr) auto; grid-template-columns:minmax(0,1fr);
     height:100vh; overflow:hidden;
   }
   a{color:var(--terra)} a:hover{color:var(--ink)}
-  header{display:flex; align-items:baseline; gap:16px; padding:12px 20px 10px;
+  header{display:flex; align-items:baseline; gap:16px; padding:12px 20px 10px; flex-wrap:wrap;
     border-bottom:1px solid var(--rule); background:linear-gradient(#f4ecda,#eee4d0)}
+  .hdracts2{margin-left:auto; display:flex; align-items:center; gap:8px; min-width:0;
+    overflow-x:auto; scrollbar-width:none; padding-bottom:1px}
+  .hdracts2::-webkit-scrollbar{display:none}
+  .hdracts{display:none}
   header h1{margin:0; font-size:24px; font-weight:600; letter-spacing:.02em; flex:none; white-space:nowrap}
   header .beta{flex:none; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.18em;
     text-transform:uppercase; color:#f4ecda; background:var(--terra); padding:2px 6px; border-radius:2px;
     position:relative; top:-2px}
   header .sub{flex:none; white-space:nowrap; font-family:"IBM Plex Mono",monospace; font-size:12px;
     letter-spacing:.16em; text-transform:uppercase; color:var(--ink-2)}
-  .aboutbtn{margin-left:14px; flex:none; font-family:"IBM Plex Mono",monospace; font-size:9.5px;
+  .aboutbtn{flex:none; font-family:"IBM Plex Mono",monospace; font-size:9.5px;
     letter-spacing:.16em; text-transform:uppercase; color:var(--ink-2); background:#f6efdd;
     border:1px solid var(--line); border-radius:2px; padding:5px 9px; cursor:pointer; white-space:nowrap}
   .aboutbtn:hover{background:#fff; color:var(--ink)}
+  .aboutbtn[aria-pressed="true"]{background:#e3d3b0; border-color:var(--terra); color:var(--terra)}
+  .more{background:none; border:0; padding:0; margin-top:6px; cursor:pointer; color:var(--terra);
+    font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase}
+  .more:hover{color:var(--ink)}
+  .hdrtitle{display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; min-width:0}
+  body.hide-header .hdrtitle{display:none}
+  .ctrlfab{display:none}
+  .x{position:absolute; top:4px; right:7px; border:0; background:none; cursor:pointer; font-size:18px; color:var(--ink-2)}
+  .x:hover{color:var(--ink)}
+  #pane-detail{position:relative}
+  @media (max-width:1280px){
+    header{padding-top:max(9px, env(safe-area-inset-top)); transition:padding .15s ease}
+    body.hide-header header{padding:0; min-height:0; border-bottom:0; background:none}
+    .ctrlfab,.ctrlfab2{display:flex; align-items:center; justify-content:center; position:fixed;
+      top:max(10px, env(safe-area-inset-top)); z-index:81;
+      width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:#f4ecdaf2;
+      color:var(--ink); font-size:16px; line-height:1; cursor:pointer; box-shadow:0 6px 16px #241f1833}
+    .ctrlfab{right:10px}
+    .ctrlfab2{right:50px; border-color:var(--indigo); color:var(--indigo)}
+    .ctrlfab:hover,.ctrlfab2:hover{background:#fff}
+    .ctrlfab[aria-expanded="true"]{background:var(--terra); color:#f4ecda; border-color:var(--terra)}
+    .ctrlfab2[aria-expanded="true"]{background:var(--indigo); color:#f4ecda}
+    .hdracts,.hdracts2{display:none}
+    body.ctrl-open .hdracts,body.ctrl2-open .hdracts2{display:flex; flex-direction:column; align-items:stretch; gap:5px;
+      position:fixed; top:calc(max(10px, env(safe-area-inset-top)) + 40px); z-index:80; width:168px;
+      max-height:calc(100vh - 64px); overflow-y:auto; background:#f4ecda; border:1px solid #8d8266; border-radius:3px;
+      box-shadow:0 14px 36px #241f1840; padding:7px; margin-left:0}
+    body.ctrl-open .hdracts{right:10px}
+    body.ctrl2-open .hdracts2{right:50px; border-color:var(--indigo)}
+    body.ctrl-open .hdracts .aboutbtn,body.ctrl2-open .hdracts2 .aboutbtn{width:100%; text-align:left; white-space:normal}
+    body.hide-layers .layerbar{display:none}
+    .cfmdetailbtn{display:inline-block}
+  }
   @media (max-width:1280px){ header .hint{display:none} }
+  @media (max-width:1080px){ header .sub{display:none} }
+  @media (max-width:900px){ header h1{font-size:20px} }
+
   .modalwrap{position:fixed; inset:0; background:#241f1866; display:flex; align-items:center;
-    justify-content:center; z-index:50; padding:24px}
+    justify-content:center; z-index:91; padding:24px}
+  #diagwrap{background:#1b171030; justify-content:flex-end; padding:0}
+  #diagwrap .ovlbox{max-width:420px; width:100%; height:100%; max-height:100vh; margin:0; border-radius:0;
+    box-shadow:-14px 0 34px #241f1840}
+  @media (max-width:820px){ #diagwrap .ovlbox{max-width:none} }
   .modalwrap[hidden]{display:none}
   .modal{background:#f4ecda; border:1px solid #8d8266; box-shadow:0 18px 50px #241f1840; max-width:560px;
     width:100%; max-height:86vh; overflow-y:auto; padding:22px 24px 24px; position:relative}
@@ -65,14 +111,6 @@
   .modal .links a{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink);
     text-decoration:none; border:1px solid var(--line); border-radius:2px; padding:5px 9px; background:#f6efdd}
   .modal .links a:hover{background:#fff; border-color:var(--terra); color:var(--terra)}
-  .lightbox{background:#f4ecda; border:1px solid #8d8266; box-shadow:0 18px 50px #241f1840; margin:0;
-    max-width:min(1100px, 94vw); max-height:90vh; padding:12px; position:relative; display:flex;
-    flex-direction:column; gap:8px}
-  .lightbox img{max-width:100%; max-height:76vh; object-fit:contain; display:block; background:#e6dbc4;
-    border:1px solid var(--line)}
-  .lightbox figcaption{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-2); line-height:1.5}
-  .lightbox figcaption b{font-family:"EB Garamond",Georgia,serif; font-size:15px; font-weight:600; color:var(--ink)}
-  .zoomhint{cursor:zoom-in}
   .modal h2{font-family:"EB Garamond",Georgia,serif; font-size:24px; font-weight:600; text-transform:none;
     letter-spacing:0; color:var(--ink); margin:0 0 2px}
   .modal .by{font-size:17px; margin:0 0 14px}
@@ -114,6 +152,7 @@
   svg{display:block; width:100%; height:100%; cursor:grab}
   svg.dragging{cursor:grabbing}
   .layerbar{position:absolute; top:10px; left:12px; right:12px; display:flex; flex-wrap:wrap; gap:5px; z-index:4}
+  /* the chip bar keeps wrapping: the map row has a floor, so there is room for both */
   .lchip{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase;
     padding:4px 7px; border:1px solid var(--line); border-radius:2px; background:#f4ecdad9; color:var(--ink-2);
     cursor:pointer; white-space:nowrap}
@@ -140,6 +179,7 @@
   .tournav button{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap;
     background:#f6efdd; border:1px solid var(--line); border-radius:2px; padding:5px 9px; cursor:pointer; color:var(--ink)}
   .tournav button:hover{background:#fff}
+  .cfmdetailbtn{display:none}
   .tournav button:disabled{opacity:.4; cursor:default}
   .tourpick{display:flex; gap:9px; align-items:flex-start; width:100%; text-align:left; background:none;
     cursor:pointer; border:0; border-top:1px solid var(--rule); padding:9px 17px; font-family:inherit; color:var(--ink)}
@@ -149,8 +189,13 @@
     color:var(--ink-2); padding:6px 9px; cursor:pointer; border-radius:2px}
   .legtoggle:hover{background:#fff; color:var(--ink)}
   .legend{position:absolute; right:12px; bottom:12px; background:#f4ecdaf2; border:1px solid var(--line);
-    padding:9px 11px; font-size:12.5px; display:grid; gap:4px; max-width:212px; cursor:pointer}
+    padding:9px 11px; padding-top:26px; font-size:12.5px; display:grid; gap:4px; max-width:212px; cursor:pointer;
+    max-height:calc(100% - 24px); overflow:auto; z-index:6}
   .legend[hidden]{display:none}
+  .legclose{position:sticky; top:0; justify-self:end; margin:-22px -6px 0 0; width:22px; height:22px;
+    border-radius:2px; border:1px solid var(--line); background:#f4ecda; color:var(--ink-2); font-size:13px;
+    line-height:1; cursor:pointer; display:grid; place-items:center; z-index:2}
+  .legclose:hover{background:var(--ink); color:#f4ecda; border-color:var(--ink)}
   .legend .row{display:flex; align-items:center; gap:7px}
   .legend .dot{width:9px;height:9px;border-radius:50%;background:var(--ink);border:1.5px solid #f4ecda}
   .legend .sw{width:20px;height:0;border-top:2.5px solid var(--terra)}
@@ -160,14 +205,28 @@
     padding:5px 8px; border-radius:2px; z-index:4; pointer-events:none}
   .tilecredit{position:absolute; right:12px; top:auto; bottom:38px; font-family:"IBM Plex Mono",monospace;
     font-size:9px; color:#e9e2d0; text-shadow:0 1px 3px #000a; pointer-events:none; text-align:right}
-  #map.sat{background:#0d1520} #map.street{background:#cfd9dd}
-  #map.sat .site-label,#map.street .site-label,
-  #map.sat .citylab,#map.street .citylab,#map.relief .citylab{stroke:#000000b0; stroke-width:3.5px; fill:#fff !important}
-  #map.sat .cityval,#map.street .cityval,#map.relief .cityval{stroke:#000000b0; stroke-width:3.2px; fill:#bcd3dc !important}
-  #map.sat .region-label,#map.sat .tribe-label,#map.sat .water-label,#map.sat .road-label{fill:#dfe6ea; opacity:.9}
+  #map.sat{background:#0d1520}
+  /* over imagery every label needs its own dark halo, or it disappears into the ground */
+  #map.sat .site-label,#map.relief .site-label,
+  #map.sat .citylab,#map.relief .citylab{stroke:#000000c9; stroke-width:3.6px; fill:#fff !important}
+  #map.sat .cityval,#map.relief .cityval{stroke:#000000c9; stroke-width:3.2px; fill:#bcd3dc !important}
+  #map.sat .region-label,#map.relief .region-label,
+  #map.sat .tribe-label,#map.relief .tribe-label,
+  #map.sat .water-label,#map.relief .water-label,
+  #map.sat .road-label,#map.relief .road-label,
+  #map.sat .zone-label,#map.relief .zone-label,
+  #map.sat .zone-belt,#map.relief .zone-belt,
+  #map.sat .isohyet-label,#map.relief .isohyet-label,
+  #map.sat .dist-label,#map.relief .dist-label,
+  #map.sat .kingdom-label,#map.relief .kingdom-label{
+    fill:#ffffff !important; opacity:1;
+    paint-order:stroke; stroke:#08111a; stroke-width:3.6px; stroke-linejoin:round; stroke-linecap:round}
+  #map.sat .region-label,#map.relief .region-label{font-size:13px}
+  #map.sat .zone-label,#map.relief .zone-label,
+  #map.sat .zone-belt,#map.relief .zone-belt{font-size:10.5px; letter-spacing:.06em}
+  #map.sat .road-label,#map.relief .road-label{fill:#f2e4c8 !important}
   #map.sat .coast{stroke:#ffffff55}
-  #map.street .coast{stroke:#00000033}
-  #map.sat .kingdom-label{stroke:#000000aa; stroke-width:3.5px}
+  #map.sat .kingdom-label{stroke:#08111a; stroke-width:3.8px}
   #map.relief{background:#cdd8d8}
   .zone-label{font-family:"IBM Plex Mono",monospace; fill:#3f6b76; paint-order:stroke; stroke:#efe6d4;
     stroke-width:2.5px; stroke-linejoin:round; pointer-events:none}
@@ -176,14 +235,28 @@
   .scalebar{position:absolute; left:52px; bottom:16px; font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:#3c3a33}
   .scalebar .bar{height:5px;border:1px solid #4a4740;border-top:0;margin-bottom:2px}
 
-  .panel{border-left:1px solid var(--rule); overflow:hidden; display:grid; grid-template-rows:auto minmax(0,1fr)}
-  .tabs{display:flex; border-bottom:1px solid var(--rule); background:#eee4d0}
-  .tabs button{flex:1 1 0; min-width:0; border:0; background:none; cursor:pointer; padding:9px 2px 8px;
-    font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.06em; text-transform:uppercase;
+  .panel{border-left:1px solid var(--rule); overflow:hidden; display:grid; grid-template-rows:auto auto minmax(0,1fr)}
+  .cfmreturn{display:flex; padding:8px 12px; border-bottom:1px solid var(--rule); background:#f7ece6}
+  .cfmreturn[hidden]{display:none}
+  .cfmreturn button{width:100%; display:flex; align-items:center; gap:6px; background:var(--terra); color:#f4ecda;
+    border:0; border-radius:3px; padding:10px 13px; cursor:pointer; font-family:"IBM Plex Mono",monospace;
+    font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 3px 10px #241f1833}
+  .cfmreturn button:hover{background:var(--ink)}
+  body.hide-rail .rail{display:none}
+  body.hide-panel .panel{display:none}
+  body.hide-rail main{grid-template-columns:minmax(0,1fr) 384px}
+  body.hide-panel main{grid-template-columns:216px minmax(0,1fr)}
+  body.hide-rail.hide-panel main{grid-template-columns:minmax(0,1fr)}
+  body.hide-timeline footer{display:none}
+  .tabs{display:flex; border-bottom:1px solid var(--rule); background:#eee4d0;
+    overflow-x:auto; scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{flex:1 1 auto; min-width:0; white-space:nowrap; border:0; background:none; cursor:pointer; padding:9px 5px 8px;
+    font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.04em; text-transform:uppercase;
     color:var(--ink-2); border-bottom:2px solid transparent}
   .tabs button:hover{color:var(--ink)}
   .tabs button[aria-current="true"]{color:var(--terra); border-bottom-color:var(--terra); background:var(--parch)}
-  .pane{overflow-y:auto; padding-bottom:26px}
+  .pane{overflow-y:auto; padding-bottom:26px; background:var(--parch)}
   .pane[hidden]{display:none}
   .body{padding:13px 17px}
   .kicker{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--terra)}
@@ -271,15 +344,30 @@
   .card .more{background:none; border:0; padding:0; margin-top:6px; cursor:pointer; color:var(--terra);
     font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase}
   .card .more:hover{color:var(--ink)}
+  .cardcred{font-family:"IBM Plex Mono",monospace; font-size:9px; line-height:1.4; color:var(--ink-2);
+    margin:3px 0 6px}
+  .cardcred a{color:var(--ink-2); text-decoration:underline}
 
-  footer{border-top:1px solid var(--rule); padding:7px 20px 10px; background:#eee4d0}
+  footer{border-top:1px solid var(--rule); padding:7px 20px 10px; background:#eee4d0;
+    display:grid; grid-template-rows:minmax(0,1fr) auto; min-height:0}
   .tlrow{display:flex; align-items:stretch; gap:8px; min-width:0}
   .tlbtn{flex:none; border:1px solid var(--line); background:#f6efdd; color:var(--ink-2); cursor:pointer;
     font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
     padding:0 9px; border-radius:2px}
   .tlbtn:hover{background:#fff; color:var(--ink)}
   .tlbtn[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:#f4ecda}
-  .chrono{height:250px; margin:0 0 8px; overflow:hidden; border:1px solid var(--rule); background:#f4ecda}
+  .chrono{height:100%; min-height:0; max-height:none; margin:0 0 8px; overflow:auto;
+    border:1px solid var(--rule); background:#f4ecda; position:relative}
+  .chronoctl{position:sticky; float:right; right:8px; top:6px; z-index:3; display:flex; align-items:center; gap:5px;
+    margin:6px 8px 0 0}
+  .chronoctl button{width:24px; height:24px; border:1px solid var(--line); background:#f6efddee; color:var(--ink);
+    cursor:pointer; border-radius:2px; font-size:13px; line-height:1}
+  .chronoctl button#czclose{width:auto; padding:0 8px; font-family:"IBM Plex Mono",monospace; font-size:9.5px;
+    letter-spacing:.12em; text-transform:uppercase}
+  .chronoctl button:hover{background:#fff}
+  .chronoctl .r{font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--ink-2); margin-right:3px}
+  @media (pointer:coarse){ .chronoctl button{width:34px; height:34px} }
   .chrono[hidden]{display:none}
   #chronosvg{width:100%; height:250px; display:block}
   .cx{font-family:"IBM Plex Mono",monospace; font-size:9px; fill:var(--ink-2)}
@@ -305,10 +393,11 @@
     stroke-width:2.5px; stroke-linejoin:round; pointer-events:none}
   .country-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.3em; fill:#2f6d8c; opacity:.75;
     paint-order:stroke; stroke:#eef4f6; stroke-width:3px; stroke-linejoin:round; pointer-events:none}
-  .road-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.1em; fill:#8a7a58; pointer-events:none}
+  .road-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.1em; fill:#8a7a58; pointer-events:none;
+    paint-order:stroke; stroke:#f2e9d6; stroke-width:3.2px; stroke-linejoin:round}
   .dist-label{font-family:"IBM Plex Mono",monospace; paint-order:stroke; stroke:#efe6d4; stroke-width:3px;
     stroke-linejoin:round; pointer-events:none}
-  /* ---- Come, Follow Me ---- */
+  /* ---- CFM ---- */
   .cfmnow{margin:9px 17px 4px; border:1px solid #d3b6ab; background:#f7ece6; padding:9px 11px}
   .cfmnow .k{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.16em;
     text-transform:uppercase; color:var(--terra)}
@@ -318,6 +407,9 @@
   .wk{font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.14em; text-transform:uppercase;
     color:var(--ink-2); padding-top:4px}
   .wv{text-wrap:pretty}
+  .wk{overflow-wrap:anywhere}
+  #creditsbody .wrow{grid-template-columns:154px minmax(0,1fr); gap:14px; align-items:start}
+  #creditsbody .wk{line-height:1.55}
   .wv .mono{font-family:"IBM Plex Mono",monospace; font-size:12px}
   .cf{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
     border:1px solid var(--line); border-radius:2px; padding:2px 6px; background:#f2e9d6}
@@ -342,13 +434,17 @@
     color:var(--ink-2); float:right; padding-top:2px}
 
   /* ---- Presenter mode: readable from the back of a classroom ---- */
-  .presentpill{display:none; position:absolute; right:12px; top:12px; z-index:9;
+  .presentpill{display:none; position:static; z-index:9;
     font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase;
     background:var(--ink); color:#f4ecda; border:0; border-radius:2px; padding:10px 14px; cursor:pointer}
+  .presentpill.ghost{background:#f4ecdaee; color:var(--ink); border:1px solid var(--line)}
+  .presentacts{display:none; position:absolute; right:12px; top:12px; z-index:9; gap:7px; align-items:center}
+  body.present .presentacts{display:flex}
   .presentpill:hover{background:var(--terra)}
   body.present .presentpill{display:block}
   body.present .rail,body.present .panel,body.present .layerbar,body.present .legtoggle,
   body.present .legend,body.present header .hint,body.present .tilecredit{display:none}
+  body.chrono-open footer{padding-bottom:8px}
   body.present main{grid-template-columns:minmax(0,1fr)}
   body.present header{padding:8px 20px 7px}
   body.present .site-label{font-size:20px; stroke-width:4.5px}
@@ -378,22 +474,224 @@
   .focusring{animation:spin 1.6s linear infinite}
   .focus-label{font-size:12px; font-family:"EB Garamond",Georgia,serif; paint-order:stroke; stroke:#f4ecda;
     stroke-width:3.5px; stroke-linejoin:round; pointer-events:none}
-  #map.sat .focus-label,#map.street .focus-label{stroke:#000000b0}
+  #map.sat .focus-label,#map.relief .focus-label{stroke:#000000c9}
   @keyframes pulse{0%{opacity:.85; r:9}70%{opacity:0; r:22}100%{opacity:0; r:22}}
+
+  /* ---- shared overlay shell: guide, camp diagram, study sheet ---- */
+  .ovl{position:fixed; inset:0; background:#1b1710d9; z-index:90; display:grid; place-items:center; padding:24px}
+  .ovl[hidden]{display:none}
+  .ovlbox{background:var(--parch); border:1px solid var(--line); box-shadow:0 18px 50px #0007;
+    max-width:780px; width:100%; max-height:calc(100vh - 48px); overflow:auto; padding:22px 24px; position:relative}
+  .ovlbox h3{margin:0 0 4px; font-size:19px; font-family:"EB Garamond",Georgia,serif}
+  .ovlbox .kicker{margin-bottom:9px}
+  .ovlx{position:absolute; top:8px; right:8px; width:26px; height:26px; border:1px solid var(--line);
+    background:#f4ecda; color:var(--ink); cursor:pointer; border-radius:2px; font-size:14px; line-height:1}
+  .ovlx:hover{background:var(--ink); color:var(--parch)}
+  .ovlact{display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; align-items:center}
+  .ovlact button{border:1px solid var(--line); background:#f6efdd; color:var(--ink); cursor:pointer;
+    font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    padding:8px 11px; border-radius:2px; white-space:nowrap}
+  .ovlact button.primary{background:var(--ink); color:var(--parch); border-color:var(--ink)}
+  .ovlact .dots{display:flex; gap:5px; margin-left:auto}
+  .ovlact .dots i{width:7px; height:7px; border-radius:50%; background:#cbbfa6; display:block}
+  .ovlact .dots i.on{background:var(--terra)}
+  .guidefig{border:1px solid var(--rule); background:#f8f2e2; padding:11px 13px; margin:10px 0 0; font-size:13px}
+
+  /* ---- elevation profile ---- */
+  .profile{margin:10px 0 2px}
+  .profile svg{width:100%; height:118px; display:block; background:#f8f2e2; border:1px solid var(--rule)}
+  .profile .pfline{fill:#dfd2b0; stroke:var(--terra); stroke-width:1.6}
+  .profile .pfax{stroke:#cbbfa6; stroke-width:.8}
+  .profile .pfsea{stroke:#4b7a86; stroke-width:.8; stroke-dasharray:4 3}
+  .profile text{font-family:"IBM Plex Mono",monospace; font-size:7.5px; fill:var(--ink-2)}
+  .profile .pfstop{font-size:8px; fill:var(--ink)}
+
+  /* ---- camp diagram ---- */
+  .camp svg{width:100%; height:auto; display:block; background:#f8f2e2; border:1px solid var(--rule)}
+  .camp text{font-family:"IBM Plex Mono",monospace}
+
+  /* ---- certainty key ---- */
+  .legend .cfrow span.sw{border-top-width:0; width:10px; height:10px; border-radius:50%;
+    display:inline-flex; align-items:center; justify-content:center; font-size:9px; color:#f4ecda; line-height:1}
+
+  /* ---- study sheet ---- */
+  .sheet{background:#fff; color:#141210; padding:0; font-family:"EB Garamond",Georgia,serif}
+  .sheet .shhead{border-bottom:2px solid #141210; padding-bottom:7px; margin-bottom:12px}
+  .sheet .shkick{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.16em;
+    text-transform:uppercase; color:#5a5347}
+  .sheet h1{font-size:23px; margin:3px 0 2px; font-weight:600}
+  .sheet .shrefs{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:#3d382f}
+  .sheet .shnote{font-size:14px; margin:0 0 12px; text-wrap:pretty}
+  .sheet .shmap{border:1px solid #b9ad92; margin:0 0 12px; overflow:hidden}
+  .sheet .shmap svg{width:100%; height:auto; display:block}
+  .sheet h2{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    margin:15px 0 6px; color:#5a5347; border-bottom:1px solid #d8cfb8; padding-bottom:3px}
+  .sheet table{width:100%; border-collapse:collapse; font-size:11.5px; font-family:"IBM Plex Mono",monospace}
+  .sheet th{text-align:left; font-weight:500; color:#5a5347; border-bottom:1px solid #d8cfb8; padding:3px 5px 3px 0}
+  .sheet td{padding:3px 5px 3px 0; border-bottom:1px solid #eee6d4; vertical-align:top}
+  .sheet .qs{font-size:13.5px; padding-left:18px; margin:0}
+  .sheet .qs li{margin-bottom:6px; text-wrap:pretty}
+  .sheet .shlines{border:1px solid #d8cfb8; height:74px; background:repeating-linear-gradient(#fff 0 22px,#e6ddc8 22px 23px)}
+  .sheetfoot{margin-top:16px; border-top:1px solid #d8cfb8; padding-top:6px;
+    font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.06em; color:#5a5347;
+    display:flex; justify-content:space-between; gap:10px}
+
+  /* ---- toast ---- */
+  .toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:92;
+    background:var(--ink); color:var(--parch); font-family:"IBM Plex Mono",monospace; font-size:11px;
+    padding:8px 13px; border-radius:2px; box-shadow:0 6px 20px #0006}
+  .toast[hidden]{display:none}
+
+  /* ---- reach: touch targets and motion ---- */
+  @media (pointer:coarse){
+    .lchip,.chip,.tlbtn,.ref{min-height:38px}
+    .zoombar button{width:42px; height:42px; font-size:17px}
+    .tabs button{padding:13px 8px 12px}
+    .legclose,.ovlx,.tourx{width:32px; height:32px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .halo{animation:none; opacity:.5}
+    *{transition-duration:.001ms !important}
+  }
+  .skip{position:absolute; left:-9999px; top:0; background:var(--ink); color:var(--parch); padding:8px 12px;
+    font-family:"IBM Plex Mono",monospace; font-size:11px; z-index:70}
+  .skip:focus{left:8px; top:8px}
+  :focus-visible{outline:2px solid var(--terra); outline-offset:1px}
+
+  @media print{
+    body>header, body>main, body>footer, .modalwrap, .ovl:not(#sheetwrap), .toast{display:none !important}
+    html,body{height:auto; overflow:visible; background:#fff}
+    #sheetwrap{position:static; inset:auto; display:block; background:#fff; padding:0; z-index:auto}
+    #sheetwrap .ovlbox{max-width:none; max-height:none; overflow:visible; border:0; box-shadow:none;
+      background:#fff; padding:0}
+    #sheetwrap .ovlx, #sheetwrap .ovlact{display:none !important}
+    .sheet h2{break-after:avoid}
+    .sheet tr{break-inside:avoid}
+    .sheetfoot{position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:1px solid #d8cfb8}
+    @page{margin:14mm 13mm 18mm}
+  }
   .halo{animation:pulse 1.8s ease-out infinite; fill:none; stroke:var(--terra); stroke-width:2px}
+
+  /* ---------- phone and tablet-portrait: the rail becomes a drawer, the panel a sheet ---------- */
+  .scrim{display:none}
+  @media (max-width:820px){
+    main{grid-template-columns:minmax(0,1fr)}
+    header{padding:9px 12px 8px; gap:8px}
+    header h1{font-size:17px}
+    .hdracts2{gap:5px}
+    .aboutbtn{padding:8px 8px; font-size:9px}
+    footer{display:none}
+    .rail{position:fixed; top:0; bottom:0; left:0; width:min(332px,87vw); z-index:42;
+      background:#f4ecda; border-right:1px solid var(--rule); padding-bottom:20px;
+      transform:translateX(-102%); transition:transform .22s ease; box-shadow:8px 0 30px #241f1826;
+      -webkit-overflow-scrolling:touch}
+    body.drawer-open .rail{transform:none}
+    .panel{position:fixed; left:0; right:0; bottom:0; height:min(45vh,420px); z-index:42;
+      background:#f4ecda; border-left:0; border-top:1px solid var(--rule);
+      transform:translateY(102%); transition:transform .22s ease;
+      box-shadow:0 -10px 30px #241f1826}
+    body.sheet-open main aside.panel{transform:none}
+    .scrim{display:block; position:fixed; inset:0; background:#241f1833; z-index:41;
+      opacity:0; pointer-events:none; transition:opacity .22s ease}
+    body.drawer-open #scrim,body.sheet-open #scrim{opacity:1; pointer-events:auto}
+    .layerbar{flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden; scrollbar-width:none;
+      -webkit-overflow-scrolling:touch; padding-bottom:2px; left:8px; right:8px}
+    .layerbar::-webkit-scrollbar{display:none}
+    .lchip{flex:0 0 auto}
+    .scalebar{bottom:12px}
+    .tilecredit{bottom:12px}
+    .tourbar,#cfmbar{left:8px; right:8px; max-width:none; bottom:12px; max-height:54vh; overflow-y:auto}
+    .tournav{position:sticky; bottom:-11px; z-index:1; background:#f4ecdaf5; margin:8px -12px -11px;
+      padding:8px 12px 11px; border-top:1px solid var(--rule)}
+    /* 44px minimum tap targets everywhere the finger goes */
+    .lay,#eralist button,.theaters button,.jrn,.tabs button,.evt,.camprow{min-height:44px}
+    .back{font-size:12px; padding:9px 10px; background:#eee4d0; border-bottom:1px solid var(--rule); display:block; width:100%; text-align:left}
+    #detailx{width:32px; height:32px; font-size:22px; top:6px; right:6px; background:#eee4d0; border:1px solid var(--line); border-radius:2px}
+    .lchip{min-height:34px; font-size:10px; padding:7px 9px}
+    .lchip.act{display:none}
+    .zoombar button{width:44px; height:44px}
+    .card{width:min(300px,calc(100% - 24px))}
+    body.chrono-open footer{display:block; position:fixed; left:0; right:0; bottom:0; z-index:43;
+      background:#f4ecda; border-top:1px solid var(--rule); max-height:72vh; overflow:auto}
+    body.chrono-open .ctrlfab,body.chrono-open .ctrlfab2{z-index:82}
+    .ctrllayers{display:flex; flex-direction:column; max-height:180px; overflow-y:auto; gap:2px;
+      border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin:2px 0; padding:4px 0}
+    .ctrllayers .lay{min-height:30px; padding:4px 6px; font-size:12px}
+    body.sheet-open .zoombar,body.sheet-open .scalebar,body.sheet-open .tilecredit,
+    body.sheet-open .legtoggle,body.sheet-open .legend{display:none}
+  }
+  @media (max-width:900px) and (orientation:landscape){
+    .tourbar,#cfmbar{padding:4px 7px 5px; max-height:42vh; overflow-y:auto; bottom:8px}
+    .tourhead{font-size:7px; margin-bottom:2px}
+    .tourbody{font-size:10px; line-height:1.2; margin-bottom:3px}
+    .tourbody b{display:block; font-size:11px}
+    .tournav{gap:4px}
+    .tournav button{padding:3px 6px; font-size:8px}
+    .refrow .ref{padding:2px 5px; font-size:9px}
+  }
+  @media (max-width:820px) and (orientation:landscape){
+    .panel{height:min(63vh,378px)}
+  }
+  @media (min-width:821px) and (max-width:1280px){
+    main{grid-template-columns:216px minmax(0,1fr)}
+    body.hide-rail main{grid-template-columns:minmax(0,1fr)}
+    .panel{position:fixed; top:0; right:0; bottom:0; width:min(30vw,380px); z-index:42;
+      border-top:0; transform:translateX(102%);
+      transition:transform .22s ease; box-shadow:-10px 0 30px #241f1826}
+    body.tab-panel-open .panel{transform:none}
+    .tourbar,#cfmbar{bottom:14px; max-width:min(520px, calc(100% - 76px)); max-height:54vh; overflow-y:auto}
+    .tournav{position:sticky; bottom:-11px; z-index:1; background:#f4ecdaf5; margin:8px -12px -11px;
+      padding:8px 12px 11px; border-top:1px solid var(--rule)}
+    body.tab-panel-open .tourbar,body.tab-panel-open #cfmbar{right:calc(min(30vw,380px) + 20px)}
+    body.tab-panel-open .zoombar,body.tab-panel-open .legtoggle,body.tab-panel-open .legend{display:none}
+  }
 </style>
 </head>
 <body>
 <header>
-  <h1>The Old Testament Atlas</h1>
+  <div class="hdrtitle">
+  <h1>The Old Testament &amp; Intertestamental Atlas</h1>
   <span class="beta" title="Work in progress — data and identifications are still being checked">Beta</span>
-  <span class="sub">Ur to the Second Temple</span>
+  <span class="sub">Ur to the death of Herod</span>
   <span class="hint">drag to pan · scroll to zoom · click any place, event or verse</span>
-  <button class="aboutbtn" id="cfmbtn" title="Come, Follow Me — this week's reading on the map (w)">Come, Follow Me</button>
-  <button class="aboutbtn" id="presentbtn" title="Presenter mode — large type, high contrast, no controls (m)">Presenter</button>
-  <button class="aboutbtn" id="aboutbtn">About</button>
+  </div>
+  <button class="ctrlfab2" id="ctrlbtn2" aria-expanded="false" aria-label="More: Weekly Reading, presenter mode, study sheet, share, guide, credits" title="More: Weekly Reading, presenter mode, study sheet, share, guide, credits">⋯</button>
+  <button class="ctrlfab" id="ctrlbtn" aria-expanded="false" aria-label="Show and hide panels" title="Show and hide panels">⋯</button>
+  <div class="hdracts" id="hdracts">
+    <button class="aboutbtn" id="tgheader" aria-pressed="true">Top bar</button>
+    <button class="aboutbtn" id="mbbrowse" aria-pressed="false">Left side panel</button>
+    <button class="aboutbtn" id="mbpanel" aria-pressed="false">Details panel</button>
+    <button class="aboutbtn" id="mbtime" aria-pressed="false">Timeline</button>
+    <button class="aboutbtn" id="tglayers" aria-pressed="true">Map layers</button>
+    <button class="aboutbtn" id="laychip-all">All layers on</button>
+    <button class="aboutbtn" id="laychip-clear">All layers off</button>
+    <button class="aboutbtn" id="laychip-reset">Reset layers</button>
+    <div class="ctrllayers" id="ctrllayers"></div>
+    <button class="aboutbtn" id="mbmap" aria-pressed="false">Map only</button>
+  </div>
+  <div class="hdracts2" id="hdracts2">
+    <button class="aboutbtn" id="dtgrail" aria-pressed="true">Left panel</button>
+    <button class="aboutbtn" id="dtgpanel" aria-pressed="true">Right panel</button>
+    <button class="aboutbtn" id="cfmbtn" title="Weekly Reading — this week's reading on the map (w)">Weekly Reading</button>
+    <button class="aboutbtn" id="presentbtn" title="Presenter mode — large type, high contrast, no controls (m or p)">Presenter</button>
+    <button class="aboutbtn" id="sheetbtn" title="Printable study sheet for the current week or era">Study sheet</button>
+    <button class="aboutbtn" id="sharebtn" title="Copy a link that reopens exactly this view">Share view</button>
+    <button class="aboutbtn" id="guidebtn" title="A six-step tour of the controls (?)">Guide</button>
+  <button class="aboutbtn" id="creditsbtn" title="Credits, licences and attributions">Credits</button>
+    <button class="aboutbtn" id="aboutbtn">About</button>
+  </div>
 </header>
 
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <rect width="120" height="120" fill="#efe6d4"/>
+    <path d="M36 30 L84 30 L84 90 L36 90 Z" fill="#f8f2e2" stroke="#a8442a" stroke-width="2"/>
+    <path d="M44 78 C52 60 58 66 64 48 C68 38 74 40 78 36" fill="none" stroke="#a8442a" stroke-width="2.4" stroke-dasharray="4 3"/>
+    <circle cx="44" cy="78" r="3.4" fill="#2f4858"/><circle cx="78" cy="36" r="3.4" fill="#2f4858"/>
+    <text x="60" y="106" text-anchor="middle" font-family="monospace" font-size="11" fill="#5a5347">OT ATLAS</text>
+  </svg>
+</template>
+<a class="skip" href="#stage">Skip to the map</a>
 <main>
   <nav class="rail">
     <div class="searchwrap">
@@ -406,6 +704,12 @@
     <div id="eralist"></div>
     <h2>Scale</h2>
     <div class="theaters" id="theaters"></div>
+    <h2>Compare eras</h2>
+    <select id="cmp" title="Ghost the routes and places of another era over this one"
+      style="width:100%; font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:6px;
+             background:#f6efdd; border:1px solid var(--line); color:var(--ink)">
+      <option value="-1">No comparison</option>
+    </select>
   </nav>
 
   <div class="stage" id="stage">
@@ -438,15 +742,21 @@
       <div class="tournav">
         <button id="cfmprev">‹ previous week</button>
         <button id="cfmnext">next week ›</button>
+        <button id="cfmdetail" class="cfmdetailbtn">Details ›</button>
         <span id="cfmrefs" class="refrow" style="margin:0"></span>
       </div>
     </div>
-    <button class="presentpill" id="presentexit" title="Leave presenter mode (or press m)">× &nbsp;Exit presenter mode</button>
+    <div class="presentacts">
+      <button class="presentpill ghost" id="presentsheet" title="Printable study sheet for what is on screen">Study sheet</button>
+      <button class="presentpill ghost" id="presentshare" title="Copy a link that reopens this view">Share view</button>
+      <button class="presentpill" id="presentexit" title="Leave presenter mode (or press m)">× &nbsp;Exit presenter mode</button>
+    </div>
     <button class="legtoggle" id="legtoggle">Legend</button>
     <div class="legend" id="legend" hidden></div>
   </div>
 
   <aside class="panel">
+    <div class="cfmreturn" id="cfmreturn" hidden><button id="cfmreturnbtn">‹ Back to this week's reading</button></div>
     <div class="tabs" id="tabs"></div>
     <div class="pane" id="pane-era"></div>
     <div class="pane" id="pane-cfm" hidden></div>
@@ -456,49 +766,60 @@
     <div class="pane" id="pane-finds" hidden></div>
     <div class="pane" id="pane-peoples" hidden></div>
     <div class="pane" id="pane-scripture" hidden></div>
+    <div class="pane" id="pane-detail" hidden></div>
   </aside>
 </main>
 
+<div class="scrim" id="scrim"></div>
+
 <footer>
-  <div class="chrono" id="chrono" hidden><svg id="chronosvg"></svg></div>
+  <div class="chrono" id="chrono" hidden>
+    <div class="chronoctl">
+      <button id="czin" title="Zoom in on the years">+</button>
+      <button id="czout" title="Zoom out">−</button>
+      <button id="czreset" title="Whole span, 2050 BC to AD 1">⤳</button>
+      <span class="r" id="czhint">drag to pan · scroll to zoom</span>
+      <button id="czclose" title="Collapse the timeline">× collapse</button>
+    </div>
+    <svg id="chronosvg"></svg>
+  </div>
   <div class="tlrow">
     <button class="tlbtn" id="chronobtn" aria-pressed="false">Timeline</button>
+    <select id="chronomodelsel" class="tlbtn" title="Which Exodus/Conquest/Judges date model to display" aria-label="Chronology model"></select>
     <div class="tl" id="tl"></div>
   </div>
 </footer>
 
-<div class="modalwrap" id="lightwrap" hidden>
-  <figure class="lightbox" id="lightbox">
-    <button class="close" id="lightclose" title="Close">×</button>
-    <img id="lightimg" alt="">
-    <figcaption id="lightcap"></figcaption>
-  </figure>
-</div>
-
 <div class="modalwrap" id="aboutwrap" hidden>
   <div class="modal" role="dialog" aria-label="About this atlas">
     <button class="close" id="aboutclose" title="Close">×</button>
-    <h2>The Old Testament Atlas</h2>
-    <p class="by">Ur to the Second Temple · prepared by <strong>Taylor Halverson, Ph.D.</strong></p>
+    <h2>The Old Testament &amp; Intertestamental Atlas</h2>
+    <p class="by">Ur to the death of Herod · prepared by <strong>Taylor Halverson, Ph.D.</strong></p>
+    <p class="by" style="margin-top:-6px" id="aboutversion"></p>
 
     <div class="modaltabs" role="tablist">
       <button role="tab" data-pane="synopsis" aria-selected="true">The atlas</button>
       <button role="tab" data-pane="howto" aria-selected="false">How to use it</button>
       <button role="tab" data-pane="author" aria-selected="false">Taylor Halverson</button>
+      <button role="tab" data-pane="credits" aria-selected="false">Credits &amp; licences</button>
+      <button role="tab" data-pane="terms" aria-selected="false">Terms &amp; refunds</button>
     </div>
 
     <div class="modalpane" data-pane="synopsis">
-      <p class="lede">Fifteen hundred years of Old Testament history laid on the land it happened on:
-        88 places, 41 journeys, 36 military campaigns, 33 excavated objects, twelve ancient peoples and
-        nine eras, each drawn in real coordinates and tied to the verse that reports it.</p>
+      <p class="lede">Two thousand years of Old Testament and intertestamental history laid on the land it happened
+        on: 157 places, 53 journeys, 41 military campaigns, 124 events, 80 excavated objects, nineteen ancient
+        peoples and thirteen eras, each drawn in real coordinates and tied to the verse that reports it, with the
+        52-week reading year mapped onto them.</p>
       <div class="flag">
         <span class="tag">Beta</span>
         Places, routes, dates and identifications are still being reviewed. Where scholars disagree — the
         location of Sinai, the date of the exodus, the sea crossing, the cities of the plain — the atlas follows
-        the traditional identification and says so in the entry rather than choosing silently.
+        the traditional identification and says so in the entry rather than choosing silently. For the Exodus,
+        Conquest and Judges dates specifically, use the chronology-model selector next to the timeline at the
+        bottom of the screen to choose the traditional (15th c. BC), archaeological (13th c. BC), or both-shown view.
       </div>
       <div class="subhead">On the evidence</div>
-      <p>All 601 scripture references were checked against book and chapter counts. Regnal dates follow Thiele's
+      <p>Every scripture reference in the atlas — more than six hundred across places, events, journeys, campaigns, finds and the 52 weekly readings — was checked against book and chapter counts. Regnal dates follow Thiele's
         synchronised chronology. Inscription dates, findspots and museum holdings were checked against published
         translations and museum records; disputed points — Samaria falling in 722 or 720, the figure on the Black
         Obelisk — are named as disputed.</p>
@@ -514,18 +835,18 @@
     </div>
 
     <div class="modalpane" data-pane="howto" hidden>
-      <p class="lede">The map is the document; everything else is a way of asking a question about it. Nine eras
+      <p class="lede">The map is the document; everything else is a way of asking a question about it. Thirteen eras
         run down the left and across the bottom, layers sit above the map, and the panel on the right holds whatever
         you last clicked.</p>
       <div class="subhead">Finding your way in</div>
       <ul>
-        <li><em>Come, Follow Me</em> (key w) opens the reading year: pick a week and the map sets itself to that
+        <li><em>Weekly Reading</em> (key w) opens the reading year: pick a week and the map sets itself to that
           reading — era, layers, places and one note on what the ground adds.</li>
-        <li><em>Tours</em> is the easiest start: seven narrated walks that set the map up stop by stop.</li>
+        <li><em>Tours</em> is the easiest start: eight narrated walks that set the map up stop by stop.</li>
         <li><em>Presenter</em> (key m) strips the controls and enlarges every label for a classroom projector.</li>
         <li><em>Scale</em> in the left rail jumps between the four scales the Old Testament is read at — Crescent,
           Egypt and Sinai, Canaan, the ridge country — or straight into Jerusalem (shift-1 to shift-5).</li>
-        <li>Nine eras across the bottom and down the left; arrow keys step through them.</li>
+        <li>Thirteen eras across the bottom and down the left; arrow keys step through them.</li>
         <li>Search (key /) reaches places, events, peoples, objects, city features and scripture references.</li>
       </ul>
       <div class="subhead">Layers and lines</div>
@@ -545,25 +866,32 @@
       <div class="subhead">Seeing the ground</div>
       <ul>
         <li><em>Jerusalem plan</em> (key J), or open Jerusalem's entry and pick a building phase.</li>
-        <li><em>Satellite</em> and <em>Street map</em> swap the parchment for real imagery, down to a single excavation.</li>
-        <li>Click any photograph — on the map or in a panel — to see it full size with its licence. Esc closes
-          whatever is open.</li>
+        <li><em>Satellite</em> swaps the parchment for NASA imagery that provides regional geographic context; it is not site-level archaeological photography.</li>
       </ul>
       <div class="subhead">Sources</div>
       <ul>
-        <li>Coastlines and modern borders: Natural Earth (public domain), 1:50m.</li>
-        <li>Scripture text: King James Version, World English Bible and Bible in Basic English (public domain).</li>
-        <li>Photographs of sites and artefacts: Wikimedia Commons — each carries a link to its source and licence.</li>
-        <li>Satellite imagery: Esri, Maxar, Earthstar Geographics. Street map: © OpenStreetMap contributors.</li>
+        <li>Coastlines and modern borders: Natural Earth, public domain, 1:50m.</li>
+        <li>Scripture text: American Standard Version (1901), public domain worldwide — no jurisdiction requires a licence.</li>
+        <li>Imagery and relief: NASA Blue Marble and NASA shaded relief with bathymetry, public domain, served through
+          NASA GIBS. Imagery needs a connection; without one the atlas falls back to the drawn map.</li>
+        <li>Elevations are the recorded heights of the named places, quoted in each place entry.</li>
+        <li>Dates are editorial choices, not settled facts: each era says which chronology it follows and what the
+          alternative is. In beta these are under review.</li>
+        <li>Independent work. Not affiliated with, endorsed by, or produced for any church, curriculum publisher or
+          university.</li>
       </ul>
+      <div class="subhead">The intertestamental centuries</div>
+      <p>The four eras after Malachi rest on different evidence from the rest of the atlas: 1–2 Maccabees, Josephus,
+        Polybius, the papyri, coins and excavation rather than the Hebrew canon. Each era says which source carries it,
+        and the entries name where a single ancient historian is the only witness.</p>
     </div>
 
     <div class="modalpane" data-pane="author" hidden>
       <h2 style="margin-bottom:4px">Taylor Halverson, Ph.D.</h2>
       <p class="role">Author · Teacher · Tour leader · Scripture scholar</p>
-      <p>Taylor Halverson is a scholar of scripture and a teacher of learners — an entrepreneurship professor in the
-        BYU Marriott School of Business who spends his working life helping people find and act on the best ideas
-        and tools available to them.</p>
+      <p>Taylor Halverson is a scholar of scripture, educator, and learning-experience designer. He formerly taught
+        entrepreneurship at the BYU Marriott School of Business and continues to help people find and act on useful
+        ideas and tools.</p>
       <p>He is the author and editor of more than fifty books and nearly a thousand articles and blog posts, and a
         builder of scripture study resources: the ScripturePlus app with Scripture Central, whose scripture YouTube
         channel he co-hosted to more than fifty million views, and BYU's Virtual Scripture Group, whose team spent
@@ -588,11 +916,103 @@
         <a href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com</a>
       </div>
     </div>
+
+    <div class="modalpane" data-pane="credits" hidden>
+      <div id="creditsbody"></div>
+    </div>
+
+    <div class="modalpane" data-pane="terms" hidden>
+      <p class="lede">Terms of use, refund policy &amp; license.</p>
+      <div class="subhead">1. What you're getting</div>
+      <p>This product is a Beta: an interactive atlas of places, finds, peoples, tours, campaigns and journeys
+        across the Old Testament and intertestamental period, with accompanying essays and reference material,
+        published by Taylor Halverson, Ph.D. ("Publisher"). It is a teaching aid and historical model, not a
+        survey document — see the How to use it and Accuracy notes elsewhere in this panel for what that means.</p>
+      <div class="subhead">2. License to use</div>
+      <p>Publisher grants the purchaser or recipient a personal, non-exclusive, non-transferable license to view
+        and use this product for personal study, teaching, and classroom use. Redistribution of the product file
+        itself, or extraction of its map data, essays, or illustrations for republication, requires Publisher's
+        prior written permission. Third-party components (typefaces, code libraries, map and imagery sources)
+        remain under their own licenses; see THIRD-PARTY-NOTICES.md and the Credits &amp; licences tab.</p>
+      <div class="subhead">3. Scripture text</div>
+      <p>Scripture quotations are from the American Standard Version (1901), which is in the public domain
+        worldwide; no permission is required to reproduce it, and none is claimed here beyond what this license
+        already grants for the product as a whole.</p>
+      <div class="subhead">4. Refunds</div>
+      <p>If this product was purchased through a store or platform, that platform's refund policy governs first.
+        Where Publisher sells directly, a full refund is available on request within 14 days of purchase,
+        provided the product has not been redistributed; request a refund via
+        <a href="mailto:support@taylorhalverson.com">support@taylorhalverson.com</a>.</p>
+      <div class="subhead">5. No warranty of scholarly conclusion</div>
+      <p>Because this is a Beta reconstruction of disputed and debated ancient geography and chronology, Publisher
+        makes no warranty that any specific dating, identification, or interpretation shown will not be revised
+        in a later edition. The product is provided "as is" for its stated teaching purpose.</p>
+      <div class="subhead">6. Limitation of liability</div>
+      <p>To the extent permitted by law, Publisher's liability for any claim arising from this product is limited
+        to the amount paid for it.</p>
+      <div class="subhead">7. Governing law &amp; contact</div>
+      <p>To request a refund or ask a licensing question, contact
+        <a href="mailto:support@taylorhalverson.com">support@taylorhalverson.com</a> or use
+        <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>.
+        The user agrees that
+        any legal action, dispute, or proceeding arising out of or relating to this product must be brought
+        exclusively in the state or federal courts located in Utah County, Utah. Both parties irrevocably consent
+        to the personal jurisdiction of these courts and waive any objection based on improper venue or
+        inconvenient forum.</p>
+    </div>
   </div>
 </div>
 
+<div class="ovl" id="guidewrap" hidden>
+  <div class="ovlbox" role="dialog" aria-label="First five minutes">
+    <button class="ovlx" id="guidex" title="Close" aria-label="Close the guide">×</button>
+    <div class="kicker" id="guidestep"></div>
+    <h3 id="guidetitle"></h3>
+    <div id="guidebody"></div>
+    <div class="ovlact">
+      <button id="guideback">‹ Back</button>
+      <button id="guidenext" class="primary">Next ›</button>
+      <button id="guideskip">Skip</button>
+      <span class="dots" id="guidedots"></span>
+    </div>
+  </div>
+</div>
+
+<div class="ovl" id="diagwrap" hidden>
+  <div class="ovlbox" role="dialog" aria-label="Diagram">
+    <button class="ovlx" id="diagx" title="Close" aria-label="Close the diagram">×</button>
+    <div id="diagbody"></div>
+  </div>
+</div>
+
+<div class="ovl" id="sheetwrap" hidden>
+  <div class="ovlbox">
+    <button class="ovlx" id="sheetx" title="Close" aria-label="Close the study sheet">×</button>
+    <article class="sheet" id="sheet"></article>
+    <div class="ovlact">
+      <button class="primary" id="sheetprint">Print / save as PDF</button>
+      <label style="display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace;
+                    font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-2)">
+        <input type="checkbox" id="sheetsimple" checked> Simplify map for print
+      </label>
+      <button id="sheetclose">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+<div id="live" aria-live="polite" style="position:absolute;left:-9999px"></div>
+
 <script src="atlas-data.js"></script>
+<script src="atlas-intertestamental.js"></script>
+<script src="atlas-finds.js"></script>
+<script src="atlas-questions.js"></script>
 <script>
+/* Index every campaign and find AFTER all data files have loaded: the base data assigns its
+   own indexes inline, so anything pushed by a later file would otherwise have none. */
+CAMPAIGNS.forEach((c,i)=>{ c.i = i; if(!c.color) c.color = (typeof ARMY!=="undefined" && ARMY[c.side]) || "var(--ink-2)"; });
+FINDS.forEach((f,i)=>{ f.i = i; });
+
 /* =========================== scripture references =========================== */
 const BOOKS = {
   gen:"Genesis", exod:"Exodus", lev:"Leviticus", num:"Numbers", deut:"Deuteronomy", josh:"Joshua",
@@ -641,7 +1061,7 @@ function parseRef(tok){
            display:(book + (nums?" "+nums.replace(/-/g,"–"):"")),
            query:(nums ? `${book} ${seg}` : book), clipped, raw:tok.trim() };
 }
-const splitRefs = str => str.split(/;|\s·\s/).map(s=>s.trim()).filter(Boolean).map(parseRef).filter(Boolean);
+const splitRefs = str => String(str||"").split(/;|\s·\s/).map(s=>s.trim()).filter(Boolean).map(parseRef).filter(Boolean);
 
 /* reverse index: "Genesis 12" -> atlas entries */
 const REFINDEX = new Map();
@@ -661,15 +1081,22 @@ PEOPLES.forEach((p,i) => { /* peoples carry loose refs; index by book mentions o
 const state = {
   era: 1, tab: "era", activeJourney: null, place: null, people: null,
   passage: null, highlight: [], verseIds: [], campaign: null, find: null, allFinds: false, focus: null, tour: null,
-  layers: { routes:true, places:true, events:true, campaigns:false, finds:false,
-            kingdoms:false, roads:false, distances:false, tribes:false, modern:false, photos:false,
-            terrain:false, relief:false, satellite:false, street:false, city:false },
-  cityPeriod: "nehemiah"
+  layers: { routes:false, places:false, events:false, campaigns:false, finds:false,
+            kingdoms:false, roads:false, distances:false, tribes:false, modern:false,
+            terrain:false, relief:false, satellite:false, city:false,
+            names:false, certainty:false },
+  cityPeriod: "nehemiah",
+  chronoModel: (()=>{ try{ return localStorage.getItem("otatlas:chrono") || "neutral"; }catch(e){ return "neutral"; } })()
 };
+function eraDates(era){
+  const m = CHRONO_DATES[era.id];
+  return (m && m[state.chronoModel]) || era.dates;
+}
 
 /* =========================== map =========================== */
 const hoverTip = document.getElementById("hovertip");
 const svg = d3.select("#map");
+svg.attr("role","img").attr("aria-label","Map of the Old Testament world");
 const stage = document.getElementById("stage");
 let W = stage.clientWidth || 320, H = stage.clientHeight || 240, measured = false;
 function syncSize(){
@@ -690,8 +1117,37 @@ const gLand = root.append("g"), gModern = root.append("g"), gWater = root.append
       gTiles = root.append("g"), gTerrain = root.append("g"), gKing = root.append("g"), gRoads = root.append("g"), gRegions = root.append("g"), gTribes = root.append("g"),
       gCamp = root.append("g"), gRoutes = root.append("g"), gHalo = root.append("g"),
       gCity = root.append("g"), gVerse = root.append("g"), gBattles = root.append("g"), gEvents = root.append("g"), gFinds = root.append("g"), gDist = root.append("g"),
-      gSites = root.append("g"), gPhotos = root.append("g"), gLabels = root.append("g"),
+      gSites = root.append("g"), gLabels = root.append("g"),
       gFocus = root.append("g");
+const gCmp = root.insert("g", ()=>gRoutes.node());     // ghosted comparison era, under the live one
+const RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const say = msg => { const l = document.getElementById("live"); if(l) l.textContent = msg; };
+const CF_COLOR = { secure:"#2f6b64", probable:"#8a6a1f", disputed:"#7a2f2f", unrated:"#8a8272" };
+/* Redundant, non-color certainty encoding (WCAG 1.4.1) — pattern/opacity carries the same
+   distinction as color so it survives grayscale and print: solid fill for secure, a dashed
+   ring for probable, a widely-dashed hollow-ish ring for disputed, dotted for unrated. */
+const CF_DASH = { secure:"", probable:"3,2", disputed:"1.5,2.5", unrated:"1,3" };
+const CF_MARK = { secure:"\u25cf", probable:"\u25d1", disputed:"\u25cb", unrated:"\u25e6" };
+function cfOf(id){ const p = (typeof PREC!=="undefined" && PREC[id]) || {};
+  return p.cf || ((S[id] && S[id].q) ? "disputed" : "unrated"); }
+const cfColor = id => CF_COLOR[cfOf(id)] || "#8a8272";
+const modName = m => (m||"").split(",")[0].trim();
+let cmpEra = -1;
+const CHRON = {
+  primeval:"The atlas gives no absolute dates here: Genesis 1–11 is placed by sequence, not by calendar.",
+  patriarchs:"The atlas follows the traditional early dating, c. 2000–1700 BC, read from the internal chronology of Genesis and 1 Kgs 6:1.",
+  exodus:"Undated. Traditional models place it in the 15th century BC, read from the 480 years of 1 Kgs 6:1; other reconstructions place it in the 13th century under Ramesses II — a difference of about 200 years. The atlas does not pick one as the archaeological date.",
+  conquest:"No single conquest horizon is agreed. The traditional narrative setting follows whichever exodus model is in view (15th or 13th c. BC); settlement archaeology shows highland population growth chiefly in the late 13th–12th centuries BC.",
+  judges:"The spans in Judges overlap and are not meant to be added; the totals here are approximate.",
+  kingdom:"Regnal dates follow Thiele's synchronised chronology of Judah and Israel.",
+  divided:"Regnal dates follow Thiele. Samaria's fall is given as 722 BC; 720 BC is the competing date, and the atlas flags it as disputed.",
+  judah:"Assyrian and Babylonian records fix this century to within a year or two — the firmest dates in the atlas.",
+  exile:"Persian-period dates rest on dated administrative records. The relative order of Ezra and Nehemiah is an open question, and the atlas takes the traditional order.",
+  persia:"Persian regnal years are fixed by Babylonian and Egyptian dated documents. What is uncertain is Judean internal history, for which there is almost no narrative between Nehemiah and Alexander.",
+  hellenistic:"Ptolemaic and Seleucid regnal years are firm; the Babylonian diaries date Gaugamela to the day. Events inside Judea before 175 BC are sparsely dated.",
+  hasmonean:"1 Maccabees dates events by the Seleucid era, which converts cleanly; 2 Maccabees uses a different reckoning and sometimes disagrees by a year.",
+  roman:"Roman and Judean events here are dated within a year or two. Herod's death is placed in 4 BC from his sons' regnal years and a lunar eclipse; a minority argues for 1 BC."
+};
 
 const projection = d3.geoMercator();
 const path = d3.geoPath(projection);
@@ -734,7 +1190,6 @@ function applyDetailVisibility(){
   gModern.select(".mcities").attr("display", state.layers.modern && !wide ? null : "none");
   gTribes.attr("display", state.layers.tribes && !wide ? null : "none");
   gTerrain.attr("display", state.layers.terrain && !wide ? null : "none");
-  gPhotos.attr("display", state.layers.photos && !wide ? null : "none");
   gDist.attr("display", state.layers.distances && !wide ? null : "none");
   gRoads.attr("display", state.layers.roads && !wide ? null : "none");
   gCity.attr("display", state.layers.city && transform.k > 60 ? null : "none");
@@ -747,10 +1202,11 @@ function scaleMarks(k){
   gEvents.selectAll("g.ev").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   gBattles.selectAll("g.bt").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   gFinds.selectAll("g.fd").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
-  gRoads.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
+  relayoutRoadLabels();
   gCity.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   gCity.selectAll("g.cy").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   relayoutCityLabels();
+  renderCompare();
   gKing.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   gTerrain.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   gTerrain.selectAll("path").attr("stroke-width",1.6/k).attr("stroke-dasharray",`${8/k} ${4/k}`);
@@ -759,7 +1215,6 @@ function scaleMarks(k){
   gVerse.selectAll("path.versepath").attr("stroke-width",2.4/k).attr("stroke-dasharray",`${6/k} ${4/k}`);
   gVerse.selectAll("g.vp").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   drawFocus();
-  renderPhotos();
   applyDetailVisibility();
   gHalo.selectAll("circle").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   layoutLabels(false);
@@ -939,13 +1394,16 @@ function renderMap(animate){
   gRoads.selectAll("*").remove();
   if(L.roads){
     gRoads.selectAll("path").data(ROADS).enter().append("path").attr("class","road")
+      .attr("id",(d,i)=>`roadpath-${i}`)
       .call(s=>s.append("title").text(d=>d.n))
       .attr("fill","none").attr("stroke","#9a8a67").attr("stroke-width",2.2/k)
       .attr("stroke-dasharray",`${1.5/k} ${4/k}`).attr("stroke-linecap","round")
       .attr("d",d=>line(d.pts.map(p=>projection(p))));
-    gRoads.selectAll("text").data(ROADS.map(r=>({t:r.n, xy:projection(r.pts[Math.floor(r.pts.length/2)])})))
-      .enter().append("text").attr("class","road-label").attr("text-anchor","middle").attr("font-size",9)
-      .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).attr("y",-5).text(d=>d.t);
+    gRoads.selectAll("text").data(ROADS).enter().append("text")
+      .attr("class","road-label").attr("text-anchor","middle")
+      .append("textPath").attr("href",(d,i)=>`#roadpath-${i}`)
+      .attr("startOffset",(d,i)=>`${26 + 13*(i%4)}%`);
+    relayoutRoadLabels();
   }
 
   /* military campaigns */
@@ -965,7 +1423,7 @@ function renderMap(animate){
     cd.forEach(c=>(c.battles||[]).forEach(b=>bd.push({...b, ci:c.i, color:c.color, xy:projection(b.c)})));
     const bg = gBattles.selectAll("g.bt").data(bd).enter().append("g").attr("class","bt")
       .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).style("cursor","pointer")
-      .on("click",(e,d)=>{ openBattle(d); e.stopPropagation(); });
+      .on("click",(e,d)=>{ mapToggle("bt:"+d.ci+":"+d.n, ()=>openBattle(d)); e.stopPropagation(); });
     bg.append("circle").attr("r",8).attr("fill","transparent");
     bg.append("path").attr("d",BATTLE_D).attr("fill","none").attr("stroke",d=>d.color).attr("stroke-width",1.8);
     if(state.campaign!==null) applyCampaignEmphasis();
@@ -999,7 +1457,7 @@ function renderMap(animate){
       const gg = gCity.selectAll("g.cygate").data(JERUSALEM.gates.map(g=>({...g,xy:projection(g.c)})))
         .enter().append("g").attr("class","cy cygate")
         .attr("transform",d=>"translate("+d.xy+") scale("+(1/k)+")").style("cursor","pointer")
-        .on("click",(e,d)=>{ openCityItem(d,"gate"); e.stopPropagation(); });
+        .on("click",(e,d)=>{ mapToggle("gate:"+d.n, ()=>openCityItem(d,"gate")); e.stopPropagation(); });
       gg.append("rect").attr("x",-3.5).attr("y",-3.5).attr("width",7).attr("height",7)
         .attr("fill","#f2e9d6").attr("stroke",WALLC.nehemiah).attr("stroke-width",1.3);
       gg.append("text").attr("class","citylab").text(d=>d.n);
@@ -1007,7 +1465,7 @@ function renderMap(animate){
     const fg = gCity.selectAll("g.cyf").data(JERUSALEM.features.map(f=>({...f,xy:projection(f.c)})))
       .enter().append("g").attr("class","cy cyf")
       .attr("transform",d=>"translate("+d.xy+") scale("+(1/k)+")").style("cursor","pointer")
-      .on("click",(e,d)=>{ openCityItem(d,"feature"); e.stopPropagation(); });
+      .on("click",(e,d)=>{ mapToggle("feat:"+d.n, ()=>openCityItem(d,"feature")); e.stopPropagation(); });
     fg.append("circle").attr("r",8).attr("fill","transparent");
     fg.append("circle").attr("r",3.4).attr("fill","var(--terra)").attr("stroke","#f2e9d6").attr("stroke-width",1.1);
     fg.append("text").attr("class","citylab strong").text(d=>d.n);
@@ -1020,7 +1478,7 @@ function renderMap(animate){
     const fd = FINDS.filter(f=>state.allFinds || f.e.includes(era.id)).map(f=>({...f, xy:projection(f.c)}));
     const fg = gFinds.selectAll("g.fd").data(fd).enter().append("g").attr("class","fd")
       .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).style("cursor","pointer")
-      .on("click",(e,d)=>{ openFind(d.i); e.stopPropagation(); });
+      .on("click",(e,d)=>{ mapToggle("find:"+d.i, ()=>openFind(d.i)); e.stopPropagation(); });
     fg.append("circle").attr("r",8).attr("fill","transparent");
     fg.append("path").attr("d",FIND_D).attr("fill","#f2e9d6").attr("stroke","var(--plum)").attr("stroke-width",1.2);
   }
@@ -1031,7 +1489,7 @@ function renderMap(animate){
     const ed = EVENTS.map((v,i)=>({...v,i})).filter(v=>v.e===era.id).map(v=>({...v, xy:projection(v.c)}));
     const eg = gEvents.selectAll("g.ev").data(ed).enter().append("g").attr("class","ev")
       .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).style("cursor","pointer")
-      .on("click",(e,d)=>{ openEvent(d); e.stopPropagation(); });
+      .on("click",(e,d)=>{ mapToggle("evt:"+d.t, ()=>openEvent(d)); e.stopPropagation(); });
     eg.append("circle").attr("r",9).attr("fill","transparent");
     eg.append("path").attr("d",d=>KINDS[d.k].d)
       .attr("fill",d=>d.k==="judgment"?"none":KINDS[d.k].c)
@@ -1047,8 +1505,11 @@ function renderMap(animate){
   gSites.selectAll("circle").data(sd).enter().append("circle").attr("class","pin")
     .attr("cx",d=>projection(d.c)[0]).attr("cy",d=>projection(d.c)[1])
     .attr("r",d=>(d.major?5:3.6)/k).attr("stroke-width",1.6/k)
-    .attr("fill",d=>d.major?"var(--ink)":"#efe6d4").attr("stroke",d=>d.major?"#efe6d4":"var(--ink)")
-    .style("cursor","pointer").on("click",(e,d)=>{ openPlace(d.id); e.stopPropagation(); })
+    .attr("fill",d=>L.certainty ? cfColor(d.id) : (d.major?"var(--ink)":"#efe6d4"))
+    .attr("stroke",d=>L.certainty ? "#f4ecda" : (d.major?"#efe6d4":"var(--ink)"))
+    .attr("stroke-dasharray",d=>L.certainty ? (CF_DASH[cfOf(d.id)]||"") : null)
+    .attr("fill-opacity",d=>L.certainty && cfOf(d.id)==="disputed" ? 0.35 : 1)
+    .style("cursor","pointer").on("click",(e,d)=>{ mapToggle("place:"+d.id, ()=>openPlace(d.id)); e.stopPropagation(); })
     .attr("opacity",animate?0:1);
   if(animate) gSites.selectAll("circle").transition().delay((d,i)=>i*22).duration(260).attr("opacity",1);
 
@@ -1059,7 +1520,8 @@ function renderMap(animate){
     .enter().append("text").attr("class","site-label")
     .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`)
     .attr("fill",d=>d.major?"var(--ink)":"var(--ink-2)")
-    .attr("font-weight",d=>d.major?600:400).text(d=>d.label);
+    .attr("font-weight",d=>d.major?600:400)
+    .text(d=>L.names && d.m ? d.label+" · "+modName(d.m) : d.label);
 
   /* regions & tribes */
   gRegions.selectAll("*").remove();
@@ -1073,8 +1535,9 @@ function renderMap(animate){
     .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).text(d=>d.t);
 
   renderTiles();
+  renderCompare();
+  relayoutRoadLabels();
   renderDistances();
-  renderPhotos();
   applyDetailVisibility();
   drawFocus();
   renderHalos();
@@ -1210,8 +1673,15 @@ function renderHalos(){
 function flyTo(c, k){
   const target = k || Math.max(transform.k, 3.2);
   const p = projection(c);
-  const t = d3.zoomIdentity.translate(W/2 - p[0]*target, H/2 - p[1]*target).scale(target);
-  svg.transition().duration(700).call(zoom.transform, t);
+  const {visW, visH} = visibleStageSize();
+  const t = d3.zoomIdentity.translate(visW/2 - p[0]*target, visH/2 - p[1]*target).scale(target);
+  svg.transition().duration(RM?0:700).call(zoom.transform, t);
+}
+function visibleStageSize(){
+  let visW = W, visH = H;
+  if(window.innerWidth<=820) visH = H - (document.body.classList.contains("sheet-open") ? Math.min(H*0.45, 420) : 0);
+  else if(window.innerWidth<=1280) visW = W - (document.body.classList.contains("tab-panel-open") ? Math.min(W*0.30, 380) : 0);
+  return {visW, visH};
 }
 
 /* =========================== focus marker =========================== */
@@ -1220,7 +1690,6 @@ function flyTo(c, k){
 function ensureLayer(key){
   if(state.layers[key]) return false;
   state.layers[key] = true;
-  if(key==="photos") ensurePhotos(ERAS[state.era].sites);
   syncLayerUI();
   return true;
 }
@@ -1284,7 +1753,7 @@ function markPlaces(ids){
     inEra: ERAS[state.era].sites.includes(id)}));
   const vg = gVerse.selectAll("g.vp").data(vd).enter().append("g").attr("class","vp")
     .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).style("cursor","pointer")
-    .on("click",(e,d)=>{ openPlace(d.id); setTab("place"); e.stopPropagation(); });
+    .on("click",(e,d)=>{ mapToggle("place:"+d.id, ()=>{ openPlace(d.id); setTab("place"); }); e.stopPropagation(); });
   vg.append("circle").attr("r",9).attr("fill","transparent");
   vg.append("circle").attr("r",5).attr("fill","var(--terra)").attr("stroke","#f4ecda").attr("stroke-width",1.8);
   vg.filter(d=>!d.inEra).append("text").attr("class","site-label verse-label")
@@ -1312,7 +1781,7 @@ function spotlightVerse(ids, fit){
     inEra: ERAS[state.era].sites.includes(id)}));
   const vg = gVerse.selectAll("g.vp").data(vd).enter().append("g").attr("class","vp")
     .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).style("cursor","pointer")
-    .on("click",(e,d)=>{ openPlace(d.id); e.stopPropagation(); });
+    .on("click",(e,d)=>{ mapToggle("place:"+d.id, ()=>openPlace(d.id)); e.stopPropagation(); });
   vg.append("circle").attr("r",9).attr("fill","transparent");
   vg.append("circle").attr("r",5).attr("fill","var(--terra)").attr("stroke","#f4ecda").attr("stroke-width",1.8);
   vg.filter(d=>!d.inEra).append("text").attr("class","site-label verse-label")
@@ -1330,14 +1799,13 @@ function spotlightVerse(ids, fit){
   }
 }
 
-/* =========================== raster tiles (satellite / street) =========================== */
+/* =========================== raster tiles (satellite / relief) =========================== */
 function activeTileset(){ return state.layers.satellite ? "satellite"
-  : state.layers.street ? "street" : state.layers.relief ? "relief" : null; }
+  : state.layers.relief ? "relief" : null; }
 function renderTiles(){
   const set = activeTileset();
   const svgEl = document.getElementById("map");
   svgEl.classList.toggle("sat", set==="satellite");
-  svgEl.classList.toggle("street", set==="street");
   svgEl.classList.toggle("relief", set==="relief");
   gLand.select(".landmass").attr("fill-opacity", set==="relief" ? 0.35 : set ? 0 : 1);
   gWater.selectAll(".lake").attr("fill-opacity", set?0:1);
@@ -1352,7 +1820,7 @@ function renderTiles(){
   const lat1 = Math.min(85, Math.max(nw[1],se[1])), lat0 = Math.max(-85, Math.min(nw[1],se[1]));
   const spanLon = lon1 - lon0;
   let z = Math.round(Math.log2(360 / Math.max(0.02, spanLon)) + Math.log2(W/256));
-  z = Math.max(1, Math.min(19, z));
+  z = Math.max(1, Math.min(TILESETS[set].maxZ || 19, z));
   const n = 2**z;
   const xOf = lon => Math.floor((lon+180)/360*n);
   const yOf = lat => { const r = lat*Math.PI/180;
@@ -1433,90 +1901,9 @@ function itineraryEl(pathArr, color){
   return box;
 }
 
-/* =========================== photographs =========================== */
-const PHOTOS = {};                                    // wiki title -> {src,page,extract} | null
-function photoFor(site){ return site.w ? PHOTOS[site.w] : undefined; }
-async function loadPhoto(title, hint){
-  if(title in PHOTOS) return PHOTOS[title];
-  PHOTOS[title] = null;
-  let page = "https://en.wikipedia.org/wiki/"+title, label = title.replace(/_/g," ");
-  // 1. article summary
-  try{
-    const j = await (await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(title))).json();
-    if(j.content_urls && j.content_urls.desktop) page = j.content_urls.desktop.page;
-    if(j.titles && j.titles.normalized) label = j.titles.normalized;
-    if(j.thumbnail){
-      PHOTOS[title] = {src:j.thumbnail.source, page, title:label,
-        full:(j.originalimage && j.originalimage.source) || j.thumbnail.source};
-      return PHOTOS[title];
-    }
-  }catch(e){}
-  // 2. pageimages (some articles expose an image the summary endpoint omits)
-  try{
-    const u = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages&piprop=thumbnail&pithumbsize=500&titles="+encodeURIComponent(title.replace(/_/g," "));
-    const j = await (await fetch(u)).json();
-    const p = Object.values(j.query.pages)[0];
-    if(p && p.thumbnail){ PHOTOS[title] = {src:p.thumbnail.source, page, title:label, full:p.thumbnail.source}; return PHOTOS[title]; }
-  }catch(e){}
-  // 3. Wikimedia Commons file search
-  try{
-    const q = hint || title.replace(/_/g," ");
-    const u = "https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&list=search&srnamespace=6&srlimit=1&srsearch="+encodeURIComponent(q);
-    const j = await (await fetch(u)).json();
-    const hitTitle = j.query && j.query.search && j.query.search[0] && j.query.search[0].title;
-    if(hitTitle){
-      const file = hitTitle.replace(/^File:/,"");
-      PHOTOS[title] = {
-        src: "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width=500",
-        full: "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width=1400",
-        page: "https://commons.wikimedia.org/wiki/"+encodeURIComponent(hitTitle),
-        title: label
-      };
-    }
-  }catch(e){}
-  return PHOTOS[title];
-}
-async function ensurePhotos(ids){
-  const titles = [...new Set(ids.map(id=>S[id] && S[id].w).filter(t=>t && !(t in PHOTOS)))];
-  for(let i=0;i<titles.length;i+=5){
-    await Promise.all(titles.slice(i,i+5).map(loadPhoto));
-    renderPhotos(); if(state.place) renderPlacePane();
-  }
-}
-function renderPhotos(){
-  gPhotos.selectAll("*").remove();
-  if(!state.layers.photos) return;
-  const era = ERAS[state.era];
-  // thumbnails are big on screen: keep journey sites first and drop any that would overlap
-  const boxes = [], hit=(a,b)=>!(a[2]<b[0]||b[2]<a[0]||a[3]<b[1]||b[3]<a[1]);
-  const data = era.sites.map(id=>S[id]).filter(s=>photoFor(s))
-    .map(s=>({...s, xy:projection(s.c), ph:photoFor(s),
-      major: era.journeys.some(j=>j.path.includes(s.id))}))
-    .sort((a,b)=>(b.major?1:0)-(a.major?1:0))
-    .filter(s=>{
-      const [x,y] = transform.apply(s.xy);
-      const box = [x-21,y-42,x+21,y-10];
-      if(box[0]<0||box[2]>W||box[1]<0) return false;
-      if(boxes.some(b=>hit(box,b))) return false;
-      boxes.push(box); return true;
-    });
-  const g = gPhotos.selectAll("g.ph").data(data).enter().append("g").attr("class","ph")
-    .attr("transform",d=>`translate(${d.xy}) scale(${1/transform.k})`).style("cursor","zoom-in")
-    .on("click",(e,d)=>{ openLightbox(d.ph, d.n); openPlace(d.id); e.stopPropagation(); });
-  g.append("title").text(d=>`${d.n} — click for the full photograph`);
-  g.append("rect").attr("x",-19).attr("y",-40).attr("width",38).attr("height",28)
-    .attr("fill","#f6efdd").attr("stroke","#6f6551").attr("stroke-width",1);
-  g.append("clipPath").attr("id",d=>"cp-"+d.id).append("rect")
-    .attr("x",-18).attr("y",-39).attr("width",36).attr("height",26);
-  g.append("image").attr("x",-18).attr("y",-39).attr("width",36).attr("height",26)
-    .attr("preserveAspectRatio","xMidYMid slice").attr("clip-path",d=>`url(#cp-${d.id})`)
-    .attr("href",d=>d.ph.src);
-  g.append("path").attr("d","M0,-12 L0,-4").attr("stroke","#6f6551").attr("stroke-width",1);
-}
-
 /* =========================== scripture reader =========================== */
-const TRANSLATIONS = [["kjv","King James Version"],["web","World English Bible"],["bbe","Bible in Basic English"]];
-let TRANS = (()=>{ try{ return localStorage.getItem("otatlas:trans") || "kjv"; }catch(e){ return "kjv"; } })();
+const TRANSLATIONS = [["asv","American Standard Version"]];
+let TRANS = "asv";
 const VERSES = {};
 const ck = q => TRANS+":"+q;
 function cacheGet(q){
@@ -1584,14 +1971,17 @@ function placesForRef(ref){
 }
 
 /* =========================== panels =========================== */
-const TABS = [["era","Era"],["cfm","Weekly"],["tours","Tours"],["place","Place"],["wars","Wars"],["finds","Finds"],["peoples","Peoples"],["scripture","Verses"]];
+const TABS = [["era","Era"],["cfm","Weekly Reading"],["tours","Tours"],["place","Place"],["wars","Wars"],["finds","Finds"],["peoples","Peoples"],["scripture","Verses"]];
 const tabsEl = document.getElementById("tabs");
+tabsEl.setAttribute("role","tablist");
 TABS.forEach(([id,label])=>{
   const b = document.createElement("button"); b.textContent = label; b.dataset.tab = id;
+  b.setAttribute("role","tab");
   b.onclick = ()=>setTab(id); tabsEl.appendChild(b);
 });
 function setTab(id){
   state.tab = id;
+  document.getElementById("pane-detail").hidden = true;
   tabsEl.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current", b.dataset.tab===id));
   TABS.forEach(([t])=>document.getElementById("pane-"+t).hidden = (t!==id));
   if(id==="cfm") renderCfmPane();
@@ -1601,14 +1991,15 @@ function setTab(id){
   if(id==="finds") renderFindsPane();
   if(id==="peoples") renderPeoplesPane();
   if(id==="scripture") renderScripturePane();
+  if(id!=="cfm" && id!=="tours") ensurePanelVisible();
 }
 
 function refRow(refStr){
   const wrap = document.createElement("div"); wrap.className = "refrow";
-  splitRefs(refStr).forEach(r=>{
+  splitRefs(refStr||"").forEach(r=>{
     const b = document.createElement("button"); b.className = "ref"; b.textContent = r.display;
     b.title = "Read " + r.display;
-    b.onclick = ()=>openPassage(r); wrap.appendChild(b);
+    b.onclick = ()=>{ openPassage(r); ensurePanelVisible(); }; wrap.appendChild(b);
   });
   return wrap;
 }
@@ -1622,7 +2013,8 @@ function renderEraPane(){
   p.innerHTML = `<div class="body">
       <div class="kicker">Era ${String(state.era+1).padStart(2,"0")} of ${ERAS.length}</div>
       <h3>${era.name}</h3>
-      <div class="dates">${era.dates}</div>
+      <div class="dates">${eraDates(era)}</div>
+      ${CHRON[era.id]?`<p class="note" style="margin:5px 0 0"><b>On these dates:</b> ${CHRON[era.id]}</p>`:""}
       <p class="narr">${era.narr}</p>
       <div class="books">${era.books}</div>
       ${era.caveat?`<p class="caveat">${era.caveat}</p>`:""}
@@ -1630,13 +2022,14 @@ function renderEraPane(){
     ${era.journeys.length?`<h2>Journeys &amp; campaigns</h2><div id="jlist"></div>`:""}
     ${CAMPAIGNS.filter(c=>c.e===era.id).length?`<h2>Military campaigns</h2><div id="wlist"></div>`:""}
     <h2>What happened here</h2><div id="elist"></div>
+    ${(PROFILES.some(p=>p.era===era.id) || era.id==="exodus")?`<h2>Diagrams &amp; profiles</h2><div class="sitelist" id="dlist"></div>`:""}
     <h2>Places on this map</h2><div class="sitelist" id="clist"></div>`;
 
   const jl = p.querySelector("#jlist");
   if(jl) era.journeys.forEach((j,idx)=>{
     const b = document.createElement("button"); b.className = "jrn";
     b.innerHTML = `<span class="swatch" style="background:${j.color}"></span>
-      <span><span class="t">${j.name}</span><br><span class="r">${j.refs} · ${j.path.filter(x=>!Array.isArray(x)).length} named stops</span>
+      <span><span class="t">${j.name}</span><br><span class="r">${j.refs?j.refs+" · ":""}${j.path.filter(x=>!Array.isArray(x)).length} named stops</span>
       ${j.note?`<br><span class="note">${j.note}</span>`:""}</span>`;
     b.onclick = ()=>{ setJourney(idx); showJourney(idx); };
     jl.appendChild(b);
@@ -1660,10 +2053,25 @@ function renderEraPane(){
     el.appendChild(b);
   });
 
+  const dl = p.querySelector("#dlist");
+  if(dl){
+    PROFILES.filter(pf=>pf.era===era.id).forEach(pf=>{
+      const b = document.createElement("button"); b.className = "chip";
+      b.textContent = pf.n; b.onclick = ()=>openProfile(pf);
+      dl.appendChild(b);
+    });
+    if(era.id==="exodus"){
+      const b = document.createElement("button"); b.className = "chip";
+      b.textContent = "The camp of Israel (Numbers 2)"; b.onclick = openCamp;
+      dl.appendChild(b);
+    }
+  }
+
   const cl = p.querySelector("#clist");
   era.sites.forEach(id=>{
     const b = document.createElement("button"); b.className = "chip";
-    b.textContent = S[id].n.replace(/ \(.*\)/,"");
+    const s = S[id], lat = s.c[1].toFixed(3), lon = s.c[0].toFixed(3);
+    b.innerHTML = `${s.n.replace(/ \(.*\)/,"")} <span class="r" style="opacity:.6">${lat}, ${lon}</span>`;
     b.onclick = ()=>{ openPlace(id); };
     cl.appendChild(b);
   });
@@ -1678,9 +2086,15 @@ function showJourney(idx){
   box.className = "body jrndetail";
   box.style.borderTop = "1px solid var(--rule)";
   box.innerHTML = `<div class="kicker" style="color:${j.color}">Journey</div>
-    <h3>${j.name}</h3><div class="dates">${j.refs}</div>
+    <h3>${j.name}</h3>${j.refs?`<div class="dates">${j.refs}</div>`:""}
     ${j.note?`<p class="note">${j.note}</p>`:""}`;
   box.appendChild(itineraryEl(j.path, j.color));
+  if(profileData(j.path.filter(x=>typeof x==="string"))){
+    const pd = document.createElement("div");
+    pd.innerHTML = `<div class="sec">Height along the way</div><div class="pfhost"></div>`;
+    box.appendChild(pd);
+    mountProfile(pd.querySelector(".pfhost"), j.path.filter(x=>typeof x==="string"), "");
+  }
   const rr = refRow(j.refs); box.appendChild(rr);
   p.appendChild(box);
   const jl = p.querySelector("#jlist");
@@ -1694,7 +2108,7 @@ function dms(v, pos, neg){
   const d = Math.floor(a), m = Math.floor((a-d)*60), s = Math.round((((a-d)*60)-m)*60);
   return `${d}°${String(m).padStart(2,"0")}′${String(s).padStart(2,"0")}″${hemi}`;
 }
-const CF_LABEL = { secure:"Securely identified", probable:"Probable identification", disputed:"Disputed — no agreed site" };
+const CF_LABEL = { secure:"Securely identified", probable:"Probable identification", disputed:"Disputed — no agreed site", unrated:"Not yet reviewed" };
 function whereBlock(id){
   const s = S[id], p = (typeof PREC!=="undefined" && PREC[id]) || {};
   const cf = p.cf || (s.q ? "disputed" : null);
@@ -1702,12 +2116,14 @@ function whereBlock(id){
     <div class="wrow"><span class="wk">Coordinates</span><span class="wv"><span class="mono">${dms(s.c[1],"N","S")} ${dms(s.c[0],"E","W")}</span><br>
       <span class="mono">${s.c[1].toFixed(4)}, ${s.c[0].toFixed(4)}</span></span></div>
     ${p.el!=null ? `<div class="wrow"><span class="wk">Elevation</span><span class="wv">${p.el<0 ? Math.abs(p.el)+" m below sea level" : "≈ "+p.el+" m above sea level"}</span></div>` : ""}
-    ${cf ? `<div class="wrow"><span class="wk">Certainty</span><span class="wv"><span class="cf ${cf}">${CF_LABEL[cf]}</span></span></div>` : ""}
+    ${cf ? `<div class="wrow"><span class="wk">Certainty</span><span class="wv"><span class="cf ${cf}">${CF_MARK[cf]} ${CF_LABEL[cf]}</span></span></div>` : ""}
     ${p.at ? `<div class="wrow"><span class="wk">Finding it</span><span class="wv">${p.at}</span></div>` : ""}
     ${p.id ? `<div class="wrow"><span class="wk">How we know</span><span class="wv">${p.id}</span></div>` : ""}
+    ${s.w?`<div class="wrow"><span class="wk">Further reading</span><span class="wv"><a href="https://en.wikipedia.org/wiki/${s.w}" target="_blank" rel="noopener">${s.w.replace(/_/g," ")} — Wikipedia</a></span></div>`:""}
+    <div class="wrow"><span class="wk">Cite as</span><span class="wv mono" style="font-size:10px">Halverson, Taylor. “${s.n}.” <i>The Old Testament &amp; Intertestamental Atlas</i>, ${s.c[1].toFixed(4)}, ${s.c[0].toFixed(4)}. Accessed ${new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})}.</span></div>
     <div class="wrow"><span class="wk">See it</span><span class="wv groundrow">
       <button class="chip" data-ground="sat">Satellite</button>
-      <button class="chip" data-ground="street">Street map</button>
+      <button class="chip" data-ground="relief">Relief</button>
       <button class="chip" data-ground="close">Closest zoom</button>
     </span></div></div>`;
 }
@@ -1717,30 +2133,22 @@ function wireGround(root, id){
     b.onclick = ()=>{
       const mode = b.dataset.ground;
       if(mode==="sat") toggleLayer("satellite", true);
-      if(mode==="street") toggleLayer("street", true);
+      if(mode==="relief") toggleLayer("relief", true);
       flyTo(s.c, mode==="close" ? 1400 : 700);
       focusOn(s.c, s.n, "var(--terra)");
     };
   });
 }
-function renderPlacePane(){
-  const p = document.getElementById("pane-place");
-  if(!state.place){
-    p.innerHTML = `<div class="body"><p class="narr">Click any place on the map — or a name in the era list — to read its entry: what Scripture records there, and what archaeology has found.</p>
-    <p class="loading">Turn on <b>Photographs</b> in the layers panel for free images of each site.</p></div>`;
-    return;
-  }
-  const s = S[state.place], ph = photoFor(s);
-  p.innerHTML = `<div class="body">
+function placeHTML(id){
+  const s = S[id];
+  return `
       <div class="kicker">Place</div>
       <h3>${s.n}</h3>
       <div class="dates">${s.m}</div>
-      ${whereBlock(state.place)}
-      ${ph?`<figure><img class="zoomhint" id="placeimg" src="${ph.src}" alt="${s.n}" title="Click to enlarge"><figcaption>${ph.title} — photograph via Wikimedia / Wikipedia. <a href="${ph.page}" target="_blank" rel="noopener">source &amp; licence</a> · click the image to enlarge</figcaption></figure>`:
-        (s.w && state.layers.photos ? `<p class="loading">Looking for a photograph…</p>` : "")}
+      ${whereBlock(id)}
       <p class="narr" style="margin-top:11px">${s.p}</p>
       ${s.q ? `<p class="idnote"><b>Identification</b> — ${s.q}</p>` : ""}
-      ${state.place==="jerusalem" ? `<div class="sec">The city plan</div>
+      ${id==="jerusalem" ? `<div class="sec">The city plan</div>
         <p class="narr" style="font-size:14px">Four building phases in real coordinates — walls, gates, valleys,
         water system. Pick a phase, then click any wall, gate or feature on the map.</p>
         <div class="perrow" id="periods"></div>` : ""}
@@ -1751,18 +2159,18 @@ function renderPlacePane(){
       <div class="sec">Campaigns through here</div><div class="sitelist" id="pcamp" style="padding-left:0"></div>
       <div class="sec">Finds from here</div><div class="sitelist" id="pfinds" style="padding-left:0"></div>
       <div class="sec">Appears in</div>
-      <div class="sitelist" id="perias" style="padding-left:0"></div>
-    </div>`;
-  const pi = p.querySelector("#placeimg");
-  if(pi) pi.onclick = ()=>openLightbox(ph, s.n);
-  wireGround(p, state.place);
+      <div class="sitelist" id="perias" style="padding-left:0"></div>`;
+}
+function wirePlaceHTML(p, id){
+  const s = S[id];
+  wireGround(p, id);
   p.querySelector("#prefs").appendChild(refRow(s.r));
   const perBox = p.querySelector("#periods");
-  if(perBox) PERIODS.forEach(([id,label,when])=>{
+  if(perBox) PERIODS.forEach(([pid,label,when])=>{
     const b = document.createElement("button");
     b.className = "perbtn"; b.innerHTML = label + (when ? " <i>"+when+"</i>" : "");
-    b.setAttribute("aria-pressed", state.cityPeriod===id);
-    b.onclick = ()=>{ state.cityPeriod = id; if(!state.layers.city) toggleLayer("city",true); else renderMap();
+    b.setAttribute("aria-pressed", state.cityPeriod===pid);
+    b.onclick = ()=>{ state.cityPeriod = pid; if(!state.layers.city) toggleLayer("city",true); else renderMap();
       if(transform.k < 200) flyTo(JERUSALEM.centre, 900);
       perBox.querySelectorAll(".perbtn").forEach(x=>x.setAttribute("aria-pressed", false));
       b.setAttribute("aria-pressed", true); };
@@ -1798,6 +2206,16 @@ function renderPlacePane(){
     box.appendChild(b);
   });
   if(!eras.length) box.innerHTML = `<span class="note">Background site — not tied to one era.</span>`;
+}
+function renderPlacePane(){
+  const p = document.getElementById("pane-place");
+  if(!state.place){
+    p.innerHTML = `<div class="body"><p class="narr">Click any place on the map — or a name in the era list — to read its entry: what Scripture records there, and what archaeology has found.</p>
+</div>`;
+    return;
+  }
+  p.innerHTML = `<div class="body">${placeHTML(state.place)}</div>`;
+  wirePlaceHTML(p, state.place);
 }
 
 function renderWarsPane(){
@@ -1857,21 +2275,15 @@ function renderFindsPane(){
     wrap.dataset.find = f.i;
     wrap.style.borderTop = "1px solid var(--rule)";
     wrap.style.transition = "background .5s";
-    const ph = f.w ? PHOTOS[f.w] : undefined;
     wrap.innerHTML = `<div class="t" style="font-size:17px;font-weight:600">${f.n}</div>
       <div class="r">${f.date} · ${f.found} · ${f.where}</div>
-      ${ph?`<figure><img class="zoomhint" src="${ph.src}" alt="${f.n}" title="Click to enlarge"><figcaption>${ph.title} — via Wikimedia / Wikipedia. <a href="${ph.page}" target="_blank" rel="noopener">source &amp; licence</a> · click to enlarge</figcaption></figure>`:
-        `<p class="loading" style="margin:6px 0 0">photograph loading…</p>`}
       <p class="arch" style="margin-top:8px">${f.p}</p>`;
-    const fi = wrap.querySelector("img");
-    if(fi) fi.onclick = ()=>openLightbox(PHOTOS[f.w], f.n);
     const rr = refRow(f.r); wrap.appendChild(rr);
     const go = document.createElement("button"); go.className="chip"; go.textContent="Show on map";
     go.style.marginTop = "7px";
     go.onclick = ()=>{ openFind(f.i, true); flyTo(f.c, Math.max(transform.k, 4)); };
     wrap.appendChild(go);
     p.appendChild(wrap);
-    if(f.w && !(f.w in PHOTOS)) loadPhoto(f.w, f.q).then(()=>{ if(state.tab==="finds") renderFindsPane(); });
   });
 }
 
@@ -1940,7 +2352,7 @@ function renderScripturePane(){
                  `<span class="vn">${v.c}:${v.v}</span>${markupVerse(v.t.replace(/\n/g," "))} </span>`;
         }).join(""):
         `<p class="loading">Loading text…</p>`}</div>
-      <div class="scrip-src">Text: bible-api.com · ${(TRANSLATIONS.find(t=>t[0]===TRANS)||[])[1]} (public domain)</div>
+      <div class="scrip-src">Text: American Standard Version (1901), public domain</div>
       <div class="sec">On the map in this passage</div>
       <div id="plinks"></div>
     </div>`;
@@ -1989,14 +2401,11 @@ function wireVerses(pane){
     bar.innerHTML = ids.length
       ? `<span class="r">On the map in this verse</span>` : `<span class="r">No mapped place in this verse</span>`;
     ids.forEach(id=>{
-      const ph = photoFor(S[id]);
       const b = document.createElement("button"); b.className = "chip vchip";
-      b.innerHTML = (ph?`<img src="${ph.src}" alt="">`:"") + S[id].n.replace(/ \(.*\)/,"");
-      b.title = ph ? "Open place · shift-click for the photograph" : "Open place";
-      b.addEventListener("click", ev=>{ if(ev.shiftKey && ph){ ev.stopPropagation(); openLightbox(ph, S[id].n); } }, true);
+      b.innerHTML = S[id].n.replace(/ \(.*\)/,"");
+      b.title = "Open place";
       b.onclick = ()=>{ openPlace(id); flyTo(S[id].c, Math.max(transform.k,4)); };
       bar.appendChild(b);
-      if(S[id].w && !(S[id].w in PHOTOS)) loadPhoto(S[id].w).then(()=>{ if(el.classList.contains("active")) setActive(el,false); });
     });
   };
   vtext.querySelectorAll(".verse").forEach(v=>{
@@ -2038,7 +2447,7 @@ function renderToursPane(){
   const p = document.getElementById("pane-tours");
   p.innerHTML = `<div class="body"><div class="kicker">Guided tours</div>
     <h3>Walk it through</h3>
-    <p class="narr">Seven narrated routes through the atlas. Each stop sets the map up for you — era, layers,
+    <p class="narr">Eight narrated routes through the atlas. Each stop sets the map up for you — era, layers,
     zoom — and hands you the passage to read there. Arrow keys move between stops.</p></div>`;
   TOURS.forEach(t=>{
     const b = document.createElement("button"); b.className = "tourpick";
@@ -2085,9 +2494,32 @@ document.getElementById("tournext").onclick = ()=>goStop(state.tour.i+1);
 document.getElementById("tourexit").onclick = endTour;
 
 /* =========================== cards =========================== */
-let cardEl = null, cardAnchor = null;
-function closeCard(){ if(cardEl){ cardEl.remove(); cardEl=null; cardAnchor=null; } }
-function dismissCard(){ closeCard(); clearFocus(); }
+let cardEl = null, cardAnchor = null, cardKey = null;
+const detailPane = document.getElementById("pane-detail");
+function showDetail(html){
+  document.querySelectorAll(".panel > .pane").forEach(p=>{ if(p!==detailPane) p.hidden = true; });
+  detailPane.innerHTML = `<button class="x" id="detailx" title="Close details" aria-label="Close details">×</button>
+    <div class="body" style="padding-bottom:0"><button class="back" id="detailback">‹ Back to menu</button></div>
+    <div class="body">${html}</div>`;
+  detailPane.hidden = false;
+  detailPane.scrollTop = 0;
+  detailPane.querySelector("#detailback").onclick = closeDetail;
+  detailPane.querySelector("#detailx").onclick = closeDetail;
+  ensurePanelVisible();
+  if(state.focus) flyTo(state.focus.c, transform.k);
+}
+function closeDetail(){
+  if(detailPane.hidden) return;
+  detailPane.hidden = true; cardKey = null; clearFocus();
+  document.querySelectorAll(".panel > .pane").forEach(p=>{ p.hidden = p.id !== "pane-"+state.tab; });
+}
+function closeCard(){ if(cardEl){ cardEl.remove(); cardEl=null; cardAnchor=null; cardKey=null; } }
+function dismissCard(){ closeCard(); closeDetail(); clearFocus(); }
+/* Clicking the same marker twice puts the card away again. */
+function mapToggle(key, open){
+  if(cardKey===key && (cardEl || !detailPane.hidden)){ dismissCard(); return; }
+  open(); cardKey = key;
+}
 function makeCard(html, anchor){
   const keep = anchor || cardAnchor;
   closeCard();
@@ -2105,6 +2537,9 @@ function makeCard(html, anchor){
 function positionCard(){
   if(!cardEl || !cardAnchor) return;
   const [x,y] = transform.apply(projection(cardAnchor));
+  // panned away from its marker: the card goes with it rather than sticking to the edge
+  if(x < -60 || x > W+60 || y < -60 || y > H+60){ cardEl.style.visibility = "hidden"; return; }
+  cardEl.style.visibility = "";
   const cw = cardEl.offsetWidth || 268;
   let left = x+14, top = y-30;
   if(left+cw+8 > W) left = x-cw-14;
@@ -2117,50 +2552,37 @@ function positionCard(){
 }
 function openPlace(id){
   const s = S[id]; state.place = id;
+  say(`${s.n}${s.m?" — "+modName(s.m):""}`);
   ensureLayer("places");
   focusOn(s.c, s.n.replace(/ \(.*\)/,""), "var(--ink)");
-  const ph = photoFor(s);
-  if(s.w && !(s.w in PHOTOS)) loadPhoto(s.w).then(()=>{ if(state.place===id){ renderPlacePane(); if(cardEl) openPlace(id); } });
-  makeCard(`<button class="x" title="Close">×</button>
-    <h4>${s.n}</h4>
-    <div class="modern">${s.m} · ${s.c[1].toFixed(3)}°N ${s.c[0].toFixed(3)}°E</div>
-    ${ph?`<img class="zoomhint" id="cardimg" src="${ph.src}" alt="${s.n}" title="Click to enlarge">`:""}
-    <p>${s.p}</p>
-    ${s.q ? `<p class="idnote">Identification debated — see the full entry.</p>` : ""}
-    <div class="refrow" id="cardrefs"></div>
-    <button class="more">Full entry &amp; archaeology ›</button>`, s.c);
-  cardEl.querySelector("#cardrefs").replaceWith(refRow(s.r));
-  const ci = cardEl.querySelector("#cardimg");
-  if(ci) ci.onclick = ()=>openLightbox(ph, s.n);
-  cardEl.querySelector(".more").onclick = ()=>{ setTab("place"); };
+  const renderCard = ()=>{
+    showDetail(placeHTML(id));
+    wirePlaceHTML(detailPane, id);
+  };
+  renderCard();
   renderPlacePane();
   if(state.tab==="place") renderPlacePane();
 }
 function openEvent(v){
   ensureLayer("events");
   focusOn(v.c, v.t, KINDS[v.k].c);
-  makeCard(`<button class="x" title="Close">×</button>
-    <h4>${glyphSVG(v.k)} ${v.t}</h4>
-    <div class="modern">${KINDS[v.k].n}</div>
-    <p>${v.p}</p>
-    <div class="refrow" id="cardrefs"></div>`, v.c);
-  cardEl.querySelector("h4").style.display="flex";
-  cardEl.querySelector("h4").style.alignItems="center";
-  cardEl.querySelector("h4").style.gap="6px";
-  cardEl.querySelector("#cardrefs").replaceWith(refRow(v.r));
+  showDetail(`<div class="kicker">${KINDS[v.k].n}</div>
+    <h3 style="display:flex; align-items:center; gap:6px">${glyphSVG(v.k)} ${v.t}</h3>
+    <p class="narr">${v.p}</p>
+    <div class="refrow" id="detailrefs"></div>`);
+  document.getElementById("detailrefs").replaceWith(refRow(v.r));
 }
 function openBattle(b){
   const c = CAMPAIGNS[b.ci];
   ensureLayer("campaigns");
   focusOn(b.c, b.n, c.color);
-  makeCard(`<button class="x" title="Close">×</button>
-    <h4>${b.n}</h4>
-    <div class="modern">Battle · ${c.n} · ${c.date}</div>
-    <p>${c.who}</p>
-    <div class="refrow" id="cardrefs"></div>
-    <button class="more">Read the campaign ›</button>`, b.c);
-  cardEl.querySelector("#cardrefs").replaceWith(refRow(b.r));
-  cardEl.querySelector(".more").onclick = ()=>{ setTab("wars"); setCampaign(b.ci); };
+  showDetail(`<div class="kicker">Battle · ${c.n} · ${c.date}</div>
+    <h3>${b.n}</h3>
+    <p class="narr">${c.who}</p>
+    <div class="refrow" id="detailrefs"></div>
+    <button class="more" id="detailmore">Read the campaign ›</button>`);
+  document.getElementById("detailrefs").replaceWith(refRow(b.r));
+  document.getElementById("detailmore").onclick = ()=>{ closeDetail(); setTab("wars"); setCampaign(b.ci); };
 }
 function openFind(i, fromPane){
   const f = FINDS[i]; state.find = i;
@@ -2168,16 +2590,14 @@ function openFind(i, fromPane){
   if(!f.e.includes(ERAS[state.era].id)) state.allFinds = true;   // so its marker really is on the map
   focusOn(f.c, f.n, "var(--plum)");
   if(land) renderMap(false);
-  if(f.w && !(f.w in PHOTOS)) loadPhoto(f.w, f.q).then(()=>{ if(state.tab==="finds") renderFindsPane(); });
-  // compact marker card — the full entry with its photograph lives in the Finds tab
-  makeCard(`<button class="x" title="Close">×</button>
-    <h4>${f.n}</h4>
-    <div class="modern">${f.date} · found at ${f.found}</div>
-    <p style="margin-bottom:4px">${f.p.split(/(?<=\.)\s/)[0]}</p>
-    <div class="refrow" id="cardrefs"></div>
-    <button class="more">Photograph &amp; full entry ›</button>`, f.c);
-  cardEl.querySelector("#cardrefs").replaceWith(refRow(f.r));
-  cardEl.querySelector(".more").onclick = ()=>{ setTab("finds"); scrollFindIntoPane(i); };
+  showDetail(`<div class="kicker">Find · ${f.date}</div>
+    <h3>${f.n}</h3>
+    <div class="modern">found at ${f.found}</div>
+    <p class="narr">${f.p.split(/(?<=\.)\s/)[0]}</p>
+    <div class="refrow" id="detailrefs"></div>
+    <button class="more" id="detailmore">Full entry ›</button>`);
+  document.getElementById("detailrefs").replaceWith(refRow(f.r));
+  document.getElementById("detailmore").onclick = ()=>{ closeDetail(); setTab("finds"); scrollFindIntoPane(i); };
   if(!fromPane){ setTab("finds"); scrollFindIntoPane(i); }
 }
 function scrollFindIntoPane(i){
@@ -2201,28 +2621,69 @@ function setEra(i, animate=true){
   if(state.tab==="finds") renderFindsPane();
   if(state.tab==="scripture" && !state.passage) renderScripturePane();
   if(land){ fitEra(animate); renderMap(animate); }
-  if(state.layers.photos) ensurePhotos(ERAS[i].sites);
 }
 
 const eralist = document.getElementById("eralist"), tl = document.getElementById("tl");
-ERAS.forEach((e,i)=>{
-  const b = document.createElement("button"); b.className = "era";
-  b.innerHTML = `<span class="n">${e.name}</span><span class="d">${e.dates}</span>`;
-  b.onclick = ()=>setEra(i); eralist.appendChild(b);
-  const t = document.createElement("button"); t.textContent = `${e.short} · ${e.dates.replace("c. ","")}`;
-  t.onclick = ()=>setEra(i); tl.appendChild(t);
+function buildEraLists(){
+  eralist.innerHTML = ""; tl.innerHTML = "";
+  ERAS.forEach((e,i)=>{
+    const b = document.createElement("button"); b.className = "era";
+    b.innerHTML = `<span class="n">${e.name}</span><span class="d">${eraDates(e)}</span>`;
+    b.onclick = ()=>setEra(i); eralist.appendChild(b);
+    const t = document.createElement("button"); t.textContent = `${e.short} · ${eraDates(e).replace("c. ","")}`;
+    t.onclick = ()=>setEra(i); tl.appendChild(t);
+  });
+}
+buildEraLists();
+const chronoModelSel = document.getElementById("chronomodelsel");
+CHRONO_MODELS.forEach(([id,label])=>{
+  const o = document.createElement("option"); o.value = id; o.textContent = label;
+  chronoModelSel.appendChild(o);
 });
+chronoModelSel.value = state.chronoModel;
+function applyChronoModel(id, opts={}){
+  state.chronoModel = id;
+  chronoModelSel.value = id;
+  if(!opts.skipPersist){ try{ localStorage.setItem("otatlas:chrono", id); }catch(e){} }
+  buildEraLists();
+  if(state.tab==="era") renderEraPane();
+  if(!chronoEl.hidden) drawChrono();
+}
+chronoModelSel.onchange = e => applyChronoModel(e.target.value);
 
 /* =========================== layers UI =========================== */
 const TILESETS = {
-  satellite:{ url:(z,x,y)=>`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`,
-              credit:"Imagery: Esri, Maxar, Earthstar Geographics" },
-  relief:{    url:(z,x,y)=>`https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/${z}/${y}/${x}`,
-              credit:"Hillshade: Esri · elevation from SRTM/GEBCO" },
-  street:{    url:(z,x,y)=>`https://tile.openstreetmap.org/${z}/${x}/${y}.png`,
-              credit:"© OpenStreetMap contributors" }
+  satellite:{ url:(z,x,y)=>`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/GoogleMapsCompatible_Level8/${z}/${y}/${x}.jpeg`,
+              maxZ:8, credit:"Imagery: NASA Blue Marble — public domain, via NASA GIBS" },
+  relief:{    url:(z,x,y)=>`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/${z}/${y}/${x}.jpeg`,
+              maxZ:8, credit:"Relief and bathymetry: NASA Blue Marble — public domain, via NASA GIBS" }
 };
 const WALLC = { david:"#7a3b2e", solomon:"#8a6a1f", hezekiah:"#2f4858", nehemiah:"#6d3355" };
+/* road names ride their own course; drop any that would sit on a place name or another road name */
+function relayoutRoadLabels(){
+  const sel = gRoads.selectAll("text.road-label");
+  if(sel.empty()) return;
+  const k = transform.k, present = document.body.classList.contains("present");
+  const fs = (present ? 17 : 9.5)/k;
+  const boxes = [];
+  const overlaps = box => boxes.some(b=>!(box[2]<b[0]||box[0]>b[2]||box[3]<b[1]||box[1]>b[3]));
+  gLabels.selectAll("text").each(function(){            // place names hold their ground
+    if(this.getAttribute("display")==="none") return;
+    const b = this.getBoundingClientRect();
+    if(b.width) boxes.push([b.left,b.top,b.right,b.bottom]);
+  });
+  const brief = k < 9;                                   // at Crescent scale, primary name only
+  sel.each(function(d){
+    const t = d3.select(this);
+    t.attr("display",null).style("font-size",fs+"px").style("stroke-width",(3.2/k)+"px")
+     .attr("dy", -4/k);
+    t.select("textPath").text(brief ? d.n.split(/[:(–]/)[0].trim() : d.n);
+    const b = this.getBoundingClientRect();
+    if(!b.width){ return; }
+    const box = [b.left,b.top,b.right,b.bottom];
+    if(overlaps(box)) t.attr("display","none"); else boxes.push(box);
+  });
+}
 /* place city labels around their dot, skipping positions already taken */
 function relayoutCityLabels(){
   if(!state.layers.city) return;
@@ -2287,14 +2748,12 @@ const PERIODS = [["david","David","c. 1000 BC"],["solomon","Solomon","c. 960 BC"
   ["hezekiah","Hezekiah","c. 700 BC"],["nehemiah","Nehemiah","c. 445 BC"],["all","All four",""]];
 function openCityItem(o,kind){
   const label = kind==="wall" ? "City wall" : kind==="gate" ? "Gate of the wall" : "In the city";
-  const c = o.c || o.pts[Math.floor(o.pts.length/2)];
-  makeCard(`<button class="x" aria-label="Close">×</button>
-    <div class="kicker">Jerusalem · ${label}</div>
-    <h4>${o.n}</h4>
-    ${o.p ? `<p>${o.p}</p>` : ""}
+  showDetail(`<div class="kicker">Jerusalem · ${label}</div>
+    <h3>${o.n}</h3>
+    ${o.p ? `<p class="narr">${o.p}</p>` : ""}
     ${o.a ? `<p class="idnote"><b>Archaeology</b> — ${o.a}</p>` : ""}
-    <div class="refrow" id="cardrefs"></div>`, c);
-  if(o.r) cardEl.querySelector("#cardrefs").replaceWith(refRow(o.r));
+    <div class="refrow" id="detailrefs"></div>`);
+  if(o.r) document.getElementById("detailrefs").replaceWith(refRow(o.r));
 }
 function showJerusalem(period){
   state.cityPeriod = period || state.cityPeriod || "nehemiah";
@@ -2306,8 +2765,9 @@ const LAYERS = [
   ["routes","Journeys","1"],["places","Places","2"],["events","Events","3"],
   ["campaigns","Campaigns","4"],["finds","Finds","5"],["kingdoms","Kingdoms","6"],
   ["roads","Trade roads","7"],["distances","Distances","8"],["tribes","Tribes","9"],
-  ["terrain","Land + rainfall","g"],["modern","Borders + cities","0"],["photos","Photos","p"],
-  ["relief","Relief","r"],["satellite","Satellite","s"],["street","Street map","t"],
+  ["terrain","Land + rainfall","g"],["modern","Borders + cities","0"],
+  ["relief","Relief (NASA)","r"],["satellite","Satellite (NASA)","s"],
+  ["names","Then & now","n"],["certainty","Certainty","k"],
   ["city","Jerusalem plan","j"]
 ];
 const DEFAULT_LAYERS = {routes:true, places:true, events:true};
@@ -2319,12 +2779,21 @@ LAYERS.forEach(([key,label,k])=>{
   l.querySelector("input").onchange = e => toggleLayer(key, e.target.checked);
   layersEl.appendChild(l);
 });
+const ctrlLayersEl = document.getElementById("ctrllayers");
+LAYERS.forEach(([key,label])=>{
+  const l = document.createElement("label"); l.className = "lay";
+  l.innerHTML = `<input type="checkbox" ${state.layers[key]?"checked":""}><span>${label}</span>`;
+  l.querySelector("input").onchange = e => toggleLayer(key, e.target.checked);
+  ctrlLayersEl.appendChild(l);
+});
 const barEl = document.getElementById("layerbar");
-[["Clear","Turn every layer off",()=>setLayers({})],
+[["Clear","Turn every layer off",()=>setLayers(Object.fromEntries(LAYERS.map(l=>[l[0],false])))],
  ["All","Turn every layer on",()=>setLayers(Object.fromEntries(LAYERS.map(l=>[l[0],true])))],
  ["Reset","Back to the default view",()=>setLayers(DEFAULT_LAYERS)]].forEach(([label,tip,fn])=>{
   const b = document.createElement("button");
   b.className = "lchip act"; b.textContent = label; b.title = tip; b.onclick = fn;
+  ({Clear:"laychip-clear",All:"laychip-all",Reset:"laychip-reset"})[label] &&
+    (document.getElementById({Clear:"laychip-clear",All:"laychip-all",Reset:"laychip-reset"}[label]).onclick = fn);
   barEl.appendChild(b);
 });
 barEl.appendChild(Object.assign(document.createElement("span"),{className:"barsep"}));
@@ -2332,7 +2801,7 @@ const layerChips = [];
 LAYERS.forEach(([key,label,k])=>{
   const b = document.createElement("button");
   b.className = "lchip" + (key==="modern"?" modern":"") +
-    (["satellite","street","relief"].includes(key)?" basemap":"");
+    (["satellite","relief"].includes(key)?" basemap":"");
   layerChips.push(b);
   b.textContent = label; b.title = "Layer "+k+" — click to toggle";
   b.setAttribute("aria-pressed", state.layers[key]);
@@ -2340,16 +2809,25 @@ LAYERS.forEach(([key,label,k])=>{
   barEl.appendChild(b);
 });
 function syncLayerUI(){
+  const ck = document.getElementById("cfkey");
+  if(ck) ck.hidden = !state.layers.certainty;
   LAYERS.forEach(([key],i)=>{
     layersEl.querySelectorAll("input")[i].checked = state.layers[key];
     layerChips[i].setAttribute("aria-pressed", state.layers[key]);
+    ctrlLayersEl.querySelectorAll("input")[i].checked = state.layers[key];
   });
 }
+const BASES = ["satellite","relief"];
+/* a basemap choice is the reader's, not the view's: keep it unless the caller names one */
+function baseToKeep(map){
+  return BASES.some(b=>b in map) ? null : (BASES.find(b=>state.layers[b]) || null);
+}
+function restoreBase(keep){ if(keep) BASES.forEach(b=>state.layers[b] = b===keep); }
 function setLayers(map){
+  const keep = baseToKeep(map);
   LAYERS.forEach(([key])=>state.layers[key] = !!map[key]);
-  if(state.layers.photos) ensurePhotos(ERAS[state.era].sites);
-  if(state.layers.satellite){ state.layers.street = false; state.layers.relief = false; }
-  else if(state.layers.street) state.layers.relief = false;
+  restoreBase(keep);
+  if(state.layers.satellite) state.layers.relief = false;
   gTiles.selectAll("*").remove();
   syncLayerUI();
   if(land){ paintOverlays(); renderMap(false); renderTiles(); }
@@ -2357,8 +2835,7 @@ function setLayers(map){
 function toggleLayer(key, on){
   state.layers[key] = on;
   syncLayerUI();
-  if(key==="photos" && on) ensurePhotos(ERAS[state.era].sites);
-  const bases = ["satellite","street","relief"];               // one basemap at a time
+  const bases = ["satellite","relief"];                        // one basemap at a time
   if(bases.includes(key)){
     if(on) bases.forEach(b=>{ if(b!==key) state.layers[b] = false; });
     gTiles.selectAll("*").remove();                            // drop the old set before re-tiling
@@ -2387,8 +2864,19 @@ document.getElementById("legend").innerHTML = `
     runs more than ~200 km without a waystation — but they remain schematic. Contested identifications are
     flagged on the place entry.</div>`;
 const legEl = document.getElementById("legend"), legBtn = document.getElementById("legtoggle");
+const legX = document.createElement("button");
+legX.className = "legclose"; legX.textContent = "×"; legX.title = "Close the legend";
+legX.setAttribute("aria-label","Close the legend");
+legEl.insertBefore(legX, legEl.firstChild);
+const cfKey = document.createElement("div");
+cfKey.id = "cfkey"; cfKey.hidden = true;
+cfKey.innerHTML = Object.keys(CF_COLOR).map(k=>
+  `<div class="row cfrow"><span class="sw" style="background:${CF_COLOR[k]}">${CF_MARK[k]}</span> ${CF_LABEL[k]}</div>`).join("");
+legEl.appendChild(cfKey);
+const closeLegend = ()=>{ legEl.hidden=true; legBtn.style.display=""; };
 legBtn.onclick = ()=>{ legEl.hidden=false; legBtn.style.display="none"; };
-legEl.addEventListener("click",()=>{ legEl.hidden=true; legBtn.style.display=""; });
+legX.onclick = e=>{ e.stopPropagation(); closeLegend(); };
+legEl.addEventListener("click", closeLegend);
 
 /* =========================== search =========================== */
 const qEl = document.getElementById("q"), resEl = document.getElementById("results");
@@ -2419,6 +2907,12 @@ qEl.oninput = ()=>{
       setTimeout(()=>openCityItem(w,"wall"), 780); }}); });
   FINDS.forEach(f=>{ if(f.n.toLowerCase().includes(q))
     out.push({label:f.n, tag:"find", go:()=>{ openFind(f.i); flyTo(f.c,4); setTab("finds"); }}); });
+  CFM.forEach(c=>{ if(c.t.toLowerCase().includes(q) || ("week "+c.w)===q)
+    out.push({label:`Week ${c.w} · ${c.t}`, tag:"reading week", go:()=>{ setTab("cfm"); openWeek(c.w); }}); });
+  PROFILES.forEach(pf=>{ if(pf.n.toLowerCase().includes(q) || "elevation profile".includes(q))
+    out.push({label:pf.n, tag:"profile", go:()=>openProfile(pf)}); });
+  if(q.length>2 && ["camp of israel","numbers 2","tabernacle","camp"].some(t=>t.includes(q)))
+    out.push({label:"The camp of Israel (Numbers 2)", tag:"diagram", go:openCamp});
   ERAS.forEach((e,i)=>{ if(e.name.toLowerCase().includes(q))
     out.push({label:e.name, tag:"era", go:()=>setEra(i)}); });
   Object.keys(BOOKS).forEach(k=>{ const b=BOOKS[k];
@@ -2445,10 +2939,13 @@ window.addEventListener("keydown", e=>{
   if(e.key==="ArrowDown"||e.key==="ArrowRight"){ setEra(Math.min(ERAS.length-1,state.era+1)); e.preventDefault(); }
   if(e.key==="ArrowUp"||e.key==="ArrowLeft"){ setEra(Math.max(0,state.era-1)); e.preventDefault(); }
   if(e.key==="Escape"){ dismissCard();
-    document.getElementById("aboutwrap").hidden = true;
-    document.getElementById("lightwrap").hidden = true; }
+    if(!aboutWrap.hidden) aboutDialog.close();
+    if(!document.getElementById("diagwrap").hidden) diagDialog.close();
+    document.getElementById("sheetwrap").hidden = true;
+    if(!document.getElementById("guidewrap").hidden) closeGuide(); }
   if(e.key==="/"){ qEl.focus(); e.preventDefault(); }
   if(e.key==="c"){ document.getElementById("chronobtn").click(); }
+  if(e.key==="p"||e.key==="P"){ document.getElementById("presentbtn").click(); }
   const li = LAYERS.findIndex(l=>l[2]===e.key);
   if(li>=0 && !e.metaKey && !e.ctrlKey) toggleLayer(LAYERS[li][0], !state.layers[LAYERS[li][0]]);
 });
@@ -2456,13 +2953,21 @@ window.addEventListener("resize",()=>{ if(syncSize() && land){ fitEra(false); re
 
 /* ---------- chronology chart ---------- */
 const chronoEl = document.getElementById("chrono"), chronoBtn = document.getElementById("chronobtn");
-const KCOL = {united:"#3f4f3a", judah:"var(--terra)", israel:"var(--indigo)", yehud:"#6d3355"};
+const KCOL = {united:"#3f4f3a", judah:"var(--terra)", israel:"var(--indigo)", yehud:"#6d3355",
+  priest:"#8a6a1f", hasmonean:"#5f6b34", herod:"var(--plum)"};
+let chronoZ = d3.zoomIdentity;
+const yrRange = (a,b) => b === 0 ? `${Math.abs(a)} BC – AD 1` : `${Math.abs(a)}–${Math.abs(b)} BC`;  // no year zero
+const SECOND = ["yehud","priest","hasmonean","herod"];        // governors, high priests, Hasmoneans, Herod
+const chronoZoom = d3.zoom().scaleExtent([1,24])
+  .on("zoom", e=>{ chronoZ = e.transform; drawChrono(); });
+d3.select("#chronosvg").call(chronoZoom).style("cursor","grab");
 function drawChrono(){
   const box = chronoEl.getBoundingClientRect();
   const w = Math.max(600, box.width);
   const m = {l:74, r:14, t:16, b:22};
-  const x = d3.scaleLinear().domain([-2050,-400]).range([m.l, w-m.r]);
-  const yearsPerPx = 1650 / (w - m.l - m.r);
+  const x = chronoZ.rescaleX(d3.scaleLinear().domain([-2050,0]).range([m.l, w-m.r]));
+  const dom = x.domain();
+  const yearsPerPx = (dom[1]-dom[0]) / (w - m.l - m.r);
 
   // lay the prophets out first: their names need room, and the row count sets the height
   const plane = [], pLanes = [];
@@ -2483,35 +2988,51 @@ function drawChrono(){
     jPlaced.push({j, lane});
   });
   const jRows = jlane.length;
+  // second-temple rulers pack into their own lanes: governors, high priests, Hasmoneans, Herod
+  const sLane = [], sPlaced = [];
+  KINGS.filter(k=>SECOND.includes(k.k)).forEach(k=>{
+    let lane = 0;
+    while(sLane[lane] !== undefined && sLane[lane] > k.a) lane++;
+    sLane[lane] = k.b;
+    sPlaced.push({k, lane});
+  });
+  const sRows = Math.max(1, sLane.length);
   const rows = {empires:26, judges:62};
   const jLabelRows = 4;                    // names sit under the bars, on packed sub-lines
   rows.judgeLabels = rows.judges + jRows*13 + 2;
   rows.judah = rows.judgeLabels + jLabelRows*14 + 10;
   rows.israel = rows.judah + 34;
   rows.prophets = rows.israel + 34;
-  rows.eras = rows.prophets + pRows*12 + 10;
+  rows.second = rows.prophets + pRows*12 + 10;
+  rows.eras = rows.second + sRows*13 + 10;
   const h = rows.eras + 40;
-  chronoEl.style.height = h+"px";
   document.getElementById("chronosvg").style.height = h+"px";
   const svgC = d3.select("#chronosvg").attr("viewBox",`0 0 ${w} ${h}`);
   svgC.selectAll("*").remove();
+  chronoZoom.translateExtent([[m.l,0],[w-m.r,0]]).extent([[m.l,0],[w-m.r,h]]);
+  svgC.append("defs").append("clipPath").attr("id","chronoclip")
+    .append("rect").attr("x",m.l-1).attr("y",0).attr("width",w-m.r-m.l+2).attr("height",h);
+  const gLab = svgC.append("g");                       // row labels live outside the clip
 
-  // axis
-  const g = svgC.append("g");
-  d3.range(-2000,-399,200).forEach(yr=>{
+  // axis: tick spacing follows the visible span, so zooming in gives finer years
+  const g = svgC.append("g").attr("clip-path","url(#chronoclip)");
+  const span = dom[1]-dom[0];
+  const step = span > 1400 ? 200 : span > 700 ? 100 : span > 300 ? 50 : span > 120 ? 20 : span > 50 ? 10 : 5;
+  for(let yr=Math.ceil(dom[0]/step)*step; yr<=Math.min(0,dom[1]); yr+=step){
     g.append("line").attr("x1",x(yr)).attr("x2",x(yr)).attr("y1",m.t-6).attr("y2",h-m.b)
       .attr("stroke","#cbbfa4").attr("stroke-width",yr%1000===0?1.2:0.6);
     g.append("text").attr("class","cx").attr("x",x(yr)).attr("y",h-8).attr("text-anchor","middle")
-      .text(Math.abs(yr)+" BC");
-  });
-  [["Empires",rows.empires],["Judges",rows.judges],["Judah",rows.judah],["Israel",rows.israel],["Prophets",rows.prophets],["Atlas eras",rows.eras]]
-    .forEach(([label,y])=>g.append("text").attr("class","clab").attr("x",8).attr("y",y+10).text(label));
+      .text(yr===0 ? "AD 1" : Math.abs(yr)+" BC");
+  }
+  [["Empires",rows.empires],["Judges",rows.judges],["Judah",rows.judah],["Israel",rows.israel],
+   ["Prophets",rows.prophets],["2nd temple",rows.second],["Atlas eras",rows.eras]]
+    .forEach(([label,y])=>gLab.append("text").attr("class","clab").attr("x",8).attr("y",y+10).text(label));
 
   // empire bands
   EMPIRE_BANDS.forEach((b,i)=>{
     const y = rows.empires + (i%2)*13;
     g.append("rect").attr("x",x(b.a)).attr("y",y).attr("width",Math.max(2,x(b.b)-x(b.a))).attr("height",11)
-      .attr("fill",b.c).attr("fill-opacity",0.55).append("title").text(`${b.n} · ${Math.abs(b.a)}–${Math.abs(b.b)} BC`);
+      .attr("fill",b.c).attr("fill-opacity",0.55).append("title").text(`${b.n} · ${yrRange(b.a,b.b)}`);
     g.append("text").attr("class","cname").attr("x",x(b.a)+4).attr("y",y+9).text(b.n.length*5.6 < (x(b.b)-x(b.a)) ? b.n : "");
   });
 
@@ -2546,9 +3067,9 @@ function drawChrono(){
 
   // reigns, packed into lanes so co-regencies stay readable
   const lanes = {judah:[], israel:[], united:[], yehud:[]};
-  KINGS.forEach(k=>{
-    const key = k.k, base = key==="israel" ? rows.israel : key==="judah" || key==="united" ? rows.judah : rows.judah;
-    const laneSet = lanes[key];
+  KINGS.filter(k=>!SECOND.includes(k.k)).forEach(k=>{
+    const key = k.k;
+    const laneSet = lanes[key] || (lanes[key] = []);
     let lane = 0;
     while(laneSet[lane] !== undefined && laneSet[lane] > k.a) lane++;
     laneSet[lane] = k.b;
@@ -2559,7 +3080,27 @@ function drawChrono(){
     grp.append("rect").attr("x",x0).attr("y",y).attr("width",x1-x0).attr("height",11)
       .attr("fill",KCOL[key]).attr("fill-opacity",k.g==="good"?0.95:0.72)
       .attr("stroke",k.g==="good"?"#f4ecda":"none").attr("stroke-width",1);
-    grp.append("title").text(`${k.n} · ${Math.abs(k.a)}–${Math.abs(k.b)} BC · ${k.r}`);
+    grp.append("title").text(`${k.n} · ${yrRange(k.a,k.b)} · ${k.r}`);
+    if(x1-x0 > k.n.length*5.4+6)
+      grp.append("text").attr("class","cname").attr("x",x0+4).attr("y",y+9).text(k.n);
+  });
+
+  // second temple: Persian governors, high priests, Hasmoneans, Herod
+  sPlaced.forEach(({k,lane})=>{
+    const y = rows.second + lane*13;
+    const x0 = x(k.a), x1 = Math.max(x0+3, x(k.b));
+    const grp = g.append("g").attr("class","creign")
+      .on("click",()=>{
+        const eraId = k.k==="yehud" ? "persia" : k.k==="priest" ? "hellenistic"
+                    : k.k==="hasmonean" ? "hasmonean" : "roman";
+        const ei = ERAS.findIndex(e=>e.id===eraId);
+        if(ei>=0) setEra(ei);
+        const r = k.r ? parseRef(k.r.split(";")[0]) : null;
+        if(r) openPassage(r);
+      });
+    grp.append("rect").attr("x",x0).attr("y",y).attr("width",x1-x0).attr("height",11)
+      .attr("fill",KCOL[k.k]).attr("fill-opacity",0.82);
+    grp.append("title").text(`${k.n} · ${yrRange(k.a,k.b)}${k.r?" · "+k.r:""}`);
     if(x1-x0 > k.n.length*5.4+6)
       grp.append("text").attr("class","cname").attr("x",x0+4).attr("y",y+9).text(k.n);
   });
@@ -2576,12 +3117,33 @@ function drawChrono(){
     grp.append("circle").attr("cx",x0).attr("cy",y+5).attr("r",3).attr("fill","var(--olive)");
     grp.append("text").attr("class","cname dark").attr("x",x1+5).attr("y",y+8.5).text(p.n);
     grp.on("mouseenter",()=>{ if(S[p.home]) focusOn(S[p.home].c, p.n, "var(--olive)"); });
-    grp.append("title").text(`${p.n} · ${Math.abs(p.a)}–${Math.abs(p.b)} BC · to ${p.to} · ${p.r}`);
+    grp.append("title").text(`${p.n} · ${yrRange(p.a,p.b)} · to ${p.to} · ${p.r}`);
   });
 
   // atlas eras
-  const ERA_SPANS = [[-2050,-2000],[-2000,-1700],[-1450,-1400],[-1400,-1350],[-1350,-1050],[-1050,-930],[-930,-722],[-722,-586],[-586,-430]];
+  const ERA_SPANS = [[-2050,-2000],[-2000,-1700],null,null,null,[-1050,-930],
+    [-930,-722],[-722,-586],[-586,-430],[-539,-332],[-332,-167],[-167,-63],[-63,-4]];
   ERAS.forEach((e,i)=>{
+    const cs = CHRONO_SPANS[e.id];
+    if(cs){
+      // Exodus/Conquest/Judges: bar position tracks the selected chronology model;
+      // "Both models" shows the traditional and archaeological spans as two labeled half-height bands.
+      const drawBand = (sp, y, h, label)=>{
+        const x0 = Math.max(m.l, x(sp[0])), x1 = Math.min(w-m.r, x(sp[1]));
+        if(x1 <= x0) return;
+        const grp = g.append("g").attr("class","creign").on("click",()=>setEra(i));
+        grp.append("rect").attr("x",x0).attr("y",y).attr("width",x1-x0).attr("height",h)
+          .attr("fill", i===state.era ? "var(--ink)" : "#d8cbb0")
+          .attr("stroke","#f4ecda").attr("stroke-width",1);
+        grp.append("title").text(`${e.name} \u2014 ${label} \u00b7 ${e.dates}`);
+        if(x1-x0 > e.short.length*5.4+6 && h>=11)
+          grp.append("text").attr("class","cname" + (i===state.era?"":" dark")).attr("x",x0+4).attr("y",y+h-3).text(e.short);
+      };
+      if(state.chronoModel==="early") drawBand(cs.early, rows.eras, 13, "traditional (15th c. BC)");
+      else if(state.chronoModel==="late") drawBand(cs.late, rows.eras, 13, "archaeological (13th c. BC)");
+      else { drawBand(cs.early, rows.eras, 6, "traditional (15th c. BC)"); drawBand(cs.late, rows.eras+7, 6, "archaeological (13th c. BC)"); }
+      return;
+    }
     const sp = ERA_SPANS[i]; if(!sp) return;
     const x0 = Math.max(m.l, x(sp[0])), x1 = Math.min(w-m.r, x(sp[1]));
     if(x1 <= x0) return;
@@ -2597,37 +3159,71 @@ function drawChrono(){
 chronoBtn.onclick = ()=>{
   const open = chronoEl.hidden;
   chronoEl.hidden = !open;
+  document.body.classList.toggle("chrono-open", open);
   chronoBtn.setAttribute("aria-pressed", open);
   if(open) drawChrono();
   if(syncSize() && land){ fitEra(false); renderMap(false); }
 };
 window.addEventListener("resize",()=>{ if(!chronoEl.hidden) drawChrono(); });
-
-/* ---------- photo lightbox ---------- */
-const lightWrap = document.getElementById("lightwrap");
-function openLightbox(ph, caption){
-  if(!ph) return;
-  document.getElementById("lightimg").src = ph.full || ph.src;
-  const name = caption || ph.title;
-  document.getElementById("lightcap").innerHTML =
-    `<b>${name}</b><br>${ph.title && ph.title !== name ? ph.title + " — " : ""}photograph via Wikimedia / Wikipedia.
-     <a href="${ph.page}" target="_blank" rel="noopener">source &amp; licence</a>`;
-  lightWrap.hidden = false;
-}
-document.getElementById("lightclose").onclick = ()=>{ lightWrap.hidden = true; };
-lightWrap.addEventListener("click", e=>{ if(e.target===lightWrap) lightWrap.hidden = true; });
+const chronoSvgSel = d3.select("#chronosvg");
+document.getElementById("czin").onclick = ()=>chronoSvgSel.transition().duration(RM?0:250).call(chronoZoom.scaleBy,1.7);
+document.getElementById("czout").onclick = ()=>chronoSvgSel.transition().duration(RM?0:250).call(chronoZoom.scaleBy,1/1.7);
+document.getElementById("czreset").onclick = ()=>chronoSvgSel.transition().duration(RM?0:250)
+  .call(chronoZoom.transform, d3.zoomIdentity);
+document.getElementById("czclose").onclick = ()=>chronoBtn.click();
 
 const aboutWrap = document.getElementById("aboutwrap");
-document.getElementById("aboutbtn").onclick = ()=>{ aboutWrap.hidden = false; };
-document.getElementById("aboutclose").onclick = ()=>{ aboutWrap.hidden = true; };
-aboutWrap.addEventListener("click", e=>{ if(e.target===aboutWrap) aboutWrap.hidden = true; });
+document.getElementById("aboutbtn").onclick = ()=>{ aboutDialog.open(); openAbout("synopsis"); };
+document.getElementById("aboutclose").onclick = ()=>{ aboutDialog.close(); };
+aboutWrap.addEventListener("click", e=>{ if(e.target===aboutWrap) aboutDialog.close(); });
 aboutWrap.querySelectorAll(".modaltabs button").forEach(b=>{
-  b.onclick = ()=>{
-    aboutWrap.querySelectorAll(".modaltabs button").forEach(x=> x.setAttribute("aria-selected", String(x===b)));
-    aboutWrap.querySelectorAll(".modalpane").forEach(p=> p.hidden = p.dataset.pane !== b.dataset.pane);
-    aboutWrap.querySelector(".modal").scrollTop = 0;
-  };
+  b.onclick = ()=> showAboutPane(b.dataset.pane);
 });
+function showAboutPane(pane){
+  if(pane==="credits") renderCredits();
+  aboutWrap.querySelectorAll(".modaltabs button").forEach(x=> x.setAttribute("aria-selected", String(x.dataset.pane===pane)));
+  aboutWrap.querySelectorAll(".modalpane").forEach(p=> p.hidden = p.dataset.pane !== pane);
+  aboutWrap.querySelector(".modal").scrollTop = 0;
+}
+function openAbout(pane){ showAboutPane(pane||"synopsis"); aboutWrap.hidden = false; }
+
+/* =========================== accessible dialog controller (WCAG 2.1.2 / 2.4.3) =========================== */
+/* Reusable focus-trap for the three dialog overlays: records the trigger, moves focus in,
+   traps Tab/Shift+Tab inside the dialog, closes on Escape, restores focus on close. */
+function makeAccessibleDialog(wrap, dialog){
+  wrap.setAttribute("aria-modal","true");
+  if(!wrap.hasAttribute("role")) wrap.setAttribute("role","presentation");
+  let trigger = null;
+  function focusables(){
+    return [...dialog.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+      .filter(el=>!el.hidden && el.offsetParent !== null);
+  }
+  function onKey(e){
+    if(e.key==="Escape"){ e.preventDefault(); close(); return; }
+    if(e.key!=="Tab") return;
+    const f = focusables(); if(!f.length) return;
+    const first = f[0], last = f[f.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+  function open(){
+    trigger = document.activeElement;
+    wrap.hidden = false;
+    document.addEventListener("keydown", onKey, true);
+    const f = focusables();
+    (f[0] || dialog).focus({preventScroll:true});
+  }
+  function close(){
+    wrap.hidden = true;
+    document.removeEventListener("keydown", onKey, true);
+    if(trigger && trigger.focus) trigger.focus({preventScroll:true});
+  }
+  return {open, close};
+}
+document.querySelectorAll(".modal, .ovlbox").forEach(d=>{ if(!d.hasAttribute("tabindex")) d.setAttribute("tabindex","-1"); });
+const aboutDialog = makeAccessibleDialog(aboutWrap, aboutWrap.querySelector(".modal"));
+const guideDialog = makeAccessibleDialog(document.getElementById("guidewrap"), document.getElementById("guidewrap").querySelector(".ovlbox"));
+const diagDialog = makeAccessibleDialog(document.getElementById("diagwrap"), document.getElementById("diagwrap").querySelector(".ovlbox"));
 
 /* =========================== viewport theatres =========================== */
 /* One zoom level cannot serve Ur-to-Egypt and the ridge road alike. */
@@ -2655,13 +3251,13 @@ THEATERS.forEach((th,i)=>{
   theatersEl.appendChild(b);
 });
 
-/* =========================== Come, Follow Me =========================== */
+/* =========================== CFM =========================== */
 /* like setLayers, but leaves the redraw to the fit that follows */
 function setLayersQuiet(map){
+  const keep = baseToKeep(map);
   LAYERS.forEach(([key])=>state.layers[key] = !!map[key]);
-  if(state.layers.satellite){ state.layers.street = false; state.layers.relief = false; }
-  else if(state.layers.street) state.layers.relief = false;
-  if(state.layers.photos) ensurePhotos(ERAS[state.era].sites);
+  restoreBase(keep);
+  if(state.layers.satellite) state.layers.relief = false;
   gTiles.selectAll("*").remove();
   syncLayerUI();
   if(land){ paintOverlays(); renderTiles(); }
@@ -2703,8 +3299,9 @@ function openWeek(n){
   });
   const now = cfmWeekNow();
   document.getElementById("cfmweekno").textContent =
-    `Come, Follow Me · week ${week.w}${now===week.w ? " · this week" : ""}`;
+    `Weekly Reading · week ${week.w}${now===week.w ? " · this week" : ""}`;
   document.getElementById("cfmtitle").textContent = week.t;
+  say(`Week ${week.w}: ${week.t}`);
   document.getElementById("cfmnote").textContent = week.note;
   const rr = document.getElementById("cfmrefs");
   rr.innerHTML = "";
@@ -2713,7 +3310,7 @@ function openWeek(n){
     if(!ref){ rr.appendChild(Object.assign(document.createElement("span"),
       {className:"r", textContent:r})); return; }
     const b = document.createElement("button"); b.className = "ref"; b.textContent = r;
-    b.onclick = ()=>openPassage(ref);
+    b.onclick = ()=>{ openPassage(ref); ensurePanelVisible(); };
     rr.appendChild(b);
   });
   document.getElementById("cfmprev").disabled = week.w<=1;
@@ -2721,6 +3318,7 @@ function openWeek(n){
   cfmBar.hidden = false;
   fitBox(cfmBox(week));
   if(state.tab==="cfm") markCfmActive();
+  document.getElementById("cfmreturn").hidden = false;
 }
 function markCfmActive(){
   document.querySelectorAll("#pane-cfm .cfmweek").forEach(b=>
@@ -2729,7 +3327,7 @@ function markCfmActive(){
 function renderCfmPane(){
   const p = document.getElementById("pane-cfm"), now = cfmWeekNow();
   const cur = now ? CFM.find(c=>c.w===now) : null;
-  p.innerHTML = `<div class="body"><div class="kicker">Come, Follow Me</div>
+  p.innerHTML = `<div class="body"><div class="kicker">Weekly Reading</div>
     <h3>This week on the ground</h3>
     <p class="narr">The Old Testament reading year, week by week. Each week sets the era, turns on the layers
       that reading needs, marks the places it names and says what the map adds that the text alone does not.
@@ -2751,9 +3349,11 @@ function renderCfmPane(){
 document.getElementById("cfmexit").onclick = ()=>{
   cfmBar.hidden = true; state.cfm = null; state.highlight = []; state.verseIds = [];
   gVerse.selectAll("*").remove(); renderHalos(); markCfmActive();
+  document.getElementById("cfmreturn").hidden = true;
 };
 document.getElementById("cfmprev").onclick = ()=>openWeek((state.cfm||1)-1);
 document.getElementById("cfmnext").onclick = ()=>openWeek((state.cfm||0)+1);
+document.getElementById("cfmdetail").onclick = ()=>{ setTab("cfm"); ensurePanelVisible(); };
 document.getElementById("cfmbtn").onclick = ()=>{
   setTab("cfm");
   const now = cfmWeekNow();
@@ -2780,6 +3380,7 @@ window.addEventListener("keydown", e=>{
   if(document.activeElement && document.activeElement.tagName==="INPUT") return;
   if(e.metaKey || e.ctrlKey || e.altKey) return;
   if(e.key==="m"){ setPresent(!document.body.classList.contains("present")); e.preventDefault(); }
+  if(e.key==="?"){ openGuide(); e.preventDefault(); }
   if(e.key==="w"){ document.getElementById("cfmbtn").click(); e.preventDefault(); }
   if(e.shiftKey && /^[1-5]$/.test(e.key)){
     const th = THEATERS[Number(e.key)-1];
@@ -2791,7 +3392,685 @@ window.addEventListener("keydown", e=>{
   }
 });
 
-setTab("era");
+/* =========================== comparison era =========================== */
+function renderCompare(){
+  gCmp.selectAll("*").remove();
+  if(!(cmpEra>=0) || cmpEra===state.era || !land) return;
+  const e = ERAS[cmpEra], k = transform.k;
+  e.journeys.forEach(j=>{
+    gCmp.append("path").attr("fill","none").attr("stroke","#6b6357").attr("stroke-opacity",.45)
+      .attr("stroke-width",2/k).attr("stroke-dasharray",`${3/k} ${4/k}`)
+      .attr("d", line(j.path.map(p=>px(p))))
+      .append("title").text(`${e.name}: ${j.name}`);
+  });
+  e.sites.forEach(id=>{
+    if(!S[id]) return;
+    const p = projection(S[id].c);
+    gCmp.append("circle").attr("cx",p[0]).attr("cy",p[1]).attr("r",3.2/k).attr("fill","none")
+      .attr("stroke","#6b6357").attr("stroke-opacity",.55).attr("stroke-width",1.2/k)
+      .append("title").text(`${S[id].n} — ${e.name}`);
+  });
+  KINGDOMS.filter(kd=>kd.e.includes(e.id)).forEach(kd=>{
+    gCmp.append("path").attr("fill","none").attr("stroke","#6b6357").attr("stroke-opacity",.5)
+      .attr("stroke-width",1.3/k).attr("stroke-dasharray",`${6/k} ${4/k}`)
+      .attr("d", line(kd.ring.map(p=>projection(p)))+"Z")
+      .append("title").text(`${kd.n} — ${e.name} (approximate)`);
+    gCmp.append("text").attr("class","kingdom-label").attr("text-anchor","middle")
+      .attr("font-size",9).attr("fill","#6b6357").attr("fill-opacity",.75)
+      .attr("transform",`translate(${projection(kd.at)}) scale(${1/k})`).text(kd.n);
+  });
+}
+const cmpSel = document.getElementById("cmp");
+ERAS.forEach((e,i)=>{ const o = document.createElement("option");
+  o.value = String(i); o.textContent = e.name; cmpSel.appendChild(o); });
+cmpSel.onchange = ()=>{
+  cmpEra = Number(cmpSel.value);
+  renderCompare();
+  say(cmpEra>=0 ? `Comparing with ${ERAS[cmpEra].name}` : "Comparison off");
+};
+
+/* =========================== elevation profiles =========================== */
+/* Heights come from the same PREC table the place entries quote — no interpolated terrain. */
+const PROFILES = [
+  { n:"The ascent out of Egypt to Sinai", era:"exodus",
+    stops:["goshen","succoth","seacross","marah","sinai"],
+    note:"Sea-level Delta to a granite massif: the exodus route climbs for the whole second half, and the last stretch is the steepest ground in the story." },
+  { n:"The ridge route: Beersheba to Shechem", era:"kingdom",
+    stops:["beersheba","hebron","bethlehem","jerusalem","bethel","shechem"],
+    note:"The watershed road climbs out of the Negev at Beersheba (280 m) and then stays high — Hebron 930 m, Bethlehem 775 m, Jerusalem 743 m, Bethel 880 m — never dropping into a valley an enemy could hold." },
+  { n:"The climb from Jericho to Jerusalem", era:"conquest",
+    stops:["jericho","gilgal","jerusalem"],
+    note:"About 1,000 m of ascent in 25 km. This is the road of the parable of the good Samaritan and of every pilgrim psalm that says 'going up'." }
+];
+const kmBetween = (a,b) => d3.geoDistance(a,b)*6371;
+function profileData(ids){
+  const use = ids.filter(id=>typeof id==="string" && S[id] && PREC[id] && PREC[id].el!=null);
+  if(use.length<2) return null;
+  let x = 0;
+  return use.map((id,i)=>{
+    if(i) x += kmBetween(S[use[i-1]].c, S[id].c);
+    return { id, x, y:PREC[id].el, n:S[id].n.replace(/ \(.*\)/,"").replace(/ \/.*$/,"") };
+  });
+}
+function profileSVG(ids, samples){
+  const d = profileData(ids);
+  if(!d) return "";
+  const Wp = 640, Hp = 118, L = 34, R = 8, T = 16, B = 30;
+  const span = d[d.length-1].x || 1;
+  const xs = d3.scaleLinear().domain([0, span]).range([L, Wp-R]);
+  const ys0 = samples && samples.length ? samples.map(s=>s.y) : [];
+  const lo = Math.min(0, d3.min(d,p=>p.y), ...(ys0.length?[d3.min(ys0)]:[]));
+  const hi = Math.max(120, d3.max(d,p=>p.y), ...(ys0.length?[d3.max(ys0)]:[]));
+  const ys = d3.scaleLinear().domain([lo, hi]).nice().range([Hp-B, T]);
+  const seq = samples && samples.length ? samples : d;
+  const area = `M${xs(seq[0].x)},${ys(lo)} ` + seq.map(p=>`L${xs(p.x).toFixed(1)},${ys(p.y).toFixed(1)}`).join(" ") +
+    ` L${xs(seq[seq.length-1].x)},${ys(lo)} Z`;
+  const ticks = ys.ticks(4).map(t=>
+    `<line class="pfax" x1="${L}" x2="${Wp-R}" y1="${ys(t).toFixed(1)}" y2="${ys(t).toFixed(1)}"/>
+     <text x="4" y="${(ys(t)+2.5).toFixed(1)}">${t} m</text>`).join("");
+  const sea = lo<0 ? `<line class="pfsea" x1="${L}" x2="${Wp-R}" y1="${ys(0).toFixed(1)}" y2="${ys(0).toFixed(1)}"/>` : "";
+  const stops = d.map((p,i)=>{
+    const anchor = i===0 ? "start" : i===d.length-1 ? "end" : "middle";
+    return `<circle cx="${xs(p.x).toFixed(1)}" cy="${ys(p.y).toFixed(1)}" r="2.2" fill="var(--terra)"/>
+      <text class="pfstop" text-anchor="${anchor}" x="${xs(p.x).toFixed(1)}" y="${Hp-16}">${p.n}</text>
+      <text text-anchor="${anchor}" x="${xs(p.x).toFixed(1)}" y="${Hp-6}">${Math.round(p.x)} km · ${p.y} m</text>`;
+  }).join("");
+  return `<div class="profile"><svg viewBox="0 0 ${Wp} ${Hp}" role="img"
+      aria-label="Elevation profile from ${d[0].n} to ${d[d.length-1].n}">
+      ${ticks}${sea}<path class="pfline" d="${area}"/>${stops}</svg></div>`;
+}
+
+/* Real ground: SRTM heights sampled along the route, cached so a route is fetched once.
+   Offline the fetch simply fails and the profile stays on recorded site elevations. */
+const ELEV = {};
+try{ Object.assign(ELEV, JSON.parse(localStorage.getItem("ot-atlas-elev")||"{}")); }catch(e){}
+const ekey = (lon,lat) => `${lat.toFixed(3)},${lon.toFixed(3)}`;
+function routeSamples(ids, per){
+  const d = profileData(ids);
+  if(!d) return null;
+  const out = [];
+  for(let i=0;i<d.length-1;i++){
+    const a = S[d[i].id].c, b = S[d[i+1].id].c, seg = d[i+1].x - d[i].x;
+    const n = Math.max(2, Math.min(per, Math.round(seg/12)));
+    for(let j=0;j<n;j++){
+      const f = j/n;
+      out.push({ lon:a[0]+(b[0]-a[0])*f, lat:a[1]+(b[1]-a[1])*f, x:d[i].x + seg*f });
+    }
+  }
+  const last = d[d.length-1];
+  out.push({ lon:S[last.id].c[0], lat:S[last.id].c[1], x:last.x });
+  return out;
+}
+/* Recorded site elevations only. An earlier build sampled a public elevation API at runtime;
+   that dependency is gone, so the atlas ships with no third-party service in this path. */
+async function sampleTerrain(){ return null; }
+/* draw from the recorded heights of the named stops */
+function mountProfile(host, ids, extra){
+  const base = profileSVG(ids);
+  if(!base){ host.innerHTML = `<p class="note">Heights are not recorded for enough stops on this route to draw a profile.</p>`; return; }
+  host.innerHTML = base +
+    `<div class="note">Recorded elevations of the named stops, spaced by the distance between them — a height
+      profile of the stages, not a surveyed terrain section.</div>` +
+    (extra?`<p class="note" style="margin-top:9px">${extra}</p>`:"");
+}
+
+/* =========================== the camp of Israel (Numbers 2) =========================== */
+const CAMP = {
+  east:{ label:"EAST · the entrance", lead:"Judah",
+    tribes:[["Judah",74600],["Issachar",54400],["Zebulun",57400]], levite:"Moses, Aaron and the priests" },
+  south:{ label:"SOUTH", lead:"Reuben",
+    tribes:[["Reuben",46500],["Simeon",59300],["Gad",45650]], levite:"Kohathites — ark, table, lampstand" },
+  west:{ label:"WEST", lead:"Ephraim",
+    tribes:[["Ephraim",40500],["Manasseh",32200],["Benjamin",35400]], levite:"Gershonites — tent and hangings" },
+  north:{ label:"NORTH", lead:"Dan",
+    tribes:[["Dan",62700],["Asher",41500],["Naphtali",53400]], levite:"Merarites — frames, bars and pillars" }
+};
+function campSVG(){
+  const fmt = n => n.toLocaleString("en-US");
+  const side = (k, x, y, w, h, rot) => {
+    const s = CAMP[k], tot = s.tribes.reduce((a,t)=>a+t[1],0);
+    return `<g transform="translate(${x},${y})">
+      <rect width="${w}" height="${h}" fill="#efe6d4" stroke="#b9ad92"/>
+      <text x="8" y="14" font-size="8.5" letter-spacing="1.4" fill="#5a5347">${s.label}</text>
+      ${s.tribes.map((t,i)=>`<text x="8" y="${30+i*14}" font-size="11" fill="#141210">${t[0]}
+        <tspan font-size="9" fill="#5a5347"> ${fmt(t[1])}</tspan></text>`).join("")}
+      <text x="8" y="${34+s.tribes.length*14}" font-size="8" fill="#7a2f2f">Standard of ${s.lead} · ${fmt(tot)}</text>
+    </g>`;
+  };
+  return `<div class="camp"><svg viewBox="0 0 720 470" role="img"
+      aria-label="Diagram of the camp of Israel in Numbers 2">
+    ${side("north", 200, 8, 320, 92)}
+    ${side("south", 200, 370, 320, 92)}
+    ${side("west", 8, 140, 182, 190)}
+    ${side("east", 530, 140, 182, 190)}
+    <rect x="210" y="126" width="300" height="218" fill="none" stroke="#b9ad92" stroke-dasharray="5 4"/>
+    <text x="360" y="146" text-anchor="middle" font-size="8.5" letter-spacing="1.4" fill="#5a5347">THE LEVITES</text>
+    <text x="360" y="162" text-anchor="middle" font-size="8.5" fill="#5a5347">${CAMP.north.levite}</text>
+    <text x="360" y="330" text-anchor="middle" font-size="8.5" fill="#5a5347">${CAMP.south.levite}</text>
+    <text x="220" y="240" font-size="8.5" fill="#5a5347">${CAMP.west.levite.split(" —")[0]}</text>
+    <text x="500" y="240" text-anchor="end" font-size="8.5" fill="#5a5347">${CAMP.east.levite.split(",")[0]} etc.</text>
+    <rect x="316" y="196" width="88" height="78" fill="#f4ecda" stroke="#7a2f2f" stroke-width="1.4"/>
+    <rect x="332" y="216" width="56" height="40" fill="none" stroke="#7a2f2f"/>
+    <text x="360" y="190" text-anchor="middle" font-size="9" fill="#7a2f2f">TABERNACLE</text>
+    <text x="360" y="240" text-anchor="middle" font-size="8" fill="#7a2f2f">holy place</text>
+    <text x="360" y="290" text-anchor="middle" font-size="8" fill="#5a5347">altar and court</text>
+  </svg></div>`;
+}
+function openDiagram(title, kicker, html, note){
+  document.getElementById("diagbody").innerHTML =
+    `<div class="kicker">${kicker}</div><h3>${title}</h3>${html}
+     ${note?`<p class="note" style="margin-top:9px">${note}</p>`:""}`;
+  diagDialog.open();
+}
+document.getElementById("diagx").onclick = ()=>diagDialog.close();
+function openCamp(){
+  openDiagram("The camp of Israel", "Numbers 2 · diagram", campSVG(),
+    "Three tribes to each compass point, the Levites between them and the tent, and the tabernacle at the centre — 603,550 fighting men counted in Numbers 1, arranged so that the tent is the middle of the nation. Judah camps east, at the entrance, and marches first.");
+}
+function openProfile(pf){
+  openDiagram(pf.n, "Elevation profile", `<div id="pfhost"></div>`, "");
+  mountProfile(document.getElementById("pfhost"), pf.stops, pf.note);
+}
+
+/* =========================== printable study sheet =========================== */
+function mapSnapshot(wpx, simple){
+  const node = document.getElementById("map").cloneNode(true);
+  node.removeAttribute("id");
+  node.setAttribute("width", wpx);
+  node.setAttribute("height", Math.round(wpx*(H/W)));
+  node.querySelectorAll(".halo, .hovertip, .route-hit, title").forEach(n=>n.remove());
+  if(simple){                                     // imagery tiles print badly
+    node.querySelectorAll("image").forEach(n=>n.remove());
+    node.classList.remove("sat","relief");
+    node.querySelectorAll(".landmass, .lake").forEach(n=>n.setAttribute("fill-opacity",1));
+  }
+  return node.outerHTML;
+}
+function placeRows(ids){
+  return ids.filter(id=>S[id]).map(id=>{
+    const s = S[id], p = (PREC[id]||{}), cf = cfOf(id);
+    return `<tr><td><b>${s.n.replace(/ \(.*\)/,"")}</b></td>
+      <td>${modName(s.m)||"—"}</td>
+      <td>${s.c[1].toFixed(3)}, ${s.c[0].toFixed(3)}</td>
+      <td>${p.el!=null ? (p.el<0 ? "−"+Math.abs(p.el) : p.el)+" m" : "—"}</td>
+      <td>${CF_LABEL[cf] ? (CF_MARK[cf]+" "+CF_LABEL[cf].split(" —")[0]) : "\u2014"}</td></tr>`;
+  }).join("");
+}
+function sheetQuestions(ids){
+  const use = ids.filter(id=>S[id]);
+  const qs = [];
+  if(use[0]) qs.push(`Where exactly is ${S[use[0]].n.replace(/ \(.*\)/,"")}, and what makes that spot worth settling — water, road, or height?`);
+  if(use.length>1){
+    const a = S[use[0]], b = S[use[use.length-1]];
+    qs.push(`It is about ${Math.round(kmBetween(a.c,b.c))} km from ${a.n.replace(/ \(.*\)/,"")} to ${b.n.replace(/ \(.*\)/,"")}. What does that distance cost a family travelling on foot, and how long would it take?`);
+  }
+  const disputed = use.find(id=>cfOf(id)==="disputed");
+  if(disputed) qs.push(`${S[disputed].n.replace(/ \(.*\)/,"")} has no agreed location. What changes in the reading if it is somewhere else — and what does not?`);
+  else {
+    const withEl = use.filter(id=>PREC[id] && PREC[id].el!=null);
+    if(withEl.length>1){
+      const hi = withEl.reduce((m,id)=>PREC[id].el>PREC[m].el?id:m, withEl[0]);
+      const lo = withEl.reduce((m,id)=>PREC[id].el<PREC[m].el?id:m, withEl[0]);
+      qs.push(`${S[hi].n.replace(/ \(.*\)/,"")} stands ${Math.round(PREC[hi].el-PREC[lo].el)} m above ${S[lo].n.replace(/ \(.*\)/,"")}. Where does the text notice going up or going down?`);
+    }
+  }
+  qs.push("Which detail on this map would you not have pictured from the words alone?");
+  return qs.slice(0,4);
+}
+const SHEET_FOOT = "Project Created by Taylor Halverson, Ph.D. (Beta mode)";
+const RELEASE_VERSION = "0.4.5-beta";
+const RELEASE_REVIEW_DATE = "2026-09-04";
+document.getElementById("aboutversion").textContent = `v${RELEASE_VERSION} · content reviewed ${RELEASE_REVIEW_DATE}`;
+function buildSheet(){
+  const today = new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+  const week = state.cfm ? CFM.find(c=>c.w===state.cfm) : null;
+  const era = ERAS[state.era];
+  const ids = week ? week.pl.filter(id=>S[id]) : era.sites.slice(0,16);
+  const refs = week ? (week.refs||[]).join(" · ") : era.books;
+  const kicker = week ? `CFM · Week ${week.w}` : `Era ${String(state.era+1).padStart(2,"0")} of ${ERAS.length}`;
+  const title = week ? week.t : era.name;
+  const note = week ? week.note : era.narr;
+  const pf = PROFILES.find(p=>p.era===era.id);
+  const prof = pf ? profileSVG(pf.stops) : "";
+  document.getElementById("sheet").innerHTML = `
+    <div class="shhead">
+      <div class="shkick">${kicker} · The Old Testament &amp; Intertestamental Atlas</div>
+      <h1>${title}</h1>
+      <div class="shrefs">${refs || eraDates(era)} · ${era.name}, ${eraDates(era)}</div>
+    </div>
+    <p class="shnote">${note}</p>
+    <div class="shmap">${mapSnapshot(1100, sheetSimple())}</div>
+    <h2>Places in this reading</h2>
+    <table><thead><tr><th>Place</th><th>Today</th><th>Lat, lon</th><th>Elev.</th><th>Certainty</th></tr></thead>
+      <tbody>${placeRows(ids)}</tbody></table>
+    ${CHRON[era.id]?`<h2>On these dates</h2><p class="shnote" style="font-size:12.5px">${CHRON[era.id]}</p>`:""}
+    ${prof?`<h2>${pf.n}</h2>${prof}<p class="shnote" style="font-size:12.5px">${pf.note}</p>`:""}
+    <h2>Questions to ask of the ground</h2>
+    <ol class="qs">${((week && typeof WEEKQ!=="undefined" && WEEKQ[week.w]) || sheetQuestions(ids))
+        .map(q=>`<li>${q}</li>`).join("")}</ol>
+    <h2>Notes</h2>
+    <div class="shlines"></div>
+    <div class="sheetfoot">
+      <span>${SHEET_FOOT}</span>
+      <span>Independent work · not affiliated with any church or curriculum publisher · printed ${today}</span>
+      <span>v${RELEASE_VERSION} · content reviewed ${RELEASE_REVIEW_DATE}</span>
+    </div>`;
+}
+const sheetSimple = ()=>{
+  const c = document.getElementById("sheetsimple");
+  return c ? c.checked : true;
+};
+function openSheet(){ buildSheet(); document.getElementById("sheetwrap").hidden = false; }
+document.getElementById("sheetbtn").onclick = openSheet;
+document.getElementById("presentsheet").onclick = openSheet;
+document.getElementById("sheetsimple").onchange = buildSheet;
+document.getElementById("sheetx").onclick = ()=>document.getElementById("sheetwrap").hidden = true;
+document.getElementById("sheetclose").onclick = ()=>document.getElementById("sheetwrap").hidden = true;
+document.getElementById("sheetprint").onclick = ()=>window.print();
+
+/* =========================== share this view =========================== */
+let hashSelf = false;
+function viewHash(){
+  const p = new URLSearchParams();
+  if(state.chronoModel && state.chronoModel!=="neutral") p.set("chrono", state.chronoModel);
+  if(state.cfm) p.set("cfm", String(state.cfm));
+  else {
+    p.set("era", String(state.era));
+    if(state.place) p.set("place", state.place);
+    p.set("v", `${transform.k.toFixed(3)},${Math.round(transform.x)},${Math.round(transform.y)}`);
+  }
+  const on = LAYERS.map(l=>l[0]).filter(k=>state.layers[k]);
+  if(on.length) p.set("lay", on.join(","));
+  if(cmpEra>=0) p.set("cmp", String(cmpEra));
+  return "#"+p.toString();
+}
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.hidden = true, 2600);
+  say(msg);
+}
+async function shareView(){
+  hashSelf = true;
+  history.replaceState(null, "", viewHash());
+  const url = location.href;
+  try{ await navigator.clipboard.writeText(url); toast("Link to this view copied"); }
+  catch(e){ toast("Link is in the address bar — copy it from there"); }
+  setTimeout(()=>{ hashSelf = false; }, 80);
+}
+document.getElementById("sharebtn").onclick = shareView;
+document.getElementById("presentshare").onclick = shareView;
+
+/* =========================== first five minutes =========================== */
+const GUIDE = [
+  { t:"The map is the document", b:`<p>Thirteen eras run down the left rail and across the bottom timeline. Everything else — layers, panel, tours — is a way of asking a question about the map.</p>
+      <div class="guidefig">Try it: press the left and right arrow keys to walk through the eras.</div>` },
+  { t:"Layers sit above the map", b:`<p>The chips along the top of the map switch what is drawn: journeys, places, events, campaigns, finds, trade roads, tribal allotments, rainfall belts.</p>
+      <div class="guidefig"><b>Then &amp; now</b> adds each site's modern name; <b>Certainty</b> recolours the pins by how securely the place is identified.</div>` },
+  { t:"Read by the week", b:`<p><b>Weekly Reading</b> (key w) opens a week-by-week Old Testament reading sequence. Pick a week and the atlas sets the era, the layers, the scale and the places for that reading — and says plainly when a week has no earthly setting.</p>` },
+  { t:"Take it to class", b:`<p><b>Presenter</b> (key m) strips the controls and enlarges every label for a projector. <b>Study sheet</b> makes a printable handout of the week or era on screen — map, places, coordinates, and questions.</p>` },
+  { t:"Look at the real ground", b:`<p><b>Satellite</b> swaps the parchment for imagery and stays on as you move around. The <b>Scale</b> presets (shift-1 to shift-5) jump between the Crescent, Egypt and Sinai, Canaan, the ridge country and Jerusalem.</p>` },
+  { t:"Keep what you find", b:`<p><b>Share view</b> copies a link that reopens exactly this era, zoom, layers and place — paste it into your lesson notes. Search (key /) reaches places, events, peoples, objects, weeks and scripture references.</p>
+      <div class="guidefig">Press <b>?</b> at any time to reopen this guide.</div>` }
+];
+let gi = 0;
+function renderGuide(){
+  const s = GUIDE[gi];
+  document.getElementById("guidestep").textContent = `Step ${gi+1} of ${GUIDE.length}`;
+  document.getElementById("guidetitle").textContent = s.t;
+  document.getElementById("guidebody").innerHTML = s.b;
+  document.getElementById("guideback").disabled = gi===0;
+  document.getElementById("guidenext").textContent = gi===GUIDE.length-1 ? "Start reading" : "Next ›";
+  document.getElementById("guidedots").innerHTML = GUIDE.map((_,i)=>`<i class="${i===gi?"on":""}"></i>`).join("");
+}
+function openGuide(){ gi = 0; renderGuide(); guideDialog.open(); }
+function closeGuide(){
+  guideDialog.close();
+  try{ localStorage.setItem("ot-atlas-guide-seen","1"); }catch(e){}
+}
+document.getElementById("guidebtn").onclick = openGuide;
+document.getElementById("guidex").onclick = closeGuide;
+document.getElementById("guideskip").onclick = closeGuide;
+document.getElementById("guideback").onclick = ()=>{ if(gi>0){ gi--; renderGuide(); } };
+document.getElementById("guidenext").onclick = ()=>{
+  if(gi<GUIDE.length-1){ gi++; renderGuide(); } else closeGuide();
+};
+try{ if(!localStorage.getItem("ot-atlas-guide-seen")) setTimeout(openGuide, 900); }catch(e){}
+
+/* =========================== imagery that isn't there =========================== */
+/* Offline or behind a firewall the tile servers simply fail; say so and fall back to the drawn map. */
+let tileFails = 0;
+gTiles.node().addEventListener("error", ()=>{
+  if(++tileFails < 8) return;
+  tileFails = 0;
+  const set = activeTileset();
+  if(!set) return;
+  toggleLayer(set, false);
+  toast("Imagery unavailable — showing the drawn map");
+}, true);
+
+/* =========================== credits and licences =========================== */
+const CREDIT_SECTIONS = [
+  ["Cartography and base geography", [
+    ["Coastlines, rivers, lakes and modern borders", "Natural Earth, 1:50m physical and cultural vectors. Public domain; released by the Natural Earth project and its volunteer cartographers, supported by NACIS."],
+    ["Country outline topology", "world-atlas (TopoJSON build of Natural Earth) by Mike Bostock. ISC Licence; underlying data public domain."],
+    ["Site coordinates and elevations", "Compiled for this atlas from published excavation reports, survey gazetteers and museum records. Each place entry names the height and the confidence of the identification."],
+    ["Ancient roads, kingdom zones and rainfall belts", "Drawn for this atlas as schematic reconstructions from the standard route and climate literature. They are interpretive lines, not surveyed boundaries."],
+    ["Jerusalem plan", "Drawn for this atlas from the excavated and surveyed wall, gate and water-system lines of the Davidic, Solomonic, Hezekian and Nehemian phases; reconstructed stretches are named in each entry."]
+  ]],
+  ["Satellite imagery and relief", [
+    ["Blue Marble: Next Generation", "NASA Earth Observatory — Reto St\u00f6ckli, Nazmi El Saleous and Marit Jentoft-Nilsen. Public domain. Courtesy NASA/GSFC."],
+    ["Shaded relief with bathymetry", "NASA Global Imagery Browse Services (GIBS), Earth Observing System Data and Information System. Public domain. Courtesy NASA/GSFC/ESDIS."],
+    ["Delivery", "Tiles are requested from NASA GIBS at view time. Without a connection the atlas draws its own parchment map instead."]
+  ]],
+  ["Scripture texts", [
+    ["American Standard Version, 1901 (only translation in this build)", "Public domain in the United States and worldwide; unlike the King James Version, the ASV carries no UK Crown-copyright claim."],
+    ["Verse delivery", "Passage text is retrieved at reading time from bible-api.com, an open scripture API by Tim Morgan, which serves this public-domain edition (translation=asv)."],
+    ["Deuterocanonical sources", "1 and 2 Maccabees are quoted from public-domain English editions; Josephus from the public-domain translation of William Whiston (1737)."]
+  ]],
+  ["Reference works consulted", [
+    ["Chronology of the kings", "Edwin R. Thiele, The Mysterious Numbers of the Hebrew Kings \u2014 the synchronised regnal scheme followed throughout the divided-monarchy eras."],
+    ["Historical geography", "Yohanan Aharoni and Michael Avi-Yonah, The Macmillan Bible Atlas; Anson F. Rainey and R. Steven Notley, The Sacred Bridge; Barry Beitzel, The Moody Atlas of Bible Lands."],
+    ["Ancient Near Eastern texts", "James B. Pritchard, ed., Ancient Near Eastern Texts Relating to the Old Testament; William W. Hallo and K. Lawson Younger, eds., The Context of Scripture."],
+    ["Excavation and artefact records", "Site reports and object records published by the Israel Antiquities Authority, the Israel Museum, the British Museum, the Louvre, the Vorderasiatisches Museum Berlin, the Istanbul Archaeology Museums, the Oriental Institute of the University of Chicago and the Egyptian Museum, Cairo."],
+    ["Classical historians", "Herodotus, Polybius, Diodorus Siculus and Strabo, in public-domain English translations."]
+  ]],
+  ["Typefaces", [
+    ["EB Garamond", "Georg Duffner and Octavio Pardo. SIL Open Font Licence 1.1."],
+    ["IBM Plex Mono", "Mike Abbink and Bold Monday for IBM. SIL Open Font Licence 1.1."]
+  ]],
+  ["Software", [
+    ["D3 version 7", "Mike Bostock. ISC Licence."],
+    ["topojson-client", "Mike Bostock. BSD 3-Clause Licence."],
+    ["Atlas application", "Written for this edition. It runs entirely in the browser and uses no framework."]
+  ]],
+  ["Weekly reading plan", [
+    ["The 52-week sequence", "A weekly Old Testament reading order, given so that the map can be set to the passage under study."],
+    ["Independence", "This atlas is an independent work. It is not affiliated with, endorsed by, sponsored by or produced for any church, curriculum publisher or university."],
+    ["Reading plan", "The weekly reading order is dated to the same calendar year commonly used by Old Testament Sunday-school reading plans, for readers who want to follow along with a class; the atlas assigns no curriculum name to it."]
+  ]]
+];
+function renderCredits(){
+  const host = document.getElementById("creditsbody");
+  const rows = list => `<div class="where">${list.map(([k,v])=>
+    `<div class="wrow"><span class="wk">${k}</span><span class="wv">${v}</span></div>`).join("")}</div>`;
+  host.innerHTML = `
+    <p class="lede">Sources, licences and attributions for the material used in this atlas.</p>
+    ${CREDIT_SECTIONS.map(([title, list], i)=>
+      `<div class="sec"${i===0?' style="border-top:0; padding-top:0"':''}>${title}</div>${rows(list)}`).join("")}
+    <div class="sec">Photographs</div>
+    <p class="note">This build does not load photographs at runtime — there is no live image search and no third-party image host to credit.</p>
+    <div class="sec">How to cite this atlas</div>
+    <p class="note">Halverson, Taylor. <em>The Old Testament &amp; Intertestamental Atlas: Ur to the Death of Herod.</em>
+      Beta edition. Individual views are cited by the link produced by <em>Share view</em>, which reopens the same era,
+      layers and place.</p>
+    <div class="sec">Rights</div>
+    <p class="note">Atlas text, data compilation, maps, drawn plans and code \u00a9 Taylor Halverson. All rights reserved.
+      Licensed to the purchaser for personal study and classroom teaching. Material from the sources listed above is
+      used under the licences named there and remains the property of its rights holders.</p>
+    <p class="note">The atlas uses no accounts, analytics, advertising trackers, or behavioural profiling. The online
+      build makes requests to the services listed above for libraries, geographic data, optional map imagery, and
+      scripture text; those providers may receive standard network information such as IP address, browser headers,
+      and the requested resource. The offline build bundles application libraries and geographic data, but scripture
+      text and optional satellite imagery still require network access unless those resources are separately
+      bundled. It makes no requests for photographs — none are loaded at runtime.</p>`;
+}
+document.getElementById("creditsbtn").onclick = ()=> openAbout("credits");
+
+/* =========================== phone and tablet-portrait shell =========================== */
+/* The rail and the panel overlay the map rather than squeezing it, so the canvas keeps its
+   measured size and nothing needs re-fitting when they open. Choosing something inside an
+   overlay dismisses it first, then acts, so the result is never hidden behind the panel. */
+const scrim = document.getElementById("scrim");
+const mbBtn = { map:document.getElementById("mbmap"), browse:document.getElementById("mbbrowse"),
+  panel:document.getElementById("mbpanel"), time:document.getElementById("mbtime") };
+const ctrlBtn = document.getElementById("ctrlbtn"), tgHeader = document.getElementById("tgheader");
+const ctrlBtn2 = document.getElementById("ctrlbtn2");
+ctrlBtn.onclick = ()=>{
+  const open = !document.body.classList.contains("ctrl-open");
+  document.body.classList.toggle("ctrl-open", open);
+  document.body.classList.remove("ctrl2-open"); ctrlBtn2.setAttribute("aria-expanded","false");
+  ctrlBtn.setAttribute("aria-expanded", String(open));
+};
+ctrlBtn2.onclick = ()=>{
+  const open = !document.body.classList.contains("ctrl2-open");
+  document.body.classList.toggle("ctrl2-open", open);
+  document.body.classList.remove("ctrl-open"); ctrlBtn.setAttribute("aria-expanded","false");
+  ctrlBtn2.setAttribute("aria-expanded", String(open));
+};
+document.addEventListener("click", e=>{
+  if(document.body.classList.contains("ctrl-open") && !e.target.closest("#hdracts") && !e.target.closest("#ctrlbtn"))
+    document.body.classList.remove("ctrl-open");
+  if(document.body.classList.contains("ctrl2-open") && !e.target.closest("#hdracts2") && !e.target.closest("#ctrlbtn2"))
+    document.body.classList.remove("ctrl2-open");
+});
+document.getElementById("hdracts").addEventListener("click", e=>{
+  if(e.target.closest("button")) setTimeout(()=>document.body.classList.remove("ctrl-open"), 0);
+});
+document.getElementById("hdracts2").addEventListener("click", e=>{
+  if(e.target.closest("button")) setTimeout(()=>document.body.classList.remove("ctrl2-open"), 0);
+});
+tgHeader.onclick = ()=>{
+  const hidden = document.body.classList.toggle("hide-header");
+  tgHeader.setAttribute("aria-pressed", String(!hidden));
+};
+function isCompact(){ return window.matchMedia("(max-width:820px)").matches; }
+function setOverlay(which){
+  const b = document.body;
+  b.classList.toggle("drawer-open", which==="browse");
+  b.classList.toggle("sheet-open", which==="panel");
+  if(which==="time" && chronoEl.hidden) chronoBtn.click();
+  if(which!=="time" && !chronoEl.hidden) chronoBtn.click();
+  // drive the overlays inline as well: nothing in the cascade can then hold them shut
+  const rail = document.querySelector(".rail"), panel = document.querySelector(".panel");
+  if(isCompact()){
+    rail.style.transform  = which==="browse" ? "none" : "";
+    panel.style.transform = which==="panel"  ? "none" : "";
+    scrim.style.opacity = which==="browse" ? "1" : "0";
+    scrim.style.pointerEvents = which==="browse" ? "auto" : "none";
+  } else {
+    rail.style.transform = panel.style.transform = "";
+    scrim.style.opacity = ""; scrim.style.pointerEvents = "";
+  }
+  mbBtn.browse.setAttribute("aria-pressed", String(which==="browse"));
+  mbBtn.panel.setAttribute("aria-pressed", String(which==="panel"));
+  mbBtn.time.setAttribute("aria-pressed", String(which==="time"));
+}
+function closeOverlays(){ setOverlay(null); }
+const toggleOverlay = name => setOverlay(
+  (name==="browse" && document.body.classList.contains("drawer-open")) ||
+  (name==="panel" && document.body.classList.contains("sheet-open")) ||
+  (name==="time" && !chronoEl.hidden) ? null : name);
+/* tablet range (rail/panel are static columns, not overlays): toggle visibility directly */
+function toggleStatic(cls, btn){
+  const hidden = document.body.classList.toggle(cls);
+  btn.setAttribute("aria-pressed", String(!hidden));
+  syncPanelToggles();
+}
+function syncPanelToggles(){
+  const railOn = !document.body.classList.contains("hide-rail");
+  const panelOn = isCompact() ? document.body.classList.contains("sheet-open")
+    : window.innerWidth<=1280 ? document.body.classList.contains("tab-panel-open")
+    : !document.body.classList.contains("hide-panel");
+  [mbBtn.browse, document.getElementById("dtgrail")].forEach(b=>b.setAttribute("aria-pressed", String(railOn)));
+  [mbBtn.panel, document.getElementById("dtgpanel")].forEach(b=>b.setAttribute("aria-pressed", String(panelOn)));
+}
+mbBtn.map.onclick = ()=>{
+  const on = !document.body.classList.contains("map-only");
+  document.body.classList.toggle("map-only", on);
+  mbBtn.map.setAttribute("aria-pressed", String(on));
+  if(isCompact()){
+    if(on) closeOverlays();
+    document.body.classList.toggle("hide-header", on);
+    tgHeader.setAttribute("aria-pressed", String(!on));
+    if(on && !chronoEl.hidden) chronoBtn.click();
+  } else {
+    document.body.classList.toggle("hide-header", on);
+    document.body.classList.toggle("hide-rail", on);
+    document.body.classList.toggle("hide-panel", on);
+    document.body.classList.toggle("hide-timeline", on);
+    [tgHeader, mbBtn.browse, mbBtn.panel, mbBtn.time].forEach(b=>b.setAttribute("aria-pressed", String(!on)));
+    syncPanelToggles();
+  }
+};
+mbBtn.browse.onclick = ()=>{ document.body.classList.remove("map-only"); mbBtn.map.setAttribute("aria-pressed","false");
+  if(isCompact()) toggleOverlay("browse"); else toggleStatic("hide-rail", mbBtn.browse); };
+mbBtn.panel.onclick = ()=>{ document.body.classList.remove("map-only"); mbBtn.map.setAttribute("aria-pressed","false");
+  if(isCompact()) toggleOverlay("panel");
+  else if(window.innerWidth<=1280) setTabPanelOpen(!document.body.classList.contains("tab-panel-open"));
+  else toggleStatic("hide-panel", mbBtn.panel); };
+mbBtn.time.onclick = ()=>{ document.body.classList.remove("map-only"); mbBtn.map.setAttribute("aria-pressed","false");
+  if(isCompact()) toggleOverlay("time"); else toggleStatic("hide-timeline", mbBtn.time); };
+const tgLayers = document.getElementById("tglayers");
+document.getElementById("dtgrail").onclick = e=>{
+  const on = !document.body.classList.toggle("hide-rail");
+  e.target.setAttribute("aria-pressed", String(on));
+  syncPanelToggles();
+};
+document.getElementById("dtgpanel").onclick = e=>{
+  const on = !document.body.classList.toggle("hide-panel");
+  e.target.setAttribute("aria-pressed", String(on));
+  syncPanelToggles();
+};
+tgLayers.onclick = ()=>{
+  const hidden = document.body.classList.toggle("hide-layers");
+  tgLayers.setAttribute("aria-pressed", String(!hidden));
+};
+scrim.onclick = closeOverlays;
+function setTabPanelOpen(open){
+  document.body.classList.toggle("tab-panel-open", open);
+  document.querySelector(".panel").style.transform = open ? "none" : "";
+  syncPanelToggles();
+}
+function returnToCfmReading(){
+  state.passage=null; state.highlight=[]; state.verseIds=[];
+  gVerse.selectAll("*").remove(); renderHalos();
+  closeDetail();
+  if(isCompact()) closeOverlays();
+  else if(window.innerWidth<=1280) setTabPanelOpen(false);
+  else { document.body.classList.add("hide-panel"); mbBtn.panel.setAttribute("aria-pressed","false"); syncPanelToggles(); }
+}
+document.getElementById("cfmreturnbtn").onclick = returnToCfmReading;
+function ensurePanelVisible(){
+  document.body.classList.remove("map-only");
+  mbBtn.map.setAttribute("aria-pressed","false");
+  if(isCompact()){
+    document.body.classList.add("sheet-open"); document.body.classList.remove("drawer-open");
+    document.querySelector(".panel").style.transform = "none";
+    document.querySelector(".rail").style.transform = "";
+    scrim.style.opacity = "0"; scrim.style.pointerEvents = "none";
+    mbBtn.panel.setAttribute("aria-pressed","true"); mbBtn.browse.setAttribute("aria-pressed","false");
+  } else if(window.innerWidth<=1280){
+    setTabPanelOpen(true);
+  } else {
+    document.body.classList.remove("hide-panel");
+    mbBtn.panel.setAttribute("aria-pressed","true");
+    syncPanelToggles();
+  }
+}
+/* dismiss, then let the click do its work and the map move — the browse drawer auto-closes on pick
+   so the map appears; the details sheet stays open until the user closes it explicitly */
+[document.querySelector(".rail")].forEach(host=>{
+  host.addEventListener("click", e=>{
+    if(!isCompact()) return;
+    const hit = e.target.closest("button, .lay, .jrn, a");
+    if(!hit || hit.closest(".tabs") || hit.classList.contains("evt") || hit.closest("#pane-detail")) return;
+    setTimeout(closeOverlays, 0);
+  });
+});
+window.addEventListener("resize", ()=>{
+  if(!isCompact() && (document.body.classList.contains("drawer-open")||document.body.classList.contains("sheet-open"))){
+    document.body.classList.remove("drawer-open","sheet-open"); setOverlay(null);
+  }
+  if(window.innerWidth>1280 && (document.body.classList.contains("hide-rail")||document.body.classList.contains("hide-panel")||document.body.classList.contains("hide-header")||document.body.classList.contains("hide-timeline")||document.body.classList.contains("hide-layers")||document.body.classList.contains("ctrl-open")||document.body.classList.contains("map-only")||document.body.classList.contains("tab-panel-open"))){
+    document.body.classList.remove("hide-rail","hide-panel","hide-header","hide-timeline","hide-layers","ctrl-open","map-only","tab-panel-open");
+    document.querySelector(".panel").style.transform = "";
+    [mbBtn.browse,mbBtn.panel,mbBtn.time,mbBtn.map,tgHeader,tgLayers].forEach(b=>b.setAttribute("aria-pressed","true"));
+    mbBtn.map.setAttribute("aria-pressed","false");
+    syncPanelToggles();
+  }
+});
+let userToggledView = false;
+ctrlBtn.addEventListener("click", ()=>userToggledView=true);
+ctrlBtn2.addEventListener("click", ()=>userToggledView=true);
+Object.values(mbBtn).forEach(b=>b.addEventListener("click", ()=>userToggledView=true));
+tgHeader.addEventListener("click", ()=>userToggledView=true);
+function isLandscapePhone(){ return window.innerWidth<=900 && window.innerHeight<=500 && window.innerWidth>window.innerHeight; }
+function applyLandscapePhoneDefault(){
+  if(userToggledView || window.innerWidth>1280) return;
+  document.body.classList.add("map-only", "hide-header");
+  mbBtn.map.setAttribute("aria-pressed","true");
+  tgHeader.setAttribute("aria-pressed","false");
+  if(isCompact()){
+    document.body.classList.remove("drawer-open","sheet-open");
+    document.querySelector(".rail").style.transform = "";
+    document.querySelector(".panel").style.transform = "";
+    scrim.style.opacity = "0"; scrim.style.pointerEvents = "none";
+    mbBtn.browse.setAttribute("aria-pressed","false"); mbBtn.panel.setAttribute("aria-pressed","false");
+  } else {
+    document.body.classList.add("hide-rail","hide-timeline");
+    document.body.classList.remove("tab-panel-open");
+    document.querySelector(".panel").style.transform = "";
+    mbBtn.browse.setAttribute("aria-pressed","false"); mbBtn.panel.setAttribute("aria-pressed","false");
+    mbBtn.time.setAttribute("aria-pressed","false");
+  }
+  if(!chronoEl.hidden) chronoBtn.click();
+}
+window.addEventListener("resize", applyLandscapePhoneDefault);
+applyLandscapePhoneDefault();
+/* opening a place from the map should surface the sheet, not hide the answer in it */
+const _setTab = setTab;
+setTab = function(id){ _setTab(id); if(isCompact() && document.body.classList.contains("drawer-open")) closeOverlays(); };
+
+/* Device-preview harness: the frame viewer drives these states without touching the screen. */
+window.addEventListener("message", e=>{
+  const m = e.data;
+  if(!m || m.om !== "atlas-state") return;
+  if(m.name==="default"){ closeOverlays(); dismissCard(); }
+  if(m.name==="drawer") setOverlay("browse");
+  if(m.name==="sheet") setOverlay("panel");
+  if(m.name==="timeline") setOverlay("time");
+  if(m.name==="detail"){ closeOverlays(); openPlace(m.place || "jerusalem"); setTab("place"); }
+  if(m.name==="present") document.getElementById("presentbtn").click();
+});
+
+
+function readHash(){
+  const h = new URLSearchParams(location.hash.replace(/^#/,""));
+  const chrono = h.get("chrono");
+  if(chrono && CHRONO_MODELS.some(m=>m[0]===chrono)) applyChronoModel(chrono, {skipPersist:true});
+  const cfm = h.get("cfm"), passage = h.get("passage"), eraP = h.get("era");
+  const lay = h.get("lay"), cmp = h.get("cmp"), place = h.get("place"), v = h.get("v");
+  if(cmp!==null && ERAS[Number(cmp)]){ cmpEra = Number(cmp); cmpSel.value = cmp; }
+  const applyLayers = ()=>{
+    if(!lay) return;
+    const want = lay.split(",");
+    setLayers(Object.fromEntries(LAYERS.map(l=>[l[0], want.includes(l[0])])));
+  };
+  if(cfm && CFM.some(c=>c.w===Number(cfm))){ setTab("cfm"); openWeek(Number(cfm)); applyLayers(); return; }
+  if(passage){
+    const ref = parseRef(decodeURIComponent(passage));
+    if(ref){ openPassage(ref); applyLayers(); return; }
+  }
+  if(eraP!==null && ERAS[Number(eraP)]){
+    setEra(Number(eraP), false);
+    applyLayers();
+    setTab("era");
+    if(place && S[place]) openPlace(place);
+    if(v){
+      const [k,x,y] = v.split(",").map(Number);
+      if([k,x,y].every(n=>isFinite(n)))
+        svg.transition().duration(RM?0:500).call(zoom.transform, d3.zoomIdentity.translate(x,y).scale(k));
+    }
+    return;
+  }
+  applyLayers();
+  setTab("era");
+}
+readHash();
+applyLandscapePhoneDefault();
+window.addEventListener("hashchange", ()=>{ if(!hashSelf) readHash(); });
 </script>
 </body>
 </html>

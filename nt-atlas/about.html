@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Testament Atlas (beta) — an interactive atlas of the world of the Gospels</title>
+<meta name="description" content="An interactive atlas of the New Testament world — 85 places with their scripture, archaeology and context, graded by how securely each site is identified. Created by Taylor Halverson, PhD.">
+<link href="fonts/nt-fonts.css" rel="stylesheet">
+<style>
+  :root{
+    --ink:#241c14; --ink-2:#4a3d2e; --ink-3:#645436;
+    --parch:#e9dcc0; --parch-2:#f3e9d4; --rule:#c3b190; --rule-2:#a8926c;
+    --red:#8c3a2b; --red-2:#b0442e;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;font-family:'Spectral',Georgia,serif;color:var(--ink);line-height:1.62;
+    background:var(--parch);
+    background-image:
+      radial-gradient(ellipse at 22% 12%, rgba(243,233,212,.55), rgba(190,168,126,.22) 76%),
+      repeating-linear-gradient(112deg, rgba(160,136,96,.045) 0 2px, transparent 2px 5px);
+    -webkit-font-smoothing:antialiased;text-wrap:pretty;
+  }
+  a{color:var(--red)}
+  a:hover{color:var(--red-2)}
+  h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:0;line-height:1.14}
+  .wrap{max-width:940px;margin:0 auto;padding:0 24px}
+  .rule{border:0;border-top:1px solid var(--rule);margin:0}
+
+  header.top{border-bottom:1px solid var(--rule-2);background:rgba(243,233,212,.72)}
+  header.top .wrap{display:flex;align-items:baseline;gap:14px;padding:15px 24px 0;flex-wrap:wrap}
+  .mark{font-family:'Cormorant Garamond',serif;font-size:19px;letter-spacing:.09em;text-transform:uppercase;
+    text-decoration:none;color:var(--ink)}
+  .mark:hover{color:var(--red)}
+  .beta{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);
+    border:1px solid var(--red);padding:2px 6px;vertical-align:2px}
+  header.top .sp{flex:1}
+  /* the tab row: this page and the attributions page are two faces of the same
+     document, so they share a strip rather than each carrying a lone link */
+  .tabs{display:flex;gap:0;flex-wrap:wrap;margin-top:11px}
+  .tabs a{
+    font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;text-decoration:none;
+    color:var(--ink-2);padding:9px 15px;border:1px solid transparent;border-bottom:0;
+    background:transparent;white-space:nowrap;
+  }
+  .tabs a:hover{color:var(--red)}
+  .tabs a.on{
+    color:var(--ink);background:var(--parch-2);
+    border-color:var(--rule-2);position:relative;top:1px;
+  }
+  .tabs .sp{flex:1;border-bottom:1px solid var(--rule-2);min-width:0}
+  .tabs a:not(.on){border-bottom:1px solid var(--rule-2)}
+
+  .hero{padding:64px 0 54px;padding-inline:24px}
+  .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3);margin-bottom:18px}
+  .hero h1{font-size:clamp(38px,6.6vw,68px);letter-spacing:-.005em}
+  .hero .lede{font-size:clamp(17px,2.1vw,21px);font-style:italic;color:var(--ink-2);
+    max-width:37ch;margin:20px 0 0}
+  .cta{display:flex;gap:11px;flex-wrap:wrap;margin-top:32px;align-items:center}
+  .btn{display:inline-block;text-decoration:none;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    padding:13px 22px;border:1px solid var(--ink);color:var(--ink);background:transparent;white-space:nowrap}
+  .btn.primary{background:#3a2f22;border-color:#3a2f22;color:var(--parch-2)}
+  .btn:hover{background:var(--red);border-color:var(--red);color:#fff}
+  .ctanote{font-size:11.5px;color:var(--ink-3);font-style:italic}
+
+  .counts{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:1px;
+    background:var(--rule);border:1px solid var(--rule);margin:0 0 0}
+  .counts div{background:var(--parch-2);padding:16px 14px}
+  .counts b{display:block;font-family:'Cormorant Garamond',serif;font-size:31px;font-weight:600;line-height:1}
+  .counts span{display:block;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-top:6px}
+
+  section{padding:52px 0;padding-inline:24px}
+  section h2{font-size:clamp(25px,3.4vw,34px)}
+  section .sub{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:12px}
+  section p{max-width:64ch}
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:28px;margin-top:26px}
+  .cols h3{font-size:19px}
+  .cols p{font-size:14px;color:var(--ink-2);margin:7px 0 0}
+
+  .tiers{margin-top:26px;border-top:1px solid var(--rule)}
+  .tier{display:grid;grid-template-columns:132px 1fr;gap:18px;padding:15px 0;border-bottom:1px solid var(--rule)}
+  .tier .tn{font-size:11px;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:7px}
+  .tier .dot{width:11px;height:11px;border-radius:50%;flex:none}
+  .tier p{margin:0;font-size:14px;color:var(--ink-2)}
+  @media (max-width:560px){.tier{grid-template-columns:1fr;gap:5px}}
+
+  .author{background:rgba(243,233,212,.66);border-top:1px solid var(--rule-2);border-bottom:1px solid var(--rule-2)}
+  .author .grid{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+  @media (max-width:720px){.author .grid{grid-template-columns:1fr;gap:22px}}
+  .creds{margin:0;font-size:13.5px;color:var(--ink-2)}
+  .creds div{padding:7px 0;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:56px 1fr;gap:12px}
+  .creds b{font-weight:500}
+
+  footer{padding:38px 0 52px;padding-inline:24px;font-size:12px;color:var(--ink-3);line-height:1.6}
+  footer .cred{color:var(--ink-2)}
+  footer a{color:var(--ink-2)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="index.html">New Testament Atlas</a> <span class="beta">beta</span>
+    <span class="sp"></span>
+    <nav class="tabs">
+      <a href="index.html">The atlas</a>
+      <a class="on" href="about.html">About</a>
+      <a href="attributions.html">Attributions &amp; licences</a>
+      <a href="about.html#terms">Terms &amp; licence</a>
+      <span class="sp"></span>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap hero">
+  <div class="kicker">Galilee · the Decapolis · Samaria · Judea · Jerusalem · Paul’s world</div>
+  <h1>See what the specialists see.</h1>
+  <p class="lede">An interactive atlas of the world of the Gospels and Acts — built for study rather
+    than sightseeing, honest about how much we actually know, and keyed to the 2027 New Testament year.</p>
+  <div class="cta">
+    <a class="btn primary" href="index.html">Open the atlas</a>
+    <span class="ctanote">Free · works in any browser · nothing to install</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="counts">
+    <div><b>85</b><span>Places</span></div>
+    <div><b>61</b><span>Events</span></div>
+    <div><b>15</b><span>Traced routes</span></div>
+    <div><b>4</b><span>Guided tours</span></div>
+    <div><b>14</b><span>Map layers</span></div>
+    <div><b>53</b><span>Weeks, 2027</span></div>
+  </div>
+</div>
+
+<section class="wrap">
+  <div class="sub">What it is</div>
+  <h2>Every place carries its own argument.</h2>
+  <p>Tap a place and you get its scripture in full, its Greco-Roman and Second Temple Jewish context,
+    what has actually been excavated there, why the terrain mattered to the people walking it, questions
+    for discussion, and the literature the claims rest on. Then print it as a study sheet.</p>
+  <div class="cols">
+    <div>
+      <h3>Search a reference</h3>
+      <p>Type <em>Mark 5</em>, <em>Jn 4:6</em> or <em>Acts 10</em> and the atlas finds the places and
+        events tied to that passage.</p>
+    </div>
+    <div>
+      <h3>Fourteen layers</h3>
+      <p>Herodian borders, Jewish and Gentile territory, Roman roads, the rift and its elevations, the
+        sixteen ancient harbours of the lake, a day’s walk in rings.</p>
+    </div>
+    <div>
+      <h3>CFM 2027, week by week</h3>
+      <p>All fifty-three weeks of the 2027 New Testament year, each framing its own theatre of action —
+        the sites lit, the routes drawn, everything else receding — and each linking straight to its
+        lesson in the Gospel Library.</p>
+    </div>
+    <div>
+      <h3>Measure and practise</h3>
+      <p>Distance and days on foot between any two places, a chronology band, and a map-recall drill
+        with the labels taken off.</p>
+    </div>
+    <div>
+      <h3>Made for a room</h3>
+      <p>Presenter mode raises type and thickens routes for a classroom screen. Study sheets and
+        multi-place packets print clean.</p>
+    </div>
+    <div>
+      <h3>Your own marginalia</h3>
+      <p>Save places and write notes that stay in your browser — and print on the study sheet with
+        the rest. Any lesson week prints as a handout, notes and all.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="wrap">
+  <div class="sub">Why this one is different</div>
+  <h2>Bible maps print every name in the same type.</h2>
+  <p>Which quietly tells the reader that Capernaum and Emmaus are known to the same degree. They are not.
+    Capernaum is fixed by excavation and continuous name; Emmaus has four candidates and two manuscript
+    distances. This atlas grades every identification, marks the contested ones on the map itself, and
+    names the competing candidates rather than choosing for you.</p>
+  <div class="tiers">
+    <div class="tier">
+      <div class="tn"><span class="dot" style="background:#3f6b4a"></span>Secure</div>
+      <p>Fixed by continuous name, inscription, or excavation matching the ancient descriptions.</p>
+    </div>
+    <div class="tier">
+      <div class="tn"><span class="dot" style="background:#6b6033"></span>Probable</div>
+      <p>One candidate is widely accepted and unrivalled, but the proof is not decisive.</p>
+    </div>
+    <div class="tier">
+      <div class="tn"><span class="dot" style="background:#8c5a2b;border:2px dashed #8c5a2b;background:transparent"></span>Contested</div>
+      <p>Two or more real candidates are argued in print — Bethsaida, Cana, Emmaus, Golgotha, the Praetorium.
+        The panel lays out the case for each.</p>
+    </div>
+    <div class="tier">
+      <div class="tn"><span class="dot" style="border:2px dotted #8c3a2b;background:#f6eeda"></span>Conjectural</div>
+      <p>Rests on later tradition or inference. Scripture fixes no location a modern map can plot.</p>
+    </div>
+  </div>
+  <p style="margin-top:22px;font-style:italic;color:var(--ink-3);font-size:14px">Every panel also lists its
+    sources by author and title — pointers into the literature, so a teacher challenged on a location can
+    say where the argument lives.</p>
+</section>
+
+<div class="author">
+  <section class="wrap">
+    <div class="grid">
+      <div>
+        <div class="sub">Who made it</div>
+        <h2>Taylor Halverson, Ph.D.</h2>
+        <p style="font-size:14px;color:var(--ink-3);margin-top:4px">Author · Teacher · Tour leader · Scripture scholar</p>
+        <p style="font-size:14.5px">A scholar of scripture and a teacher of learners — an entrepreneurship
+          professor in the BYU Marriott School of Business, author and editor of more than fifty books,
+          and a builder of scripture study resources: the ScripturePlus app with Scripture Central, and
+          BYU’s Virtual Scripture Group, whose team spent five years reconstructing New Testament Jerusalem
+          in three dimensions.</p>
+        <p style="font-size:14.5px">He leads tours to Israel and the Middle East, where he unfolds how geology,
+          geography, civilization and scriptural texts created our present day. This atlas belongs to that
+          same body of work.</p>
+      </div>
+      <div>
+        <div class="sub">Training</div>
+        <div class="creds">
+          <div><b>Ph.D.</b><span>Judaism &amp; Christianity in Antiquity — Indiana University</span></div>
+          <div><b>Ph.D.</b><span>Instructional Systems Technology — Indiana University</span></div>
+          <div><b>M.A.</b><span>Biblical Studies — Yale University</span></div>
+          <div><b>B.A.</b><span>Ancient Near Eastern Studies — Brigham Young University</span></div>
+        </div>
+        <p style="font-size:13.5px;font-style:italic;color:var(--ink-3);margin-top:14px">Two doctorates in two
+          separate fields — the ancient world, and the design of learning. Both of them are in this tool.</p>
+        <div style="margin-top:18px;font-size:13.5px">
+          <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a> ·
+          <a href="https://books.taylorhalverson.com" target="_blank" rel="noopener">books</a> ·
+          <a href="https://exodustours.com" target="_blank" rel="noopener">tours</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="wrap">
+  <div class="sub">Beta</div>
+  <h2>Corrections are the point.</h2>
+  <p>This atlas makes specific claims about specific places, and a beta is where the wrong ones get found.
+    If a coordinate, a date, a reading of an excavation, or a scripture reference is off, say so — name the
+    place, quote the line, and say what it should say. Inside the atlas, <b style="font-weight:500">Tools →
+    Report an error</b> carries a link to the exact view you were looking at.</p>
+  <div class="cta">
+    <a class="btn primary" href="index.html">Open the atlas</a>
+    <a class="btn" href="mailto:insights@taylorhalverson.com?subject=New%20Testament%20Atlas%20beta">Email a correction</a>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="wrap" id="terms">
+  <div class="sub">Legal</div>
+  <h2>Terms of use &amp; licence</h2>
+  <p style="max-width:70ch">This is a Beta: an interactive atlas of 85 New Testament places, with
+    scripture, historical context, and study tools, published by Taylor Halverson, Ph.D. (“Publisher”).
+    It is a teaching aid, not a survey document — see “Every place carries its own argument” above for
+    what the confidence tiers mean and don’t mean.</p>
+
+  <h3 style="font-size:17px;margin-top:30px">Licence to use</h3>
+  <p style="font-size:14.5px;max-width:70ch">Publisher grants the purchaser or recipient a personal,
+    non-exclusive, non-transferable licence to use this atlas for personal study, teaching, and classroom
+    use, including printing study sheets and lesson packets it generates. Redistributing the atlas file
+    itself, or extracting its map data, essays, or illustrations for republication elsewhere, requires
+    Publisher’s prior written permission.</p>
+
+  <h3 style="font-size:17px;margin-top:26px">Scripture &amp; map data</h3>
+  <p style="font-size:14.5px;max-width:70ch">Scripture quotations are from the World English Bible, public
+    domain worldwide — no permission is required to reproduce it. Base map tiles are ©
+    <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a> (CC‑BY‑SA), map data ©
+    <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>
+    contributors (ODbL) — both licences permit commercial and paid use provided attribution stays visible and, for reused or
+    exported map imagery, the same CC BY-SA and ShareAlike terms travel with it — as they do in every
+    exported view and printed sheet from this atlas.</p>
+
+  <h3 style="font-size:17px;margin-top:26px">Beta reconstruction notice</h3>
+  <p style="font-size:14.5px;max-width:70ch">This beta presents a schematic educational reconstruction
+    based on selected published research. Dates, elevations, dimensions, routes, and disputed
+    identifications may be simplified. Where evidence is uncertain, the presentation offers one plausible
+    interpretation rather than a definitive conclusion.</p>
+
+  <h3 style="font-size:17px;margin-top:26px">Privacy and device storage</h3>
+  <p style="font-size:14.5px;max-width:70ch">This beta has no account system or analytics. It stores saved
+    places, notes, display preferences, and limited offline cache data only in this browser. Loading the
+    base map sends ordinary web requests, including IP address and referrer information, to the named map
+    provider. Clearing this site's browser data removes locally stored notes and cached views.</p>
+
+  <h3 style="font-size:17px;margin-top:26px">Connectivity</h3>
+  <p style="font-size:14.5px;max-width:70ch">The atlas interface and text can work after a successful
+    cached visit. A fresh visit needs a connection, and only map tiles previously viewed may be available
+    offline.</p>
+
+  <h3 style="font-size:17px;margin-top:26px">Refunds</h3>
+  <p style="font-size:14.5px;max-width:70ch">If this atlas was purchased through a store or platform, that
+    platform’s refund policy governs first. Where Publisher sells directly, a full refund is available on
+    request within 14 days of purchase, provided the atlas has not been redistributed.</p>
+
+  <h3 style="font-size:17px;margin-top:26px">No warranty of scholarly conclusion</h3>
+  <p style="font-size:14.5px;max-width:70ch">Because several sites shown are disputed, Publisher makes no
+    warranty that any dating, identification, or interpretation shown will not be revised in a later
+    edition. The atlas is provided “as is” for its stated teaching purpose. To the extent permitted by
+    law, Publisher’s liability for any claim arising from this product is limited to the amount paid for it.</p>
+
+  <h3 style="font-size:17px;margin-top:26px">Contact</h3>
+  <p style="font-size:14.5px;max-width:70ch">Licensing, refunds, or rights questions:
+    <a href="mailto:insights@taylorhalverson.com">insights@taylorhalverson.com</a>.</p>
+</section>
+
+<hr class="rule">
+
+<footer class="wrap">
+  <div class="cred"><b style="font-weight:500">Project Created by Taylor Halverson, Ph.D. (Beta mode)</b></div>
+  <div>New Testament Atlas — created, written and owned by Taylor Halverson, PhD.
+    © <span id="yr">2026</span> Taylor Halverson. All rights reserved.</div>
+  <div style="margin-top:8px">Scripture from the World English Bible (public domain) · historical context after Josephus, the
+    Mishnah and modern excavation reports · boundaries and routes approximate · base map ©
+    <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a> contributors, data ©
+    <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</div>
+  <div style="margin-top:8px"><a href="index.html">The atlas</a> · <a href="attributions.html">Attributions &amp; licences</a> · <a href="about.html#terms">Terms &amp; licence</a></div>
+</footer>
+
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>

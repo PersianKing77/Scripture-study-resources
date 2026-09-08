@@ -1,0 +1,64 @@
+/* Self-hosted type for New Testament Atlas.
+   Both families are SIL Open Font License 1.1 — free for commercial use and
+   embedding. Self-hosting does two things the Google CDN cannot: it keeps
+   visitor IP addresses away from Google (the GDPR exposure noted in
+   LICENSES.md) and it lets offline mode render in the right typefaces.
+
+   Drop the .woff2 files named below into this folder, then swap the one line
+   in index.html's <head>. See fonts/README.md for exactly where to get them.
+
+   Ship OFL.txt alongside these files in any distribution. */
+
+/* ——— Cormorant Garamond: display, titles, scripture ——— */
+@font-face{
+  font-family:'Cormorant Garamond';
+  font-style:normal; font-weight:400; font-display:swap;
+  src:url('cormorant-garamond-400.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Cormorant Garamond';
+  font-style:normal; font-weight:500; font-display:swap;
+  src:url('cormorant-garamond-500.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Cormorant Garamond';
+  font-style:normal; font-weight:600; font-display:swap;
+  src:url('cormorant-garamond-600.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Cormorant Garamond';
+  font-style:normal; font-weight:700; font-display:swap;
+  src:url('cormorant-garamond-700.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Cormorant Garamond';
+  font-style:italic; font-weight:400; font-display:swap;
+  src:url('cormorant-garamond-400-italic.woff2') format('woff2');
+}
+
+/* ——— Spectral: body and interface ——— */
+@font-face{
+  font-family:'Spectral';
+  font-style:normal; font-weight:300; font-display:swap;
+  src:url('spectral-300.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Spectral';
+  font-style:normal; font-weight:400; font-display:swap;
+  src:url('spectral-400.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Spectral';
+  font-style:normal; font-weight:500; font-display:swap;
+  src:url('spectral-500.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Spectral';
+  font-style:normal; font-weight:600; font-display:swap;
+  src:url('spectral-600.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Spectral';
+  font-style:italic; font-weight:400; font-display:swap;
+  src:url('spectral-400-italic.woff2') format('woff2');
+}

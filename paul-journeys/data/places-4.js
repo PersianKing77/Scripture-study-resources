@@ -11,7 +11,7 @@ sidon: {
   people: ["Julius the centurion", "Luke", "Aristarchus", "friends of Paul at Sidon"],
   epistles: [],
   scripture: [
-    { ref: "Acts 27:3", text: "And the next day we touched at Sidon. And Julius courteously entreated Paul, and gave him liberty to go unto his friends to refresh himself." }
+    { ref: "Acts 27:3", text: "The next day, we touched at Sidon. Julius treated Paul kindly, and gave him permission to go to his friends and refresh himself." }
   ]
 },
 
@@ -24,8 +24,8 @@ myra: {
   people: ["Julius the centurion", "the shipmaster and owner of the Alexandrian ship"],
   epistles: [],
   scripture: [
-    { ref: "Acts 27:5", text: "And when we had sailed over the sea of Cilicia and Pamphylia, we came to Myra, a city of Lycia." },
-    { ref: "Acts 27:6", text: "And there the centurion found a ship of Alexandria sailing into Italy; and he put us therein." }
+    { ref: "Acts 27:5", text: "When we had sailed across the sea which is off Cilicia and Pamphylia, we came to Myra, a city of Lycia." },
+    { ref: "Acts 27:6", text: "There the centurion found a ship of Alexandria sailing for Italy, and he put us on board." }
   ]
 },
 
@@ -38,7 +38,7 @@ cnidus: {
   people: [],
   epistles: [],
   scripture: [
-    { ref: "Acts 27:7", text: "And when we had sailed slowly many days, and scarce were come over against Cnidus, the wind not suffering us, we sailed under Crete, over against Salmone." }
+    { ref: "Acts 27:7", text: "When we had sailed slowly many days, and had come with difficulty opposite Cnidus, the wind not allowing us further, we sailed under the lee of Crete, opposite Salmone." }
   ]
 },
 
@@ -51,10 +51,10 @@ fairHavens: {
   people: ["Julius the centurion", "the shipmaster and owner", "276 souls aboard (Acts 27:37)"],
   epistles: ["Titus 1:5 has Paul later leaving Titus in Crete — evidence used for a post-Roman ministry"],
   scripture: [
-    { ref: "Acts 27:8", text: "And, hardly passing it, came unto a place which is called The fair havens; nigh whereunto was the city of Lasea." },
-    { ref: "Acts 27:9–10", text: "Now when much time was spent, and when sailing was now dangerous, because the fast was now already past, Paul admonished them, And said unto them, Sirs, I perceive that this voyage will be with hurt and much damage, not only of the lading and ship, but also of our lives." },
-    { ref: "Acts 27:11", text: "Nevertheless the centurion believed the master and the owner of the ship, more than those things which were spoken by Paul." },
-    { ref: "Acts 27:14", text: "But not long after there arose against it a tempestuous wind, called Euroclydon." }
+    { ref: "Acts 27:8", text: "With difficulty sailing along it we came to a certain place called Fair Havens, near the city of Lasea." },
+    { ref: "Acts 27:9–10", text: "When much time had passed and the voyage was now dangerous, because the Fast had now already gone by, Paul admonished them, and said to them, “Sirs, I perceive that the voyage will be with injury and much loss, not only of the cargo and the ship, but also of our lives.”" },
+    { ref: "Acts 27:11", text: "But the centurion gave more heed to the master and to the owner of the ship than to those things which were spoken by Paul." },
+    { ref: "Acts 27:14", text: "But before long, a stormy wind beat down from shore, which is called Euroclydon." }
   ]
 },
 
@@ -67,9 +67,9 @@ clauda: {
   people: ["the crew and prisoners"],
   epistles: [],
   scripture: [
-    { ref: "Acts 27:16–17", text: "And running under a certain island which is called Clauda, we had much work to come by the boat: Which when they had taken up, they used helps, undergirding the ship." },
-    { ref: "Acts 27:20", text: "And when neither sun nor stars in many days appeared, and no small tempest lay on us, all hope that we should be saved was then taken away." },
-    { ref: "Acts 27:22", text: "And now I exhort you to be of good cheer: for there shall be no loss of any man's life among you, but of the ship." }
+    { ref: "Acts 27:16–17", text: "Running under the lee of a small island called Clauda, we were able, with difficulty, to secure the boat. After they had hoisted it up, they used cables to help reinforce the ship. Fearing that they would run aground on the Syrtis sand bars, they lowered the sea anchor, and so were driven along." },
+    { ref: "Acts 27:20", text: "When neither sun nor stars shone on us for many days, and no small storm pressed on us, all hope that we would be saved was now taken away." },
+    { ref: "Acts 27:22", text: "Now I exhort you to cheer up, for there will be no loss of life among you, but only of the ship." }
   ]
 },
 
@@ -82,11 +82,11 @@ malta: {
   people: ["Publius, the chief man of the island", "his father, healed of a fever", "Luke", "Aristarchus", "Julius"],
   epistles: [],
   scripture: [
-    { ref: "Acts 27:41", text: "And falling into a place where two seas met, they ran the ship aground; and the forepart stuck fast, and remained unmoveable, but the hinder part was broken with the violence of the waves." },
-    { ref: "Acts 27:44", text: "And the rest, some on boards, and some on broken pieces of the ship. And so it came to pass, that they escaped all safe to land." },
-    { ref: "Acts 28:2", text: "And the barbarous people shewed us no little kindness: for they kindled a fire, and received us every one, because of the present rain, and because of the cold." },
-    { ref: "Acts 28:5", text: "And he shook off the beast into the fire, and felt no harm." },
-    { ref: "Acts 28:8", text: "And it came to pass, that the father of Publius lay sick of a fever and of a bloody flux: to whom Paul entered in, and prayed, and laid his hands on him, and healed him." }
+    { ref: "Acts 27:41", text: "But coming to a place where two seas met, they ran the vessel aground. The bow struck and remained immovable, but the stern began to break up by the violence of the waves." },
+    { ref: "Acts 27:44", text: "and the rest should follow, some on planks, and some on other things from the ship. So it happened that they all escaped safely to the land." },
+    { ref: "Acts 28:2", text: "The natives showed us uncommon kindness; for they kindled a fire, and received us all, because of the present rain, and because of the cold." },
+    { ref: "Acts 28:5", text: "However he shook off the creature into the fire, and wasn’t harmed." },
+    { ref: "Acts 28:8", text: "It happened that the father of Publius lay sick of fever and dysentery. Paul entered in to him, prayed, and laying his hands on him, healed him." }
   ]
 },
 
@@ -99,7 +99,7 @@ syracuse: {
   people: ["Luke", "Aristarchus", "Julius"],
   epistles: [],
   scripture: [
-    { ref: "Acts 28:11–12", text: "And after three months we departed in a ship of Alexandria, which had wintered in the isle, whose sign was Castor and Pollux. And landing at Syracuse, we tarried there three days." }
+    { ref: "Acts 28:11–12", text: "After three months, we set sail in a ship of Alexandria which had wintered in the island, whose sign was “The Twin Brothers.” Touching at Syracuse, we stayed there three days." }
   ]
 },
 
@@ -112,7 +112,7 @@ rhegium: {
   people: [],
   epistles: [],
   scripture: [
-    { ref: "Acts 28:13", text: "And from thence we fetched a compass, and came to Rhegium: and after one day the south wind blew, and we came the next day to Puteoli." }
+    { ref: "Acts 28:13", text: "From there we circled around and arrived at Rhegium. After one day, a south wind sprang up, and on the second day we came to Puteoli," }
   ]
 },
 
@@ -125,7 +125,7 @@ puteoli: {
   people: ["Brethren of Puteoli", "Luke", "Aristarchus", "Julius"],
   epistles: [],
   scripture: [
-    { ref: "Acts 28:13–14", text: "And from thence we fetched a compass, and came to Rhegium: and after one day the south wind blew, and we came the next day to Puteoli: Where we found brethren, and were desired to tarry with them seven days: and so we went toward Rome." }
+    { ref: "Acts 28:13–14", text: "From there we circled around and arrived at Rhegium. After one day, a south wind sprang up, and on the second day we came to Puteoli, where we found brothers, and were entreated to stay with them for seven days. So we came to Rome." }
   ]
 },
 
@@ -138,7 +138,7 @@ appianWay: {
   people: ["Roman believers who came out to meet him"],
   epistles: ["Romans, written c. AD 57, had prepared this welcome"],
   scripture: [
-    { ref: "Acts 28:15", text: "And from thence, when the brethren heard of us, they came to meet us as far as Appii forum, and The three taverns: whom when Paul saw, he thanked God, and took courage." }
+    { ref: "Acts 28:15", text: "From there the brothers, when they heard of us, came to meet us as far as The Market of Appius and The Three Taverns. When Paul saw them, he thanked God, and took courage." }
   ]
 },
 
@@ -151,12 +151,12 @@ rome: {
   people: ["Timothy", "Luke", "Mark", "Aristarchus", "Epaphras", "Onesimus", "Tychicus", "Demas", "Onesiphorus", "Nero's household (Phil 4:22)", "Jewish leaders of Rome"],
   epistles: ["Romans is addressed here; Ephesians, Philippians, Colossians and Philemon are traditionally written from this imprisonment; 2 Timothy from a later one"],
   scripture: [
-    { ref: "Acts 28:16", text: "And when we came to Rome, the centurion delivered the prisoners to the captain of the guard: but Paul was suffered to dwell by himself with a soldier that kept him." },
-    { ref: "Acts 28:30–31", text: "And Paul dwelt two whole years in his own hired house, and received all that came in unto him, Preaching the kingdom of God, and teaching those things which concern the Lord Jesus Christ, with all confidence, no man forbidding him." },
-    { ref: "Philippians 1:13", text: "So that my bonds in Christ are manifest in all the palace, and in all other places." },
-    { ref: "Philippians 4:22", text: "All the saints salute you, chiefly they that are of Caesar's household." },
-    { ref: "2 Timothy 4:6–7", text: "For I am now ready to be offered, and the time of my departure is at hand. I have fought a good fight, I have finished my course, I have kept the faith." },
-    { ref: "Romans 1:15", text: "So, as much as in me is, I am ready to preach the gospel to you that are at Rome also." }
+    { ref: "Acts 28:16", text: "When we entered into Rome, the centurion delivered the prisoners to the captain of the guard, but Paul was allowed to stay by himself with the soldier who guarded him." },
+    { ref: "Acts 28:30–31", text: "Paul stayed two whole years in his own rented house, and received all who were coming to him, preaching the Kingdom of God, and teaching the things concerning the Lord Jesus Christ with all boldness, without hindrance." },
+    { ref: "Philippians 1:13", text: "so that it became evident to the whole palace guard, and to all the rest, that my bonds are in Christ;" },
+    { ref: "Philippians 4:22", text: "All the saints greet you, especially those who are of Caesar’s household." },
+    { ref: "2 Timothy 4:6–7", text: "For I am already being offered, and the time of my departure has come. I have fought the good fight. I have finished the course. I have kept the faith." },
+    { ref: "Romans 1:15", text: "So, as much as is in me, I am eager to preach the Good News to you also who are in Rome." }
   ]
 },
 
@@ -169,9 +169,9 @@ crete: {
   people: ["Titus", "Zenas and Apollos (Titus 3:13)"],
   epistles: ["Titus"],
   scripture: [
-    { ref: "Titus 1:5", text: "For this cause left I thee in Crete, that thou shouldest set in order the things that are wanting, and ordain elders in every city." },
-    { ref: "Titus 1:12", text: "One of themselves, even a prophet of their own, said, The Cretians are alway liars, evil beasts, slow bellies." },
-    { ref: "Titus 3:12", text: "When I shall send Artemas unto thee, or Tychicus, be diligent to come unto me to Nicopolis: for I have determined there to winter." }
+    { ref: "Titus 1:5", text: "I left you in Crete for this reason, that you would set in order the things that were lacking, and appoint elders in every city, as I directed you;" },
+    { ref: "Titus 1:12", text: "One of them, a prophet of their own, said, “Cretans are always liars, evil beasts, and idle gluttons.”" },
+    { ref: "Titus 3:12", text: "When I send Artemas to you, or Tychicus, be diligent to come to me to Nicopolis, for I have determined to winter there." }
   ]
 },
 
@@ -184,8 +184,8 @@ nicopolis: {
   people: ["Titus", "Artemas", "Tychicus"],
   epistles: ["Titus 3:12"],
   scripture: [
-    { ref: "Titus 3:12", text: "When I shall send Artemas unto thee, or Tychicus, be diligent to come unto me to Nicopolis: for I have determined there to winter." },
-    { ref: "Romans 15:19", text: "So that from Jerusalem, and round about unto Illyricum, I have fully preached the gospel of Christ." }
+    { ref: "Titus 3:12", text: "When I send Artemas to you, or Tychicus, be diligent to come to me to Nicopolis, for I have determined to winter there." },
+    { ref: "Romans 15:19", text: "in the power of signs and wonders, in the power of God’s Spirit; so that from Jerusalem, and around as far as to Illyricum, I have fully preached the Good News of Christ;" }
   ]
 },
 
@@ -198,9 +198,9 @@ spain: {
   people: [],
   epistles: ["Romans 15:24, 28 state the plan"],
   scripture: [
-    { ref: "Romans 15:20", text: "Yea, so have I strived to preach the gospel, not where Christ was named, lest I should build upon another man's foundation." },
-    { ref: "Romans 15:24", text: "Whensoever I take my journey into Spain, I will come to you: for I trust to see you in my journey, and to be brought on my way thitherward by you, if first I be somewhat filled with your company." },
-    { ref: "Romans 15:28", text: "When therefore I have performed this, and have sealed to them this contribution, I will come by you into Spain." }
+    { ref: "Romans 15:20", text: "yes, making it my aim to preach the Good News, not where Christ was already named, that I might not build on another’s foundation." },
+    { ref: "Romans 15:24", text: "whenever I journey to Spain, I will come to you. For I hope to see you on my journey, and to be helped on my way there by you, if first I may enjoy your company for a while." },
+    { ref: "Romans 15:28", text: "When therefore I have accomplished this, and have sealed to them this fruit, I will go on by way of you to Spain." }
   ]
 }
 

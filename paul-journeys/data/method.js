@@ -2,18 +2,19 @@
 window.PAUL_METHOD = {
   intro: "Everything in this atlas is a reconstruction of one kind or another. The New Testament gives no dates, few distances, and no coordinates; what follows is an account of where the rest came from, what is firm, what is disputed, and how the difference is marked.",
   rules: [
-    { h: "Geography comes from data, never from drawing", t: "Coastlines and terrain are real tiles from Esri's topographic, imagery and shaded-relief services. Every site is a coordinate, not a placement by eye. Roman roads are traced through cities and road-stations attested in the ancient itineraries — but the line drawn between two known stations is a simplification of a road that survives only in fragments, and the layer says so on hover." },
+    { h: "Geography comes from data, never from drawing", t: "This atlas draws no live basemap tiles from any third-party service; every place is plotted by exact coordinate on a plain ground, so nothing here depends on an outside host being reachable. Every site is a coordinate, not a placement by eye. Roman roads are traced through cities and road-stations attested in the ancient itineraries — but the line drawn between two known stations is a simplification of a road that survives only in fragments, and the layer says so on hover." },
     { h: "Provincial boundaries are labelled, not outlined", t: "Provinces moved repeatedly in the first century: Judea's status changed four times in Paul's lifetime, Galatia's extent is still argued, and no trustworthy geometry for any of them exists at this date. So provinces appear as labels at their approximate centres and nothing is drawn as a border." },
     { h: "Uncertainty is stated where it exists", t: "Where a site identification is contested, the gazetteer grades it and gives the basis. Where a letter's place of origin is inferred rather than stated, the letter's note says which verse the inference rests on. Where three dating schemes disagree, all three are shown side by side rather than one being quietly chosen." },
+    { h: "'First/Second/Third Journey' is a modern convention", t: "Acts itself does not number Paul's travels into three (or four) missionary journeys; that framework is a widely used teaching convenience for organising the narrative, adopted here for the same reason, not a division Luke draws." },
     { h: "Ancient testimony is attributed", t: "Classical evidence is quoted or summarised with its author and, where practical, its work — Strabo on Tarsus, Josephus on the famine and the procurators, Tacitus on the fire, Suetonius on Claudius' expulsion, Pausanias on Corinth and Athens. Inscriptions are named with their find circumstances and present location where known." },
-    { h: "Scripture is the Authorized Version", t: "The King James text is public domain and used throughout, fetched a chapter at a time and cached in your browser. Where the KJV's rendering obscures a point of substance, the article says so in its own words rather than substituting another translation." }
+    { h: "Scripture is the World English Bible", t: "The World English Bible (WEB) is a modern translation dedicated to the public domain worldwide, so no territorial permission is needed anywhere. The key verses quoted in each panel are stored in the atlas itself and always available offline. Reading a full passage links out to the WEB at biblegateway.com rather than calling any scripture API from this app." }
   ],
   confidence: [
-    { g: "Secure", c: "#7fb069", t: "The site is identified by inscription, continuous occupation, or unambiguous ancient testimony. Corinth, Ephesus, Athens, Philippi, Thessalonica, Rome, Caesarea Maritima, Tarsus, Antioch on the Orontes, Malta, Puteoli, Syracuse. Nobody argues about these." },
-    { g: "Probable", c: "#c9a227", t: "The identification is accepted by most, on good but not decisive evidence — often a single inscription or a strong topographical fit. Lystra (Sterrett's 1885 Latin statue base of the deified Augustus), Derbe (Ballance's 1956 dedication from Kerti Höyük), Berea, Colossae, Fair Havens." },
-    { g: "Traditional", c: "#c9873a", t: "The location rests on later church tradition, or on a reasonable but unproven reading of the text. St Paul's Bay on Malta, the site of the Damascus escape, Appii Forum and the Three Taverns as points on the Appian Way. Usable, but not evidence." },
-    { g: "Disputed", c: "#b06a8f", t: "Serious scholars disagree, and the atlas draws one option while naming the other. The destination of Galatians (South vs. North Galatian); Phoenix on Crete (Loutro faces east, contradicting Luke's description); the origin of the Pastoral letters; whether the prison letters come from Rome, Ephesus or Caesarea; Erastus of the Corinthian pavement." },
-    { g: "Region only", c: "#8d9a9c", t: "The atlas maps Paul's world. For Come, Follow Me weeks in the Gospels and general epistles, the sites are not in this gazetteer, so the map frames the region and says plainly that it is doing so rather than inventing markers." }
+    { g: "Secure", c: "#7fb069", cl: "#2f6b46", t: "The site is identified by inscription, continuous occupation, or unambiguous ancient testimony. Corinth, Ephesus, Athens, Philippi, Thessalonica, Rome, Caesarea Maritima, Tarsus, Antioch on the Orontes, Malta, Puteoli, Syracuse. Nobody argues about these." },
+    { g: "Probable", c: "#c9a227", cl: "#7d5f14", t: "The identification is accepted by most, on good but not decisive evidence — often a single inscription or a strong topographical fit. Lystra (Sterrett's 1885 Latin statue base of the deified Augustus), Derbe (Ballance's 1956 dedication from Kerti Höyük), Berea, Colossae, Fair Havens." },
+    { g: "Traditional", c: "#c9873a", cl: "#8a4a2c", t: "The location rests on later church tradition, or on a reasonable but unproven reading of the text. St Paul's Bay on Malta, the site of the Damascus escape, Appii Forum and the Three Taverns as points on the Appian Way. Usable, but not evidence." },
+    { g: "Disputed", c: "#b06a8f", cl: "#7d3358", t: "Serious scholars disagree, and the atlas draws one option while naming the other. The destination of Galatians (South vs. North Galatian); Phoenix on Crete (Loutro faces east, contradicting Luke's description); the origin of the Pastoral letters; whether the prison letters come from Rome, Ephesus or Caesarea; Erastus of the Corinthian pavement." },
+    { g: "Region only", c: "#8d9a9c", cl: "#4a565b", t: "The atlas maps Paul's world. For CFM weeks in the Gospels and general epistles, the sites are not in this gazetteer, so the map frames the region and says plainly that it is doing so rather than inventing markers." }
   ],
   fixed: "Five external anchors carry the whole chronology: the Delphi inscription fixing Gallio's proconsulship of Achaia to AD 51–52 (against Acts 18:12); the death of Aretas IV of Nabataea c. AD 40, which caps the Damascus escape of 2 Corinthians 11:32; Orosius' date of AD 49 for Claudius' expulsion of Jews from Rome, matching Aquila and Priscilla 'lately come from Italy'; Josephus on the Judean famine of c. AD 46–48; and the recall of Felix and arrival of Festus c. AD 59. Every year in this atlas is derived from those five, and the Chronology panel shows how three published schemes derive different answers from the same evidence.",
   works: [
@@ -50,8 +51,21 @@ window.PAUL_METHOD = {
       "Strabo, <i>Geography</i>; Josephus, <i>Jewish War</i> and <i>Antiquities</i>; Tacitus, <i>Annals</i>; Suetonius, <i>Lives of the Caesars</i>; Pausanias, <i>Description of Greece</i>; Pliny the Elder, <i>Natural History</i> — quoted directly in the city articles.",
       "<i>Corpus Inscriptionum Latinarum</i>, <i>Inscriptiones Graecae</i>, and <i>Sylloge Inscriptionum Graecarum</i> for the Gallio, politarch, Soreg, Theodotus, Lystra and Derbe texts."
     ] },
+    { sect: "The Gospel-era sites", items: [
+      "Jerome Murphy-O'Connor, <i>The Holy Land: An Oxford Archaeological Guide</i>, 5th ed. (2008) — the standard site-by-site guide, and the check on every Gospel entry here.",
+      "Jodi Magness, <i>The Archaeology of the Holy Land: From the Destruction of Solomon's Temple to the Muslim Conquest</i> (2012).",
+      "Eric M. Meyers and Mark A. Chancey, <i>Alexander to Constantine: Archaeology of the Land of the Bible</i>, vol. 3 (2012) — on Sepphoris, Tiberias and the Hellenization of Galilee.",
+      "James F. Strange and Stanislao Loffreda on Capernaum; the Magdala and el-Araj excavation reports; Shimon Gibson, <i>The Final Days of Jesus</i> (2009) on the Passion topography.",
+      "Josephus, <i>Jewish War</i> and <i>Antiquities</i>, for Machaerus, Tiberias, Sepphoris, Bethsaida-Julias and Tabor — the outside witness the Gospels do not supply.",
+      "Eusebius, <i>Onomasticon</i>; the Bordeaux Pilgrim (333); Egeria (c. 384); the Madaba mosaic map (6th c.) — the earliest commemorations, cited as evidence of tradition, not of fact."
+    ] },
+    { sect: "Text and textual criticism", items: [
+      "Bruce M. Metzger and Bart D. Ehrman, <i>The Text of the New Testament</i>, 4th ed. (2005).",
+      "Bruce M. Metzger, <i>A Textual Commentary on the Greek New Testament</i>, 2nd ed. (1994) — the source of the variant notes shown in the passage reader.",
+      "The World English Bible (WEB), public domain worldwide; short verses quoted in-app, full passages linked out to biblegateway.com."
+    ] },
     { sect: "Curriculum and background resources", items: [
-      "The 52-week Come, Follow Me New Testament schedule, with scripture links to the Gospel Library at churchofjesuschrist.org.",
+      "The 52-week CFM New Testament schedule, with scripture links to the Gospel Library at churchofjesuschrist.org.",
       "Taylor Halverson's <a href=\"https://insights.taylorhalverson.com/p/new-testament-resources\" target=\"_blank\" rel=\"noopener\">New Testament Resource Hub</a> — the videos, articles and books attached to each week."
     ] }
   ],
@@ -59,7 +73,10 @@ window.PAUL_METHOD = {
     "Road alignments between attested stations are simplifications; do not measure a march from them.",
     "Gazetteer elevations are approximate site figures, not surveyed spot heights.",
     "Travel times are modelled from ancient average rates by season, not from any single recorded journey. They are ranges of plausibility.",
-    "Site photographs are fetched from Wikipedia on demand and are not curated; a wrong or unhelpful image is possible.",
-    "This is a beta. Articles are still being checked and extended, and four review passes have already corrected errors of the kind that remain."
+    "This atlas embeds no third-party site photographs; each place panel links out to that site's own Wikipedia article instead, so no image licensing can go unverified.",
+    "The Gospel-era layer is a gazetteer of places, not a reconstruction of an itinerary: the Gospels do not give the sequence of travel that Acts gives for Paul, so no routes are drawn between these sites and none should be inferred.",
+    "Several Gospel sites rest on Byzantine commemoration rather than evidence — Ain Karem, the Mount of Beatitudes, Tabor, Emmaus. They are graded traditional and included because that is what teaching honestly requires, not because the identification is likely.",
+    "Textual variant notes are summaries of a settled scholarly consensus, not an apparatus; consult Metzger's commentary before making an argument from one.",
+    "The atlas is a revised edition rather than a fixed one: articles are updated as excavation reports and scholarship appear, and the gazetteer grades are re-weighed with them."
   ]
 };

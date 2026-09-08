@@ -12,7 +12,7 @@ lanes: [
     { name: "Pontius Pilate", t0: 26, t1: 36, note: "Prefect at the crucifixion; recalled after a massacre of Samaritans. His name survives on a stone from Caesarea's theatre." },
     { name: "Marcellus / Marullus", t0: 36, t1: 41, note: "Caretaker prefects — the years of Paul's conversion and first Jerusalem visit." },
     { name: "Herod Agrippa I (king)", t0: 41, t1: 44, note: "Ruled all Judea as a client king; killed James the son of Zebedee and imprisoned Peter (Acts 12), and died at Caesarea in 44." },
-    { name: "Fadus & Tib. Alexander", t0: 44, t1: 48, note: "Procurators through the famine years; Tiberius Julius Alexander administered relief (Josephus, Ant. 20.101) — the famine of the Acts 11 relief visit." },
+    { name: "Fadus & Tib. Alexander", t0: 44, t1: 48, note: "Procurators through the famine years. Josephus places the famine during Tiberius Julius Alexander's administration; Queen Helena obtained grain and dried figs for the poor, while Izates sent money (Ant. 20.49-53, 100-101). This is the famine associated with the Acts 11 relief visit." },
     { name: "Ventidius Cumanus", t0: 48, t1: 52, note: "His mishandling of a Samaritan feud brought Judea to the edge of revolt." },
     { name: "Antonius Felix", t0: 52, t1: 59, note: "Heard Paul at Caesarea, trembled, hoped for a bribe, and left him bound two years (Acts 24)." },
     { name: "Porcius Festus", t0: 59, t1: 62, note: "Received Paul's appeal to Caesar and sent him to Rome (Acts 25)." },

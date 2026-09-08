@@ -1,11 +1,11 @@
-/* ——— COME, FOLLOW ME LAYER ———————————————————————————————————————————————
+/* ——— CFM LAYER ———————————————————————————————————————————————
    Three additions, appended onto window.NTATLAS by the loader at the foot of
    this file:
      MED_PLACES   the Mediterranean gazetteer the Acts / Epistles / Revelation
                   weeks need — Asia Minor, Macedonia, Achaia, Italy, the isles.
      CFM_JOURNEYS Paul's three missions, the voyage to Rome, and the circuit of
                   the seven churches.
-     CFM_SCHEDULE all 53 Come, Follow Me weeks (0–52), each with the theatre of
+     CFM_SCHEDULE all 53 CFM weeks (0–52), each with the theatre of
                   action to fly to, the sites and routes it covers, the letter's
                   origin and destination where the week is an epistle, class
                   discussion prompts, and a Gospel Library link.
@@ -19,8 +19,8 @@ const MED_PLACES = [
   lat:36.2021, lon:36.1610, cat:"city", region:"Syria (Roman province)",
   blurb:"Third city of the empire, and the church that first sent missionaries out — and first wore the name Christian.",
   scriptures:[
-    {ref:"Acts 11:26", text:"And when he had found him, he brought him unto Antioch. And it came to pass, that a whole year they assembled themselves with the church, and taught much people. And the disciples were called Christians first in Antioch."},
-    {ref:"Acts 13:2–3", text:"The Holy Ghost said, Separate me Barnabas and Saul for the work whereunto I have called them. And when they had fasted and prayed, and laid their hands on them, they sent them away."}
+    { ref: "Acts 11:26", text: "When he had found him, he brought him to Antioch. For a whole year they were gathered together with the assembly, and taught many people. The disciples were first called Christians in Antioch." },
+    { ref: "Acts 13:2–3", text: "As they served the Lord and fasted, the Holy Spirit said, “Separate Barnabas and Saul for me, for the work to which I have called them.” Then, when they had fasted and prayed and laid their hands on them, they sent them away." }
   ],
   geo:"On the Orontes, twenty miles inland from its port at Seleucia, at the hinge between the Syrian coast road and the caravan routes east. Whoever held Antioch held the traffic between the Mediterranean and Mesopotamia.",
   greco:"Seleucid capital, then Roman provincial capital of Syria, with a population commonly estimated in the hundreds of thousands, a colonnaded main street lit at night, and a legionary command that watched the Parthian frontier.",
@@ -37,8 +37,8 @@ const MED_PLACES = [
   lat:36.9177, lon:34.8947, cat:"city", region:"Cilicia (Roman province)",
   blurb:"Paul's home city — a university town on a navigable river, and the reason he could argue in Greek and claim Rome.",
   scriptures:[
-    {ref:"Acts 21:39", text:"But Paul said, I am a man which am a Jew of Tarsus, a city in Cilicia, a citizen of no mean city."},
-    {ref:"Acts 22:3", text:"I am verily a man which am a Jew, born in Tarsus, a city in Cilicia, yet brought up in this city at the feet of Gamaliel."}
+    { ref: "Acts 21:39", text: "But Paul said, “I am a Jew, from Tarsus in Cilicia, a citizen of no insignificant city. I beg you, allow me to speak to the people.”" },
+    { ref: "Acts 22:3", text: "“I am indeed a Jew, born in Tarsus of Cilicia, but brought up in this city at the feet of Gamaliel, instructed according to the strict tradition of the law of our fathers, being zealous for God, even as you all are today." }
   ],
   geo:"On the Cydnus, ten miles from the sea but reachable by ship, at the southern mouth of the Cilician Gates — the pass every army and caravan used to cross the Taurus into Asia Minor.",
   greco:"Famous for its schools of rhetoric and Stoic philosophy; Strabo rated its appetite for learning above Athens and Alexandria. A free city with Roman citizenship in some of its families.",
@@ -55,7 +55,7 @@ const MED_PLACES = [
   id:"salamis-cyprus", name:"Salamis (Cyprus)", greek:"Σαλαμίς", modern:"near Famagusta, Cyprus",
   lat:35.1830, lon:33.9060, cat:"city", region:"Cyprus (Roman province)",
   blurb:"The eastern port of Cyprus and the first stop of the first mission — where they preached in the synagogues of the Jews.",
-  scriptures:[{ref:"Acts 13:5", text:"And when they were at Salamis, they preached the word of God in the synagogues of the Jews: and they had also John to their minister."}],
+  scriptures:[{ ref: "Acts 13:5", text: "When they were at Salamis, they proclaimed God’s word in the Jewish synagogues. They had also John as their attendant." }],
   geo:"A harbour facing Syria, a single day's sail from Seleucia with a following wind — which is why Cyprus, and not Asia Minor, is the first field.",
   greco:"The island's chief commercial city, rebuilt repeatedly after earthquakes, with a gymnasium, theatre and grand baths.",
   jewish:"A substantial Jewish population; Barnabas was a Cypriot Levite (Acts 4:36), so the first mission goes first to his own people and his own island.",
@@ -70,7 +70,7 @@ const MED_PLACES = [
   id:"paphos", name:"Paphos", greek:"Πάφος", modern:"Kato Paphos, Cyprus",
   lat:34.7570, lon:32.4060, cat:"city", region:"Cyprus (Roman province)",
   blurb:"The Roman capital of Cyprus, where a proconsul believed, a sorcerer was blinded, and Saul begins to be called Paul.",
-  scriptures:[{ref:"Acts 13:12", text:"Then the deputy, when he saw what was done, believed, being astonished at the doctrine of the Lord."}],
+  scriptures:[{ ref: "Acts 13:12", text: "Then the proconsul, when he saw what was done, believed, being astonished at the teaching of the Lord." }],
   geo:"The island's south-western harbour, the natural point of departure for the run north-west to the Pamphylian coast.",
   greco:"Seat of the proconsul and of the cult of Aphrodite, whose sanctuary drew pilgrims from across the Aegean — the first named Roman official to believe does so in a shrine city.",
   jewish:"Bar-jesus / Elymas, the magician attached to the governor's household, shows how far some diaspora Jews had gone into the market for court prophecy.",
@@ -86,7 +86,7 @@ const MED_PLACES = [
   id:"perga", name:"Perga", greek:"Πέργη", modern:"Aksu, near Antalya, Türkiye",
   lat:36.9611, lon:30.8536, cat:"city", region:"Galatia & southern Asia Minor",
   blurb:"The landfall in Asia Minor — and the place where John Mark turned back.",
-  scriptures:[{ref:"Acts 13:13", text:"Now when Paul and his company loosed from Paphos, they came to Perga in Pamphylia: and John departing from them returned to Jerusalem."}],
+  scriptures:[{ ref: "Acts 13:13", text: "Now Paul and his company set sail from Paphos, and came to Perga in Pamphylia. John departed from them and returned to Jerusalem." }],
   geo:"Eight miles up the Cestrus from the sea, at the foot of the Taurus. Beyond it the road climbs 3,600 feet through malarial lowland and bandit country to the Anatolian plateau.",
   greco:"A wealthy Pamphylian city with a colonnaded street, monumental gate and a great theatre; centre of the cult of Artemis Pergaia.",
   jewish:"No synagogue is mentioned here — one reason the party may have pushed straight inland to Pisidian Antioch.",
@@ -102,8 +102,8 @@ const MED_PLACES = [
   lat:38.3062, lon:31.1900, cat:"city", region:"Galatia & southern Asia Minor",
   blurb:"A Roman colony on the plateau, and the pulpit where Paul preaches his first recorded sermon.",
   scriptures:[
-    {ref:"Acts 13:46", text:"Then Paul and Barnabas waxed bold, and said, It was necessary that the word of God should first have been spoken to you: but seeing ye put it from you... lo, we turn to the Gentiles."},
-    {ref:"Acts 13:49", text:"And the word of the Lord was published throughout all the region."}
+    { ref: "Acts 13:46", text: "Paul and Barnabas spoke out boldly, and said, “It was necessary that God’s word should be spoken to you first. Since indeed you thrust it from you, and judge yourselves unworthy of eternal life, behold, we turn to the Gentiles." },
+    { ref: "Acts 13:49", text: "The Lord’s word was spread abroad throughout all the region." }
   ],
   geo:"3,600 feet up on the Anatolian plateau, on the Via Sebaste — the military road Augustus drove across Galatia to police the highland tribes.",
   greco:"A colony of Italian veterans with a temple of Augustus cut into the hillside and an inscription of the emperor's own account of his reign. Roman law, Latin names, imperial cult.",
@@ -119,7 +119,7 @@ const MED_PLACES = [
   id:"iconium", name:"Iconium", greek:"Ἰκόνιον", modern:"Konya, Türkiye",
   lat:37.8746, lon:32.4932, cat:"city", region:"Galatia & southern Asia Minor",
   blurb:"A watered plateau city on the trunk road, visited on every journey and left with a plot behind them.",
-  scriptures:[{ref:"Acts 14:1", text:"And it came to pass in Iconium, that they went both together into the synagogue of the Jews, and so spake, that a great multitude both of the Jews and also of the Greeks believed."}],
+  scriptures:[{ ref: "Acts 14:1", text: "In Iconium, they entered together into the synagogue of the Jews, and so spoke that a great multitude both of Jews and of Greeks believed." }],
   geo:"An oasis in the dry Lycaonian plain, watered from the Taurus — the natural junction of the roads to Ephesus, Antioch and the Cilician Gates.",
   greco:"A Phrygian-speaking population under Greek civic forms and Roman administration; later a colony under Hadrian.",
   jewish:"A synagogue large enough that the split it caused divided the whole city (Acts 14:4).",
@@ -135,8 +135,8 @@ const MED_PLACES = [
   lat:37.5800, lon:32.4530, cat:"town", region:"Galatia & southern Asia Minor",
   blurb:"A small colony where a lame man walked, the crowd cried 'the gods are come down', and Paul was stoned — and probably where Timothy grew up.",
   scriptures:[
-    {ref:"Acts 14:11", text:"And when the people saw what Paul had done, they lifted up their voices, saying in the speech of Lycaonia, The gods are come down to us in the likeness of men."},
-    {ref:"Acts 16:1", text:"Then came he to Derbe and Lystra: and, behold, a certain disciple was there, named Timotheus."}
+    { ref: "Acts 14:11", text: "When the multitude saw what Paul had done, they lifted up their voice, saying in the language of Lycaonia, “The gods have come down to us in the likeness of men!”" },
+    { ref: "Acts 16:1", text: "He came to Derbe and Lystra: and behold, a certain disciple was there, named Timothy, the son of a Jewess who believed; but his father was a Greek." }
   ],
   geo:"Eighteen miles south-west of Iconium in the Lycaonian plain, off the main trade road — a modest place with a strong local dialect.",
   greco:"A Roman colony of Augustus, but the crowd shouts in Lycaonian and reaches for Zeus and Hermes: local religion running underneath imperial veneer.",
@@ -152,7 +152,7 @@ const MED_PLACES = [
   id:"derbe", name:"Derbe", greek:"Δέρβη", modern:"Kerti Hüyük, Türkiye",
   lat:37.3500, lon:33.2500, cat:"town", region:"Galatia & southern Asia Minor",
   blurb:"The turning point of the first journey — the furthest east they went before walking the whole route back.",
-  scriptures:[{ref:"Acts 14:21", text:"And when they had preached the gospel to that city, and had taught many, they returned again to Lystra, and to Iconium, and Antioch."}],
+  scriptures:[{ ref: "Acts 14:21", text: "When they had preached the Good News to that city, and had made many disciples, they returned to Lystra, Iconium, and Antioch," }],
   geo:"On the eastern edge of the Lycaonian plain near the road to the Cilician Gates — from here Antioch of Syria was reachable overland, but they chose to retrace their steps instead.",
   greco:"A frontier town of the Roman province of Galatia, on the boundary with the client kingdom of Commagene-Cappadocia.",
   jewish:"No synagogue is recorded; Gaius of Derbe later travels with Paul (Acts 20:4).",
@@ -169,8 +169,8 @@ const MED_PLACES = [
   lat:39.8140, lon:26.1590, cat:"city", region:"Asia (Roman province)",
   blurb:"The port where a vision of a man of Macedonia turned the mission west into Europe.",
   scriptures:[
-    {ref:"Acts 16:9", text:"And a vision appeared to Paul in the night; There stood a man of Macedonia, and prayed him, saying, Come over into Macedonia, and help us."},
-    {ref:"Acts 20:9", text:"And there sat in a window a certain young man named Eutychus, being fallen into a deep sleep."}
+    { ref: "Acts 16:9", text: "A vision appeared to Paul in the night. There was a man of Macedonia standing, begging him, and saying, “Come over into Macedonia and help us.”" },
+    { ref: "Acts 20:9", text: "A certain young man named Eutychus sat in the window, weighed down with deep sleep. As Paul spoke still longer, being weighed down by his sleep, he fell down from the third floor, and was taken up dead." }
   ],
   geo:"On the Aegean opposite Samothrace, the standard crossing point between Asia and Macedonia — two days' sail with the wind, five against it (Acts 16:11; 20:6).",
   greco:"Alexandria Troas, a Roman colony and one of the great harbours of the north Aegean, with a vast bath-gymnasium complex.",
@@ -187,9 +187,9 @@ const MED_PLACES = [
   lat:37.9410, lon:27.3410, cat:"city", region:"Asia (Roman province)",
   blurb:"The great city of Asia, home of Artemis and of Paul's longest stay — three years, a riot, and a letter that never scolds.",
   scriptures:[
-    {ref:"Acts 19:10", text:"And this continued by the space of two years; so that all they which dwelt in Asia heard the word of the Lord Jesus."},
-    {ref:"Acts 19:28", text:"And when they heard these sayings, they were full of wrath, and cried out, saying, Great is Diana of the Ephesians."},
-    {ref:"Revelation 2:4", text:"Nevertheless I have somewhat against thee, because thou hast left thy first love."}
+    { ref: "Acts 19:10", text: "This continued for two years, so that all those who lived in Asia heard the word of the Lord Jesus, both Jews and Greeks." },
+    { ref: "Acts 19:28", text: "When they heard this they were filled with anger, and cried out, saying, “Great is Artemis of the Ephesians!”" },
+    { ref: "Revelation 2:4", text: "But I have this against you, that you left your first love." }
   ],
   geo:"At the mouth of the Cayster, the terminus of the road from the east and the natural port of the whole Asian hinterland. Its harbour silted steadily; the sea is now three miles away.",
   greco:"Provincial capital in practice, with a temple of Artemis counted among the seven wonders, a theatre seating some 24,000, a library, and a silversmith trade selling shrines to pilgrims.",
@@ -205,7 +205,7 @@ const MED_PLACES = [
   id:"miletus", name:"Miletus", greek:"Μίλητος", modern:"Balat, Türkiye",
   lat:37.5300, lon:27.2770, cat:"city", region:"Asia (Roman province)",
   blurb:"Where Paul called the Ephesian elders down to the shore and told them they would not see his face again.",
-  scriptures:[{ref:"Acts 20:37–38", text:"And they all wept sore, and fell on Paul's neck, and kissed him, sorrowing most of all for the words which he spake, that they should see his face no more."}],
+  scriptures:[{ ref: "Acts 20:37–38", text: "They all wept a lot, and fell on Paul’s neck and kissed him, sorrowing most of all because of the word which he had spoken, that they should see his face no more. And they accompanied him to the ship." }],
   geo:"Thirty miles south of Ephesus at the mouth of the Maeander, with four harbours — deliberately chosen so the ship need not enter Ephesus and lose days (Acts 20:16).",
   greco:"The old intellectual capital of Ionia — home of Thales and Anaximander — by now a wealthy but declining port, its harbour filling with river silt.",
   jewish:"A theatre inscription reserving seats for 'the Jews and God-fearers' shows the community there.",
@@ -221,14 +221,14 @@ const MED_PLACES = [
   lat:37.7900, lon:29.2600, cat:"town", region:"Asia (Roman province)",
   blurb:"A declining wool town in the Lycus valley that Paul never visited — and wrote one of his densest letters to.",
   scriptures:[
-    {ref:"Colossians 1:16", text:"For by him were all things created, that are in heaven, and that are in earth, visible and invisible... all things were created by him, and for him."},
-    {ref:"Colossians 4:16", text:"And when this epistle is read among you, cause that it be read also in the church of the Laodiceans."}
+    { ref: "Colossians 1:16", text: "For by him all things were created, in the heavens and on the earth, things visible and things invisible, whether thrones or dominions or principalities or powers; all things have been created through him, and for him." },
+    { ref: "Colossians 4:16", text: "When this letter has been read among you, cause it to be read also in the assembly of the Laodiceans; and that you also read the letter from Laodicea." }
   ],
   geo:"On the Lycus, eleven miles east of Laodicea under the 8,000-foot bulk of Mount Cadmus, on the road from Ephesus to the Euphrates.",
   greco:"Once a great city, by Paul's day the smallest of the three valley towns, known for dark red dyed wool.",
   jewish:"A diaspora community in a valley where Jewish, Phrygian and philosophical religion mixed — the setting for the letter's warnings about angel worship and ascetic rules.",
   arch:"Almost entirely unexcavated: a mound, a theatre depression, and a necropolis.",
-  why:"Colossae proves that letters travelled further than apostles did. Epaphras planted it, Paul wrote it, and the note asks that the mail be swapped with Laodicea.",
+  why:"Colossae shows that letters travelled further than apostles did. Epaphras planted it, Paul wrote it, and the note asks that the mail be swapped with Laodicea.",
   questions:[
     "Paul writes with authority to a church he has never seen. What holds a network of congregations together across distance?",
     "Colossians 4:16 asks two congregations to exchange letters. What would circulating your study with a neighbouring group change?"
@@ -238,7 +238,7 @@ const MED_PLACES = [
   id:"laodicea", name:"Laodicea", greek:"Λαοδίκεια", modern:"near Denizli, Türkiye",
   lat:37.8360, lon:29.1080, cat:"city", region:"Asia (Roman province)",
   blurb:"Rich, self-sufficient, banking city — piped water arriving lukewarm, and a letter that uses the fact.",
-  scriptures:[{ref:"Revelation 3:17", text:"Because thou sayest, I am rich, and increased with goods, and have need of nothing; and knowest not that thou art wretched, and miserable, and poor, and blind, and naked."}],
+  scriptures:[{ ref: "Revelation 3:17", text: "Because you say, ‘I am rich, and have gotten riches, and have need of nothing;’ and don’t know that you are the wretched one, miserable, poor, blind, and naked;" }],
   geo:"On the crossroads of the Ephesus–Euphrates highway and the north-south road, in a valley between hot springs at Hierapolis and cold streams from the Cadmus range; its own water arrived through a stone aqueduct, warm and mineral-heavy.",
   greco:"A banking centre and producer of black wool and an eye ointment, wealthy enough to rebuild itself after the earthquake of AD 60 without imperial help — Tacitus notes the refusal of aid.",
   jewish:"A significant Jewish population; Cicero records the transfer of temple tax from this district.",
@@ -253,7 +253,7 @@ const MED_PLACES = [
   id:"hierapolis", name:"Hierapolis", greek:"Ἱεράπολις", modern:"Pamukkale, Türkiye",
   lat:37.9250, lon:29.1250, cat:"city", region:"Asia (Roman province)",
   blurb:"The hot-spring spa above the Lycus valley, named with Laodicea and Colossae as one cluster of churches.",
-  scriptures:[{ref:"Colossians 4:13", text:"For I bear him record, that he hath a great zeal for you, and for them that are in Laodicea, and them in Hierapolis."}],
+  scriptures:[{ ref: "Colossians 4:13", text: "For I testify about him, that he has great zeal for you, and for those in Laodicea, and for those in Hierapolis." }],
   geo:"On a terrace of white travertine formed by mineral springs, in sight of Laodicea across the valley — three towns within a morning's walk of each other.",
   greco:"A healing sanctuary and resort with a Plutonium emitting lethal gas, a great theatre, and one of the largest necropolises in Asia Minor.",
   jewish:"Inscriptions name Jewish guilds of purple-dyers and carpet-weavers in the city's trade associations.",
@@ -268,7 +268,7 @@ const MED_PLACES = [
   id:"smyrna", name:"Smyrna", greek:"Σμύρνα", modern:"İzmir, Türkiye",
   lat:38.4190, lon:27.1390, cat:"city", region:"Asia (Roman province)",
   blurb:"Loyal to Rome, hostile to the church, and the one of the seven cities that receives no rebuke.",
-  scriptures:[{ref:"Revelation 2:9", text:"I know thy works, and tribulation, and poverty, (but thou art rich)."}],
+  scriptures:[{ ref: "Revelation 2:9", text: "“I know your works, oppression, and your poverty (but you are rich), and the blasphemy of those who say they are Jews, and they are not, but are a synagogue of Satan." }],
   geo:"A deep, sheltered gulf harbour at the end of the Hermus valley road — the best natural port on the Asian coast, and Ephesus' rival for its traffic.",
   greco:"A city that claimed Homer, built a temple to Rome as early as 195 BC, and won the right to an imperial temple under Tiberius; its crowned hilltop street was called the Golden Street.",
   jewish:"The letter's language of 'them which say they are Jews, and are not' points to bitter conflict between synagogue and church here; Polycarp was martyred in the city's stadium about AD 155.",
@@ -283,7 +283,7 @@ const MED_PLACES = [
   id:"pergamum", name:"Pergamum", greek:"Πέργαμος", modern:"Bergama, Türkiye",
   lat:39.1320, lon:27.1840, cat:"city", region:"Asia (Roman province)",
   blurb:"Acropolis city of the imperial cult, the altar of Zeus and the healing god — 'where Satan's seat is'.",
-  scriptures:[{ref:"Revelation 2:13", text:"I know thy works, and where thou dwellest, even where Satan's seat is: and thou holdest fast my name, and hast not denied my faith."}],
+  scriptures:[{ ref: "Revelation 2:13", text: "“I know your works and where you dwell, where Satan’s throne is. You hold firmly to my name, and didn’t deny my faith in the days of Antipas my witness, my faithful one, who was killed among you, where Satan dwells." }],
   geo:"A steep cone rising a thousand feet above the Caicus plain, fifteen miles inland — a fortress capital rather than a port.",
   greco:"Capital of the Attalid kingdom, willed to Rome in 133 BC; site of the first imperial temple in Asia (29 BC), the great altar of Zeus, a library of 200,000 rolls, and the Asclepieion where patients slept for cures.",
   jewish:"A smaller Jewish presence than Ephesus or Sardis; the pressure in the letter is pagan and civic, not synagogal.",
@@ -299,8 +299,8 @@ const MED_PLACES = [
   lat:38.9220, lon:27.8360, cat:"town", region:"Asia (Roman province)",
   blurb:"A guild town of dyers and metalworkers — Lydia's home city, and the church warned about accommodation.",
   scriptures:[
-    {ref:"Acts 16:14", text:"And a certain woman named Lydia, a seller of purple, of the city of Thyatira, which worshipped God, heard us."},
-    {ref:"Revelation 2:19", text:"I know thy works, and charity, and service, and faith, and thy patience, and thy works; and the last to be more than the first."}
+    { ref: "Acts 16:14", text: "A certain woman named Lydia, a seller of purple, of the city of Thyatira, one who worshiped God, heard us; whose heart the Lord opened to listen to the things which were spoken by Paul." },
+    { ref: "Revelation 2:19", text: "“I know your works, your love, faith, service, patient endurance, and that your last works are more than the first." }
   ],
   geo:"On the road between Pergamum and Sardis in the open Lycus valley, with no natural defences — a trading town rather than a fortress.",
   greco:"Famous for purple-red dye from madder root and for its trade guilds, whose meals and patron deities made membership a religious act.",
@@ -316,7 +316,7 @@ const MED_PLACES = [
   id:"sardis", name:"Sardis", greek:"Σάρδεις", modern:"Sart, Türkiye",
   lat:38.4880, lon:28.0400, cat:"city", region:"Asia (Roman province)",
   blurb:"The old Lydian capital, twice captured while its guards slept — told to watch, and to remember it has a name only.",
-  scriptures:[{ref:"Revelation 3:2", text:"Be watchful, and strengthen the things which remain, that are ready to die."}],
+  scriptures:[{ ref: "Revelation 3:2", text: "Wake up, and keep the things that remain, which you were about to throw away, for I have found no works of yours perfected before my God." }],
   geo:"On a spur of Mount Tmolus above the Hermus plain, where the gold-bearing Pactolus stream runs down — a citadel thought unassailable, and taken by surprise twice.",
   greco:"Croesus' capital and the western terminus of the Persian royal road; under Rome a wealthy textile city, rebuilt after the earthquake of AD 17 with imperial help.",
   jewish:"One of the largest known diaspora synagogues stood here, built into the bath-gymnasium complex — evidence of a confident, integrated community.",
@@ -331,7 +331,7 @@ const MED_PLACES = [
   id:"philadelphia-asia", name:"Philadelphia (of Asia)", greek:"Φιλαδέλφεια", modern:"Alaşehir, Türkiye",
   lat:38.3490, lon:28.5200, cat:"town", region:"Asia (Roman province)",
   blurb:"An earthquake-prone frontier town on the road east — promised an open door, and a name that will not be shaken.",
-  scriptures:[{ref:"Revelation 3:8", text:"I know thy works: behold, I have set before thee an open door, and no man can shut it: for thou hast a little strength, and hast kept my word, and hast not denied my name."}],
+  scriptures:[{ ref: "Revelation 3:8", text: "“I know your works (behold, I have set before you an open door, which no one can shut), that you have a little power, and kept my word, and didn’t deny my name." }],
   geo:"In the Cogamis valley on the highway from Sardis to the interior — founded as a gateway city to spread Greek culture eastwards, which is what an 'open door' meant here.",
   greco:"Repeatedly damaged by earthquakes, including the great shock of AD 17; the inhabitants, Strabo says, lived largely outside the walls. The city changed its name to honour emperors more than once.",
   jewish:"A synagogue community in conflict with the church, addressed in the same terms as at Smyrna.",
@@ -348,8 +348,8 @@ const MED_PLACES = [
   lat:41.0130, lon:24.2870, cat:"city", region:"Macedonia (Roman province)",
   blurb:"A Roman veterans' colony with no synagogue — where the first European convert was a businesswoman and the first church met by a river.",
   scriptures:[
-    {ref:"Acts 16:13", text:"And on the sabbath we went out of the city by a river side, where prayer was wont to be made; and we sat down, and spake unto the women which resorted thither."},
-    {ref:"Philippians 4:11", text:"I have learned, in whatsoever state I am, therewith to be content."}
+    { ref: "Acts 16:13", text: "On the Sabbath day we went outside of the city by a riverside, where we supposed there was a place of prayer, and we sat down, and spoke to the women who had come together." },
+    { ref: "Philippians 4:11", text: "Not that I speak because of lack, for I have learned in whatever state I am, to be content in it." }
   ],
   geo:"On the Via Egnatia at the edge of a drained marsh below Mount Orbelos, ten miles inland from its port at Neapolis — the road that carried Rome's traffic from the Adriatic to Byzantium.",
   greco:"A colony of Italian veterans after the battle of 42 BC, proud of Roman citizenship — which is why Paul's own citizenship becomes the argument in Acts 16:37.",
@@ -366,8 +366,8 @@ const MED_PLACES = [
   lat:40.6403, lon:22.9350, cat:"city", region:"Macedonia (Roman province)",
   blurb:"Capital and port of Macedonia — three sabbaths of preaching, a riot, and two of the earliest letters in the New Testament.",
   scriptures:[
-    {ref:"Acts 17:6", text:"These that have turned the world upside down are come hither also."},
-    {ref:"1 Thessalonians 1:8", text:"For from you sounded out the word of the Lord not only in Macedonia and Achaia, but also in every place your faith to God-ward is spread abroad."}
+    { ref: "Acts 17:6", text: "When they didn’t find them, they dragged Jason and certain brothers before the rulers of the city, crying, “These who have turned the world upside down have come here also," },
+    { ref: "1 Thessalonians 1:8", text: "For from you the word of the Lord has been declared, not only in Macedonia and Achaia, but also in every place your faith toward God has gone out; so that we need not to say anything." }
   ],
   geo:"At the head of the Thermaic Gulf where the Via Egnatia meets the sea — the best harbour in Macedonia and the natural distribution point for anything, including news.",
   greco:"A free city with its own assembly, governed by 'politarchs' — a title Luke uses and inscriptions confirm. Home of an imperial cult and a busy commercial waterfront.",
@@ -383,7 +383,7 @@ const MED_PLACES = [
   id:"berea", name:"Berea", greek:"Βέροια", modern:"Veria, Greece",
   lat:40.5240, lon:22.2030, cat:"town", region:"Macedonia (Roman province)",
   blurb:"Off the main road and out of the way — where the hearers checked the scriptures daily to see whether it was so.",
-  scriptures:[{ref:"Acts 17:11", text:"These were more noble than those in Thessalonica, in that they received the word with all readiness of mind, and searched the scriptures daily, whether those things were so."}],
+  scriptures:[{ ref: "Acts 17:11", text: "Now these were more noble than those in Thessalonica, in that they received the word with all readiness of mind, examining the Scriptures daily to see whether these things were so." }],
   geo:"Sixty road miles south-west of Thessalonica on the eastern slope of Mount Bermion, a day off the Via Egnatia — a deliberate withdrawal from trouble.",
   greco:"A well-watered provincial town, seat of the Macedonian assembly and imperial cult league.",
   jewish:"A synagogue whose members are commended for examining the argument rather than accepting or rejecting it on authority.",
@@ -399,8 +399,8 @@ const MED_PLACES = [
   lat:37.9720, lon:23.7260, cat:"city", region:"Achaia (Roman province)",
   blurb:"A university museum of a city, full of altars — where Paul preached from a pagan inscription and a few believed.",
   scriptures:[
-    {ref:"Acts 17:23", text:"For as I passed by, and beheld your devotions, I found an altar with this inscription, TO THE UNKNOWN GOD. Whom therefore ye ignorantly worship, him declare I unto you."},
-    {ref:"Acts 17:28", text:"For in him we live, and move, and have our being; as certain also of your own poets have said, For we are his offspring."}
+    { ref: "Acts 17:23", text: "For as I passed along, and observed the objects of your worship, I found also an altar with this inscription: ‘TO AN UNKNOWN GOD.’ What therefore you worship in ignorance, this I announce to you." },
+    { ref: "Acts 17:28", text: "‘For in him we live, and move, and have our being.’ As some of your own poets have said, ‘For we are also his offspring.’" }
   ],
   geo:"Five miles inland from its port at Piraeus, dominated by the Acropolis, with the Areopagus rock and the Agora below it — the whole argument of Acts 17 happens within half a mile.",
   greco:"Politically spent but intellectually supreme: the schools of the Stoics and Epicureans, a city Pausanias says had more images than all the rest of Greece.",
@@ -417,11 +417,11 @@ const MED_PLACES = [
   lat:37.9060, lon:22.8790, cat:"city", region:"Achaia (Roman province)",
   blurb:"Two harbours, one isthmus, and eighteen months of teaching — the church that generated more surviving correspondence than any other.",
   scriptures:[
-    {ref:"Acts 18:11", text:"And he continued there a year and six months, teaching the word of God among them."},
-    {ref:"1 Corinthians 1:10", text:"Now I beseech you, brethren, by the name of our Lord Jesus Christ, that ye all speak the same thing, and that there be no divisions among you."}
+    { ref: "Acts 18:11", text: "He lived there a year and six months, teaching the word of God among them." },
+    { ref: "1 Corinthians 1:10", text: "Now I beg you, brothers, through the name of our Lord, Jesus Christ, that you all speak the same thing, and that there be no divisions among you, but that you be perfected together in the same mind and in the same judgment." }
   ],
   geo:"Astride the four-mile isthmus, with a port on each sea — Lechaion west to Italy, Cenchreae east to Asia. Cargo was dragged across rather than risk the cape, so everything and everyone passed through.",
-  greco:"Destroyed by Rome in 146 BC and refounded as a colony in 44 BC: a new city of freedmen, traders and sailors, capital of Achaia, host of the Isthmian games, and site of the temple of Aphrodite on Acrocorinth.",
+  greco:"Destroyed by Rome in 146 BC and refounded as a colony in 44 BC: a new city of freedmen, traders and sailors, capital of Achaia, host of the Isthmian games, and home to a sanctuary of Aphrodite on Acrocorinth; claims about its scale and any sacred prostitution belong to earlier tradition and should not be projected uncritically onto Paul's Corinth.",
   jewish:"A synagogue whose ruler Crispus believed; the proconsul Gallio refused to hear the case against Paul — an inscription at Delphi dates Gallio's term and anchors the whole chronology of Acts.",
   arch:"The temple of Apollo, the bema where Paul stood before Gallio, the Lechaion road, the Erastus pavement inscription and the meat-market inscriptions are all on the site.",
   why:"Corinth's problems are a port city's problems — factions, lawsuits, sexual licence, food from idol temples, class division at the table. The letters answer a place, not an abstraction.",
@@ -434,7 +434,7 @@ const MED_PLACES = [
   id:"cenchreae", name:"Cenchreae", greek:"Κεγχρεαί", modern:"Kechries, Greece",
   lat:37.8850, lon:22.9900, cat:"town", region:"Achaia (Roman province)",
   blurb:"Corinth's eastern harbour, with a congregation of its own and a deacon named Phebe who carried Romans west.",
-  scriptures:[{ref:"Romans 16:1–2", text:"I commend unto you Phebe our sister, which is a servant of the church which is at Cenchrea: that ye receive her in the Lord... for she hath been a succourer of many, and of myself also."}],
+  scriptures:[{ ref: "Romans 16:1–2", text: "I commend to you Phoebe, our sister, who is a servant of the assembly that is at Cenchreae, that you receive her in the Lord, in a way worthy of the saints, and that you assist her in whatever matter she may need from you, for she herself also has been a helper of many, and of my own self." }],
   geo:"Seven miles east of Corinth on the Saronic Gulf, the harbour facing Asia — where Paul sailed for Ephesus and cut his hair for a vow (Acts 18:18).",
   greco:"A working port with moles, warehouses and a sanctuary of Isis, described by Pausanias and pictured in mosaics found in the harbour.",
   jewish:"Part of the Corinthian Jewish and God-fearing network; the church here is named separately from Corinth's.",
@@ -450,7 +450,7 @@ const MED_PLACES = [
   id:"crete-fair-havens", name:"Fair Havens, Crete", greek:"Καλοὶ Λιμένες", modern:"Kaloi Limenes, Crete",
   lat:34.9280, lon:24.7900, cat:"site", region:"Islands of the voyage",
   blurb:"The anchorage where Paul advised wintering, was overruled, and the ship put to sea into a north-easter.",
-  scriptures:[{ref:"Acts 27:11", text:"Nevertheless the centurion believed the master and the owner of the ship, more than those things which were spoken by Paul."}],
+  scriptures:[{ ref: "Acts 27:11", text: "But the centurion gave more heed to the master and to the owner of the ship than to those things which were spoken by Paul." }],
   geo:"A roadstead on the south coast of Crete behind small islands — sheltered but, Luke says, not commodious to winter in. The next harbour, Phenice, lay forty miles west.",
   greco:"Crete was a Roman province joined to Cyrene; the grain run from Alexandria to Rome sheltered along its south coast when the etesian winds blew.",
   jewish:"Cretan Jews were at Pentecost (Acts 2:11), and Titus was later left on the island to set the churches in order (Titus 1:5).",
@@ -466,8 +466,8 @@ const MED_PLACES = [
   lat:35.9550, lon:14.4000, cat:"site", region:"Islands of the voyage",
   blurb:"Where 276 people came ashore on boards and broken pieces, and the barbarous people showed no little kindness.",
   scriptures:[
-    {ref:"Acts 28:1–2", text:"And when they were escaped, they knew that the island was called Melita. And the barbarous people shewed us no little kindness: for they kindled a fire, and received us every one, because of the present rain, and because of the cold."},
-    {ref:"Acts 28:11", text:"And after three months we departed in a ship of Alexandria, which had wintered in the isle."}
+    { ref: "Acts 28:1–2", text: "When we had escaped, then they learned that the island was called Malta. The natives showed us uncommon kindness; for they kindled a fire, and received us all, because of the present rain, and because of the cold." },
+    { ref: "Acts 28:11", text: "After three months, we set sail in a ship of Alexandria which had wintered in the island, whose sign was “The Twin Brothers.”" }
   ],
   geo:"Sixty miles south of Sicily, directly downwind of a fourteen-day drift from Crete — the reconstruction of the drift in Acts 27:27–41 matches the island's north-east bay.",
   greco:"A Punic-speaking island under Roman rule with a 'chief man' whose title, protos, appears in inscriptions as Luke uses it.",
@@ -483,7 +483,7 @@ const MED_PLACES = [
   id:"puteoli", name:"Puteoli", greek:"Ποτίολοι", modern:"Pozzuoli, Italy",
   lat:40.8230, lon:14.1220, cat:"city", region:"Italy & the west",
   blurb:"The grain port of Rome, where Paul landed in Italy and found brethren already waiting.",
-  scriptures:[{ref:"Acts 28:13–14", text:"And from thence we fetched a compass, and came to Rhegium... and we came the next day to Puteoli: where we found brethren, and were desired to tarry with them seven days: and so we went toward Rome."}],
+  scriptures:[{ ref: "Acts 28:13–14", text: "From there we circled around and arrived at Rhegium. After one day, a south wind sprang up, and on the second day we came to Puteoli, where we found brothers, and were entreated to stay with them for seven days. So we came to Rome." }],
   geo:"On the Bay of Naples, the terminus of the Alexandrian grain fleet, 130 miles from Rome by the Via Campana and the Appian Way.",
   greco:"Italy's chief eastern-trade harbour before Ostia was enlarged, with a mole whose piers still stand and a cosmopolitan dockside population.",
   jewish:"A Jewish community is attested in the region, and a church existed here before Paul arrived — planted by traffic, not by apostles.",
@@ -499,8 +499,8 @@ const MED_PLACES = [
   lat:41.8930, lon:12.4830, cat:"capital", region:"Italy & the west",
   blurb:"The head of the empire and the end of the book — two years in his own hired house, preaching with no man forbidding him.",
   scriptures:[
-    {ref:"Acts 28:30–31", text:"And Paul dwelt two whole years in his own hired house, and received all that came in unto him, preaching the kingdom of God, and teaching those things which concern the Lord Jesus Christ, with all confidence, no man forbidding him."},
-    {ref:"Romans 1:16", text:"For I am not ashamed of the gospel of Christ: for it is the power of God unto salvation to every one that believeth."}
+    { ref: "Acts 28:30–31", text: "Paul stayed two whole years in his own rented house, and received all who were coming to him, preaching God’s Kingdom, and teaching the things concerning the Lord Jesus Christ with all boldness, without hindrance." },
+    { ref: "Romans 1:16", text: "For I am not ashamed of the Good News of Christ, because it is the power of God for salvation for everyone who believes; for the Jew first, and also for the Greek." }
   ],
   geo:"Fifteen miles up the Tiber from the sea, at the hub of every road in the western empire — the Appian Way brought Paul in from the south past the Three Taverns.",
   greco:"A city of perhaps a million people, most of them poor, in insulae and tenements; the imperial household, the praetorian guard, and a legal system that a citizen could appeal to and be held by for years.",
@@ -544,7 +544,7 @@ MED_PLACES.push({
   id:"patmos", name:"Patmos", greek:"Πάτμος", modern:"Patmos, Greece",
   lat:37.3090, lon:26.5470, cat:"site", region:"Islands of the voyage",
   blurb:"A small rocky island within sight of the Asian coast — a place of exile, and the address of the last book of the Bible.",
-  scriptures:[{ref:"Revelation 1:9", text:"I John, who also am your brother, and companion in tribulation... was in the isle that is called Patmos, for the word of God, and for the testimony of Jesus Christ."}],
+  scriptures:[{ ref: "Revelation 1:9", text: "I John, your brother and partner with you in the oppression, Kingdom, and perseverance in Christ Jesus, was on the isle that is called Patmos because of God’s Word and the testimony of Jesus Christ." }],
   geo:"Thirteen square miles of volcanic rock forty miles off Miletus, on the shipping lane between Ephesus and Rome — close enough that letters to the seven churches could be carried in days.",
   greco:"Roman authorities used Aegean islands for relegatio, banishment without loss of property; a gymnasium and temple of Artemis are attested on the island.",
   jewish:"John writes in the idiom of Ezekiel, Daniel and Zechariah — an apocalyptic vocabulary formed in earlier exiles.",
@@ -556,7 +556,7 @@ MED_PLACES.push({
   ]
 });
 
-/* ——— THE 53 COME, FOLLOW ME WEEKS ———
+/* ——— THE 53 CFM WEEKS ———
    targetBounds: [[latMin,lngMin],[latMax,lngMax]] — the theatre of action to frame.
    relevantPlaceIds / relevantJourneyIds: ids in the gazetteer and route list.
    letter: for epistle weeks — where it was written and where it was going. */
@@ -937,9 +937,9 @@ MED_PLACES.push(
   lat:31.2001, lon:29.9187, cat:"capital", region:"Egypt & the south",
   blurb:"Second city of the empire, home of the Septuagint and of Apollos — and the port whose grain ships carried Paul to Rome.",
   scriptures:[
-    {ref:"Acts 18:24", text:"And a certain Jew named Apollos, born at Alexandria, an eloquent man, and mighty in the scriptures, came to Ephesus."},
-    {ref:"Acts 27:6", text:"And there the centurion found a ship of Alexandria sailing into Italy; and he put us therein."},
-    {ref:"Acts 2:10", text:"Phrygia, and Pamphylia, in Egypt, and in the parts of Libya about Cyrene…"}
+    { ref: "Acts 18:24", text: "Now a certain Jew named Apollos, an Alexandrian by race, an eloquent man, came to Ephesus. He was mighty in the Scriptures." },
+    { ref: "Acts 27:6", text: "There the centurion found a ship of Alexandria sailing for Italy, and he put us on board." },
+    { ref: "Acts 2:10", text: "Phrygia, Pamphylia, Egypt, the parts of Libya around Cyrene, visitors from Rome, both Jews and proselytes," }
   ],
   geo:"On the Egyptian coast between the sea and Lake Mareotis, with a double harbour behind the Pharos lighthouse — the loading point for the grain that fed Rome, and the sea lane Paul's prison ship was following.",
   greco:"A planned Greek city of perhaps half a million, with the Library and Museum, the Serapeum, and a shipping trade that made it the empire's second port; its grain ships were large enough to carry 276 passengers and a cargo of wheat (Acts 27:37–38).",
@@ -956,9 +956,9 @@ MED_PLACES.push(
   lat:32.5355, lon:44.4275, cat:"city", region:"Mesopotamia & the east",
   blurb:"The old city of the exile — a real Jewish centre on the Euphrates, and the name the New Testament gives to imperial power.",
   scriptures:[
-    {ref:"1 Peter 5:13", text:"The church that is at Babylon, elected together with you, saluteth you; and so doth Marcus my son."},
-    {ref:"Revelation 18:2", text:"Babylon the great is fallen, is fallen, and is become the habitation of devils."},
-    {ref:"Acts 2:9", text:"Parthians, and Medes, and Elamites, and the dwellers in Mesopotamia…"}
+    { ref: "1 Peter 5:13", text: "She who is in Babylon, chosen together with you, greets you; and so does Mark, my son." },
+    { ref: "Revelation 18:2", text: "He cried with a mighty voice, saying, “Fallen, fallen is Babylon the great, and she has become a habitation of demons, a prison of every unclean spirit, and a prison of every unclean and hateful bird!" },
+    { ref: "Acts 2:9", text: "Parthians, Medes, Elamites, and people from Mesopotamia, Judea, Cappadocia, Pontus, Asia," }
   ],
   geo:"On the Euphrates some fifty miles south of modern Baghdad, at the head of the caravan roads running west to Syria — 600 miles from Jerusalem, and outside Rome's frontier in the Parthian empire.",
   greco:"By the first century the city itself was much reduced, its trade drawn off to Seleucia on the Tigris; Strabo describes a largely deserted site, though Jewish settlement in the region stayed dense.",
@@ -975,8 +975,8 @@ MED_PLACES.push(
   lat:40.7654, lon:29.9408, cat:"city", region:"Bithynia & Pontus",
   blurb:"The province the Spirit closed to Paul at Mysia — and one of the five that Peter later writes to.",
   scriptures:[
-    {ref:"Acts 16:7", text:"After they were come to Mysia, they assayed to go into Bithynia: but the Spirit suffered them not."},
-    {ref:"1 Peter 1:1", text:"Peter, an apostle of Jesus Christ, to the strangers scattered throughout Pontus, Galatia, Cappadocia, Asia, and Bithynia."}
+    { ref: "Acts 16:7", text: "When they had come opposite Mysia, they tried to go into Bithynia, but the Spirit didn’t allow them." },
+    { ref: "1 Peter 1:1", text: "Peter, an apostle of Jesus Christ, to the chosen ones who are living as foreigners in the Dispersion in Pontus, Galatia, Cappadocia, Asia, and Bithynia," }
   ],
   geo:"The Black Sea side of Asia Minor, reached from the Aegean over the passes north of Mysia. Turning away from it at Troas is what sent the mission west into Europe instead.",
   greco:"A wealthy double province of Greek coastal cities under a proconsul, centred on Nicomedia and Nicaea; eighty years later its governor Pliny wrote to Trajan asking how to try Christians, describing them meeting before dawn to sing to Christ as to a god.",
@@ -993,8 +993,8 @@ MED_PLACES.push(
   lat:41.1189, lon:1.2445, cat:"site", region:"Hispania & the far west",
   blurb:"The western end of the empire, and the field Paul was still planning when the record stops.",
   scriptures:[
-    {ref:"Romans 15:24", text:"Whensoever I take my journey into Spain, I will come to you: for I trust to see you in my journey, and to be brought on my way thitherward by you."},
-    {ref:"Romans 15:20", text:"So have I strived to preach the gospel, not where Christ was named, lest I should build upon another man's foundation."}
+    { ref: "Romans 15:24", text: "whenever I travel to Spain, I will come to you. For I hope to see you on my journey, and to be helped on my way there by you, if first I may enjoy your company for a while." },
+    { ref: "Romans 15:20", text: "yes, making it my aim to preach the Good News, not where Christ was already named, that I might not build on another’s foundation." }
   ],
   geo:"Some 1,500 miles west of Rome by road and sea, at the far edge of the Latin-speaking world — Tarraco on the Catalan coast was the nearest provincial capital and the natural landfall.",
   greco:"Three long-Romanised provinces supplying silver, olive oil and grain, with colonies of veterans and an imperial cult centre at Tarraco — and none of the Greek-speaking synagogue network the eastern journeys always started from.",

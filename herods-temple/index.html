@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://unpkg.com; base-uri 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="start-view" content="">
 <title>Herod's Temple — Jerusalem, c. 30 CE</title>
-<meta name="description" content="An explorable 3D reconstruction of Herod's Temple as it stood in the time of Christ. Forty-three annotated locations with 162 King James passages, Josephus, the Mishnah and the Talmud. Prepared by Taylor Halverson, Ph.D.">
+<meta name="description" content="An explorable 3D reconstruction of Herod's Temple as it stood in the time of Christ. Forty-three annotated locations with 162 scripture passages, Josephus, the Mishnah and the Talmud. Prepared by Taylor Halverson, Ph.D.">
 <meta name="author" content="Taylor Halverson">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Herod's Temple — Jerusalem, c. 30 CE">
-<meta property="og:description" content="Walk into the temple of the Gospels. 43 annotated locations, 162 King James passages, with Josephus, the Mishnah and the Talmud.">
+<meta property="og:description" content="Walk into the temple of the Gospels. 43 annotated locations, 162 scripture passages, with Josephus, the Mishnah and the Talmud.">
 <meta property="og:image" content="og-preview.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Herod's Temple — Jerusalem, c. 30 CE">
@@ -21,15 +22,12 @@
   "imports": {
     "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
     "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
-    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
-    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+    "three/addons/utils/BufferGeometryUtils.js": "https://unpkg.com/three@0.184.0/examples/jsm/utils/BufferGeometryUtils.js"
   },
   "integrity": {
     "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
     "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
-    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
-    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
-    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9"
   }
 }
 </script>
@@ -38,26 +36,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
+    --idxw: 246px;
     --ink: #1d1b16;
     --parch: #f4efe3;
     --parch2: #e9e1cf;
     --stone: #2a2823;
     --gold: #b08a2e;
     --gold-lt: #d9b451;
+    --sans: "Optima", "Gill Sans", "Helvetica Neue", sans-serif;
     --rule: rgba(29,27,22,.16);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; overflow: hidden; background: #14130f; color: var(--ink);
     font-family: "EB Garamond", Georgia, serif; }
+  /* The toolbar is a row of the page, not a floating strip measured by script: its
+     height comes out of layout, so the chrome below can never sit behind it. */
+  body { display: grid; grid-template-rows: auto 1fr; }
+  #shell { position: relative; overflow: hidden; min-height: 0; }
   a { color: var(--gold); } a:hover { color: var(--gold-lt); }
-  #stage { position: fixed; inset: 0; }
+  #stage { position: absolute; inset: 0; }
   #stage canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
 
   /* ---- chrome ---- */
-  .bar { position: fixed; top: 0; left: 0; right: 0; min-height: 56px; display: flex; align-items: center;
+  .bar { position: relative; min-height: 56px; display: flex; align-items: center;
     flex-wrap: wrap; gap: 10px 16px; padding: 8px 16px;
     background: linear-gradient(180deg, rgba(14,13,10,.94), rgba(14,13,10,.72));
-    color: var(--parch); z-index: 20; }
+    color: var(--parch); z-index: 24; }   /* above #scrim (22), so the menu stays tappable */
   .seg { flex: 0 0 auto; }
   .group { flex-wrap: wrap; }
   .bar h1 { font-family: "Cormorant Garamond", serif; font-weight: 600; font-size: 21px; margin: 0;
@@ -78,8 +82,21 @@
   .group { display: flex; gap: 8px; flex: 0 1 auto; }
 
   /* ---- index ---- */
-  #index { position: fixed; top: var(--bar-h, 56px); bottom: 0; left: 0; width: 246px; overflow-y: auto; z-index: 15;
-    padding: 16px 14px 90px; background: linear-gradient(90deg, rgba(14,13,10,.86), rgba(14,13,10,.52)); }
+  #index { position: absolute; top: 0; bottom: 0; left: 0; width: var(--idxw); overflow-y: auto; z-index: 15;
+    padding: 16px 14px 90px; background: linear-gradient(90deg, rgba(14,13,10,.86), rgba(14,13,10,.52));
+    transition: transform .3s cubic-bezier(.2,.8,.2,1); }
+  body.index-off #index { transform: translateX(-100%); }
+  /* the pull-tab that hides and restores it — a proper 44px target, always on screen */
+  #idx-handle { position: absolute; top: 50%; left: var(--idxw); z-index: 16;
+    width: 30px; height: 124px; margin-top: -62px; cursor: pointer; padding: 0;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+    color: var(--gold-lt); font-family: "EB Garamond", serif; font-size: 15px; line-height: 1;
+    background: rgba(14,13,10,.9); border: 1px solid rgba(217,180,81,.42); border-left: 0;
+    border-radius: 0 4px 4px 0; transition: left .3s cubic-bezier(.2,.8,.2,1); }
+  #idx-handle span { writing-mode: vertical-rl; font-size: 10.5px; letter-spacing: .22em;
+    text-transform: uppercase; }
+  #idx-handle:hover { background: rgba(176,138,46,.4); color: var(--parch); }
+  body.index-off #idx-handle { left: 0; }
   #index h4 { font-family: "EB Garamond", serif; font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase;
     color: var(--gold-lt); margin: 20px 0 7px; font-weight: 400; }
   #index h4:first-child { margin-top: 2px; }
@@ -90,12 +107,19 @@
   #index button.active { color: var(--gold-lt); border-left-color: var(--gold); background: rgba(176,138,46,.14); }
 
   /* ---- label panel ---- */
-  #panel { position: fixed; top: var(--bar-h, 56px); right: 0; bottom: 0; width: 430px; max-width: 92vw; z-index: 18;
+  #panel { position: absolute; top: 0; right: 0; bottom: 0; width: 430px; max-width: 92vw; z-index: 18;
     background: var(--parch); border-left: 1px solid #cdc3ab; display: flex; flex-direction: column;
     transform: translateX(102%); transition: transform .42s cubic-bezier(.2,.8,.2,1);
     box-shadow: -18px 0 44px rgba(0,0,0,.35); }
   #panel.open { transform: none; }
-  .p-head { padding: 20px 26px 14px; border-bottom: 1px solid var(--rule); background: var(--parch2); }
+  .p-head { position: relative; padding: 20px 62px 14px 26px; border-bottom: 1px solid var(--rule); background: var(--parch2); }
+  /* a dismissal that is always in the same place, whatever the size of the screen */
+  #p-x { position: absolute; top: 9px; right: 9px; width: 44px; height: 44px; display: flex;
+    align-items: center; justify-content: center; cursor: pointer; color: #6b6353;
+    background: none; border: 1px solid transparent; border-radius: 2px;
+    font-family: "EB Garamond", serif; font-size: 21px; line-height: 1; }
+  #p-x:hover { background: #e4dac1; border-color: #cdc3ab; color: #33301f; }
+  #p-grab { display: none; }
   #p-title { font-family: "Cormorant Garamond", serif; font-size: 27px; font-weight: 600; margin: 0 0 3px;
     line-height: 1.12; }
   #p-sub { font-size: 14.5px; font-style: italic; color: #6b6353; }
@@ -111,6 +135,8 @@
     text-transform: uppercase; background: transparent; color: rgba(244,239,227,.78);
     border: 1px solid rgba(244,239,227,.24); border-radius: 2px; padding: 7px 8px; }
   #tour-select option { background: #14130f; color: var(--parch); text-transform: none; letter-spacing: 0; }
+  #tour-select optgroup { background: #14130f; color: var(--gold-lt); font-style: normal;
+    font-family: "EB Garamond", serif; font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase; }
   a.exp { text-decoration: none; display: inline-flex; align-items: center; }
   #p-verses blockquote { margin: 0 0 14px; padding: 11px 14px; background: #ece5d2; border: 1px solid #dbd0b4;
     font-size: 15.5px; line-height: 1.5; color: #33301f; }
@@ -129,8 +155,8 @@
   .p-foot button { white-space: nowrap; }
 
   /* ---- pins ---- */
-  #pins { position: fixed; inset: 0; z-index: 12; pointer-events: none; }
-  .pin { position: absolute; top: 0; left: 0; pointer-events: auto; display: flex; align-items: center; gap: 6px;
+  #pins { position: absolute; inset: 0; z-index: 12; pointer-events: none; }
+  .pin { position: absolute; top: 0; left: 0; display: none; pointer-events: auto; align-items: center; gap: 6px;
     background: rgba(20,18,14,.78); color: var(--parch); border: 1px solid rgba(217,180,81,.55);
     font-family: "EB Garamond", serif; font-size: 12.5px; letter-spacing: .06em; padding: 3px 8px 3px 5px;
     border-radius: 2px; cursor: pointer; white-space: nowrap; backdrop-filter: blur(2px); }
@@ -140,24 +166,28 @@
   .pin.sel { border-color: var(--gold-lt); background: rgba(176,138,46,.9); color: #16150f; }
   body.walking .pin { font-size: 12px; }
 
-  #hint { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 14; max-width: min(560px, 90vw);
+  #hint { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 14; max-width: min(560px, 90vw);
     color: rgba(244,239,227,.66); font-size: 13.5px; letter-spacing: .04em; text-align: center;
     background: rgba(14,13,10,.6); padding: 7px 16px; border-radius: 2px; }
   #hint b { color: var(--gold-lt); font-weight: 500; }
   #coords { font-size: 12px; letter-spacing: .12em; color: rgba(244,239,227,.45); margin-top: 3px; }
   body:not(.walking) #coords { display: none; }
-  #crosshair { position: fixed; left: 50%; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px;
+  #crosshair { position: absolute; left: 50%; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px;
     z-index: 14; display: none; }
-  body.walking #crosshair { display: block; }
+  body.walking #crosshair { display: block; opacity: .3; transition: opacity .2s; }
+  body.looking #crosshair { opacity: 1; }
   #crosshair::before, #crosshair::after { content: ""; position: absolute; background: rgba(244,239,227,.7); }
   #crosshair::before { left: 5px; top: 0; width: 2px; height: 12px; }
   #crosshair::after { top: 5px; left: 0; height: 2px; width: 12px; }
 
-  #compass { position: fixed; left: 22px; top: calc(var(--bar-h, 56px) + 14px); width: 72px; height: 72px; z-index: 16;
-    border-radius: 50%; background: rgba(14,13,10,.62); border: 1px solid rgba(217,180,81,.45); }
+  #compass { position: absolute; left: calc(var(--idxw) + 46px); top: 14px; width: 72px; height: 72px; z-index: 16;
+    border-radius: 50%; background: rgba(14,13,10,.62); border: 1px solid rgba(217,180,81,.45);
+    transition: left .3s cubic-bezier(.2,.8,.2,1); }
   #compass-dial { position: absolute; inset: 0; }
-  #plan { position: fixed; left: 22px; top: calc(var(--bar-h, 56px) + 100px); width: 118px; height: 150px;
-    z-index: 16; background: rgba(14,13,10,.62); border: 1px solid rgba(217,180,81,.45); border-radius: 2px; }
+  #plan { position: absolute; left: calc(var(--idxw) + 46px); top: 100px; width: 118px; height: 150px;
+    z-index: 16; background: rgba(14,13,10,.62); border: 1px solid rgba(217,180,81,.45); border-radius: 2px;
+    transition: left .3s cubic-bezier(.2,.8,.2,1); }
+  body.index-off #compass, body.index-off #plan { left: 46px; }
   #plan.hidden { display: none; }
   #compass-dial span { position: absolute; left: 50%; transform: translateX(-50%);
     font-size: 11px; letter-spacing: .1em; color: rgba(244,239,227,.6); }
@@ -231,7 +261,7 @@
     background: #14130f; color: var(--parch); text-align: center; }
   #loading em { font-family: "Cormorant Garamond", serif; font-size: 26px; font-style: normal; }
   #loading small { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--gold-lt); }
-  @media (max-width: 1100px) { #index { width: 200px; } #panel { width: 380px; } }
+  @media (max-width: 1100px) { :root { --idxw: 200px; } #panel { width: 380px; } }
 
   /* ---- first-visit welcome ---- */
   #welcome { position: fixed; inset: 0; z-index: 34; display: none; align-items: center; justify-content: center;
@@ -246,6 +276,8 @@
     border-left: 2px solid var(--gold); text-wrap: pretty; }
   .wel-card .exp { margin-top: 24px; width: 100%; padding: 13px; font-size: 13.5px; border-color: var(--gold);
     color: var(--gold-lt); }
+  .wel-card #welcome-arrive { background: var(--gold); color: #16150f; border-color: var(--gold); }
+  .wel-card #welcome-go { margin-top: 8px; border-color: rgba(244,239,227,.24); color: rgba(244,239,227,.7); }
   .wel-card .wel-cred { font-size: 13.5px; font-style: italic; color: rgba(232,224,207,.5); margin: 16px 0 0; }
 
   /* ---- no WebGL ---- */
@@ -256,26 +288,25 @@
     color: var(--gold-lt); }
   #nogl p { font-size: 17px; line-height: 1.6; color: rgba(232,224,207,.8); margin: 0 0 14px; text-wrap: pretty; }
 
-  /* ---- touch drive pad (walk mode on touch devices) ---- */
-  #touchpad { position: fixed; right: 16px; bottom: 16px; z-index: 19; display: none;
-    grid-template-columns: repeat(3, 56px); grid-template-rows: repeat(2, 56px); gap: 6px; }
-  body.mobile.walking #touchpad { display: grid; }
-  body.mobile.walking #panel.open ~ #touchpad { display: none; }
-  #touchpad button { -webkit-user-select: none; user-select: none; touch-action: none;
+  /* ---- thumb joystick: movement, independent of pinch-to-zoom/drag-to-look ---- */
+  #joystick { position: absolute; left: 18px; bottom: 18px; z-index: 19; display: none; align-items: flex-end; gap: 12px; }
+  body.touch #joystick { display: flex; }
+  body.touch.sheeting #joystick, body.touch #panel.open ~ #joystick { display: none; }
+  #joy-base { position: relative; width: 116px; height: 116px; border-radius: 50%; touch-action: none;
+    background: rgba(20,18,14,.56); border: 1px solid rgba(217,180,81,.45); }
+  #joy-thumb { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px;
+    border-radius: 50%; background: rgba(176,138,46,.85); border: 1px solid var(--gold-lt);
+    transition: transform .06s linear; pointer-events: none; }
+  #joy-run { width: 44px; height: 44px; border-radius: 50%; display: none; align-items: center; justify-content: center;
     background: rgba(20,18,14,.72); border: 1px solid rgba(217,180,81,.5); color: var(--gold-lt);
-    font-size: 20px; border-radius: 3px; cursor: pointer; }
-  #touchpad button:active { background: rgba(176,138,46,.85); color: #16150f; }
-  #touchpad button.wide { grid-column: span 1; }
-  #tp-fwd { grid-column: 2; grid-row: 1; }
-  #tp-l { grid-column: 1; grid-row: 2; }
-  #tp-back { grid-column: 2; grid-row: 2; }
-  #tp-r { grid-column: 3; grid-row: 2; }
-  #tp-run { grid-column: 3; grid-row: 1; font-size: 10px; letter-spacing: .12em; }
+    font-size: 10px; letter-spacing: .1em; cursor: pointer; -webkit-user-select: none; user-select: none; }
+  body.touch.walking #joy-run { display: flex; }
+  #joy-run.on { background: rgba(176,138,46,.85); color: #16150f; }
 
   .mobonly { display: none !important; }
 
-  /* ---- phones & small tablets ---- */
-  @media (max-width: 780px) {
+  /* ---- phones and tablets alike, up through tablet landscape ---- */
+  @media (max-width: 1200px) {
     .mobonly { display: inline-flex !important; }
     .bar { min-height: 50px; flex-wrap: nowrap; gap: 8px; padding: 6px 10px; }
     .bar h1 { font-size: 16.5px; min-width: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; }
@@ -286,28 +317,47 @@
     .seg { flex: 0 0 auto; }
     .bar .tog { padding: 10px 12px; font-size: 11.5px; letter-spacing: .08em; }
     #tools .idx-inline { display: block; }
+    /* the two he reaches for first and last */
+    #cfm-btn { order: -1; }
+    #tools-x { order: 9; margin-top: 4px; }
 
     #tools { position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 24;
-      flex-direction: column; align-items: stretch; gap: 9px; padding: 16px 16px 26px;
-      background: #14130f; border-top: 1px solid rgba(200,171,85,.4);
+      display: grid; grid-template-columns: repeat(2, 1fr); align-items: stretch; gap: 8px 10px;
+      padding: 14px 14px 20px;
+      max-height: 25%; max-height: 25dvh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      background: #14130f; border-top: 1px solid rgba(200,171,85,.4); border-radius: 14px 14px 0 0;
       box-shadow: 0 -20px 44px rgba(0,0,0,.5);
       transform: translateY(106%); transition: transform .34s cubic-bezier(.2,.8,.2,1); }
     #tools.open { transform: none; }
-    #tools .tog, #tools .exp, #tools #tour-select { width: 100%; min-height: 48px; padding: 13px;
-      font-size: 13.5px; text-align: center; justify-content: center; }
+    #tools .tog, #tools .exp, #tools #tour-select { width: 100%; min-height: 46px; padding: 10px;
+      font-size: 12.5px; text-align: center; justify-content: center; }
+    #tools .more-wrap, #tools #tools-x, #tools #m-places2 { grid-column: 1 / -1; }
+    @media (min-width: 480px) { #tools, #more-menu { grid-template-columns: repeat(3, 1fr); } }
 
-    #index { top: auto; bottom: 0; left: 0; width: 100%; max-height: 64vh; z-index: 25;
+    #index { top: auto; bottom: 0; left: 0; width: 100%; max-height: 25%; max-height: 25dvh; z-index: 25;
       background: #14130f; border-top: 1px solid rgba(200,171,85,.4); padding: 14px 14px 28px;
-      box-shadow: 0 -20px 44px rgba(0,0,0,.5);
+      box-shadow: 0 -20px 44px rgba(0,0,0,.5); border-radius: 14px 14px 0 0;
       transform: translateY(106%); transition: transform .34s cubic-bezier(.2,.8,.2,1); }
     #index.open { transform: none; }
     #index button { padding: 11px 8px; font-size: 17px; min-height: 44px; }
+    #idx-handle { display: none; }
 
-    #panel { top: auto; left: 0; right: 0; bottom: 0; width: 100%; max-width: none; height: 82vh;
+    /* Half the screen, so the model stays in view behind it. The grab bar
+       raises it to full height for a long essay and drops it back again. */
+    #panel { top: auto; left: 0; right: 0; bottom: 0; width: 100%; max-width: none; height: auto;
+      max-height: 56vh; max-height: 56dvh;
       border-left: 0; border-top: 1px solid #cdc3ab; box-shadow: 0 -20px 44px rgba(0,0,0,.45);
-      transform: translateY(103%); }
+      border-radius: 14px 14px 0 0; transform: translateY(103%); }
+    #panel.tall { max-height: 92vh; max-height: 92dvh; }
     #panel.open { transform: none; }
-    .p-head { padding: 15px 18px 12px; }
+    #panel .p-body { flex: 1 1 auto; min-height: 0; }
+    #p-grab { display: block; width: 100%; padding: 9px 0 3px; background: none; border: 0;
+      cursor: pointer; flex: 0 0 auto; }
+    #p-grab::before { content: ""; display: block; width: 44px; height: 4px; margin: 0 auto;
+      border-radius: 3px; background: #b9ad91; }
+    #panel.tall #p-grab::before { background: var(--gold); }
+    .p-head { padding: 8px 56px 12px 18px; }
+    #p-x { top: 2px; right: 6px; }
     #p-title { font-size: 23px; }
     .p-body { padding: 14px 18px 22px; }
     #p-body { font-size: 16.5px; }
@@ -317,6 +367,7 @@
 
     #compass { display: none; }
     #plan { display: none; }
+    #t-plan { display: none; }
     #hint { font-size: 12px; bottom: 10px; padding: 6px 12px; }
     body.walking #hint { display: none; }
     #crosshair { display: none !important; }
@@ -339,21 +390,164 @@
       .bar .tog { padding: 10px 10px; }
     }
   }
-  @media (max-width: 780px) and (orientation: landscape) {
-    #panel { height: 92vh; }
-    #index { max-height: 78vh; }
+  @media (max-width: 1200px) and (orientation: landscape) {
+    #panel, #tools, #index {
+      top: 0; bottom: 0; left: 0; right: auto; width: 50%; max-width: 420px; height: auto;
+      max-height: none; border-radius: 0; border-top: 0; border-right: 1px solid rgba(200,171,85,.4);
+      box-shadow: 20px 0 44px rgba(0,0,0,.45); transform: translateX(-104%); }
+    #panel.open, #tools.open, #index.open { transform: none; }
+    #panel { border-right: 1px solid #cdc3ab; }
+    #p-grab { display: none; }
+    #tools { grid-template-columns: repeat(2, 1fr); align-content: start; padding: 14px; }
+    #index { padding: 14px 12px 60px; }
+  }
+  /* ---- tablet portrait: a slimmer strip, more columns, the model stays clear above it ---- */
+  @media (min-width: 700px) and (max-width: 1200px) and (orientation: portrait) {
+    #tools, #more-menu { grid-template-columns: repeat(4, 1fr); }
+    #tools { max-height: 34%; max-height: 34dvh; }
+    #index { max-height: 34%; max-height: 34dvh; }
+  }
+
+  /* ---- the way out of an open sheet ---- */
+  #scrim { position: fixed; inset: 0; z-index: 22; display: none; background: rgba(10,9,7,.42); }
+  body.sheeting #scrim { display: block; }
+  #sheet-x { position: fixed; z-index: 26; top: 12px; right: 12px; display: none;
+    align-items: center; justify-content: center; gap: 7px; min-width: 44px; min-height: 44px;
+    padding: 0 14px; cursor: pointer; color: var(--parch);
+    font-family: "EB Garamond", serif; font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+    background: rgba(14,13,10,.92); border: 1px solid rgba(217,180,81,.5); border-radius: 2px; }
+  body.sheeting #sheet-x { display: flex; }
+  #sheet-x b { font-size: 17px; font-weight: 400; line-height: 1; }
+  /* ---- secondary tools popover ---- */
+  .more-wrap { position: relative; display: flex; }
+  #more-menu { position: absolute; top: calc(100% + 8px); right: 0; z-index: 30; display: none;
+    flex-direction: column; gap: 6px; min-width: 186px; padding: 8px;
+    background: #14130f; border: 1px solid rgba(217,180,81,.4); border-radius: 2px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.5); }
+  .more-wrap.open #more-menu { display: flex; }
+  #more-menu .tog, #more-menu .exp { text-align: left; }
+
+  /* ---- caption card: sight lines, the arrival, computed hours ---- */
+  #cap-card { position: absolute; left: 50%; bottom: 66px; transform: translateX(-50%) translateY(14px);
+    z-index: 17; width: min(520px, 92vw); max-height: min(52vh, 460px); overflow-y: auto;
+    background: var(--parch); color: var(--ink);
+    border: 1px solid #cdc3ab; border-radius: 2px; padding: 15px 17px 14px;
+    box-shadow: 0 22px 50px rgba(0,0,0,.4); opacity: 0; pointer-events: none;
+    transition: opacity .3s ease, transform .3s cubic-bezier(.2,.8,.2,1); }
+  #cap-card.open { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+  #cap-title { font-family: "Cormorant Garamond", serif; font-size: 21px; font-weight: 600; margin: 0 34px 1px 0; }
+  #cap-sub { font-family: "EB Garamond", serif; font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px; }
+  #cap-text { font-family: "EB Garamond", serif; font-size: 16px; line-height: 1.52; margin: 0;
+    text-wrap: pretty; white-space: pre-line; }
+  #cap-foot { font-family: "EB Garamond", serif; font-size: 12.5px; font-style: italic;
+    color: #6d6144; margin-top: 9px; }
+  #cap-close { position: absolute; top: 9px; right: 9px; width: 28px; height: 28px; line-height: 1;
+    background: transparent; border: 1px solid var(--rule); border-radius: 2px; color: #6d6144;
+    font-size: 15px; cursor: pointer; }
+  #cap-close:hover { color: var(--ink); border-color: #a99; }
+
+  /* ---- certainty legend ---- */
+  #cert-key { position: absolute; right: 18px; bottom: 18px; z-index: 14; width: 252px; display: none;
+    max-height: 46vh; overflow-y: auto;
+    background: rgba(14,13,10,.82); border: 1px solid rgba(217,180,81,.4); border-radius: 2px; padding: 12px 13px; }
+  #cert-key.open { display: block; }
+  #cert-key h6 { font-family: "EB Garamond", serif; font-size: 10.5px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--gold-lt); margin: 0 0 8px; font-weight: 400; }
+  #cert-key .ck { display: grid; grid-template-columns: 12px 1fr; gap: 4px 8px; align-items: start;
+    margin-bottom: 9px; font-family: "EB Garamond", serif; font-size: 12.5px; line-height: 1.4;
+    color: rgba(244,239,227,.72); }
+  #cert-key .ck:last-child { margin-bottom: 0; }
+  #cert-key .ck i { width: 12px; height: 12px; border-radius: 2px; margin-top: 2px; background-size: 6px 6px; }
+  #cert-key .ck i.pat-dot { background-image: radial-gradient(rgba(20,16,10,.5) 1.4px, transparent 1.6px); }
+  #cert-key .ck i.pat-diag { background-image: repeating-linear-gradient(45deg, rgba(20,16,10,.5) 0 1.2px, transparent 1.2px 6px); }
+  #cert-key .ck i.pat-cross { background-image: repeating-linear-gradient(45deg, rgba(20,16,10,.5) 0 1.2px, transparent 1.2px 6px), repeating-linear-gradient(-45deg, rgba(20,16,10,.5) 0 1.2px, transparent 1.2px 6px); }
+  #cert-key .ck b { grid-column: 2; color: var(--parch); font-weight: 500; display: block; }
+  #cert-key .ck span { grid-column: 2; display: block; }
+  #cert-key .ck-caveat { font-family: "EB Garamond", serif; font-size: 12px; line-height: 1.45;
+    color: rgba(244,239,227,.6); margin: 0 0 10px; padding-bottom: 9px; border-bottom: 1px solid rgba(217,180,81,.22); }
+
+  /* ---- measuring readout ---- */
+  #measure-out { position: absolute; right: 18px; top: 18px; z-index: 17; width: 264px; display: none;
+    background: var(--parch); color: var(--ink); border: 1px solid #cdc3ab; border-radius: 2px;
+    padding: 13px 14px; font-family: "EB Garamond", serif; font-size: 14px; line-height: 1.45; }
+  #measure-out.open { display: block; }
+  #measure-out b { display: block; font-family: "Cormorant Garamond", serif; font-size: 22px; font-weight: 600; }
+  #measure-out span { display: block; margin-top: 3px; }
+  #measure-out .cite { font-size: 12px; font-style: italic; color: #6d6144; margin-top: 7px; }
+  #measure-out .measure-warn { font-size: 11.5px; color: #8a4b32; margin-top: 5px; }
+  #measure-out button { margin-top: 9px; font-family: "EB Garamond", serif; font-size: 11.5px;
+    letter-spacing: .12em; text-transform: uppercase; background: transparent; color: #6d6144;
+    border: 1px solid var(--rule); border-radius: 2px; padding: 6px 10px; cursor: pointer; }
+  body.standing #stage canvas { cursor: pointer; }
+  body.measuring #stage canvas { cursor: cell; }
+
+  /* ---- keyboard focus, everywhere ---- */
+  :focus-visible { outline: 2px solid var(--gold-lt); outline-offset: 2px; }
+  #index button:focus-visible { outline-offset: -2px; }
+
+  @media (max-width: 1200px) {
+    #t-more { display: none; }
+    .more-wrap { width: 100%; flex-direction: column; }
+    #more-menu { position: static; display: grid; grid-template-columns: repeat(2, 1fr); width: 100%; background: transparent; border: 0;
+      box-shadow: none; padding: 0; min-width: 0; gap: 8px; }
+    #more-menu .tog, #more-menu .exp { width: 100%; min-height: 46px; padding: 10px;
+      font-size: 12.5px; text-align: center; }
+    #cap-card { bottom: 12px; width: calc(100% - 20px); padding: 14px 15px 13px; }
+    body.walking #cap-card { bottom: 84px; }
+    #cap-title { font-size: 19px; }
+    #cap-text { font-size: 15px; }
+    #cert-key { right: 10px; bottom: 10px; width: calc(100% - 20px); }
+    body.touch.walking #cap-card { bottom: 146px; }
+    body.touch.walking #cert-key { display: none; }
+    #measure-out { right: 10px; top: 10px; width: calc(100% - 20px); }
+  }
+  /* ---- CFM index ---- */
+  #cfm-overlay { position: fixed; inset: 0; z-index: 33; display: none; align-items: center; justify-content: center;
+    padding: 24px; background: rgba(14,13,10,.9); }
+  .cfm-card { width: min(880px, 100%); max-height: 88vh; display: flex; flex-direction: column;
+    background: var(--parch); border: 1px solid #cdc3ab; border-radius: 3px; }
+  .cfm-card h2 { font-family: "Cormorant Garamond", serif; font-weight: 600; font-size: 28px;
+    margin: 0; padding: 22px 26px 2px; }
+  .cfm-lede { padding: 0 26px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+  .cfm-note { padding: 12px 26px 0; margin: 0; font-size: 15.5px; line-height: 1.5; color: #4a4436; max-width: 70ch; }
+  .cfm-scroll { overflow-y: auto; padding: 6px 26px 18px; }
+  .cfm-scroll h3 { font-family: "Cormorant Garamond", serif; font-size: 21px; font-weight: 600;
+    margin: 22px 0 6px; padding-bottom: 5px; border-bottom: 1px solid var(--rule); }
+  .cfm-row { display: grid; grid-template-columns: 190px 1fr; gap: 4px 16px; padding: 9px 0;
+    border-bottom: 1px solid rgba(29,27,22,.08); }
+  .cfm-ref { font-family: "EB Garamond", serif; font-size: 15px; font-weight: 500; }
+  .cfm-theme { font-size: 15px; line-height: 1.45; color: #3d3a33; }
+  .cfm-places { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+  .cfm-places button { font-family: "EB Garamond", serif; font-size: 12.5px; background: #ece5d2;
+    border: 1px solid #dbd0b4; border-radius: 2px; padding: 4px 9px; cursor: pointer; color: #3d3a33; }
+  .cfm-places button:hover { background: var(--gold-lt); border-color: var(--gold); color: #16150f; }
+  .cfm-foot { display: flex; gap: 10px; padding: 14px 26px 18px; border-top: 1px solid var(--rule); }
+  .cfm-foot .exp { color: var(--gold); border-color: rgba(29,27,22,.2); }
+  @media (max-width: 780px) {
+    .cfm-card h2 { font-size: 23px; padding: 18px 18px 2px; }
+    .cfm-lede, .cfm-note { padding-left: 18px; padding-right: 18px; }
+    .cfm-scroll { padding: 6px 18px 14px; }
+    .cfm-row { grid-template-columns: 1fr; }
+    .cfm-places { grid-column: 1; }
+    .cfm-foot { padding: 12px 18px 16px; }
+    .cfm-foot .exp { flex: 1; min-height: 46px; }
+  }
+  /* ---- CFM on phone/tablet: half the screen, the model stays visible in the other half ---- */
+  @media (max-width: 1200px) {
+    #cfm-overlay { align-items: flex-end; justify-content: stretch; padding: 0; background: rgba(14,13,10,.35); }
+    .cfm-card { width: 100%; max-width: none; max-height: 55%; max-height: 55dvh; border-radius: 14px 14px 0 0; }
+    #cfm-print { display: none; }
+  }
+  @media (max-width: 1200px) and (orientation: landscape) {
+    #cfm-overlay { align-items: stretch; justify-content: flex-start; }
+    .cfm-card { width: 50%; max-width: 420px; max-height: none; height: 100%; border-radius: 0; border-right: 1px solid #cdc3ab; }
   }
 </style>
 </head>
 <body>
-<div id="stage"></div>
-<div id="pins"></div>
-<div id="crosshair"></div>
-<div id="compass" title="The temple faces east; north is up on the dial">
-  <div id="compass-dial"><i></i><b></b><span class="n">N</span><span class="e">E</span><span class="s">S</span><span class="w">W</span></div>
-</div>
-<canvas id="plan" width="236" height="300" title="Plan of the precinct, north up — the wedge is where you are looking"></canvas>
-
+<div id="scrim"></div>
+<button id="sheet-x"><b>&#10005;</b> Close</button>
 <div class="bar">
   <h1>Herod's Temple<span class="beta">Beta</span><small>Jerusalem · c. 30 CE</small></h1>
   <div class="seg">
@@ -363,37 +557,61 @@
   <div class="spacer"></div>
   <button class="tog mobonly" id="m-menu">Menu</button>
   <div class="group" id="tools">
+    <button class="exp mobonly" id="tools-x">&#10005; &nbsp;Close</button>
+    <button class="tog on" id="m-places" title="Hide or show the list of places">Places</button>
     <button class="exp mobonly idx-inline" id="m-places2">All 43 places</button>
-    <button class="tog" id="t-roofs">Roofs</button>
-    <button class="tog" id="t-cutaway">Cutaway</button>
     <button class="tog" id="t-pins">Labels</button>
     <button class="tog" id="t-city">City</button>
-    <button class="tog" id="t-plan">Plan</button>
-    <button class="tog" id="t-hour">Morning</button>
-    <select id="tour-select" title="Guided sequence">
-      <option value="full">Full tour</option>
-      <option value="atonement">Day of Atonement</option>
-      <option value="ascent">Into greater light</option>
-      <option value="passover">Passover pilgrimage</option>
+    <button class="tog" id="t-plan" title="A small plan of the precinct, north up">Plan</button>
+    <button class="tog" id="t-hour" title="The hour of the day — four stylised hours, then four computed for the real festival days">Morning</button>
+    <select id="tour-select" title="Guided sequences and sight lines" aria-label="Guided sequences and sight lines">
+      <option value="tour:full">Full tour</option>
     </select>
-    <button class="exp" id="start-tour">Begin</button>
+    <button class="exp" id="start-tour" title="Visit the chosen sequence in order, one place at a time">Begin tour</button>
+    <button class="exp" id="cfm-btn" title="Weekly Reading — from the week's reading to the places in this model">Weekly Reading</button>
+    <div class="more-wrap" id="more-wrap">
+      <button class="tog" id="t-more" aria-expanded="false" aria-controls="more-menu">More</button>
+      <div id="more-menu">
+        <button class="tog" id="t-roofs" title="Lift the portico and sanctuary roofs">Roofs</button>
+        <button class="tog" id="t-cutaway" title="Open the sanctuary so the Holy Place can be seen from outside">Cutaway</button>
+        <button class="tog" id="t-people" title="The figures that give the courts their scale">People</button>
+        <button class="tog" id="t-cert" title="Colour the model by how much of it is actually known">Certainty</button>
+        <button class="tog" id="t-stand" title="Click anywhere on the model to stand there — or just double-click the ground in Orbit">Stand here</button>
+        <button class="tog" id="t-phases" title="The building phases of the platform: the pre-Herodian square, the Hasmonean extension, and Herod's additions">Phases</button>
+        <button class="tog" id="t-measure" title="Tap two points for a distance in metres and cubits">Measure</button>
+        <button class="tog" id="t-sound" title="A quiet crowd, loudest in the outer court and silent behind the veil">Sound</button>
+        <button class="exp" id="arrive-btn" title="Ninety seconds from the Mount of Olives to the Holy of Holies">The arrival</button>
+      </div>
+    </div>
     <button class="exp" id="about-btn">About</button>
     <a class="exp" id="handout" href="study-guide.html" rel="noopener">Handout</a>
   </div>
 </div>
 
-<nav id="index"></nav>
+<div id="shell">
+<div id="stage"></div>
+<div id="pins"></div>
+<div id="crosshair"></div>
+<div id="compass" title="The temple faces east; north is up on the dial">
+  <div id="compass-dial"><i></i><b></b><span class="n">N</span><span class="e">E</span><span class="s">S</span><span class="w">W</span></div>
+</div>
+<canvas id="plan" width="236" height="300" title="Plan of the precinct, north up — the wedge is where you are looking"></canvas>
 
-<aside id="panel">
+<nav id="index" aria-label="All 43 annotated locations"></nav>
+<button id="idx-handle" aria-label="Hide or show the list of places" title="Hide the list of places"><span>Places</span>&lsaquo;</button>
+
+<aside id="panel" role="complementary" aria-label="Location commentary">
+  <button id="p-grab" aria-label="Raise or lower this panel"></button>
   <div class="p-head">
-    <h2 id="p-title"></h2>
+    <button id="p-x" aria-label="Close this commentary">&#10005;</button>
+    <h2 id="p-title" tabindex="-1"></h2>
     <div id="p-sub"></div>
   </div>
   <div class="p-body">
     <p id="p-narration"></p>
     <p id="p-body"></p>
     <div id="p-scripture">
-      <h5 id="p-scripture-head">Scripture &mdash; King James Version</h5>
+      <h5 id="p-scripture-head">Scripture</h5>
       <div id="p-verses"></div>
     </div>
     <h5>Sources</h5>
@@ -414,6 +632,23 @@
   <div id="coords"></div>
 </div>
 
+<div id="cap-card" role="region" aria-live="polite" aria-label="Commentary">
+  <button id="cap-close" aria-label="Close this card">&times;</button>
+  <h3 id="cap-title"></h3>
+  <div id="cap-sub"></div>
+  <p id="cap-text"></p>
+  <div id="cap-foot"></div>
+</div>
+
+<div id="cert-key" aria-hidden="true"></div>
+<div id="measure-out" role="status" aria-live="polite"></div>
+
+<div id="joystick" aria-hidden="true">
+  <div id="joy-base"><div id="joy-thumb"></div></div>
+  <button id="joy-run" aria-label="Run">RUN</button>
+</div>
+</div><!-- /#shell -->
+
 <div id="about-overlay">
   <div class="about-card">
     <h2>Herod's Temple <span class="beta">Beta</span></h2>
@@ -422,22 +657,32 @@
       <button role="tab" aria-selected="true" data-pane="ab-model">The reconstruction</button>
       <button role="tab" aria-selected="false" data-pane="ab-use">How to use it</button>
       <button role="tab" aria-selected="false" data-pane="ab-author">Taylor Halverson, Ph.D.</button>
+      <button role="tab" aria-selected="false" data-pane="ab-rights">Credits</button>
+      <button role="tab" aria-selected="false" data-pane="ab-terms">Terms &amp; License</button>
     </div>
     <div class="ab-scroll">
       <div class="ab-pane on" id="ab-model">
         <p>An explorable reconstruction of the Temple Mount as it stood in the time of Christ, c. 30 CE &mdash;
         the platform and its walls, the outer court and porticoes, the Court of the Women, the Court of Israel,
         the altar and laver, the sanctuary, the veil, and the Holy of Holies with the Foundation Stone within it.</p>
-        <p>Every location is annotated from the King James New Testament, Josephus, the Mishnah and the Talmud,
+        <p>Every location is annotated from the New Testament, Josephus, the Mishnah and the Talmud,
         with notes where the sources disagree. Forty-three locations, one hundred sixty-two passages.</p>
         <h3>Beta</h3>
-        <p>A work in progress. The reconstruction follows the majority reading of the sources; dimensions,
-        decoration and the lines of the city walls remain debated. Where the sources conflict, the model shows
-        the majority reconstruction and the location's note records the dissent rather than quietly settling it.</p>
+        <p>This model is a documented synthesis, not a recovered floor plan. It uses Mishnah Middot for much of
+        the inner plan, Josephus for elevations and outer works, surviving perimeter archaeology where available,
+        and named modern reconstructions for disputed placements. The inner sanctuary footprint has not been
+        comprehensively excavated in modern times. Dimensions, decoration, rooflines and several event locations
+        remain debated; alternatives are identified at the point of use rather than settled quietly.</p>
+        <p>This visualization combines surviving perimeter archaeology with ancient literary descriptions and
+        modern reconstruction. The destroyed inner precinct is not presented as a modern excavated plan.</p>
         <h3>On the measurements</h3>
         <p>Dimensions come from the Mishnah's tractate Middot, with the cubit taken at 0.5 m &mdash; a round
         figure within the range scholars propose &mdash; and cross-checked against Josephus. Small differences
-        of a cubit or two are inside the margin of the sources themselves.</p>
+        of a cubit or two are inside the margin of the sources themselves. Where the archaeology gives a figure
+        directly &mdash; the Royal Stoa's columns, the width and tread of the southern stairway, the line of the
+        walls &mdash; the excavated measurement is followed instead, chiefly as published by Leen Ritmeyer from
+        Benjamin Mazar's Temple Mount excavations. Ritmeyer reckons in the royal cubit of 52.5 cm rather than
+        0.5 m, so his figures for the same building run about five per cent larger than the ones used here.</p>
         <p class="ab-note">&copy; 2026 Taylor Halverson. All rights reserved.</p>
       </div>
       <div class="ab-pane" id="ab-use">
@@ -449,30 +694,66 @@
           you oriented &mdash; the facade genuinely faces the rising sun.</li>
           <li><b>Walk in</b> puts you on the ground: <b>WASD</b> to move, drag or <b>&larr; &rarr;</b> to look,
           <b>Shift</b> to run. On a phone a drive pad appears at the corner.</li>
+          <li><b>Double-click the ground</b> anywhere in Orbit and you are put on that spot on foot, facing the
+          way you were already looking &mdash; the quickest way into a particular corner of the court. On a phone,
+          arm <b>Stand here</b> under <i>More</i> and tap the place you want.</li>
           <li><b>All 43 places</b> lists every annotated location; <b>&lsaquo; Prev</b> and <b>Next &rsaquo;</b>
           step through them in order, and <b>Esc</b> closes whatever is open.</li>
         </ul>
         <h3>Seeing inside</h3>
         <ul>
-          <li><b>Roofs</b> and <b>Cutaway</b> lift the porticoes and open the sanctuary so the Holy Place and
-          the Holy of Holies can be seen from outside.</li>
           <li><b>Labels</b> pins the names to the model; <b>City</b> adds Jerusalem around the mount &mdash;
           Olivet, Siloam, Golgotha, Hinnom &mdash; and can be turned off on a slower device.</li>
           <li><b>Plan</b> shows a small schematic of the precinct, north up, with a wedge marking where you
           stand and which way you face &mdash; useful when the courts start to look alike.</li>
-          <li><b>Morning</b> cycles the hour: dawn, morning, noon, dusk. The light is the same light the
-          pilgrims climbed in.</li>
+          <li><b>Morning</b> cycles the hour. The first four &mdash; dawn, morning, noon, dusk &mdash; are stylised.
+          The next four are astronomical simulations: the sun's altitude and bearing computed for the latitude of
+          Jerusalem on selected representative dates for Passover, the Day of Atonement and Tabernacles &mdash; an
+          approximation, not an exact recovered calendar day.</li>
+        </ul>
+        <h3>Under <i>More</i></h3>
+        <ul>
+          <li><b>Roofs</b> and <b>Cutaway</b> lift the portico and sanctuary roofs and open the house, so the Holy
+          Place and the Holy of Holies can be seen from outside. Everything is on by default: nothing in the model
+          is hidden until you hide it.</li>
+          <li><b>People</b> turns off the figures. They are there for scale: a court three hundred metres across
+          reads as a diagram until there is someone standing in it.</li>
+          <li><b>Certainty</b> colours the whole model by how much of it is actually known &mdash; green where there
+          are standing remains or an explicit measurement, gold where the sources describe what no longer stands,
+          red where they are silent or contradict each other and this is one defensible reconstruction among several.</li>
+          <li><b>Phases</b> colours the platform by building period: the 500-cubit square described in Middot,
+          the Hasmonean extension south of it, and everything Herod added north, west and south &mdash; with the
+          two lines Ritmeyer's argument turns on, the seam in the eastern wall and the surviving step of the old
+          western wall.</li>
+          <li><b>Measure</b> turns the pointer into a tape: tap two points for the distance in metres and in cubits,
+          which is the unit the sources argue in.</li>
+          <li><b>Sound</b> adds a quiet crowd &mdash; loudest in the outer court, quieter through each boundary,
+          and silent behind the veil. Off unless you ask for it.</li>
+          <li><b>The arrival</b> runs ninety seconds from the ridge of Olivet to the Holy of Holies, narrated,
+          and stops the moment you press Esc.</li>
         </ul>
         <h3>Reading and teaching</h3>
         <ul>
-          <li>Each panel carries the KJV passages for that place, a scholarly note, its sources, and
+          <li>Each panel carries the scripture passages for that place, a scholarly note, its sources, and
           &ldquo;where the sources differ.&rdquo;</li>
           <li><b>Begin</b> runs a guided sequence &mdash; the full tour, the Day of Atonement, a Passover
-          pilgrimage, or <i>Into greater light</i>, which climbs the gradient of access from the open outer
-          court to the Holy of Holies &mdash; visiting the places in the order the day required.</li>
+          pilgrimage, how a sacrifice was actually offered, Jesus in the temple, the apostles' temple, or
+          <i>Into greater light</i>, which climbs the gradient of access from the open outer court to the Holy of
+          Holies &mdash; visiting the places in the order the day required.</li>
+          <li>The same list carries <b>sight lines</b>: where the publican stood against the Pharisee, what a
+          gentile could see from the lattice, the pinnacle of the temple, and the fact that no one then alive had
+          seen the innermost room. Camera positions and a paragraph, rather than another list of places.</li>
           <li><b>Handout</b> opens the whole study guide, all 43 locations and 162 passages, ready to print
-          or save as PDF.</li>
+          or save as PDF &mdash; and while a tour is selected it prints that tour instead: its stations in order,
+          with the narration and ruled space to write. The full handout also carries an index from the reading
+          block to the stations worth opening in class.</li>
+          <li><b>Weekly Reading</b> opens that index on screen: thirty reading blocks across the Old
+          Testament and the New Testament, each with the places in this model
+          worth opening for it. Tap a place and the model flies there. Because the curriculum renumbers its weeks
+          every year, the index is keyed to the reading block rather than to a week number.</li>
           <li><b>Copy link</b> gives a link straight to one place, in orbit or on foot, to paste into a lesson.</li>
+          <li>Keyboard: <b>M</b> switches orbit and walk, <b>[</b> and <b>]</b> step through the current sequence,
+          <b>Esc</b> closes, and the list of places takes arrow keys.</li>
         </ul>
         <h3>Sources</h3>
         <ul>
@@ -480,7 +761,10 @@
           material for the service.</li>
           <li>Elevations, porticoes and the fabric of the building: Josephus, <i>Jewish War</i> and
           <i>Antiquities</i>.</li>
-          <li>Scripture quoted from the King James Version.</li>
+          <li>Excavated measurements and the building phases of the platform: Leen Ritmeyer, <i>The Quest:
+          Revealing the Temple Mount in Jerusalem</i> (2006), from the Temple Mount excavations of
+          Benjamin Mazar, 1968&ndash;78.</li>
+          <li>Scripture is paraphrased in the author’s own words and cited by book, chapter and verse — not quoted verbatim from any translation.</li>
         </ul>
       </div>
       <div class="ab-pane" id="ab-author">
@@ -514,6 +798,98 @@
           <a href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com</a>
         </div>
       </div>
+      <div class="ab-pane" id="ab-rights">
+        <h3>Credits</h3>
+        <p><b>Reconstruction, research, geometry and text</b> &mdash; Taylor Halverson, Ph.D. The three-dimensional
+        reconstruction, the forty-three location commentaries, the guided tours, the sight lines, the certainty and
+        phase overlays, the printed study guide and the reading index are his work.</p>
+        <p>The geometry, textures and ambient sound are generated in code at run time.</p>
+        <h3>Ancient sources</h3>
+        <ul>
+          <li>Mishnah, tractate <i>Middot</i>, for the plan and the dimensions of the courts, with <i>Tamid</i>,
+          <i>Yoma</i>, <i>Shekalim</i>, <i>Sukkah</i> and <i>Parah</i> for the daily and festival service.</li>
+          <li>Flavius Josephus, <i>The Jewish War</i> and <i>Jewish Antiquities</i>, for elevations, the porticoes
+          and the fabric of the building.</li>
+          <li>The Babylonian Talmud, for the service and for the memory of the second temple.</li>
+          <li>The New Testament, for the events set in these courts.</li>
+        </ul>
+        <p>These works are in the public domain. The descriptions in this product are the author's own, and cite
+        each source by book, chapter and line.</p>
+        <h3>Archaeology and scholarship</h3>
+        <ul>
+          <li>Excavated dimensions of the Royal Stoa, the southern stairway, the walls and the gates, and the
+          building phases of the platform, follow <b>Leen Ritmeyer</b>, <i>The Quest: Revealing the Temple Mount
+          in Jerusalem</i> (Jerusalem: Carta, 2006), and his published articles &mdash; the standard account of
+          the mount's development, and the source of the two lines the phase overlay turns on.</li>
+          <li>Those excavations are the work of <b>Benjamin Mazar</b> and the Hebrew University expedition to the
+          area south and west of the Temple Mount, 1968&ndash;1978, and of <b>Ronny Reich</b> and <b>Eli Shukron</b>
+          for the Herodian street and the stepped ascent.</li>
+          <li>The geometry in this model was drawn from those published measurements.</li>
+        </ul>
+        <h3>Software and typefaces</h3>
+        <ul>
+          <li><b>three.js</b> r184 &mdash; WebGL rendering, orbit controls and geometry utilities.
+          &copy; 2010&ndash;2025 three.js authors, used under the MIT License.</li>
+          <li><b>EB Garamond</b> &mdash; Georg Duffner and Octavio Pardo, used under the SIL Open Font License 1.1.</li>
+          <li><b>Cormorant Garamond</b> &mdash; Christian Thalmann, used under the SIL Open Font License 1.1.</li>
+        </ul>
+        <p>The full text of these licences travels with the product in its notices file.</p>
+        <h3>Scripture</h3>
+        <p>Scripture passages are paraphrased in the author's own words and cited by book, chapter and verse.
+        No modern translation is quoted verbatim, so no scripture-translation licence or permission is required
+        anywhere the product is distributed.</p>
+        <h3>Remote services</h3>
+        <p>This application loads three.js modules from unpkg.com and typefaces from Google Fonts. Those
+        providers receive standard web-request information, such as IP address, browser information, requested
+        resource, and time of request. This product itself does not use analytics, accounts, advertising trackers,
+        or form submissions.</p>
+        <h3>Curriculum index</h3>
+        <p>The reading index maps scripture reading blocks to locations in this model, and is keyed to the reading
+        block rather than to a published week number, since those are renumbered each year. It covers the Old
+        Testament and the New Testament, the two volumes whose reading meets this building.</p>
+        <p>The Weekly Reading index is a generic reading-block guide and does not name any single publisher's
+        curriculum. This product is not affiliated with, authorised by, endorsed by or sponsored by
+        The Church of Jesus Christ of Latter-day Saints or Intellectual Reserve, Inc.</p>
+        <h3>How to cite this model</h3>
+        <p class="ab-note">Halverson, Taylor. <i>Herod's Temple &mdash; Jerusalem, c. 30 CE</i>. Interactive
+        three-dimensional reconstruction. 2026. taylorhalverson.com.</p>
+        <p class="ab-note">&copy; 2026 Taylor Halverson. All rights reserved. Reproduced screenshots and printed
+        handouts may be used for personal study and classroom teaching with attribution retained.</p>
+      </div>
+      <div class="ab-pane" id="ab-terms">
+        <h3>Terms of use &amp; license</h3>
+        <p><b>1. What you're getting.</b> This product is a Beta: an interactive reconstruction of Herod's
+        Temple across its building phases, with forty-three location commentaries, guided tours, a certainty
+        overlay and a printed study guide, published by Taylor Halverson, Ph.D. (&ldquo;Publisher&rdquo;). It is
+        a teaching aid and reconstruction, not a survey document &mdash; see &ldquo;The reconstruction&rdquo; tab
+        for what that means.</p>
+        <p><b>2. License to use.</b> Publisher grants the purchaser or recipient a personal, non-exclusive,
+        non-transferable license to view and use this product for personal study, teaching and classroom use.
+        Redistribution of the product file itself, or extraction of its model, commentaries or illustrations for
+        republication, requires Publisher's prior written permission.</p>
+        <p><b>3. Scripture text.</b> Scripture passages in this product are paraphrased in the author's own words
+        and cited by book, chapter and verse. No modern translation is quoted verbatim, so no scripture-translation
+        licence or permission is required anywhere the product is distributed.</p>
+        <p><b>4. Third-party software and fonts.</b> three.js is used under the MIT License; EB Garamond and
+        Cormorant Garamond are used under the SIL Open Font License 1.1. The full text of both licences is bundled
+        with this product in its notices file, not merely linked, so it travels with the file offline. This
+        application loads three.js from unpkg.com and typefaces from Google Fonts; those providers receive
+        standard web-request information (e.g. IP address, requested resource, time of request). This product
+        itself uses no analytics, accounts, advertising trackers, or form submissions.</p>
+        <p><b>5. Refunds.</b> If this product was purchased through a store or platform (e.g. an app marketplace),
+        that platform's refund policy governs and is displayed at checkout. Where Publisher sells directly, a full
+        refund is available on request within 14 days of purchase, provided the product has not been
+        redistributed; request a refund via the contact below.</p>
+        <p><b>6. No warranty of scholarly conclusion.</b> Because this is a Beta reconstruction of a site with real
+        scholarly disagreement, Publisher makes no warranty that any specific dating, identification or
+        interpretation shown will not be revised in a later edition. The product is provided &ldquo;as is&rdquo;
+        for its stated teaching purpose.</p>
+        <p><b>7. Limitation of liability.</b> To the extent permitted by law, Publisher's liability for any claim
+        arising from this product is limited to the amount paid for it.</p>
+        <p><b>8. Contact.</b> For licensing, refunds or rights questions, use the Email Taylor link in the
+        footer at <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>.</p>
+        <p class="ab-note">&copy; 2026 Taylor Halverson. All rights reserved.</p>
+      </div>
     </div>
     <div class="ab-foot"><button class="exp" id="about-close">Close</button></div>
   </div>
@@ -530,19 +906,27 @@
 <div id="handout-overlay">
   <div class="ho-bar">
     <button class="exp back" id="handout-close">&#8592;&nbsp; Back to the temple</button>
-    <span>Study handout &mdash; 43 locations, 162 passages</span>
+    <span id="handout-title">Study handout &mdash; 43 locations, 162 passages</span>
     <button class="exp" id="handout-print">Print / save PDF</button>
     <span class="ho-esc">or press Esc</span>
   </div>
   <iframe id="handout-frame" title="Study handout"></iframe>
 </div>
 
-<div id="touchpad">
-  <button id="tp-fwd" aria-label="Walk forward">&#9650;</button>
-  <button id="tp-run" aria-label="Run">RUN</button>
-  <button id="tp-l" aria-label="Turn left">&#8249;</button>
-  <button id="tp-back" aria-label="Walk back">&#9660;</button>
-  <button id="tp-r" aria-label="Turn right">&#8250;</button>
+
+<div id="cfm-overlay" role="dialog" aria-modal="true" aria-label="Weekly Reading index">
+  <div class="cfm-card">
+    <h2>Weekly Reading</h2>
+    <div class="cfm-lede">From the week&rsquo;s reading to the place</div>
+    <p class="cfm-note">The reading calendar rotates volumes and renumbers its weeks year by year, so this index is keyed to
+    the reading block rather than to a week number. Find the block; the places named are the ones worth opening in
+    class. Tap any place to fly there.</p>
+    <div class="cfm-scroll" id="cfm-body"></div>
+    <div class="cfm-foot">
+      <button class="exp" id="cfm-print">Print this index</button>
+      <button class="exp" id="cfm-close">Close</button>
+    </div>
+  </div>
 </div>
 
 <div id="welcome">
@@ -552,9 +936,11 @@
     <ul>
       <li><b>43 annotated locations</b> &mdash; from the southern stairs to the rock in the Holy of Holies.</li>
       <li><b>Orbit or walk in.</b> Drag to look, click anything to read it.</li>
-      <li><b>Every note is cited</b> &mdash; the King James New Testament, Josephus, the Mishnah, the Talmud, with dissent noted.</li>
+      <li><b>Every note is cited</b> &mdash; the New Testament, Josephus, the Mishnah, the Talmud, with dissent noted.</li>
+      <li><b>Nothing here pretends to be a photograph.</b> Under <i>More</i>, <b>Certainty</b> colours the model by how much of it is really known.</li>
     </ul>
-    <button class="exp" id="welcome-go">Begin exploring</button>
+    <button class="exp" id="welcome-arrive">Take the arrival &mdash; 90 seconds</button>
+    <button class="exp" id="welcome-go">Explore on my own</button>
     <p class="wel-cred">Prepared by Taylor Halverson, Ph.D. &middot; Beta</p>
   </div>
 </div>
@@ -567,7 +953,7 @@
     managed computers where graphics acceleration is disabled.</p>
     <p>Try a current version of Chrome, Safari, Edge or Firefox with hardware acceleration enabled. In the
     meantime, the whole commentary is readable as text:</p>
-    <p><a href="study-guide.html">Open the study handout &mdash; 43 locations, 162 King James passages &rsaquo;</a></p>
+    <p><a href="study-guide.html">Open the study handout &mdash; 43 locations, 162 scripture passages &rsaquo;</a></p>
   </div>
 </div>
 
@@ -594,6 +980,7 @@
     }, true);
   })();
 </script>
+
 
 <script type="module" src="temple-app.js"></script>
 </body>

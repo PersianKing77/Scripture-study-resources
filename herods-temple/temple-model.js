@@ -2,6 +2,7 @@
 // 1 cubit = 0.5 m (the Mishnaic cubit of Middot). Plan follows Mishnah Middot
 // for the inner precinct and Josephus for the outer platform and porticoes.
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 const C = 0.5, cu = n => n * C;
 
@@ -262,13 +263,17 @@ function cloth(w, h, folds, amp, material, x, y, z, name) {
 }
 
 // a simplified human figure, 1.72 m tall, for scale
+const figGeo = {};
 function figure(x, y, z, robe, facing, name) {
   const g = new THREE.Group(); g.name = name || 'figure';
-  const legs = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.26, 0.95, 10), robe);
+  figGeo.legs = figGeo.legs || new THREE.CylinderGeometry(0.19, 0.26, 0.95, 10);
+  figGeo.body = figGeo.body || new THREE.CylinderGeometry(0.24, 0.21, 0.62, 10);
+  figGeo.head = figGeo.head || new THREE.SphereGeometry(0.115, 12, 10);
+  const legs = new THREE.Mesh(figGeo.legs, robe);
   legs.position.y = 0.48;
-  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.21, 0.62, 10), robe);
+  const body = new THREE.Mesh(figGeo.body, robe);
   body.position.y = 1.24;
-  const head = new THREE.Mesh(new THREE.SphereGeometry(0.115, 12, 10), robe);
+  const head = new THREE.Mesh(figGeo.head, robe);
   head.position.y = 1.66;
   [legs, body, head].forEach(p => { p.castShadow = true; p.receiveShadow = true; g.add(p); });
   g.position.set(x, y, z); g.rotation.y = facing || 0;
@@ -276,16 +281,35 @@ function figure(x, y, z, robe, facing, name) {
 }
 
 // ---------- helpers ----------
+// Box geometry is cached by size and texture density: the model asks for thousands of
+// boxes and only a few hundred distinct sizes, so one geometry serves many meshes.
+const boxGeoCache = new Map();
+function boxGeo(w, h, d, dens) {
+  const key = w + '|' + h + '|' + d + '|' + (dens || 0);
+  let g = boxGeoCache.get(key);
+  if (!g) {
+    g = new THREE.BoxGeometry(w, h, d);
+    if (dens) tileBoxUV(g, w, h, d, dens);
+    boxGeoCache.set(key, g);
+  }
+  return g;
+}
+const cylGeoCache = new Map();
+function cylGeo(r, h, seg) {
+  const key = r + '|' + h + '|' + seg;
+  let g = cylGeoCache.get(key);
+  if (!g) { g = new THREE.CylinderGeometry(r, r, h, seg); cylGeoCache.set(key, g); }
+  return g;
+}
 function box(w, h, d, material, x, y, z, name) {
-  const geo = new THREE.BoxGeometry(w, h, d);
-  if (material.userData && material.userData.dens) tileBoxUV(geo, w, h, d, material.userData.dens);
+  const geo = boxGeo(w, h, d, material.userData && material.userData.dens);
   const m = new THREE.Mesh(geo, material);
   m.position.set(x, y, z); m.name = name || 'block';
   m.castShadow = true; m.receiveShadow = true;
   return m;
 }
 function cyl(r, h, material, x, y, z, name, seg = 24) {
-  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg), material);
+  const m = new THREE.Mesh(cylGeo(r, h, seg), material);
   m.position.set(x, y, z); m.name = name || 'cylinder';
   m.castShadow = true; m.receiveShadow = true;
   return m;
@@ -344,7 +368,7 @@ function stairs(axis, startCoord, dir, count, rise, tread, width, y0, otherCoord
 }
 
 // ============================================================
-export function buildTemple() {
+export function buildTemple(opts = {}) {
   const root = new THREE.Group(); root.name = 'HerodsTemple';
   const F = {}; // id -> group
   const feat = (id, ...kids) => { const g = group(id, ...kids); g.userData.feature = id; F[id] = g; root.add(g); return g; };
@@ -383,9 +407,23 @@ export function buildTemple() {
 
   // ---------- platform + walls ----------
   const PX = 150, PZ = 235; // half extents (E-W 300 m, N-S 470 m)
+  // The two Huldah passages come up through the platform and emerge inside the Royal
+  // Stoa, so the pavement and the fill under it are laid as strips around two open
+  // shafts rather than as one unbroken slab.
+  const SHAFTS = [{ x0: -26, x1: -10, z0: -222, z1: -208 }, { x0: 20, x1: 40, z0: -222, z1: -208 }];
+  function slabs(y, h, material, name) {
+    const bz0 = -222, bz1 = -208;                        // the band the two shafts sit in
+    const out = [
+      box(PX * 2, h, bz0 + PZ, material, 0, y, (-PZ + bz0) / 2, name),
+      box(PX * 2, h, PZ - bz1, material, 0, y, (bz1 + PZ) / 2, name)
+    ];
+    [[-PX, -26], [-10, 20], [40, PX]].forEach(([x0, x1]) =>
+      out.push(box(x1 - x0, h, bz1 - bz0, material, (x0 + x1) / 2, y, (bz0 + bz1) / 2, name)));
+    return out;
+  }
   feat('mount',
-    box(PX * 2, 2, PZ * 2, M.stoneWarm, 0, -1, 0, 'esplanade_pavement'),
-    box(PX * 2 - 8, 64, PZ * 2 - 8, M.stoneDark, 0, -32, 0, 'platform_fill'));
+    slabs(-1.05, 2, M.stoneWarm, 'esplanade_pavement'),
+    slabs(-32, 64, M.stoneDark, 'platform_fill'));
 
   const wallParts = [];
   const WT = 4.5, WH = 66;
@@ -394,8 +432,10 @@ export function buildTemple() {
   wallParts.push(box(PX * 2, WH, WT, M.ashlar, 0, -WH / 2 + 0.2, -PZ, 'southern_wall'));
   wallParts.push(box(PX * 2, WH, WT, M.ashlar, 0, -WH / 2 + 0.2, PZ, 'northern_wall'));
   // top course band + parapet
-  [[PX, 0], [-PX, 0]].forEach(([x]) => wallParts.push(box(WT + 0.6, 1.6, PZ * 2, M.stone, x, 0.8, 0, 'wall_parapet')));
-  [[0, PZ], [0, -PZ]].forEach(([, z]) => wallParts.push(box(PX * 2, 1.6, WT + 0.6, M.stone, 0, 0.8, z, 'wall_parapet')));
+  // parapets sit a hair above the pavement and stop short of the corners, so no two
+  // faces are exactly coplanar (coincident faces flicker as the camera moves)
+  [[PX, 0], [-PX, 0]].forEach(([x]) => wallParts.push(box(WT + 0.6, 1.6, PZ * 2, M.stone, x, 0.86, 0, 'wall_parapet')));
+  [[0, PZ], [0, -PZ]].forEach(([, z]) => wallParts.push(box(PX * 2 - 2 * (WT + 0.9), 1.6, WT + 0.6, M.stone, 0, 0.86, z, 'wall_parapet')));
   for (let x = -PX + 6; x <= PX - 6; x += 6.5) {
     wallParts.push(box(1.3, 1.7, 1.3, M.stone, x, 2.45, PZ, 'merlon'));
     wallParts.push(box(1.3, 1.7, 1.3, M.stone, x, 2.45, -PZ, 'merlon'));
@@ -404,67 +444,261 @@ export function buildTemple() {
     wallParts.push(box(1.3, 1.7, 1.3, M.stone, PX, 2.45, z, 'merlon'));
     wallParts.push(box(1.3, 1.7, 1.3, M.stone, -PX, 2.45, z, 'merlon'));
   }
+  // towers at the northern angles of the enclosure (Josephus, War 5.238-246; the southern
+  // angles are occupied by the ends of the Royal Stoa, which ran wall to wall)
+  [[PX - 10, PZ - 10, 'north_east'], [-PX + 10, PZ - 10, 'north_west']].forEach(([x, z, nm]) => {
+    wallParts.push(box(18, 13, 18, M.ashlar, x, 6.3, z, 'corner_tower_' + nm));
+    wallParts.push(box(19.6, 1.4, 19.6, M.stone, x, 13.5, z, 'corner_tower_cornice_' + nm));
+  });
   feat('walls', wallParts);
 
   // ---------- southern stairs & Huldah gates ----------
+  // The pilgrims' front. A broad flight climbs to a landing at the foot of the wall;
+  // the double gate and the triple gate open in the wall face itself, and each passage
+  // ramps up through the platform to emerge in the Royal Stoa above (Josephus, Ant.
+  // 15.410; Middot 1:3 for the two southern gates).
   const south = [];
-  south.push(stairs('z', -PZ - 66, 1, 34, 0.5, 1.85, 68, -25, -12, M.stone, -26));
-  south.push(box(72, 1.6, 12, M.stone, -12, -7.4, -PZ - 8, 'stair_landing'));
-  south.push(box(14, 12, 3.4, M.stoneDark, -18, -14, -PZ - 1.7, 'double_gate'));
-  south.push(box(20, 11, 3.4, M.stoneDark, 30, -13.5, -PZ - 1.7, 'triple_gate'));
-  south.push(box(17, 2, 4.4, M.stone, -18, -7.6, -PZ - 2, 'double_gate_lintel'));
-  south.push(box(23, 2, 4.4, M.stone, 30, -7.6, -PZ - 2, 'triple_gate_lintel'));
-  for (let i = 0; i < 9; i++) south.push(box(2.4, 2.6, 2.4, M.stone, -56 + i * 12, -23.5, -PZ - 70, 'mikveh_kerb_' + (i + 1)));
+  const WFACE = -PZ - 2.25;                 // outer face of the southern wall
+  const SILL = -8;                          // the landing, and the sill of both gates
+  // The great stairway: thirty steps of alternating width — one stride, then two — so
+  // that no one could run at the house of God. Mazar excavated a 64 m breadth of it.
+  {
+    let z = -PZ - 61, top = -25;
+    for (let i = 0; i < 30; i++) {
+      const tread = i % 2 ? 2.45 : 1.05;
+      top += 17 / 30;
+      south.push(box(64, top + 26, tread, M.stone, -12, (top - 26) / 2, z + tread / 2, 'southern_step_' + (i + 1)));
+      z += tread;
+    }
+  }
+  south.push(box(68, 1.6, 6.5, M.stone, -12, SILL + 0.6, WFACE - 3.2, 'stair_landing'));
+  // a narrower stepped approach from the street to the triple gate
+  south.push(stairs('z', -PZ - 44, 1, 18, 0.5, 1.5, 26, -17, 30, M.stone, -26));
+  south.push(box(30, 1.6, 6.5, M.stone, 30, SILL + 0.6, WFACE - 3.2, 'triple_gate_landing'));
+
+  // one gateway: dark opening set into the wall, jambs and lintel standing proud of it
+  function gateway(cx, openings, w, h, tag2) {
+    const total = openings * w + (openings - 1) * 2.2;
+    const left = cx - total / 2;
+    for (let i = 0; i < openings; i++) {
+      const x = left + w / 2 + i * (w + 2.2);
+      south.push(box(w, h, 3.2, M.stoneDark, x, SILL + h / 2, WFACE + 0.4, tag2 + '_opening_' + (i + 1)));
+      south.push(box(w - 0.6, h - 1.4, 0.5, mat('gate_shadow', { color: 0x100e0a, roughness: 1 }),
+        x, SILL + (h - 1.4) / 2, WFACE - 0.4, tag2 + '_doorway_' + (i + 1)));
+      // leaves of the door, standing open against the jambs
+      south.push(box(0.4, h - 1.8, 1.5, M.cedar, x - w / 2 + 0.9, SILL + (h - 1.8) / 2, WFACE - 1.1, tag2 + '_door_leaf_' + (i + 1)));
+    }
+    // jambs between and either side, and a continuous lintel over the whole gateway
+    for (let i = 0; i <= openings; i++) {
+      const x = left - 1.1 + i * (w + 2.2);
+      south.push(box(2.2, h + 1.2, 2.6, M.stone, x, SILL + (h + 1.2) / 2, WFACE - 1.1, tag2 + '_jamb_' + (i + 1)));
+    }
+    south.push(box(total + 4.4, 1.8, 3, M.stone, cx, SILL + h + 1.7, WFACE - 1.2, tag2 + '_lintel'));
+    south.push(box(total + 6, 0.9, 3.4, M.stone, cx, SILL + h + 3.1, WFACE - 1.4, tag2 + '_cornice'));
+    // the vaulted passage running north through the fill to the foot of the shaft
+    const sh = SHAFTS[tag2 === 'double_gate' ? 0 : 1];
+    south.push(box(total, h, Math.abs(sh.z0 - (WFACE + 2)), mat('passage_dark', { color: 0x15130f, roughness: 1 }),
+      cx, SILL + h / 2, (WFACE + 2 + sh.z0) / 2, tag2 + '_passage'));
+  }
+  gateway(-18, 2, 6.2, 7.2, 'double_gate');
+  gateway(30, 3, 4.6, 6.6, 'triple_gate');
+
+  // each passage ends in an open shaft in the pavement, with steps rising into the stoa.
+  // Eighteen shallow risers: a walker who goes down into the shaft has to be able to
+  // climb back out (the walk mode refuses any step over 0.62 m).
+  SHAFTS.forEach((sh, i) => {
+    const w = sh.x1 - sh.x0, cx = (sh.x0 + sh.x1) / 2;
+    const N = 18, rise = 8.7 / N, tread = (sh.z1 - sh.z0) / N;
+    for (let s = 0; s < N; s++) {
+      const y = SILL + (s + 1) * rise;
+      south.push(box(w - 1.6, rise + 0.1, tread + 0.05, M.stoneWarm, cx, y - rise / 2, sh.z0 + tread / 2 + s * tread, 'huldah_exit_step_' + (i + 1) + '_' + (s + 1)));
+    }
+    // the kerb round three sides of the mouth, standing on the stoa floor; the stair
+    // side is left open so a walker can go down the steps and come back up them
+    south.push(box(1.2, 1.1, sh.z1 - sh.z0 + 2.4, M.stone, sh.x0 - 0.6, 1.25, (sh.z0 + sh.z1) / 2, 'exit_kerb_west_' + (i + 1)));
+    south.push(box(1.2, 1.1, sh.z1 - sh.z0 + 2.4, M.stone, sh.x1 + 0.6, 1.25, (sh.z0 + sh.z1) / 2, 'exit_kerb_east_' + (i + 1)));
+    south.push(box(w + 2.4, 1.1, 1.2, M.stone, cx, 1.25, sh.z0 - 0.6, 'exit_kerb_south_' + (i + 1)));
+    // shaft walls, so the sides of the cut show masonry rather than a void
+    south.push(box(0.8, 9, sh.z1 - sh.z0, M.ashlar, sh.x0 + 0.4, -4.4, (sh.z0 + sh.z1) / 2, 'shaft_wall_west_' + (i + 1)));
+    south.push(box(0.8, 9, sh.z1 - sh.z0, M.ashlar, sh.x1 - 0.4, -4.4, (sh.z0 + sh.z1) / 2, 'shaft_wall_east_' + (i + 1)));
+    south.push(box(w, 9, 0.8, M.ashlar, cx, -4.4, sh.z1 - 0.4, 'shaft_wall_north_' + (i + 1)));
+  });
+  for (let i = 0; i < 9; i++) south.push(box(2.4, 2.6, 2.4, M.stone, -56 + i * 12, -23.5, -PZ - 74, 'mikveh_kerb_' + (i + 1)));
   feat('huldah', south);
 
   // ---------- the city of Jerusalem ----------
   const houseMats = [M.stoneWarm, M.stone, M.stoneDark];
-  // insulae laid along streets: blocks of flat-roofed courtyard houses, packed tight
+  const awningMats = [
+    mat('awning_flax',   { color: 0xd8c79c, roughness: 0.95, side: THREE.DoubleSide }),
+    mat('awning_madder', { color: 0x9d5a45, roughness: 0.95, side: THREE.DoubleSide }),
+    mat('awning_indigo', { color: 0x4c5b7a, roughness: 0.95, side: THREE.DoubleSide })
+  ];
+  // deterministic noise, so the city is the same city every time it is built
+  const hash = (a, b) => { const t = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return t - Math.floor(t); };
+
+  // A Jerusalem house: wings of one and two storeys around a small open court,
+  // with a parapet (Deuteronomy 22:8), an outside stair, and sometimes an awning.
+  function courtHouse(cx, cz, rot, w, d, seed, tall) {
+    const out = [];
+    const ca = Math.cos(rot), sa = Math.sin(rot);
+    const put = (lx, lz, bw, bd, h, m, name, lift) => {
+      const wx = cx + lx * ca - lz * sa, wz = cz + lx * sa + lz * ca;
+      const gy = terrainY(wx, wz);
+      const b = box(bw, h + 5, bd, m, wx, gy + (h + 5) / 2 - 5 + (lift || 0), wz, name);
+      b.rotation.y = -rot;
+      out.push(b);
+      return { wx, wz, gy, h };
+    };
+    const t = w / 2, u = d / 2, court = Math.min(w, d) * 0.34;
+    const wingW = (w - court) / 2, wingD = (d - court) / 2;
+    const base = 4.4 + hash(seed, 3) * 2.2 + (tall ? 2.6 : 0);
+    // four wings around the court; one is left open as the entry passage
+    const open = Math.floor(hash(seed, 7) * 4);
+    const wings = [
+      [0, -u + wingD / 2, w, wingD],
+      [0,  u - wingD / 2, w, wingD],
+      [-t + wingW / 2, 0, wingW, court],
+      [ t - wingW / 2, 0, wingW, court]
+    ];
+    wings.forEach((wg, k) => {
+      if (k === open && hash(seed, 11 + k) > 0.45) return;
+      const h = base * (0.8 + hash(seed, 17 + k) * 0.5);
+      const r = put(wg[0], wg[1], wg[2], wg[3], h, houseMats[Math.floor(hash(seed, 23 + k) * 3)], 'house');
+      // parapet round the roof
+      const par = box(wg[2], 0.7, wg[3], M.stoneWarm, r.wx, r.gy + h + 0.35, r.wz, 'roof_parapet');
+      par.rotation.y = -rot;
+      out.push(par);
+      // an upper room, set back from the street edge
+      if (hash(seed, 31 + k) > 0.62) {
+        const uh = base * 0.72;
+        put(wg[0] * 0.7, wg[1] * 0.7, wg[2] * 0.6, wg[3] * 0.72, uh, houseMats[Math.floor(hash(seed, 41 + k) * 3)], 'upper_room', h);
+      }
+      // outside stair to the roof
+      if (k === 0 && hash(seed, 53) > 0.4) {
+        for (let st = 0; st < 5; st++) put(wg[0] + t * 0.42, wg[1] + wingD * 0.72, 1.9, 1.0, 0.9 + st * (h / 5), M.stoneDark, 'roof_stair');
+      }
+    });
+    // a cloth awning over the court
+    if (hash(seed, 61) > 0.5) {
+      const m = awningMats[Math.floor(hash(seed, 67) * 3)];
+      const gy = terrainY(cx, cz);
+      const aw = box(court * 0.95, 0.12, court * 0.95, m, cx, gy + base * 0.75, cz, 'court_awning');
+      aw.rotation.y = -rot; out.push(aw);
+    }
+    return out;
+  }
+
+  // A courtyard mansion of the priestly quarter: peristyle court, mosaic floor.
+  function mansion(cx, cz, rot, seed) {
+    const out = [], gy = terrainY(cx, cz), ca = Math.cos(rot), sa = Math.sin(rot);
+    const W = 34, D = 26;
+    const put = (lx, lz, bw, bd, h, m, name, lift) => {
+      const wx = cx + lx * ca - lz * sa, wz = cz + lx * sa + lz * ca;
+      const b = box(bw, h + 6, bd, m, wx, terrainY(wx, wz) + (h + 6) / 2 - 6 + (lift || 0), wz, name);
+      b.rotation.y = -rot; out.push(b);
+    };
+    put(0, -D / 2 + 5, W, 10, 8.5, M.stone, 'mansion_wing');
+    put(0,  D / 2 - 5, W, 10, 7.2, M.stoneWarm, 'mansion_wing');
+    put(-W / 2 + 4, 0, 8, D - 20, 7.6, M.stone, 'mansion_wing');
+    put( W / 2 - 4, 0, 8, D - 20, 7.6, M.stoneWarm, 'mansion_wing');
+    const floor = box(W - 16, 0.4, D - 20, M.marble, cx, gy + 0.2, cz, 'mansion_court');
+    floor.rotation.y = -rot; out.push(floor);
+    for (let i = 0; i < 6; i++) {                      // peristyle
+      const lx = (i % 3 - 1) * 6.5, lz = (i < 3 ? -1 : 1) * (D / 2 - 11);
+      const wx = cx + lx * ca - lz * sa, wz = cz + lx * sa + lz * ca;
+      out.push(column(wx, wz, 5.4, 0.42));
+      out[out.length - 1].position.y = terrainY(wx, wz);
+    }
+    if (hash(seed, 3) > 0.4) put(W / 2 - 7, -D / 2 + 6, 7, 7, 13, M.ashlar, 'mansion_tower');
+    return out;
+  }
+
+  // Ground the city may not build on: the great stairs and their forecourt, the
+  // Robinson's Arch stair and the street at the foot of the wall, and the pools.
+  // [x0, z0, x1, z1] in model coordinates.
+  const KEEP_CLEAR = [
+    [-80, -330, 60, -232],      // the southern stairway and its plaza
+    [-215, -300, -152, 40],     // the Tyropoeon street and Robinson's Arch
+    [-105, -600, 20, -520],     // the pool of Siloam and its approach
+    [-120, 300, 10, 400]        // Bethesda and its porches
+  ];
+  const clearOf = (cx, cz, halfW, halfD) => !KEEP_CLEAR.some(([x0, z0, x1, z1]) =>
+    cx + halfW > x0 && cx - halfW < x1 && cz + halfD > z0 && cz - halfD < z1);
+
+  // Insulae strung along streets that bend with the hillside, not a chessboard.
+  // A point counts as inside a wall run only if it sits on the same side of every
+  // course as a point we know is within the walls — keeps insulae from spilling
+  // past a wall that cuts diagonally across the zone's bounding rectangle.
+  function insideWall(pts, x, z, refX, refZ) {
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [x1, z1] = pts[i], [x2, z2] = pts[i + 1];
+      const dx = x2 - x1, dz = z2 - z1;
+      const crossRef = dx * (refZ - z1) - dz * (refX - x1);
+      const crossPt = dx * (z - z1) - dz * (x - x1);
+      if (crossRef !== 0 && Math.sign(crossPt) !== Math.sign(crossRef)) return false;
+    }
+    return true;
+  }
   function houses(zone, seedBase) {
     const out = [];
-    const step = 26, gap = 9;
+    const step = 34;
     let i = 0;
     for (let x = zone.x0; x < zone.x1; x += step) {
+      // each north-south street leans a little, so blocks are never all square to each other
+      const lean = (hash(seedBase, Math.floor(x / step)) - 0.5) * 0.5;
       for (let z = zone.z0; z < zone.z1; z += step) {
-        if ((i * 37 + Math.floor(x / step) * 13) % 11 === 0) { i++; continue; }   // streets and yards
-        const jx = ((i * 53) % 9) - 4, jz = ((i * 91) % 9) - 4;
-        const cx = x + jx, cz = z + jz;
-        const gy = terrainY(cx, cz);
-        const slope = Math.abs(terrainY(cx + 12, cz) - terrainY(cx - 12, cz)) + Math.abs(terrainY(cx, cz + 12) - terrainY(cx, cz - 12));
-        if (gy < zone.minY || slope > 13) { i++; continue; }
-        for (let q = 0; q < 4; q++) {
-          if ((i * 7 + q * 3) % 5 === 0) continue;
-          const w = 6.5 + ((i + q) % 3) * 1.8, dz = 6 + ((i + q * 2) % 3) * 1.8;
-          const h = 4 + ((i * 3 + q) % 4) * 1.9;
-          const hx = cx + (q % 2 ? 1 : -1) * (step / 2 - gap / 2 - 1), hz = cz + (q < 2 ? -1 : 1) * (step / 2 - gap / 2 - 1);
-          const g2 = terrainY(hx, hz);
-          const b = box(w, h + 4, dz, houseMats[(i + q) % 3], hx, g2 + h / 2 - 2, hz, 'house');
-          b.rotation.y = (((i + q) % 5) - 2) * 0.03;
-          out.push(b);
-          if ((i + q) % 3 === 0) out.push(box(w * 0.5, 0.9, dz * 0.5, M.stoneWarm, hx + 1, g2 + h + 0.4, hz - 1, 'roof_parapet'));
-        }
         i++;
+        const r1 = hash(seedBase + x, z);
+        if (r1 > 0.82) continue;                                    // a lane, a yard, a market square
+        const cx = x + (hash(x, z) - 0.5) * 9, cz = z + (hash(z, x) - 0.5) * 9;
+        if (zone.walls && !zone.walls.every(wl => insideWall(wl.pts, cx, cz, wl.refX, wl.refZ))) continue;
+        const gy = terrainY(cx, cz);
+        const slope = Math.abs(terrainY(cx + 14, cz) - terrainY(cx - 14, cz)) + Math.abs(terrainY(cx, cz + 14) - terrainY(cx, cz - 14));
+        if (gy < zone.minY || slope > 15) continue;
+        const rot = lean + (hash(cx, cz) - 0.5) * 0.28;
+        const seed = seedBase + i * 7.3;
+        if (!clearOf(cx, cz, 20, 20)) continue;      // the great works come first
+        if (zone.grand && r1 < 0.13) { out.push(...mansion(cx, cz, rot, seed)); continue; }
+        const w = 17 + hash(seed, 1) * 11, d = 15 + hash(seed, 2) * 10;
+        out.push(...courtHouse(cx, cz, rot, w, d, seed, zone.grand && r1 < 0.35));
       }
     }
     return out;
   }
+  // A wall run, cut into short courses so it rides the slope with no gaps under it.
   function cityWall(pts, h, name) {
     const out = [];
     for (let i = 0; i < pts.length - 1; i++) {
       const [x1, z1] = pts[i], [x2, z2] = pts[i + 1];
-      const len = Math.hypot(x2 - x1, z2 - z1), mx = (x1 + x2) / 2, mz = (z1 + z2) / 2;
-      const gy = terrainY(mx, mz);
-      const seg = box(len, h + 10, 3.6, M.ashlar, mx, gy + (h + 10) / 2 - 10, mz, name + '_segment');
-      seg.rotation.y = -Math.atan2(z2 - z1, x2 - x1);
-      out.push(seg);
-      out.push(box(6.5, h + 14, 6.5, M.ashlar, x1, terrainY(x1, z1) + (h + 14) / 2 - 10, z1, name + '_tower'));
+      const run = Math.hypot(x2 - x1, z2 - z1);
+      const ang = -Math.atan2(z2 - z1, x2 - x1);
+      const n = Math.max(2, Math.round(run / 13));
+      const segLen = run / n;
+      for (let k = 0; k < n; k++) {
+        const f = (k + 0.5) / n;
+        const mx = x1 + (x2 - x1) * f, mz = z1 + (z2 - z1) * f;
+        const gy = terrainY(mx, mz);
+        // each course is buried deep enough that a dip in the ground never shows daylight
+        const seg = box(segLen + 0.6, h + 26, 3.6, M.ashlar, mx, gy + (h + 26) / 2 - 26, mz, name + '_course');
+        seg.rotation.y = ang;
+        out.push(seg);
+        const cap = box(segLen + 1.4, 1.3, 4.6, M.stone, mx, gy + h + 0.65, mz, name + '_walk');
+        cap.rotation.y = ang; out.push(cap);
+      }
+      const th = h + 9;
+      out.push(box(7.5, th + 26, 7.5, M.ashlar, x1, terrainY(x1, z1) + (th + 26) / 2 - 26, z1, name + '_tower'));
+      out.push(box(9, 1.4, 9, M.stone, x1, terrainY(x1, z1) + th + 0.7, z1, name + '_tower_crown'));
     }
+    const last = pts[pts.length - 1];
+    out.push(box(7.5, h + 35, 7.5, M.ashlar, last[0], terrainY(last[0], last[1]) + (h + 35) / 2 - 26, last[1], name + '_tower'));
     return out;
   }
 
   // Upper City on the western hill, with Herod's palace and its three great towers
   const upper = [];
-  upper.push(...houses({ x0: -646, x1: -252, z0: -434, z1: 148, minY: -14 }, 11));
+  upper.push(...houses({ x0: -646, x1: -252, z0: -434, z1: 148, minY: -14, grand: true,
+    walls: [{ pts: [[-660, -150], [-660, 60], [-520, 150], [-300, 150], [-215, 96]], refX: -450, refZ: -50 },
+            { pts: [[-660, -150], [-560, -380], [-380, -520], [-150, -620]], refX: -450, refZ: -50 }] }, 11));
   upper.push(box(96, 22, 62, M.stone, -560, terrainY(-560, -120) + 10, -120, 'herods_palace'));
   upper.push(box(102, 3, 68, M.stone, -560, terrainY(-560, -120) + 22.5, -120, 'palace_cornice'));
   [[-600, -60, 44, 'phasael_tower'], [-560, -52, 36, 'hippicus_tower'], [-520, -60, 32, 'mariamne_tower']]
@@ -479,44 +713,164 @@ export function buildTemple() {
 
   // the Lower City on the City of David spur, running south from the Mount
   const lower = [];
-  lower.push(...houses({ x0: -152, x1: 62, z0: -676, z1: -272, minY: -78 }, 37));
+  lower.push(...houses({ x0: -152, x1: 62, z0: -676, z1: -272, minY: -78,
+    walls: [{ pts: [[-150, -620], [40, -660], [130, -520], [150, -300]], refX: -50, refZ: -450 }] }, 37));
   lower.push(...cityWall([[-150, -620], [40, -660], [130, -520], [150, -300]], 10, 'first_wall_east'));
   feat('cityofdavid', lower);
 
   // Bezetha, the new quarter north of the Mount, and the second wall
   const bez = [];
-  bez.push(...houses({ x0: -302, x1: 118, z0: 296, z1: 556, minY: -24 }, 59));
+  bez.push(...houses({ x0: -302, x1: 118, z0: 296, z1: 556, minY: -24,
+    walls: [{ pts: [[-215, 96], [-330, 300], [-180, 430], [60, 400], [150, 300]], refX: -100, refZ: 420 }] }, 59));
   bez.push(...cityWall([[-215, 96], [-330, 300], [-180, 430], [60, 400], [150, 300]], 10, 'second_wall'));
   feat('bezetha', bez);
 
-  // Golgotha: a quarried knoll outside the second wall, north-west of the city
-  const knollGeo = new THREE.SphereGeometry(26, 24, 14);
-  const kp = knollGeo.attributes.position;
-  for (let i = 0; i < kp.count; i++) {
-    const x = kp.getX(i), y = kp.getY(i), z = kp.getZ(i);
-    kp.setXYZ(i, x * (1 + 0.12 * Math.sin(z * 0.3)), Math.max(0, y) * 0.34, z * (1 + 0.1 * Math.cos(x * 0.25)));
+  // Golgotha: an abandoned quarry outside the second wall. A knoll of hard rock the
+  // quarrymen left standing, a cut face behind it, and rock-hewn tombs in a garden
+  // at its foot — one of them new, with a stone rolled to the door.
+  {
+    const gx = -395, gz = 250, gy0 = terrainY(gx, gz);
+    const gol = [];
+    const knollGeo = new THREE.SphereGeometry(22, 28, 16);
+    const kp = knollGeo.attributes.position;
+    for (let i = 0; i < kp.count; i++) {
+      const x = kp.getX(i), y = kp.getY(i), z = kp.getZ(i);
+      const bump = 1 + 0.16 * Math.sin(z * 0.34) + 0.12 * Math.cos(x * 0.29) + 0.07 * Math.sin((x + z) * 0.7);
+      kp.setXYZ(i, x * bump, Math.max(0, y) * 0.46 * (1 + 0.1 * Math.sin(x * 0.5)), z * bump);
+    }
+    knollGeo.computeVertexNormals();
+    const knoll = new THREE.Mesh(knollGeo, M.stoneDark);
+    knoll.position.set(gx, gy0 - 0.4, gz); knoll.name = 'golgotha_knoll';
+    knoll.receiveShadow = true; knoll.castShadow = true;
+    gol.push(knoll);
+    // the quarry face: stepped benches where the stone was taken out
+    for (let i = 0; i < 5; i++) {
+      const b = box(74 - i * 8, 3.4, 12, M.stoneDark, gx + 6, gy0 + 1.4 + i * 2.6, gz + 30 + i * 5.5, 'quarry_bench_' + (i + 1));
+      b.rotation.y = 0.06 * i; gol.push(b);
+    }
+    for (let i = 0; i < 7; i++) {                       // dressed blocks left lying
+      const bx2 = gx - 40 + (i * 17) % 88, bz2 = gz - 26 + ((i * 29) % 34);
+      const b = box(4.2, 2.1, 2.6, M.stone, bx2, terrainY(bx2, bz2) + 1, bz2, 'quarried_block_' + (i + 1));
+      b.rotation.y = i * 0.7; gol.push(b);
+    }
+    // the garden below, and its rock-cut tombs in the cut face
+    const gardenTrunk = mat('garden_trunk', { color: 0x5c4a35, roughness: 0.9 });
+    const gardenLeaf = mat('garden_foliage', { color: 0x6f8158, roughness: 0.94 });
+    for (let i = 0; i < 6; i++) {
+      const tx = gx - 46 + i * 19, tz = gz - 44 - (i % 3) * 9, ty = terrainY(tx, tz);
+      gol.push(cyl(0.34, 2.6, gardenTrunk, tx, ty + 1.3, tz, 'garden_trunk', 8));
+      const cr = new THREE.Mesh(new THREE.IcosahedronGeometry(2.2 + (i % 3) * 0.4, 1), gardenLeaf);
+      cr.position.set(tx, ty + 3.7, tz); cr.scale.set(1.1, 0.8, 1.1);
+      cr.name = 'garden_canopy'; cr.castShadow = true; gol.push(cr);
+    }
+    for (let i = 0; i < 4; i++) {                       // tomb chambers cut in the scarp
+      const tx = gx - 34 + i * 22, tz = gz - 58, ty = terrainY(tx, tz);
+      gol.push(box(11, 6.5, 8, M.stoneDark, tx, ty + 2.6, tz, 'rock_cut_tomb_' + (i + 1)));
+      gol.push(box(2.4, 2.6, 1.2, mat('tomb_mouth', { color: 0x14120e, roughness: 1 }), tx, ty + 1.3, tz - 4.2, 'tomb_mouth_' + (i + 1)));
+      // a channel and a disc stone at the newest tomb
+      if (i === 1) {
+        gol.push(box(7.5, 0.7, 1.6, M.stone, tx + 2.2, ty + 0.35, tz - 4.9, 'rolling_stone_channel'));
+        const disc = new THREE.Mesh(new THREE.CylinderGeometry(1.55, 1.55, 0.45, 22), M.stone);
+        disc.rotation.z = Math.PI / 2; disc.position.set(tx + 4.4, ty + 1.6, tz - 4.9);
+        disc.name = 'rolling_stone'; disc.castShadow = true; gol.push(disc);
+      }
+    }
+    feat('golgotha', gol);
   }
-  knollGeo.computeVertexNormals();
-  const knoll = new THREE.Mesh(knollGeo, M.stoneDark);
-  knoll.position.set(-395, terrainY(-395, 250) - 0.5, 250); knoll.name = 'golgotha_knoll';
-  knoll.receiveShadow = true; knoll.castShadow = true;
-  feat('golgotha', knoll,
-    ...Array.from({ length: 5 }, (_, i) => box(9, 4, 7, M.stoneDark, -350 + i * 13, terrainY(-350 + i * 13, 292) + 1.4, 292, 'rock_cut_tomb_' + (i + 1))));
 
   // Pools: Siloam at the south end of the spur, Bethesda north of the Mount
   const water = mat('pool_water', { color: 0x3f6b74, roughness: 0.14, metalness: 0.1 });
-  const siloamY = terrainY(-40, -690);
-  feat('siloam',
-    box(46, 2, 34, water, -40, siloamY + 0.4, -690, 'pool_of_siloam'),
-    box(54, 3, 42, M.stone, -40, siloamY - 0.6, -690, 'siloam_kerb'),
-    ...Array.from({ length: 8 }, (_, i) => box(3.4, 1.1, 42, M.stone, -66 + i * 6.6, siloamY + 1.1 + i * 0.42, -690, 'siloam_step_' + (i + 1))));
-  const bethY = terrainY(-40, 330);
-  feat('bethesda',
-    box(40, 2.4, 30, water, -62, bethY + 0.5, 330, 'bethesda_north_pool'),
-    box(40, 2.4, 30, water, -62, bethY + 0.5, 372, 'bethesda_south_pool'),
-    box(96, 2, 8, M.stone, -62, bethY + 1.2, 351, 'bethesda_central_dam'),
-    ...Array.from({ length: 10 }, (_, i) => cyl(0.8, 8, M.marble, -104 + i * 9.4, bethY + 4, 351, 'bethesda_colonnade_' + (i + 1), 16)),
-    box(96, 1.2, 46, M.cedar, -62, bethY + 8.4, 351, 'bethesda_porches_roof'));
+  // cut basin: floor slab, four retaining walls standing clear of the ground, water
+  // inside them, and shallow steps down on the sides asked for.
+  function basin(cx, cz, W, D, opts) {
+    const o = opts || {};
+    const out = [];
+    const g = terrainY(cx, cz);
+    const wallT = 2.8, rimH = o.rim == null ? 3.4 : o.rim;
+    const rimY = g + rimH * 0.55 + 1.6;                 // walls stand proud of the uneven ground
+    const waterY = g + 2.1;                             // water above the local hummocks
+    out.push(box(W + wallT * 2, 16, D + wallT * 2, M.stoneDark, cx, g - 8.4, cz, (o.name || 'pool') + '_floor'));
+    out.push(box(W, 3.2, D, water, cx, waterY - 1.6, cz, (o.name || 'pool') + '_water'));
+    const wall = (x, z, w, d, nm) => out.push(box(w, rimH + 22, d, M.stone, cx + x, rimY - 11 + rimH * 0.45, cz + z, nm));
+    wall(0, -(D / 2 + wallT / 2), W + wallT * 2, wallT, (o.name || 'pool') + '_wall_s');
+    wall(0,  (D / 2 + wallT / 2), W + wallT * 2, wallT, (o.name || 'pool') + '_wall_n');
+    wall(-(W / 2 + wallT / 2), 0, wallT, D, (o.name || 'pool') + '_wall_w');
+    if (!o.openEast) wall((W / 2 + wallT / 2), 0, wallT, D, (o.name || 'pool') + '_wall_e');
+    // steps: shallow flights inside the western end, down to the water
+    const tiers = o.steps == null ? 4 : o.steps;
+    for (let i = 0; i < tiers; i++) {
+      const y = rimY + rimH * 0.45 - (i + 1) * ((rimH * 0.45 + 0.6) / tiers);
+      out.push(box(2.6, 5, D - 2, M.stone, cx - W / 2 + 1.4 + i * 2.6, y - 2.1, cz, (o.name || 'pool') + '_step_' + (i + 1)));
+    }
+    return { out, g, rimY: rimY + rimH * 0.45, waterY };
+  }
+  // The pool of Siloam: a broad open basin at the mouth of Hezekiah's tunnel, with
+  // flights of shallow steps down to the water on three sides (John 9:7).
+  const siloamX = -46, siloamZ = -566;
+  {
+    const b = basin(siloamX, siloamZ, 44, 34, { name: 'pool_of_siloam', openEast: true, rim: 4.2 });
+    const sil = b.out;
+    // Hezekiah's tunnel comes out at the eastern end and feeds the pool
+    sil.push(box(10, 6, 8, M.stoneDark, siloamX + 30, b.g + 2, siloamZ, 'hezekiah_tunnel_mouth'));
+    sil.push(box(3.2, 3, 1.4, mat('tunnel_mouth', { color: 0x14120e, roughness: 1 }), siloamX + 26, b.g + 1.5, siloamZ, 'tunnel_opening'));
+    sil.push(box(16, 0.6, 2.4, water, siloamX + 20, b.waterY - 0.2, siloamZ, 'siloam_channel'));
+    // a colonnaded walk along the northern rim
+    for (let i = 0; i < 7; i++) {
+      const px = siloamX - 18 + i * 6.2, pz = siloamZ + 24;
+      const c = column(px, pz, 5.2, 0.4); c.position.y = terrainY(px, pz); sil.push(c);
+      sil.push(box(1.5, 12, 1.5, M.stone, px, terrainY(px, pz) - 6, pz, 'walk_footing'));
+    }
+    sil.push(box(48, 0.8, 7, M.cedar, siloamX - 3, b.rimY + 5.4, siloamZ + 24, 'siloam_walk_roof'));
+    feat('siloam', sil);
+  }
+  // Bethesda: two rock-cut reservoirs, one north and one south of a central dam,
+  // sunk below the rim and ringed by five colonnaded porches — four round the sides
+  // and the fifth on the dam between them (John 5:2-4).
+  {
+    const bx = -62, bz = 351;
+    const bet = [];
+    const PWID = 44, PLEN = 30, DAM = 10;
+    const north = basin(bx, bz - PLEN / 2 - DAM / 2 - 1, PWID, PLEN, { name: 'bethesda_north_pool', rim: 4.6 });
+    const south = basin(bx, bz + PLEN / 2 + DAM / 2 + 1, PWID, PLEN, { name: 'bethesda_south_pool', rim: 4.6 });
+    bet.push(...north.out, ...south.out);
+    const rim = north.rimY;
+    bet.push(box(PWID + 12, 3, DAM, M.ashlar, bx, rim - 1, bz, 'bethesda_central_dam'));
+
+    // five porches: one on each side of the twin pools and the fifth on the dam between
+    const porch = (cx, cz, along, len, name) => {
+      const cols = Math.max(4, Math.round(len / 5.6));
+      for (let i = 0; i < cols; i++) {
+        const f = (i / (cols - 1) - 0.5) * len;
+        const px = cx + (along === 'x' ? f : 0), pz = cz + (along === 'x' ? 0 : f);
+        const c = column(px, pz, 6.4, 0.46); c.position.y = terrainY(px, pz); bet.push(c);
+      }
+      const rw = along === 'x' ? len + 5 : 7, rd = along === 'x' ? 7 : len + 5;
+      bet.push(box(rw, 0.9, rd, M.cedar, cx, rim + 5.9, cz, name + '_roof'));
+      bet.push(box(rw + 0.6, 0.5, rd + 0.6, M.stoneWarm, cx, rim + 6.5, cz, name + '_cornice'));
+    };
+    const span = PLEN * 2 + DAM + 12;
+    porch(bx, bz, 'x', PWID + 12, 'porch_middle');
+    porch(bx, bz - span / 2, 'x', PWID + 12, 'porch_north');
+    porch(bx, bz + span / 2, 'x', PWID + 12, 'porch_south');
+    porch(bx - PWID / 2 - 10, bz, 'z', span, 'porch_west');
+    porch(bx + PWID / 2 + 10, bz, 'z', span, 'porch_east');
+
+    // the sick waiting under the porches (John 5:3)
+    const sickRobe = mat('waiting_robe', { color: 0xb8a98c, roughness: 0.92 });
+    [[-14, -36], [-4, -33], [8, -36], [18, -31], [-18, 33], [-4, 36], [10, 33], [20, 30]]
+      .forEach(([ox, oz], i) => {
+        const px = bx + ox, pz = bz + oz;
+        bet.push(figure(px, terrainY(px, pz), pz, sickRobe, i % 2 ? 0.4 : -2.6, 'waiting_' + (i + 1)));
+      });
+    feat('bethesda', bet);
+  }
+
+  // The Pool of Israel: the great reservoir cut against the north wall at the north-east
+  // angle, filling the head of the valley Herod had to fill in to extend the platform.
+  {
+    const b = basin(96, PZ + 34, 96, 44, { name: 'pool_of_israel', rim: 5.2, steps: 3 });
+    F.walls.add(group('pool_of_israel', b.out));
+  }
 
   // the Kidron and Hinnom valleys, and the Mount of Olives with its olive groves
   const olive = mat('olive_foliage', { color: 0x6d7a5a, roughness: 0.95, metalness: 0 });
@@ -562,55 +916,121 @@ export function buildTemple() {
   feat('hinnom', wadi('x', -640, 180, 40, -830, 26, 'hinnom_valley_bed'));
 
   // ---------- porticoes ----------
+  // The rows stop short of the angles, where the corner towers stand, and short of the
+  // Royal Stoa at the south, whose end walls close the building.
   const northRows = [
-    colonnade('x', -140, 140, PZ - 6, 41, 12.5, 0.85),
-    colonnade('x', -140, 140, PZ - 14, 41, 12.5, 0.85)
+    colonnade('x', -126, 126, PZ - 6, 37, 12.5, 0.85),
+    colonnade('x', -126, 126, PZ - 14, 37, 12.5, 0.85)
   ];
   const westRows = [
-    colonnade('z', -PZ + 30, PZ - 30, -PX + 6, 55, 12.5, 0.85),
-    colonnade('z', -PZ + 30, PZ - 30, -PX + 14, 55, 12.5, 0.85)
+    colonnade('z', -PZ + 54, PZ - 30, -PX + 6, 52, 12.5, 0.85),
+    colonnade('z', -PZ + 54, PZ - 30, -PX + 14, 52, 12.5, 0.85)
   ];
   const porticoRoofs = [
-    box(PX * 2 - 10, 1.6, 18, M.cedar, 0, 14.1, PZ - 10, 'portico_roof_north'),
-    box(18, 1.6, PZ * 2 - 60, M.cedar, -PX + 10, 14.1, 0, 'portico_roof_west'),
-    box(PX * 2 - 12, 0.4, 17, M.coffer, 0, 13.1, PZ - 10, 'portico_ceiling_north'),
-    box(17, 0.4, PZ * 2 - 62, M.coffer, -PX + 10, 13.1, 0, 'portico_ceiling_west'),
-    box(PX * 2 - 10, 1.1, 19, M.stone, 0, 15.4, PZ - 10, 'portico_cornice_north'),
-    box(19, 1.1, PZ * 2 - 60, M.stone, -PX + 10, 15.4, 0, 'portico_cornice_west')
+    box(258, 1.6, 18, M.cedar, 0, 14.1, PZ - 10, 'portico_roof_north'),
+    box(18, 1.6, PZ * 2 - 84, M.cedar, -PX + 10, 14.1, 12, 'portico_roof_west'),
+    box(256, 0.4, 17, M.coffer, 0, 13.1, PZ - 10, 'portico_ceiling_north'),
+    box(17, 0.4, PZ * 2 - 86, M.coffer, -PX + 10, 13.1, 12, 'portico_ceiling_west'),
+    box(260, 1.1, 19, M.stone, 0, 15.4, PZ - 10, 'portico_cornice_north'),
+    box(19, 1.1, PZ * 2 - 84, M.stone, -PX + 10, 15.4, 12, 'portico_cornice_west')
   ];
   feat('porticoes', northRows, westRows, tag(group('roofs_portico', porticoRoofs), 'roof'),
     box(PX * 2, 14, 2, M.stone, 0, 7, PZ - 2.6, 'portico_back_wall_north'),
     box(2, 14, PZ * 2, M.stone, -PX + 2.6, 7, 0, 'portico_back_wall_west'));
 
   const eastRows = [
-    colonnade('z', -PZ + 30, PZ - 30, PX - 6, 55, 12.5, 0.9),
-    colonnade('z', -PZ + 30, PZ - 30, PX - 14, 55, 12.5, 0.9)
+    colonnade('z', -PZ + 54, PZ - 30, PX - 10, 52, 12.5, 0.9),
+    colonnade('z', -PZ + 54, PZ - 30, PX - 18, 52, 12.5, 0.9)
   ];
   feat('solomons', eastRows,
     tag(group('solomons_roof',
-      box(18, 1.6, PZ * 2 - 60, M.cedar, PX - 10, 14.1, 0, 'solomons_porch_roof'),
-      box(17, 0.4, PZ * 2 - 62, M.coffer, PX - 10, 13.1, 0, 'solomons_ceiling'),
-      box(19, 1.1, PZ * 2 - 60, M.stone, PX - 10, 15.4, 0, 'solomons_cornice')), 'roof'),
+      box(18, 1.6, PZ * 2 - 84, M.cedar, PX - 14, 14.1, 12, 'solomons_porch_roof'),
+      box(17, 0.4, PZ * 2 - 86, M.coffer, PX - 14, 13.1, 12, 'solomons_ceiling'),
+      box(19, 1.1, PZ * 2 - 84, M.stone, PX - 14, 15.4, 12, 'solomons_cornice')), 'roof'),
     box(2, 14, PZ * 2, M.stone, PX - 2.6, 7, 0, 'portico_back_wall_east'));
 
   // ---------- Royal Stoa (south) ----------
+  // Josephus describes a basilica: four rows of columns, the middle aisle half again as
+  // high as the sides, and the whole standing on the southern wall — which means it was
+  // a closed building, walled on the south and at both ends, not an open colonnade.
+  // Dimensions after Ritmeyer and Netzer, from the Temple Mount excavations: four rows
+  // of forty columns (162 with the pair at the western gate), each column 1.46 m thick
+  // and 15.24 m — fifty Roman feet, Ant. 15.415 — tall; a nave of 14.8 m between two
+  // aisles of 9.9 m, some 35 m deep in all; and the nave carried up twice the height of
+  // the aisles on a clerestory. The row against the south wall is engaged in the wall,
+  // and only the row facing the court is open.
   const stoa = [];
-  const rows = [-PZ + 7, -PZ + 16, -PZ + 25, -PZ + 34];
-  rows.forEach((z, ri) => stoa.push(colonnade('x', -142, 142, z, ri < 2 ? 41 : 40, ri === 1 || ri === 2 ? 18 : 12.5, 1.1)));
+  const CR = 0.73, CH = 15.24;
+  const rowA = -PZ + 4.6, rowB = -PZ + 14.5, rowC = -PZ + 29.3, rowD = -PZ + 39.2;
+  const rows = [rowA, rowB, rowC, rowD];
+  const inShaft = (x, z) => SHAFTS.some(s => x > s.x0 - 1.4 && x < s.x1 + 1.4 && z > s.z0 - 1.4 && z < s.z1 + 1.4);
+  rows.forEach(z => {
+    const g = new THREE.Group(); g.name = 'stoa_colonnade';
+    for (let i = 0; i < 40; i++) {
+      const x = -134.5 + 269 * (i / 39);
+      if (inShaft(x, z)) continue;          // the two gate passages come up here
+      const c = column(x, z, CH, CR); c.position.y = 0.7;   // standing on the stoa floor
+      g.add(c);
+    }
+    stoa.push(g);
+  });
+  // the two extra columns at the western gate, where Robinson's stair arrives
+  [rowC, rowD].forEach(z => { const c = column(-141.4, z, CH, CR); c.position.y = 0.7; stoa.push(c); });
+  // architraves along each row
+  rows.forEach((z, i) => stoa.push(box(272, 1.3, 2.2, M.stone, 0, CH + 1.35, z, 'stoa_architrave_' + (i + 1))));
+  // south wall: a solid dado, then a band of window bays, then the frieze under the roof
+  const SW = -PZ + 3.4;
+  stoa.push(box(PX * 2 - 8, 9.6, 2.4, M.ashlar, 0, 4.8, SW, 'stoa_south_wall'));
+  for (let x = -PX + 8; x <= PX - 8; x += 8.6) {
+    stoa.push(box(3.4, 6.6, 2.4, M.ashlar, x, 12.9, SW, 'stoa_window_pier'));
+    stoa.push(box(5.2, 0.9, 2.6, M.stone, x + 4.3, 10.05, SW, 'stoa_window_sill'));
+  }
+  stoa.push(box(PX * 2 - 8, 1.8, 2.8, M.stone, 0, 17.2, SW, 'stoa_south_frieze'));
+  // end walls, closing the building east and west
+  [[-144.2, 'west'], [144.2, 'east']].forEach(([x, nm]) => {
+    stoa.push(box(2.4, 18, 39, M.ashlar, x, 9, -PZ + 21.9, 'stoa_end_wall_' + nm));
+    stoa.push(box(3, 1.4, 40, M.stone, x, 18.7, -PZ + 21.9, 'stoa_end_cornice_' + nm));
+    // the clerestory storey of the nave returns across each end
+    stoa.push(box(2.4, 10, 15.6, M.ashlar, x, 23, -PZ + 21.9, 'stoa_nave_end_' + nm));
+  });
+  stoa.push(box(PX * 2 - 8, 0.7, 3, M.stoneWarm, 0, 0.35, rowD + 1.6, 'stoa_stylobate'));
+  // The floor of the basilica, level with the stylobate, laid in strips so that the two
+  // Huldah shafts stay open where the passages come up through it.
+  {
+    const fz0 = -PZ + 2.2, fz1 = rowD + 0.1, hw = 0.7;
+    const bands = [[fz0, SHAFTS[0].z0], [SHAFTS[0].z1, fz1]];
+    bands.forEach(([z0, z1], i) => {
+      if (z1 - z0 > 0.4) stoa.push(box(PX * 2 - 8, hw, z1 - z0, M.stoneWarm, 0, 0.35, (z0 + z1) / 2, 'stoa_floor_' + (i + 1)));
+    });
+    // the band the shafts sit in, in three pieces round them
+    [[-PX + 4, SHAFTS[0].x0], [SHAFTS[0].x1, SHAFTS[1].x0], [SHAFTS[1].x1, PX - 4]].forEach(([x0, x1], i) =>
+      stoa.push(box(x1 - x0, hw, SHAFTS[0].z1 - SHAFTS[0].z0, M.stoneWarm, (x0 + x1) / 2, 0.35, (SHAFTS[0].z0 + SHAFTS[0].z1) / 2, 'stoa_floor_band_' + (i + 1))));
+  }
   stoa.push(tag(group('stoa_roofs',
-    box(PX * 2 - 12, 1.8, 12, M.cedar, 0, 14.2, -PZ + 8, 'stoa_aisle_roof_s'),
-    box(PX * 2 - 12, 1.8, 12, M.cedar, 0, 14.2, -PZ + 33, 'stoa_aisle_roof_n'),
-    box(PX * 2 - 12, 2.4, 14, M.cedar, 0, 20.4, -PZ + 20.5, 'stoa_nave_roof'),
-    box(PX * 2 - 14, 0.4, 13, M.coffer, 0, 19.1, -PZ + 20.5, 'stoa_nave_ceiling'),
-    box(PX * 2 - 14, 0.4, 11, M.coffer, 0, 13.1, -PZ + 8, 'stoa_aisle_ceiling_s'),
-    box(PX * 2 - 14, 0.4, 11, M.coffer, 0, 13.1, -PZ + 33, 'stoa_aisle_ceiling_n'),
-    box(PX * 2 - 10, 1.2, 15, M.stone, 0, 21.8, -PZ + 20.5, 'stoa_nave_cornice'),
-    box(PX * 2 - 12, 6, 1.2, M.stone, 0, 17, -PZ + 13.8, 'stoa_clerestory_s'),
-    box(PX * 2 - 12, 6, 1.2, M.stone, 0, 17, -PZ + 27.2, 'stoa_clerestory_n')), 'roof'));
+    // aisle roofs, one over each side aisle
+    box(276, 1.6, 11.7, M.cedar, 0, 17.9, (rowA + rowB) / 2, 'stoa_aisle_roof_s'),
+    box(276, 1.6, 11.7, M.cedar, 0, 17.9, (rowC + rowD) / 2, 'stoa_aisle_roof_n'),
+    box(274, 0.4, 10.6, M.coffer, 0, 16.9, (rowA + rowB) / 2, 'stoa_aisle_ceiling_s'),
+    box(274, 0.4, 10.6, M.coffer, 0, 16.9, (rowC + rowD) / 2, 'stoa_aisle_ceiling_n'),
+    box(278, 1.1, 12.6, M.stone, 0, 19, (rowA + rowB) / 2, 'stoa_aisle_cornice_s'),
+    box(278, 1.1, 12.6, M.stone, 0, 19, (rowC + rowD) / 2, 'stoa_aisle_cornice_n'),
+    // the clerestory: a wall of window bays over each nave colonnade, carrying the
+    // nave roof twice the height of the aisles
+    ...[[rowB + 0.9, 's'], [rowC - 0.9, 'n']].flatMap(([z, nm]) => {
+      const parts = [box(272, 1.4, 1.6, M.stone, 0, 19.4, z, 'stoa_clerestory_sill_' + nm),
+        box(272, 1.2, 1.8, M.stone, 0, 27.4, z, 'stoa_clerestory_head_' + nm)];
+      for (let x = -134.5; x <= 134.5; x += 6.9)
+        parts.push(box(2.1, 7, 1.6, M.ashlar, x, 23.5, z, 'stoa_clerestory_pier_' + nm));
+      return parts;
+    }),
+    box(272, 2, 16.8, M.cedar, 0, 29, (rowB + rowC) / 2, 'stoa_nave_roof'),
+    box(270, 0.5, 15.2, M.coffer, 0, 27.8, (rowB + rowC) / 2, 'stoa_nave_ceiling'),
+    box(274, 1.2, 18, M.stone, 0, 30.5, (rowB + rowC) / 2, 'stoa_nave_cornice'),
+    box(274, 1.1, 3.2, M.stone, 0, 31.6, (rowB + rowC) / 2, 'stoa_nave_ridge')), 'roof'));
   feat('royalstoa', stoa);
 
   // ---------- outer court ----------
-  feat('gentiles', box(PX * 2 - 40, 0.3, PZ * 2 - 100, M.stoneWarm, 0, 0.15, -10, 'outer_court_paving'));
+  feat('gentiles', box(PX * 2 - 40, 0.4, PZ * 2 - 100, M.stoneWarm, 0, 0.1, -10, 'outer_court_paving'));
 
   // ---------- Antonia ----------
   // the fortress stands beyond the north-west angle of the enclosure, on higher rock,
@@ -634,19 +1054,35 @@ export function buildTemple() {
     stairs('z', 232, 1, 12, 0.5, 0.95, 11, 0, -112, M.stone, -1),
     box(11, 1.4, 8, M.stone, -112, 5.3, 248, 'antonia_landing'));
 
-  // Shushan Gate — the eastern gate, through which the red heifer went out
-  feat('shushan',
-    box(9, 26, 26, M.ashlar, PX + 1, -6, 0, 'shushan_gate_tower'),
-    box(4, 11, 6, M.stoneDark, PX + 3.6, -13.5, 0, 'shushan_gate_passage'),
-    box(10, 2.4, 30, M.stone, PX + 1, 7.6, 0, 'shushan_gate_cornice'),
-    box(0.4, 9, 2.7, M.bronze, PX + 1.2, -12.5, 1.45, 'shushan_door_north'),
-    box(0.4, 9, 2.7, M.bronze, PX + 1.2, -12.5, -1.45, 'shushan_door_south'),
-    box(16, 1.6, 26, M.stone, PX + 13, -7.4, 0, 'shushan_landing'));
+  // Shushan Gate — the eastern gate, through which the red heifer went out. The Kidron
+  // drops away too steeply here for a street, so the gate stands in the thickness of the
+  // wall with nothing built out over the valley: only its frame breaks the outer face.
+  {
+    const EF = PX + 2.25;                    // outer face of the eastern wall
+    const sill = -19, head = -8;
+    feat('shushan',
+      box(9, 26, 26, M.ashlar, PX - 2.4, -6, 0, 'shushan_gate_tower'),
+      box(5.4, 11, 6, M.stoneDark, PX - 0.6, -13.5, 0, 'shushan_gate_passage'),
+      box(1.2, head - sill, 5.6, mat('shushan_dark', { color: 0x14120e, roughness: 1 }), EF - 0.5, (sill + head) / 2, 0, 'shushan_opening'),
+      box(0.4, 9, 2.7, M.bronze, EF - 1.2, -12.5, 1.45, 'shushan_door_north'),
+      box(0.4, 9, 2.7, M.bronze, EF - 1.2, -12.5, -1.45, 'shushan_door_south'),
+      box(2.6, head - sill + 1.4, 2.4, M.stone, EF + 1.1, (sill + head) / 2 + 0.7, 4, 'shushan_jamb_north'),
+      box(2.6, head - sill + 1.4, 2.4, M.stone, EF + 1.1, (sill + head) / 2 + 0.7, -4, 'shushan_jamb_south'),
+      box(3, 1.8, 12, M.stone, EF + 1.1, head + 2.3, 0, 'shushan_lintel'),
+      box(3.4, 0.9, 13.4, M.stone, EF + 1.2, head + 3.7, 0, 'shushan_cornice'),
+      box(3.4, 1.2, 12, M.stone, EF + 0.6, sill - 0.6, 0, 'shushan_threshold'));
+  }
 
   // Tadi Gate — the northern gate, not used for ordinary entry
   feat('tadi',
     box(20, 22, 8, M.ashlar, -30, -8, PZ + 1, 'tadi_gate_tower'),
     box(6, 9, 4, M.stoneDark, -30, -13.5, PZ + 3.4, 'tadi_gate_passage'),
+    // the through-opening itself: a dark void spanning the full tower depth so the
+    // gate reads as an actual gap in the wall rather than a solid, closed tower
+    box(5.2, 8.2, 8.4, mat('tadi_dark', { color: 0x14120e, roughness: 1 }), -30, -13.5, PZ + 1, 'tadi_opening'),
+    // the Mishnah's leaning lintel: two stones propped against one another instead of an arch
+    box(3.6, 5.8, 1.4, M.stoneDark, -31.4, -9.6, PZ + 1, 'tadi_lintel_a'),
+    box(3.6, 5.8, 1.4, M.stoneDark, -28.6, -9.6, PZ + 1, 'tadi_lintel_b'),
     box(24, 2.2, 9, M.stone, -30, 4.2, PZ + 1, 'tadi_gate_cornice'),
     box(20, 1.6, 10, M.stone, -30, -7.4, PZ + 9, 'tadi_landing'),
     stairs('z', PZ + 78, -1, 34, 0.5, 2.1, 20, -25, -30, M.stone, -26));
@@ -668,15 +1104,51 @@ export function buildTemple() {
   // Barclay's Gate, low in the wall
   west.push(box(3.5, 11, 9, M.stoneDark, -PX - 2, -14, -108, 'barclays_gate'));
   west.push(box(4.5, 1.6, 11, M.stone, -PX - 2, -8, -108, 'barclays_lintel'));
-  // Robinson's Arch: monumental stair on arches, descending southward
-  for (let i = 0; i < 4; i++) {
-    const z = -PZ - 46 + i * 14, top = -25 + 4 + i * 4.6;
-    west.push(box(11, top + 25, 9, M.ashlar, -PX - 8, (top - 25) / 2, z, 'robinson_pier_' + (i + 1)));
-    const t = new THREE.Mesh(new THREE.TorusGeometry(6.4, 1.4, 10, 20, Math.PI), M.ashlar);
-    t.rotation.y = Math.PI / 2; t.position.set(-PX - 8, top + 1.5, z + 7); t.name = 'robinson_arch_' + (i + 1);
-    west.push(t);
+  // Robinson's Arch. The stair did not run straight down: it rose from the
+  // Tyropoeon street on a flight set against the wall, turned a right angle on a
+  // landing carried by the great arch, and climbed north to the gate in the wall.
+  // Josephus, Antiquities 15.410; the springer of the arch survives in the wall.
+  {
+    const gateZ = -PZ + 12;            // the gate through the western wall
+    const pierX = -PX - 11, streetX = -PX - 34;
+    const landingZ = -PZ - 20, landingY = -7.5;
+    // the four piers and their arches, carrying the landing out from the wall
+    for (let i = 0; i < 4; i++) {
+      const x = pierX - i * 7.6;
+      const hTop = landingY - 1.4;
+      west.push(box(6.6, hTop + 26, 15, M.ashlar, x, (hTop - 26) / 2, landingZ, 'robinson_pier_' + (i + 1)));
+      if (i < 3) {
+        const a = new THREE.Mesh(new THREE.TorusGeometry(3.3, 1.15, 10, 22, Math.PI), M.ashlar);
+        a.rotation.y = Math.PI / 2; a.position.set(x - 3.8, hTop - 1.2, landingZ); a.name = 'robinson_arch_' + (i + 1);
+        west.push(a);
+      }
+    }
+    // the landing itself, a square platform against the wall
+    west.push(box(30, 2.2, 16, M.stone, pierX - 11, landingY, landingZ, 'robinson_landing'));
+    west.push(box(30, 1.1, 1.2, M.stone, pierX - 11, landingY + 1.6, landingZ - 7.4, 'robinson_landing_parapet'));
+    // lower flight: up from the street, running east toward the wall
+    for (let i = 0; i < 16; i++) {
+      const y = -25 + i * (17.5 / 16);
+      west.push(box(2.1, 1.3, 13, M.stoneWarm, streetX - 14 + i * 2.1, y, landingZ, 'robinson_lower_step_' + (i + 1)));
+    }
+    // the right-angle turn: upper flight climbing north along the wall to the gate
+    const rise = (landingY - 2) - (-6.5);
+    for (let i = 0; i < 22; i++) {
+      const z = landingZ + 8 + i * 1.9;
+      west.push(box(13, 1.25, 1.9, M.stoneWarm, pierX - 3, landingY + 0.4 + i * (Math.abs(rise) / 22 + 0.06), z, 'robinson_upper_step_' + (i + 1)));
+    }
+    west.push(box(15, 2, 6, M.stone, pierX - 3, -6.2, gateZ - 3, 'robinson_gate_landing'));
+    west.push(box(3.5, 12, 10, M.stoneDark, -PX - 2, -12.5, gateZ, 'robinson_gateway'));
+    west.push(box(4.6, 1.8, 12, M.stone, -PX - 2, -6, gateZ, 'robinson_gate_lintel'));
+    // the paved street at the foot of the wall, with its shop fronts
+    west.push(box(13, 1, 210, M.courtPave, streetX - 6, -25.3, -PZ - 90, 'tyropoeon_street'));
+    for (let i = 0; i < 12; i++) {
+      const z = -PZ - 34 - i * 15;
+      west.push(box(8, 6, 11, M.stoneWarm, streetX - 17, -22, z, 'street_shop_' + (i + 1)));
+      const aw = box(6.5, 0.12, 9, awningMats[i % 3], streetX - 11.5, -18.4, z, 'shop_awning_' + (i + 1));
+      aw.rotation.z = 0.07; west.push(aw);
+    }
   }
-  west.push(box(13, 2, 14, M.stone, -PX - 8, -7, -PZ - 2, 'robinson_landing'));
   feat('kiponus', west);
 
   // ============ inner precinct podium ============
@@ -685,7 +1157,7 @@ export function buildTemple() {
   const AZx0 = -100, AZx1 = -6.5, AZz = 33.75;    // azarah (187 x 135 cubits)
 
   feat('chel',
-    box(IPx1 - IPx0, 3, IPz * 2, M.stoneWarm, (IPx0 + IPx1) / 2, 1.5, 0, 'chel_terrace'),
+    box(IPx1 - IPx0, 3.4, IPz * 2, M.stoneWarm, (IPx0 + IPx1) / 2, 1.3, 0, 'chel_terrace'),
     stairs('x', IPx1, 1, 12, 0.25, 0.5, 50, 0, 0),
     stairs('z', IPz, 1, 12, 0.25, 0.5, 60, 0, -40),
     stairs('z', -IPz, -1, 12, 0.25, 0.5, 60, 0, -40));
@@ -704,7 +1176,7 @@ export function buildTemple() {
   // ---------- Court of the Women ----------
   const CWx0 = -6.5, CWx1 = 61, CWz = 33.75;
   const cw = [];
-  cw.push(box(CWx1 - CWx0, 0.3, CWz * 2, M.courtPave, (CWx0 + CWx1) / 2, 3.15, 0, 'court_of_women_paving'));
+  cw.push(box(CWx1 - CWx0, 0.5, CWz * 2, M.courtPave, (CWx0 + CWx1) / 2, 3.05, 0, 'court_of_women_paving'));
   // enclosing walls (north, south, east with gate opening)
   cw.push(box(CWx1 - CWx0, 16, 2.5, M.stone, (CWx0 + CWx1) / 2, 11, CWz, 'women_wall_north'));
   cw.push(box(CWx1 - CWx0, 16, 2.5, M.stone, (CWx0 + CWx1) / 2, 11, -CWz, 'women_wall_south'));
@@ -747,8 +1219,8 @@ export function buildTemple() {
 
   // ---------- azarah podium & wall, Nicanor Gate ----------
   const az = [];
-  az.push(box(AZx1 - AZx0, 3.75, AZz * 2, M.stoneWarm, (AZx0 + AZx1) / 2, 4.875, 0, 'azarah_podium'));
-  az.push(box(AZx1 - AZx0, 0.3, AZz * 2, M.courtPave, (AZx0 + AZx1) / 2, 6.9, 0, 'azarah_paving'));
+  az.push(box(AZx1 - AZx0, 3.95, AZz * 2, M.stoneWarm, (AZx0 + AZx1) / 2, 4.775, 0, 'azarah_podium'));
+  az.push(box(AZx1 - AZx0, 0.5, AZz * 2, M.courtPave, (AZx0 + AZx1) / 2, 6.8, 0, 'azarah_paving'));
   const AW = 15; // inner court wall height
   az.push(box(AZx1 - AZx0, AW, 3, M.stone, (AZx0 + AZx1) / 2, 6.75 + AW / 2, AZz, 'inner_court_wall_north'));
   az.push(box(AZx1 - AZx0, AW, 3, M.stone, (AZx0 + AZx1) / 2, 6.75 + AW / 2, -AZz, 'inner_court_wall_south'));
@@ -768,9 +1240,10 @@ export function buildTemple() {
   nic.push(box(3, 5, 5, M.stone, AZx1 - 1.5, 19.25, 0, 'nicanor_lintel'));
   nic.push(box(0.3, 10, 1.2, M.bronze, AZx1 - 1.4, 11.75, 1.3, 'nicanor_door_north'));
   nic.push(box(0.3, 10, 1.2, M.bronze, AZx1 - 1.4, 11.75, -1.3, 'nicanor_door_south'));
-  for (let i = 0; i < 15; i++) { // fifteen semicircular steps
+  // fifteen semicircular steps, bulging east into the Court of the Women
+  for (let i = 0; i < 15; i++) {
     const r = 8.5 - i * 0.45;
-    const g = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.25, 28, 1, false, -Math.PI / 2, Math.PI), M.marble);
+    const g = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.25, 30, 1, false, 0, Math.PI), M.marble);
     g.position.set(AZx1, 3.15 + 0.125 + i * 0.25, 0); g.name = 'nicanor_step_' + (i + 1);
     g.castShadow = true; g.receiveShadow = true; nic.push(g);
   }
@@ -858,8 +1331,10 @@ export function buildTemple() {
   fac.push(box(2.7, 1.3, 12, M.stone, scrX - 0.12, SF + 20.7, 0, 'door_lintel'));
   fac.push(box(2.7, 21, 1.1, M.stone, scrX - 0.08, SF + 10, 5.6, 'door_jamb_north'));
   fac.push(box(2.7, 21, 1.1, M.stone, scrX - 0.08, SF + 10, -5.6, 'door_jamb_south'));
-  for (let i = 1; i < 8; i++)                                   // seams between the gold plates
-    fac.push(box(2.56, 0.16, 50, M.stoneWarm, scrX - 0.01, SF + i * 6.2, 0, 'gold_plate_seam_' + i));
+  for (let i = 1; i < 8; i++) {                                  // seams between the gold plates — the door gap has no gold, so skip it
+    fac.push(box(2.56, 0.16, 20, M.stoneWarm, scrX - 0.01, SF + i * 6.2, 15, 'gold_plate_seam_' + i + '_north'));
+    fac.push(box(2.56, 0.16, 20, M.stoneWarm, scrX - 0.01, SF + i * 6.2, -15, 'gold_plate_seam_' + i + '_south'));
+  }
   // porch flanking walls and roof
   fac.push(box(8.5, facadeH * 0.62, 2.6, M.stone, Xporch - 4.5, SF + facadeH * 0.31, bodyZ + 6.2, 'porch_wall_north'));
   fac.push(box(8.5, facadeH * 0.62, 2.6, M.stone, Xporch - 4.5, SF + facadeH * 0.31, -bodyZ - 6.2, 'porch_wall_south'));
@@ -911,7 +1386,7 @@ export function buildTemple() {
 
   // Holy Place interior
   feat('hekhal',
-    box(30.5, 0.35, 10, M.gold, -70.75, SF + 0.17, 0, 'hekhal_floor'),
+    box(20.4, 0.35, 10, M.gold, -65.7, SF + 0.17, 0, 'hekhal_floor'),
     box(20, 20, 0.3, M.gold, -65.5, SF + 10, 5, 'hekhal_gold_panel_north'),
     box(20, 20, 0.3, M.gold, -65.5, SF + 10, -5, 'hekhal_gold_panel_south'),
     box(20, 0.4, 10.4, M.gold, -65.5, SF + 20.2, 0, 'hekhal_ceiling'),
@@ -998,14 +1473,12 @@ export function buildTemple() {
   vl.push(box(0.3, 0.16, 0.9, M.gold, -76.35, SF + 0.08, 4.7, 'veil_hem_weight_north'));
   // golden beams and rings above each curtain
   for (const [bx, nm] of [[-75.6, 'outer'], [-76.1, 'inner']]) {
-    vl.push(box(0.26, 0.26, VW + 0.9, M.gold, bx, SF + VH + 0.35, 0, 'veil_beam_' + nm));
     for (let i = 0; i < 13; i++) {
       const t = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.024, 8, 18), M.gold);
       t.rotation.y = Math.PI / 2; t.position.set(bx, SF + VH + 0.12, -4.8 + i * 0.8);
       t.name = 'veil_ring'; vl.push(t);
     }
   }
-  vl.push(box(0.8, 0.5, VW + 1.6, M.gold, -75.85, SF + VH + 0.85, 0, 'veil_valance'));
   feat('veil', vl);
 
   // Holy of Holies
@@ -1026,7 +1499,7 @@ export function buildTemple() {
   }
   rockGeo.computeVertexNormals();
   const rock = new THREE.Mesh(rockGeo, M.stone);
-  rock.position.set(-81, SF - 1.05, 0); rock.name = 'even_ha_shetiyah';
+  rock.position.set(-81, SF - 0.84, 0); rock.name = 'even_ha_shetiyah';
   rock.castShadow = true; rock.receiveShadow = true;
   feat('rock', rock);
 
@@ -1049,34 +1522,128 @@ export function buildTemple() {
   // pilgrims on the southern stairs and the outer court
   for (let i = 0; i < 16; i++) {
     const z = -300 + i * 3.6, x = -30 + ((i * 91) % 60);
-    place(x, z, i % 2 ? cloak : cloak2, 1.55, -25 + (i * 3.6) * (17 / 63) + 0.6);
+    place(x, z, i % 2 ? cloak : cloak2, 1.55, -25 + (z + 303) * (17 / 59.5) + 0.55);
   }
   for (let i = 0; i < 14; i++) place(70 + ((i * 113) % 60), -140 + ((i * 97) % 260), i % 2 ? cloak : cloak2, ((i * 37) % 62) / 10, 0.2);
-  root.add(people);
+
+  // A court 300 m across with a dozen people in it reads as a diagram. These fill the
+  // open ground so that almost any view has a figure in it to measure the walls by.
+  const rnd = (a, b) => { const t = Math.sin(a * 91.7 + b * 47.13) * 24634.6345; return t - Math.floor(t); };
+  const robes = [cloak, cloak2, cloak, mat('striped_cloak', { color: 0xa08a63, roughness: 0.95 }), mat('white_cloak', { color: 0xded4bc, roughness: 0.94 })];
+  const crowd = (n, seed, fn) => {
+    for (let i = 0; i < n; i++) {
+      const p = fn(rnd(seed, i), rnd(seed + 1.7, i), i);
+      if (p) place(p[0], p[1], robes[Math.floor(rnd(seed + 3.1, i) * robes.length)], rnd(seed + 5.3, i) * 6.28, p[2]);
+    }
+  };
+  // the outer court: crowds thin out away from the gates and the inner precinct
+  crowd(230, 11.3, (a, b, i) => {
+    const x = -146 + a * 292, z = -230 + b * 460;
+    if (x > -112 && x < 72 && Math.abs(z) < 44) return null;          // inside the chel platform
+    if (Math.abs(x) > 140 || Math.abs(z) > 224) return null;          // in the wall
+    const pull = 1 - Math.min(1, Math.hypot((x - 40) / 200, z / 260)); // nearer the gates, denser
+    if (rnd(97.1, i) > 0.28 + pull * 0.72) return null;
+    return [x, z, 0.2];
+  });
+  // under the porticoes, north and west, where the teaching happened
+  crowd(46, 23.9, (a, b) => [-138 + a * 276, PZ - 6 - b * 10, 0.2]);
+  crowd(34, 31.7, (a, b) => [-PX + 6 + b * 10, -210 + a * 420, 0.2]);
+  // the Royal Stoa along the south wall
+  crowd(40, 43.1, (a, b) => [-120 + a * 240, -PZ + 8 + b * 14, 0.2]);
+  // the Court of the Women, filling out the twenty-two already standing there
+  crowd(40, 53.3, (a, b) => {
+    const x = 4 + a * 54, z = -28 + b * 56;
+    return Math.hypot(x - 60, z) < 8 ? null : [x, z, 3.15];
+  });
+  // the terrace of the chel, on the twelve steps' landing
+  crowd(22, 61.7, (a, b) => [68 + b * 6, -34 + a * 68, 3.15]);
+  // the southern stairway, climbing (the flight runs 59.5 m and rises 17 m)
+  crowd(30, 71.3, (a, b, i) => {
+    const z = -300 + a * 52;
+    return [-44 + b * 88, z, -25 + (z + 303) * (17 / 59.5) + 0.55];
+  });
+  // on the streets of the city, at whatever height the ground happens to be
+  crowd(60, 83.9, (a, b) => {
+    const x = -560 + a * 700, z = -620 + b * 900;
+    const gy = terrainY(x, z);
+    return gy < -24 ? null : [x, z, gy];
+  });
+  root.add(tag(people, 'figures'));
 
   root.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
-  Object.values(M).forEach(mm => { mm.side = THREE.DoubleSide; });
+  // Only the hanging cloths and the ground plate are two-sided. Everything else is a
+  // closed solid, and drawing its back faces made every stacked pair of blocks — paving
+  // on platform, cornice on wall, ceiling under roof — fight for the same pixels.
+  Object.values(M).forEach(mm => { mm.side = THREE.FrontSide; });
+  [M.veil, M.parochet, M.heavens, M.earth].forEach(mm => { mm.side = THREE.DoubleSide; });
+  if (opts.merge !== false) mergeStatic(root, F);
   root.scale.z = -1;                      // authored north = +z  ->  world north = -z
   root.updateMatrixWorld(true);
   return { model: root, features: F };
 }
 
+// The city, the crowds and the precinct are thousands of small static meshes over a
+// handful of materials, and nothing in them is picked individually — only the feature
+// they belong to. Merging each feature's meshes per material takes the draw calls from
+// thousands to dozens, which is what pays for the figures and the shadows. Anything
+// carrying a layer tag (roofs, the sanctuary shell) is merged into its own mesh, so the
+// cutaway and the roof switch still work, on one draw call each.
+function mergeStatic(root, F) {
+  root.updateMatrixWorld(true);
+  const targets = Object.values(F);
+  const figs = root.children.find(c => c.name === 'figures');
+  if (figs) targets.push(figs);
+  for (const g of targets) {
+    const buckets = new Map();
+    g.traverse(o => {
+      if (!o.isMesh) return;
+      const layer = o.userData.layer || '';
+      const k = layer + '|' + o.material.uuid;
+      if (!buckets.has(k)) buckets.set(k, { m: o.material, layer, geos: [] });
+      buckets.get(k).geos.push(o.geometry.clone().applyMatrix4(o.matrixWorld));
+    });
+    let merged = 0;
+    const out = [];
+    let bail = false;
+    for (const { m, layer, geos } of buckets.values()) {
+      if (!geos.length) continue;
+      try {
+        // a bucket of mixed indexed and non-indexed geometry cannot be merged as it is
+        const indexed = geos.filter(g2 => g2.index).length;
+        const list = (indexed && indexed !== geos.length) ? geos.map(g2 => g2.index ? g2.toNonIndexed() : g2) : geos;
+        const one = list.length === 1 ? list[0] : mergeGeometries(list, false);
+        if (!one) { bail = true; break; }
+        if (list.length > 1) list.forEach(gg => { if (gg !== one) gg.dispose(); });
+        const mesh = new THREE.Mesh(one, m);
+        mesh.name = g.name + (layer ? '_' + layer : '') + '_merged';
+        mesh.castShadow = true; mesh.receiveShadow = true;
+        if (layer) mesh.userData.layer = layer;
+        out.push(mesh); merged += geos.length;
+      } catch (e) { bail = true; break; }
+    }
+    if (bail || !merged) continue;   // leave this feature exactly as it was built
+    g.clear();
+    out.forEach(m => g.add(m));
+  }
+}
+
 // focus target, orbit camera station, and walking position for each label
 export const VIEWS = {
-  hinnom:       { t: [-230, -70, -820], c: [120, 60, -1020], w: [-200, -800] },
+  hinnom:       { t: [-230, -70, -820], c: [-20, 8, -940], w: [-200, -800] },
   olives:       { t: [510, 26, -30],  c: [792, 132, -74], w: [430, -34] },
-  kidron:       { t: [265, -60, -60],c: [420, 40, -220],  w: [268, -60] },
+  kidron:       { t: [265, -60, -60],c: [366, 5, -164],  w: [268, -60] },
   cityofdavid:  { t: [-40, -30, -460], c: [220, 130, -700], w: [-40, -430] },
-  siloam:       { t: [-40, -38, -690], c: [90, 20, -800],  w: [-10, -700] },
+  siloam:       { t: [-46, -34, -566], c: [64, 6, -668],   w: [-4, -576] },
   uppercity:    { t: [-520, 10, -80], c: [-820, 150, -400], w: [-420, -80] },
   bezetha:      { t: [-100, -12, 400], c: [180, 130, 640], w: [-100, 380] },
   golgotha:     { t: [-395, -8, 250], c: [-560, 60, 470],  w: [-360, 250] },
   bethesda:     { t: [-62, -14, 350], c: [130, 60, 470],   w: [-30, 330] },
   mount:        { t: [-24, 8, 0],    c: [116, 238, -420], w: [70, -60] },
   walls:        { t: [-150, -12, 0], c: [-250, 10, 90],  w: [-120, 0] },
-  huldah:       { t: [0, -14, -250], c: [40, 20, -330],  w: [0, -250] },
+  huldah:       { t: [-6, -7, -262], c: [22, 30, -326], w: [0, -252] },
   shushan:      { t: [158, -6, 0],   c: [256, 40, 70],   w: [140, 0] },
   tadi:         { t: [-30, -4, 240], c: [-30, 30, 310],  w: [-30, 220] },
+  pool_of_israel: { t: [96, -8, 269], c: [190, 42, 350], w: [90, 250] },
   kiponus:      { t: [-165, -8, -70],c: [-250, 30, -150], w: [-140, -60] },
   royalstoa:    { t: [0, 10, -215],  c: [70, 45, -300],  w: [0, -215] },
   porticoes:    { t: [0, 8, 224],    c: [10, 30, 150],   w: [0, 218] },
@@ -1089,7 +1656,7 @@ export const VIEWS = {
   women:        { t: [27, 4, 0],     c: [30, 46, 62],    w: [30, 0] },
   chambers:     { t: [50, 5, 23],    c: [72, 24, 44],    w: [50, 12] },
   nicanor:      { t: [-6.5, 9, 0],   c: [16, 13, 0],     w: [8, 0] },
-  israel:       { t: [-10, 7.2, 0],  c: [6, 15, 12],     w: [-9, 0] },
+  israel:       { t: [-10, 7.2, 0],  c: [2, 22, 22],     w: [-9, 0] },
   priests:      { t: [-24, 7, 8],    c: [4, 26, 30],     w: [-16, 12] },
   altar:        { t: [-25.5, 10, 0], c: [8, 34, 40],    w: [-15, 0] },
   ramp:         { t: [-25.5, 8.5, -14], c: [-12, 15, -26], w: [-25, -20] },
@@ -1104,6 +1671,6 @@ export const VIEWS = {
   incense:      { t: [-74.6, 10.7, 0],  c: [-70.2, 11.4, -1.6], w: [-71, 0] },
   veil:         { t: [-75.8, 14, 0], c: [-68, 13, 1.5],  w: [-71, 0] },
   holyofholies: { t: [-84, 13, 0],   c: [-77.4, 13.5, 0], w: [-80, 0] },
-  rock:         { t: [-81.4, 9.4, 0],c: [-77.4, 11.4, 3.4], w: [-78, 2.5] },
+  rock:         { t: [-81, 9, 0],c: [-79, 16, 8], w: [-78, 2.5] },
   cells:        { t: [-75, 14, -17.5], c: [-66, 22, -42], w: [-70, -30] }
 };

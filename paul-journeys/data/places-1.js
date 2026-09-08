@@ -11,11 +11,11 @@ tarsus: {
   people: ["Paul's family (Pharisees of the tribe of Benjamin, Acts 23:6; Phil 3:5)", "Barnabas, who came to find him (Acts 11:25)"],
   epistles: [],
   scripture: [
-    { ref: "Acts 22:3", text: "I am verily a man which am a Jew, born in Tarsus, a city in Cilicia, yet brought up in this city at the feet of Gamaliel, and taught according to the perfect manner of the law of the fathers, being zealous toward God, as ye all are this day." },
-    { ref: "Acts 9:11", text: "And the Lord said unto him, Arise, and go into the street which is called Straight, and enquire in the house of Judas for one called Saul, of Tarsus: for, behold, he prayeth." },
-    { ref: "Acts 9:30", text: "Which when the brethren knew, they brought him down to Caesarea, and sent him forth to Tarsus." },
-    { ref: "Acts 11:25", text: "Then departed Barnabas to Tarsus, for to seek Saul." },
-    { ref: "Acts 22:28", text: "And the chief captain answered, With a great sum obtained I this freedom. And Paul said, But I was free born." }
+    { ref: "Acts 22:3", text: "“I am indeed a Jew, born in Tarsus of Cilicia, but brought up in this city at the feet of Gamaliel, instructed according to the strict tradition of the law of our fathers, being zealous for God, even as you all are this day." },
+    { ref: "Acts 9:11", text: "The Lord said to him, “Arise, and go to the street which is called Straight, and inquire in the house of Judah for one named Saul, a man of Tarsus. For behold, he is praying," },
+    { ref: "Acts 9:30", text: "When the brothers knew it, they brought him down to Caesarea, and sent him off to Tarsus." },
+    { ref: "Acts 11:25", text: "Barnabas went out to Tarsus to look for Saul." },
+    { ref: "Acts 22:28", text: "The commanding officer answered, “I bought my citizenship for a great price.” Paul said, “But I was born a Roman.”" }
   ]
 },
 
@@ -28,11 +28,11 @@ jerusalem: {
   people: ["Gamaliel", "Stephen", "Peter", "James the Lord's brother", "Barnabas", "Ananias the high priest", "Claudius Lysias", "Paul's nephew (Acts 23:16)"],
   epistles: ["Galatians and Romans both argue over decisions reached here (Acts 15; Gal 2)"],
   scripture: [
-    { ref: "Acts 7:58", text: "And cast him out of the city, and stoned him: and the witnesses laid down their clothes at a young man's feet, whose name was Saul." },
-    { ref: "Acts 8:3", text: "As for Saul, he made havock of the church, entering into every house, and haling men and women committed them to prison." },
-    { ref: "Galatians 1:18", text: "Then after three years I went up to Jerusalem to see Peter, and abode with him fifteen days." },
-    { ref: "Acts 21:27", text: "And when the seven days were almost ended, the Jews which were of Asia, when they saw him in the temple, stirred up all the people, and laid hands on him." },
-    { ref: "Acts 23:11", text: "And the night following the Lord stood by him, and said, Be of good cheer, Paul: for as thou hast testified of me in Jerusalem, so must thou bear witness also at Rome." }
+    { ref: "Acts 7:58", text: "They threw him out of the city, and stoned him. The witnesses placed their garments at the feet of a young man named Saul." },
+    { ref: "Acts 8:3", text: "But Saul ravaged the assembly, entering into every house, and dragged both men and women off to prison." },
+    { ref: "Galatians 1:18", text: "Then after three years I went up to Jerusalem to visit Peter, and stayed with him fifteen days." },
+    { ref: "Acts 21:27", text: "When the seven days were almost completed, the Jews from Asia, when they saw him in the temple, stirred up all the multitude and laid hands on him," },
+    { ref: "Acts 23:11", text: "The following night, the Lord stood by him, and said, “Cheer up, Paul, for as you have testified about me at Jerusalem, so you must testify also at Rome.”" }
   ]
 },
 
@@ -45,11 +45,11 @@ damascus: {
   people: ["Ananias", "Judas of Straight Street", "the disciples who let him down the wall", "an officer of Aretas IV"],
   epistles: [],
   scripture: [
-    { ref: "Acts 9:3", text: "And as he journeyed, he came near Damascus: and suddenly there shined round about him a light from heaven." },
-    { ref: "Acts 9:11", text: "And the Lord said unto him, Arise, and go into the street which is called Straight, and enquire in the house of Judas for one called Saul, of Tarsus." },
-    { ref: "Acts 9:20", text: "And straightway he preached Christ in the synagogues, that he is the Son of God." },
-    { ref: "2 Corinthians 11:32–33", text: "In Damascus the governor under Aretas the king kept the city of the Damascenes with a garrison, desirous to apprehend me: And through a window in a basket was I let down by the wall, and escaped his hands." },
-    { ref: "Galatians 1:17", text: "Neither went I up to Jerusalem to them which were apostles before me; but I went into Arabia, and returned again unto Damascus." }
+    { ref: "Acts 9:3", text: "As he traveled, it happened that he got close to Damascus, and suddenly a light from the sky shone around him." },
+    { ref: "Acts 9:11", text: "The Lord said to him, “Arise, and go to the street which is called Straight, and inquire in the house of Judah for one named Saul, a man of Tarsus. For behold, he is praying," },
+    { ref: "Acts 9:20", text: "Immediately in the synagogues he proclaimed the Christ, that he is the Son of God." },
+    { ref: "2 Corinthians 11:32–33", text: "In Damascus the governor under King Aretas guarded the city of the Damascenes desiring to arrest me. Through a window I was let down in a basket by the wall, and escaped his hands." },
+    { ref: "Galatians 1:17", text: "nor did I go up to Jerusalem to those who were apostles before me, but I went away into Arabia. Then I returned to Damascus." }
   ]
 },
 
@@ -62,9 +62,9 @@ arabia: {
   people: [],
   epistles: ["Galatians 1:17 (Paul's own testimony); Galatians 4:25 links Sinai to 'Arabia'"],
   scripture: [
-    { ref: "Galatians 1:15–17", text: "But when it pleased God, who separated me from my mother's womb, and called me by his grace, To reveal his Son in me, that I might preach him among the heathen; immediately I conferred not with flesh and blood." },
-    { ref: "Galatians 1:17", text: "Neither went I up to Jerusalem to them which were apostles before me; but I went into Arabia, and returned again unto Damascus." },
-    { ref: "Galatians 4:25", text: "For this Agar is mount Sinai in Arabia, and answereth to Jerusalem which now is, and is in bondage with her children." }
+    { ref: "Galatians 1:15–17", text: "But when it was the good pleasure of God, who separated me from my mother’s womb, and called me through his grace, to reveal his Son in me, that I might preach him among the Gentiles, I didn’t immediately confer with flesh and blood, nor did I go up to Jerusalem to those who were apostles before me, but I went away into Arabia. Then I returned to Damascus." },
+    { ref: "Galatians 1:17", text: "nor did I go up to Jerusalem to those who were apostles before me, but I went away into Arabia. Then I returned to Damascus." },
+    { ref: "Galatians 4:25", text: "For this Hagar is Mount Sinai in Arabia, and answers to the Jerusalem that exists now, for she is in bondage with her children." }
   ]
 },
 
@@ -77,11 +77,11 @@ antioch: {
   people: ["Barnabas", "Simeon called Niger", "Lucius of Cyrene", "Manaen", "Agabus", "Peter", "Titus", "Silas", "Judas Barsabas"],
   epistles: ["Galatians is widely thought to have been written from or near here after the Antioch incident (Gal 2:11–14)"],
   scripture: [
-    { ref: "Acts 11:26", text: "And when he had found him, he brought him unto Antioch. And it came to pass, that a whole year they assembled themselves with the church, and taught much people. And the disciples were called Christians first in Antioch." },
-    { ref: "Acts 13:2", text: "As they ministered to the Lord, and fasted, the Holy Ghost said, Separate me Barnabas and Saul for the work whereunto I have called them." },
-    { ref: "Acts 14:27", text: "And when they were come, and had gathered the church together, they rehearsed all that God had done with them, and how he had opened the door of faith unto the Gentiles." },
-    { ref: "Galatians 2:11", text: "But when Peter was come to Antioch, I withstood him to the face, because he was to be blamed." },
-    { ref: "Acts 15:35", text: "Paul also and Barnabas continued in Antioch, teaching and preaching the word of the Lord, with many others also." }
+    { ref: "Acts 11:26", text: "When he had found him, he brought him to Antioch. It happened, that for a whole year they were gathered together with the assembly, and taught many people. The disciples were first called Christians in Antioch." },
+    { ref: "Acts 13:2", text: "As they served the Lord and fasted, the Holy Spirit said, “Separate Barnabas and Saul for me, for the work to which I have called them.”" },
+    { ref: "Acts 14:27", text: "When they had arrived, and had gathered the assembly together, they reported all the things that God had done with them, and that he had opened a door of faith to the nations." },
+    { ref: "Galatians 2:11", text: "But when Peter came to Antioch, I resisted him to his face, because he stood condemned." },
+    { ref: "Acts 15:35", text: "But Paul and Barnabas stayed in Antioch, teaching and preaching the word of the Lord, with many others also." }
   ]
 },
 
@@ -94,7 +94,7 @@ seleucia: {
   people: ["Barnabas", "John Mark"],
   epistles: [],
   scripture: [
-    { ref: "Acts 13:4", text: "So they, being sent forth by the Holy Ghost, departed unto Seleucia; and from thence they sailed to Cyprus." }
+    { ref: "Acts 13:4", text: "So, being sent out by the Holy Spirit, they went down to Seleucia. From there they sailed to Cyprus." }
   ]
 },
 
@@ -107,7 +107,7 @@ salamis: {
   people: ["Barnabas", "John Mark"],
   epistles: [],
   scripture: [
-    { ref: "Acts 13:5", text: "And when they were at Salamis, they preached the word of God in the synagogues of the Jews: and they had also John to their minister." }
+    { ref: "Acts 13:5", text: "When they were at Salamis, they proclaimed the word of God in the Jewish synagogues. They had also John as their attendant." }
   ]
 },
 
@@ -120,9 +120,9 @@ paphos: {
   people: ["Sergius Paulus, proconsul", "Bar-Jesus / Elymas", "Barnabas", "John Mark"],
   epistles: [],
   scripture: [
-    { ref: "Acts 13:6–7", text: "And when they had gone through the isle unto Paphos, they found a certain sorcerer, a false prophet, a Jew, whose name was Bar-jesus: Which was with the deputy of the country, Sergius Paulus, a prudent man; who called for Barnabas and Saul, and desired to hear the word of God." },
-    { ref: "Acts 13:9–10", text: "Then Saul, (who also is called Paul,) filled with the Holy Ghost, set his eyes on him, And said, O full of all subtilty and all mischief, thou child of the devil, thou enemy of all righteousness, wilt thou not cease to pervert the right ways of the Lord?" },
-    { ref: "Acts 13:12", text: "Then the deputy, when he saw what was done, believed, being astonished at the doctrine of the Lord." }
+    { ref: "Acts 13:6–7", text: "When they had gone through the island to Paphos, they found a certain sorcerer, a false prophet, a Jew, whose name was Bar Jesus, who was with the proconsul, Sergius Paulus, a man of understanding. This man summoned Barnabas and Saul, and sought to hear the word of God." },
+    { ref: "Acts 13:9–10", text: "But Saul, who is also called Paul, filled with the Holy Spirit, fastened his eyes on him, and said, “Full of all deceit and all cunning, you son of the devil, you enemy of all righteousness, will you not cease to pervert the right ways of the Lord?" },
+    { ref: "Acts 13:12", text: "Then the proconsul, when he saw what was done, believed, being astonished at the teaching of the Lord." }
   ]
 },
 
@@ -135,8 +135,8 @@ perga: {
   people: ["John Mark (departing)", "Barnabas"],
   epistles: [],
   scripture: [
-    { ref: "Acts 13:13", text: "Now when Paul and his company loosed from Paphos, they came to Perga in Pamphylia: and John departing from them returned to Jerusalem." },
-    { ref: "Acts 14:25", text: "And after they had preached the word in Perga, they went down into Attalia." }
+    { ref: "Acts 13:13", text: "Now Paul and his company set sail from Paphos, and came to Perga in Pamphylia. John departed from them and returned to Jerusalem." },
+    { ref: "Acts 14:25", text: "When they had spoken the word in Perga, they went down to Attalia." }
   ]
 },
 
@@ -149,11 +149,11 @@ antiochPisidia: {
   people: ["Barnabas", "devout Gentile proselytes and 'honourable women'", "the local Jewish synagogue leadership"],
   epistles: ["A leading candidate audience of Galatians under the 'South Galatian' view"],
   scripture: [
-    { ref: "Acts 13:14", text: "But when they departed from Perga, they came to Antioch in Pisidia, and went into the synagogue on the sabbath day, and sat down." },
-    { ref: "Acts 13:38–39", text: "Be it known unto you therefore, men and brethren, that through this man is preached unto you the forgiveness of sins: And by him all that believe are justified from all things, from which ye could not be justified by the law of Moses." },
-    { ref: "Acts 13:44", text: "And the next sabbath day came almost the whole city together to hear the word of God." },
-    { ref: "Acts 13:46", text: "Then Paul and Barnabas waxed bold, and said, It was necessary that the word of God should first have been spoken to you: but seeing ye put it from you, and judge yourselves unworthy of everlasting life, lo, we turn to the Gentiles." },
-    { ref: "Acts 13:51", text: "But they shook off the dust of their feet against them, and came unto Iconium." }
+    { ref: "Acts 13:14", text: "But they, passing on from Perga, came to Antioch of Pisidia. They went into the synagogue on the Sabbath day, and sat down." },
+    { ref: "Acts 13:38–39", text: "Be it known to you therefore, brothers, that through this man is proclaimed to you remission of sins, and by him everyone who believes is justified from all things, from which you could not be justified by the law of Moses." },
+    { ref: "Acts 13:44", text: "The next Sabbath almost the whole city was gathered together to hear the word of God." },
+    { ref: "Acts 13:46", text: "Paul and Barnabas spoke out boldly, and said, “It was necessary that God’s word should be spoken to you first. Since indeed you thrust it from you, and judge yourselves unworthy of eternal life, behold, we turn to the Gentiles." },
+    { ref: "Acts 13:51", text: "But they shook off the dust of their feet against them, and came to Iconium." }
   ]
 },
 
@@ -166,10 +166,10 @@ iconium: {
   people: ["Barnabas", "Timothy (commended here and at Lystra)"],
   epistles: ["Addressed within Galatians under the South Galatian view; recalled in 2 Timothy 3:11"],
   scripture: [
-    { ref: "Acts 14:1", text: "And it came to pass in Iconium, that they went both together into the synagogue of the Jews, and so spake, that a great multitude both of the Jews and also of the Greeks believed." },
-    { ref: "Acts 14:3", text: "Long time therefore abode they speaking boldly in the Lord, which gave testimony unto the word of his grace, and granted signs and wonders to be done by their hands." },
-    { ref: "Acts 14:19", text: "And there came thither certain Jews from Antioch and Iconium, who persuaded the people, and, having stoned Paul, drew him out of the city, supposing he had been dead." },
-    { ref: "2 Timothy 3:11", text: "Persecutions, afflictions, which came unto me at Antioch, at Iconium, at Lystra; what persecutions I endured: but out of them all the Lord delivered me." }
+    { ref: "Acts 14:1", text: "It happened in Iconium that they entered together into the synagogue of the Jews, and so spoke that a great multitude both of Jews and of Greeks believed." },
+    { ref: "Acts 14:3", text: "Therefore they stayed there a long time, speaking boldly in the Lord, who testified to the word of his grace, granting signs and wonders to be done by their hands." },
+    { ref: "Acts 14:19", text: "But some Jews from Antioch and Iconium came there, and having persuaded the multitudes, they stoned Paul, and dragged him out of the city, supposing that he was dead." },
+    { ref: "2 Timothy 3:11", text: "persecutions, and sufferings: those things that happened to me at Antioch, Iconium, and Lystra. I endured those persecutions. Out of them all the Lord delivered me." }
   ]
 },
 
@@ -182,11 +182,11 @@ lystra: {
   people: ["Timothy", "Eunice and Lois (2 Tim 1:5)", "the healed lame man", "the priest of Zeus", "Barnabas"],
   epistles: ["Within the Galatian churches (South Galatian view); 2 Timothy 3:11 recalls the stoning"],
   scripture: [
-    { ref: "Acts 14:8", text: "And there sat a certain man at Lystra, impotent in his feet, being a cripple from his mother's womb, who never had walked." },
-    { ref: "Acts 14:11–12", text: "And when the people saw what Paul had done, they lifted up their voices, saying in the speech of Lycaonia, The gods are come down to us in the likeness of men. And they called Barnabas, Jupiter; and Paul, Mercurius, because he was the chief speaker." },
-    { ref: "Acts 14:15", text: "Sirs, why do ye these things? We also are men of like passions with you, and preach unto you that ye should turn from these vanities unto the living God, which made heaven, and earth, and the sea, and all things that are therein." },
-    { ref: "Acts 14:19", text: "And there came thither certain Jews from Antioch and Iconium, who persuaded the people, and, having stoned Paul, drew him out of the city, supposing he had been dead." },
-    { ref: "Acts 16:1", text: "Then came he to Derbe and Lystra: and, behold, a certain disciple was there, named Timotheus, the son of a certain woman, which was a Jewess, and believed; but his father was a Greek." }
+    { ref: "Acts 14:8", text: "At Lystra a certain man sat, impotent in his feet, a cripple from his mother’s womb, who never had walked." },
+    { ref: "Acts 14:11–12", text: "When the multitude saw what Paul had done, they lifted up their voice, saying in the language of Lycaonia, “The gods have come down to us in the likeness of men!” They called Barnabas “Jupiter,” and Paul “Mercury,” because he was the chief speaker." },
+    { ref: "Acts 14:15", text: "“Men, why are you doing these things? We also are men of like passions with you, and bring you good news, that you should turn from these vain things to the living God, who made the sky and the earth and the sea, and all that is in them;" },
+    { ref: "Acts 14:19", text: "But some Jews from Antioch and Iconium came there, and having persuaded the multitudes, they stoned Paul, and dragged him out of the city, supposing that he was dead." },
+    { ref: "Acts 16:1", text: "He came to Derbe and Lystra: and behold, a certain disciple was there, named Timothy, the son of a Jewess who believed; but his father was a Greek." }
   ]
 },
 
@@ -199,9 +199,9 @@ derbe: {
   people: ["Gaius of Derbe", "Barnabas"],
   epistles: ["Galatian churches (South Galatian view)"],
   scripture: [
-    { ref: "Acts 14:20", text: "Howbeit, as the disciples stood round about him, he rose up, and came into the city: and the next day he departed with Barnabas to Derbe." },
-    { ref: "Acts 14:21–22", text: "And when they had preached the gospel to that city, and had taught many, they returned again to Lystra, and to Iconium, and Antioch, Confirming the souls of the disciples, and exhorting them to continue in the faith, and that we must through much tribulation enter into the kingdom of God." },
-    { ref: "Acts 14:23", text: "And when they had ordained them elders in every church, and had prayed with fasting, they commended them to the Lord, on whom they believed." }
+    { ref: "Acts 14:20", text: "But as the disciples stood around him, he rose up, and entered into the city. On the next day he went out with Barnabas to Derbe." },
+    { ref: "Acts 14:21–22", text: "When they had preached the Good News to that city, and had made many disciples, they returned to Lystra, Iconium, and Antioch, confirming the souls of the disciples, exhorting them to continue in the faith, and that through many afflictions we must enter into the Kingdom of God." },
+    { ref: "Acts 14:23", text: "When they had appointed elders for them in every assembly, and had prayed with fasting, they commended them to the Lord, on whom they had believed." }
   ]
 },
 
@@ -214,7 +214,7 @@ attalia: {
   people: ["Barnabas"],
   epistles: [],
   scripture: [
-    { ref: "Acts 14:25–26", text: "And after they had preached the word in Perga, they went down into Attalia: And thence sailed to Antioch, from whence they had been recommended to the grace of God unto the work which they fulfilled." }
+    { ref: "Acts 14:25–26", text: "When they had spoken the word in Perga, they went down to Attalia. From there they sailed to Antioch, from where they had been committed to the grace of God for the work which they had fulfilled." }
   ]
 }
 
