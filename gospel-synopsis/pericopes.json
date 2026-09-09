@@ -1,11 +1,11 @@
 {
  "sections": [
   {
-   "title": "§ 1. Preface",
+   "title": "How the Gospels Open",
    "pericopes": [
     {
      "n": 1,
-     "title": "Prologue",
+     "title": "How Each Gospel Begins",
      "refs": {
       "Matthew": "1.1",
       "Mark": "1.1",
@@ -16,39 +16,39 @@
    ]
   },
   {
-   "title": "§ 2. Birth and Childhood",
+   "title": "Before the Ministry: Birth and Boyhood",
    "pericopes": [
     {
      "n": 2,
-     "title": "The Promise of the Birth of John the Baptist",
+     "title": "Gabriel Promises a Son to Zacharias",
      "refs": {
       "Luke": "1.5-25"
      }
     },
     {
      "n": 3,
-     "title": "The Annunciation",
+     "title": "Gabriel Comes to Mary",
      "refs": {
       "Luke": "1.26-38"
      }
     },
     {
      "n": 4,
-     "title": "Mary's Visit to Elizabeth",
+     "title": "Mary Visits Elisabeth",
      "refs": {
       "Luke": "1.39-56"
      }
     },
     {
      "n": 5,
-     "title": "The Birth of John the Baptist",
+     "title": "John Is Born and Named",
      "refs": {
       "Luke": "1.57-80"
      }
     },
     {
      "n": 6,
-     "title": "The Genealogy of Jesus",
+     "title": "The Two Genealogies of Jesus",
      "refs": {
       "Matthew": "1.2-17",
       "Luke": "3.23-38"
@@ -56,7 +56,7 @@
     },
     {
      "n": 7,
-     "title": "The Birth of Jesus",
+     "title": "Jesus Is Born",
      "refs": {
       "Matthew": "1.18-25",
       "Luke": "2.1-7"
@@ -64,7 +64,7 @@
     },
     {
      "n": 8,
-     "title": "The Adoration of the Infant Jesus",
+     "title": "Shepherds and Wise Men Come",
      "refs": {
       "Matthew": "2.1-12",
       "Luke": "2.8-20"
@@ -72,21 +72,21 @@
     },
     {
      "n": 9,
-     "title": "The Circumcision and Presentation in the Temple",
+     "title": "Presented in the Temple: Simeon and Anna",
      "refs": {
       "Luke": "2.21-38"
      }
     },
     {
      "n": 10,
-     "title": "The Flight into Egypt and Return",
+     "title": "Escape to Egypt and the Return",
      "refs": {
       "Matthew": "2.13-21"
      }
     },
     {
      "n": 11,
-     "title": "The Childhood of Jesus at Nazareth",
+     "title": "Growing Up in Nazareth",
      "refs": {
       "Matthew": "2.22-23",
       "Luke": "2.39-40"
@@ -94,7 +94,7 @@
     },
     {
      "n": 12,
-     "title": "The Boy Jesus in the Temple",
+     "title": "At Twelve, in His Father’s House",
      "refs": {
       "Luke": "2.41-52"
      }
@@ -102,11 +102,11 @@
    ]
   },
   {
-   "title": "§ 3. Preparation",
+   "title": "John the Baptist and the Preparation",
    "pericopes": [
     {
      "n": 13,
-     "title": "John the Baptist",
+     "title": "John Preaches in the Wilderness",
      "refs": {
       "Matthew": "3.1-6",
       "Mark": "1.2-6",
@@ -116,7 +116,7 @@
     },
     {
      "n": 14,
-     "title": "John's Preaching of Repentance",
+     "title": "John Warns the Crowds",
      "refs": {
       "Matthew": "3.7-10",
       "Luke": "3.7-9"
@@ -124,14 +124,14 @@
     },
     {
      "n": 15,
-     "title": "John Replies to Questioners",
+     "title": "John Tells Each Group What to Do",
      "refs": {
       "Luke": "3.10-14"
      }
     },
     {
      "n": 16,
-     "title": "John's Messianic Preaching",
+     "title": "One Mightier Is Coming",
      "refs": {
       "Matthew": "3.11-12",
       "Mark": "1.7-8",
@@ -141,7 +141,7 @@
     },
     {
      "n": 17,
-     "title": "The Imprisonment of John",
+     "title": "Herod Puts John in Prison",
      "refs": {
       "Matthew": "14.3-4",
       "Mark": "6.17-18",
@@ -150,7 +150,7 @@
     },
     {
      "n": 18,
-     "title": "The Baptism of Jesus",
+     "title": "Jesus Is Baptized",
      "refs": {
       "Matthew": "3.13-17",
       "Mark": "1.9-11",
@@ -160,7 +160,7 @@
     },
     {
      "n": 19,
-     "title": "The Genealogy of Jesus",
+     "title": "The Line of Descent, Matthew and Luke Compared",
      "refs": {
       "Matthew": "1.1-17",
       "Luke": "3.23-38"
@@ -168,7 +168,7 @@
     },
     {
      "n": 20,
-     "title": "The Temptation",
+     "title": "Forty Days and Three Temptations",
      "refs": {
       "Matthew": "4.1-11",
       "Mark": "1.12-13",
@@ -178,39 +178,39 @@
    ]
   },
   {
-   "title": "§ 4. The Beginning of Jesus' Public Ministry (According to John)",
+   "title": "The Opening Ministry in John’s Account",
    "pericopes": [
     {
      "n": 21,
-     "title": "The Call of the First Disciples",
+     "title": "The First Disciples Follow",
      "refs": {
       "John": "1.35-51"
      }
     },
     {
      "n": 22,
-     "title": "The Marriage at Cana",
+     "title": "Water Into Wine at Cana",
      "refs": {
       "John": "2.1-11"
      }
     },
     {
      "n": 23,
-     "title": "The Sojourn at Capernaum",
+     "title": "A Short Stay in Capernaum",
      "refs": {
       "John": "2.12"
      }
     },
     {
      "n": 24,
-     "title": "The First Journey to Jerusalem",
+     "title": "Going Up to Jerusalem for Passover",
      "refs": {
       "John": "2.13"
      }
     },
     {
      "n": 25,
-     "title": "The Cleansing of the Temple",
+     "title": "Driving Out the Money Changers (John’s Placement)",
      "refs": {
       "Matthew": "21.12-13",
       "Mark": "11.15-17",
@@ -220,28 +220,28 @@
     },
     {
      "n": 26,
-     "title": "Jesus' Ministry in Jerusalem",
+     "title": "Many Believe on Seeing the Signs",
      "refs": {
       "John": "2.23-25"
      }
     },
     {
      "n": 27,
-     "title": "The Discourse with Nicodemus",
+     "title": "Nicodemus Comes by Night",
      "refs": {
       "John": "3.1-21"
      }
     },
     {
      "n": 28,
-     "title": "Jesus' Ministry in Judea",
+     "title": "Teaching and Baptizing in Judea",
      "refs": {
       "John": "3.22"
      }
     },
     {
      "n": 29,
-     "title": "John's Testimony to Christ",
+     "title": "John Says He Must Decrease",
      "refs": {
       "John": "3.23-36"
      }
@@ -249,11 +249,11 @@
    ]
   },
   {
-   "title": "§ 5. Jesus' Ministry in Galilee",
+   "title": "The Galilean Ministry Begins",
    "pericopes": [
     {
      "n": 30,
-     "title": "The Journey into Galilee",
+     "title": "Leaving Judea for Galilee",
      "refs": {
       "Matthew": "4.12",
       "Mark": "1.14a",
@@ -263,14 +263,14 @@
     },
     {
      "n": 31,
-     "title": "The Discourse with the Woman of Samaria",
+     "title": "The Woman at the Well",
      "refs": {
       "John": "4.4-42"
      }
     },
     {
      "n": 32,
-     "title": "Ministry in Galilee",
+     "title": "Preaching the Kingdom in Galilee",
      "refs": {
       "Matthew": "4.13-17",
       "Mark": "1.14b-15",
@@ -280,7 +280,7 @@
     },
     {
      "n": 33,
-     "title": "Jesus' Preaching at Nazareth",
+     "title": "Reading Isaiah in the Nazareth Synagogue",
      "refs": {
       "Matthew": "13.53-58",
       "Mark": "6.1-6a",
@@ -289,7 +289,7 @@
     },
     {
      "n": 34,
-     "title": "The Call of the Disciples",
+     "title": "Fishermen Leave Their Nets",
      "refs": {
       "Matthew": "4.18-22",
       "Mark": "1.16-20"
@@ -297,7 +297,7 @@
     },
     {
      "n": 35,
-     "title": "Teaching in the Synagogue at Capernaum",
+     "title": "Teaching With Authority at Capernaum",
      "refs": {
       "Mark": "1.21-22",
       "Luke": "4.31-32"
@@ -305,7 +305,7 @@
     },
     {
      "n": 36,
-     "title": "The Healing of the Demoniac in the Synagogue",
+     "title": "An Unclean Spirit Cast Out in the Synagogue",
      "refs": {
       "Mark": "1.23-28",
       "Luke": "4.33-37"
@@ -313,7 +313,7 @@
     },
     {
      "n": 37,
-     "title": "The Healing of Peter's Mother-in-law",
+     "title": "Peter’s Mother-in-Law Healed",
      "refs": {
       "Matthew": "8.14-15",
       "Mark": "1.29-31",
@@ -322,7 +322,7 @@
     },
     {
      "n": 38,
-     "title": "The Sick Healed at Evening",
+     "title": "Healing the Sick After Sundown",
      "refs": {
       "Matthew": "8.16-17",
       "Mark": "1.32-34",
@@ -331,7 +331,7 @@
     },
     {
      "n": 39,
-     "title": "Jesus Departs from Capernaurn",
+     "title": "Leaving Capernaum to Preach Elsewhere",
      "refs": {
       "Mark": "1.35-38",
       "Luke": "4.42-43"
@@ -339,7 +339,7 @@
     },
     {
      "n": 40,
-     "title": "First Preaching Tour in Galilee",
+     "title": "Through All Galilee",
      "refs": {
       "Matthew": "4.23",
       "Mark": "1.39",
@@ -348,14 +348,14 @@
     },
     {
      "n": 41,
-     "title": "The Miraculous Draught of Fish",
+     "title": "Nets Filled at Jesus’ Word",
      "refs": {
       "Luke": "5.1-11"
      }
     },
     {
      "n": 42,
-     "title": "The Cleansing of the Leper",
+     "title": "A Leper Made Clean",
      "refs": {
       "Matthew": "8.1-4",
       "Mark": "1.40-45",
@@ -364,7 +364,7 @@
     },
     {
      "n": 43,
-     "title": "The Healing of the Paralytic",
+     "title": "The Paralytic Lowered Through the Roof",
      "refs": {
       "Matthew": "9.1-8",
       "Mark": "2.1-12",
@@ -374,7 +374,7 @@
     },
     {
      "n": 44,
-     "title": "The Call of Levi (Matthew)",
+     "title": "Levi Called; Eating With Publicans",
      "refs": {
       "Matthew": "9.9-13",
       "Mark": "2.13-17",
@@ -383,7 +383,7 @@
     },
     {
      "n": 45,
-     "title": "The Question about Fasting",
+     "title": "Why Jesus’ Disciples Do Not Fast",
      "refs": {
       "Matthew": "9.14-17",
       "Mark": "2.18-22",
@@ -392,7 +392,7 @@
     },
     {
      "n": 46,
-     "title": "Plucking Grain on the Sabbath",
+     "title": "Grain Plucked on the Sabbath",
      "refs": {
       "Matthew": "12.1-8",
       "Mark": "2.23-28",
@@ -401,7 +401,7 @@
     },
     {
      "n": 47,
-     "title": "The Man with the Withered Hand",
+     "title": "Healing a Withered Hand on the Sabbath",
      "refs": {
       "Matthew": "12.9-14",
       "Mark": "3.1-6",
@@ -410,7 +410,7 @@
     },
     {
      "n": 48,
-     "title": "Jesus Heals Multitudes by the Sea",
+     "title": "Crowds Healed Beside the Sea",
      "refs": {
       "Matthew": "4.24-25",
       "Mark": "3.7-12",
@@ -419,7 +419,7 @@
     },
     {
      "n": 49,
-     "title": "The Choosing of the Twelve",
+     "title": "Choosing the Twelve",
      "refs": {
       "Matthew": "10.1-4",
       "Mark": "3.13-19",
@@ -429,14 +429,14 @@
    ]
   },
   {
-   "title": "§ 6. The Sermon on the Mount (According to Matthew)",
+   "title": "Matthew’s Sermon on the Mount",
    "pericopes": [
     {
      "n": 50,
-     "title": "Occasion of the Sermon",
+     "title": "The Crowd Gathers to Hear Him",
      "refs": {
       "Matthew": "4.24-5.2",
-      "Mark": "3.7-13 a",
+      "Mark": "3.7-13a",
       "Luke": "6.17-20a"
      }
     },
@@ -450,7 +450,7 @@
     },
     {
      "n": 52,
-     "title": "The Salt of the Earth",
+     "title": "Salt That Loses Its Savour",
      "refs": {
       "Matthew": "5.13",
       "Mark": "9.49-50",
@@ -459,7 +459,7 @@
     },
     {
      "n": 53,
-     "title": "The Light of the World",
+     "title": "A Candle Not Hidden",
      "refs": {
       "Matthew": "5.14-16",
       "Mark": "4.21",
@@ -468,7 +468,7 @@
     },
     {
      "n": 54,
-     "title": "On the Law and the Prophets",
+     "title": "Fulfilling the Law, Not Destroying It",
      "refs": {
       "Matthew": "5.17-20",
       "Luke": "16.16-17"
@@ -476,7 +476,7 @@
     },
     {
      "n": 55,
-     "title": "On Murder and Wrath",
+     "title": "Anger, Insult, and Reconciliation",
      "refs": {
       "Matthew": "5.21-26",
       "Luke": "12.57-59"
@@ -484,7 +484,7 @@
     },
     {
      "n": 56,
-     "title": "On Adultery and Divorce",
+     "title": "Lust, Divorce, and the Offending Hand",
      "refs": {
       "Matthew": "5.27-32",
       "Mark": "9.43-48",
@@ -493,14 +493,14 @@
     },
     {
      "n": 57,
-     "title": "On Oaths",
+     "title": "Swear Not at All",
      "refs": {
       "Matthew": "5.33-37"
      }
     },
     {
      "n": 58,
-     "title": "On Retaliation",
+     "title": "Turning the Other Cheek",
      "refs": {
       "Matthew": "5.38-42",
       "Luke": "6.29-30"
@@ -508,7 +508,7 @@
     },
     {
      "n": 59,
-     "title": "On Love of One's Enemies",
+     "title": "Love Your Enemies",
      "refs": {
       "Matthew": "5.43-48",
       "Luke": "6.27-28"
@@ -516,21 +516,21 @@
     },
     {
      "n": 60,
-     "title": "On Almsgiving",
+     "title": "Giving Alms in Secret",
      "refs": {
       "Matthew": "6.1-4"
      }
     },
     {
      "n": 61,
-     "title": "On Prayer",
+     "title": "Praying in Secret",
      "refs": {
       "Matthew": "6.5-6"
      }
     },
     {
      "n": 62,
-     "title": "The Lord's Prayer",
+     "title": "The Lord’s Prayer",
      "refs": {
       "Matthew": "6.7-15",
       "Mark": "11.25",
@@ -539,14 +539,14 @@
     },
     {
      "n": 63,
-     "title": "On Fasting",
+     "title": "Fasting Without a Sad Countenance",
      "refs": {
       "Matthew": "6.16-18"
      }
     },
     {
      "n": 64,
-     "title": "On Treasures",
+     "title": "Treasure in Heaven",
      "refs": {
       "Matthew": "6.19-21",
       "Luke": "12.33-34"
@@ -554,7 +554,7 @@
     },
     {
      "n": 65,
-     "title": "The Sound Eye",
+     "title": "The Eye as the Light of the Body",
      "refs": {
       "Matthew": "6.22-23",
       "Luke": "11.34-36"
@@ -562,7 +562,7 @@
     },
     {
      "n": 66,
-     "title": "On Serving Two Masters",
+     "title": "No One Can Serve Two Masters",
      "refs": {
       "Matthew": "6.24",
       "Luke": "16.13"
@@ -570,7 +570,7 @@
     },
     {
      "n": 67,
-     "title": "On Anxiety",
+     "title": "Take No Thought for Tomorrow",
      "refs": {
       "Matthew": "6.25-34",
       "Luke": "12.22-32"
@@ -578,7 +578,7 @@
     },
     {
      "n": 68,
-     "title": "On Judging",
+     "title": "The Mote and the Beam",
      "refs": {
       "Matthew": "7.1-5",
       "Mark": "4.24-25",
@@ -587,14 +587,14 @@
     },
     {
      "n": 69,
-     "title": "On Profaning the Holy",
+     "title": "Pearls Before Swine",
      "refs": {
       "Matthew": "7.6"
      }
     },
     {
      "n": 70,
-     "title": "God's Answering of Prayer",
+     "title": "Ask, Seek, Knock",
      "refs": {
       "Matthew": "7.7-11",
       "Luke": "11.9-13"
@@ -610,7 +610,7 @@
     },
     {
      "n": 72,
-     "title": "The Two Ways",
+     "title": "The Strait Gate and the Narrow Way",
      "refs": {
       "Matthew": "7.13-14",
       "Luke": "13.23-24"
@@ -618,7 +618,7 @@
     },
     {
      "n": 73,
-     "title": "\"By their Fruits\"",
+     "title": "Known by Their Fruits",
      "refs": {
       "Matthew": "7.15-20",
       "Luke": "6.43-45"
@@ -626,7 +626,7 @@
     },
     {
      "n": 74,
-     "title": "\"Saying Lord, Lord\"",
+     "title": "Not Everyone Who Says Lord, Lord",
      "refs": {
       "Matthew": "7.21-23",
       "Luke": "6.46"
@@ -634,7 +634,7 @@
     },
     {
      "n": 75,
-     "title": "The House Built upon the Rock",
+     "title": "Two Houses, Rock and Sand",
      "refs": {
       "Matthew": "7.24-27",
       "Luke": "6.47-49"
@@ -642,7 +642,7 @@
     },
     {
      "n": 76,
-     "title": "The Effect of the Sermon",
+     "title": "The Crowd’s Astonishment",
      "refs": {
       "Matthew": "7.28-29",
       "Mark": "1.21-22"
@@ -651,11 +651,11 @@
    ]
   },
   {
-   "title": "§ 7. The Sermon on the Plain (According to Luke)",
+   "title": "Luke’s Sermon on the Plain",
    "pericopes": [
     {
      "n": 77,
-     "title": "Occasion of the Sermon",
+     "title": "Coming Down to the Plain",
      "refs": {
       "Matthew": "4.24-5.2",
       "Mark": "3.7-13a",
@@ -664,7 +664,7 @@
     },
     {
      "n": 78,
-     "title": "The Beatitudes",
+     "title": "Luke’s Four Blessings",
      "refs": {
       "Matthew": "5.3-12",
       "Luke": "6.20b-23"
@@ -672,14 +672,14 @@
     },
     {
      "n": 79,
-     "title": "The Woes",
+     "title": "Luke’s Four Woes",
      "refs": {
       "Luke": "6.24-26"
      }
     },
     {
      "n": 80,
-     "title": "On Love of One's Enemies",
+     "title": "Love Your Enemies, Do Good, Lend",
      "refs": {
       "Matthew": "5.38-48",
       "Luke": "6.27-36"
@@ -687,7 +687,7 @@
     },
     {
      "n": 81,
-     "title": "On Judging",
+     "title": "Judge Not; the Blind Leading the Blind",
      "refs": {
       "Matthew": "7.1-5",
       "Mark": "4.24-25",
@@ -696,7 +696,7 @@
     },
     {
      "n": 82,
-     "title": "\"By their Fruits\"",
+     "title": "A Tree Known by Its Fruit",
      "refs": {
       "Matthew": "7.15-20",
       "Luke": "6.43-45"
@@ -704,7 +704,7 @@
     },
     {
      "n": 83,
-     "title": "The House Built upon the Rock",
+     "title": "Building With and Without a Foundation",
      "refs": {
       "Matthew": "7.21-27",
       "Luke": "6.46-49"
@@ -713,11 +713,11 @@
    ]
   },
   {
-   "title": "§ 8. Jesus' Ministry in Galilee Continued",
+   "title": "The Galilean Ministry Widens",
    "pericopes": [
     {
      "n": 84,
-     "title": "Cleansing of the Leper",
+     "title": "A Leper Made Clean (Matthew’s Order)",
      "refs": {
       "Matthew": "8.1-4",
       "Mark": "1.40-45",
@@ -726,24 +726,23 @@
     },
     {
      "n": 85,
-     "title": "The Centurion of Capernaum",
+     "title": "The Centurion’s Servant",
      "refs": {
       "Matthew": "8.5-13",
-      "Mark": "7.3",
       "Luke": "7.1-10",
       "John": "4.46b-54"
      }
     },
     {
      "n": 86,
-     "title": "The Widow's Son at Nain",
+     "title": "The Widow’s Son at Nain",
      "refs": {
       "Luke": "7.11-17"
      }
     },
     {
      "n": 87,
-     "title": "The Healing of Peter's Mother-in-law",
+     "title": "Peter’s Mother-in-Law Healed (Matthew’s Order)",
      "refs": {
       "Matthew": "8.14-15",
       "Mark": "1.29-31",
@@ -752,7 +751,7 @@
     },
     {
      "n": 88,
-     "title": "The Sick Healed at Evening",
+     "title": "Healing at Evening (Matthew’s Order)",
      "refs": {
       "Matthew": "8.16-17",
       "Mark": "1.32-34",
@@ -761,7 +760,7 @@
     },
     {
      "n": 89,
-     "title": "On Following Jesus",
+     "title": "The Cost of Following: Foxes Have Holes",
      "refs": {
       "Matthew": "8.18-22",
       "Luke": "9.57-62"
@@ -778,7 +777,7 @@
     },
     {
      "n": 91,
-     "title": "The Gadarene Demoniacs",
+     "title": "The Demoniacs Among the Tombs",
      "refs": {
       "Matthew": "8.28-34",
       "Mark": "5.1-20",
@@ -787,7 +786,7 @@
     },
     {
      "n": 92,
-     "title": "The Healing of the Paralytic",
+     "title": "The Paralytic Forgiven and Healed (Matthew’s Order)",
      "refs": {
       "Matthew": "9.1-8",
       "Mark": "2.1-12",
@@ -797,7 +796,7 @@
     },
     {
      "n": 93,
-     "title": "The Call of Levi (Matthew)",
+     "title": "Levi Called (Matthew’s Order)",
      "refs": {
       "Matthew": "9.9-13",
       "Mark": "2.13-17",
@@ -806,7 +805,7 @@
     },
     {
      "n": 94,
-     "title": "The Question about Fasting",
+     "title": "The Question About Fasting (Matthew’s Order)",
      "refs": {
       "Matthew": "9.14-17",
       "Mark": "2.18-22",
@@ -815,7 +814,7 @@
     },
     {
      "n": 95,
-     "title": "Jairus' Daughter and the Woman with a Hemorrhage",
+     "title": "Jairus’ Daughter and the Woman Who Touched His Hem",
      "refs": {
       "Matthew": "9.18-26",
       "Mark": "5.21-43",
@@ -824,16 +823,14 @@
     },
     {
      "n": 96,
-     "title": "Two Blind Men",
+     "title": "Two Blind Men Follow and Are Healed",
      "refs": {
-      "Matthew": "9.27-31",
-      "Mark": "10.46-52",
-      "Luke": "18.35-43"
+      "Matthew": "9.27-31"
      }
     },
     {
      "n": 97,
-     "title": "The Dumb Demoniac",
+     "title": "A Mute Man Speaks",
      "refs": {
       "Matthew": "9.32-34",
       "Mark": "3.22",
@@ -842,7 +839,7 @@
     },
     {
      "n": 98,
-     "title": "The Harvest is Great",
+     "title": "The Harvest Is Great, the Labourers Few",
      "refs": {
       "Matthew": "9.35-38",
       "Mark": "6.6b",
@@ -851,7 +848,7 @@
     },
     {
      "n": 99,
-     "title": "Commissioning the Twelve",
+     "title": "Sending Out the Twelve",
      "refs": {
       "Matthew": "10.1-16",
       "Mark": "6.7",
@@ -860,7 +857,7 @@
     },
     {
      "n": 100,
-     "title": "The Fate of the Disciples",
+     "title": "What the Disciples Will Suffer",
      "refs": {
       "Matthew": "10.17-25",
       "Mark": "13.9-13",
@@ -870,7 +867,7 @@
     },
     {
      "n": 101,
-     "title": "Exhortation to Fearless Confession",
+     "title": "Fear Not: Confess Him Before Men",
      "refs": {
       "Matthew": "10.26-33",
       "Luke": "12.2-9"
@@ -878,7 +875,7 @@
     },
     {
      "n": 102,
-     "title": "Divisions within Households",
+     "title": "Not Peace, But a Sword",
      "refs": {
       "Matthew": "10.34-36",
       "Luke": "12.51-53"
@@ -886,7 +883,7 @@
     },
     {
      "n": 103,
-     "title": "Conditions of Discipleship",
+     "title": "Taking Up the Cross",
      "refs": {
       "Matthew": "10.37-39",
       "Luke": "14.25-27",
@@ -895,7 +892,7 @@
     },
     {
      "n": 104,
-     "title": "Rewards of Discipleship",
+     "title": "A Cup of Cold Water",
      "refs": {
       "Matthew": "10.40-42",
       "Mark": "9.41",
@@ -905,14 +902,14 @@
     },
     {
      "n": 105,
-     "title": "Continuation of Journey",
+     "title": "Moving On to Teach and Preach",
      "refs": {
       "Matthew": "11.1"
      }
     },
     {
      "n": 106,
-     "title": "John the Baptist's Question and Jesus' Answer",
+     "title": "Art Thou He That Should Come?",
      "refs": {
       "Matthew": "11.2-6",
       "Luke": "7.18-23"
@@ -920,7 +917,7 @@
     },
     {
      "n": 107,
-     "title": "Jesus' Witness concerning John",
+     "title": "What Jesus Said About John",
      "refs": {
       "Matthew": "11.7-19",
       "Luke": "7.24-35"
@@ -928,7 +925,7 @@
     },
     {
      "n": 108,
-     "title": "Woes Pronounced on Galilean Cities",
+     "title": "Woe to Chorazin, Bethsaida, Capernaum",
      "refs": {
       "Matthew": "11.20-24",
       "Luke": "10.12-15"
@@ -936,7 +933,7 @@
     },
     {
      "n": 109,
-     "title": "Jesus' Thanksgiving to the Father",
+     "title": "I Thank Thee, Father",
      "refs": {
       "Matthew": "11.25-27",
       "Luke": "10.21-22"
@@ -944,14 +941,14 @@
     },
     {
      "n": 110,
-     "title": "\"Come unto Me\"",
+     "title": "Come Unto Me, All Ye That Labour",
      "refs": {
       "Matthew": "11.28-30"
      }
     },
     {
      "n": 111,
-     "title": "Plucking Grain on the Sabbath",
+     "title": "Grain on the Sabbath (Matthew’s Order)",
      "refs": {
       "Matthew": "12.1-8",
       "Mark": "2.23-28",
@@ -960,7 +957,7 @@
     },
     {
      "n": 112,
-     "title": "Healing the Withered Hand",
+     "title": "The Withered Hand (Matthew’s Order)",
      "refs": {
       "Matthew": "12.9-14",
       "Mark": "3.1-6",
@@ -969,7 +966,7 @@
     },
     {
      "n": 113,
-     "title": "Jesus Heals Multitudes by the Sea",
+     "title": "Healing the Multitudes; Isaiah’s Servant",
      "refs": {
       "Matthew": "12.15-21",
       "Mark": "3.7-12",
@@ -978,7 +975,7 @@
     },
     {
      "n": 114,
-     "title": "The Woman with the Ointment",
+     "title": "A Woman Anoints Him, Compared Across the Gospels",
      "refs": {
       "Matthew": "26.6-13",
       "Mark": "14.3-9",
@@ -988,21 +985,21 @@
     },
     {
      "n": 115,
-     "title": "The Ministering Women",
+     "title": "The Women Who Supported the Ministry",
      "refs": {
       "Luke": "8.1-3"
      }
     },
     {
      "n": 116,
-     "title": "Jesus is Thought to be Beside Himself",
+     "title": "His Friends Think He Is Beside Himself",
      "refs": {
       "Mark": "3.20-21"
      }
     },
     {
      "n": 117,
-     "title": "On Collusion with Satan",
+     "title": "Casting Out Devils by Beelzebub?",
      "refs": {
       "Matthew": "12.22-30",
       "Mark": "3.22-27",
@@ -1011,7 +1008,7 @@
     },
     {
      "n": 118,
-     "title": "The Sin against the Holy Spirit",
+     "title": "The Unpardonable Sin",
      "refs": {
       "Matthew": "12.31-37",
       "Mark": "3.28-30",
@@ -1029,7 +1026,7 @@
     },
     {
      "n": 120,
-     "title": "The Return of the Evil Spirit",
+     "title": "The Unclean Spirit Returns",
      "refs": {
       "Matthew": "12.43-45",
       "Luke": "11.24-26"
@@ -1037,12 +1034,11 @@
     },
     {
      "n": 121,
-     "title": "Jesus' True Kindred",
+     "title": "Who Is My Mother and My Brethren?",
      "refs": {
       "Matthew": "12.46-50",
       "Mark": "3.31-35",
-      "Luke": "8.19-21",
-      "John": "15.14"
+      "Luke": "8.19-21"
      }
     },
     {
@@ -1056,7 +1052,7 @@
     },
     {
      "n": 123,
-     "title": "The Reason for Speaking in Parables",
+     "title": "Why He Speaks in Parables",
      "refs": {
       "Matthew": "13.10-17",
       "Mark": "4.10-12",
@@ -1065,7 +1061,7 @@
     },
     {
      "n": 124,
-     "title": "Interpretation of the Parable of the Sower",
+     "title": "The Sower Explained",
      "refs": {
       "Matthew": "13.18-23",
       "Mark": "4.13-20",
@@ -1074,7 +1070,7 @@
     },
     {
      "n": 125,
-     "title": "\"He who has Ears to Hear, Let him Hear\"",
+     "title": "Nothing Hid That Shall Not Be Known",
      "refs": {
       "Matthew": "5.15",
       "Mark": "4.21-25",
@@ -1083,14 +1079,14 @@
     },
     {
      "n": 126,
-     "title": "The Parable of the Seed Growing Secretly",
+     "title": "The Seed That Grows While He Sleeps",
      "refs": {
       "Mark": "4.26-29"
      }
     },
     {
      "n": 127,
-     "title": "The Parable of the Tares",
+     "title": "The Parable of the Wheat and Tares",
      "refs": {
       "Matthew": "13.24-30"
      }
@@ -1114,7 +1110,7 @@
     },
     {
      "n": 130,
-     "title": "Jesus' Use of Parables",
+     "title": "He Spoke Only in Parables",
      "refs": {
       "Matthew": "13.34-35",
       "Mark": "4.33-34"
@@ -1122,14 +1118,14 @@
     },
     {
      "n": 131,
-     "title": "Interpretation of the Parable of the Tares",
+     "title": "The Wheat and Tares Explained",
      "refs": {
       "Matthew": "13.36-43"
      }
     },
     {
      "n": 132,
-     "title": "The Parables of the Hidden Treasure and of the Pearl",
+     "title": "The Hidden Treasure and the Pearl",
      "refs": {
       "Matthew": "13.44-46"
      }
@@ -1143,14 +1139,14 @@
     },
     {
      "n": 134,
-     "title": "Treasures New and Old",
+     "title": "Things New and Old",
      "refs": {
       "Matthew": "13.51-52"
      }
     },
     {
      "n": 135,
-     "title": "Jesus' True Kindred",
+     "title": "His Mother and Brethren (Mark’s Order)",
      "refs": {
       "Matthew": "12.46-50",
       "Mark": "3.31-35",
@@ -1160,7 +1156,7 @@
     },
     {
      "n": 136,
-     "title": "Stilling the Storm",
+     "title": "Stilling the Storm (Mark’s Order)",
      "refs": {
       "Matthew": "8.23-27",
       "Mark": "4.35-41",
@@ -1169,7 +1165,7 @@
     },
     {
      "n": 137,
-     "title": "The Gerasene Demoniac",
+     "title": "The Man Called Legion",
      "refs": {
       "Matthew": "8.28-34",
       "Mark": "5.1-20",
@@ -1178,7 +1174,7 @@
     },
     {
      "n": 138,
-     "title": "Jairus' Daughter and the Woman with a Hemorrhage",
+     "title": "Jairus’ Daughter and the Woman Healed (Mark’s Order)",
      "refs": {
       "Matthew": "9.18-26",
       "Mark": "5.21-43",
@@ -1187,7 +1183,7 @@
     },
     {
      "n": 139,
-     "title": "Jesus is Rejected at Nazareth",
+     "title": "A Prophet Without Honour at Home",
      "refs": {
       "Matthew": "13.53-58",
       "Mark": "6.1-6a",
@@ -1196,21 +1192,21 @@
     },
     {
      "n": 140,
-     "title": "Second Journey (to Jerusalem)",
+     "title": "Up to Jerusalem for a Feast",
      "refs": {
       "John": "5.1"
      }
     },
     {
      "n": 141,
-     "title": "The Healing at the Pool",
+     "title": "The Man at the Pool of Bethesda",
      "refs": {
       "John": "5.2-47"
      }
     },
     {
      "n": 142,
-     "title": "Commissioning the Twelve",
+     "title": "The Twelve Sent Out Two by Two",
      "refs": {
       "Matthew": "9.35",
       "Mark": "6.6b-13",
@@ -1219,7 +1215,7 @@
     },
     {
      "n": 143,
-     "title": "Opinions regarding Jesus",
+     "title": "Herod Wonders Who He Is",
      "refs": {
       "Matthew": "14.1-2",
       "Mark": "6.14-16",
@@ -1228,7 +1224,7 @@
     },
     {
      "n": 144,
-     "title": "The Death of John the Baptist",
+     "title": "How John the Baptist Died",
      "refs": {
       "Matthew": "14.3-12",
       "Mark": "6.17-29",
@@ -1237,7 +1233,7 @@
     },
     {
      "n": 145,
-     "title": "The Return of the Apostles",
+     "title": "The Apostles Report Back",
      "refs": {
       "Mark": "6.30-31",
       "Luke": "9.10a"
@@ -1245,17 +1241,17 @@
     },
     {
      "n": 146,
-     "title": "Five Thousand are Fed",
+     "title": "Feeding the Five Thousand",
      "refs": {
       "Matthew": "14.13-21",
       "Mark": "6.32-44",
-      "Luke": "9. 10b-17",
+      "Luke": "9.10b-17",
       "John": "6.1-15"
      }
     },
     {
      "n": 147,
-     "title": "The Walking on the Water",
+     "title": "Walking on the Sea",
      "refs": {
       "Matthew": "14.22-33",
       "Mark": "6.45-52",
@@ -1273,14 +1269,14 @@
     },
     {
      "n": 149,
-     "title": "The Bread of Life",
+     "title": "I Am the Bread of Life",
      "refs": {
       "John": "6.26-59"
      }
     },
     {
      "n": 150,
-     "title": "Defilement - Traditional and Real",
+     "title": "What Really Defiles a Person",
      "refs": {
       "Matthew": "15.1-20",
       "Mark": "7.1-23",
@@ -1289,7 +1285,7 @@
     },
     {
      "n": 151,
-     "title": "The Syrophoenician (Canaanite) Woman",
+     "title": "The Gentile Mother’s Persistence",
      "refs": {
       "Matthew": "15.21-28",
       "Mark": "7.24-30"
@@ -1297,7 +1293,7 @@
     },
     {
      "n": 152,
-     "title": "Jesus Heals a Deaf Mute and Many Others",
+     "title": "A Deaf Man Hears; Many Others Healed",
      "refs": {
       "Matthew": "15.29-31",
       "Mark": "7.31-37"
@@ -1305,7 +1301,7 @@
     },
     {
      "n": 153,
-     "title": "Four Thousand are Fed",
+     "title": "Feeding the Four Thousand",
      "refs": {
       "Matthew": "15.32-39",
       "Mark": "8.1-10"
@@ -1313,7 +1309,7 @@
     },
     {
      "n": 154,
-     "title": "The Pharisees Seek a Sign",
+     "title": "The Pharisees Demand a Sign",
      "refs": {
       "Matthew": "16.1-4",
       "Mark": "8.11-13",
@@ -1322,7 +1318,7 @@
     },
     {
      "n": 155,
-     "title": "The Leaven of the Pharisees",
+     "title": "Beware the Leaven of the Pharisees",
      "refs": {
       "Matthew": "16.5-12",
       "Mark": "8.14-21",
@@ -1331,7 +1327,7 @@
     },
     {
      "n": 156,
-     "title": "A Blind Man is Healed at Bethsaida",
+     "title": "A Blind Man Healed in Two Stages",
      "refs": {
       "Mark": "8.22-26"
      }
@@ -1339,18 +1335,18 @@
    ]
   },
   {
-   "title": "§ 9. The Way to the Cross",
+   "title": "Turning Toward Jerusalem",
    "pericopes": [
     {
      "n": 157,
-     "title": "Many Disciples Take Offense at Jesus",
+     "title": "Many Disciples Turn Back",
      "refs": {
       "John": "6.60-66"
      }
     },
     {
      "n": 158,
-     "title": "Peter's Confession",
+     "title": "Whom Say Ye That I Am?",
      "refs": {
       "Matthew": "16.13-20",
       "Mark": "8.27-30",
@@ -1360,7 +1356,7 @@
     },
     {
      "n": 159,
-     "title": "Jesus Foretells His Passion",
+     "title": "The First Prediction of His Death",
      "refs": {
       "Matthew": "16.21-23",
       "Mark": "8.31-33",
@@ -1369,7 +1365,7 @@
     },
     {
      "n": 160,
-     "title": "\"If Any Man would Come after Me\"",
+     "title": "Whosoever Will Save His Life",
      "refs": {
       "Matthew": "16.24-28",
       "Mark": "8.34-9.1",
@@ -1388,7 +1384,7 @@
     },
     {
      "n": 162,
-     "title": "The Coming of Elijah",
+     "title": "Elias Must First Come",
      "refs": {
       "Matthew": "17.10-13",
       "Mark": "9.11-13"
@@ -1396,7 +1392,7 @@
     },
     {
      "n": 163,
-     "title": "Jesus Heals a Boy Possessed by a Spirit",
+     "title": "The Boy His Disciples Could Not Heal",
      "refs": {
       "Matthew": "17.14-21",
       "Mark": "9.14-29",
@@ -1405,7 +1401,7 @@
     },
     {
      "n": 164,
-     "title": "Jesus Foretells His Passion again",
+     "title": "The Second Prediction of His Death",
      "refs": {
       "Matthew": "17.22-23",
       "Mark": "9.30-32",
@@ -1414,14 +1410,14 @@
     },
     {
      "n": 165,
-     "title": "Payment of the Temple Tax",
+     "title": "The Coin in the Fish’s Mouth",
      "refs": {
       "Matthew": "17.24-27"
      }
     },
     {
      "n": 166,
-     "title": "True Greatness",
+     "title": "Who Is Greatest? A Child Set in Their Midst",
      "refs": {
       "Matthew": "18.1-5",
       "Mark": "9.33-37",
@@ -1431,7 +1427,7 @@
     },
     {
      "n": 167,
-     "title": "The Strange Exorcist",
+     "title": "One Who Casts Out Devils in His Name",
      "refs": {
       "Matthew": "10.42",
       "Mark": "9.38-41",
@@ -1440,7 +1436,7 @@
     },
     {
      "n": 168,
-     "title": "Warnings concerning Temptations",
+     "title": "Offences, Millstones, and Fire",
      "refs": {
       "Matthew": "18.6-9",
       "Mark": "9.42-50",
@@ -1457,7 +1453,7 @@
     },
     {
      "n": 170,
-     "title": "On Reproving One's Brother",
+     "title": "If Thy Brother Trespass Against Thee",
      "refs": {
       "Matthew": "18.15-18",
       "Luke": "17.3",
@@ -1466,14 +1462,14 @@
     },
     {
      "n": 171,
-     "title": "\"Where Two or Three are Gathered Together\"",
+     "title": "Where Two or Three Are Gathered",
      "refs": {
       "Matthew": "18.19-20"
      }
     },
     {
      "n": 172,
-     "title": "On Reconciliation",
+     "title": "Seventy Times Seven",
      "refs": {
       "Matthew": "18.21-22",
       "Luke": "17.4"
@@ -1489,11 +1485,11 @@
    ]
   },
   {
-   "title": "§ 10. Last Journey to Jerusalem (According to Luke)",
+   "title": "Luke’s Long Journey to Jerusalem",
    "pericopes": [
     {
      "n": 174,
-     "title": "Decision to Go to Jerusalem",
+     "title": "Setting His Face Toward Jerusalem",
      "refs": {
       "Matthew": "19.1-2",
       "Mark": "10.1",
@@ -1502,14 +1498,14 @@
     },
     {
      "n": 175,
-     "title": "Jesus is Rejected by Samaritans",
+     "title": "A Samaritan Village Refuses Him",
      "refs": {
       "Luke": "9.52-56"
      }
     },
     {
      "n": 176,
-     "title": "On Following Jesus",
+     "title": "Three Would-Be Followers",
      "refs": {
       "Matthew": "8.18-22",
       "Luke": "9.57-62"
@@ -1517,7 +1513,7 @@
     },
     {
      "n": 177,
-     "title": "Commissioning the Seventy",
+     "title": "Sending Out the Seventy",
      "refs": {
       "Matthew": "9.37-38",
       "Luke": "10.1-12"
@@ -1525,7 +1521,7 @@
     },
     {
      "n": 178,
-     "title": "Woes Pronounced on Galilaean Cities",
+     "title": "Woe to the Cities That Saw the Works",
      "refs": {
       "Matthew": "11.20-24",
       "Luke": "10.13-15"
@@ -1533,7 +1529,7 @@
     },
     {
      "n": 179,
-     "title": "\"He who Hears You, Hears Me\"",
+     "title": "He That Heareth You Heareth Me",
      "refs": {
       "Matthew": "10.4",
       "Luke": "10.16",
@@ -1542,14 +1538,14 @@
     },
     {
      "n": 180,
-     "title": "The Return of the Seventy",
+     "title": "The Seventy Return Rejoicing",
      "refs": {
       "Luke": "10.17-20"
      }
     },
     {
      "n": 181,
-     "title": "Jesus' Thanksgiving to the Father, and the Blessedness of the Disciples",
+     "title": "Hidden From the Wise, Revealed to Babes",
      "refs": {
       "Matthew": "11.25-27",
       "Luke": "10.21-24"
@@ -1557,7 +1553,7 @@
     },
     {
      "n": 182,
-     "title": "The Lawyer's Question",
+     "title": "What Shall I Do to Inherit Eternal Life?",
      "refs": {
       "Matthew": "22.34-40",
       "Mark": "12.28-34",
@@ -1580,7 +1576,7 @@
     },
     {
      "n": 185,
-     "title": "The Lord's Prayer",
+     "title": "Teach Us to Pray",
      "refs": {
       "Matthew": "6.9-13",
       "Luke": "11.1-4"
@@ -1588,14 +1584,14 @@
     },
     {
      "n": 186,
-     "title": "The Importunate Friend at Midnight",
+     "title": "The Friend Who Knocks at Midnight",
      "refs": {
       "Luke": "11.5-8"
      }
     },
     {
      "n": 187,
-     "title": "Encouragement to Pray",
+     "title": "Ask and It Shall Be Given",
      "refs": {
       "Matthew": "7.7-11",
       "Luke": "11.9-13"
@@ -1603,7 +1599,7 @@
     },
     {
      "n": 188,
-     "title": "The Beelzebub Controversy",
+     "title": "The Charge That He Casts Out Devils by Beelzebub",
      "refs": {
       "Matthew": "12.22-30",
       "Mark": "3.22-27",
@@ -1612,7 +1608,7 @@
     },
     {
      "n": 189,
-     "title": "The Return of the Evil Spirit",
+     "title": "The Spirit That Returns With Seven Worse",
      "refs": {
       "Matthew": "12.43-45",
       "Luke": "11.24-26"
@@ -1620,14 +1616,14 @@
     },
     {
      "n": 190,
-     "title": "True Blessedness",
+     "title": "Blessed Rather Are They That Hear the Word",
      "refs": {
       "Luke": "11.27-28"
      }
     },
     {
      "n": 191,
-     "title": "The Sign of Jonah",
+     "title": "No Sign But the Sign of Jonas",
      "refs": {
       "Matthew": "12.38-42",
       "Mark": "8.11-12",
@@ -1636,7 +1632,7 @@
     },
     {
      "n": 192,
-     "title": "Concerning Light",
+     "title": "A Candle Set on a Candlestick",
      "refs": {
       "Matthew": "5.15",
       "Mark": "4.21",
@@ -1645,7 +1641,7 @@
     },
     {
      "n": 193,
-     "title": "The Sound Eye",
+     "title": "When the Eye Is Single",
      "refs": {
       "Matthew": "6.22-23",
       "Luke": "11.34-36"
@@ -1653,7 +1649,7 @@
     },
     {
      "n": 194,
-     "title": "Discourses against the Pharisees and Lawyers",
+     "title": "Woes Against Pharisees and Lawyers",
      "refs": {
       "Matthew": "15.1-9",
       "Mark": "7.1-9",
@@ -1662,7 +1658,7 @@
     },
     {
      "n": 195,
-     "title": "The Leaven of the Pharisees",
+     "title": "The Leaven Which Is Hypocrisy",
      "refs": {
       "Matthew": "16.5-6",
       "Mark": "8.14-15",
@@ -1671,7 +1667,7 @@
     },
     {
      "n": 196,
-     "title": "Exhortation to Fearless Confession",
+     "title": "Confessing Him Before Men",
      "refs": {
       "Matthew": "10.26-33",
       "Luke": "12.2-9"
@@ -1679,7 +1675,7 @@
     },
     {
      "n": 197,
-     "title": "The Sin against the Holy Spirit",
+     "title": "Speaking Against the Holy Ghost",
      "refs": {
       "Matthew": "12.31-32",
       "Mark": "3.28-30",
@@ -1688,7 +1684,7 @@
     },
     {
      "n": 198,
-     "title": "The Assistance of the Holy Spirit",
+     "title": "The Spirit Will Teach You What to Say",
      "refs": {
       "Matthew": "10.19-20",
       "Mark": "13.11",
@@ -1697,7 +1693,7 @@
     },
     {
      "n": 199,
-     "title": "Warning against Avarice",
+     "title": "Beware of Covetousness",
      "refs": {
       "Luke": "12.13-15"
      }
@@ -1711,7 +1707,7 @@
     },
     {
      "n": 201,
-     "title": "Anxieties about Earthly Things",
+     "title": "Consider the Ravens and the Lilies",
      "refs": {
       "Matthew": "6.25-34",
       "Luke": "12.22-32"
@@ -1719,7 +1715,7 @@
     },
     {
      "n": 202,
-     "title": "Treasures in Heaven",
+     "title": "Sell What Ye Have and Give Alms",
      "refs": {
       "Matthew": "6.19-21",
       "Luke": "12.33-34"
@@ -1727,7 +1723,7 @@
     },
     {
      "n": 203,
-     "title": "Watchfulness and Faithfulness",
+     "title": "Loins Girded, Lights Burning",
      "refs": {
       "Matthew": "24.42-51",
       "Luke": "12.35-48"
@@ -1735,7 +1731,7 @@
     },
     {
      "n": 204,
-     "title": "Division in Households",
+     "title": "Fire on the Earth; Households Divided",
      "refs": {
       "Matthew": "10.34-36",
       "Luke": "12.49-53"
@@ -1743,7 +1739,7 @@
     },
     {
      "n": 205,
-     "title": "Interpreting the Times",
+     "title": "Discerning the Sky But Not the Time",
      "refs": {
       "Matthew": "16.2-3",
       "Luke": "12.54-56"
@@ -1751,7 +1747,7 @@
     },
     {
      "n": 206,
-     "title": "Agreement with One's Accuser",
+     "title": "Settle With Your Adversary on the Way",
      "refs": {
       "Matthew": "5.25-26",
       "Luke": "12.57-59"
@@ -1759,21 +1755,21 @@
     },
     {
      "n": 207,
-     "title": "Repentance or Destruction (the Parable of the Barren Fig Tree)",
+     "title": "Except Ye Repent; the Barren Fig Tree",
      "refs": {
       "Luke": "13.1-9"
      }
     },
     {
      "n": 208,
-     "title": "The Healing of the Crippled Woman on the Sabbath",
+     "title": "The Woman Bowed Together Eighteen Years",
      "refs": {
       "Luke": "13.10-17"
      }
     },
     {
      "n": 209,
-     "title": "The Parable of the Mustard Seed",
+     "title": "The Mustard Seed (Luke’s Placement)",
      "refs": {
       "Matthew": "13.31-32",
       "Mark": "4.30-32",
@@ -1782,7 +1778,7 @@
     },
     {
      "n": 210,
-     "title": "The Parable of the Leaven",
+     "title": "The Leaven (Luke’s Placement)",
      "refs": {
       "Matthew": "13.33",
       "Luke": "13.20-21"
@@ -1790,7 +1786,7 @@
     },
     {
      "n": 211,
-     "title": "Exclusion from the Kingdom",
+     "title": "Strive to Enter in at the Strait Gate",
      "refs": {
       "Matthew": "7.13-14",
       "Mark": "10.31",
@@ -1799,14 +1795,14 @@
     },
     {
      "n": 212,
-     "title": "A Warning against Herod",
+     "title": "Go Tell That Fox",
      "refs": {
       "Luke": "13.31-33"
      }
     },
     {
      "n": 213,
-     "title": "The Lament over Jerusalem",
+     "title": "O Jerusalem, Jerusalem",
      "refs": {
       "Matthew": "23.37-39",
       "Luke": "13.34-35"
@@ -1814,14 +1810,14 @@
     },
     {
      "n": 214,
-     "title": "The Healing of the Man with Dropsy",
+     "title": "Healing the Man With Dropsy on the Sabbath",
      "refs": {
       "Luke": "14.1-6"
      }
     },
     {
      "n": 215,
-     "title": "Teaching on Humility",
+     "title": "Take the Lowest Room",
      "refs": {
       "Luke": "14.7-14"
      }
@@ -1830,13 +1826,12 @@
      "n": 216,
      "title": "The Parable of the Great Supper",
      "refs": {
-      "Matthew": "22.1-14",
       "Luke": "14.15-24"
      }
     },
     {
      "n": 217,
-     "title": "The Conditions of Discipleship",
+     "title": "Counting the Cost",
      "refs": {
       "Matthew": "10.37-38",
       "Luke": "14.25-33"
@@ -1844,7 +1839,7 @@
     },
     {
      "n": 218,
-     "title": "The Parable of Salt",
+     "title": "Salt That Has Lost Its Savour (Luke’s Placement)",
      "refs": {
       "Matthew": "5.13",
       "Mark": "9.49-50",
@@ -1853,7 +1848,7 @@
     },
     {
      "n": 219,
-     "title": "The Parable of the Lost Sheep",
+     "title": "The Lost Sheep (Luke’s Placement)",
      "refs": {
       "Matthew": "18.12-14",
       "Luke": "15.1-7"
@@ -1882,14 +1877,14 @@
     },
     {
      "n": 223,
-     "title": "On Faithfulness in What is Least",
+     "title": "Faithful in That Which Is Least",
      "refs": {
       "Luke": "16.10-12"
      }
     },
     {
      "n": 224,
-     "title": "On Serving Two Masters",
+     "title": "Ye Cannot Serve God and Mammon",
      "refs": {
       "Matthew": "6.24",
       "Luke": "16.13"
@@ -1897,14 +1892,14 @@
     },
     {
      "n": 225,
-     "title": "The Pharisees Reproved",
+     "title": "That Which Is Highly Esteemed Among Men",
      "refs": {
       "Luke": "16.14-15"
      }
     },
     {
      "n": 226,
-     "title": "Concerning the Law",
+     "title": "The Law and the Prophets Were Until John",
      "refs": {
       "Matthew": "11.12-13",
       "Luke": "16.16-17"
@@ -1912,7 +1907,7 @@
     },
     {
      "n": 227,
-     "title": "Concerning Divorce",
+     "title": "Putting Away a Wife",
      "refs": {
       "Matthew": "19.9",
       "Mark": "10.11-12",
@@ -1921,14 +1916,14 @@
     },
     {
      "n": 228,
-     "title": "The Parable of the Rich Man and Lazarus",
+     "title": "The Rich Man and Lazarus",
      "refs": {
       "Luke": "16.19-31"
      }
     },
     {
      "n": 229,
-     "title": "Warning against Offenses",
+     "title": "It Is Impossible But That Offences Come",
      "refs": {
       "Matthew": "18.6-7",
       "Mark": "9.42",
@@ -1937,7 +1932,7 @@
     },
     {
      "n": 230,
-     "title": "On Forgiveness",
+     "title": "Forgive Him Seven Times a Day",
      "refs": {
       "Matthew": "18.15",
       "Luke": "17.3b-4"
@@ -1945,7 +1940,7 @@
     },
     {
      "n": 231,
-     "title": "On Faith",
+     "title": "Faith as a Grain of Mustard Seed",
      "refs": {
       "Matthew": "17.19-21",
       "Mark": "9.28-29",
@@ -1954,28 +1949,28 @@
     },
     {
      "n": 232,
-     "title": "We are Unprofitable Servants",
+     "title": "The Servant Who Only Did His Duty",
      "refs": {
       "Luke": "17.7-10"
      }
     },
     {
      "n": 233,
-     "title": "The Cleansing of the Ten Lepers",
+     "title": "Ten Lepers Healed; One Returns",
      "refs": {
       "Luke": "17.11-19"
      }
     },
     {
      "n": 234,
-     "title": "On the Coming of the Kingdom of God",
+     "title": "The Kingdom of God Is Within You",
      "refs": {
       "Luke": "17.20-21"
      }
     },
     {
      "n": 235,
-     "title": "The Day of the Son of Man",
+     "title": "As It Was in the Days of Noe",
      "refs": {
       "Matthew": "24.23",
       "Mark": "13.19-23",
@@ -2000,95 +1995,95 @@
    ]
   },
   {
-   "title": "§ 11. Jesus at the Feast of Tabernacles (According to John)",
+   "title": "The Feast of Tabernacles and After (John)",
    "pericopes": [
     {
      "n": 238,
-     "title": "Jesus Remains in Galilee",
+     "title": "His Brethren Urge Him to Go Up",
      "refs": {
       "John": "7.1-9"
      }
     },
     {
      "n": 239,
-     "title": "Journey to Jerusalem in Secret",
+     "title": "Going Up Secretly to the Feast",
      "refs": {
       "John": "7.10-13"
      }
     },
     {
      "n": 240,
-     "title": "Teaching in the Temple",
+     "title": "Teaching at the Feast of Tabernacles",
      "refs": {
       "John": "7.14-39"
      }
     },
     {
      "n": 241,
-     "title": "Division among the People regarding Jesus",
+     "title": "The Crowd Divides Over Him",
      "refs": {
       "John": "7.40-52"
      }
     },
     {
      "n": 242,
-     "title": "The Woman Caught in Adultery",
+     "title": "The Woman Taken in Adultery",
      "refs": {
       "John": "7.53-8.11"
      }
     },
     {
      "n": 243,
-     "title": "\"I am the Light of the World\"",
+     "title": "I Am the Light of the World",
      "refs": {
       "John": "8.12-20"
      }
     },
     {
      "n": 244,
-     "title": "Discussion with the Jews",
+     "title": "Whither I Go, Ye Cannot Come",
      "refs": {
       "John": "8.21-29"
      }
     },
     {
      "n": 245,
-     "title": "\"The Truth will Make You Free\"",
+     "title": "The Truth Shall Make You Free",
      "refs": {
       "John": "8.30-36"
      }
     },
     {
      "n": 246,
-     "title": "Children of the Devil",
+     "title": "Whose Children Are Ye?",
      "refs": {
       "John": "8.37-47"
      }
     },
     {
      "n": 247,
-     "title": "\"Before Abraham was, I am\"",
+     "title": "Before Abraham Was, I Am",
      "refs": {
       "John": "8.48-59"
      }
     },
     {
      "n": 248,
-     "title": "Jesus Heals the Man Born Blind",
+     "title": "The Man Born Blind",
      "refs": {
       "John": "9.1-41"
      }
     },
     {
      "n": 249,
-     "title": "\"I am the Good Shepherd\"",
+     "title": "I Am the Good Shepherd",
      "refs": {
       "John": "10.1-18"
      }
     },
     {
      "n": 250,
-     "title": "Division among the Jews again",
+     "title": "Division Again Among the Jews",
      "refs": {
       "John": "10.19-21"
      }
@@ -2096,11 +2091,11 @@
    ]
   },
   {
-   "title": "§ 12. The Ministry in Judea",
+   "title": "Ministry in Judea and Beyond Jordan",
    "pericopes": [
     {
      "n": 251,
-     "title": "Departure to Judea",
+     "title": "Leaving Galilee for Judea",
      "refs": {
       "Matthew": "19.1-2",
       "Mark": "10.1",
@@ -2109,7 +2104,7 @@
     },
     {
      "n": 252,
-     "title": "On Divorce and Celibacy",
+     "title": "The Question About Divorce",
      "refs": {
       "Matthew": "19.3-12",
       "Mark": "10.2-12",
@@ -2118,7 +2113,7 @@
     },
     {
      "n": 253,
-     "title": "Jesus Blesses the Children",
+     "title": "Suffer the Little Children",
      "refs": {
       "Matthew": "19.13-15",
       "Mark": "10.13-16",
@@ -2127,7 +2122,7 @@
     },
     {
      "n": 254,
-     "title": "The Rich Young Man",
+     "title": "The Rich Young Ruler",
      "refs": {
       "Matthew": "19.16-22",
       "Mark": "10.17-22",
@@ -2136,7 +2131,7 @@
     },
     {
      "n": 255,
-     "title": "On Riches and the Rewards of Discipleship",
+     "title": "A Camel Through a Needle’s Eye",
      "refs": {
       "Matthew": "19.23-30",
       "Mark": "10.23-31",
@@ -2145,7 +2140,7 @@
     },
     {
      "n": 256,
-     "title": "The Parable of the Laborers in the Vineyard",
+     "title": "The Parable of the Labourers in the Vineyard",
      "refs": {
       "Matthew": "20.1-16",
       "Mark": "10.31",
@@ -2154,14 +2149,14 @@
     },
     {
      "n": 257,
-     "title": "Jesus at the Feast of Dedication in Jerusalem",
+     "title": "At the Feast of Dedication",
      "refs": {
       "John": "10.22-39"
      }
     },
     {
      "n": 258,
-     "title": "Jesus Withdraws across the Jordan",
+     "title": "Withdrawing Beyond Jordan",
      "refs": {
       "John": "10.40-42"
      }
@@ -2175,21 +2170,21 @@
     },
     {
      "n": 260,
-     "title": "The Chief Priests and Pharisees Take Counsel against Jesus",
+     "title": "The Council Decides He Must Die",
      "refs": {
       "John": "11.45-53"
      }
     },
     {
      "n": 261,
-     "title": "Jesus Retires to Ephraim",
+     "title": "Withdrawing to Ephraim",
      "refs": {
       "John": "11.54-57"
      }
     },
     {
      "n": 262,
-     "title": "The Third Prediction of the Passion",
+     "title": "The Third Prediction of His Death",
      "refs": {
       "Matthew": "20.17-19",
       "Mark": "10.32-34",
@@ -2198,7 +2193,7 @@
     },
     {
      "n": 263,
-     "title": "The Sons of Zebedee; Precedence among the Disciples",
+     "title": "James and John Ask for the Chief Seats",
      "refs": {
       "Matthew": "20.20-28",
       "Mark": "10.35-45",
@@ -2207,7 +2202,7 @@
     },
     {
      "n": 264,
-     "title": "The Healing of the Blind Men (Bartimaeus)",
+     "title": "Blind Bartimaeus",
      "refs": {
       "Matthew": "20.29-34",
       "Mark": "10.46-52",
@@ -2216,7 +2211,7 @@
     },
     {
      "n": 265,
-     "title": "Zacchaeus",
+     "title": "Zacchaeus in the Sycomore Tree",
      "refs": {
       "Matthew": "18.11",
       "Luke": "19.1-10"
@@ -2226,8 +2221,6 @@
      "n": 266,
      "title": "The Parable of the Pounds",
      "refs": {
-      "Matthew": "25.14-30",
-      "Mark": "13.34",
       "Luke": "19.11-27"
      }
     },
@@ -2243,7 +2236,7 @@
     },
     {
      "n": 268,
-     "title": "The Plot against Lazarus",
+     "title": "The Plot Against Lazarus",
      "refs": {
       "John": "12.9-11"
      }
@@ -2251,11 +2244,11 @@
    ]
   },
   {
-   "title": "§ 13. The Final Ministry in Jerusalem",
+   "title": "The Last Week in Jerusalem",
    "pericopes": [
     {
      "n": 269,
-     "title": "The Triumphal Entry",
+     "title": "Riding Into Jerusalem",
      "refs": {
       "Matthew": "21.1-9",
       "Mark": "11.1-10",
@@ -2265,14 +2258,14 @@
     },
     {
      "n": 270,
-     "title": "Jesus Weeps over Jerusalem",
+     "title": "Weeping Over the City",
      "refs": {
       "Luke": "19.41-44"
      }
     },
     {
      "n": 271,
-     "title": "Jesus in Jerusalem (Cleansing the Temple), Return to Bethany",
+     "title": "Entering the Temple; Returning to Bethany",
      "refs": {
       "Matthew": "21.10-17",
       "Mark": "11.11",
@@ -2281,7 +2274,7 @@
     },
     {
      "n": 272,
-     "title": "The Cursing of the Fig Tree",
+     "title": "Cursing the Fig Tree",
      "refs": {
       "Matthew": "21.18-19",
       "Mark": "11.12-14"
@@ -2289,7 +2282,7 @@
     },
     {
      "n": 273,
-     "title": "The Cleansing of the Temple",
+     "title": "Driving Out the Money Changers (Holy Week Placement)",
      "refs": {
       "Matthew": "21.12-13",
       "Mark": "11.15-17",
@@ -2299,7 +2292,7 @@
     },
     {
      "n": 274,
-     "title": "The Chief Priests and Scribes Conspire against Jesus",
+     "title": "The Chief Priests Look for a Way to Destroy Him",
      "refs": {
       "Mark": "11.18-19",
       "Luke": "19.47-48"
@@ -2307,7 +2300,7 @@
     },
     {
      "n": 275,
-     "title": "The Fig Tree is Withered",
+     "title": "The Fig Tree Found Withered",
      "refs": {
       "Matthew": "21.20-22",
       "Mark": "11.20-26"
@@ -2315,7 +2308,7 @@
     },
     {
      "n": 276,
-     "title": "The Question about Authority",
+     "title": "By What Authority Doest Thou These Things?",
      "refs": {
       "Matthew": "21.23-27",
       "Mark": "11.27-33",
@@ -2340,15 +2333,14 @@
     },
     {
      "n": 279,
-     "title": "The Parable of the Great Supper",
+     "title": "The Marriage of the King’s Son",
      "refs": {
-      "Matthew": "22.1-14",
-      "Luke": "14.15-24"
+      "Matthew": "22.1-14"
      }
     },
     {
      "n": 280,
-     "title": "On Paying Tribute to Caesar",
+     "title": "Render Unto Caesar",
      "refs": {
       "Matthew": "22.15-22",
       "Mark": "12.13-17",
@@ -2357,7 +2349,7 @@
     },
     {
      "n": 281,
-     "title": "The Question about the Resurrection",
+     "title": "The Sadducees’ Question About the Resurrection",
      "refs": {
       "Matthew": "22.23-33",
       "Mark": "12.18-27",
@@ -2375,7 +2367,7 @@
     },
     {
      "n": 283,
-     "title": "The Question about David's Son",
+     "title": "How Is Christ David’s Son?",
      "refs": {
       "Matthew": "22.41-46",
       "Mark": "12.35-37a",
@@ -2384,7 +2376,7 @@
     },
     {
      "n": 284,
-     "title": "Woe to the Scribes and Pharisees",
+     "title": "Woe Unto You, Scribes and Pharisees",
      "refs": {
       "Matthew": "23.1-36",
       "Mark": "12.37b-40",
@@ -2393,7 +2385,7 @@
     },
     {
      "n": 285,
-     "title": "Jesus' Lament over Jerusalem",
+     "title": "O Jerusalem (Matthew’s Placement)",
      "refs": {
       "Matthew": "23.37-39",
       "Luke": "13.34-35"
@@ -2401,7 +2393,7 @@
     },
     {
      "n": 286,
-     "title": "The Widow's Mite",
+     "title": "The Widow’s Two Mites",
      "refs": {
       "Mark": "12.41-44",
       "Luke": "21.1-4"
@@ -2410,11 +2402,11 @@
    ]
   },
   {
-   "title": "§ 14. The Olivet Discourse",
+   "title": "Prophecies on the Mount of Olives",
    "pericopes": [
     {
      "n": 287,
-     "title": "Prediction of the Destruction of the Temple",
+     "title": "Not One Stone Left Upon Another",
      "refs": {
       "Matthew": "24.1-2",
       "Mark": "13.1-2",
@@ -2423,7 +2415,7 @@
     },
     {
      "n": 288,
-     "title": "Signs before the End",
+     "title": "The Beginning of Sorrows",
      "refs": {
       "Matthew": "24.3-8",
       "Mark": "13.3-8",
@@ -2432,7 +2424,7 @@
     },
     {
      "n": 289,
-     "title": "Persecutions Foretold",
+     "title": "Ye Shall Be Hated of All Nations",
      "refs": {
       "Matthew": "24.9-14",
       "Mark": "13.9-13",
@@ -2441,7 +2433,7 @@
     },
     {
      "n": 290,
-     "title": "The Desolating Sacrilege",
+     "title": "The Abomination of Desolation",
      "refs": {
       "Matthew": "24.15-22",
       "Mark": "13.14-20",
@@ -2459,7 +2451,7 @@
     },
     {
      "n": 292,
-     "title": "The Coming of the Son of Man",
+     "title": "The Sign of the Son of Man",
      "refs": {
       "Matthew": "24.29-31",
       "Mark": "13.24-27",
@@ -2468,7 +2460,7 @@
     },
     {
      "n": 293,
-     "title": "The Time of the Coming: the Parable of the Fig Tree",
+     "title": "The Parable of the Fig Tree; No Man Knows the Day",
      "refs": {
       "Matthew": "24.32-36",
       "Mark": "13.28-32",
@@ -2477,7 +2469,7 @@
     },
     {
      "n": 294,
-     "title": "Conclusion: \"Take Heed, Watch!\" (According to Mark)",
+     "title": "Watch: The Master of the House Returns (Mark)",
      "refs": {
       "Matthew": "25.13-15",
       "Mark": "13.33-37",
@@ -2486,7 +2478,7 @@
     },
     {
      "n": 295,
-     "title": "Conclusion: \"Take Heed, Watch!\" (According to Luke)",
+     "title": "Watch and Pray Always (Luke)",
      "refs": {
       "Luke": "21.34-36"
      }
@@ -2494,11 +2486,11 @@
    ]
   },
   {
-   "title": "§ 15. Conclusion of the Account before the Passion",
+   "title": "Final Parables and Warnings",
    "pericopes": [
     {
      "n": 296,
-     "title": "The Parable of the Flood and Exhortation to Watchfulness",
+     "title": "As in the Days of Noe; Two in the Field",
      "refs": {
       "Matthew": "24.37-44",
       "Mark": "13.35",
@@ -2507,7 +2499,7 @@
     },
     {
      "n": 297,
-     "title": "The Parable of the Good Servant and the Wicked Servant",
+     "title": "The Faithful Servant and the Evil Servant",
      "refs": {
       "Matthew": "24.45-51",
       "Luke": "12.41-46"
@@ -2525,13 +2517,12 @@
      "title": "The Parable of the Talents",
      "refs": {
       "Matthew": "25.14-30",
-      "Mark": "13.34",
-      "Luke": "19.11-27"
+      "Mark": "13.34"
      }
     },
     {
      "n": 300,
-     "title": "The Last Judgment",
+     "title": "The Sheep and the Goats",
      "refs": {
       "Matthew": "25.31-46",
       "John": "5.29"
@@ -2539,28 +2530,28 @@
     },
     {
      "n": 301,
-     "title": "The Ministry of Jesus in Jerusalem",
+     "title": "Teaching by Day, Lodging on Olivet",
      "refs": {
       "Luke": "21.37-38"
      }
     },
     {
      "n": 302,
-     "title": "Greeks Seek Jesus; Discourse on His Death",
+     "title": "Greeks Ask to See Him; the Corn of Wheat",
      "refs": {
       "John": "12.20-36"
      }
     },
     {
      "n": 303,
-     "title": "The Unbelief of the People",
+     "title": "Why They Would Not Believe",
      "refs": {
       "John": "12.37-43"
      }
     },
     {
      "n": 304,
-     "title": "Judgment by the Word",
+     "title": "The Word Shall Judge Him",
      "refs": {
       "John": "12.44-50"
      }
@@ -2568,11 +2559,11 @@
    ]
   },
   {
-   "title": "§ 16. The Passion Narrative",
+   "title": "The Passion",
    "pericopes": [
     {
      "n": 305,
-     "title": "Jesus' Death is Premeditated",
+     "title": "The Plot Two Days Before Passover",
      "refs": {
       "Matthew": "26.1-5",
       "Mark": "14.1-2",
@@ -2581,7 +2572,7 @@
     },
     {
      "n": 306,
-     "title": "The Anointing in Bethany",
+     "title": "The Anointing at Bethany (Passion Placement)",
      "refs": {
       "Matthew": "26.6-13",
       "Mark": "14.3-9",
@@ -2591,7 +2582,7 @@
     },
     {
      "n": 307,
-     "title": "The Betrayal by Judas",
+     "title": "Judas Agrees to Betray Him",
      "refs": {
       "Matthew": "26.14-16",
       "Mark": "14.10-11",
@@ -2600,7 +2591,7 @@
     },
     {
      "n": 308,
-     "title": "Preparation for the Passover",
+     "title": "Preparing the Passover",
      "refs": {
       "Matthew": "26.17-20",
       "Mark": "14.12-17",
@@ -2609,16 +2600,16 @@
     },
     {
      "n": 309,
-     "title": "Washing the Disciples' Feet",
+     "title": "Washing the Disciples’ Feet",
      "refs": {
       "Matthew": "10.24",
-      "Luke": "6.4",
+      "Luke": "6.40",
       "John": "13.1-20"
      }
     },
     {
      "n": 310,
-     "title": "Jesus Foretells His Betrayal",
+     "title": "One of You Shall Betray Me",
      "refs": {
       "Matthew": "26.21-25",
       "Mark": "14.18-21",
@@ -2628,7 +2619,7 @@
     },
     {
      "n": 311,
-     "title": "The Last Supper",
+     "title": "The Bread and the Cup",
      "refs": {
       "Matthew": "26.26-29",
       "Mark": "14.22-25",
@@ -2637,7 +2628,7 @@
     },
     {
      "n": 312,
-     "title": "Jesus Foretells His Betrayal",
+     "title": "One of You Shall Betray Me (Duplicate Entry)",
      "refs": {
       "Matthew": "26.21-25",
       "Mark": "14.18-21",
@@ -2647,7 +2638,7 @@
     },
     {
      "n": 313,
-     "title": "Precedence among the Disciples and the Reward of Discipleship",
+     "title": "Which of Them Should Be Greatest",
      "refs": {
       "Matthew": "20.24-28",
       "Mark": "10.41-45",
@@ -2656,14 +2647,14 @@
     },
     {
      "n": 314,
-     "title": "The New Commandment of Love",
+     "title": "A New Commandment: Love One Another",
      "refs": {
       "John": "13.31-35"
      }
     },
     {
      "n": 315,
-     "title": "Peter's Denial Predicted",
+     "title": "Before the Cock Crow",
      "refs": {
       "Matthew": "26.30-35",
       "Mark": "14.26-31",
@@ -2673,98 +2664,98 @@
     },
     {
      "n": 316,
-     "title": "The Two Swords",
+     "title": "It Is Enough: The Two Swords",
      "refs": {
       "Luke": "22.35-38"
      }
     },
     {
      "n": 317,
-     "title": "\"Let Not Your Hearts be Troubled\"",
+     "title": "Let Not Your Heart Be Troubled",
      "refs": {
       "John": "14.1-14"
      }
     },
     {
      "n": 318,
-     "title": "The Promise of the Paraclete",
+     "title": "The Promise of the Comforter",
      "refs": {
       "John": "14.15-26"
      }
     },
     {
      "n": 319,
-     "title": "The Gift of Peace",
+     "title": "My Peace I Give Unto You",
      "refs": {
       "John": "14.27-31"
      }
     },
     {
      "n": 320,
-     "title": "Jesus the True Vine",
+     "title": "I Am the True Vine",
      "refs": {
       "John": "15.1-8"
      }
     },
     {
      "n": 321,
-     "title": "\"Abide in My Love\"",
+     "title": "Continue Ye in My Love",
      "refs": {
       "John": "15.9-17"
      }
     },
     {
      "n": 322,
-     "title": "The World's Hatred",
+     "title": "If the World Hate You",
      "refs": {
       "John": "15.18-25"
      }
     },
     {
      "n": 323,
-     "title": "The Witness of the Paraclete",
+     "title": "The Comforter Shall Testify of Me",
      "refs": {
       "John": "15.26-27"
      }
     },
     {
      "n": 324,
-     "title": "On Persecutions",
+     "title": "They Shall Put You Out of the Synagogues",
      "refs": {
       "John": "16.1-4"
      }
     },
     {
      "n": 325,
-     "title": "The Work of the Paraclete",
+     "title": "The Spirit Will Guide You Into All Truth",
      "refs": {
       "John": "16.5-15"
      }
     },
     {
      "n": 326,
-     "title": "Sorrow Turned to Joy",
+     "title": "Your Sorrow Shall Be Turned Into Joy",
      "refs": {
       "John": "16.16-22"
      }
     },
     {
      "n": 327,
-     "title": "Prayer in the Name of Jesus",
+     "title": "Ask in My Name",
      "refs": {
       "John": "16.23-28"
      }
     },
     {
      "n": 328,
-     "title": "Prediction of the Disciples' Flight",
+     "title": "Ye Shall Be Scattered",
      "refs": {
       "John": "16.29-33"
      }
     },
     {
      "n": 329,
-     "title": "The Intercessory Prayer",
+     "title": "The Great Intercessory Prayer",
      "refs": {
       "John": "17.1-26"
      }
@@ -2781,7 +2772,7 @@
     },
     {
      "n": 331,
-     "title": "Jesus Arrested",
+     "title": "The Arrest",
      "refs": {
       "Matthew": "26.47-56",
       "Mark": "14.43-52",
@@ -2791,7 +2782,7 @@
     },
     {
      "n": 332,
-     "title": "Jesus before the Sanhedrin (Peter's Denial)",
+     "title": "Before the Sanhedrin",
      "refs": {
       "Matthew": "26.57-68",
       "Mark": "14.53-65",
@@ -2801,7 +2792,7 @@
     },
     {
      "n": 333,
-     "title": "Peter's Denial",
+     "title": "Peter Denies Him Three Times",
      "refs": {
       "Matthew": "26.69-75",
       "Mark": "14.66-72",
@@ -2811,7 +2802,7 @@
     },
     {
      "n": 334,
-     "title": "Jesus Delivered to Pilate",
+     "title": "Handed Over to Pilate",
      "refs": {
       "Matthew": "27.1-2",
       "Mark": "15.1",
@@ -2821,14 +2812,14 @@
     },
     {
      "n": 335,
-     "title": "The Death of Judas",
+     "title": "The End of Judas",
      "refs": {
       "Matthew": "27.3-10"
      }
     },
     {
      "n": 336,
-     "title": "The Trial before Pilate",
+     "title": "Before Pilate",
      "refs": {
       "Matthew": "27.11-14",
       "Mark": "15.2-5",
@@ -2838,21 +2829,21 @@
     },
     {
      "n": 337,
-     "title": "Jesus before Herod",
+     "title": "Before Herod",
      "refs": {
       "Luke": "23.6-12"
      }
     },
     {
      "n": 338,
-     "title": "Pilate Declares Jesus Innocent",
+     "title": "Pilate Finds No Fault in Him",
      "refs": {
       "Luke": "23.13-16"
      }
     },
     {
      "n": 339,
-     "title": "Jesus or Barabbas?",
+     "title": "Barabbas Released",
      "refs": {
       "Matthew": "27.15-23",
       "Mark": "15.6-14",
@@ -2862,7 +2853,7 @@
     },
     {
      "n": 340,
-     "title": "\"Behold the Man!\"",
+     "title": "Behold the Man",
      "refs": {
       "Matthew": "27.28-31a",
       "Mark": "15.17-20a",
@@ -2871,7 +2862,7 @@
     },
     {
      "n": 341,
-     "title": "Pilate Delivers Jesus to be Crucified",
+     "title": "Pilate Gives Him Up",
      "refs": {
       "Matthew": "27.24-26",
       "Mark": "15.15",
@@ -2881,7 +2872,7 @@
     },
     {
      "n": 342,
-     "title": "Jesus Mocked by the Soldiers",
+     "title": "The Crown of Thorns",
      "refs": {
       "Matthew": "27.27-31a",
       "Mark": "15.16-20a",
@@ -2890,7 +2881,7 @@
     },
     {
      "n": 343,
-     "title": "The Road to Golgotha",
+     "title": "The Way to Golgotha",
      "refs": {
       "Matthew": "27.31b-32",
       "Mark": "15.20b-21",
@@ -2910,7 +2901,7 @@
     },
     {
      "n": 345,
-     "title": "Jesus Derided on the Cross",
+     "title": "Mocked on the Cross",
      "refs": {
       "Matthew": "27.38-43",
       "Mark": "15.27-32a",
@@ -2938,7 +2929,7 @@
     },
     {
      "n": 348,
-     "title": "Witnesses of the Crucifixion",
+     "title": "Those Who Watched From Afar",
      "refs": {
       "Matthew": "27.55-56",
       "Mark": "15.40-41",
@@ -2948,14 +2939,14 @@
     },
     {
      "n": 349,
-     "title": "Jesus' Side Pierced",
+     "title": "The Pierced Side",
      "refs": {
       "John": "19.31-37"
      }
     },
     {
      "n": 350,
-     "title": "The Burial of Jesus",
+     "title": "The Burial",
      "refs": {
       "Matthew": "27.57-61",
       "Mark": "15.42-47",
@@ -2965,7 +2956,7 @@
     },
     {
      "n": 351,
-     "title": "The Guard at the Tomb",
+     "title": "Sealing the Tomb",
      "refs": {
       "Matthew": "27.62-66"
      }
@@ -2973,11 +2964,11 @@
    ]
   },
   {
-   "title": "§ 17. The Resurrection",
+   "title": "The Resurrection and the Appearances",
    "pericopes": [
     {
      "n": 352,
-     "title": "The Women at the Tomb",
+     "title": "The Women Find the Tomb Empty",
      "refs": {
       "Matthew": "28.1-8",
       "Mark": "16.1-8",
@@ -2987,7 +2978,7 @@
     },
     {
      "n": 353,
-     "title": "Jesus Appears to the Women",
+     "title": "He Appears to the Women",
      "refs": {
       "Matthew": "28.9-10",
       "Mark": "16.9-11",
@@ -2997,14 +2988,14 @@
     },
     {
      "n": 354,
-     "title": "The Report of the Guard",
+     "title": "The Guards Are Paid to Lie",
      "refs": {
       "Matthew": "28.11-15"
      }
     },
     {
      "n": 355,
-     "title": "Jesus Appears to Two on the Way to Emmaus",
+     "title": "The Road to Emmaus",
      "refs": {
       "Mark": "16.12-13",
       "Luke": "24.13-35"
@@ -3012,7 +3003,7 @@
     },
     {
      "n": 356,
-     "title": "Jesus Appears to His Disciples (Thomas being Absent)",
+     "title": "He Appears to the Disciples (Thomas Absent)",
      "refs": {
       "Luke": "24.36-43",
       "John": "20.19-23"
@@ -3020,35 +3011,35 @@
     },
     {
      "n": 357,
-     "title": "Jesus Appears to His Disciples (Thomas being Present)",
+     "title": "He Appears to Thomas",
      "refs": {
       "John": "20.24-29"
      }
     },
     {
      "n": 358,
-     "title": "Jesus Appears to the Eleven While They Sit at Table",
+     "title": "He Appears to the Eleven at Table",
      "refs": {
       "Mark": "16.14-18"
      }
     },
     {
      "n": 359,
-     "title": "Jesus Appears to the Eleven on a Mountain in Galilee",
+     "title": "He Appears on a Mountain in Galilee",
      "refs": {
       "Matthew": "28.16-20"
      }
     },
     {
      "n": 360,
-     "title": "Jesus Appears to His Disciples by the Sea of Tiberias",
+     "title": "By the Sea of Tiberias",
      "refs": {
       "John": "21.1-14"
      }
     },
     {
      "n": 361,
-     "title": "Paul's Account of the Appearances of Jesus",
+     "title": "Paul’s List of the Appearances",
      "refs": {
       "Mark": "1 Cor. 15.3-8"
      }
@@ -3056,32 +3047,32 @@
    ]
   },
   {
-   "title": "§ 18. The Endings of the Gospels",
+   "title": "How the Gospels Close",
    "pericopes": [
     {
      "n": 362,
-     "title": "The Shorter Ending of Mark",
+     "title": "Mark’s Shorter Ending",
      "refs": {
       "Mark": "see note below"
      }
     },
     {
      "n": 363,
-     "title": "The Longer Ending of Mark",
+     "title": "Mark’s Longer Ending",
      "refs": {
       "Mark": "16.9-20"
      }
     },
     {
      "n": 364,
-     "title": "The Ending of Matthew: The Great Commission",
+     "title": "Matthew’s Ending: The Great Commission",
      "refs": {
       "Matthew": "28.16-20"
      }
     },
     {
      "n": 365,
-     "title": "The Ending of Luke: Jesus' Last Words and Ascension",
+     "title": "Luke’s Ending: Blessing and Ascension",
      "refs": {
       "Mark": "16.15,19",
       "Luke": "24.44-53"
@@ -3089,14 +3080,14 @@
     },
     {
      "n": 366,
-     "title": "The Ending of John",
+     "title": "John’s Ending: Written That Ye Might Believe",
      "refs": {
       "John": "20.30-31"
      }
     },
     {
      "n": 367,
-     "title": "The Appendix to John: Jesus at the Sea of Tiberias.",
+     "title": "John’s Appendix: The World Could Not Contain",
      "refs": {
       "John": "21.1-25"
      }

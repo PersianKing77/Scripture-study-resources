@@ -1,0 +1,5 @@
+{
+  "_format": "Bundled-text manifest. 'bible' maps a translation code to the gospel names bundled under texts/<CODE>/<Gospel>/<chapter>.json, each file an array of {verse, text} objects, or to \"all\" for every gospel. 'restoration' lists volume filenames bundled under restoration/. Anything not listed here is loaded from a network host instead.",
+  "bible": { "WEB": ["Matthew", "Mark", "Luke", "John", "1 Corinthians"] },
+  "restoration": []
+}
