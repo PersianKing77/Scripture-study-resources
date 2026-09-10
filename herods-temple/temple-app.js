@@ -757,8 +757,8 @@ renderer.domElement.addEventListener('pointermove', e => {
     return;
   }
   if (look) {                                  // drag anywhere on the view to look around
-    walk.yawT -= (e.clientX - look.x) * 0.0038;
-    walk.pitchT = clamp(walk.pitchT - (e.clientY - look.y) * 0.0038, -1.2, 1.1);
+    walk.yawT += (e.clientX - look.x) * 0.0038;
+    walk.pitchT = clamp(walk.pitchT + (e.clientY - look.y) * 0.0038, -1.2, 1.1);
     look = { x: e.clientX, y: e.clientY };
   }
 });
