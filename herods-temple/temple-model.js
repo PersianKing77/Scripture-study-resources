@@ -1162,13 +1162,29 @@ export function buildTemple(opts = {}) {
     stairs('z', IPz, 1, 12, 0.25, 0.5, 60, 0, -40),
     stairs('z', -IPz, -1, 12, 0.25, 0.5, 60, 0, -40));
 
-  // soreg
+  // soreg — a low fence around the platform, broken by a gate under each of the four
+  // warning-inscription plaques below (the posts/rails used to run solid past them).
   const soreg = [];
   const sx0 = IPx0 - 5, sx1 = IPx1 + 5, sz = IPz + 5;
-  for (let x = sx0; x <= sx1; x += 3) { soreg.push(box(0.25, 1.5, 0.25, M.stone, x, 0.75, sz, 'soreg_post')); soreg.push(box(0.25, 1.5, 0.25, M.stone, x, 0.75, -sz, 'soreg_post')); }
-  for (let z = -sz; z <= sz; z += 3) { soreg.push(box(0.25, 1.5, 0.25, M.stone, sx1, 0.75, z, 'soreg_post')); soreg.push(box(0.25, 1.5, 0.25, M.stone, sx0, 0.75, z, 'soreg_post')); }
-  [[0, sz], [0, -sz]].forEach(([, z]) => { soreg.push(box(sx1 - sx0, 0.18, 0.32, M.stone, (sx0 + sx1) / 2, 1.42, z, 'soreg_rail')); soreg.push(box(sx1 - sx0, 0.14, 0.3, M.stone, (sx0 + sx1) / 2, 0.7, z, 'soreg_rail')); });
-  [sx0, sx1].forEach(x => { soreg.push(box(0.32, 0.18, sz * 2, M.stone, x, 1.42, 0, 'soreg_rail')); soreg.push(box(0.3, 0.14, sz * 2, M.stone, x, 0.7, 0, 'soreg_rail')); });
+  const GATE_HALF = 1.6, eastGateZs = [-12, 12], sideGateX = -40;
+  const railSeg = (axis, fixed, a0, a1, name) => {
+    const len = a1 - a0, mid = (a0 + a1) / 2;
+    if (len <= 0) return;
+    if (axis === 'x') { soreg.push(box(len, 0.18, 0.32, M.stone, mid, 1.42, fixed, name)); soreg.push(box(len, 0.14, 0.3, M.stone, mid, 0.7, fixed, name)); }
+    else { soreg.push(box(0.32, 0.18, len, M.stone, fixed, 1.42, mid, name)); soreg.push(box(0.3, 0.14, len, M.stone, fixed, 0.7, mid, name)); }
+  };
+  for (let x = sx0; x <= sx1; x += 3) {
+    if (Math.abs(x - sideGateX) >= GATE_HALF) { soreg.push(box(0.25, 1.5, 0.25, M.stone, x, 0.75, sz, 'soreg_post')); soreg.push(box(0.25, 1.5, 0.25, M.stone, x, 0.75, -sz, 'soreg_post')); }
+  }
+  for (let z = -sz; z <= sz; z += 3) {
+    if (!eastGateZs.some(gz => Math.abs(z - gz) < GATE_HALF)) soreg.push(box(0.25, 1.5, 0.25, M.stone, sx1, 0.75, z, 'soreg_post'));
+    soreg.push(box(0.25, 1.5, 0.25, M.stone, sx0, 0.75, z, 'soreg_post'));
+  }
+  [sz, -sz].forEach(z => { railSeg('x', z, sx0, sideGateX - GATE_HALF, 'soreg_rail'); railSeg('x', z, sideGateX + GATE_HALF, sx1, 'soreg_rail'); });
+  railSeg('z', sx1, -sz, eastGateZs[0] - GATE_HALF, 'soreg_rail');
+  railSeg('z', sx1, eastGateZs[0] + GATE_HALF, eastGateZs[1] - GATE_HALF, 'soreg_rail');
+  railSeg('z', sx1, eastGateZs[1] + GATE_HALF, sz, 'soreg_rail');
+  railSeg('z', sx0, -sz, sz, 'soreg_rail');
   [[sx1 + 0.3, 12], [sx1 + 0.3, -12], [-40, sz + 0.3], [-40, -sz - 0.3]].forEach(([x, z], i) =>
     soreg.push(box(i < 2 ? 0.14 : 1.1, 0.75, i < 2 ? 1.1 : 0.14, M.marble, x, 1.05, z, 'warning_inscription')));
   feat('soreg', soreg);
@@ -1215,7 +1231,7 @@ export function buildTemple(opts = {}) {
     box(3.4, 4, 17, M.stone, CWx1 + 1.5, 21, 0, 'beautiful_gate_lintel'),
     box(0.35, 12, 2.4, M.bronze, CWx1 + 1.5, 9.2, 1.35, 'beautiful_gate_door'),
     box(0.35, 12, 2.4, M.bronze, CWx1 + 1.5, 9.2, -1.35, 'beautiful_gate_door'),
-    stairs('x', CWx1 + 3.2, 1, 12, 0.25, 0.55, 18, 0, 0));
+    stairs('x', CWx1 + 3.2 + 12 * 0.55, -1, 12, 0.25, 0.55, 18, 0, 0));
 
   // ---------- azarah podium & wall, Nicanor Gate ----------
   const az = [];
