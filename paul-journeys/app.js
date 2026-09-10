@@ -99,23 +99,60 @@ if (window.topojson) {
     document.body.classList.remove("notiles");
   }).catch(() => { /* still unavailable: falls back to the plain sea ground below */ });
 }
-/* the 50m land file carries a handful of degenerate simplification artifacts near the poles —
-   rings that span most of the globe's longitude while barely varying in latitude, painting as a
-   spurious horizontal band across the ocean. Real coastlines never do this, so drop any ring
-   that does before it ever reaches the renderer. */
+/* the 50m land file has a handful of small rings that legitimately straddle the antimeridian
+   (Wrangel Island, far-east Arctic islands). Plotted raw, the jump from +179 to -180 draws a
+   straight line clear across the whole map — the horizontal band seen in testing. Unwrap just
+   those small rings (shift by 360 wherever a segment jumps more than 180 degrees). Skip large
+   rings: the main Afro-Eurasian landmass is deliberately split at the dateline with a synthetic
+   cut edge, and unwrapping it would drag the whole continent off to one side instead of fixing
+   anything. */
+/* the 50m land file's Eurasian coastline crosses the antimeridian directly (near Chukotka,
+   Russia, ~65-69N). Naively plotted, the jump from -180 to +180 draws a line straight across the
+   whole projected width — the horizontal band across Scandinavia/Russia seen in testing.
+   For small rings (islands near the dateline, e.g. Wrangel Island) a simple cumulative unwrap
+   (shift by 360 wherever a segment jumps more than 180 degrees) keeps the shape intact. For the
+   one huge ring that crosses the dateline TWICE, far apart in its point sequence (the main
+   Afro-Eurasian coastline), unwrapping would drag the whole continent 360 degrees off to one
+   side. Instead, keep only the longest contiguous run between crossings and close it directly —
+   this drops only the sliver of Chukotka that actually sits past the dateline, invisible at this
+   map's Mediterranean/Near-East scale, while leaving the rest of the continent untouched. */
 function scrubLandArtifacts(land) {
-  const keepRing = (ring) => {
-    let minLng = Infinity, maxLng = -Infinity, minLat = Infinity, maxLat = -Infinity;
-    ring.forEach(([lng, lat]) => {
-      if (lng < minLng) minLng = lng; if (lng > maxLng) maxLng = lng;
-      if (lat < minLat) minLat = lat; if (lat > maxLat) maxLat = lat;
-    });
-    return !(maxLng - minLng > 100 && maxLat - minLat < 8);
+  const fixRing = (ring) => {
+    const jumpIdx = [0];
+    for (let i = 1; i < ring.length; i++) if (Math.abs(ring[i][0] - ring[i - 1][0]) > 180) jumpIdx.push(i);
+    if (jumpIdx.length === 1) return ring;
+    jumpIdx.push(ring.length);
+    if (ring.length <= 200) {
+      for (let i = 1; i < ring.length; i++) {
+        let d = ring[i][0] - ring[i - 1][0];
+        while (d > 180) { ring[i][0] -= 360; d = ring[i][0] - ring[i - 1][0]; }
+        while (d < -180) { ring[i][0] += 360; d = ring[i][0] - ring[i - 1][0]; }
+      }
+      return ring;
+    }
+    const segments = [];
+    for (let k = 0; k < jumpIdx.length - 1; k++) segments.push(ring.slice(jumpIdx[k], jumpIdx[k + 1]));
+    segments.sort((a, b) => b.length - a.length);
+    const kept = segments[0];
+    if (kept.length > 2) kept.push(kept[0].slice());
+    return kept;
+  };
+  // a couple of rings are pure simplification noise: near-zero latitude thickness (a sliver or a
+  // polar closing seam), not real land. Unwrapping can't fix those — drop them outright.
+  const isDegenerate = (ring) => {
+    let minLat = Infinity, maxLat = -Infinity;
+    ring.forEach(([, lat]) => { if (lat < minLat) minLat = lat; if (lat > maxLat) maxLat = lat; });
+    return (maxLat - minLat) < 0.2;
   };
   (land.features || []).forEach(f => {
     const g = f.geometry; if (!g) return;
-    if (g.type === "Polygon") g.coordinates = g.coordinates.filter(keepRing);
-    else if (g.type === "MultiPolygon") g.coordinates = g.coordinates.map(poly => poly.filter(keepRing)).filter(poly => poly.length);
+    if (g.type === "Polygon") {
+      g.coordinates = g.coordinates.map(fixRing).filter(r => !isDegenerate(r));
+    } else if (g.type === "MultiPolygon") {
+      g.coordinates = g.coordinates
+        .map(poly => poly.map(fixRing).filter(r => !isDegenerate(r)))
+        .filter(poly => poly.length);
+    }
   });
 }
 
