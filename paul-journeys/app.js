@@ -4,6 +4,17 @@ const P = window.PAUL_PLACES, J = window.PAUL_JOURNEYS, LETTER_SITES = window.PA
 const T0 = 4, T1 = 69;
 const STORE = "paulAtlas.v1";
 const $ = (s) => document.querySelector(s);
+/* Keyboard/screen-reader parity for div-based rows: role="button" + tabindex are set in the
+   markup; this wires Enter/Space to fire the same click each row already listens for. */
+function activatable(nodeList) {
+  nodeList.forEach(el => {
+    el.setAttribute("role", "button");
+    el.setAttribute("tabindex", "0");
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); el.click(); }
+    });
+  });
+}
 
 const store = (() => {
   let d = { marks: {}, notes: {} };
@@ -20,6 +31,7 @@ const store = (() => {
 const state = {
   year: 46, visible: new Set(J.map(j => j.id)), active: "j1",
   place: null, ctx: null, playing: false, evIdx: 0,
+  overlay: { on: false, a: null, b: null, sharedOnly: false, prev: null },
   cfm: { week: null, places: new Set(), journeys: new Set() }
 };
 
@@ -66,54 +78,26 @@ function journeyKm(j) { return j.stops.reduce((s, _, i) => s + legKm(j, i), 0); 
 
 /* ---------- map ---------- */
 const map = L.map("map", { center: [37.6, 27.5], zoom: 5, zoomControl: true, worldCopyJump: false,
-  minZoom: 3, maxZoom: 17, attributionControl: true });
-/* Esri's World Topographic basemap: keyless, and labelled in Latin script / English exonyms
-   (standard OSM tiles label each place in its local script — Arabic, Hebrew, Greek).
-   Falls back to OpenStreetMap if the service is unreachable. */
-const ATTRIB = 'Tiles © Esri — Esri, DeLorme, NAVTEQ, USGS, NPS · Place data © OpenStreetMap contributors';
-const intlTiles = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {
-  attribution: ATTRIB, maxZoom: 19, detectRetina: false
-}).addTo(map);
-let tileFails = 0, swapped = false;
-intlTiles.on("tileerror", () => {
-  if (swapped || ++tileFails < 6) return;
-  swapped = true;
-  map.removeLayer(intlTiles);
-  const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '© OpenStreetMap contributors', maxZoom: 19
-  }).addTo(map);
-  // no network at all: fall back to a plain sea ground so routes and labels still read
-  let osmFails = 0;
-  osm.on("tileerror", () => {
-    if (++osmFails < 6 || document.body.classList.contains("notiles")) return;
-    map.removeLayer(osm);
-    document.body.classList.add("notiles");
-  });
-});
-if (navigator.onLine === false) document.body.classList.add("notiles");
-
-/* basemap choices. Satellite and relief carry no printed place names, so the atlas's own
-   labels are all that show — often the clearest way to read ancient terrain. */
-const BASES = [
-  { id: "topo", label: "Topographic", layer: intlTiles },
-  { id: "sat", label: "Satellite", url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    attribution: 'Imagery © Esri — Maxar, Earthstar Geographics, USDA FSA, USGS, Aerogrid, IGN, IGP' },
-  { id: "relief", label: "Relief (no labels)", url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}",
-    attribution: 'Shaded relief © Esri' }
-];
+  minZoom: 3, maxZoom: 17, attributionControl: false });
+/* No live tile service is used: hosted basemap tiles (Esri, OpenStreetMap, etc.) carry usage
+   policies and, at commercial scale, licensing terms this atlas has not cleared. Coastlines are
+   instead drawn once from a static, public-domain vector file (Natural Earth land boundaries,
+   via the world-atlas package) — a versioned data file, not a hosted map/tile service — so every
+   place, route and label still sits on real geography with nothing tracked per view. */
+document.body.classList.add("notiles");
 let baseIdx = 0;
-function setBase(i) {
-  const cur = BASES[baseIdx], next = BASES[i % BASES.length];
-  if (next === cur) return;
-  if (cur.layer) map.removeLayer(cur.layer);
-  if (!next.layer) next.layer = L.tileLayer(next.url, { attribution: next.attribution, maxZoom: 19 });
-  next.layer.addTo(map); next.layer.bringToBack();
-  baseIdx = i % BASES.length;
-  store.set("base", next.id);
-  document.body.classList.toggle("sat", next.id === "sat");
-  const b = $("#btnBase"); if (b) b.textContent = next.label === "Topographic" ? "Map" : next.label.split(" ")[0];
-  updateLabels();
+const BASES = [{ id: "none", label: "No basemap imagery", attribution: "" }];
+if (window.topojson) {
+  const loadLand = window.PAUL_LAND ? Promise.resolve(window.PAUL_LAND) : fetch("data/land-50m.json").then(r => r.json());
+  loadLand.then(topo => {
+    const land = topojson.feature(topo, topo.objects.land);
+    L.geoJSON(land, { interactive: false, className: "landmass" })
+      .addTo(map).bringToBack();
+    document.body.classList.remove("notiles");
+  }).catch(() => { /* offline or blocked: falls back to the plain sea ground below */ });
 }
+
+
 
 const routeLayer = L.layerGroup().addTo(map);
 const markerLayer = L.layerGroup().addTo(map);
@@ -235,8 +219,9 @@ function renderMap() {
     });
   });
   updateLabels();
+  if (layerState.gospel) { styleGospel(); updateGospelLabels(); }
 
-  // travelling head
+  if (state.overlay.on) styleComparedCities(present);
   let head = null, headJ = null;
   J.forEach(j => {
     if (!state.visible.has(j.id)) return;
@@ -295,12 +280,21 @@ function renderTimeline() {
   $("#year").innerHTML = `${yr}<small>TIMELINE</small>`;
   $("#scrub").value = y;
   const e = currentEvent();
-  if (e) {
+  const gWeek = state.cfm.week != null && !state.cfm.journeys.size
+    ? CFM.find(w => w.week === state.cfm.week) : null;
+  if (gWeek) {
+    /* Gospel weeks have no itinerary on the clock, so the timeline label carries the lesson instead */
+    document.body.classList.add("gweek");
+    $("#eventlabel").innerHTML = `<b>${gWeek.readings}</b> &nbsp;<span
+      style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:var(--muted)">
+      STUDY WEEK ${gWeek.week}</span> &nbsp;· ${gWeek.coverage}`;
+  } else if (e) {
+    document.body.classList.remove("gweek");
     const p = P[e.s.place];
     $("#eventlabel").innerHTML = `<b>${p.name}</b> &nbsp;<span style="color:${e.j.color}">▬</span>
-      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:#8d9a9c">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:var(--muted)">
       ${e.j.name.toUpperCase()}</span> &nbsp;· ${e.s.date} &nbsp;·
-      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#c9a227">${e.s.ref}</span>`;
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold)">${e.s.ref}</span>`;
   }
   // highlight the current stop in the rail
   document.querySelectorAll(".stop").forEach(el => el.classList.remove("now"));
@@ -326,45 +320,51 @@ function buildRail() {
         ${i ? ` <span class="mode">${s.mode === "sea" ? "⛵ " + fmtDist(legKm(j, i)) : s.mode === "land" ? "⛬ " + fmtDist(legKm(j, i)) : ""}</span>` : ""}
         </div></div>`).join("")}
       <div class="stop" style="grid-template-columns:1fr;padding-left:30px">
-        <div style="font-size:11.5px;color:#8d9a9c;line-height:1.5;padding:6px 0 2px">${j.summary}</div></div>
+        <div style="font-size:11.5px;color:var(--muted);line-height:1.5;padding:6px 0 2px">${j.summary}</div></div>
     </div>`;
   }).join("");
 
-  $("#railnote").innerHTML = `<b style="color:#cbc2b0">Legend.</b> Solid line = journey travelled;
+  $("#railnote").innerHTML = `<b style="color:var(--parch-dim)">Legend.</b> Solid line = journey travelled;
     dotted = route not yet reached at this point on the timeline; dashes = disputed, post-Acts route.
     Curved links are sea passages. Distances are route estimates (Roman roads and sailing tracks),
     not straight lines. Dates follow the Gallio inscription (Acts 18:12), which fixes Corinth to AD 51–52.
-    <br><br>Also on the map: <b style="color:#cbc2b0">Colossae</b>, a church Paul wrote to but never visited.`;
+    <br><br>Also on the map: <b style="color:var(--parch-dim)">Colossae</b>, a church Paul wrote to but never visited.`;
 
   $("#jlist").querySelectorAll(".jrow").forEach(row => {
+    row.setAttribute("aria-label", row.querySelector(".jname").textContent + " — toggle or open itinerary");
     row.addEventListener("click", (e) => {
       if (e.target.classList.contains("jswatch")) { toggleJourney(row.dataset.j); return; }
       setActive(row.dataset.j, true);
     });
   });
+  activatable($("#jlist").querySelectorAll(".jrow"));
   $("#jlist").querySelectorAll(".stop[data-i]").forEach(st => {
+    st.setAttribute("aria-label", "Open " + (st.querySelector(".nm") ? st.querySelector(".nm").textContent : "stop"));
     st.addEventListener("click", () => {
       const j = journeyOf(st.dataset.j), i = +st.dataset.i;
       state.year = j.timeline[i]; state.active = j.id;
       selectPlace(j.stops[i].place, { jid: j.id, i });
-      map.flyTo([P[j.stops[i].place].lat, P[j.stops[i].place].lng], Math.max(map.getZoom(), 7), { duration: .8 });
+      flyToVisible(P[j.stops[i].place].lat, P[j.stops[i].place].lng, Math.max(map.getZoom(), 7), { duration: .8 });
       renderAll();
     });
   });
+  activatable($("#jlist").querySelectorAll(".stop[data-i]"));
 }
 function toggleJourney(id) {
+  if (state.overlay.on) exitCompare();
   state.visible.has(id) ? state.visible.delete(id) : state.visible.add(id);
   buildRail(); renderAll();
 }
 function setActive(id, fit) {
+  if (state.overlay.on && id !== state.overlay.a && id !== state.overlay.b) exitCompare();
   state.active = id;
   if (!state.visible.has(id)) state.visible.add(id);
   const j = journeyOf(id);
   state.year = j.timeline[j.timeline.length - 1];
   if (fit) {
     const pts = j.stops.map(s => [P[s.place].lat, P[s.place].lng]);
-    map.flyToBounds(L.latLngBounds(pts).pad(0.18), { duration: .9 });
-    if (window.innerWidth <= 760) document.body.classList.remove("rail-open");
+    map.flyToBounds(L.latLngBounds(pts).pad(0.18), { duration: .9, ...fitPad() });
+    if (isCompact()) document.body.classList.remove("rail-open");
   }
   buildRail(); renderAll();
 }
@@ -395,7 +395,7 @@ function wirePanel() {
   d.querySelectorAll("[data-go]").forEach(el => el.addEventListener("click", () => {
     const gid = el.dataset.go; if (!P[gid]) return;
     selectPlace(gid);
-    map.flyTo([P[gid].lat, P[gid].lng], Math.max(map.getZoom(), 6), { duration: .9 });
+    flyToVisible(P[gid].lat, P[gid].lng, Math.max(map.getZoom(), 6), { duration: .9 });
   }));
   d.querySelectorAll("[data-person]").forEach(el =>
     el.addEventListener("click", () => showPerson(el.dataset.person)));
@@ -412,10 +412,11 @@ function wirePanel() {
     if (prev.t === "person") showPerson(prev.k);
     if (prev.t === "letter") showLetterPanel(prev.k);
     if (prev.t === "cfm") showCFMPanel(prev.k);
+    if (prev.t === "passage") showPassagePanel(prev.k);
   });
   const cl = d.querySelector(".dclose"); if (cl) cl.onclick = closeDetail;
   $("#app").classList.add("detail-open");
-  if (window.innerWidth <= 760) document.body.classList.remove("rail-open");
+  if (isCompact()) document.body.classList.remove("rail-open");
   d.scrollTop = 0;
   setTimeout(() => map.invalidateSize(), 320);
 }
@@ -468,27 +469,27 @@ function showPerson(name) {
     sect("In brief", `<p>${pp.note}</p>`) +
     sect("Places named at", `<div class="tags">${pp.places.map(id => P[id]
       ? `<span class="chip" data-go="${id}">${P[id].name}</span>` : "").join("")}</div>
-      <p style="font-size:12px;color:#8d9a9c;margin-top:8px">Click a place to open it on the map.</p>`) +
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Click a place to open it on the map.</p>`) +
     sect("Itineraries", journeys.length ? journeys.map(j => `<div class="occ" data-j="${j.id}">
       <div class="dot" style="background:${j.color}"></div>
       <div><span class="occname">${j.name}</span><div class="om">${j.years} · ${j.acts}</div></div></div>`).join("")
-      : `<p style="color:#8d9a9c">Named only outside the itineraries.</p>`) +
+      : `<p style="color:var(--muted)">Named only outside the itineraries.</p>`) +
     sect("Scripture", `<div class="tags">${pp.refs.map(r =>
       `<span class="chip" data-passage="${r.replace(/[–—]/g, "-")}">${r}</span>`).join("")}</div>
-      <p style="font-size:12px;color:#8d9a9c;margin-top:8px">Click a reference to read it in full (KJV).</p>`) +
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Click a reference to read it in full (WEB).</p>`) +
     (letters.length ? sect("Letters", `<div class="tags">${letters.map(l =>
       `<span class="chip" data-letterp="${l.id}">${l.name}</span>`).join("")}</div>`) : "") +
     sect("Named alongside", `<div class="tags">${alongside.map(x =>
       `<span class="chip" data-person="${x.o.name}">${x.o.name}</span>`).join("")}</div>
-      <p style="font-size:12px;color:#8d9a9c;margin-top:8px">People named at the same places — ordered by how many they share.</p>`);
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">People named at the same places — ordered by how many they share.</p>`);
   wirePanel();
   $("#detail").querySelectorAll(".occ[data-j]").forEach(el => el.addEventListener("click", () => {
     setActive(el.dataset.j, true);
   }));
   // light the places on the map
   const pts = pp.places.filter(id => P[id]).map(id => [P[id].lat, P[id].lng]);
-  if (pts.length > 1) map.flyToBounds(L.latLngBounds(pts).pad(0.25), { duration: .9 });
-  else if (pts.length) map.flyTo(pts[0], Math.max(map.getZoom(), 6), { duration: .9 });
+  if (pts.length > 1) map.flyToBounds(L.latLngBounds(pts).pad(0.25), { duration: .9, ...fitPad() });
+  else if (pts.length) flyToVisible(pts[0][0], pts[0][1], Math.max(map.getZoom(), 6), { duration: .9 });
 }
 function showLetterPanel(id) {
   const l = (window.PAUL_LETTERS || []).find(x => x.id === id); if (!l) return;
@@ -501,23 +502,25 @@ function showLetterPanel(id) {
   const people = (window.PAUL_PEOPLE || []).filter(pp =>
     pp.refs.some(r => r.toLowerCase().indexOf(l.name.toLowerCase()) === 0)).slice(0, 12);
   $("#detail").innerHTML =
-    panelHead(l.name, `${l.date} · written from ${a.name} · sent to ${b.name}`, "LETTER") +
+    panelHead(l.name, `${l.date} · written from ${a ? a.name : "unknown origin"} · sent to ${b.name}`, "LETTER") +
     sect("Occasion", `<p>${l.occasion}</p>`) +
-    sect("Key verse", `<div class="verse"><div class="ref">${l.key}</div><p>${l.keyText}</p></div>
+    sect("Key verse", `<div class="verse"><div class="ref" data-passage="${l.key.replace(/[–—]/g, "-")}">${l.key}</div><p>${l.keyText}</p></div>
       <div class="tags"><span class="chip" data-passage="${readRef.replace(/[–—]/g, "-")}">Read ${readRef} in full</span></div>`) +
     sect("Where it travelled", `<div class="tags">
-      <span class="chip" data-go="${l.from}">Written at ${a.name}</span>
+      ${a ? `<span class="chip" data-go="${l.from}">Written at ${a.name}</span>` : `<span class="chip" style="cursor:default">Origin unknown</span>`}
       <span class="chip" data-go="${l.to}">Sent to ${b.name}</span></div>`) +
     (people.length ? sect("People named in it", `<div class="tags">${people.map(pp =>
       `<span class="chip" data-person="${pp.name}">${pp.name}</span>`).join("")}</div>`) : "") +
-    sect("On the evidence", `<p style="color:#a9b2ac">${l.note}</p>`);
+    sect("On the evidence", `<p style="color:var(--parch)">${l.note}</p>`);
   wirePanel();
-  const pts = [a, b].map(x => [x.lat, x.lng]);
-  map.flyToBounds(L.latLngBounds(pts).pad(0.3), { duration: .9 });
+  const pts = (a ? [a, b] : [b]).map(x => [x.lat, x.lng]);
+  if (pts.length > 1) map.flyToBounds(L.latLngBounds(pts).pad(0.3), { duration: .9 });
+  else flyToVisible(b.lat, b.lng, Math.max(map.getZoom(), 6), { duration: .9 });
   if (!layerState.letters) { setLayer("letters", true); const cb = document.querySelector('#layers input[data-layer="letters"]'); if (cb) cb.checked = true; }
 }
 
 function selectPlace(id, ctx) {
+  if (quiz.on) return quizAnswer(id);
   const p = P[id]; if (!p) return;
   state.place = id; state.ctx = ctx || null;
   panelHist.push({ t: "place", k: id, ctx: ctx || null });
@@ -538,8 +541,9 @@ function selectPlace(id, ctx) {
       <p style="font-size:13px">${[G.names.greek ? "<b>Greek:</b> " + G.names.greek : "",
         G.names.latin ? "<b>Latin:</b> " + G.names.latin : "",
         G.names.other ? G.names.other : ""].filter(Boolean).join(" &nbsp;·&nbsp; ")}</p>
-      <p style="font-size:12.5px;color:#a9b2ac">${G.confidence.basis} <br>Marker: ${G.coord}</p>
-      ${G.wiki ? `<div id="photoslot"></div>` : ""}</div>` : "";
+      <p style="font-size:12.5px;color:var(--parch)">${G.confidence.basis} <br>Marker: ${G.coord}</p>
+      ${G.wiki ? `<div id="photoslot"><div class="photocred" style="margin:0">This atlas embeds no third-party photographs (each image's licence and attribution vary by source and can't be verified in bulk).
+        <a href="https://en.wikipedia.org/wiki/${encodeURIComponent(G.wiki)}" target="_blank" rel="noopener">Read about ${G.wiki.replace(/_/g, " ")} on Wikipedia →</a></div></div>` : ""}</div>` : "";
   $("#detail").innerHTML = `
     <div class="dhead">
       <button class="dclose" title="Close">×</button>
@@ -555,9 +559,9 @@ function selectPlace(id, ctx) {
         <div class="dot" style="background:${o.j.color}"></div>
         <div><span class="occname">${o.j.name}</span>
         <div class="om">${o.s.date} · ${o.s.ref}</div></div></div>`).join("")) : ""}
-    ${weeksFor(id).length ? sect("Come, Follow Me", `<div class="tags">${weeksFor(id)
+    ${weeksFor(id).length ? sect("Study weeks", `<div class="tags">${weeksFor(id)
         .map(w => `<span class="chip" data-week="${w.week}">Week ${w.week} — ${w.readings}</span>`).join("")}</div>
-      <p style="font-size:12px;color:#8d9a9c;margin-top:8px">Weeks whose reading is set here. Click one to
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Weeks whose reading is set here. Click one to
       enter lesson focus mode.</p>`) : ""}
     ${sect("What happened here", `<p>${p.narrative}</p>`)}
     ${gazHead}
@@ -565,9 +569,9 @@ function selectPlace(id, ctx) {
         ~${fmtDist(leg.km)} · ${daysFor(leg.km, leg.mode)} of travel${leg.mode === "sea"
         ? " with a working wind" : " on foot at c. 27 km a day"}.</p>${leg.note ? `<p>${leg.note}</p>` : ""}
         ${prof ? `<div class="prof">${prof.pts.map(v => `<i style="height:${Math.max(6, Math.round(v / Math.max.apply(null, prof.pts) * 100))}%" title="${v} m"></i>`).join("")}</div>
-        <p style="font-size:12px;color:#8d9a9c"><b style="color:#cbc2b0">${prof.label}</b> — elevation profile, ${Math.min.apply(null, prof.pts)}–${Math.max.apply(null, prof.pts)} m. ${prof.note}</p>` : ""}`) : ""}
-    ${sect("Scripture — Authorized (King James) Version", p.scripture.map(s =>
-        `<div class="verse"><div class="ref">${s.ref}</div><p>${s.text}</p></div>`).join("") +
+        <p style="font-size:12px;color:var(--muted)"><b style="color:var(--parch-dim)">${prof.label}</b> — elevation profile, ${Math.min.apply(null, prof.pts)}–${Math.max.apply(null, prof.pts)} m. ${prof.note}</p>` : ""}`) : ""}
+    ${sect("Scripture — World English Bible", p.scripture.map(s =>
+        `<div class="verse"><div class="ref" data-passage="${s.ref.replace(/[–—]/g, "-")}">${s.ref}</div><p>${s.text}</p></div>`).join("") +
         (chapterSpan(p.scripture) ? `<div><span class="chip" data-passage="${chapterSpan(p.scripture).ref}">${chapterSpan(p.scripture).label} in full</span></div>` : ""))}
     ${sect("The city in Greco-Roman history", `<p>${p.greco}</p>`)}
     ${sect("Archaeology — what survives", `<p>${p.archaeology}</p>`)}
@@ -582,19 +586,18 @@ function selectPlace(id, ctx) {
         const pp = personByName(x);
         return pp ? `<span class="chip" data-person="${pp.name}">${x}</span>` : `<span class="tag">${x}</span>`;
       }).join("")}</div>
-      <p style="font-size:12px;color:#8d9a9c;margin-top:8px">Gold names open a full entry — every other place
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Gold names open a full entry — every other place
       they are named at, the passages, and who they travelled with. Plain names are people the record leaves
       unnamed or mentions only here.</p>`) : ""}
     ${sect("Your notes", `<textarea id="note" placeholder="Notes on ${p.name} — saved in this browser">${store.note(id)}</textarea>`)}
   `;
   $("#app").classList.add("detail-open");
-  if (window.innerWidth <= 760) document.body.classList.remove("rail-open");
+  if (isCompact()) document.body.classList.remove("rail-open");
   $("#detail").scrollTop = 0;
   wirePanel();
   $("#btnMark").onclick = () => { store.toggle(id); panelHist.pop(); selectPlace(id, ctx); renderMap(); };
-  $("#btnZoom").onclick = () => map.flyTo([p.lat, p.lng], 13, { duration: 1.1 });
+  $("#btnZoom").onclick = () => flyToVisible(p.lat, p.lng, 13, { duration: 1.1 });
   const n = $("#note"); if (n) n.addEventListener("input", () => store.note(id, n.value));
-  if (G && G.wiki) loadPhoto(G.wiki);
   $("#detail").querySelectorAll(".occ").forEach(el => el.addEventListener("click", () => {
     const j = journeyOf(el.dataset.j), i = +el.dataset.i;
     state.active = j.id; state.year = j.timeline[i];
@@ -605,29 +608,11 @@ function selectPlace(id, ctx) {
   setTimeout(() => map.invalidateSize(), 320);
   renderMap();
 }
-/* site photographs, pulled on demand from Wikipedia's public REST summary endpoint */
-const photoCache = {};
-function loadPhoto(title) {
-  const slot = $("#photoslot"); if (!slot) return;
-  const render = (d) => {
-    const s = $("#photoslot"); if (!s || !d || !d.thumb) return;
-    s.innerHTML = `<img class="sitephoto" src="${d.thumb}" alt="${d.title}" loading="lazy">
-      <div class="photocred">${d.title} — photograph via Wikipedia;
-      <a href="${d.url}" target="_blank" rel="noopener">source and licence</a></div>`;
-  };
-  if (photoCache[title]) return render(photoCache[title]);
-  fetch("https://en.wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(title))
-    .then(r => r.ok ? r.json() : null)
-    .then(j => {
-      if (!j) return;
-      const d = { title: j.title, url: (j.content_urls && j.content_urls.desktop && j.content_urls.desktop.page) || "",
-        thumb: (j.originalimage && j.originalimage.source) || (j.thumbnail && j.thumbnail.source) || "" };
-      photoCache[title] = d; render(d);
-    }).catch(() => {});
-}
+
 
 function closeDetail() {
   state.place = null; panelHist.length = 0; $("#app").classList.remove("detail-open");
+  document.body.classList.remove("sheet-full");
   setTimeout(() => { map.invalidateSize(); renderMap(); }, 320);
 }
 
@@ -663,14 +648,18 @@ function runSearch(q) {
       <p>${snippet(body, q)}</p></div>`;
   }).join("");
   box.classList.add("on");
-  box.querySelectorAll(".res[data-id]").forEach(el => el.addEventListener("click", () => {
-    const id = el.dataset.id, p = P[id];
-    box.classList.remove("on"); $("#search").value = "";
-    const occ = occurrences(id);
-    if (occ.length) { state.active = occ[0].j.id; state.year = Math.max(state.year, occ[0].j.timeline[occ[0].i]); }
-    selectPlace(id); buildRail(); renderAll();
-    map.flyTo([p.lat, p.lng], Math.max(map.getZoom(), 7), { duration: .9 });
-  }));
+  box.querySelectorAll(".res[data-id]").forEach(el => {
+    el.setAttribute("aria-label", "Open " + (el.querySelector("b") ? el.querySelector("b").textContent : "result"));
+    el.addEventListener("click", () => {
+      const id = el.dataset.id, p = P[id];
+      box.classList.remove("on"); $("#search").value = "";
+      const occ = occurrences(id);
+      if (occ.length) { state.active = occ[0].j.id; state.year = Math.max(state.year, occ[0].j.timeline[occ[0].i]); }
+      selectPlace(id); buildRail(); renderAll();
+      flyToVisible(p.lat, p.lng, Math.max(map.getZoom(), 7), { duration: .9 });
+    });
+  });
+  activatable(box.querySelectorAll(".res[data-id]"));
 }
 $("#search").addEventListener("input", e => runSearch(e.target.value));
 document.addEventListener("click", e => {
@@ -726,8 +715,32 @@ document.addEventListener("keydown", e => {
 });
 
 /* ---------- modals ---------- */
-function openModal(title, html) { $("#mtitle").textContent = title; $("#mbody").innerHTML = html; $("#modal").classList.add("on"); }
-function closeModal() { $("#modal").classList.remove("on"); }
+const REDUCE_MOTION = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (REDUCE_MOTION) {
+  const _flyTo = map.flyTo.bind(map), _flyToBounds = map.flyToBounds.bind(map);
+  map.flyTo = (latlng, zoom, opts) => _flyTo(latlng, zoom, { ...(opts || {}), duration: 0 });
+  map.flyToBounds = (bounds, opts) => _flyToBounds(bounds, { ...(opts || {}), duration: 0 });
+}
+let modalLastFocus = null;
+function openModal(title, html) {
+  modalLastFocus = document.activeElement;
+  $("#mtitle").textContent = title; $("#mbody").innerHTML = html; $("#modal").classList.add("on");
+  const sheet = document.querySelector("#modal .sheet");
+  if (sheet) { sheet.setAttribute("tabindex", "-1"); sheet.focus(); }
+}
+function closeModal() {
+  $("#modal").classList.remove("on");
+  if (modalLastFocus && modalLastFocus.focus) modalLastFocus.focus();
+}
+$("#modal").addEventListener("keydown", e => {
+  if (e.key !== "Tab" || !$("#modal").classList.contains("on")) return;
+  const f = Array.from($("#modal").querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"))
+    .filter(el => el.offsetParent !== null);
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
 $("#mclose").onclick = closeModal;
 $("#modal").addEventListener("click", e => { if (e.target.id === "modal") closeModal(); });
 
@@ -740,6 +753,11 @@ $("#btnCompare").onclick = () => {
     <div class="cmpgrid">
       <div><select id="cA">${opts("j2")}</select><div class="cmpcol" id="outA"></div></div>
       <div><select id="cB">${opts("j3")}</select><div class="cmpcol" id="outB"></div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;margin-top:18px">
+      <button class="tool" id="cmpOverlay">Overlay both on the map</button>
+      <span style="font-size:12px;color:var(--muted)">Draws the two routes together — the second dashed —
+        and rings every city they share.</span>
     </div>`);
   const letters = { pre: [], j1: ["Galatians (probably, soon after)"], council: [], j2: ["1 Thessalonians", "2 Thessalonians"],
     j3: ["1 Corinthians", "2 Corinthians", "Romans"], rome: ["Ephesians", "Philippians", "Colossians", "Philemon"],
@@ -751,8 +769,8 @@ $("#btnCompare").onclick = () => {
     const landKm = j.stops.reduce((t, s, i) => t + (i && s.mode === "land" ? legKm(j, i) : 0), 0);
     const row = (a, b) => `<div class="statrow"><span>${a}</span><span>${b}</span></div>`;
     $("#out" + which).innerHTML = `<h4 style="color:${j.color}">${j.name}</h4>
-      <div class="om" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8d9a9c;margin-bottom:10px">${j.acts}</div>
-      <p style="font-size:13px;line-height:1.6;color:#ded4c0">${j.summary}</p>
+      <div class="om" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:10px">${j.acts}</div>
+      <p style="font-size:13px;line-height:1.6;color:var(--parch-dim)">${j.summary}</p>
       ${row("Dates", j.years)} ${row("Duration", j.stats.duration)}
       ${row("Stops recorded", j.stops.length)}
       ${row("Total distance", "~" + fmtDist(journeyKm(j)))}
@@ -764,6 +782,71 @@ $("#btnCompare").onclick = () => {
       ${row("Furthest point", (() => { let f = j.stops[0]; j.stops.forEach(s => { if (P[s.place].lng < P[f.place].lng) f = s; }); return P[f.place].name; })())}`;
   };
   ["A", "B"].forEach(w => { $("#c" + w).onchange = () => draw(w); draw(w); });
+  $("#cmpOverlay").onclick = () => { closeModal(); enterCompare($("#cA").value, $("#cB").value); };
+};
+
+/* ---------- two itineraries side by side on the map ---------- */
+function sharedCities(a, b) {
+  const A = new Set(journeyOf(a).stops.map(s => s.place));
+  return new Set(journeyOf(b).stops.map(s => s.place).filter(id => A.has(id)));
+}
+function styleComparedCities(present) {
+  const O = state.overlay;
+  const shared = sharedCities(O.a, O.b);
+  const inEither = new Set([...journeyOf(O.a).stops, ...journeyOf(O.b).stops].map(s => s.place));
+  allPlaceIds.forEach(id => {
+    const m = placeMarks[id]; if (!m) return;
+    const sh = shared.has(id), here = inEither.has(id);
+    const dim = !here || (O.sharedOnly && !sh);
+    m.setStyle({
+      opacity: dim ? .1 : 1,
+      color: sh ? "#fff3cf" : state.place === id ? "#c9a227" : "#f2e9d6",
+      fillColor: sh ? "#c9a227" : "#c9873a",
+      fillOpacity: dim ? .2 : .9,
+      weight: (sh ? 4 : 2) * (present ? 1.6 : 1),
+      radius: ((P[id].tier === "major" ? 6.5 : 4.5) + (sh ? 3 : 0)) * (present ? 1.5 : 1)
+    });
+  });
+}
+function enterCompare(a, b) {
+  if (a === b) { const alt = J.find(j => j.id !== a); b = alt ? alt.id : b; }
+  pause();
+  if (state.cfm.week != null) exitCFM();
+  const O = state.overlay;
+  if (!O.on) O.prev = { visible: new Set(state.visible), year: state.year, active: state.active };
+  O.on = true; O.a = a; O.b = b; O.sharedOnly = false;
+  state.visible = new Set([a, b]);
+  state.active = a;
+  state.year = T1;                       // routes draw up to the clock, so run it to the end
+  $("#scrub").value = state.year;
+  J.forEach(j => drawn[j.id].setStyle({ dashArray: j.id === b ? "9 7" : null }));
+  const pts = [];
+  [a, b].forEach(id => journeyOf(id).stops.forEach(s => pts.push([P[s.place].lat, P[s.place].lng])));
+  if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.12));
+  const n = sharedCities(a, b).size;
+  $("#cbtitle").innerHTML = `<b style="color:${journeyOf(a).color}">${journeyOf(a).name}</b>
+    <span style="color:var(--muted)">vs</span>
+    <b style="color:${journeyOf(b).color}">${journeyOf(b).name}</b>
+    <span style="color:var(--muted);font-size:12px">· ${n} ${n === 1 ? "city" : "cities"} in both</span>`;
+  $("#cbSwap").classList.remove("on");
+  $("#cmpbadge").classList.add("on");
+  buildRail(); renderAll();
+}
+function exitCompare() {
+  const O = state.overlay;
+  if (!O.on) return;
+  J.forEach(j => drawn[j.id].setStyle({ dashArray: null }));
+  if (O.prev) { state.visible = O.prev.visible; state.year = O.prev.year; state.active = O.prev.active; }
+  state.overlay = { on: false, a: null, b: null, sharedOnly: false, prev: null };
+  $("#scrub").value = state.year;
+  $("#cmpbadge").classList.remove("on");
+  buildRail(); renderAll();
+}
+$("#cbExit").onclick = exitCompare;
+$("#cbSwap").onclick = () => {
+  state.overlay.sharedOnly = !state.overlay.sharedOnly;
+  $("#cbSwap").classList.toggle("on", state.overlay.sharedOnly);
+  renderAll();
 };
 
 $("#btnCalc").onclick = () => {
@@ -772,15 +855,15 @@ $("#btnCalc").onclick = () => {
   openModal("Distance, season & travel time", `
     <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
       <select id="dA">${placeOptions("corinth")}</select>
-      <span style="color:#8d9a9c">to</span>
+      <span style="color:var(--muted)">to</span>
       <select id="dB">${placeOptions("ephesus")}</select>
       <select id="dM"><option value="sea">by sea</option><option value="land">overland</option></select>
     </div>
     <div class="season" id="months">${S.months.map((m, i) =>
       `<span class="mon" data-m="${i}">${m.slice(0, 3)}</span>`).join("")}</div>
     <div class="calcout" id="dOut" style="margin-top:18px"></div>
-    <p style="font-size:12px;color:#8d9a9c;line-height:1.6;margin-top:16px" id="dNote"></p>
-    <p style="font-size:12px;color:#8d9a9c;line-height:1.6">
+    <p style="font-size:12px;color:var(--muted);line-height:1.6;margin-top:16px" id="dNote"></p>
+    <p style="font-size:12px;color:var(--muted);line-height:1.6">
       Distance is measured great-circle between the two sites, so real road and coasting routes were longer.
       Rates follow Casson and the ORBIS model: 25–30 km a day on foot; 100–150 km a day under sail with a
       working wind, and as little as 30–50 km beating to windward. The seasonal model applies the etesian
@@ -812,13 +895,13 @@ $("#btnCalc").onclick = () => {
     });
     $("#dOut").innerHTML = season.state === "closed" && mode === "sea"
       ? `<b>${a.name}</b> to <b>${b.name}</b> — ${fmtDist(km)} in a straight line, heading ${dir}.<br>
-         <b style="color:#d98a7c">No sailing in ${S.months[now.m]}.</b> The sea was closed; the journey waits for spring.`
+         <b style="color:var(--warn)">No sailing in ${S.months[now.m]}.</b> The sea was closed; the journey waits for spring.`
       : `<b>${a.name}</b> to <b>${b.name}</b> — ${fmtDist(km)} in a straight line, heading ${dir}.<br>
          ${mode === "sea" ? "Under sail" : "On foot"} in ${S.months[now.m]}:
          about <b>${Math.max(1, Math.round(lo))}–${Math.max(2, Math.round(hi))} days</b>
-         ${headwind ? "<span style=\"color:#d9b45c\">beating against the etesian northerlies</span>" :
+         ${headwind ? "<span style=\"color:var(--caution)\">beating against the etesian northerlies</span>" :
            mode === "sea" ? "with a working wind" : "walking daylight hours"}.`;
-    $("#dNote").innerHTML = `<b style="color:#cbc2b0">${S.months[now.m]}, ${mode === "sea" ? "by sea" : "overland"}:</b> ${season.note}`;
+    $("#dNote").innerHTML = `<b style="color:var(--parch-dim)">${S.months[now.m]}, ${mode === "sea" ? "by sea" : "overland"}:</b> ${season.note}`;
   };
   ["dA", "dB", "dM"].forEach(id => $("#" + id).onchange = draw);
   $("#months").querySelectorAll(".mon").forEach(el => el.addEventListener("click", () => {
@@ -830,16 +913,16 @@ $("#btnCalc").onclick = () => {
 $("#btnMarks").onclick = () => {
   const ids = Object.keys(store.d.marks).sort((a, b) => store.d.marks[b] - store.d.marks[a]);
   const noted = Object.keys(store.d.notes).filter(id => ids.indexOf(id) < 0);
-  const row = (id) => `<div class="bmk" data-id="${id}"><div class="dot" style="width:8px;height:8px;border-radius:50%;background:#c9a227;margin-top:6px"></div>
+  const row = (id) => `<div class="bmk" data-id="${id}"><div class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--gold);margin-top:6px"></div>
     <div><div class="bnm">${P[id] ? P[id].name : id}</div>
     <div class="bnote">${store.note(id) ? store.note(id).replace(/</g, "&lt;") : "<i>no note</i>"}</div></div></div>`;
   openModal("Bookmarks & notes", (ids.length || noted.length)
     ? ids.concat(noted).map(row).join("")
-    : `<p style="color:#8d9a9c;font-size:13.5px;line-height:1.6">No bookmarks yet. Open any city and use
+    : `<p style="color:var(--muted);font-size:13.5px;line-height:1.6">No bookmarks yet. Open any city and use
        ☆ Bookmark, or type in its notes field — both are kept in this browser.</p>`);
   $("#mbody").querySelectorAll(".bmk").forEach(el => el.addEventListener("click", () => {
     closeModal(); selectPlace(el.dataset.id);
-    map.flyTo([P[el.dataset.id].lat, P[el.dataset.id].lng], Math.max(map.getZoom(), 7), { duration: .9 });
+    flyToVisible(P[el.dataset.id].lat, P[el.dataset.id].lng, Math.max(map.getZoom(), 7), { duration: .9 });
   }));
 };
 
@@ -851,49 +934,69 @@ $("#btnSources").onclick = () => {
     <h3 style="margin:22px 0 10px;font-size:19px">How the atlas is built</h3>
     ${M.rules.map(r => `<div class="prow"><h4>${r.h}</h4><p>${r.t}</p></div>`).join("")}
     <h3 style="margin:24px 0 10px;font-size:19px">How confidence is graded</h3>
-    <p style="font-size:12.5px;color:#8d9a9c;margin:0 0 12px">Every city's Gazetteer block carries one of
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Every city's Gazetteer block carries one of
       these grades and the evidence behind it.</p>
-    ${M.confidence.map(c => `<div class="prow" style="border-left:3px solid ${c.c};padding-left:11px">
-      <h4 style="color:${c.c}">${c.g}</h4><p>${c.t}</p></div>`).join("")}
+    ${M.confidence.map(c => { const cc = document.body.classList.contains("light") && c.cl ? c.cl : c.c;
+      return `<div class="prow" style="border-left:3px solid ${cc};padding-left:11px">
+      <h4 style="color:${cc}">${c.g}</h4><p>${c.t}</p></div>`; }).join("")}
     <h3 style="margin:24px 0 10px;font-size:19px">The five fixed points</h3>
     <p>${M.fixed}</p>
     <h3 style="margin:24px 0 10px;font-size:19px">Works consulted</h3>
     ${M.works.map(w => `<h4 style="margin:16px 0 7px;font-family:'IBM Plex Mono',monospace;font-size:10px;
-      letter-spacing:.14em;text-transform:uppercase;color:#c9a227">${w.sect}</h4>
+      letter-spacing:.14em;text-transform:uppercase;color:var(--gold)">${w.sect}</h4>
       <ul style="margin:0;padding-left:18px">${w.items.map(i =>
-        `<li style="font-size:13px;line-height:1.6;color:#ded4c0;margin-bottom:6px">${i}</li>`).join("")}</ul>`).join("")}
+        `<li style="font-size:13px;line-height:1.6;color:var(--parch-dim);margin-bottom:6px">${i}</li>`).join("")}</ul>`).join("")}
     <h3 style="margin:24px 0 10px;font-size:19px">Known limits</h3>
     <ul style="margin:0;padding-left:18px">${M.limits.map(l =>
-      `<li style="font-size:13px;line-height:1.6;color:#ded4c0;margin-bottom:7px">${l}</li>`).join("")}</ul>
-    <p style="margin-top:20px;font-size:12.5px;color:#8d9a9c">Errors are the author's, not the sources'.
-      If you find one, it is worth reporting — four review passes have already corrected several.</p>
+      `<li style="font-size:13px;line-height:1.6;color:var(--parch-dim);margin-bottom:7px">${l}</li>`).join("")}</ul>
+    <p style="margin-top:20px;font-size:12.5px;color:var(--muted)">Errors are the author's, not the sources'.
+      Corrections and better evidence are welcome, and are worked into the next revision.</p>
   </div>`);
 };
 
-$("#btnAbout").onclick = () => openModal("About this atlas", `<div class="help">
-  <p style="color:#c9a227"><b>This is a beta.</b> Routes, dates and articles are still being checked and
-  extended. Treat what you read here as a working draft and verify against your own sources.</p>
+function openAbout(tab) {
+  const YR = new Date().getFullYear();
+  openModal("About this atlas", `<div class="help">
+  <div class="railtabs" id="abtabs" style="position:static;margin:-6px 0 18px">
+    <button class="rtab on" data-atab="about">About</button>
+    <button class="rtab" data-atab="credits">Credits &amp; Licences</button>
+    <button class="rtab" data-atab="terms">Terms of Use</button>
+  </div>
+
+  <div data-apane="about">
+  <p style="color:var(--muted);font-size:13px">This beta presents a schematic educational reconstruction based on selected published research. Dates,
+  elevations, dimensions, routes, and disputed identifications may be simplified. Where evidence is uncertain,
+  the presentation offers one plausible interpretation rather than a definitive conclusion.</p>
+  <p style="color:var(--gold)"><b>A living edition.</b> The atlas is revised as scholarship moves; articles,
+  routes and dates carry the evidence behind them so a reader can weigh each one.</p>
 
   <h3 style="margin:20px 0 8px;font-size:19px">What this is</h3>
   <p>An interactive atlas of the journeys of Paul, built for a reader who wants to study rather than skim:
   every stop on every itinerary with what happened there, the city's Greco-Roman history, what survives on
   the ground today, the people named, the letters written or received, the travel leg with its distance and
-  sailing season, and the Authorized (King James) text — with the full chapter a click away. Around it sit a
+  sailing season, and the scripture text — with the full chapter a click away. Around it sit a
   people index, an epistle layer, three competing chronologies, a reading plan through Acts, a Roman road and
-  province overlay, and the 52-week Come, Follow Me curriculum wired into the map.</p>
+  province overlay, a Gospel-era gazetteer on its own layer for the places of the life of Jesus, and the
+  52-week New Testament reading year wired into the map.</p>
   <p>Two rules govern the data. Geography comes from real coordinates and attested sites, never from drawing;
   where a site identification is disputed the gazetteer says so and grades its confidence. And where the
   evidence is thin — a road alignment between known stations, a letter's place of origin, the date of an
   event — the atlas states the uncertainty rather than smoothing it over.</p>
 
+  <p style="font-size:12.5px;color:var(--muted);border-left:2px solid var(--line);padding-left:11px">
+  <b style="color:var(--parch-dim)">Independent study aid.</b> This atlas is published by Taylor Halverson.
+  It is not affiliated with, endorsed by, or published by any church, curriculum publisher or tour operator.
+  The 52-week reading year lists scripture ranges as plain references and links to publishers' own sites;
+  all titles, coverage notes, prompts and articles here are the author's own work.</p>
+
   <h3 style="margin:22px 0 8px;font-size:19px">Getting started</h3>
   <p>Press <b>?</b> in the toolbar for the full guide. In brief: click any city marker to open its article;
   drag the timeline to watch the routes draw themselves, or press <b>Play</b>; use the left rail to focus one
-  itinerary, walk Acts in order, or pick a Come, Follow Me week; and search for a city, a person, a verse or a
+  itinerary, walk Acts in order, or pick a study week; and search for a city, a person, a verse or a
   phrase from any article.</p>
 
   <h3 style="margin:22px 0 8px;font-size:19px">Taylor Halverson, Ph.D.</h3>
-  <p style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:#8d9a9c;
+  <p style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--muted);
     text-transform:uppercase;margin:-4px 0 12px">Author · Teacher · Tour leader · Scripture scholar</p>
   <p>Taylor Halverson is a scholar of scripture and a teacher of learners — an entrepreneurship professor in
   the BYU Marriott School of Business who spends his working life helping people find and act on the best
@@ -909,43 +1012,148 @@ $("#btnAbout").onclick = () => openModal("About this atlas", `<div class="help">
   created our beautiful present day.</p>
 
   <h4 style="margin:18px 0 6px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;
-    text-transform:uppercase;color:#c9a227">Academic training</h4>
+    text-transform:uppercase;color:var(--gold)">Academic training</h4>
   <p style="margin:0">Ph.D., Judaism &amp; Christianity in Antiquity — Indiana University<br>
   Ph.D., Instructional Systems Technology — Indiana University<br>
   M.A., Biblical Studies — Yale University<br>
   B.A., Ancient Near Eastern Studies — Brigham Young University</p>
-  <p style="color:#8d9a9c">Two doctorates in two separate fields — the ancient world, and the design of
+  <p style="color:var(--muted)">Two doctorates in two separate fields — the ancient world, and the design of
   learning. Both of them are in this tool.</p>
 
   <h4 style="margin:18px 0 6px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;
-    text-transform:uppercase;color:#c9a227">Elsewhere</h4>
+    text-transform:uppercase;color:var(--gold)">Elsewhere</h4>
   <div class="tags">
     <a class="chip" href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com ↗</a>
     <a class="chip" href="https://books.taylorhalverson.com" target="_blank" rel="noopener">books.taylorhalverson.com ↗</a>
     <a class="chip" href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com ↗</a>
   </div>
 
-  <h3 style="margin:22px 0 8px;font-size:19px">Credits</h3>
-  <p>Scripture text: the Authorized (King James) Version, public domain. Base mapping: Esri World
-  Topographic, World Imagery and Shaded Relief tiles. Site photographs: Wikipedia's public REST endpoint, loaded on demand.
-  Come, Follow Me background resources: Taylor Halverson's
+  <p style="margin-top:22px;font-size:12.5px;color:var(--muted)">Full credits, sources and licence terms are
+  on the <b>Credits &amp; Licences</b> tab above.</p>
+  </div>
+
+  <div data-apane="credits" hidden>
+  <p>Sources, licences and acknowledgements for the material used in this atlas.</p>
+
+  ${CH("The work")}
+  <p><b>The Journeys of Paul: An Interactive Study Atlas.</b> Text, research, design and code by Taylor
+  Halverson. &copy; ${YR} Taylor Halverson.</p>
+
+  ${CH("Scripture")}
+  <p>The World English Bible (WEB), a modern translation dedicated to the public domain worldwide. Every
+  cited verse and full chapter is bundled in the atlas and opens right here, in the reading panel — nothing
+  links out and nothing is fetched over the network.</p>
+
+  ${CH("Ancient authors")}
+  <p>Strabo, <i>Geography</i>. Josephus, <i>Jewish War</i> and <i>Jewish Antiquities</i>. Tacitus, <i>Annals</i>
+  and <i>Histories</i>. Suetonius, <i>Lives of the Caesars</i>. Pliny the Elder, <i>Natural History</i>. Pliny
+  the Younger, <i>Letters</i>. Pausanias, <i>Description of Greece</i>. Vegetius, <i>De re militari</i>.
+  Inscriptions from <i>Corpus Inscriptionum Latinarum</i>, <i>Inscriptiones Graecae</i>, and the Delphi
+  inscription of Gallio (<i>Syll.</i>³ 801d). Renderings are the author's, from the ancient texts.</p>
+
+  ${CH("Reference works")}
+  <p>Richard J. A. Talbert, ed., <i>Barrington Atlas of the Greek and Roman World</i> (Princeton, 2000) and its
+  <i>Map-by-Map Directory</i>. <i>Pleiades</i>, the community gazetteer of ancient places (pleiades.stoa.org),
+  CC BY. <i>Tabula Imperii Romani</i>. Excavation reports and critical commentaries for individual sites are
+  listed under <b>Sources</b> in the toolbar.</p>
+
+  ${CH("Cartography")}
+  <p>Site coordinates from published survey and gazetteer data. Road alignments and provincial boundaries after
+  the <i>Barrington Atlas</i> and <i>Tabula Imperii Romani</i>, generalised for atlas scale. This atlas draws no
+  live basemap imagery — hosted map-tile services carry usage and licensing terms of their own, so every place,
+  route and label here is plotted by exact coordinate on a plain ground instead.</p>
+
+  ${CH("Photographs")}
+  <p>This atlas does not embed third-party site photographs — image licensing on Wikimedia varies file by
+  file and can't be verified in bulk, so a place panel instead links out to the site's own Wikipedia article.</p>
+
+  ${CH("Software")}
+  <p>Leaflet 1.9.4, &copy; 2010&ndash;2024 Volodymyr Agafonkin, &copy; 2010&ndash;2011 CloudMade, BSD 2-Clause
+  Licence. topojson-client 3.1.0 and world-atlas 2.0.2, &copy; Mike Bostock, ISC Licence. Natural Earth coastline
+  data is in the public domain. Full notices: THIRD_PARTY_NOTICES.txt, included with this release.</p>
+
+  ${CH("Typefaces")}
+  <p>EB Garamond, by Georg Duffner and Octavio Pardo after Claude Garamont. IBM Plex Sans and IBM Plex Mono, by
+  Mike Abbink and Bold Monday for IBM. SIL Open Font License 1.1.</p>
+
+  ${CH("Study resources")}
+  <p>Weekly background reading links to the author's
   <a href="https://insights.taylorhalverson.com/p/new-testament-resources" target="_blank" rel="noopener">New
-  Testament Resource Hub</a>. Ancient testimony is quoted or summarised from Strabo, Josephus, Tacitus,
-  Suetonius, Pausanias, Pliny and the standard inscription corpora, each attributed in the city article where
-  it appears.</p>
+  Testament Resource Hub</a>. Weekly readings are given as chapter-and-verse references; lesson links go to the
+  publishers' own pages.</p>
+
+  ${CH("Independence")}
+  <p>Published by the author. Not affiliated with or endorsed by any church, curriculum publisher, university or
+  tour operator.</p>
+
+  ${CH("How to cite")}
+  <p style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.75;color:var(--parch-dim)">
+  Halverson, Taylor. <i>The Journeys of Paul: An Interactive Study Atlas</i>. ${YR}.<br>
+  Cite a single place or week by its permalink &mdash; the <b>Copy link</b> tool in the toolbar returns the
+  exact address of the view on screen.</p>
+
+  <p style="margin-top:20px;font-size:12.5px;color:var(--muted)">Corrections and source suggestions are
+  welcome by way of <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>.</p>
+  </div>
+
+  <div data-apane="terms" hidden>
+  ${CH("1. What this is")}
+  <p style="color:var(--muted);font-size:13px">This beta presents a schematic educational reconstruction based on selected published research. Dates,
+  elevations, dimensions, routes, and disputed identifications may be simplified. Where evidence is uncertain,
+  the presentation offers one plausible interpretation rather than a definitive conclusion.</p>
+  <p>The Journeys of Paul: An Interactive Study Atlas is a teaching aid and reconstruction, built and owned by
+  Taylor Halverson, Ph.D. It is not a survey document or a work of original scholarship &mdash; see the
+  <b>About</b> tab and the <b>Sources &amp; method</b> panel for what that means and what confidence each part
+  of it carries.</p>
+
+  ${CH("2. License to use")}
+  <p>Taylor Halverson grants anyone accessing this atlas a personal, non-exclusive, non-transferable license to
+  view and use it for personal study, teaching, and classroom use. Redistribution of the atlas itself, or
+  extraction of its data, essays, or maps for republication elsewhere, requires the author's prior written
+  permission. Third-party components (typefaces, code libraries) remain under their own licenses; see the
+  <b>Credits &amp; Licences</b> tab.</p>
+
+  ${CH("3. Scripture text")}
+  <p>Scripture quotations are from the World English Bible (WEB), which is dedicated to the public domain
+  worldwide; no permission is required to reproduce it, and none is claimed here beyond what this license
+  already grants for the atlas as a whole.</p>
+
+  ${CH("4. No warranty of scholarly conclusion")}
+  <p>Because this atlas represents disputed historical and geographical reconstructions, Taylor Halverson makes
+  no warranty that any specific dating, identification, route or interpretation shown will not be revised in a
+  later edition. It is provided "as is" for its stated teaching purpose.</p>
+
+  ${CH("5. Limitation of liability")}
+  <p>To the extent permitted by law, liability for any claim arising from this atlas is limited to the amount
+  paid for access to it, if any.</p>
+
+  ${CH("6. Contact")}
+  <p>For licensing, permissions, or rights questions, contact by way of
+  <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>.</p>
+  </div>
 </div>`);
+  const tabs = [...document.querySelectorAll("#abtabs .rtab")];
+  const panes = [...document.querySelectorAll("[data-apane]")];
+  tabs.forEach(b => b.onclick = () => {
+    tabs.forEach(x => x.classList.toggle("on", x === b));
+    panes.forEach(p => { p.hidden = p.dataset.apane !== b.dataset.atab; });
+  });
+  if (tab === "credits") tabs[1].click();
+  if (tab === "terms") tabs[2].click();
+}
+const CH = (t) => `<h4 style="margin:22px 0 6px;font-family:'IBM Plex Mono',monospace;font-size:10px;` +
+  `letter-spacing:.14em;text-transform:uppercase;color:var(--gold)">${t}</h4>`;
+$("#btnAbout").onclick = () => openAbout("about");
 
 $("#btnHelp").onclick = () => openModal("How to use this atlas", `<div class="help">
-  <p style="color:#c9a227"><b>This is a beta.</b> The routes, dates and articles are still being checked and
-  extended; treat anything here as a working draft rather than a settled edition, and verify against your
-  own sources before teaching from it.</p>
+  <p><span class="chip" data-tour="1">Take the guided tour</span></p>
   <p><b>The timeline is the spine.</b> Drag the scrubber, or press <kbd>Space</kbd> to watch the journeys
   draw themselves in sequence; <kbd>←</kbd> and <kbd>→</kbd> step one recorded stop at a time. Routes appear
   only up to the year you are standing in, so you see what Paul had done by any given date.</p>
   <p><b>The left rail lists the seven itineraries.</b> Click a name to focus it and fit it on the map;
   click its coloured dot to hide it. Click any stop to open that city.</p>
   <p><b>Every city panel carries eight things:</b> where it appears in the itineraries, what happened there,
-  how he got there and how long it took, the scripture in the Authorized Version, the city's own
+  how he got there and how long it took, the scripture in the World English Bible, the city's own
   Greco-Roman history, what survives archaeologically, the letters tied to it, and the people met there.
   Bookmark it or keep notes — both persist in this browser.</p>
   <p><b>Search reaches everything</b> — city names, people, epistles, archaeology, and the full text of
@@ -961,23 +1169,21 @@ $("#btnHelp").onclick = () => openModal("How to use this atlas", `<div class="he
   they were named alongside; a letter opens its own entry with its origin and destination as links. Rows in
   <b>People</b>, <b>Letters</b> and <b>Companions</b> open there too, and a row in <b>Chronology</b> moves the
   timeline to that year. <b>← Back</b> retraces your steps through the panel.</p>
-  <p><b>Come, Follow Me.</b> The third rail tab lists all 52 weeks of the New Testament curriculum. Pick a
+  <p><b>Study weeks.</b> The third rail tab lists a 52-week reading year through the New Testament. Pick a
   week and the map enters <i>lesson focus</i>: it flies to the theatre of that reading, brightens the places
   and itineraries the block covers, dims everything else, and opens a lesson card with the reading, a Gospel
   Library link, the letters in view, the Acts passages set there, and two discussion questions. Step weeks with
   the arrows on the badge over the map; ✕ leaves focus. Every city panel also lists which weeks are set there.
-  Weeks marked <i>outside this atlas</i> are the Gospels and general epistles — this atlas maps Paul, so those
-  weeks frame the region and say plainly that the sites are not in the gazetteer.</p>
+  Weeks 1–26 draw on the Gospel gazetteer and turn that layer on for you; weeks 27–52 follow Paul.</p>
   <p><b>Sources</b> gives the bibliography, the rules the atlas is built on, how site-identification
   confidence is graded, and the five external anchors the whole chronology hangs from. <b>Print</b> makes
   study sheets — one Letter page per city or per itinerary, with your own notes and ruled space, ready for a
   notebook or a PDF. <b>Copy link</b> copies a permalink to exactly the view you are looking at: the city,
-  the Come, Follow Me week, the itinerary and the year all travel in the address, so you can send a class
+  the study week, the itinerary and the year all travel in the address, so you can send a class
   straight to one place (<i>…#philippi</i>, <i>…#week=30</i>, <i>…#corinth&amp;week=34</i>).</p>
-  <p><b>The basemap</b> cycles with the <b>Map</b> button: topographic, satellite imagery, and shaded relief
-  with no printed names at all — the last two are often the clearest way to read ancient terrain, since only
-  this atlas's own labels appear. <b>Present</b> is for a classroom screen: heavier routes, larger markers and
-  labels, and article text at projection size. Both choices are remembered.</p>
+  <p><b>The map</b> uses a bundled schematic coastline rather than live basemap imagery. Zoom and pan to
+  explore places and routes. <b>Present</b> increases route weight, marker size, labels, and article text for
+  classroom projection; that choice is remembered.</p>
   <p><b>Map layers.</b> Roman roads are traced through cities and road-stations named in the ancient
   itineraries. Provinces are labelled but deliberately <i>not</i> outlined: provincial boundaries moved
   repeatedly in this century and no trustworthy geometry for them exists.</p>
@@ -987,12 +1193,21 @@ $("#btnHelp").onclick = () => openModal("How to use this atlas", `<div class="he
   practically closed from November to March, and the summer etesian northerlies made westward runs crawl.
   The <b>km</b> button cycles kilometres, Roman miles (1,479 m) and stadia (185 m).</p>
   <p><b>Reading the text.</b> 'Read the full passage' in any city panel, in a reading-plan entry, or beside
-  a person's references opens the whole passage in the Authorized Version, with every place name in it
-  clickable. The text is fetched from bible-api.com the first time and then cached in your browser, so an
-  internet connection is needed only once per passage.</p>
+  a person's references links out to the World English Bible (WEB) at biblegateway.com — this atlas calls
+  no scripture API of its own.</p>
   <p><b>Compare</b> puts two journeys side by side with distances, sea-versus-land mileage, companions and
-  the letters written in each period. <b>Distance</b> measures between any two sites at ancient rates of travel.</p>
-  <p style="color:#8d9a9c;font-size:12.5px"><b>On the dating.</b> Absolute years are reconstructions.
+  the letters written in each period, and will <b>overlay both routes on the map</b> — the second drawn
+  dashed, every city they share ringed in gold, with a 'shared only' filter.
+  <b>Distance</b> measures between any two sites at ancient rates of travel.</p>
+  <p><b>The Gospels.</b> Turn on <b>Gospel sites</b> in the map layers for thirty-two places from the life
+  of Jesus — Bethlehem, Nazareth, Capernaum, Caesarea Philippi, Gethsemane, Golgotha and the rest — graded
+  for confidence the same way Paul's cities are. Study weeks 1–26 turn the layer on for you and
+  focus the map on that week's ground. <b>Quiz</b> drills the map: read the clue, click the place, and a
+  wrong click tells you how far off you were.</p>
+  <p><b>Textual notes.</b> Where the Received Text behind a familiar reading is not supported by the earliest
+  manuscripts — the longer ending of Mark, the woman taken in adultery, Acts 8:37, the Johannine Comma — the
+  passage reader says so plainly underneath the text.</p>
+  <p style="color:var(--muted);font-size:12.5px"><b>On the dating.</b> Absolute years are reconstructions.
   The fixed points are Gallio's proconsulship of Achaia in AD 51–52 (the Delphi inscription, cf. Acts 18:12),
   the death of Aretas IV c. AD 40 (2 Cor 11:32), and Festus succeeding Felix c. AD 59. Everything else is
   counted forward and backward from those, so dates here may differ by a year or two from other schemes.
@@ -1000,13 +1215,62 @@ $("#btnHelp").onclick = () => openModal("How to use this atlas", `<div class="he
   rather than on Acts.</p></div>`);
 
 /* ---------- overlay layers: roads, provinces, epistles ---------- */
-const layerState = { roads: false, provinces: false, letters: false };
+const layerState = { roads: false, provinces: false, letters: false, gospel: false };
 const roadLayer = L.layerGroup(), provLayer = L.layerGroup(), letterLayer = L.layerGroup();
+
+/* ---------- Gospel-era sites (data/gospels.js) ----------
+   Their own layer, off by default: this is Paul's atlas, and the Gospel gazetteer is
+   for study weeks 1–26. Cool blue markers keep the two eras visually distinct. */
+const gospelLayer = L.layerGroup();
+const GOSPEL_IDS = (window.GOSPEL_SITE_IDS || []).filter(id => P[id]);
+const gospelMarks = {};
+GOSPEL_IDS.forEach(id => {
+  const p = P[id], major = p.tier === "major";
+  const m = L.circleMarker([p.lat, p.lng], { radius: major ? 6 : 4.5, weight: 2,
+    color: "#a9d2e0", fillColor: "#20475a", fillOpacity: .95, opacity: .9, className: "marker-dot" })
+    .addTo(gospelLayer);
+  m.on("click", () => selectPlace(id));
+  m.bindTooltip(p.name.split(" (")[0], { permanent: true, direction: "right", offset: [7, 0],
+    className: "plabel gospel" + (major ? "" : " small") });
+  gospelMarks[id] = m;
+});
+function styleGospel() {
+  if (!layerState.gospel) return;
+  const F = state.cfm.week != null ? state.cfm : null;
+  const present = document.body.classList.contains("present");
+  GOSPEL_IDS.forEach(id => {
+    const m = gospelMarks[id], sel = state.place === id, rel = !F || F.places.has(id);
+    m.setStyle({
+      opacity: rel ? 1 : .14, fillOpacity: rel ? .95 : .2,
+      color: sel ? "#c9a227" : rel && F ? "#dff0f6" : "#a9d2e0",
+      fillColor: sel ? "#c9a227" : "#20475a",
+      weight: (sel ? 4 : F && rel ? 3 : 2) * (present ? 1.6 : 1),
+      radius: ((P[id].tier === "major" ? 6 : 4.5) + (sel ? 2.5 : F && rel ? 1.5 : 0)) * (present ? 1.5 : 1)
+    });
+  });
+}
+function updateGospelLabels() {
+  if (!layerState.gospel) return;
+  const z = map.getZoom(), F = state.cfm.week != null ? state.cfm : null, kept = [];
+  GOSPEL_IDS.forEach(id => {
+    const t = gospelMarks[id].getTooltip(), el = t && t.getElement(); if (!el) return;
+    const major = P[id].tier === "major", focus = F && F.places.has(id);
+    const show = focus || z >= 9 || (major && z >= 7);
+    el.style.display = show ? "" : "none";
+    if (!show) return;
+    const r = el.getBoundingClientRect();
+    const clash = kept.some(k => !(r.right < k.left - 2 || r.left > k.right + 2 ||
+      r.bottom < k.top - 1 || r.top > k.bottom + 1));
+    if (clash) el.style.display = "none"; else kept.push(r);
+  });
+}
+map.on("zoomend", updateGospelLabels);
+map.on("moveend", () => setTimeout(updateGospelLabels, 100));
 
 (window.PAUL_ROADS || []).forEach(r => {
   L.polyline(r.pts, { color: "#8a6a2f", weight: 2.4, opacity: .55, dashArray: "1 7",
     lineCap: "round" }).bindTooltip(`<b style="font-family:'EB Garamond',serif;font-size:14px">${r.name}</b>
-      <div style="max-width:250px;font-size:11.5px;line-height:1.5;color:#cbc2b0;margin-top:3px">${r.note}</div>`,
+      <div style="max-width:250px;font-size:11.5px;line-height:1.5;color:var(--parch-dim);margin-top:3px">${r.note}</div>`,
     { sticky: true, className: "letterlabel" }).addTo(roadLayer);
 });
 (window.PAUL_PROVINCES || []).forEach(p => {
@@ -1052,9 +1316,11 @@ function updateLetterLabels() {
 }
 function setLayer(key, on) {
   layerState[key] = on;
-  const g = key === "roads" ? roadLayer : key === "provinces" ? provLayer : letterLayer;
+  const g = key === "roads" ? roadLayer : key === "provinces" ? provLayer
+    : key === "gospel" ? gospelLayer : letterLayer;
   on ? g.addTo(map) : map.removeLayer(g);
   if (key === "letters" && on) setTimeout(updateLetterLabels, 60);
+  if (key === "gospel") { styleGospel(); setTimeout(updateGospelLabels, 60); }
 }
 map.on("zoomend", updateLetterLabels);
 map.on("moveend", () => setTimeout(updateLetterLabels, 100));
@@ -1064,31 +1330,31 @@ document.querySelectorAll("#layers input[data-layer]").forEach(cb =>
 function showLetter(id) {
   const l = (window.PAUL_LETTERS || []).find(x => x.id === id); if (!l) return;
   openModal(l.name, `
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:#8d9a9c;margin-bottom:14px">
-      ${l.date} · WRITTEN FROM ${P[l.from].name.toUpperCase()} · SENT TO ${P[l.to].name.toUpperCase()}</div>
-    ${l.carrier ? `<div class="sect"><h4>Carried by</h4><p style="font-size:15px;color:#e7c9d8;
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--muted);margin-bottom:14px">
+      ${l.date} · WRITTEN FROM ${P[l.from] ? P[l.from].name.toUpperCase() : "ORIGIN UNKNOWN"} · SENT TO ${P[l.to].name.toUpperCase()}${l.authorship ? ` · <span style="color:${l.authorship === "undisputed" ? "var(--muted)" : "#b5793a"}">${l.authorship.toUpperCase()} AUTHORSHIP</span>` : ""}</div>
+    ${l.carrier ? `<div class="sect"><h4>Carried by</h4><p style="font-size:15px;color:var(--parch);
       font-family:'EB Garamond',serif;margin:0 0 6px">${l.carrier}</p>
-      <p style="font-size:12.5px;color:#8d9a9c;line-height:1.6;margin:0">${l.carrierNote}</p></div>` : ""}
-    <p style="font-size:14px;line-height:1.7;color:#ded4c0;text-wrap:pretty">${l.occasion}</p>
+      <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin:0">${l.carrierNote}</p></div>` : ""}
+    <p style="font-size:14px;line-height:1.7;color:var(--parch-dim);text-wrap:pretty">${l.occasion}</p>
     <div class="verse" style="margin:18px 0"><div class="ref">${l.key}</div><p>${l.keyText}</p></div>
-    <p style="font-size:12.5px;line-height:1.6;color:#8d9a9c">${l.note}</p>
+    <p style="font-size:12.5px;line-height:1.6;color:var(--muted)">${l.note}</p>
     <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
-      <span class="chip" data-go="${l.from}">Open ${P[l.from].name}</span>
+      ${P[l.from] ? `<span class="chip" data-go="${l.from}">Open ${P[l.from].name}</span>` : ""}
       <span class="chip" data-go="${l.to}">Open ${P[l.to].name}</span></div>`);
   $("#mbody").querySelectorAll("[data-go]").forEach(el => el.addEventListener("click", () => {
     closeModal(); selectPlace(el.dataset.go);
-    map.flyTo([P[el.dataset.go].lat, P[el.dataset.go].lng], Math.max(map.getZoom(), 6), { duration: .9 });
+    flyToVisible(P[el.dataset.go].lat, P[el.dataset.go].lng, Math.max(map.getZoom(), 6), { duration: .9 });
   }));
 }
 
 $("#btnLetters").onclick = () => {
   openModal("The thirteen letters", `
-    <p style="font-size:13px;line-height:1.65;color:#8d9a9c;margin:0 0 16px">
-      Where each letter was written and where it went. Turn on <b style="color:#cbc2b0">Epistles — written &amp; sent</b>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin:0 0 16px">
+      Where each letter was written and where it went. Turn on <b style="color:var(--parch-dim)">Epistles — written &amp; sent</b>
       in the map layers to see them drawn as arcs.</p>
     <div class="plist">${(window.PAUL_LETTERS || []).map(l => `<div class="prow" data-openl="${l.id}" style="cursor:pointer">
-      <h4 style="color:#e7c9d8">${l.name} <span style="font-size:11px;color:#8d9a9c">— open →</span></h4>
-      <div class="prole">${l.date} · from ${P[l.from].name} → to ${P[l.to].name}</div>
+      <h4 style="color:var(--parch)">${l.name} <span style="font-size:11px;color:var(--muted)">— open →</span></h4>
+      <div class="prole">${l.date} · from ${P[l.from] ? P[l.from].name : "unknown origin"} → to ${P[l.to].name}${l.authorship && l.authorship !== "undisputed" ? ` · <span style="color:#b5793a">${l.authorship}</span>` : ""}</div>
       <p>${l.occasion}</p>
       <div class="pref">${l.key} — “${l.keyText}”</div>
     </div>`).join("")}</div>`);
@@ -1101,7 +1367,7 @@ $("#btnPeople").onclick = () => {
   const people = window.PAUL_PEOPLE || [];
   openModal("People index", `
     <input id="pq" placeholder="Filter by name, role, place or reference…" autocomplete="off"
-      style="width:100%;background:#0e1418;border:1px solid #2b3a42;color:#f2e9d6;padding:9px 11px;
+      style="width:100%;background:var(--ink);border:1px solid var(--line);color:var(--parch);padding:9px 11px;
       border-radius:3px;font-family:inherit;font-size:13px;margin-bottom:16px">
     <div class="plist" id="plist"></div>`);
   const draw = (q) => {
@@ -1109,19 +1375,19 @@ $("#btnPeople").onclick = () => {
     const rows = people.filter(pp => !q || (pp.name + " " + pp.role + " " + pp.note + " " +
       pp.refs.join(" ") + " " + pp.places.map(id => P[id] ? P[id].name : "").join(" ")).toLowerCase().indexOf(q) > -1);
     $("#plist").innerHTML = rows.length ? rows.map(pp => `<div class="prow" data-open="${pp.name}" style="cursor:pointer">
-      <h4 style="color:#e7d7b0">${pp.name} <span style="font-size:11px;color:#8d9a9c">— open →</span></h4><div class="prole">${pp.role}</div>
+      <h4 style="color:var(--parch)">${pp.name} <span style="font-size:11px;color:var(--muted)">— open →</span></h4><div class="prole">${pp.role}</div>
       <p>${pp.note}</p>
       <div style="margin:6px 0">${pp.places.map(id => P[id]
         ? `<span class="chip" data-go="${id}">${P[id].name}</span>` : "").join("")}</div>
       <div class="pref">${pp.refs.join(" · ")}</div></div>`).join("")
-      : `<p style="color:#8d9a9c;font-size:13px">No one by that name in the atlas.</p>`;
+      : `<p style="color:var(--muted);font-size:13px">No one by that name in the atlas.</p>`;
     $("#plist").querySelectorAll("[data-open]").forEach(el => el.addEventListener("click", e => {
       if (e.target.closest("[data-go]")) return;
       closeModal(); showPerson(el.dataset.open);
     }));
     $("#plist").querySelectorAll("[data-go]").forEach(el => el.addEventListener("click", () => {
       closeModal(); selectPlace(el.dataset.go);
-      map.flyTo([P[el.dataset.go].lat, P[el.dataset.go].lng], Math.max(map.getZoom(), 7), { duration: .9 });
+      flyToVisible(P[el.dataset.go].lat, P[el.dataset.go].lng, Math.max(map.getZoom(), 7), { duration: .9 });
     }));
   };
   $("#pq").addEventListener("input", e => draw(e.target.value));
@@ -1132,13 +1398,13 @@ $("#btnPeople").onclick = () => {
 $("#btnDates").onclick = () => {
   const C = window.PAUL_CHRONOLOGY;
   openModal("Chronology — three reconstructions", `
-    <p style="font-size:13px;line-height:1.65;color:#ded4c0;margin:0 0 8px">
+    <p style="font-size:13px;line-height:1.65;color:var(--parch-dim);margin:0 0 8px">
       Not one date in Paul's life is given in the New Testament. Every year below is reconstructed from
       a handful of external fixed points. The middle column is the scheme this map uses.</p>
     <div style="display:flex;gap:16px;flex-wrap:wrap;margin:12px 0 18px">
       ${C.schemes.map(s => `<div style="flex:1 1 220px"><div style="font-family:'IBM Plex Mono',monospace;
-        font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:${s.id === "std" ? "#c9a227" : "#8d9a9c"}">
-        ${s.label}</div><div style="font-size:12px;line-height:1.55;color:#ded4c0;margin-top:4px">${s.note}</div></div>`).join("")}
+        font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:${s.id === "std" ? "var(--gold)" : "var(--muted)"}">
+        ${s.label}</div><div style="font-size:12px;line-height:1.55;color:var(--parch-dim);margin-top:4px">${s.note}</div></div>`).join("")}
     </div>
     <div style="overflow-x:auto"><table class="chron">
       <thead><tr><th>Event</th><th>Early</th><th>Standard (used here)</th><th>Late</th><th>Evidence</th></tr></thead>
@@ -1154,7 +1420,7 @@ $("#btnDates").onclick = () => {
     const y = (b != null && b - a > 0 && b - a <= 5) ? (a + b) / 2 : a + .4;
     pause(); state.year = Math.max(T0, Math.min(T1, y)); renderAll(); closeModal();
     $("#eventlabel").innerHTML = `<b>${tr.querySelector(".ev").textContent}</b>
-      <span style="color:#8d9a9c">— ${tr.dataset.y} on the standard scheme. ${tr.querySelector(".bs") ? tr.querySelector(".bs").textContent : ""}</span>`;
+      <span style="color:var(--muted)">— ${tr.dataset.y} on the standard scheme. ${tr.querySelector(".bs") ? tr.querySelector(".bs").textContent : ""}</span>`;
   }));
 };
 
@@ -1164,7 +1430,7 @@ let readIdx = -1;
 function buildReading() {
   $("#readlist").innerHTML = READ.map((r, i) => `<div class="ritem${i === readIdx ? " on" : ""}" data-r="${i}">
     <div class="rref">${r.ref}</div><div class="rttl">${r.title}</div>
-    <div class="rask">${r.ask}<div style="margin-top:8px"><span class="chip" data-read="${i}">Read the passage — full KJV text</span></div></div></div>`).join("");
+    <div class="rask">${r.ask}<div style="margin-top:8px"><span class="chip" data-read="${i}">Read the passage — full WEB text</span></div></div></div>`).join("");
   $("#readlist").querySelectorAll(".ritem").forEach(el =>
     el.addEventListener("click", () => gotoReading(+el.dataset.r)));
 }
@@ -1178,7 +1444,7 @@ function gotoReading(i) {
   buildRail(); buildReading(); renderAll();
   selectPlace(r.place);
   const p = P[r.place];
-  if (p) map.flyTo([p.lat, p.lng], Math.max(map.getZoom(), 6), { duration: .9 });
+  if (p) flyToVisible(p.lat, p.lng, Math.max(map.getZoom(), 6), { duration: .9 });
   const el = $(`#readlist .ritem[data-r="${i}"]`);
   if (el) $("#rail").scrollTop = Math.max(0, el.offsetTop - 160);
   document.body.classList.remove("rail-open");
@@ -1190,21 +1456,167 @@ $("#readNext").onclick = () => gotoReading(readIdx + 1 >= READ.length ? READ.len
 document.querySelectorAll(".rtab").forEach(tab => tab.addEventListener("click", () => {
   document.querySelectorAll(".rtab").forEach(t => t.classList.toggle("on", t === tab));
   document.querySelectorAll(".tabpane").forEach(p => p.hidden = p.dataset.pane !== tab.dataset.tab);
+  document.body.classList.toggle("railfocus", tab.dataset.tab !== "itin");
+  railEl.scrollTop = 0;
 }));
+
+/* When the article panel overlays the map (tablet landscape, 821–1080px) its width is
+   reserved as padding so a fitted route never lands underneath it. */
+/* one definition of "compact chrome": phone portrait, or any short landscape screen */
+function isCompact() {
+  const w = window.innerWidth, h = window.innerHeight;
+  return w <= 820 || (h <= 540 && w <= 1000);
+}
+function fitPad() {
+  const w = window.innerWidth, h = window.innerHeight;
+  if (!$("#app").classList.contains("detail-open")) return {};
+  if (w <= 820 && h > w)                                    // phone portrait: half-height sheet
+    return { paddingBottomRight: [0, Math.round(h * 0.52)] };
+  if (h <= 540 && w <= 1000)                                // phone landscape: panel on the left
+    return { paddingTopLeft: [Math.max(296, Math.min(430, w * 0.46)), 0] };
+  if (w > 820 && w <= 1080)                                 // tablet: overlay panel on the right
+    return { paddingBottomRight: [Math.min(380, w * 0.82), 0] };
+  return {};
+}
+/* fly so the target lands centred in whatever part of the map isn't covered by an open panel,
+   instead of dead-centre on the whole map div (which can be half hidden behind the panel) */
+function flyToVisible(lat, lng, zoom, opts) {
+  const z = zoom != null ? zoom : map.getZoom();
+  const pad = fitPad();
+  const tl = pad.paddingTopLeft || [0, 0], br = pad.paddingBottomRight || [0, 0];
+  if (!tl[0] && !tl[1] && !br[0] && !br[1]) { map.flyTo([lat, lng], z, opts); return; }
+  const markerPx = map.project([lat, lng], z);
+  const centerPx = markerPx.add(L.point((br[0] - tl[0]) / 2, (br[1] - tl[1]) / 2));
+  map.flyTo(map.unproject(centerPx, z), z, opts);
+}
+
+/* the sheet's grab bar expands it to full height and back */
+$("#detail").addEventListener("click", e => {
+  if (window.innerWidth > 820 || window.innerHeight < window.innerWidth) return;
+  if (e.target.closest("button, a, .chip, input")) return;
+  const head = e.target.closest(".dhead");
+  if (!head || e.clientY - head.getBoundingClientRect().top > 22) return;
+  document.body.classList.toggle("sheet-full");
+  setTimeout(() => map.invalidateSize(true), 300);
+});
+
+/* bottom action bar (<=820px). Each button dismisses whatever overlays the map,
+   lets the map re-measure, and only then changes what is shown. */
+function tabMark(id) {
+  document.querySelectorAll("#tabbar button").forEach(b => b.classList.toggle("on", b.id === id));
+}
+function railTo(tab, id) {   /* kept for keyboard and deep links */
+  const open = !document.body.classList.contains("rail-open") ||
+    !document.querySelector('.rtab[data-tab="' + tab + '"]').classList.contains("on");
+  document.body.classList.toggle("rail-open", open);
+  if (open) {
+    const t = document.querySelector('.rtab[data-tab="' + tab + '"]');
+    if (t && !t.classList.contains("on")) t.click();
+  }
+  tabMark(open ? id : "tbMap");
+}
+/* one Menu button: the drawer already carries itineraries, weeks, reading and tools */
+$("#railClose").onclick = () => {
+  if (document.body.classList.contains("rail-open")) {
+    document.body.classList.remove("rail-open");
+    tabMark("tbMap");
+  } else {
+    document.body.classList.add("rail-collapsed");
+    $("#btnRailToggle").classList.remove("on");
+    store.set("railcollapsed", "1");
+    setTimeout(() => { map.invalidateSize(true); renderMap(); }, 300);
+  }
+};
+$("#tbIndex").onclick = () => {
+  const open = document.body.classList.toggle("rail-open");
+  if (open) {
+    railEl.scrollTop = 0;
+    const itin = document.querySelector('.rtab[data-tab="itin"]');
+    if (itin && !itin.classList.contains("on")) itin.click();
+  }
+  tabMark(open ? "tbIndex" : "tbMap");
+};
+
+/* the timeline is a tool, not furniture: on a small screen it stays out of the way
+   until it is asked for, and the map keeps the room */
+function setTimeline(on) {
+  document.body.classList.toggle("timeline-on", on);
+  $("#btnTimeTop").classList.toggle("on", on);
+  $("#tbTime").classList.toggle("on", on);
+  store.set("timeline", on ? "1" : "");
+  setTimeout(() => { map.invalidateSize(true); renderMap(); }, 300);
+}
+const toggleTimeline = () => setTimeline(!document.body.classList.contains("timeline-on"));
+$("#btnTimeTop").onclick = toggleTimeline;
+$("#tbTime").onclick = toggleTimeline;
+setTimeline(store.get("timeline") === "1");   /* off unless the reader asked for it */
+
+/* tablet landscape: the index column folds away so the map can have the width */
+$("#btnRailToggle").onclick = () => {
+  const off = document.body.classList.toggle("rail-collapsed");
+  $("#btnRailToggle").classList.toggle("on", !off);
+  store.set("railcollapsed", off ? "1" : "");
+  setTimeout(() => { map.invalidateSize(true); renderMap(); }, 300);
+};
+if (store.get("railcollapsed") === "1") document.body.classList.add("rail-collapsed");
+else $("#btnRailToggle").classList.add("on");
+$("#tbMap").onclick = () => {
+  document.body.classList.remove("rail-open");
+  if ($("#app").classList.contains("detail-open")) closeDetail();
+  else setTimeout(() => map.invalidateSize(true), 300);
+  tabMark("tbMap");
+};
+$("#tbRead").onclick = () => {
+  document.body.classList.add("rail-open");
+  document.querySelector('.rtab[data-tab="read"]').click();
+  tabMark("tbRead");
+};
 
 /* mobile drawer + tool relocation */
 $("#btnMenu").onclick = () => document.body.classList.toggle("rail-open");
-$("#map").addEventListener("pointerdown", () => document.body.classList.remove("rail-open"));
+$("#map").addEventListener("pointerdown", () => {
+  document.body.classList.remove("rail-open");
+  if (isCompact()) tabMark("tbMap");
+});
 const toolsEl = $("#tools"), headerEl = document.querySelector("header"), railEl = $("#rail");
+const moreWrap = $("#moreWrap"), moreMenu = $("#moreMenu"), btnMore = $("#btnMore"),
+  pinnedEl = document.querySelector(".pinned");
+function closeMore() { moreMenu.classList.remove("open"); btnMore.classList.remove("on"); }
+btnMore.onclick = e => {
+  e.stopPropagation();
+  const open = moreMenu.classList.toggle("open");
+  btnMore.classList.toggle("on", open);
+};
+moreMenu.addEventListener("click", e => { if (e.target.closest("button")) closeMore(); });
+document.addEventListener("click", e => { if (!moreWrap.contains(e.target)) closeMore(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeMore(); });
+
 function placeTools() {
-  const narrow = window.innerWidth <= 1150;
+  const narrow = window.innerWidth <= 1150, phone = isCompact();
   if (narrow && toolsEl.parentElement !== railEl) railEl.insertBefore(toolsEl, railEl.firstChild);
-  if (!narrow && toolsEl.parentElement !== headerEl) headerEl.appendChild(toolsEl);
+  if (!narrow && toolsEl.parentElement !== headerEl) headerEl.insertBefore(toolsEl, pinnedEl);
+  /* on a phone the header has no room for Map — it joins the rail set; Light/Dark stays pinned */
+  const roam = [];
+  roam.forEach(b => {
+    if (phone && b.parentElement !== toolsEl) toolsEl.appendChild(b);
+    if (!phone && b.parentElement !== pinnedEl) pinnedEl.insertBefore(b, $("#btnTheme"));
+  });  /* pull everything back, then spill whatever will not fit into the More menu */
+  while (moreMenu.firstChild) toolsEl.appendChild(moreMenu.firstChild);
+  closeMore();
+  if (narrow) { moreWrap.classList.remove("on"); return; }
+  moreWrap.classList.add("on");
+  /* secondary tools always live in the menu, so the header set never shuffles with window width */
+  [...toolsEl.children].filter(b => b.hasAttribute("data-secondary"))
+    .forEach(b => moreMenu.appendChild(b));
+  let guard = 40;
+  while (toolsEl.scrollWidth > toolsEl.clientWidth + 1 && toolsEl.children.length > 1 && guard--)
+    moreMenu.insertBefore(toolsEl.lastElementChild, moreMenu.firstChild);
+  moreWrap.classList.toggle("on", moreMenu.children.length > 0);
 }
 placeTools();
 window.addEventListener("resize", placeTools);
 
-/* ---------- KJV passage reader (text fetched on demand, cached locally) ---------- */
+/* ---------- WEB passage reader (links out on demand; nothing fetched by this app) ---------- */
 const PLACE_ALIASES = [
   ["Antioch in Pisidia", "antiochPisidia"], ["Antioch of Pisidia", "antiochPisidia"],
   ["Fair havens", "fairHavens"], ["fair havens", "fairHavens"], ["Samothracia", "samothrace"],
@@ -1231,46 +1643,107 @@ function linkPlaces(text) {
   });
   return out;
 }
+function variantNotes(q) {
+  const V = window.WEB_VARIANTS || [];
+  const m = String(q).match(/^\s*((?:[1-3]\s*)?[A-Za-z]+(?:\s+[A-Za-z]+)?)\s+(\d+)/);
+  if (!m) return "";
+  const book = m[1].toLowerCase().replace(/\s+/g, " ").trim(), ch = +m[2];
+  const hits = V.filter(v => book.indexOf(v.book) > -1 && v.ch === ch);
+  if (!hits.length) return "";
+  const seen = {};
+  return `<div style="margin-top:22px;padding-top:14px;border-top:1px solid var(--line)">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;
+      text-transform:uppercase;color:var(--gold);margin-bottom:8px">Textual note</div>
+    ${hits.filter(v => (seen[v.ref] ? false : (seen[v.ref] = true))).map(v => `
+      <p style="font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;line-height:1.65;
+        color:var(--parch-dim);margin:0 0 10px"><b style="color:var(--parch)">${v.ref} — ${v.title}.</b>
+        ${v.note}</p>`).join("")}
+    <p style="font-family:'IBM Plex Sans',sans-serif;font-size:11.5px;line-height:1.6;color:var(--muted);margin:0">
+      Noted because the atlas grades the confidence of a site identification, and the text deserves
+      the same candour. Nothing here is a reason to distrust the passage.</p></div>`;
+}
+/* Scripture text: the full New Testament (World English Bible, public domain) is bundled in
+   data/web-nt.js as window.WEB_TEXT, so every passage renders here, offline, with no link-out. */
+function localPassage(q) {
+  const T = window.WEB_TEXT; if (!T) return null;
+  // "Book C", "Book C1-C2" (whole chapters), "Book C:V" or "Book C:V1-V2" (one chapter, verse range)
+  const m = String(q).match(/^\s*((?:[1-3]\s*)?[A-Za-z][A-Za-z ]*?)(?:\s+(\d+)(?:-(\d+))?(?::(\d+)(?:\s*[-\u2013]\s*(\d+))?)?)?\s*$/);
+  if (!m) return null;
+  const want = m[1].trim().toLowerCase();
+  const bookKey = Object.keys(T).find(b => b.toLowerCase() === want
+    || b.toLowerCase().replace(/\s+/g, "") === want.replace(/\s+/g, ""));
+  if (!bookKey) return null;
+  const allCh = Object.keys(T[bookKey]).map(Number);
+  const chFrom = m[2] ? +m[2] : Math.min.apply(null, allCh), chTo = m[3] ? +m[3] : (m[2] ? chFrom : Math.max.apply(null, allCh));
+  const vFrom = m[4] ? +m[4] : 1, vTo = m[5] ? +m[5] : (m[4] ? +m[4] : 9999);
+  const verses = [];
+  for (let c = chFrom; c <= chTo; c++) {
+    const ch = T[bookKey][c]; if (!ch) continue;
+    Object.keys(ch).map(Number).sort((a, b) => a - b)
+      .filter(v => c !== chFrom || c !== chTo || (v >= vFrom && v <= vTo))
+      .filter(v => (c !== chFrom || v >= vFrom) && (c !== chTo || v <= vTo))
+      .forEach(v => verses.push({ chapter: c, verse: v, text: ch[String(v)] }));
+  }
+  if (!verses.length) return null;
+  const ref = chFrom === chTo
+    ? `${bookKey} ${chFrom}${m[4] ? ":" + m[4] + (m[5] ? "-" + m[5] : "") : ""}`
+    : `${bookKey} ${chFrom}-${chTo}`;
+  return { reference: ref, verses, local: true };
+}
 function openPassage(ref) {
   if (!ref) return;
   const q = ref.replace(/[–—]/g, "-").trim();
-  const cacheKey = "paulAtlas.kjv." + q;
-  openModal(q + " — Authorized (King James) Version",
-    `<div class="passage" id="ptext" style="color:#8d9a9c">Fetching the text…</div>`);
-  const render = (data) => {
+  const local = localPassage(q);
+  if (local) {
+    openModal(q + " — World English Bible", `<div class="passage" id="ptext"></div>`);
+    return render(local);
+  }
+  openModal(q + " — World English Bible", `<div class="passage" style="color:var(--muted);font-size:13.5px;line-height:1.7">
+    "${q}" isn't in the atlas's bundled New Testament text (the World English Bible, public domain worldwide).
+    Every reference cited elsewhere in this atlas is bundled and readable offline — try Search above, or the
+    Read Acts tab in the left rail, for the full passage.</div>`);
+  function render(data) {
     const box = $("#ptext"); if (!box) return;
     box.style.color = "";
     box.innerHTML = (data.verses || []).map(v =>
       `<span class="vn">${v.chapter}:${v.verse}</span>${linkPlaces(v.text.trim())} `).join("") +
-      `<div style="margin-top:18px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#63757c;
-        letter-spacing:.06em">${data.reference || q} · KING JAMES VERSION (PUBLIC DOMAIN) · TEXT VIA BIBLE-API.COM</div>`;
+      `<div style="margin-top:18px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);
+        letter-spacing:.06em">${data.reference || q} · WORLD ENGLISH BIBLE (WEB) — public domain worldwide</div>` +
+      variantNotes(data.reference || q);
     box.querySelectorAll("[data-pl]").forEach(el => el.addEventListener("click", () => {
       const id = el.dataset.pl; closeModal(); selectPlace(id);
-      map.flyTo([P[id].lat, P[id].lng], Math.max(map.getZoom(), 6), { duration: .9 });
+      flyToVisible(P[id].lat, P[id].lng, Math.max(map.getZoom(), 6), { duration: .9 });
     }));
-  };
-  let cached = null;
-  try { cached = JSON.parse(localStorage.getItem(cacheKey) || "null"); } catch (e) {}
-  if (cached) return render(cached);
-  fetch("https://bible-api.com/" + encodeURIComponent(q) + "?translation=kjv")
-    .then(r => r.ok ? r.json() : null)
-    .then(j => {
-      if (!j || !j.verses) throw new Error("no text");
-      try { localStorage.setItem(cacheKey, JSON.stringify({ reference: j.reference, verses: j.verses })); } catch (e) {}
-      render(j);
-    })
-    .catch(() => {
-      const box = $("#ptext"); if (!box) return;
-      box.innerHTML = `<div style="font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;line-height:1.7;color:#d99a7c">
-        The full text could not be fetched just now — the reader needs an internet connection.
-        The verses quoted in each city panel are stored in the atlas itself and always available.</div>`;
-    });
+  }
+}
+function showPassagePanel(ref) {
+  if (!ref) return;
+  const q = ref.replace(/[–—]/g, "-").trim();
+  panelHist.push({ t: "passage", k: q });
+  state.place = null;
+  const data = localPassage(q);
+  $("#detail").innerHTML = panelHead(q, "WORLD ENGLISH BIBLE (WEB) — public domain worldwide", "SCRIPTURE") +
+    `<div class="sect"><div class="passage" id="ptext">${data ? "" :
+      `<p style="color:var(--muted);font-size:13.5px;line-height:1.7">"${q}" isn't in the atlas's bundled
+       New Testament text. Every reference cited elsewhere in this atlas is bundled and readable offline —
+       try Search above instead.</p>`}</div></div>`;
+  wirePanel();
+  if (data) {
+    const box = $("#ptext");
+    box.innerHTML = data.verses.map(v =>
+      `<span class="vn">${v.chapter}:${v.verse}</span>${linkPlaces(v.text.trim())} `).join("") +
+      variantNotes(data.reference);
+    box.querySelectorAll("[data-pl]").forEach(el => el.addEventListener("click", () => {
+      const id = el.dataset.pl; selectPlace(id);
+      flyToVisible(P[id].lat, P[id].lng, Math.max(map.getZoom(), 6), { duration: .9 });
+    }));
+  }
 }
 document.addEventListener("click", e => {
   const chip = e.target.closest("[data-passage]");
-  if (chip) openPassage(chip.dataset.passage);
+  if (chip) showPassagePanel(chip.dataset.passage);
   const rd = e.target.closest("[data-read]");
-  if (rd) { e.stopPropagation(); openPassage(READ[+rd.dataset.read].ref); }
+  if (rd && !e.target.closest("#detail")) { e.stopPropagation(); showPassagePanel(READ[+rd.dataset.read].ref); }
 });
 
 /* ---------- world-events lanes under the timeline ---------- */
@@ -1281,7 +1754,7 @@ function buildContext() {
       const a = Math.max(T0, it.t0), b = Math.min(T1, it.t1);
       return `<div class="seg" data-lane="${l.id}" data-i="${i}"
         style="left:${((a - T0) / (T1 - T0)) * 100}%;width:${((b - a) / (T1 - T0)) * 100}%;
-        background:${l.color}">${it.name}</div>`;
+        background:${l.color};color:${readableOn(l.color)}">${it.name}</div>`;
     }).join("")}</div></div>`).join("");
   const evts = `<div class="lane"><div class="lbl">Events</div><div class="strip">
     ${C.events.map((e, i) => `<div class="evt" data-evt="${i}"
@@ -1289,7 +1762,7 @@ function buildContext() {
   $("#ctxlanes").innerHTML = lanes + evts;
   const say = (title, note, year) => {
     if (year != null) { pause(); state.year = year; renderAll(); }
-    $("#eventlabel").innerHTML = `<b>${title}</b> <span style="color:#8d9a9c">— ${note}</span>`;
+    $("#eventlabel").innerHTML = `<b>${title}</b> <span style="color:var(--muted)">— ${note}</span>`;
   };
   $("#ctxlanes").querySelectorAll(".seg").forEach(el => {
     const l = C.lanes.find(x => x.id === el.dataset.lane), it = l.items[+el.dataset.i];
@@ -1341,19 +1814,20 @@ $("#btnNet").onclick = () => {
     return { pp, per, n: per.filter(Boolean).length };
   }).filter(r => r.n > 0).sort((a, b) => b.n - a.n || a.pp.name.localeCompare(b.pp.name));
   openModal("Companions — who was with Paul, and when", `
-    <p style="font-size:13px;line-height:1.65;color:#ded4c0;margin:0 0 6px">
+    <p style="font-size:13px;line-height:1.65;color:var(--parch-dim);margin:0 0 6px">
       A filled dot means this person is named at a place on that itinerary. It is a map of overlap in the
       record, not a claim that they walked every stage — Luke names companions only when it matters to him.</p>
-    <p style="font-size:12px;color:#8d9a9c;margin:0 0 16px">Sorted by how many itineraries each appears in.
+    <p style="font-size:12px;color:var(--muted);margin:0 0 16px">Sorted by how many itineraries each appears in.
       Click a name for their entry.</p>
     <div class="netwrap"><table class="net">
       <thead><tr><th class="who">Person</th>${J.map(j =>
-        `<th><span style="color:${j.color}">${j.name.replace(/^The /, "").replace(" Journey", "")}</span></th>`).join("")}
+        `<th><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${j.color};
+          margin-bottom:3px"></span><br>${j.name.replace(/^The /, "").replace(" Journey", "")}</th>`).join("")}
         <th>Total</th></tr></thead>
       <tbody>${rows.map(r => `<tr>
         <td class="who" data-person="${r.pp.name}">${r.pp.name}</td>
         ${r.per.map((on, i) => `<td><span class="cell" style="background:${on ? J[i].color : "#1d282f"}"></span></td>`).join("")}
-        <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8d9a9c">${r.n}</td></tr>`).join("")}
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)">${r.n}</td></tr>`).join("")}
       </tbody></table></div>`);
   $("#mbody").querySelectorAll("[data-person]").forEach(el => el.addEventListener("click", () => {
     closeModal(); showPerson(el.dataset.person);
@@ -1374,7 +1848,7 @@ $("#btnUnits").onclick = () => {
   store.d.units = UNITS.key; store.save(); applyUnits();
 };
 
-/* ---------- Come, Follow Me: lesson focus mode ---------- */
+/* ---------- study weeks: lesson focus mode ---------- */
 const CFM = window.CFM_SCHEDULE || [];
 function weeksFor(placeId) { return CFM.filter(w => w.places.indexOf(placeId) > -1); }
 function lettersFor(w) {
@@ -1395,7 +1869,7 @@ function buildCFM() {
   $("#wlist").innerHTML = CFM.map(w => `<div class="witem${state.cfm.week === w.week ? " on" : ""}" data-w="${w.week}">
     <div class="wk">WEEK ${w.week}</div>
     <div class="wr">${w.readings}</div>
-    ${w.places.length ? "" : `<div class="wo">OUTSIDE THIS ATLAS</div>`}</div>`).join("");
+    ${w.places.length ? "" : `<div class="wo">${w.week === 0 ? "ORIENTATION" : "OUTSIDE THIS ATLAS"}</div>`}</div>`).join("");
   $("#wlist").querySelectorAll(".witem").forEach(el =>
     el.addEventListener("click", () => setWeek(+el.dataset.w)));
   if (state.cfm.week != null) $("#cfmsel").value = String(state.cfm.week);
@@ -1404,6 +1878,12 @@ function setWeek(n) {
   const w = CFM.find(x => x.week === n); if (!w) return;
   pause();
   state.cfm = { week: n, places: new Set(w.places), journeys: new Set(w.journeys) };
+  /* Gospel weeks: turn the Gospel-site layer on automatically, since that is where their places live */
+  if (w.places.some(id => GOSPEL_IDS.indexOf(id) > -1) && !layerState.gospel) {
+    setLayer("gospel", true);
+    const cb = document.querySelector('#layers input[data-layer="gospel"]');
+    if (cb) cb.checked = true;
+  }
   w.journeys.forEach(id => state.visible.add(id));
   // routes only draw up to the current year, so wind the clock to the end of the relevant itineraries
   let end = 0;
@@ -1412,8 +1892,9 @@ function setWeek(n) {
   buildRail(); buildCFM(); renderAll();
   $("#focusbadge").classList.add("on");
   $("#fbtitle").textContent = w.title;
-  const b = w.bounds;
-  map.flyToBounds(L.latLngBounds(b[0], b[1]), { padding: [40, 40], duration: 1.2, maxZoom: 9 });
+  const pts = w.places.map(id => P[id]).filter(Boolean).map(p => [p.lat, p.lng]);
+  const b = pts.length ? L.latLngBounds(pts) : L.latLngBounds(w.bounds[0], w.bounds[1]);
+  map.flyToBounds(b.pad(0.12), { padding: [40, 40], duration: 1.2, maxZoom: 9, ...fitPad() });
   showCFMPanel(n);
   // epistle weeks: the letter arcs are the point, so turn the layer on unasked
   const ls = lettersFor(w);
@@ -1428,6 +1909,7 @@ function setWeek(n) {
   document.body.classList.remove("rail-open");
 }
 function exitCFM() {
+  document.body.classList.remove("gweek");
   state.cfm = { week: null, places: new Set(), journeys: new Set() };
   Object.values(letterLines).forEach(ln => ln.setStyle({ opacity: .8, weight: 2 }));
   $("#focusbadge").classList.remove("on");
@@ -1451,14 +1933,14 @@ function resourceHTML(w) {
     if (!items.length) return "";
     return `<div style="margin:0 0 12px">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;
-        text-transform:uppercase;color:#8d9a9c;margin-bottom:5px">${g.label}</div>
+        text-transform:uppercase;color:var(--muted);margin-bottom:5px">${g.label}</div>
       ${items.map(i => `<a href="${i.u}" target="_blank" rel="noopener" style="display:block;
-        font-family:'EB Garamond',serif;font-size:14.5px;line-height:1.35;color:#e2d6bd;
-        text-decoration:none;padding:4px 0 4px 10px;border-left:1px solid #2b3a42">${i.t} <span
-        style="color:#8d9a9c;font-size:11px">↗</span></a>`).join("")}</div>`;
+        font-family:'EB Garamond',serif;font-size:14.5px;line-height:1.35;color:var(--parch-dim);
+        text-decoration:none;padding:4px 0 4px 10px;border-left:1px solid var(--line)">${i.t} <span
+        style="color:var(--muted);font-size:11px">↗</span></a>`).join("")}</div>`;
   }).join("");
   return `<div class="sect"><h4>Background &amp; study resources</h4>
-    <p style="font-size:12px;color:#8d9a9c;margin:0 0 12px">Videos, articles and books for this lesson from
+    <p style="font-size:12px;color:var(--muted);margin:0 0 12px">Videos, articles and books for this lesson from
       Taylor Halverson's <a href="${window.CFM_HUB}#week-${String(w.week).padStart(2, "0")}"
       target="_blank" rel="noopener">New Testament Resource Hub</a>${R.date ? ` · lesson week of ${R.date}` : ""}.</p>
     ${rows}</div>`;
@@ -1469,49 +1951,53 @@ function showCFMPanel(n) {
   panelHist.push({ t: "cfm", k: n });
   const sect = (t, h) => h ? `<div class="sect"><h4>${t}</h4>${h}</div>` : "";
   const ls = lettersFor(w);
-  const reads = (window.PAUL_READING || []).filter(r => {
+  const readSegs = w.readings.split(";").map(s => s.trim()).filter(s => localPassage(s.replace(/[–—]/g, "-")));
+  const actsReads = (window.PAUL_READING || []).filter(r => {
     const m = (w.readings.match(/Acts (\d+)[–-](\d+)/) || null);
     if (!m || r.ref.indexOf("Acts ") !== 0) return false;
     const ch = parseInt(r.ref.slice(5), 10);
     return ch >= +m[1] && ch <= +m[2];
   });
-  $("#detail").innerHTML = panelHead(w.title, w.readings, "COME, FOLLOW ME") + `
-    <div class="sect"><div class="dactions">
+  $("#detail").innerHTML = `<div class="dhead">
+    <button class="dclose" title="Close">×</button>
+    <div class="dactions" style="margin-bottom:9px">
       <button class="tool" id="cfmPrev2">← Previous week</button>
       <button class="tool" id="cfmNext2">Next week →</button>
-      <button class="tool" id="cfmOut">Leave focus</button>
-    </div></div>
+    </div>
+    <div class="dsub" style="margin:0 0 5px">STUDY WEEK</div>
+    <h2>${w.title}</h2>
+    <div class="dsub">${w.readings}</div></div>` + `
     ${sect("Reading", `<p>${w.readings}</p>
-      <div class="tags"><a class="chip" href="${w.url}" target="_blank" rel="noopener">Read in Gospel Library ↗</a></div>`)}
+      ${readSegs.length ? `<div class="tags">${readSegs.map(s =>
+          `<span class="chip" data-passage="${s.replace(/[–—]/g, "-")}">Read ${s} — WEB text</span>`).join("")}</div>
+        <p style="font-size:12px;color:var(--muted);margin-top:8px">Opens the full text right here.</p>`
+        : `<p style="font-size:12.5px;color:var(--muted)">No set-apart scripture text for this week.</p>`}`)}
     ${resourceHTML(w)}
     ${sect("Where this happens", `<p>${w.coverage}</p>`)}
     ${w.places.length ? sect("Places in this lesson", `<div class="tags">${w.places
       .filter(id => P[id]).map(id => `<span class="chip" data-go="${id}">${P[id].name}</span>`).join("")}</div>
-      <p style="font-size:12px;color:#8d9a9c;margin-top:8px">Click a name to open it and centre the map.</p>`) : ""}
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Click a name to open it and centre the map.</p>`) : ""}
     ${w.journeys.length ? sect("Itineraries highlighted", `<div class="tags">${w.journeys.map(id => {
         const j = journeyOf(id); return j ? `<span class="chip" data-jump="${id}">${j.name} · ${j.years}</span>` : ""; }).join("")}</div>`) : ""}
-    ${ls.length ? sect("Letters in view", ls.map(l => `<p style="margin:0 0 10px"><b style="color:#e7c9d8">${l.name}</b> —
+    ${ls.length ? sect("Letters in view", ls.map(l => `<p style="margin:0 0 10px"><b style="color:var(--parch)">${l.name}</b> —
         written from <b>${P[l.from] ? P[l.from].name : l.from}</b> to <b>${P[l.to] ? P[l.to].name : l.to}</b>, ${l.date}.
         ${l.carrier ? `<br><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;
-          text-transform:uppercase;color:#d7a3bd">carried by ${l.carrier}</span>` : ""}
+          text-transform:uppercase;color:var(--carrier)">carried by ${l.carrier}</span>` : ""}
         <span class="chip" data-letterp="${l.id}">Open</span></p>`).join("") +
-        `<p style="font-size:12px;color:#8d9a9c;margin:2px 0 0">The arcs are drawn on the map: origin → destination,
+        `<p style="font-size:12px;color:var(--muted);margin:2px 0 0">The arcs are drawn on the map: origin → destination,
         with the courier named where scripture names one.</p>`) : ""}
-    ${reads.length ? sect("Passages set on the map", `<div class="tags">${reads.map(r =>
+    ${actsReads.length ? sect("Passages set on the map", `<div class="tags">${actsReads.map(r =>
         `<span class="chip" data-read="${r.ref}">${r.ref} — ${r.title}</span>`).join("")}</div>`) : ""}
-    ${sect("For discussion", w.prompts.map(q => `<div class="verse"><p>${q}</p></div>`).join(""))}
+    ${sect("For discussion", w.prompts.map(q => `<div class="discq"><p>${q}</p></div>`).join(""))}
   `;
   wirePanel();
   $("#cfmPrev2").onclick = () => stepWeek(-1);
   $("#cfmNext2").onclick = () => stepWeek(1);
-  $("#cfmOut").onclick = () => { exitCFM(); closeDetail(); };
+  $("#detail .dclose").onclick = () => { exitCFM(); closeDetail(); };
   $("#detail").querySelectorAll("[data-jump]").forEach(el => el.addEventListener("click", () => {
     setActive(el.dataset.jump, true);
   }));
-  $("#detail").querySelectorAll("[data-read]").forEach(el => el.addEventListener("click", () => {
-    const i = (window.PAUL_READING || []).findIndex(r => r.ref === el.dataset.read);
-    if (i > -1) { document.querySelector('.rtab[data-tab="read"]').click(); gotoReading(i); }
-  }));
+  $("#detail").querySelectorAll("[data-read]").forEach(el => el.addEventListener("click", () => showPassagePanel(el.dataset.read)));
 }
 $("#cfmsel").addEventListener("change", e => setWeek(+e.target.value));
 $("#cfmPrev").onclick = () => stepWeek(-1);
@@ -1523,17 +2009,36 @@ $("#fbCard").onclick = () => { if (state.cfm.week != null) showCFMPanel(state.cf
 $("#fbExit").onclick = () => exitCFM();
 $("#btnCFM").onclick = () => {
   document.querySelector('.rtab[data-tab="cfm"]').click();
-  if (window.innerWidth <= 760) document.body.classList.add("rail-open");
+  if (isCompact()) document.body.classList.add("rail-open");
   if (state.cfm.week != null) showCFMPanel(state.cfm.week);
 };
+$("#btnRead").onclick = () => {
+  document.querySelector('.rtab[data-tab="read"]').click();
+  if (isCompact()) document.body.classList.add("rail-open");
+  document.body.classList.remove("rail-collapsed");
+};
+
+/* light / dark theme: remembered, defaults to the system setting */
+(() => {
+  const btn = $("#btnTheme"), meta = document.querySelector('meta[name="color-scheme"]');
+  const apply = t => {
+    const light = t === "light";
+    document.body.classList.toggle("light", light);
+    btn.textContent = light ? "Dark" : "Light";
+    btn.title = light ? "Switch to dark mode" : "Switch to light mode";
+    if (meta) meta.setAttribute("content", light ? "light" : "dark");
+    try { localStorage.setItem("paul-theme", t); } catch (e) {}
+  };
+  let t = null;
+  try { t = localStorage.getItem("paul-theme"); } catch (e) {}
+  if (t !== "light" && t !== "dark")
+    t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  apply(t);
+  btn.onclick = () => apply(document.body.classList.contains("light") ? "dark" : "light");
+})();
 
 /* basemap cycle */
-$("#btnBase").onclick = () => setBase(baseIdx + 1);
-(() => {
-  const want = store.get("base");
-  const i = BASES.findIndex(b => b.id === want);
-  if (i > 0) setBase(i);
-})();
+/* basemap cycle: removed — the atlas ships with no live tile provider (see map init above) */
 
 /* presenter mode: bigger type, heavier routes, for classroom projection */
 $("#btnPresent").onclick = () => {
@@ -1562,7 +2067,7 @@ function citySheet(id) {
     ${sec("Appears in", occ.length ? `<p class="small">${occ.map(o =>
       `${o.j.name} — ${o.s.date}, ${o.s.ref}`).join("<br>")}</p>` : "")}
     ${sec("What happened here", `<p>${p.narrative}</p>`)}
-    ${sec("Scripture — Authorized Version", p.scripture.map(s =>
+    ${sec("Scripture — World English Bible (WEB)", p.scripture.map(s =>
       `<blockquote><span class="ref">${s.ref}</span>${s.text}</blockquote>`).join(""))}
     ${sec("The city in Greco-Roman history", `<p>${p.greco}</p>`)}
     ${sec("Archaeology — what survives", `<p>${p.archaeology}</p>`)}
@@ -1576,13 +2081,14 @@ function citySheet(id) {
       `<b>${l.name}</b> — ${l.from === id ? "written here" : "sent here"}, ${l.date}${
       l.carrier && !/^Unnamed/i.test(l.carrier) ? "; carried by " + l.carrier : ""}`).join("<br>")}</p>`) : ""}
     ${p.people && p.people.length ? sec("People here", `<p class="small">${p.people.join(" · ")}</p>`) : ""}
-    ${wk.length ? sec("Come, Follow Me", `<p class="small">${wk.map(w =>
+    ${wk.length ? sec("Study weeks", `<p class="small">${wk.map(w =>
       `Week ${w.week} — ${w.readings}`).join("<br>")}</p>`) : ""}
     <h2>Notes</h2>
     ${store.note(id) ? `<p>${stripTags(store.note(id)).replace(/\n/g, "<br>")}</p>` : ""}
     <div class="lines">${"<i></i>".repeat(6)}</div>
-    <div class="foot">The Journeys of Paul — an interactive atlas (beta) · Taylor Halverson ·
-      Scripture: Authorized (King James) Version · Dates are reconstructions; see Sources &amp; method.</div>
+    <div class="foot"><b>Project Created by Taylor Halverson, Ph.D. (Beta mode)</b><br>
+      The Journeys of Paul — an interactive atlas ·
+      Scripture: World English Bible (WEB) · Dates are reconstructions; see Sources &amp; method.</div>
   </div>`;
 }
 function journeySheet(jid) {
@@ -1607,7 +2113,8 @@ function journeySheet(jid) {
       `${l.name} — from ${P[l.from].name} to ${P[l.to].name}, ${l.date}`).join("<br>")}</p>` : ""}
     <h2>Notes</h2>
     <div class="lines">${"<i></i>".repeat(9)}</div>
-    <div class="foot">The Journeys of Paul — an interactive atlas (beta) · Taylor Halverson ·
+    <div class="foot"><b>Project Created by Taylor Halverson, Ph.D. (Beta mode)</b><br>
+      The Journeys of Paul — an interactive atlas ·
       Dates are reconstructions; see Sources &amp; method.</div>
   </div>`;
 }
@@ -1617,31 +2124,59 @@ function printSheets(html) {
 }
 window.addEventListener("afterprint", () => { $("#printsheet").innerHTML = ""; });
 
-$("#btnPrint").onclick = () => {
+$("#btnExport").onclick = () => {
   const marked = Object.keys(store.d.marks).filter(id => P[id]);
   const cityIds = [...allPlaceIds];
-  openModal("Print study sheets", `<div class="help">
-    <p>Each sheet is one Letter page for a notebook: the narrative, the scripture, the city's history and
-    archaeology, the ancient testimony, the gazetteer entry, and ruled space for your own notes. Your saved
-    notes print with the sheet.</p>
-    <div class="tags" style="margin:14px 0 4px">
+  const wk = state.cfm.week != null ? CFM.find(w => w.week === state.cfm.week) : null;
+  const view = [
+    wk ? `Study week ${wk.week} — ${wk.readings}` : null,
+    state.place ? P[state.place].name : null,
+    state.active ? journeyOf(state.active).name : null,
+    "AD " + state.year.toFixed(0)
+  ].filter(Boolean).join(" · ");
+  openModal("Export this lesson", `<div class="help">
+    <p style="margin-bottom:14px">Everything a class needs to follow you: the link reopens this exact view,
+    the handout is the same material on paper.</p>
+    <h4 style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:7px">This view</h4>
+    <p style="font-size:13px">${view}</p>
+    <div style="display:flex;gap:8px;align-items:center;margin:6px 0 20px">
+      <input id="exLink" readonly value="${location.href}"
+        style="flex:1;min-width:0;background:var(--ink);border:1px solid var(--line);color:var(--parch-dim);
+        border-radius:3px;padding:8px 10px;font-family:'IBM Plex Mono',monospace;font-size:11px">
+      <button class="tool" id="exCopy">Copy link</button>
+    </div>
+    <h4 style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:7px">Handout</h4>
+    <p style="font-size:13px">One Letter page per city or itinerary: narrative, scripture, history,
+    archaeology, ancient testimony, gazetteer, and ruled space. Your saved notes print with the sheet.</p>
+    <div class="tags" style="margin:12px 0 4px">
       ${state.place ? `<span class="chip" data-print="city:${state.place}">This city — ${P[state.place].name}</span>` : ""}
       ${state.active ? `<span class="chip" data-print="journey:${state.active}">This itinerary — ${journeyOf(state.active).name}</span>` : ""}
+      ${wk && wk.places && wk.places.length ? `<span class="chip" data-print="week">This week — ${wk.places.length} ${wk.places.length === 1 ? "city" : "cities"}</span>` : ""}
       ${marked.length ? `<span class="chip" data-print="marks">All ${marked.length} bookmarked ${marked.length === 1 ? "city" : "cities"}</span>` : ""}
       <span class="chip" data-print="alljourneys">All seven itineraries</span>
-      <span class="chip" data-print="allcities">Every city — ${cityIds.length} pages</span>
+      <span class="chip" data-print="allcities">Every city of Paul — ${cityIds.length} pages</span>
+      ${GOSPEL_IDS.length ? `<span class="chip" data-print="gospel">Every Gospel site — ${GOSPEL_IDS.length} pages</span>` : ""}
     </div>
-    <p class="small" style="font-size:12px;color:#8d9a9c;margin-top:12px">Your browser's print dialog opens;
-    choose "Save as PDF" there if you want a file rather than paper.</p>
+    <p class="small" style="font-size:12px;color:var(--muted);margin-top:12px">Your browser's print dialog opens;
+    choose “Save as PDF” there if you want a file rather than paper.</p>
   </div>`);
+  $("#exCopy").onclick = () => {
+    const f = $("#exLink"); f.select();
+    const done = ok => { $("#exCopy").textContent = ok ? "Copied" : "Copy failed";
+      setTimeout(() => { $("#exCopy").textContent = "Copy link"; }, 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText(f.value).then(() => done(true), () => done(false));
+    else done(false);
+  };
   $("#mbody").querySelectorAll("[data-print]").forEach(el => el.addEventListener("click", () => {
     const [kind, arg] = el.dataset.print.split(":");
     let html = "";
     if (kind === "city") html = citySheet(arg);
     else if (kind === "journey") html = journeySheet(arg);
-    else if (kind === "marks") html = Object.keys(store.d.marks).filter(id => P[id]).map(citySheet).join("");
+    else if (kind === "week") html = wk.places.map(citySheet).join("");
+    else if (kind === "marks") html = marked.map(citySheet).join("");
     else if (kind === "alljourneys") html = J.map(j => journeySheet(j.id)).join("");
     else if (kind === "allcities") html = cityIds.map(citySheet).join("");
+    else if (kind === "gospel") html = GOSPEL_IDS.map(citySheet).join("");
     closeModal();
     printSheets(html);
   }));
@@ -1684,7 +2219,7 @@ function readHash() {
   hashLock = false;
   if (place) {
     const p = P[place];
-    setTimeout(() => map.flyTo([p.lat, p.lng], Math.max(map.getZoom(), 6), { duration: .8 }), 260);
+    setTimeout(() => flyToVisible(p.lat, p.lng, Math.max(map.getZoom(), 6), { duration: .8 }), 260);
   }
   return true;
 }
@@ -1693,14 +2228,197 @@ function copyLink() {
   writeHash();
   const url = location.href;
   const done = (ok) => {
-    const b = $("#btnLink"); if (!b) return;
+    const b = $("#btnExport"); if (!b) return;
     b.textContent = ok ? "Link copied" : "Copy failed";
-    setTimeout(() => { b.textContent = "Copy link"; }, 1800);
+    setTimeout(() => { b.textContent = "Export"; }, 1800);
   };
   if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => done(true), () => done(false));
   else done(false);
 }
-$("#btnLink").onclick = copyLink;
+/* ---------- first-run guided tour ---------- */
+const TOUR = [
+  { sel: "#rail", side: "right", title: "Start with a journey",
+    text: "The rail lists seven itineraries, from the pre-ministry years to the disputed voyage after Acts. Click one to follow it; click its coloured dot to hide it. Every stop underneath is clickable." },
+  { sel: "footer", side: "top", title: "Then move through the years",
+    text: "The timeline is the clock for the whole atlas. Drag it and the routes draw themselves as Paul travelled them; the lanes below show what was happening in Rome and Judaea at the same moment. Press Play to watch it run." },
+  { sel: "#map", side: "center", title: "Click any city",
+    text: "Eighty-five sites — Paul's cities and, on their own layer, the places of the Gospels — each with the narrative, the World English Bible text, the Greco-Roman history, what archaeology has actually found, and how confident the identification is. Bookmark the ones you want back." },
+  { sel: "#btnCFM", side: "below", title: "Teaching this week?",
+    text: "Weeks opens the reading year. Pick a week and the atlas focuses itself on the places that week's reading covers. Export then gives you the link and the printed handout together." }
+];
+let tourAt = -1;
+function tourShow(i) {
+  const prev = document.querySelector(".coach");
+  if (prev) prev.classList.remove("coach");
+  if (i < 0 || i >= TOUR.length) return tourEnd();
+  tourAt = i;
+  const s = TOUR[i], card = $("#introcard");
+  $("#intro").classList.add("on");
+  $("#istep").textContent = `Step ${i + 1} of ${TOUR.length}`;
+  $("#ititle").textContent = s.title;
+  $("#itext").textContent = s.text;
+  $("#idots").innerHTML = TOUR.map((_, n) => `<i class="${n === i ? "on" : ""}"></i>`).join("");
+  $("#inext").textContent = i === TOUR.length - 1 ? "Done" : "Next";
+  const el = document.querySelector(s.sel);
+  const vis = el && el.getBoundingClientRect().width > 40 && el.getBoundingClientRect().height > 24;
+  card.style.cssText = "";
+  if (!vis || s.side === "center") {
+    card.style.left = "50%"; card.style.top = "50%"; card.style.transform = "translate(-50%,-50%)";
+    return;
+  }
+  el.classList.add("coach");
+  const r = el.getBoundingClientRect(), w = Math.min(360, innerWidth * 0.88), pad = 16;
+  const clampL = x => Math.max(pad, Math.min(x, innerWidth - w - pad));
+  if (s.side === "right") { card.style.left = clampL(r.right + pad) + "px"; card.style.top = Math.min(r.top + 90, innerHeight - 260) + "px"; }
+  else if (s.side === "top") { card.style.left = clampL(r.left + 20) + "px"; card.style.bottom = (innerHeight - r.top + 14) + "px"; }
+  else { card.style.left = clampL(r.right - w) + "px"; card.style.top = (r.bottom + 12) + "px"; }
+}
+function tourEnd() {
+  const prev = document.querySelector(".coach");
+  if (prev) prev.classList.remove("coach");
+  $("#intro").classList.remove("on");
+  tourAt = -1;
+  store.set("intro", "1");
+}
+function startTour() { tourShow(0); }
+$("#inext").onclick = () => tourShow(tourAt + 1);
+$("#iskip").onclick = tourEnd;
+$("#intro").addEventListener("click", e => { if (e.target === $("#intro")) tourEnd(); });
+document.addEventListener("keydown", e => {
+  if (!$("#intro").classList.contains("on")) return;
+  if (e.key === "Escape") tourEnd();
+  if (e.key === "ArrowRight" || e.key === "Enter") tourShow(tourAt + 1);
+  if (e.key === "ArrowLeft") tourShow(Math.max(0, tourAt - 1));
+});
+document.addEventListener("click", e => { if (e.target.closest("[data-tour]")) { closeModal(); startTour(); } });
+if (store.get("intro") !== "1") setTimeout(startTour, 700);
+
+/* ---------- map recall drill ----------
+   Eight cities, one at a time: read the clue, click the place on the map. Wrong clicks say
+   how far off you were, which teaches the geography better than a right/wrong buzzer. */
+const quiz = { on: false, queue: [], i: 0, score: 0, tries: 0 };
+function quizPool() {
+  const paul = [...allPlaceIds].filter(id => P[id] && (P[id].tier === "major" || P[id].tier === "letter"));
+  const gos = layerState.gospel ? GOSPEL_IDS.filter(id => P[id].tier === "major") : [];
+  return paul.concat(gos);
+}
+function startQuiz() {
+  const pool = quizPool();
+  if (pool.length < 4) return;
+  closeModal();
+  if (state.overlay.on) exitCompare();
+  pause();
+  const picked = [];
+  while (picked.length < Math.min(8, pool.length)) {
+    const id = pool[Math.floor(Math.random() * pool.length)];
+    if (picked.indexOf(id) < 0) picked.push(id);
+  }
+  Object.assign(quiz, { on: true, queue: picked, i: 0, score: 0, tries: 0 });
+  state.visible = new Set(J.map(j => j.id));
+  state.year = T1;
+  $("#scrub").value = state.year;
+  buildRail(); renderAll();
+  map.flyTo([37.2, 28.5], 5, { duration: .8 });
+  $("#quizbadge").classList.add("on");
+  quizAsk();
+}
+function quizClue(id) {
+  const p = P[id], G = (window.PAUL_GAZ || {})[id];
+  const bits = [];
+  if (p.region) bits.push(p.region);
+  if (p.modern) bits.push("today " + p.modern);
+  if (G && G.confidence) bits.push(G.confidence.level + " identification");
+  return bits.join(" · ");
+}
+function quizAsk() {
+  const id = quiz.queue[quiz.i];
+  quiz.tries = 0;
+  $("#quizbadge").classList.remove("right", "wrong");
+  $("#qzstep").textContent = `Find the place — ${quiz.i + 1} of ${quiz.queue.length} · score ${quiz.score}`;
+  $("#qztitle").innerHTML = `${P[id].name} <span style="color:var(--muted);font-size:12px">${quizClue(id)}</span>`;
+}
+function quizAnswer(clicked) {
+  const want = quiz.queue[quiz.i], badge = $("#quizbadge");
+  if (clicked === want) {
+    quiz.score += quiz.tries === 0 ? 1 : 0.5;
+    badge.classList.add("right");
+    $("#qzstep").textContent = quiz.tries === 0 ? "Right" : "Right — second attempt";
+    setTimeout(quizNext, 850);
+    return;
+  }
+  quiz.tries++;
+  badge.classList.add("wrong");
+  const km = Math.round(haversine(P[clicked], P[want]));
+  $("#qzstep").textContent = quiz.tries === 1
+    ? `That is ${P[clicked].name} — ${fmtDist(km)} away. Try again.`
+    : `Still ${P[clicked].name}. The answer is shown.`;
+  if (quiz.tries >= 2) {
+    const w = P[want];
+    map.flyTo([w.lat, w.lng], Math.max(map.getZoom(), 6), { duration: .8 });
+    setTimeout(quizNext, 1600);
+  }
+}
+function quizNext() {
+  quiz.i++;
+  if (quiz.i >= quiz.queue.length) return quizEnd();
+  quizAsk();
+}
+function quizEnd() {
+  const total = quiz.queue.length, score = quiz.score;
+  const done = quiz.queue.slice();
+  quiz.on = false;
+  $("#quizbadge").classList.remove("on", "right", "wrong");
+  openModal("Drill finished", `<div class="help">
+    <p style="font-size:16px;font-family:'EB Garamond',serif">You scored
+      <b style="color:var(--gold)">${score % 1 ? score.toFixed(1) : score}</b> out of ${total} —
+      a full point first time, a half on the second attempt.</p>
+    <p>The places in this round:</p>
+    <div class="tags">${done.map(id => `<span class="chip" data-go="${id}">${P[id].name}</span>`).join("")}</div>
+    <div style="display:flex;gap:8px;margin-top:18px">
+      <button class="tool" id="qzAgain">Another eight</button>
+      <button class="tool" id="qzDone">Done</button>
+    </div></div>`);
+  $("#qzAgain").onclick = startQuiz;
+  $("#qzDone").onclick = closeModal;
+  $("#mbody").querySelectorAll("[data-go]").forEach(el => el.addEventListener("click", () => {
+    closeModal(); selectPlace(el.dataset.go);
+  }));
+}
+function quizExit() {
+  quiz.on = false;
+  $("#quizbadge").classList.remove("on", "right", "wrong");
+}
+$("#btnQuiz").onclick = startQuiz;
+$("#qzExit").onclick = quizExit;
+$("#qzSkip").onclick = () => { if (quiz.on) quizNext(); };
+
+/* keyboard: / focuses search, Escape backs out of whatever mode is running */
+document.addEventListener("keydown", e => {
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+  if (e.key === "/" && !typing) { e.preventDefault(); $("#search").focus(); $("#search").select(); return; }
+  if (e.key !== "Escape") return;
+  if ($("#intro").classList.contains("on")) return;
+  if ($("#modal").classList.contains("on")) return closeModal();
+  if (quiz.on) return quizExit();
+  if (state.overlay.on) return exitCompare();
+  if (state.cfm.week != null) return exitCFM();
+  if (state.place) return closeDetail();
+});
+
+/* Lane and band colours come from the data and vary widely in luminance, so the label colour
+   is chosen per segment rather than fixed by the theme. */
+function readableOn(hex) {
+  const m = String(hex).replace("#", "").match(/^([0-9a-f]{6})$/i);
+  if (!m) return "#100d06";
+  const v = parseInt(m[1], 16), ch = [(v >> 16) & 255, (v >> 8) & 255, v & 255].map(c => {
+    c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  });
+  const lum = 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+  return lum > 0.35 ? "#100d06" : "#fdf4e0";
+}
+
+/* credits & licences live on the About panel's second tab */
+$("#btnLicence").onclick = () => openAbout("credits");
 
 /* ---------- boot ---------- */
 function renderAll() { renderMap(); renderTimeline(); renderContextNow(); writeHash(); }
@@ -1719,26 +2437,47 @@ let booted = false;
 function bootFit() {
   const el = map.getContainer();
   if (!el.clientWidth || !el.clientHeight) return;
-  map.invalidateSize();
+  map.invalidateSize(true);          // must happen before fitBounds, or the SVG stays 0×0
   map.fitBounds(bootBounds);
   updateLabels();
   booted = true;
 }
+/* The SVG renderer keeps whatever size it was created with, so the poll below re-measures
+   it until it reports real geometry. */
 map.whenReady(() => requestAnimationFrame(bootFit));
 if (window.ResizeObserver) {
+  const t0 = Date.now();
   let lastW = 0, lastH = 0, roTimer = null;
   const ro = new ResizeObserver(entries => {
     const r = entries[0].contentRect;
     const w = Math.round(r.width), h = Math.round(r.height);
-    if (w === lastW && h === lastH) return;          // ignore no-op reports
+    /* for the first few seconds always re-measure: a same-size report can still mean the
+       renderer was created at 0x0 and never resized */
+    if (Date.now() - t0 > 3000 && w === lastW && h === lastH) return;
     lastW = w; lastH = h;
     clearTimeout(roTimer);
-    roTimer = setTimeout(() => { booted ? map.invalidateSize() : bootFit(); }, 120);
+    roTimer = setTimeout(() => { booted ? map.invalidateSize(true) : bootFit(); }, 120);
   });
   ro.observe(map.getContainer());
 }
 window.addEventListener("resize", () => { if (!booted) bootFit(); });
-setTimeout(() => { if (!booted) bootFit(); }, 400);
+/* Poll until the renderer genuinely has a size. Fixed timeouts are not enough: on a slow
+   load every one of them can fire before the grid cell resolves, and nothing retries after. */
+(() => {
+  let n = 0;
+  const iv = setInterval(() => {
+    if (++n > 60) return clearInterval(iv);            // ~15 s ceiling, then give up quietly
+    const el = map.getContainer();
+    if (!el.clientWidth || !el.clientHeight) return;
+    if (!booted) return bootFit();
+    const svg = document.querySelector("#map .leaflet-overlay-pane svg");
+    if (!svg || !svg.getBoundingClientRect().width) {
+      map.invalidateSize(true); renderMap(); updateLabels();
+      return;
+    }
+    clearInterval(iv);
+  }, 250);
+})();
 // a permalink overrides the default opening view
 setTimeout(() => { readHash(); }, 500);
 ["place", "year", "cfm", "active"].forEach(() => {});
