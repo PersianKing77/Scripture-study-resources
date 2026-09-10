@@ -88,13 +88,35 @@ document.body.classList.add("notiles");
 let baseIdx = 0;
 const BASES = [{ id: "none", label: "No basemap imagery", attribution: "" }];
 if (window.topojson) {
-  const loadLand = window.PAUL_LAND ? Promise.resolve(window.PAUL_LAND) : fetch("data/land-50m.json").then(r => r.json());
-  loadLand.then(topo => {
+  const fetchLand = () => window.PAUL_LAND ? Promise.resolve(window.PAUL_LAND)
+    : fetch("data/land-50m.json").then(r => { if (!r.ok) throw new Error(String(r.status)); return r.json(); });
+  /* one retry after a beat: a slow/flaky mobile connection is the main reason this ever fails */
+  fetchLand().catch(() => new Promise(res => setTimeout(res, 1200)).then(fetchLand)).then(topo => {
     const land = topojson.feature(topo, topo.objects.land);
+    scrubLandArtifacts(land);
     L.geoJSON(land, { interactive: false, className: "landmass" })
       .addTo(map).bringToBack();
     document.body.classList.remove("notiles");
-  }).catch(() => { /* offline or blocked: falls back to the plain sea ground below */ });
+  }).catch(() => { /* still unavailable: falls back to the plain sea ground below */ });
+}
+/* the 50m land file carries a handful of degenerate simplification artifacts near the poles —
+   rings that span most of the globe's longitude while barely varying in latitude, painting as a
+   spurious horizontal band across the ocean. Real coastlines never do this, so drop any ring
+   that does before it ever reaches the renderer. */
+function scrubLandArtifacts(land) {
+  const keepRing = (ring) => {
+    let minLng = Infinity, maxLng = -Infinity, minLat = Infinity, maxLat = -Infinity;
+    ring.forEach(([lng, lat]) => {
+      if (lng < minLng) minLng = lng; if (lng > maxLng) maxLng = lng;
+      if (lat < minLat) minLat = lat; if (lat > maxLat) maxLat = lat;
+    });
+    return !(maxLng - minLng > 100 && maxLat - minLat < 8);
+  };
+  (land.features || []).forEach(f => {
+    const g = f.geometry; if (!g) return;
+    if (g.type === "Polygon") g.coordinates = g.coordinates.filter(keepRing);
+    else if (g.type === "MultiPolygon") g.coordinates = g.coordinates.map(poly => poly.filter(keepRing)).filter(poly => poly.length);
+  });
 }
 
 

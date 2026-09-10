@@ -312,10 +312,9 @@
   .landmass { fill: #d8cca4; stroke: #7a6a45; stroke-width: .8; fill-opacity: 1; stroke-opacity: .8; }
 
 
-  /* no basemap available (offline): a plain sea ground, so routes and labels still read */
-  body.notiles #map { background:
-      repeating-linear-gradient(0deg, #a9c1c7 0 1px, transparent 1px 56px),
-      repeating-linear-gradient(90deg, #a9c1c7 0 1px, transparent 1px 56px), #b7cdd2; }
+  /* no basemap available (offline): a plain flat sea ground (a fine repeating grid moirés into
+     ugly bands once the browser downscales the map at low zoom, so keep this flat) */
+  body.notiles #map { background: #b7cdd2; }
   body.notiles #map .leaflet-tile-pane { display: none; }
   body.notiles #map::before { content: "No basemap — offline. Routes, cities and every article still work.";
     position: absolute; left: 50%; transform: translateX(-50%); bottom: 12px; z-index: 700;
@@ -791,9 +790,7 @@
   body.light .passage .pl:hover { color: #6d520a; }
   body.light .prof i { background: linear-gradient(180deg, #c9a227, #8a6a2f); }
   body.light .evt { background: #b9863a; border-color: #6b4a1c; }
-  body.light body.notiles #map, body.light.notiles #map { background:
-      repeating-linear-gradient(0deg, #cdd9dd 0 1px, transparent 1px 56px),
-      repeating-linear-gradient(90deg, #cdd9dd 0 1px, transparent 1px 56px), #e3ecee; }
+  body.light body.notiles #map, body.light.notiles #map { background: #e3ecee; }
   body.light.notiles #map::before { background: #fdfaf3ee; }
 </style>
 </head>
