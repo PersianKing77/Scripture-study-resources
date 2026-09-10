@@ -630,7 +630,12 @@
     body.sheet-open .legtoggle,body.sheet-open .legend{display:none}
   }
   @media (max-width:900px) and (orientation:landscape){
-    .tourbar,#cfmbar{padding:4px 7px 5px; max-height:42vh; overflow-y:auto; bottom:8px}
+    /* short landscape phones: main's 300px floor could push the timeline in the footer
+       below the viewport and clip it (body has overflow:hidden). Let main shrink freely
+       so the footer row always gets the room it needs and stays on-screen. */
+    body{grid-template-rows:auto minmax(0,1fr) auto}
+    footer{flex:none}
+    .tourbar,#cfmbar{padding:4px 7px 5px; max-height:34vh; overflow-y:auto; bottom:8px}
     .tourhead{font-size:7px; margin-bottom:2px}
     .tourbody{font-size:10px; line-height:1.2; margin-bottom:3px}
     .tourbody b{display:block; font-size:11px}
