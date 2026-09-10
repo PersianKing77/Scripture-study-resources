@@ -827,7 +827,7 @@ function hits(dir, reach) {
     for (const off of (PHONE_TIER ? [0] : [-SHOULDER * 0.6, 0, SHOULDER * 0.6])) {
       const o = new THREE.Vector3(-dir.z * off, 0, dir.x * off);
       probe.set(new THREE.Vector3(walk.pos.x + o.x, eyeY + h, walk.pos.z + o.z), dir);
-      if (probe.intersectObject(model, true).some(x => x.object.userData.layer !== 'roof' && x.distance < reach)) return true;
+      if (probe.intersectObject(model, true).some(x => x.object.userData.layer !== 'roof' && x.object.userData.layer !== 'curtain' && x.distance < reach)) return true;
     }
   }
   return false;
@@ -862,7 +862,7 @@ function moveWalk(dt) {
     if (Math.abs(walk.glide) < 0.02) walk.glide = 0;
   }
   fwd.set(Math.sin(walk.yaw), 0, Math.cos(walk.yaw)).multiplyScalar(-1);
-  side.set(fwd.z, 0, -fwd.x);
+  side.set(-fwd.z, 0, fwd.x);
   const want = new THREE.Vector3();
   if (f || s) want.copy(fwd).multiplyScalar(f).add(side.clone().multiplyScalar(s));
   if (want.lengthSq() > 1) want.normalize();

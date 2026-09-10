@@ -1158,15 +1158,15 @@ export function buildTemple(opts = {}) {
 
   feat('chel',
     box(IPx1 - IPx0, 3.4, IPz * 2, M.stoneWarm, (IPx0 + IPx1) / 2, 1.3, 0, 'chel_terrace'),
-    stairs('x', IPx1, 1, 12, 0.25, 0.5, 50, 0, 0),
-    stairs('z', IPz, 1, 12, 0.25, 0.5, 60, 0, -40),
+    stairs('x', IPx1 + 12 * 0.5, -1, 12, 0.25, 0.5, 50, 0, 0),
+    stairs('z', IPz + 12 * 0.5, -1, 12, 0.25, 0.5, 60, 0, -40),
     stairs('z', -IPz, -1, 12, 0.25, 0.5, 60, 0, -40));
 
   // soreg — a low fence around the platform, broken by a gate under each of the four
   // warning-inscription plaques below (the posts/rails used to run solid past them).
   const soreg = [];
   const sx0 = IPx0 - 5, sx1 = IPx1 + 5, sz = IPz + 5;
-  const GATE_HALF = 1.6, eastGateZs = [-12, 12], sideGateX = -40;
+  const GATE_HALF = 1.6, eastGateZs = [-12, 0, 12], sideGateX = -40;   // z=0 is the primary walk-in path, aligned with the Beautiful Gate
   const railSeg = (axis, fixed, a0, a1, name) => {
     const len = a1 - a0, mid = (a0 + a1) / 2;
     if (len <= 0) return;
@@ -1181,9 +1181,7 @@ export function buildTemple(opts = {}) {
     soreg.push(box(0.25, 1.5, 0.25, M.stone, sx0, 0.75, z, 'soreg_post'));
   }
   [sz, -sz].forEach(z => { railSeg('x', z, sx0, sideGateX - GATE_HALF, 'soreg_rail'); railSeg('x', z, sideGateX + GATE_HALF, sx1, 'soreg_rail'); });
-  railSeg('z', sx1, -sz, eastGateZs[0] - GATE_HALF, 'soreg_rail');
-  railSeg('z', sx1, eastGateZs[0] + GATE_HALF, eastGateZs[1] - GATE_HALF, 'soreg_rail');
-  railSeg('z', sx1, eastGateZs[1] + GATE_HALF, sz, 'soreg_rail');
+  { let prevZ = -sz; for (const gz of eastGateZs) { railSeg('z', sx1, prevZ, gz - GATE_HALF, 'soreg_rail'); prevZ = gz + GATE_HALF; } railSeg('z', sx1, prevZ, sz, 'soreg_rail'); }
   railSeg('z', sx0, -sz, sz, 'soreg_rail');
   [[sx1 + 0.3, 12], [sx1 + 0.3, -12], [-40, sz + 0.3], [-40, -sz - 0.3]].forEach(([x, z], i) =>
     soreg.push(box(i < 2 ? 0.14 : 1.1, 0.75, i < 2 ? 1.1 : 0.14, M.marble, x, 1.05, z, 'warning_inscription')));
@@ -1203,9 +1201,10 @@ export function buildTemple(opts = {}) {
   cw.push(box(CWx1 - CWx0 - 10, 0.6, 5, M.cedar, (CWx0 + CWx1) / 2, 12.6, CWz - 5, 'women_gallery_north'));
   cw.push(box(CWx1 - CWx0 - 10, 0.6, 5, M.cedar, (CWx0 + CWx1) / 2, 12.6, -CWz + 5, 'women_gallery_south'));
   cw.push(box(5, 0.6, CWz * 2 - 20, M.cedar, CWx1 - 6, 12.6, 0, 'women_gallery_east'));
-  // thirteen shofar chests
+  // thirteen shofar chests, skipping the one that would land in the gate's own doorway
   for (let i = 0; i < 13; i++) {
     const zz = -24 + i * 4;
+    if (Math.abs(zz) < 2) continue;
     cw.push(cyl(0.35, 1.2, M.bronze, CWx0 + 9, 3.9, zz, 'shofar_chest', 12));
     cw.push(cyl(0.16, 0.7, M.bronze, CWx0 + 9, 4.85, zz, 'shofar_chest_neck', 10));
   }
@@ -1351,6 +1350,7 @@ export function buildTemple(opts = {}) {
     fac.push(box(2.56, 0.16, 20, M.stoneWarm, scrX - 0.01, SF + i * 6.2, 15, 'gold_plate_seam_' + i + '_north'));
     fac.push(box(2.56, 0.16, 20, M.stoneWarm, scrX - 0.01, SF + i * 6.2, -15, 'gold_plate_seam_' + i + '_south'));
   }
+  fac.push(box(12.5, 0.3, 45, M.marble, -50, SF + 0.15, 0, 'porch_floor'));
   // porch flanking walls and roof
   fac.push(box(8.5, facadeH * 0.62, 2.6, M.stone, Xporch - 4.5, SF + facadeH * 0.31, bodyZ + 6.2, 'porch_wall_north'));
   fac.push(box(8.5, facadeH * 0.62, 2.6, M.stone, Xporch - 4.5, SF + facadeH * 0.31, -bodyZ - 6.2, 'porch_wall_south'));
@@ -1406,7 +1406,7 @@ export function buildTemple(opts = {}) {
     box(20, 20, 0.3, M.gold, -65.5, SF + 10, 5, 'hekhal_gold_panel_north'),
     box(20, 20, 0.3, M.gold, -65.5, SF + 10, -5, 'hekhal_gold_panel_south'),
     box(20, 0.4, 10.4, M.gold, -65.5, SF + 20.2, 0, 'hekhal_ceiling'),
-    cloth(5, 10, 5, 0.22, M.heavens, -55.7, SF + 5, 0, 'babylonian_curtain_doorway'),
+    tag(cloth(5, 10, 5, 0.22, M.heavens, -55.7, SF + 5, 0, 'babylonian_curtain_doorway'), 'curtain'),
     box(0.24, 0.24, 5.6, M.gold, -55.7, SF + 10.2, 0, 'doorway_curtain_beam'));
 
   // ---- the golden candlestick (south side) ----
@@ -1480,11 +1480,11 @@ export function buildTemple(opts = {}) {
   // at the north, so the high priest walked between them.
   const vl = [];
   const VH = 20, VW = 10, VY = SF + VH / 2;
-  vl.push(cloth(VW - 0.7, VH, 7, 0.34, M.parochet, -75.6, VY, 0.35, 'outer_veil'));
-  vl.push(cloth(VW - 0.7, VH, 7, 0.34, M.parochet, -76.1, VY, -0.35, 'inner_veil'));
+  vl.push(tag(cloth(VW - 0.7, VH, 7, 0.34, M.parochet, -75.6, VY, 0.35, 'outer_veil'), 'curtain'));
+  vl.push(tag(cloth(VW - 0.7, VH, 7, 0.34, M.parochet, -76.1, VY, -0.35, 'inner_veil'), 'curtain'));
   // the looped-back edges: outer gathered to the south, inner to the north
-  vl.push(cloth(1.5, VH, 3, 0.28, M.parochet, -75.35, VY, -4.7, 'outer_veil_looped_south'));
-  vl.push(cloth(1.5, VH, 3, 0.28, M.parochet, -76.35, VY, 4.7, 'inner_veil_looped_north'));
+  vl.push(tag(cloth(1.5, VH, 3, 0.28, M.parochet, -75.35, VY, -4.7, 'outer_veil_looped_south'), 'curtain'));
+  vl.push(tag(cloth(1.5, VH, 3, 0.28, M.parochet, -76.35, VY, 4.7, 'inner_veil_looped_north'), 'curtain'));
   vl.push(box(0.3, 0.16, 0.9, M.gold, -75.35, SF + 0.08, -4.7, 'veil_hem_weight_south'));
   vl.push(box(0.3, 0.16, 0.9, M.gold, -76.35, SF + 0.08, 4.7, 'veil_hem_weight_north'));
   // golden beams and rings above each curtain
