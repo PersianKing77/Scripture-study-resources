@@ -4,7 +4,7 @@
    view you have already studied comes back without a network.
    Registered only over http(s) — opened straight off disk this never runs. */
 
-const APP = 'nt-atlas-v7';
+const APP = 'nt-atlas-v9';
 const TILES = 'nt-atlas-tiles-v1';
 const TILE_CEILING = 1200;
 
@@ -22,6 +22,7 @@ const SHELL = [
   'nt-cfm-data.js',
   'nt-cfm-2027.js',
   'nt-scholarship.js',
+  'nt-scripture-text.js',
   'vendor/leaflet-1.9.4/leaflet.css',
   'vendor/leaflet-1.9.4/leaflet.js',
   'vendor/leaflet-1.9.4/images/layers.png',

@@ -1,250 +1,1716 @@
 const LAT0 = 31.7855, LON0 = 35.2238, MLAT = 110900, MLON = 94650;
 const VW = 1646, VH = 1852;
 
-const P = {
-  ottoman: [[31.77661,35.22755],[31.77745,35.22705],[31.77845,35.22655],[31.77931,35.22628],[31.77995,35.22620],[31.78065,35.22760],[31.78120,35.22900],[31.78164,35.23050],[31.78215,35.23180],[31.78265,35.23300],[31.78300,35.23375],[31.78330,35.23520],[31.78338,35.23650],[31.78083,35.23694],[31.77985,35.23694],[31.77889,35.23694],[31.77750,35.23706],[31.77596,35.23718],[31.77545,35.23620],[31.77500,35.23480],[31.77472,35.23389],[31.77420,35.23250],[31.77365,35.23090],[31.77315,35.22980],[31.77286,35.22936],[31.77300,35.22850],[31.77375,35.22770],[31.77470,35.22735],[31.77570,35.22735]],
-  platform: [[31.77567,35.23407],[31.77596,35.23706],[31.78020,35.23698],[31.78007,35.23365]],
-  jebusite: [[31.77470,35.23485],[31.77445,35.23600],[31.77350,35.23648],[31.77250,35.23628],[31.77170,35.23600],[31.77155,35.23520],[31.77250,35.23500],[31.77370,35.23478]],
-  cityOfDavid: [[31.77480,35.23480],[31.77450,35.23608],[31.77340,35.23655],[31.77230,35.23630],[31.77120,35.23608],[31.77030,35.23575],[31.77000,35.23495],[31.77120,35.23488],[31.77250,35.23495],[31.77380,35.23470]],
-  westernHillIron: [[31.77600,35.22790],[31.77568,35.23010],[31.77510,35.23230],[31.77450,35.23330],[31.77330,35.23330],[31.77230,35.23260],[31.77160,35.23100],[31.77150,35.22950],[31.77190,35.22820],[31.77300,35.22760],[31.77450,35.22750]],
-  broadWall: [[31.77578,35.23020],[31.77558,35.23080]],
-  solomonic: [[31.77720,35.23410],[31.77730,35.23640],[31.78000,35.23632],[31.77990,35.23404]],
-  ophel: [[31.77480,35.23480],[31.77567,35.23470],[31.77596,35.23731],[31.77450,35.23608]],
-  secondTemple: [[31.77650,35.22755],[31.77690,35.23010],[31.77700,35.23250],[31.77700,35.23400],[31.78007,35.23400],[31.78020,35.23724],[31.77596,35.23731],[31.77480,35.23660],[31.77380,35.23670],[31.77260,35.23640],[31.77130,35.23615],[31.77030,35.23575],[31.76990,35.23470],[31.77060,35.23350],[31.77130,35.23180],[31.77150,35.22990],[31.77190,35.22820],[31.77300,35.22750],[31.77480,35.22735]],
-  secondWall: [[31.77690,35.22990],[31.77790,35.23040],[31.77880,35.23150],[31.77970,35.23300],[31.78040,35.23450],[31.78060,35.23520]],
-  thirdWall: [[31.77650,35.22755],[31.78300,35.22715],[31.78560,35.22900],[31.78600,35.23350],[31.78450,35.23700],[31.78243,35.23670]],
-  temple: [[31.77762,35.23440],[31.77772,35.23575],[31.77852,35.23570],[31.77842,35.23435]],
-  royalStoa: [[31.77600,35.23420],[31.77610,35.23720],[31.77650,35.23718],[31.77640,35.23418]],
-  antonia: [[31.78010,35.23480],[31.78016,35.23600],[31.78090,35.23596],[31.78084,35.23476]],
-  citadel: [[31.77585,35.22752],[31.77592,35.22822],[31.77655,35.22816],[31.77648,35.22746]],
-  ironAgeCity: [[31.77620,35.22795],[31.77595,35.22900],[31.77578,35.23020],[31.77558,35.23080],[31.77555,35.23200],[31.77558,35.23330],[31.77562,35.23430],[31.77558,35.23530],[31.77552,35.23600],[31.77480,35.23625],[31.77400,35.23648],[31.77300,35.23660],[31.77200,35.23648],[31.77110,35.23620],[31.77040,35.23585],[31.77015,35.23520],[31.77045,35.23430],[31.77075,35.23330],[31.77100,35.23230],[31.77118,35.23120],[31.77135,35.23000],[31.77160,35.22900],[31.77200,35.22830],[31.77330,35.22795],[31.77470,35.22785]],
-  nehemiah: [[31.77470,35.23478],[31.77420,35.23545],[31.77340,35.23572],[31.77250,35.23568],[31.77160,35.23548],[31.77110,35.23528]],
-  umayyad: [[31.77505,35.23425],[31.77522,35.23600],[31.77560,35.23594],[31.77543,35.23419]],
-  tunnel: [[31.77300,35.23600],[31.77280,35.23545],[31.77245,35.23560],[31.77215,35.23520],[31.77170,35.23548],[31.77120,35.23520],[31.77075,35.23548],[31.77030,35.23540]],
-  cardoW: [[31.78090,35.23010],[31.78000,35.23020],[31.77900,35.23032],[31.77800,35.23042],[31.77700,35.23050],[31.77620,35.23056]],
-  cardoWext: [[31.77620,35.23056],[31.77520,35.23064],[31.77450,35.23070]],
-  cardoE: [[31.78090,35.23050],[31.78000,35.23090],[31.77900,35.23140],[31.77800,35.23190],[31.77700,35.23250],[31.77620,35.23300],[31.77560,35.23350]],
-  decumanus: [[31.77660,35.22790],[31.77670,35.22900],[31.77680,35.23000],[31.77690,35.23100],[31.77695,35.23200],[31.77700,35.23300],[31.77700,35.23390]],
-  decumanusN: [[31.78134,35.23694],[31.78120,35.23600],[31.78100,35.23520],[31.78070,35.23440],[31.78020,35.23380],[31.77990,35.23300],[31.77960,35.23220],[31.77940,35.23140],[31.77900,35.23060],[31.77870,35.22990]],
-  nea: [[31.77410,35.23048],[31.77418,35.23130],[31.77480,35.23124],[31.77472,35.23042]],
-  constantinian: [[31.77808,35.22930],[31.77816,35.23050],[31.77872,35.23044],[31.77864,35.22924]],
-  sepulchre: [[31.77812,35.22945],[31.77818,35.23008],[31.77868,35.23002],[31.77862,35.22939]],
-  dome: [[31.77772,35.23486],[31.77772,35.23546],[31.77832,35.23546],[31.77832,35.23486]],
-  aqsa: [[31.77592,35.23552],[31.77596,35.23604],[31.77648,35.23600],[31.77644,35.23548]],
-  quarry: [[31.77800,35.22900],[31.77812,35.23020],[31.77900,35.23010],[31.77888,35.22890]],
-  bethesda: [[31.78118,35.23562],[31.78124,35.23628],[31.78176,35.23622],[31.78170,35.23556]],
-  siloam: [[31.77000,35.23508],[31.77006,35.23562],[31.77046,35.23556],[31.77040,35.23502]],
-  wwPlaza: [[31.77620,35.23330],[31.77700,35.23325],[31.77706,35.23400],[31.77612,35.23404]],
-  jewishQ: [[31.77420,35.23130],[31.77560,35.23100],[31.77690,35.23150],[31.77700,35.23330],[31.77490,35.23370],[31.77410,35.23200]],
-  muslimQ: [[31.77720,35.23070],[31.78100,35.23020],[31.78230,35.23280],[31.78120,35.23690],[31.77720,35.23400]],
-  christianQ: [[31.77700,35.22740],[31.77940,35.22698],[31.78110,35.22712],[31.78120,35.23000],[31.77720,35.23060]],
-  armenianQ: [[31.77390,35.22800],[31.77660,35.22760],[31.77690,35.23010],[31.77420,35.23120]],
-  streets: [
-    [[31.77760,35.22868],[31.77860,35.22878],[31.77950,35.22888],[31.78010,35.22898]],
-    [[31.77900,35.22790],[31.77948,35.22858],[31.77988,35.22928]],
-    [[31.77640,35.22790],[31.77530,35.22815],[31.77440,35.22860],[31.77400,35.22932]],
-    [[31.77690,35.23125],[31.77600,35.23148],[31.77510,35.23174],[31.77452,35.23208]],
-    [[31.77700,35.22996],[31.77620,35.23004]],
-    [[31.77700,35.23021],[31.77620,35.23029]],
-    [[31.77700,35.23046],[31.77620,35.23054]],
-    [[31.77900,35.23262],[31.77902,35.23392]],
-    [[31.77962,35.23232],[31.77964,35.23378]],
-    [[31.77560,35.23372],[31.77505,35.23386],[31.77477,35.23394]],
-    [[31.78062,35.23108],[31.77992,35.23078],[31.77930,35.23020],[31.77880,35.22992]]
-  ],
-  valleys: {
-    kidron: [[31.78420,35.23830],[31.78100,35.23805],[31.77800,35.23795],[31.77500,35.23768],[31.77200,35.23705],[31.76980,35.23605],[31.76900,35.23520]],
-    hinnom: [[31.77520,35.22600],[31.77300,35.22650],[31.77150,35.22800],[31.77000,35.23000],[31.76920,35.23250],[31.76900,35.23480]],
-    tyropoeon: [[31.78200,35.23050],[31.78000,35.23125],[31.77800,35.23235],[31.77650,35.23320],[31.77500,35.23400],[31.77300,35.23450],[31.77100,35.23480],[31.76980,35.23520]]
+const P = {"ottoman":[[31.77661,35.22755],[31.77745,35.22705],[31.77845,35.22655],[31.77931,35.22628],[31.77995,35.2262],[31.78065,35.2276],[31.7812,35.229],[31.78164,35.2305],[31.78215,35.2318],[31.78265,35.233],[31.783,35.23375],[31.7833,35.2352],[31.78338,35.2365],[31.78083,35.23694],[31.77985,35.23694],[31.77889,35.23694],[31.7775,35.23706],[31.77596,35.23718],[31.77545,35.2362],[31.775,35.2348],[31.77472,35.23389],[31.7742,35.2325],[31.77365,35.2309],[31.77315,35.2298],[31.77286,35.22936],[31.773,35.2285],[31.77375,35.2277],[31.7747,35.22735],[31.7757,35.22735]],"platform":[[31.77567,35.23407],[31.77596,35.23706],[31.7802,35.23698],[31.78007,35.23365]],"jebusite":[[31.7747,35.23485],[31.77445,35.236],[31.7735,35.23648],[31.7725,35.23628],[31.7717,35.236],[31.77155,35.2352],[31.7725,35.235],[31.7737,35.23478]],"cityOfDavid":[[31.7748,35.2348],[31.7745,35.23608],[31.7734,35.23655],[31.7723,35.2363],[31.7712,35.23608],[31.7703,35.23575],[31.77,35.23495],[31.7712,35.23488],[31.7725,35.23495],[31.7738,35.2347]],"westernHillIron":[[31.776,35.2279],[31.77568,35.2301],[31.7751,35.2323],[31.7745,35.2333],[31.7733,35.2333],[31.7723,35.2326],[31.7716,35.231],[31.7715,35.2295],[31.7719,35.2282],[31.773,35.2276],[31.7745,35.2275]],"broadWall":[[31.77578,35.2302],[31.77558,35.2308]],"solomonic":[[31.7772,35.2341],[31.7773,35.2364],[31.78,35.23632],[31.7799,35.23404]],"ophel":[[31.7748,35.2348],[31.77567,35.2347],[31.77596,35.23731],[31.7745,35.23608]],"secondTemple":[[31.7765,35.22755],[31.7769,35.2301],[31.777,35.2325],[31.777,35.234],[31.78007,35.234],[31.7802,35.23724],[31.77596,35.23731],[31.7748,35.2366],[31.7738,35.2367],[31.7726,35.2364],[31.7713,35.23615],[31.7703,35.23575],[31.7699,35.2347],[31.7706,35.2335],[31.7713,35.2318],[31.7715,35.2299],[31.7719,35.2282],[31.773,35.2275],[31.7748,35.22735]],"firstWall":[[31.7765,35.2277],[31.777,35.2296],[31.7772,35.2318],[31.777,35.2333],[31.7769,35.234],[31.776,35.2347],[31.7752,35.2356],[31.7742,35.23595],[31.773,35.236],[31.7716,35.2357],[31.7704,35.23545],[31.7699,35.2346],[31.7701,35.2323],[31.7708,35.23],[31.7718,35.2286],[31.7742,35.2278]],"baris":[[31.78,35.2347],[31.78006,35.2357],[31.7807,35.23566],[31.78064,35.23466]],"hasmoneanBridge":[[31.777,35.2333],[31.777,35.234]],"secondWall":[[31.7769,35.2299],[31.7779,35.2304],[31.7788,35.2315],[31.7797,35.233],[31.7804,35.2345],[31.7806,35.2352]],"thirdWall":[[31.7765,35.22755],[31.783,35.22715],[31.7856,35.229],[31.786,35.2335],[31.7845,35.237],[31.78243,35.2367]],"temple":[[31.77762,35.2344],[31.77772,35.23575],[31.77852,35.2357],[31.77842,35.23435]],"royalStoa":[[31.776,35.2342],[31.7761,35.2372],[31.7765,35.23718],[31.7764,35.23418]],"antonia":[[31.7801,35.2348],[31.78016,35.236],[31.7809,35.23596],[31.78084,35.23476]],"citadel":[[31.77585,35.22752],[31.77592,35.22822],[31.77655,35.22816],[31.77648,35.22746]],"ironAgeCity":[[31.7762,35.22795],[31.77595,35.229],[31.77578,35.2302],[31.77558,35.2308],[31.77555,35.232],[31.77558,35.2333],[31.77562,35.2343],[31.77558,35.2353],[31.77552,35.236],[31.7748,35.23625],[31.774,35.23648],[31.773,35.2366],[31.772,35.23648],[31.7711,35.2362],[31.7704,35.23585],[31.77015,35.2352],[31.77045,35.2343],[31.77075,35.2333],[31.771,35.2323],[31.77118,35.2312],[31.77135,35.23],[31.7716,35.229],[31.772,35.2283],[31.7733,35.22795],[31.7747,35.22785]],"nehemiah":[[31.7747,35.23478],[31.7742,35.23545],[31.7734,35.23572],[31.7725,35.23568],[31.7716,35.23548],[31.7711,35.23528]],"umayyad":[[31.77505,35.23425],[31.77522,35.236],[31.7756,35.23594],[31.77543,35.23419]],"tunnel":[[31.773,35.236],[31.7728,35.23545],[31.77245,35.2356],[31.77215,35.2352],[31.7717,35.23548],[31.7712,35.2352],[31.77075,35.23548],[31.7703,35.2354]],"cardoW":[[31.7809,35.2301],[31.78,35.2302],[31.779,35.23032],[31.778,35.23042],[31.777,35.2305],[31.7762,35.23056]],"cardoWext":[[31.7762,35.23056],[31.7752,35.23064],[31.7745,35.2307]],"cardoE":[[31.7809,35.2305],[31.78,35.2309],[31.779,35.2314],[31.778,35.2319],[31.777,35.2325],[31.7762,35.233],[31.7756,35.2335]],"decumanus":[[31.7766,35.2279],[31.7767,35.229],[31.7768,35.23],[31.7769,35.231],[31.77695,35.232],[31.777,35.233],[31.777,35.2339]],"decumanusN":[[31.78134,35.23694],[31.7812,35.236],[31.781,35.2352],[31.7807,35.2344],[31.7802,35.2338],[31.7799,35.233],[31.7796,35.2322],[31.7794,35.2314],[31.779,35.2306],[31.7787,35.2299]],"nea":[[31.7741,35.23048],[31.77418,35.2313],[31.7748,35.23124],[31.77472,35.23042]],"constantinian":[[31.77808,35.2293],[31.77816,35.2305],[31.77872,35.23044],[31.77864,35.22924]],"sepulchre":[[31.77812,35.22945],[31.77818,35.23008],[31.77868,35.23002],[31.77862,35.22939]],"dome":[[31.77772,35.23486],[31.77772,35.23546],[31.77832,35.23546],[31.77832,35.23486]],"aqsa":[[31.77592,35.23552],[31.77596,35.23604],[31.77648,35.236],[31.77644,35.23548]],"quarry":[[31.778,35.229],[31.77812,35.2302],[31.779,35.2301],[31.77888,35.2289]],"bethesda":[[31.78118,35.23562],[31.78124,35.23628],[31.78176,35.23622],[31.7817,35.23556]],"siloam":[[31.77,35.23508],[31.77006,35.23562],[31.77046,35.23556],[31.7704,35.23502]],"wwPlaza":[[31.7762,35.2333],[31.777,35.23325],[31.77706,35.234],[31.77612,35.23404]],"jewishQ":[[31.7742,35.2313],[31.7756,35.231],[31.7769,35.2315],[31.777,35.2333],[31.7749,35.2337],[31.7741,35.232]],"muslimQ":[[31.7772,35.2307],[31.781,35.2302],[31.7823,35.2328],[31.7812,35.2369],[31.7772,35.234]],"christianQ":[[31.777,35.2274],[31.7794,35.22698],[31.7811,35.22712],[31.7812,35.23],[31.7772,35.2306]],"armenianQ":[[31.7739,35.228],[31.7766,35.2276],[31.7769,35.2301],[31.7742,35.2312]],"streets":[[[31.7776,35.22868],[31.7786,35.22878],[31.7795,35.22888],[31.7801,35.22898]],[[31.779,35.2279],[31.77948,35.22858],[31.77988,35.22928]],[[31.7764,35.2279],[31.7753,35.22815],[31.7744,35.2286],[31.774,35.22932]],[[31.7769,35.23125],[31.776,35.23148],[31.7751,35.23174],[31.77452,35.23208]],[[31.777,35.22996],[31.7762,35.23004]],[[31.777,35.23021],[31.7762,35.23029]],[[31.777,35.23046],[31.7762,35.23054]],[[31.779,35.23262],[31.77902,35.23392]],[[31.77962,35.23232],[31.77964,35.23378]],[[31.7756,35.23372],[31.77505,35.23386],[31.77477,35.23394]],[[31.78062,35.23108],[31.77992,35.23078],[31.7793,35.2302],[31.7788,35.22992]]],"valleys":{"kidron":[[31.7842,35.2383],[31.781,35.23805],[31.778,35.23795],[31.775,35.23768],[31.772,35.23705],[31.7698,35.23605],[31.769,35.2352]],"hinnom":[[31.7752,35.226],[31.773,35.2265],[31.7715,35.228],[31.77,35.23],[31.7692,35.2325],[31.769,35.2348]],"tyropoeon":[[31.782,35.2305],[31.78,35.23125],[31.778,35.23235],[31.7765,35.2332],[31.775,35.234],[31.773,35.2345],[31.771,35.2348],[31.7698,35.2352]]}};
+
+const T = {
+  "en": {
+    "kicker": "Jerusalem — comparative survey",
+    "title": "The city under the city",
+    "sub": "One map, thirteen layers. Slide through time to see exactly where the Jerusalem of each era sits beneath — and outside — the walls you walk today.",
+    "fit": "FIT",
+    "modern": "Today's city",
+    "valleys": "Valleys",
+    "legend": "Legend",
+    "north": "North ↑",
+    "timeline": "Slide through time",
+    "look": "What you can still see on the ground",
+    "sectionKicker": "Why it doesn't look right",
+    "sectionTitle": "Cross-section, west to east — the buried valley",
+    "sectionBody": "The single biggest reason the Old City confuses people is vertical. Jerusalem was built on two ridges split by a deep ravine, the Tyropoeon. Twenty centuries of rubble, ruin and rebuilding filled that ravine in. Where a first-century pilgrim climbed monumental stairs out of a valley, you now stroll across a flat plaza — the valley is still there, twelve metres under your shoes.",
+    "sources": "How to read this: solid warm lines are walls and structures whose course is established by excavation. Dashed red lines are reconstructions where scholars genuinely disagree — chiefly the Second and Third Walls of the Second Temple period. The cool blue line is the standing Ottoman wall of 1538 and today's street plan, drawn to the same scale and position. Reconstruction follows the mainstream consensus (Avigad's Jewish Quarter excavations, Mazar's Temple Mount and Ophel excavations, Reich & Shukron at the City of David, and the Madaba mosaic map for the Byzantine city). Today's streets, buildings and gates are live OpenStreetMap data, not drawn by hand — so every lane of the souq is in its real place, and you can zoom in as far as the alley you are standing in. The historical layers are plotted on the same coordinates for orientation; some lines combine excavated segments with topographically constrained inference or schematic extent, so coordinates support orientation, not survey or excavation planning.",
+    "eraOf": "Layer",
+    "of": "of"
   }
 };
 
-const T = {
-  en: { kicker: "Jerusalem — comparative survey", title: "The city under the city", sub: "One map, twelve layers. Slide through time to see exactly where the Jerusalem of each era sits beneath — and outside — the walls you walk today.", fit: "FIT", modern: "Today's city", valleys: "Valleys", legend: "Legend", north: "North ↑", timeline: "Slide through time", look: "What you can still see on the ground", sectionKicker: "Why it doesn't look right", sectionTitle: "Cross-section, west to east — the buried valley", sectionBody: "The single biggest reason the Old City confuses people is vertical. Jerusalem was built on two ridges split by a deep ravine, the Tyropoeon. Twenty centuries of rubble, ruin and rebuilding filled that ravine in. Where a first-century pilgrim climbed monumental stairs out of a valley, you now stroll across a flat plaza — the valley is still there, twelve metres under your shoes.", sources: "How to read this: solid warm lines are walls and structures whose course is established by excavation. Dashed red lines are reconstructions where scholars genuinely disagree — chiefly the Second and Third Walls of the Second Temple period. The cool blue line is the standing Ottoman wall of 1538 and today's street plan, drawn to the same scale and position. Reconstruction follows the mainstream consensus (Avigad's Jewish Quarter excavations, Mazar's Temple Mount and Ophel excavations, Reich & Shukron at the City of David, and the Madaba mosaic map for the Byzantine city). Today's streets, buildings and gates are live OpenStreetMap data, not drawn by hand — so every lane of the souq is in its real place, and you can zoom in as far as the alley you are standing in. The historical layers are plotted on the same coordinates, so anything that lines up on this map lines up on the ground.", eraOf: "Layer", of: "of" },
-  he: { kicker: "ירושלים — סקר השוואתי", title: "העיר שמתחת לעיר", sub: "מפה אחת, שתים־עשרה שכבות. הזיזו את הסרגל בזמן וראו בדיוק היכן שוכנת ירושלים של כל תקופה מתחת לחומות שאתם מהלכים בהן היום — ומחוצה להן.", fit: "התאמה", modern: "העיר של היום", valleys: "עמקים", legend: "מפתח", north: "צפון ↑", timeline: "הזזה בזמן", look: "מה עוד אפשר לראות בשטח", sectionKicker: "למה זה לא מסתדר", sectionTitle: "חתך רוחב, ממערב למזרח — העמק הקבור", sectionBody: "הסיבה הגדולה לבלבול היא אנכית. ירושלים נבנתה על שני רכסים שביניהם ערוץ עמוק — עמק גיא־התירופיון. עשרים מאות של הרס, פסולת ובנייה מחדש מילאו את הערוץ. במקום שבו עולה־רגל מן המאה הראשונה טיפס במדרגות מונומנטליות מתוך עמק, אתם חוצים היום רחבה שטוחה — והעמק עדיין שם, שנים־עשר מטר מתחת לנעליכם.", sources: "כיצד לקרוא את המפה: קווים חמים ורצופים הם חומות ומבנים שמסלולם נקבע בחפירות. קווים אדומים מקוטעים הם שחזורים שיש עליהם מחלוקת אמיתית בין החוקרים — בעיקר החומה השנייה והחומה השלישית מימי הבית השני. הקו הכחול הקר הוא חומת השלטון העות'מאני משנת 1538 ומערך הרחובות של היום, במידה ובמקום זהים. השחזור נסמך על הקונצנזוס המקובל (חפירות אביגד ברובע היהודי, חפירות מזר בהר הבית ובעופל, רייך ושוקרון בעיר דוד, ומפת מידבא לעיר הביזנטית). הרחובות, הבניינים והשערים של היום הם נתוני OpenStreetMap חיים ולא שרטוט ביד — כך שכל סמטה בשוק נמצאת במקומה האמיתי, ואפשר להתקרב עד לסמטה שאתם עומדים בה. השכבות ההיסטוריות משורטטות באותן קואורדינטות, ולכן כל דבר שמתלכד במפה הזאת מתלכד גם בשטח.", eraOf: "שכבה", of: "מתוך" },
-  ar: { kicker: "القدس — مسح مقارن", title: "المدينة تحت المدينة", sub: "خريطة واحدة واثنتا عشرة طبقة. حرّك المؤشر عبر الزمن لترى بالضبط أين تقع قدس كل عصر تحت الأسوار التي تسير داخلها اليوم — وخارجها.", fit: "ملاءمة", modern: "مدينة اليوم", valleys: "الأودية", legend: "المفتاح", north: "الشمال ↑", timeline: "التنقّل عبر الزمن", look: "ما يمكن رؤيته على الأرض اليوم", sectionKicker: "لماذا لا تتطابق الصورة", sectionTitle: "مقطع عرضي من الغرب إلى الشرق — الوادي المدفون", sectionBody: "السبب الأكبر للالتباس رأسي لا أفقي. بُنيت القدس على تلّتين يفصل بينهما وادٍ عميق هو وادي التيروبيون. عشرون قرناً من الأنقاض والخراب وإعادة البناء ردمت ذلك الوادي. وحيث كان حاجّ القرن الأول يصعد سلالم ضخمة خارجاً من الوادي، تعبر أنت اليوم ساحة مستوية — والوادي ما زال هناك، على عمق اثني عشر متراً تحت قدميك.", sources: "كيف تقرأ الخريطة: الخطوط الدافئة المتصلة أسوار ومبانٍ ثبت مسارها بالتنقيب. الخطوط الحمراء المتقطعة إعادات بناء يختلف فيها الباحثون فعلاً — وأهمها السور الثاني والسور الثالث من العهد الهيكلي الثاني. الخط الأزرق البارد هو السور العثماني القائم من عام ١٥٣٨ ومخطط شوارع اليوم، بالمقياس والموضع ذاتهما. تتبع إعادة البناء الإجماع السائد (تنقيبات أفيغاد في حارة اليهود، وتنقيبات مازار في الحرم والعوفل، ورايش وشكرون في تلة سلوان، وخريطة مادبا للمدينة البيزنطية). شوارع اليوم ومبانيه وأبوابه بيانات حيّة من OpenStreetMap لا رسمٌ باليد — فكل زقاق في السوق في موضعه الحقيقي، ويمكنك التكبير حتى الزقاق الذي تقف فيه. والطبقات التاريخية مرسومة على الإحداثيات ذاتها، فما يتطابق على هذه الخريطة يتطابق على الأرض.", eraOf: "طبقة", of: "من" },
-  es: { kicker: "Jerusalén — estudio comparado", title: "La ciudad bajo la ciudad", sub: "Un mapa, doce capas. Deslice el tiempo para ver exactamente dónde queda la Jerusalén de cada época debajo — y fuera — de las murallas por las que hoy camina.", fit: "AJUSTAR", modern: "Ciudad actual", valleys: "Valles", legend: "Leyenda", north: "Norte ↑", timeline: "Deslice el tiempo", look: "Lo que aún se ve en el terreno", sectionKicker: "Por qué no encaja", sectionTitle: "Corte oeste–este: el valle enterrado", sectionBody: "La mayor causa de confusión es vertical. Jerusalén se levantó sobre dos colinas separadas por un barranco profundo, el Tiropeón. Veinte siglos de escombros, destrucción y reconstrucción lo rellenaron. Donde un peregrino del siglo I subía escalinatas monumentales para salir del valle, usted hoy cruza una plaza plana: el valle sigue ahí, doce metros bajo sus zapatos.", sources: "Cómo leerlo: las líneas cálidas continuas son murallas y estructuras cuyo trazado está establecido por excavación. Las líneas rojas discontinuas son reconstrucciones donde los especialistas discrepan de verdad, sobre todo la Segunda y la Tercera Muralla del período del Segundo Templo. La línea azul fría es la muralla otomana de 1538, aún en pie, y el trazado actual de calles, a la misma escala y posición. La reconstrucción sigue el consenso mayoritario (excavaciones de Avigad en el Barrio Judío, de Mazar en el Monte del Templo y el Ofel, de Reich y Shukron en la Ciudad de David, y el mapa mosaico de Madaba para la ciudad bizantina). Las calles, edificios y puertas actuales son datos en vivo de OpenStreetMap, no dibujo a mano: cada callejón del souq está en su sitio real y puede ampliar hasta el callejón en el que está parado. Las capas históricas se trazan sobre las mismas coordenadas, así que lo que coincide en este mapa coincide en el terreno.", eraOf: "Capa", of: "de" }
-};
-
 const LEG = {
-  en: [["solid #b98c46 3px","Excavated / established ancient line"],["dashed #a8452f 3px","Reconstruction — scholars disagree"],["solid #3d6076 3px","Standing Ottoman wall (1538) & today's streets"],["dashed #a8906a 3px","Valley floor (mostly buried today)"],["solid #4a7f86 3px","Water: springs, pools, Hezekiah's Tunnel"],["solid rgba(138,106,62,.45) 5px","Roman street corridors — schematic; the exact line is the modern street beneath"]],
-  he: [["solid #b98c46 3px","קו קדום מבוסס על חפירות"],["dashed #a8452f 3px","שחזור — יש מחלוקת בין החוקרים"],["solid #3d6076 3px","חומה עות'מאנית קיימת (1538) ורחובות היום"],["dashed #a8906a 3px","קרקעית העמק (קבורה בעיקרה היום)"],["solid #4a7f86 3px","מים: מעיינות, בריכות, נקבת חזקיהו"],["solid rgba(138,106,62,.45) 5px","מסדרונות הרחובות הרומיים — סכמטיים; הקו המדויק הוא הרחוב המודרני שמתחת"]],
-  ar: [["solid #b98c46 3px","خط أثري مؤكَّد بالتنقيب"],["dashed #a8452f 3px","إعادة بناء — خلاف بين الباحثين"],["solid #3d6076 3px","السور العثماني القائم (١٥٣٨) وشوارع اليوم"],["dashed #a8906a 3px","قاع الوادي (مدفون في معظمه اليوم)"],["solid #4a7f86 3px","المياه: عيون وبرك ونفق حزقيا"],["solid rgba(138,106,62,.45) 5px","ممرات الشوارع الرومانية — تخطيطية؛ الخط الدقيق هو الشارع الحديث تحتها"]],
-  es: [["solid #b98c46 3px","Trazado antiguo confirmado por excavación"],["dashed #a8452f 3px","Reconstrucción: hay desacuerdo académico"],["solid #3d6076 3px","Muralla otomana en pie (1538) y calles de hoy"],["dashed #a8906a 3px","Fondo del valle (hoy casi todo enterrado)"],["solid #4a7f86 3px","Agua: manantiales, piscinas, túnel de Ezequías"],["solid rgba(138,106,62,.45) 5px","Corredores de calles romanas — esquemáticos; la línea exacta es la calle moderna debajo"]]
+  "en": [
+    [
+      "solid #b98c46 3px",
+      "Excavated / established ancient line"
+    ],
+    [
+      "dashed #a8452f 3px",
+      "Reconstruction — scholars disagree"
+    ],
+    [
+      "solid #3d6076 3px",
+      "Standing Ottoman wall (1538) & today's streets"
+    ],
+    [
+      "dashed #a8906a 3px",
+      "Valley floor (mostly buried today)"
+    ],
+    [
+      "solid #4a7f86 3px",
+      "Water: springs, pools, Hezekiah's Tunnel"
+    ],
+    [
+      "solid rgba(138,106,62,.45) 5px",
+      "Roman street corridors — schematic; the exact line is the modern street beneath"
+    ]
+  ]
 };
-
 
 const ICONKEY = {
-  en: { btn: "Key", g1: "Drawn on the overlay", g2: "On the street map (local-names view)",
-    rows: ["Major building of the chosen era","Pool, cistern or reservoir","Spring — the reason the city is here","Golgotha and the tomb","Gate, tower or excavated point",
-           "Church, monastery or convent","Mosque","Synagogue","Archaeological site or ruin","Museum or visitor centre","Viewpoint","Restaurant","Café","Fast food or takeaway","Bakery or sweets","Shop or gift stall","Parking","Drinking water or fountain","Public toilets","Playground"] },
-  he: { btn: "מקרא", g1: "מצויר על השכבה ההיסטורית", g2: "על מפת הרחובות (תצוגת שמות מקומיים)",
-    rows: ["מבנה מרכזי של התקופה הנבחרת","בריכה, בור מים או מאגר","מעיין — הסיבה שהעיר כאן","גולגותא והקבר","שער, מגדל או נקודת חפירה",
-           "כנסייה, מנזר או משכן","מסגד","בית כנסת","אתר ארכיאולוגי או חורבה","מוזיאון או מרכז מבקרים","נקודת תצפית","מסעדה","בית קפה","מזון מהיר או טייק אווי","מאפייה או ממתקים","חנות או דוכן מזכרות","חניה","מי שתייה או מזרקה","שירותים ציבוריים","גן משחקים"] },
-  ar: { btn: "المفتاح", g1: "مرسوم على الطبقة التاريخية", g2: "على خريطة الشوارع (عرض الأسماء المحلية)",
-    rows: ["مبنى رئيسي من الحقبة المختارة","بركة أو صهريج أو خزان","نبع — سبب وجود المدينة هنا","الجلجثة والقبر","بوابة أو برج أو نقطة تنقيب",
-           "كنيسة أو دير","مسجد","كنيس","موقع أثري أو خرائب","متحف أو مركز زوار","نقطة إطلالة","مطعم","مقهى","وجبات سريعة","مخبز أو حلويات","متجر أو محل هدايا","موقف سيارات","مياه شرب أو نافورة","دورات مياه عامة","ملعب أطفال"] },
-  es: { btn: "Leyenda", g1: "Dibujado en la capa histórica", g2: "En el mapa de calles (vista de nombres locales)",
-    rows: ["Edificio principal de la época elegida","Piscina, cisterna o depósito","Manantial: la razón de que la ciudad esté aquí","Gólgota y el sepulcro","Puerta, torre o punto excavado",
-           "Iglesia, monasterio o convento","Mezquita","Sinagoga","Yacimiento arqueológico o ruina","Museo o centro de visitantes","Mirador","Restaurante","Cafetería","Comida rápida","Panadería o dulces","Tienda o puesto de regalos","Aparcamiento","Agua potable o fuente","Aseos públicos","Parque infantil"] }
+  "en": {
+    "btn": "Key",
+    "g1": "Drawn on the overlay",
+    "g2": "On the street map (local-names view)",
+    "rows": [
+      "Major building of the chosen era",
+      "Pool, cistern or reservoir",
+      "Spring — the reason the city is here",
+      "Golgotha and the tomb",
+      "Gate, tower or excavated point",
+      "Church, monastery or convent",
+      "Mosque",
+      "Synagogue",
+      "Archaeological site or ruin",
+      "Museum or visitor centre",
+      "Viewpoint",
+      "Restaurant",
+      "Café",
+      "Fast food or takeaway",
+      "Bakery or sweets",
+      "Shop or gift stall",
+      "Parking",
+      "Drinking water or fountain",
+      "Public toilets",
+      "Playground"
+    ]
+  }
 };
 
 const SECKEYS = {
-  en: [["dashed #8a6a3e 3px","Bedrock and the first-century surface"],["solid #3d6076 3px","The surface you walk on today"],["solid #b98c46 5px","Herod's retaining walls — the same stones, top to bottom"]],
-  he: [["dashed #8a6a3e 3px","סלע האם ופני השטח במאה הראשונה"],["solid #3d6076 3px","פני השטח שאתם הולכים עליהם היום"],["solid #b98c46 5px","הכתלים התומכים של הורדוס — אותן אבנים, מלמעלה עד למטה"]],
-  ar: [["dashed #8a6a3e 3px","الصخر الأصلي وسطح القرن الأول"],["solid #3d6076 3px","السطح الذي تسير عليه اليوم"],["solid #b98c46 5px","جدران هيرودس الاستنادية — الحجارة ذاتها من الأعلى إلى الأسفل"]],
-  es: [["dashed #8a6a3e 3px","Roca madre y superficie del siglo I"],["solid #3d6076 3px","La superficie por la que hoy camina"],["solid #b98c46 5px","Muros de contención de Herodes: las mismas piedras, de arriba abajo"]]
+  "en": [
+    [
+      "dashed #8a6a3e 3px",
+      "Bedrock and the first-century surface"
+    ],
+    [
+      "solid #3d6076 3px",
+      "The surface you walk on today"
+    ],
+    [
+      "solid #b98c46 5px",
+      "Herod's retaining walls — the same stones, top to bottom"
+    ]
+  ]
 };
 
 const CS = [
-  { x: 58, y: 182, a: "middle", fs: 15, w: 600, c: "#4a4132", t: { en: "Jaffa Gate", he: "שער יפו", ar: "باب الخليل", es: "Puerta de Jafa" } },
-  { x: 215, y: 99, a: "middle", fs: 17, w: 600, c: "#8a5a2b", t: { en: "Upper City 775 m", he: "העיר העליונה 775 מ'", ar: "المدينة العليا ٧٧٥ م", es: "Ciudad Alta 775 m" } },
-  { x: 452, y: 240, a: "middle", fs: 16, w: 700, c: "#a8452f", t: { en: "Tyropoeon Valley", he: "עמק התירופיון", ar: "وادي التيروبيون", es: "Valle del Tiropeón" } },
-  { x: 455, y: 298, a: "middle", fs: 14, w: 400, c: "#6d3a2c", t: { en: "≈ 12 m of fill", he: "כ־12 מ' של מילוי", ar: "نحو ١٢ م من الردم", es: "≈ 12 m de relleno" } },
-  { x: 508, y: 160, a: "end", fs: 15, w: 600, c: "#8a5a2b", t: { en: "Western Wall", he: "הכותל המערבי", ar: "حائط البراق / الحائط الغربي", es: "Muro Occidental" } },
-  { x: 700, y: 132, a: "middle", fs: 17, w: 600, c: "#8a5a2b", t: { en: "Temple Mount 740 m", he: "הר הבית 740 מ'", ar: "الحرم 740 م", es: "Monte del Templo 740 m" } },
-  { x: 1005, y: 318, a: "middle", fs: 16, w: 600, c: "#4a4132", t: { en: "Kidron 625 m", he: "קדרון 625 מ'", ar: "قدرون ٦٢٥ م", es: "Cedrón 625 m" } },
-  { x: 1215, y: 112, a: "end", fs: 15, w: 600, c: "#4a4132", t: { en: "Mount of Olives →", he: "הר הזיתים →", ar: "جبل الزيتون →", es: "Monte de los Olivos →" } },
-  { x: 26, y: 340, a: "start", fs: 12, w: 400, c: "#8a7550", t: { en: "vertical exaggeration ×1.55", he: "הגדלה אנכית ×1.55", ar: "تكبير رأسي ×١٫٢٥", es: "exageración vertical ×1,25" } }
+  {
+    "x": 58,
+    "y": 182,
+    "a": "middle",
+    "fs": 15,
+    "w": 600,
+    "c": "#4a4132",
+    "t": {
+      "en": "Jaffa Gate"
+    }
+  },
+  {
+    "x": 215,
+    "y": 99,
+    "a": "middle",
+    "fs": 17,
+    "w": 600,
+    "c": "#8a5a2b",
+    "t": {
+      "en": "Upper City 775 m"
+    }
+  },
+  {
+    "x": 452,
+    "y": 240,
+    "a": "middle",
+    "fs": 16,
+    "w": 700,
+    "c": "#a8452f",
+    "t": {
+      "en": "Tyropoeon Valley"
+    }
+  },
+  {
+    "x": 455,
+    "y": 298,
+    "a": "middle",
+    "fs": 14,
+    "w": 400,
+    "c": "#6d3a2c",
+    "t": {
+      "en": "≈ 12 m of fill"
+    }
+  },
+  {
+    "x": 508,
+    "y": 160,
+    "a": "end",
+    "fs": 15,
+    "w": 600,
+    "c": "#8a5a2b",
+    "t": {
+      "en": "Western Wall"
+    }
+  },
+  {
+    "x": 700,
+    "y": 132,
+    "a": "middle",
+    "fs": 17,
+    "w": 600,
+    "c": "#8a5a2b",
+    "t": {
+      "en": "Temple Mount 740 m"
+    }
+  },
+  {
+    "x": 1005,
+    "y": 318,
+    "a": "middle",
+    "fs": 16,
+    "w": 600,
+    "c": "#4a4132",
+    "t": {
+      "en": "Kidron 625 m"
+    }
+  },
+  {
+    "x": 1215,
+    "y": 112,
+    "a": "end",
+    "fs": 15,
+    "w": 600,
+    "c": "#4a4132",
+    "t": {
+      "en": "Mount of Olives →"
+    }
+  },
+  {
+    "x": 26,
+    "y": 340,
+    "a": "start",
+    "fs": 12,
+    "w": 400,
+    "c": "#8a7550",
+    "t": {
+      "en": "vertical exaggeration ×1.55"
+    }
+  }
 ];
 
 const ERAS = [
-  { key: "canaan", tick: { en: "Canaanite", he: "כנענית", ar: "كنعانية", es: "Cananea" }, date: { en: "1800 BCE", he: "1800 לפנה\"ס", ar: "١٨٠٠ ق.م", es: "1800 a.C." },
-    title: { en: "Canaanite Jerusalem — the City of David ridge", he: "ירושלים הכנענית — רכס עיר דוד", ar: "القدس الكنعانية — تلّة مدينة داود", es: "Jerusalén cananea — la colina de la Ciudad de David" },
-    years: { en: "c. 1800 – 1000 BCE", he: "בערך 1800–1000 לפנה\"ס", ar: "نحو ١٨٠٠–١٠٠٠ ق.م", es: "c. 1800 – 1000 a.C." },
-    body: { en: "Jerusalem begins entirely outside today's walls. The whole city — about five hectares, smaller than the Temple Mount platform — sits on a narrow spur running south from the Mount, chosen for one reason: the Gihon Spring, the only permanent water in the region. Everything inside the Ottoman gates you walk through today is bare hillside and quarry.", he: "ירושלים מתחילה כולה מחוץ לחומות של היום. כל העיר — כחמישה הקטרים, פחות משטח רחבת הר הבית — יושבת על רכס צר היורד דרומה מן ההר, ונבחרה מסיבה אחת: מעיין הגיחון, מקור המים הקבוע היחיד באזור. כל מה שבתוך השערים העות'מאניים שאתם עוברים בהם היום הוא מדרון חשוף ומחצבות.", ar: "بدأت القدس بكاملها خارج أسوار اليوم. المدينة كلها — نحو خمسة هكتارات، أصغر من ساحة الحرم — كانت على تلّة ضيّقة تنحدر جنوباً من الحرم، واختيرت لسبب واحد: عين الجيحون، مصدر الماء الدائم الوحيد في المنطقة. أما كل ما هو داخل الأبواب العثمانية التي تمرّ بها اليوم فكان منحدراً عارياً ومقالع حجر.", es: "Jerusalén empieza enteramente fuera de las murallas actuales. Toda la ciudad —unas cinco hectáreas, menos que la explanada del Templo— ocupa un espolón estrecho que baja hacia el sur, elegido por una razón: el manantial de Guijón, la única agua permanente de la región. Todo lo que hoy queda dentro de las puertas otomanas era ladera desnuda y cantera." },
-    look: { en: ["The Gihon Spring and the Middle Bronze spring tower, reached by stairs below the City of David visitor centre.","Warren's Shaft — the vertical shaft that let the city draw water without leaving the walls.","Massive Canaanite fortification blocks, some over three metres thick, on the east slope above the Kidron."], he: ["מעיין הגיחון ומגדל המעיין מתקופת הברונזה התיכונה, שאליהם יורדים במדרגות מתחת למרכז המבקרים בעיר דוד.","פיר וורן — הפיר האנכי שאיפשר לעיר לשאוב מים בלי לצאת מן החומות.","גושי ביצור כנעניים עצומים, חלקם בעובי של יותר משלושה מטרים, במדרון המזרחי מעל הקדרון."], ar: ["عين الجيحون وبرج العين من العصر البرونزي المتوسط، ويُنزل إليهما بسلالم تحت مركز الزوار في تلّة سلوان.","بئر وارن — البئر الرأسية التي مكّنت المدينة من سحب الماء دون الخروج من الأسوار.","كتل تحصين كنعانية ضخمة، بعضها بسماكة تتجاوز ثلاثة أمتار، على المنحدر الشرقي فوق وادي قدرون."], es: ["El manantial de Guijón y la torre del manantial del Bronce Medio, a los que se baja por escaleras bajo el centro de visitantes.","El pozo de Warren: el pozo vertical que permitía sacar agua sin salir de las murallas.","Bloques de fortificación cananeos enormes, algunos de más de tres metros de grosor, en la ladera oriental sobre el Cedrón."] } },
-
-  { key: "david", tick: { en: "David", he: "דוד", ar: "داود", es: "David" }, date: { en: "1000–930 BCE", he: "1000–930 לפנה\"ס", ar: "١٠٠٠–٩٣٠ ق.م", es: "1000–930 a.C." },
-    title: { en: "David's city and Solomon's Temple", he: "עיר דוד ומקדש שלמה", ar: "مدينة داود وهيكل سليمان", es: "La ciudad de David y el Templo de Salomón" },
-    years: { en: "c. 1000 – 930 BCE", he: "בערך 1000–930 לפנה\"ס", ar: "نحو ١٠٠٠–٩٣٠ ق.م", es: "c. 1000 – 930 a.C." },
-    body: { en: "David takes the Jebusite stronghold and it stays almost exactly the size it already was: a fortified ridge of about five hectares, entirely outside today's walls. He builds no temple. He buys Araunah's threshing floor on the rock to the north — at that moment still open ground beyond the city. It is Solomon who builds the Temple and his palace complex up there, and who ties them to the old town across the saddle called the Millo. For the whole of David's reign, everything your group calls the Old City is empty hillside.", he: "דוד כובש את מצודת היבוסי, והעיר נשארת כמעט בדיוק בגודל שהייתה: רכס מבוצר של כחמישה הקטרים, כולו מחוץ לחומות של היום. הוא אינו בונה מקדש. הוא קונה את גורן ארוונה על הסלע שמצפון — ובאותו רגע זו עדיין שטח פתוח מחוץ לעיר. שלמה הוא שבונה שם את המקדש ואת מכלול הארמון, והוא שמחבר אותם אל העיר הקדומה דרך האוכף הנקרא המילוא. בכל ימי מלכות דוד, כל מה שהקבוצה שלכם קוראת לו 'העיר העתיקה' הוא מדרון ריק.", ar: "استولى داود على حصن اليبوسيين، وبقيت المدينة على حجمها تقريباً: تلّة محصّنة نحو خمسة هكتارات، خارج أسوار اليوم بالكامل. ولم يبنِ هيكلاً. بل اشترى بيدر أرونة على الصخرة إلى الشمال — وكان في تلك اللحظة أرضاً مكشوفة خارج المدينة. وسليمان هو الذي بنى هناك الهيكل ومجمّع القصر، وربطهما بالبلدة القديمة عبر السرج المسمّى «الملّو». وطوال حكم داود كان كل ما تسمّيه مجموعتك «البلدة القديمة» منحدراً خالياً.", es: "David toma la fortaleza jebusea y la ciudad conserva casi exactamente el tamaño que ya tenía: una colina fortificada de unas cinco hectáreas, enteramente fuera de las murallas actuales. No construye ningún templo. Compra la era de Arauna sobre la roca al norte, que en ese momento sigue siendo terreno abierto fuera de la ciudad. Es Salomón quien levanta allí el Templo y su complejo palaciego, y quien los une al viejo poblado por la silla llamada Milló. Durante todo el reinado de David, todo lo que su grupo llama Ciudad Vieja es ladera vacía." },
-    look: { en: ["The Stepped Stone Structure on the eastern slope — the huge terracing usually identified with the Millo of 2 Samuel 5:9.","The Large Stone Structure above it, which its excavator identified as David's palace. The identification is contested.","Warren's Shaft and the Gihon Spring — the water system traditionally linked to David's men entering the city."], he: ["המבנה המדורג במדרון המזרחי — מערכת התמך העצומה שמזוהה בדרך כלל עם המילוא של שמואל ב' ה', ט'.","המבנה הגדול מאבן שמעליו, שהחופרת זיהתה כארמון דוד. הזיהוי נתון במחלוקת.","פיר וורן ומעיין הגיחון — מערכת המים שהמסורת קושרת לכניסת אנשי דוד אל העיר."], ar: ["البناء المدرّج الحجري على المنحدر الشرقي — المصاطب الضخمة التي تُنسب عادةً إلى «الملّو» في صموئيل الثاني ٥:٩.","البناء الحجري الكبير فوقه، الذي نسبته حافرته إلى قصر داود، والنسبة موضع خلاف.","بئر وارن وعين الجيحون — شبكة المياه التي يربطها التقليد بدخول رجال داود إلى المدينة."], es: ["La Estructura Escalonada de Piedra en la ladera este: el enorme aterrazamiento que suele identificarse con el Milló de 2 Samuel 5:9.","La Gran Estructura de Piedra sobre ella, que su excavadora identificó como el palacio de David. La identificación se discute.","El pozo de Warren y el manantial de Guijón: el sistema de agua que la tradición vincula a la entrada de los hombres de David."] },
-    disputed: { en: "Very little here is settled. The Large Stone Structure's identification as David's palace is actively contested, the extent of Solomon's platform is unknown, and no wall of David or Solomon has been securely identified on the western or northern sides. Read the outline as the ridge the city occupied, not as a surveyed wall line.", he: "מעט מאוד כאן מוסכם. זיהוי המבנה הגדול מאבן כארמון דוד נתון בוויכוח נוקב, גודלה של רחבת שלמה אינו ידוע, ולא זוהתה בבטחה שום חומה של דוד או שלמה בצד המערבי או הצפוני. קראו את הקו כרכס שהעיר תפסה, ולא כקו חומה מדוד.", ar: "قليل جداً هنا محسوم. فنسبة «البناء الحجري الكبير» إلى قصر داود موضع خلاف حادّ، وحجم ساحة سليمان غير معروف، ولم يُحدَّد بثقة أي سور لداود أو سليمان في الجهتين الغربية أو الشمالية. اقرأ الخط كالتلّة التي شغلتها المدينة، لا كخطّ سور مقيس.", es: "Aquí hay muy poco firme. La identificación de la Gran Estructura de Piedra como palacio de David se discute activamente, el tamaño de la explanada salomónica es desconocido y no se ha identificado con seguridad ninguna muralla de David o Salomón en los lados oeste y norte. Lea el contorno como la colina que ocupó la ciudad, no como un trazado de muralla medido." } },
-
-  { key: "hezekiah", tick: { en: "Hezekiah", he: "חזקיהו", ar: "حزقيا", es: "Ezequías" }, date: { en: "715–686 BCE", he: "715–686 לפנה\"ס", ar: "٧١٥–٦٨٦ ق.م", es: "715–686 a.C." },
-    title: { en: "Hezekiah's Jerusalem — the city doubles", he: "ירושלים של חזקיהו — העיר מכפילה את עצמה", ar: "قدس حزقيا — تتضاعف المدينة", es: "La Jerusalén de Ezequías: la ciudad se duplica" },
-    years: { en: "c. 715 – 686 BCE", he: "בערך 715–686 לפנה\"ס", ar: "نحو ٧١٥ – ٦٨٦ ق.م", es: "c. 715 – 686 a.C." },
-    body: { en: "Refugees from the fallen northern kingdom pour in and Jerusalem spills west for the first time, across the Tyropoeon Valley and onto the Western Hill. Hezekiah throws a wall seven metres thick around the new quarter — the Broad Wall you can stand beside in the Jewish Quarter — producing a single continuous circuit that holds the Western Hill, the old ridge and the Temple platform together. Facing Sennacherib's siege in 701 BCE he also cuts a 533-metre tunnel through solid rock to bring the Gihon's water inside the walls, to the Pool of Siloam. The city jumps from about five hectares to something on the order of fifty or sixty — the largest Jerusalem will be until Herod.", he: "פליטים מממלכת ישראל שנפלה זורמים אל העיר, וירושלים גולשת מערבה בפעם הראשונה — מעבר לעמק גיא־התירופיון, אל הגבעה המערבית. חזקיהו מקיף את הרובע החדש בחומה בעובי שבעה מטרים — היא החומה הרחבה שאתם יכולים לעמוד לידה ברובע היהודי — ויוצר מעגל חומות רצוף אחד המחזיק יחד את הגבעה המערבית, את הרכס הקדום ואת רחבת המקדש. לקראת מצור סנחריב בשנת 701 לפנה\"ס הוא גם חוצב נקבה באורך 533 מטר כדי להביא את מי הגיחון אל תוך החומות, לבריכת השילוח. העיר מזנקת מכחמישה הקטרים לכחמישים או שישים — וזו ירושלים הגדולה ביותר שתהיה עד ימי הורדוס.", ar: "يتدفّق لاجئو المملكة الشمالية الساقطة، فتفيض القدس غرباً أول مرة عبر وادي التيروبيون إلى التلة الغربية. ويحيط حزقيا الحيّ الجديد بسور سماكته سبعة أمتار — هو «السور العريض» الذي يمكنك الوقوف إلى جانبه في حارة اليهود — فينشأ سور واحد متّصل يجمع التلة الغربية والتلّة القديمة وساحة الهيكل. وفي مواجهة حصار سنحاريب عام ٧٠١ ق.م حفر أيضاً نفقاً بطول ٥٣٣ متراً في الصخر ليجرّ ماء الجيحون إلى داخل الأسوار، إلى بركة سلوان. تنتقل المدينة من نحو خمسة هكتارات إلى نحو خمسين أو ستين — وهذه أكبر قدس ستكون حتى زمن هيرودس.", es: "Los refugiados del reino del norte caído se agolpan y Jerusalén desborda al oeste por primera vez, cruzando el valle del Tiropeón hasta la Colina Occidental. Ezequías rodea el barrio nuevo con una muralla de siete metros de grosor —el Muro Ancho junto al que puede pararse en el Barrio Judío—, creando un único recinto continuo que abarca la Colina Occidental, la vieja colina y la explanada del Templo. Ante el sitio de Senaquerib en 701 a.C. excava además un túnel de 533 metros en la roca para meter el agua del Guijón dentro de las murallas, a la piscina de Siloé. La ciudad salta de unas cinco hectáreas a unas cincuenta o sesenta: será la Jerusalén más extensa hasta Herodes." },
-    look: { en: ["The Broad Wall itself — seven metres thick, still standing shoulder-high in the Jewish Quarter.","Hezekiah's Tunnel: you can wade all 533 metres of it, from the Gihon Spring to the Pool of Siloam.","The Israelite Tower and the remains of a city gate at the north end of the Jewish Quarter excavations."], he: ["החומה הרחבה עצמה — בעובי שבעה מטרים, עומדת עד היום לגובה כתף ברובע היהודי.","נקבת חזקיהו: אפשר לעבור בה במים את כל 533 המטרים, ממעיין הגיחון עד בריכת השילוח.","מגדל ישראלי ושרידי שער עיר בקצה הצפוני של חפירות הרובע היהודי."], ar: ["«السور العريض» نفسه — سماكته سبعة أمتار، وما زال قائماً بارتفاع الكتف في حارة اليهود.","نفق حزقيا: يمكنك خوض طوله كاملاً ٥٣٣ متراً، من عين الجيحون إلى بركة سلوان.","«البرج الإسرائيلي» وبقايا بوابة مدينة في الطرف الشمالي من تنقيبات حارة اليهود."], es: ["El propio Muro Ancho: siete metros de grosor, aún en pie a la altura del hombro en el Barrio Judío.","El túnel de Ezequías: se pueden vadear sus 533 metros completos, del manantial de Guijón a la piscina de Siloé.","La Torre Israelita y los restos de una puerta de la ciudad al norte de las excavaciones del Barrio Judío."] },
-    disputed: { en: "The honest limits for this era. Fixed by excavation: the Broad Wall — drawn here at its real length and place in the Jewish Quarter, not stretched into a whole northern wall — plus the tunnel and the Siloam pool. Inferred from the Broad Wall: the rest of the northern line. Estimated: the wall along the western crest, the southern line above the Hinnom, and where it crossed the Tyropoeon. Unknown: how the Temple precinct was enclosed, so that stretch of wall is simply not drawn and the dashed rectangle is only the presumed platform.", he: "גבולות הידיעה בתקופה הזאת. מבוסס חפירות: החומה הרחבה — משורטטת כאן באורכה ובמקומה האמיתיים ברובע היהודי ולא נמתחת לחומה צפונית שלמה — וכן הנקבה ובריכת השילוח. נגזר מן החומה הרחבה: שאר הקו הצפוני. מוערך: החומה לאורך הרכס המערבי, הקו הדרומי שמעל גיא בן־הינום, ומקום החצייה של עמק גיא־התירופיון. לא ידוע: כיצד הוקף מכלול המקדש — ולכן קטע החומה הזה אינו משורטט כלל, והמלבן המקוטע הוא רק הרחבה המשוערת.", ar: "حدود المعرفة في هذا العصر. مثبت بالتنقيب: «السور العريض» — مرسوم هنا بطوله وموضعه الحقيقيين في حارة اليهود، لا ممدوداً ليصير سوراً شمالياً كاملاً — والنفق وبركة سلوان. مستنتج من السور العريض: بقية الخط الشمالي. مقدَّر: السور على الحرف الغربي، والخط الجنوبي فوق وادي جهنّم، وموضع عبور وادي التيروبيون. مجهول: كيف أُحيط مجمّع الهيكل، ولذلك لم يُرسم ذلك المقطع أصلاً، والمستطيل المتقطع هو الساحة المفترضة فقط.", es: "Los límites honestos de esta época. Confirmado por excavación: el Muro Ancho —dibujado aquí con su longitud y lugar reales en el Barrio Judío, no estirado hasta formar una muralla norte completa—, el túnel y la piscina de Siloé. Inferido del Muro Ancho: el resto de la línea norte. Estimado: la muralla por la cresta occidental, la línea sur sobre el Hinón y el punto de cruce del Tiropeón. Desconocido: cómo se cerraba el recinto del Templo, así que ese tramo no se dibuja y el rectángulo discontinuo es solo la explanada presunta." } },
-
-  { key: "return", tick: { en: "Return", he: "שיבת ציון", ar: "العودة", es: "Retorno" }, date: { en: "538–332 BCE", he: "538–332 לפנה\"ס", ar: "٥٣٨–٣٣٢ ق.م", es: "538–332 a.C." },
-    title: { en: "Return from exile — the small city of Ezra and Nehemiah", he: "שיבת ציון — העיר הקטנה של עזרא ונחמיה", ar: "العودة من المنفى — مدينة عزرا ونحميا الصغيرة", es: "El retorno del exilio: la pequeña ciudad de Esdras y Nehemías" },
-    years: { en: "538 – 332 BCE", he: "538–332 לפנה\"ס", ar: "٥٣٨ – ٣٣٢ ق.م", es: "538 – 332 a.C." },
-    body: { en: "The exiles come back to a city a fraction of its former size. The Western Hill and Mount Zion are abandoned and stay in ruins for the next four centuries; Jerusalem contracts back onto the old ridge and the Temple platform, with perhaps a few thousand people. Zerubbabel's modest Second Temple rises on the same rock in 516 BCE — no grand esplanade yet. Nehemiah rebuilds the wall in fifty-two days in 445 BCE, and because the Iron Age wall down the eastern slope had collapsed into rubble he builds his higher up the ridge. This is the one era where the city gets smaller at the moment of its restoration.", he: "הגולים חוזרים אל עיר שהיא שבריר מגודלה הקודם. הגבעה המערבית והר ציון נעזבים ונשארים בחורבנם ארבע מאות שנה; ירושלים מצטמצמת בחזרה אל הרכס הקדום ואל רחבת המקדש, ובה אולי אלפים בודדים של תושבים. בית שני צנוע של זרובבל קם על אותו הסלע בשנת 516 לפנה\"ס — בלי רחבה מפוארת. נחמיה בונה את החומה בחמישים ושניים יום בשנת 445 לפנה\"ס, ומכיוון שחומת תקופת הברזל שבמדרון המזרחי התמוטטה לגל אבנים, הוא בונה את שלו גבוה יותר על הרכס. זו התקופה האחת שבה העיר מתכנסת ומתקטנת דווקא ברגע שיקומה.", ar: "يعود المنفيّون إلى مدينة صارت جزءاً صغيراً من حجمها السابق. فقد هُجرت التلة الغربية وجبل صهيون وبقيتا خراباً أربعة قرون، وتقلّصت القدس إلى التلّة القديمة وساحة الهيكل، وفيها بضعة آلاف من السكان. وقام هيكل زربابل الثاني المتواضع على الصخرة ذاتها عام ٥١٦ ق.م — دون ساحة فخمة بعد. وأعاد نحميا بناء السور في اثنين وخمسين يوماً عام ٤٤٥ ق.م، ولأن سور العصر الحديدي على المنحدر الشرقي كان قد انهار أنقاضاً، بنى سوره أعلى على التلّة. وهذا هو العصر الوحيد الذي تصغر فيه المدينة في لحظة نهضتها.", es: "Los desterrados vuelven a una ciudad reducida a una fracción de lo que fue. La Colina Occidental y el Monte Sión quedan abandonados y en ruinas los cuatro siglos siguientes; Jerusalén se contrae de nuevo a la vieja colina y la explanada del Templo, con unos pocos miles de habitantes. El modesto Segundo Templo de Zorobabel se levanta sobre la misma roca en 516 a.C., aún sin gran esplanada. Nehemías reconstruye la muralla en cincuenta y dos días en 445 a.C., y como el muro de la Edad del Hierro de la ladera oriental se había derrumbado en escombros, construye el suyo más arriba en la colina. Es la única época en que la ciudad se hace más pequeña justo al restaurarse." },
-    look: { en: ["The wall segment at the top of the City of David's eastern slope, identified by its excavator as Nehemiah's.","The collapsed Iron Age terraces below it — the rubble Nehemiah's builders could not clear (Nehemiah 4:10).","Nothing at all on the Western Hill: four centuries of empty ground is itself the evidence."], he: ["קטע החומה בראש המדרון המזרחי של עיר דוד, שהחופרת זיהתה כחומת נחמיה.","המדרגות ההרוסות מתקופת הברזל שמתחתיו — גל האבנים שבוני נחמיה לא הצליחו לפנות (נחמיה ד', י').","דבר לא נותר על הגבעה המערבית: ארבע מאות שנים של קרקע ריקה הן עצמן העדות."], ar: ["مقطع السور في أعلى المنحدر الشرقي لتلّة مدينة داود، الذي نسبته الحافرة إلى نحميا.","المصاطب المنهارة من العصر الحديدي تحته — الأنقاض التي لم يستطع بنّاؤو نحميا إزالتها (نحميا ٤:١٠).","لا شيء على التلة الغربية: أربعة قرون من الأرض الخالية هي الدليل بذاته."], es: ["El tramo de muralla en lo alto de la ladera oriental de la Ciudad de David, atribuido por su excavadora a Nehemías.","Las terrazas derrumbadas de la Edad del Hierro debajo: los escombros que los constructores de Nehemías no pudieron retirar (Nehemías 4:10).","Nada en la Colina Occidental: cuatro siglos de terreno vacío son en sí la prueba."] },
-    disputed: { en: "The attribution of that wall segment to Nehemiah is contested, and the size of the post-exilic Temple platform is simply unknown — both are drawn here as best estimates.", he: "ייחוס אותו קטע חומה לנחמיה נתון בוויכוח, וגודלה של רחבת המקדש שלאחר הגלות אינו ידוע — שניהם משורטטים כאן כהערכה.", ar: "نسبة ذلك المقطع إلى نحميا موضع خلاف، وحجم ساحة الهيكل بعد المنفى غير معروف أصلاً — وقد رُسما هنا كتقدير.", es: "La atribución de ese tramo a Nehemías se discute, y el tamaño de la explanada posexílica es simplemente desconocido: aquí son estimaciones." } },
-
-  { key: "herod", tick: { en: "Jesus' time", he: "ימי ישוע", ar: "زمن المسيح", es: "Tiempo de Jesús" }, date: { en: "37 BCE–70 CE", he: "37 לפנה\"ס–70 לספירה", ar: "٣٧ ق.م–٧٠ م", es: "37 a.C.–70 d.C." },
-    title: { en: "Second Temple Jerusalem — the city Jesus saw", he: "ירושלים של הבית השני — העיר שישוע ראה", ar: "قدس الهيكل الثاني — المدينة التي رآها المسيح", es: "Jerusalén del Segundo Templo: la ciudad que vio Jesús" },
-    years: { en: "37 BCE – 70 CE", he: "37 לפנה\"ס – 70 לספירה", ar: "٣٧ ق.م – ٧٠ م", es: "37 a.C. – 70 d.C." },
-    body: { en: "This is the Jerusalem of the Gospels. Herod doubles the Temple platform to the size it still is — the retaining walls you touch at the Western Wall are his. The Upper City of priestly mansions covers the Western Hill, separated from the Temple by the deep Tyropoeon Valley and joined to it by monumental stairs at Wilson's and Robinson's Arches. And Golgotha, with its rock-cut tombs, lies in an abandoned quarry OUTSIDE the Second Wall. That is the single fact that unlocks the Old City: the Church of the Holy Sepulchre stands inside the walls today because the wall moved, not the tomb.", he: "זו ירושלים של הבשורות. הורדוס מכפיל את רחבת הר הבית לגודלה עד היום — הכתלים התומכים שאתם נוגעים בהם בכותל המערבי הם שלו. העיר העליונה, ובה בתי הכוהנים המפוארים, מכסה את הגבעה המערבית, מופרדת מן ההר בעמק גיא־התירופיון העמוק ומחוברת אליו במדרגות מונומנטליות בקמרון וילסון ובקמרון רובינסון. וגולגותא, עם קברי הסלע שבה, שוכנת במחצבה נטושה מחוץ לחומה השנייה. זו העובדה שפותחת את כל העיר העתיקה: כנסיית הקבר עומדת היום בתוך החומות מפני שהחומה זזה — לא הקבר.", ar: "هذه هي قدس الأناجيل. ضاعف هيرودس ساحة الهيكل إلى حجمها الباقي حتى اليوم — والجدران الاستنادية التي تلمسها عند الحائط الغربي من بنائه. وكانت المدينة العليا بقصور الكهنة تغطّي التلة الغربية، يفصلها عن الحرم وادي التيروبيون العميق وتصلها به سلالم ضخمة عند قوس ويلسون وقوس روبنسون. أما الجُلجُثة وقبورها المنقورة في الصخر فكانت في مقلع مهجور خارج السور الثاني. هذه هي الحقيقة الواحدة التي تفتح البلدة القديمة كلها: كنيسة القيامة تقف اليوم داخل الأسوار لأن السور هو الذي تحرّك، لا القبر.", es: "Esta es la Jerusalén de los Evangelios. Herodes duplica la explanada del Templo hasta el tamaño que conserva: los muros de contención que se tocan en el Muro Occidental son suyos. La Ciudad Alta, con las mansiones sacerdotales, cubre la Colina Occidental, separada del Templo por el profundo valle del Tiropeón y unida a él por escalinatas monumentales en los arcos de Wilson y Robinson. Y el Gólgota, con sus tumbas talladas en roca, queda en una cantera abandonada FUERA de la Segunda Muralla. Ese es el dato que abre toda la Ciudad Vieja: el Santo Sepulcro está hoy dentro de las murallas porque se movió la muralla, no la tumba." },
-    flag: { en: "The key layer for a Gospel itinerary — everything on this map is first-century.", he: "השכבה המרכזית למסלול על פי הבשורות — כל מה שבמפה הזו הוא מן המאה הראשונה.", ar: "الطبقة المفتاحية لمسار إنجيلي — كل ما في هذه الخريطة من القرن الأول.", es: "La capa clave para un itinerario evangélico: todo en este mapa es del siglo I." },
-    look: { en: ["Robinson's Arch and the collapsed stones still lying on the Herodian street where Roman soldiers threw them in 70 CE.","The Southern Steps, worn and uneven by design, where pilgrims entered the Temple courts.","Wilson's Arch, now deep inside the Western Wall tunnels, once carrying a bridge over the valley from the Upper City.","The Pool of Siloam's monumental steps — the pool of John 9, still being excavated."], he: ["קמרון רובינסון והאבנים שנפלו ועודן מוטלות על הרחוב ההרודיאני, שם השליכו אותן חיילי רומא בשנת 70.","מדרגות הכניסה הדרומיות, שחוקות ולא־אחידות בכוונה, שבהן עלו עולי הרגל אל הר הבית.","קמרון וילסון, כיום בעומק מנהרות הכותל, שנשא פעם גשר מעל העמק מן העיר העליונה.","מדרגות בריכת השילוח המונומנטליות — הבריכה של יוחנן ט', שנחשפת עד היום."], ar: ["قوس روبنسون والحجارة المنهارة التي ما زالت ملقاة على الشارع الهيرودي حيث ألقاها الجنود الرومان عام ٧٠م.","السلالم الجنوبية، المتفاوتة عن قصد، حيث كان الحجّاج يدخلون ساحات الهيكل.","قوس ويلسون، وهو اليوم في عمق أنفاق الحائط الغربي، وكان يحمل جسراً فوق الوادي من المدينة العليا.","سلالم بركة سلوان الضخمة — بركة إنجيل يوحنا ٩، ولا يزال التنقيب فيها جارياً."], es: ["El arco de Robinson y las piedras derrumbadas que siguen sobre la calle herodiana donde los soldados romanos las arrojaron en el 70 d.C.","Las Escalinatas del Sur, irregulares a propósito, por donde los peregrinos entraban al Templo.","El arco de Wilson, hoy en el fondo de los túneles del Muro, que sostenía un puente sobre el valle desde la Ciudad Alta.","Las escalinatas monumentales de la piscina de Siloé, la de Juan 9, aún en excavación."] },
-    disputed: { en: "The Second Wall's course is genuinely disputed — no continuous stretch has been found — but every proposed line leaves Golgotha outside the city. The Third Wall (dashed, far north) was built by Agrippa I in 41–44 CE, after Jesus' lifetime, and its identification is also contested.", he: "מסלול החומה השנייה נתון במחלוקת אמיתית — לא נמצא ממנה קטע רצוף — אך כל הצעה מותירה את גולגותא מחוץ לעיר. החומה השלישית (המקוטעת, בצפון הרחוק) נבנתה בידי אגריפס הראשון בשנים 41–44, אחרי ימי ישוע, וגם זיהויה נתון בוויכוח.", ar: "مسار السور الثاني موضع خلاف حقيقي — فلم يُعثر على أي مقطع متّصل منه — لكن كل خط مقترح يترك الجُلجُثة خارج المدينة. أما السور الثالث (المتقطع في الشمال البعيد) فبناه أغريباس الأول بين ٤١ و٤٤م، بعد زمن المسيح، وتحديد موضعه موضع جدل أيضاً.", es: "El trazado de la Segunda Muralla está realmente en disputa —no se ha hallado ningún tramo continuo—, pero toda propuesta deja el Gólgota fuera de la ciudad. La Tercera Muralla (discontinua, al norte) la construyó Agripa I en 41–44 d.C., después de la vida de Jesús, y su identificación también se discute." } },
-
-  { key: "aelia", tick: { en: "Roman", he: "רומית", ar: "رومانية", es: "Romana" }, date: { en: "135–324 CE", he: "135–324", ar: "١٣٥–٣٢٤ م", es: "135–324 d.C." },
-    title: { en: "Aelia Capitolina — the grid that survives", he: "איליה קפיטולינה — הרשת שנשארה", ar: "إيليا كابيتولينا — الشبكة الباقية", es: "Aelia Capitolina: la retícula que sobrevive" },
-    years: { en: "135 – 324 CE", he: "135–324 לספירה", ar: "١٣٥ – ٣٢٤ م", es: "135 – 324 d.C." },
-    body: { en: "After 70 CE the city is levelled; after 135 Hadrian rebuilds it as a Roman colony on the standard military plan. Two colonnaded cardines run south from the north gate; a decumanus runs east from the west gate to the Temple Mount. This is the single most useful thing a visitor can know: the souq you get lost in is not a medieval accident, it is a Roman grid. Khan el-Zeit and El-Wad are the two cardines; David Street and Chain Street are the decumanus. The southern hills — the City of David, Mount Zion — are left outside, and stay outside from now on.", he: "אחרי שנת 70 העיר מיושרת עם הקרקע; אחרי 135 מקים אדריאנוס קולוניה רומית לפי התכנית הצבאית המקובלת. שני רחובות עמודים (קרדו) יורדים דרומה מן השער הצפוני, ורחוב רוחב (דקומנוס) עובר מזרחה מן השער המערבי אל הר הבית. זה הדבר המועיל ביותר שמבקר יכול לדעת: השוק שאתם נבלעים בו איננו תוצאה מקרית של ימי הביניים אלא רשת רומית. חאן א־זית ואל־ואד הם שני הקרדו; רחוב דוד ורחוב השלשלת הם הדקומנוס. הגבעות הדרומיות — עיר דוד והר ציון — נותרות בחוץ, ומכאן ואילך יישארו בחוץ.", ar: "بعد عام ٧٠م سُوّيت المدينة بالأرض، وبعد ١٣٥ أعاد هدريان بناءها كمستعمرة رومانية على المخطط العسكري المعتاد: شارعان معمّدان (كاردو) ينزلان جنوباً من الباب الشمالي، وشارع عرضي (ديكومانوس) يمتدّ شرقاً من الباب الغربي إلى الحرم. وهذه أنفع معلومة للزائر: السوق الذي تتوه فيه ليس فوضى من العصور الوسطى بل شبكة رومانية. خان الزيت والواد هما الكاردوان، وشارع داود وطريق السلسلة هما الديكومانوس. أما التلال الجنوبية — تلّة سلوان وجبل صهيون — فبقيت خارج السور، وستبقى خارجه من الآن.", es: "Tras el 70 la ciudad queda arrasada; tras el 135 Adriano la refunda como colonia romana con el plan militar estándar. Dos cardos con columnatas bajan desde la puerta norte; un decumano va desde la puerta oeste al Monte del Templo. Este es el dato más útil para un visitante: el souq en el que se pierde no es un desorden medieval, es una retícula romana. Khan el-Zeit y El-Wad son los dos cardos; la calle David y la calle de la Cadena son el decumano. Las colinas del sur —Ciudad de David, Monte Sión— quedan fuera, y fuera se quedan." },
-    look: { en: ["The Roman paving and column bases of the Cardo, exposed under the Jewish Quarter.","Hadrian's triple gate under today's Damascus Gate — you can walk down to the Roman threshold.","The Lithostrotos paving stones beneath the Sisters of Zion convent, Roman, not the pavement of Pilate's trial."], he: ["מרצפות הקרדו ובסיסי העמודים הרומיים, חשופים מתחת לרובע היהודי.","שער הכניסה המשולש של אדריאנוס מתחת לשער שכם של היום — אפשר לירד עד המפתן הרומי.","אבני הריצוף של הליתוסטרוטוס מתחת למשכן אחיות ציון — רומיות, ולא רצפת משפטו של פילטוס."], ar: ["بلاط الكاردو الروماني وقواعد أعمدته، المكشوفة تحت حارة اليهود.","بوابة هدريان الثلاثية تحت باب العمود الحالي — ويمكنك النزول إلى العتبة الرومانية.","حجارة الليثوستروتوس تحت دير أخوات صهيون: رومانية، وليست بلاط محاكمة بيلاطس."], es: ["El pavimento romano y las basas de columna del Cardo, expuestos bajo el Barrio Judío.","La puerta triple de Adriano bajo la actual Puerta de Damasco: se puede bajar al umbral romano.","Las losas del Litóstrotos bajo el convento de las Hermanas de Sión: romanas, no el pavimento del juicio de Pilato."] } },
-
-  { key: "byz", tick: { en: "Byzantine", he: "ביזנטית", ar: "بيزنطية", es: "Bizantina" }, date: { en: "324–638 CE", he: "324–638", ar: "٣٢٤–٦٣٨ م", es: "324–638 d.C." },
-    title: { en: "Byzantine Jerusalem — the Madaba Map city", he: "ירושלים הביזנטית — העיר של מפת מידבא", ar: "القدس البيزنطية — مدينة خريطة مادبا", es: "Jerusalén bizantina: la ciudad del mapa de Madaba" },
-    years: { en: "324 – 638 CE", he: "324–638 לספירה", ar: "٣٢٤ – ٦٣٨ م", es: "324 – 638 d.C." },
-    body: { en: "Constantine's engineers cut the hillside away around the tomb, quarry Golgotha into a free-standing rock, and raise the first Church of the Holy Sepulchre facing the Cardo. Two centuries later Justinian extends the Cardo south to the vast Nea Church. The Madaba mosaic map, made about 560, shows this exact city from above: colonnaded main street, two great churches — and the Temple Mount left pointedly empty.", he: "מהנדסיו של קונסטנטינוס חוצבים את המדרון סביב הקבר, מבודדים את גולגותא כסלע עומד לעצמו, ומקימים את כנסיית הקבר הראשונה כשפניה אל הקרדו. מאתיים שנה אחר כך מאריך יוסטיניאנוס את הקרדו דרומה עד כנסיית הנֵאָה העצומה. מפת מידבא, פסיפס משנת 560 בקירוב, מציגה בדיוק את העיר הזאת ממעל: רחוב עמודים ראשי, שתי כנסיות גדולות — והר הבית מושאר ריק במופגן.", ar: "قطع مهندسو قسطنطين المنحدر حول القبر، ونحتوا الجُلجُثة صخرةً قائمة بذاتها، وأقاموا أول كنيسة للقيامة تطلّ على الكاردو. وبعد قرنين مدّ يوستنيانوس الكاردو جنوباً إلى كنيسة «النيّا» الهائلة. وخريطة مادبا الفسيفسائية، المصنوعة نحو ٥٦٠م، تُظهر هذه المدينة بالضبط من الأعلى: شارع رئيسي معمّد، وكنيستان كبيرتان — والحرم متروك خالياً بتعمّد.", es: "Los ingenieros de Constantino recortan la ladera en torno a la tumba, tallan el Gólgota como roca aislada y levantan la primera basílica del Santo Sepulcro frente al Cardo. Dos siglos después Justiniano prolonga el Cardo al sur hasta la enorme Nea. El mapa mosaico de Madaba, hacia 560, muestra exactamente esta ciudad desde arriba: calle principal con columnatas, dos grandes iglesias y el Monte del Templo deliberadamente vacío." },
-    look: { en: ["The rock of Golgotha, still standing inside the church, its quarried face visible in the Chapel of Adam.","Justinian's Nea Church foundations and cistern at the south edge of the Jewish Quarter.","The Madaba Map itself — worth showing your group before you walk in through the Jaffa Gate."], he: ["סלע גולגותא, העומד עד היום בתוך הכנסייה, וחזיתו החצובה נראית בקפלת אדם.","יסודות כנסיית הנֵאָה של יוסטיניאנוס והבור שלה בקצה הדרומי של הרובע היהודי.","מפת מידבא עצמה — כדאי להראות אותה לקבוצה לפני הכניסה בשער יפו."], ar: ["صخرة الجُلجُثة، ما زالت قائمة داخل الكنيسة، ويظهر وجهها المنحوت في كنيسة آدم.","أساسات كنيسة «النيّا» اليوستنيانية وصهريجها في الحدّ الجنوبي لحارة اليهود.","خريطة مادبا نفسها — يُستحسن عرضها على المجموعة قبل الدخول من باب الخليل."], es: ["La roca del Gólgota, aún en pie dentro de la iglesia, con su cara cortada visible en la capilla de Adán.","Los cimientos y la cisterna de la Nea de Justiniano, al sur del Barrio Judío.","El propio mapa de Madaba: conviene mostrarlo al grupo antes de entrar por la Puerta de Jafa."] } },
-
-  { key: "muslim", tick: { en: "Early Muslim", he: "מוסלמית קדומה", ar: "إسلامية مبكرة", es: "Islámica temprana" }, date: { en: "638–1099", he: "638–1099", ar: "٦٣٨–١٠٩٩", es: "638–1099" },
-    title: { en: "Early Muslim Jerusalem — the Haram takes shape", he: "ירושלים המוסלמית הקדומה — הַחרם מתעצב", ar: "القدس الإسلامية المبكرة — تكوّن الحرم", es: "Jerusalén islámica temprana: nace el Haram" },
-    years: { en: "638 – 1099", he: "638–1099", ar: "٦٣٨ – ١٠٩٩", es: "638 – 1099" },
-    body: { en: "Jerusalem surrenders in 638, and the Temple Mount — deliberately left empty and ruined since 70 CE — becomes the centre of the city again. The Dome of the Rock is finished in 691, al-Aqsa about 705, and an Umayyad palace quarter rises immediately south of the platform. The Roman-Byzantine street grid survives intact, but the weight of the city shifts east and south toward the Haram. This is the era that produced the skyline your group photographs from the Mount of Olives: the golden dome is Umayyad, not biblical, and it stands where the Temple stood.", he: "ירושלים נכנעת בשנת 638, והר הבית — שהושאר ריק והרוס בכוונה מאז שנת 70 — חוזר להיות מרכז העיר. כובד הסלע נשלם בשנת 691, אל־אקצא בערך ב־705, ורובע ארמונות אומיי קם מיד מדרום לרחבה. מערך הרחובות הרומי־ביזנטי נשמר בשלמותו, אך מרכז הכובד של העיר נע מזרחה ודרומה, אל הַחרם. זו התקופה שיצרה את קו הרקיע שהקבוצה שלכם מצלמת מהר הזיתים: הכיפה המוזהבת היא אומיית, לא מקראית, והיא עומדת במקום שבו עמד המקדש.", ar: "استُلمت القدس عام ٦٣٨، فعاد الحرم — الذي تُرك خالياً خراباً بتعمّد منذ عام ٧٠م — مركزاً للمدينة من جديد. أُنجزت قبة الصخرة عام ٦٩١، والمسجد الأقصى نحو ٧٠٥، وقام حيّ القصور الأموية جنوب الساحة مباشرة. وبقيت شبكة الشوارع الرومانية–البيزنطية سليمة، لكن ثقل المدينة انتقل شرقاً وجنوباً نحو الحرم. هذا هو العصر الذي أنتج المنظر الذي تصوّره مجموعتك من جبل الزيتون: القبة الذهبية أموية لا توراتية، وهي قائمة حيث كان الهيكل.", es: "Jerusalén se rinde en 638 y el Monte del Templo —dejado vacío y en ruinas a propósito desde el 70 d.C.— vuelve a ser el centro de la ciudad. La Cúpula de la Roca se termina en 691, al-Aqsa hacia 705, y un barrio palaciego omeya se levanta justo al sur de la explanada. La retícula romano-bizantina sobrevive intacta, pero el peso de la ciudad se desplaza al este y al sur, hacia el Haram. Esta es la época que produjo el perfil que su grupo fotografía desde el Monte de los Olivos: la cúpula dorada es omeya, no bíblica, y se alza donde estuvo el Templo." },
-    look: { en: ["The Dome of the Rock itself — an Umayyad building of 691, the oldest surviving Islamic monument in the world.","The excavated Umayyad palaces and administrative buildings in the Ophel park, immediately south of the Haram.","The Double Gate and its stairs in the southern wall: Herodian courses below, Umayyad work above — one wall, two eras."], he: ["כובד הסלע עצמו — מבנה אומיי משנת 691, האנדרטה האסלאמית העתיקה ביותר בעולם שנשתמרה.","ארמונות אומיים ומבני מִנהל שנחשפו בגן העופל, מיד מדרום לַחרם.","שער כפול ומדרגותיו בחומה הדרומית: נדבכים הרודיאניים מלמטה, בנייה אומיית מלמעלה — חומה אחת, שתי תקופות."], ar: ["قبة الصخرة نفسها — بناء أموي من عام ٦٩١، وأقدم أثر إسلامي باقٍ في العالم.","القصور الأموية والمباني الإدارية المكشوفة في حديقة العوفل، جنوب الحرم مباشرة.","الباب المزدوج وسلالمه في السور الجنوبي: مداميك هيرودية أسفل وعمل أموي أعلى — سور واحد وعصران."], es: ["La propia Cúpula de la Roca: edificio omeya de 691, el monumento islámico más antiguo que se conserva en el mundo.","Los palacios y edificios administrativos omeyas excavados en el parque del Ofel, justo al sur del Haram.","La Puerta Doble y sus escaleras en el muro sur: hiladas herodianas abajo, obra omeya arriba — un muro, dos épocas."] } },
-
-  { key: "crusader", tick: { en: "Crusader", he: "צלבנית", ar: "صليبية", es: "Cruzada" }, date: { en: "1099–1187", he: "1099–1187", ar: "١٠٩٩–١١٨٧", es: "1099–1187" },
-    title: { en: "Crusader Jerusalem — the quarters take shape", he: "ירושלים הצלבנית — הרבעים מתגבשים", ar: "القدس الصليبية — تتشكّل الحارات", es: "Jerusalén cruzada: nacen los barrios" },
-    years: { en: "1099 – 1187", he: "1099–1187", ar: "١٠٩٩ – ١١٨٧", es: "1099 – 1187" },
-    body: { en: "The Crusaders inherit the Roman-Byzantine street plan unchanged and organise the city into quarters — the same four-quarter division tourists are handed on a map today. They gather Constantine's separate shrines under a single Romanesque roof: the church you walk into is essentially their building. The Dome of the Rock becomes Templum Domini, al-Aqsa becomes the Templars' headquarters, and the covered markets of the Muristan are laid out.", he: "הצלבנים יורשים את תכנית הרחובות הרומית־ביזנטית כמעט ללא שינוי ומחלקים את העיר לרבעים — אותה חלוקה לארבעה רבעים שמקבלים תיירים במפה עד היום. הם מאחדים את המקומות הקדושים הנפרדים של קונסטנטינוס תחת גג רומנסקי אחד: הכנסייה שאתם נכנסים אליה היא בעיקרה בניין שלהם. כובד הסלע הופך ל־Templum Domini, אל־אקצא הופך למפקדת הטמפלרים, והשווקים המקורים של המוריסטן נסללים.", ar: "ورث الصليبيون المخطط الروماني–البيزنطي للشوارع كما هو، ونظّموا المدينة في حارات — وهي القسمة الرباعية ذاتها التي يتلقّاها السائح على الخريطة اليوم. وجمعوا مقامات قسطنطين المنفصلة تحت سقف رومانسكي واحد: فالكنيسة التي تدخلها هي في جوهرها بناؤهم. وصارت قبة الصخرة «هيكل الرب»، والمسجد الأقصى مقرّاً لفرسان الهيكل، وخُطّت أسواق المورستان المسقوفة.", es: "Los cruzados heredan intacto el plan viario romano-bizantino y organizan la ciudad en barrios: la misma división en cuatro que hoy se entrega al turista en un plano. Reúnen los santuarios separados de Constantino bajo un solo techo románico: la iglesia en la que usted entra es esencialmente su edificio. La Cúpula de la Roca pasa a ser Templum Domini, al-Aqsa el cuartel de los templarios, y se trazan los mercados cubiertos del Muristán." },
-    look: { en: ["The Holy Sepulchre's south façade and bell tower — twelfth-century work, largely unaltered.","The three parallel vaulted market streets south of David Street, still trading.","St Anne's Church by the Pool of Bethesda, the purest Crusader interior in the city."], he: ["החזית הדרומית של כנסיית הקבר ומגדל הפעמונים — עבודה מן המאה השתים־עשרה, כמעט ללא שינוי.","שלושת רחובות השוק המקומרים המקבילים מדרום לרחוב דוד, שסוחרים בהם עד היום.","כנסיית סנטה אנה שליד בריכת בית־חסדא, הפנים הצלבני הצרוף ביותר בעיר."], ar: ["الواجهة الجنوبية لكنيسة القيامة وبرج الأجراس — عمل من القرن الثاني عشر، شبه سليم.","شوارع السوق المعقودة الثلاثة المتوازية جنوب شارع داود، وما زالت عامرة بالتجارة.","كنيسة القديسة حنة عند بركة بيت حسدا، أنقى داخل صليبي في المدينة."], es: ["La fachada sur del Santo Sepulcro y su campanario: obra del siglo XII casi intacta.","Las tres calles-mercado abovedadas paralelas al sur de la calle David, aún comerciales.","Santa Ana, junto a la piscina de Betesda: el interior cruzado más puro de la ciudad."] } },
-
-  { key: "mamluk", tick: { en: "Mamluk", he: "ממלוכית", ar: "مملوكية", es: "Mameluca" }, date: { en: "1250–1517", he: "1250–1517", ar: "١٢٥٠–١٥١٧", es: "1250–1517" },
-    title: { en: "Mamluk Jerusalem — where the maze comes from", he: "ירושלים הממלוכית — מכאן בא המבוך", ar: "القدس المملوكية — من هنا جاءت المتاهة", es: "Jerusalén mameluca: de aquí viene el laberinto" },
-    years: { en: "1250 – 1517", he: "1250–1517", ar: "١٢٥٠ – ١٥١٧", es: "1250 – 1517" },
-    body: { en: "Nothing about the street plan changes; everything about the texture does. The Mamluks pack the approaches to the Haram with madrasas, pilgrim hostels, tombs and markets, stacked two and three storeys over the Roman line and roofed across it. This is the layer that makes visitors say 'maze': the grid is still under your feet, but it has been vaulted over, built into and narrowed for three centuries. If a street feels like a tunnel, you are in a Mamluk street.", he: "בתכנית הרחובות שום דבר לא משתנה; במרקם — הכול. הממלוכים דוחסים את הדרכים אל הַחרם במדרסות, אכסניות לעולי רגל, מקברים ושווקים, בשתיים ושלוש קומות מעל הקו הרומי ובקירוי מעליו. זו השכבה שגורמת למבקרים לומר 'מבוך': הרשת עודנה תחת רגליכם, אך היא קורתה, נבנתה והוצרה במשך שלוש מאות שנה. אם רחוב מרגיש כמו מנהרה — אתם ברחוב ממלוכי.", ar: "لم يتغيّر شيء في مخطط الشوارع، وتغيّر كل شيء في نسيجها. حشد المماليك مداخل الحرم بالمدارس وأربطة الحجّاج والتُّرَب والأسواق، طابقين وثلاثة فوق الخط الروماني ومسقوفة عبره. هذه هي الطبقة التي تجعل الزائر يقول «متاهة»: الشبكة لا تزال تحت قدميك، لكنها عُقدت وبُني فيها وضُيّقت على مدى ثلاثة قرون. فإن أحسست أن الشارع نفق، فأنت في شارع مملوكي.", es: "Nada cambia en el plano viario; todo cambia en la textura. Los mamelucos abarrotan los accesos al Haram con madrasas, hospederías de peregrinos, mausoleos y mercados, apilados en dos y tres alturas sobre la línea romana y techados por encima. Esta es la capa que hace decir «laberinto»: la retícula sigue bajo sus pies, pero durante tres siglos fue abovedada, ocupada y estrechada. Si una calle parece un túnel, es una calle mameluca." },
-    look: { en: ["Chain Street (Tariq Bab al-Silsila): a continuous run of Mamluk façades with striped masonry and stalactite portals.","The Ashrafiyya and Tankiziyya madrasas built right up against the Haram's western edge.","Ablutions fountains and sabils still set into the walls along the approaches."], he: ["רחוב השלשלת (טריק באב א־סילסילה): רצף חזיתות ממלוכיות עם אבן בפסים ופתחי מוקרנס.","המדרסות אל־אשרפייה ואל־תנכיזייה, שנבנו ממש אל קצה הַחרם המערבי.","סבילים ומזרקות רחצה שעודם משוקעים בקירות לאורך הדרכים אל ההר."], ar: ["طريق باب السلسلة: تتابع متّصل من الواجهات المملوكية بالحجر المشهّر والمداخل المقرنصة.","المدرستان الأشرفية والتنكزية المبنيّتان ملاصقتين للحدّ الغربي للحرم.","الأسبلة ومياضئ الوضوء التي لا تزال قائمة في الجدران على مسارب الحرم."], es: ["La calle de la Cadena (Tariq Bab al-Silsila): una sucesión continua de fachadas mamelucas con sillería rayada y portadas de mocárabes.","Las madrasas Ashrafiyya y Tankiziyya, adosadas al borde occidental del Haram.","Sabiles y fuentes de ablución todavía embutidos en los muros de los accesos."] } },
-
-  { key: "ottoman", tick: { en: "Ottoman", he: "עות'מאנית", ar: "عثمانية", es: "Otomana" }, date: { en: "1538", he: "1538", ar: "١٥٣٨", es: "1538" },
-    title: { en: "Suleiman's walls, 1538 — the walls everyone assumes are ancient", he: "חומות סולימאן, 1538 — החומות שכולם חושבים שהן עתיקות", ar: "أسوار سليمان، ١٥٣٨ — الأسوار التي يظنّها الجميع قديمة", es: "Las murallas de Solimán, 1538: las que todos creen antiguas" },
-    years: { en: "1538 – 1917", he: "1538–1917", ar: "١٥٣٨ – ١٩١٧", es: "1538 – 1917" },
-    body: { en: "Suleiman the Magnificent rebuilds the circuit — and this is the crux of the whole confusion. These walls are less than 500 years old, and they follow the Roman-Byzantine line, not the biblical one. That means they deliberately leave out the oldest Jerusalem there is: the City of David, the Gihon Spring, the Pool of Siloam and Mount Zion all end up outside the gates. A group that only walks inside these walls never sets foot in the city of David, Hezekiah, or the Siloam of John 9.", he: "סולימאן המפואר בונה מחדש את מעגל החומות — וכאן שורש כל הבלבול. החומות האלה צעירות מ־500 שנה, והן הולכות בקו הרומי־ביזנטי ולא בקו המקראי. משמע: הן משאירות בכוונה בחוץ את ירושלים הקדומה ביותר שיש — עיר דוד, מעיין הגיחון, בריכת השילוח והר ציון כולם מחוץ לשערים. קבוצה שמהלכת רק בתוך החומות האלה לא דורכת מעולם בעיר של דוד, של חזקיהו, או בשילוח של יוחנן ט'.", ar: "أعاد سليمان القانوني بناء دائرة الأسوار — وهنا لبّ الالتباس كله. هذه الأسوار عمرها أقل من خمسة قرون، وهي تتبع الخط الروماني–البيزنطي لا الخط التوراتي. أي أنها تترك خارجها أقدم قدس على الإطلاق: تلّة مدينة داود وعين الجيحون وبركة سلوان وجبل صهيون كلها خارج الأبواب. والمجموعة التي تتنقّل داخل هذه الأسوار فقط لا تطأ قدماها مدينة داود ولا حزقيا ولا سلوان الإنجيلية.", es: "Solimán el Magnífico reconstruye el recinto, y aquí está el nudo de toda la confusión. Estas murallas tienen menos de 500 años y siguen la línea romano-bizantina, no la bíblica. Es decir: dejan fuera a propósito la Jerusalén más antigua que existe: la Ciudad de David, el manantial de Guijón, la piscina de Siloé y el Monte Sión quedan todos extramuros. Un grupo que solo camina dentro de estas murallas nunca pisa la ciudad de David, de Ezequías, ni el Siloé de Juan 9." },
-    look: { en: ["Suleiman's dedicatory inscriptions over the Jaffa and Damascus Gates, dated by the Muslim year.","The seam in the eastern wall south of the Golden Gate, where Ottoman masonry sits on Herodian courses.","The ramparts walk — the fastest way to show a group what the walls include and, crucially, exclude."], he: ["כתובות ההקדשה של סולימאן מעל שער יפו ושער שכם, מתוארכות לשנה המוסלמית.","התפר בחומה המזרחית מדרום לשער הרחמים, שם בנייה עות'מאנית יושבת על נדבכים הרודיאניים.","הטיילת על החומות — הדרך המהירה ביותר להראות לקבוצה מה החומות מכניסות ומה, בעיקר, הן משאירות בחוץ."], ar: ["نقوش سليمان التذكارية فوق باب الخليل وباب العمود، مؤرَّخة بالتقويم الهجري.","الخط الفاصل في السور الشرقي جنوب باب الرحمة، حيث تجلس البناية العثمانية على مداميك هيرودية.","المسير على الأسوار — أسرع طريقة لتُبيّن لمجموعتك ما تُدخله الأسوار وما تُخرجه، والأهم ما تُخرجه."], es: ["Las inscripciones dedicatorias de Solimán sobre las puertas de Jafa y Damasco, fechadas en año musulmán.","La costura del muro oriental al sur de la Puerta Dorada, donde la sillería otomana se asienta sobre hiladas herodianas.","El paseo por las murallas: la forma más rápida de mostrar al grupo qué incluyen y, sobre todo, qué excluyen."] } },
-
-  { key: "today", tick: { en: "Today", he: "היום", ar: "اليوم", es: "Hoy" }, date: { en: "now", he: "עכשיו", ar: "الآن", es: "ahora" },
-    title: { en: "The Old City today — everything at once", he: "העיר העתיקה היום — הכול בבת אחת", ar: "البلدة القديمة اليوم — كل شيء في وقت واحد", es: "La Ciudad Vieja hoy: todo a la vez" },
-    years: { en: "1917 – present", he: "1917 – ימינו", ar: "١٩١٧ – الآن", es: "1917 – hoy" },
-    body: { en: "What makes the Old City hard to read is that nothing was ever demolished flat — it was built over. Roman paving lies under Crusader vaults under Mamluk façades under twentieth-century reconstruction, and the ground has risen by up to twelve metres. The Tyropoeon Valley is buried, which is why the Western Wall plaza feels level. Set this layer against the Herodian one and the geography snaps into place: the walls shrank away from the south, the valley filled, the streets stayed exactly where Rome put them.", he: "מה שמקשה לקרוא את העיר העתיקה הוא שדבר לא נהרס עד היסוד — הכול נבנה מעל. ריצוף רומי מתחת לקמרונות צלבניים מתחת לחזיתות ממלוכיות מתחת לשיקום מן המאה העשרים, ופני הקרקע עלו עד שנים־עשר מטרים. עמק גיא־התירופיון קבור, ולכן רחבת הכותל מרגישה שטוחה. העמידו את השכבה הזאת מול השכבה ההרודיאנית והגיאוגרפיה מתיישבת: החומות נסוגו מן הדרום, העמק התמלא, והרחובות נשארו בדיוק במקום שרומא הניחה אותם.", ar: "ما يجعل قراءة البلدة القديمة صعبة أنّ شيئاً لم يُهدم إلى الأرض قط، بل بُني فوقه. بلاط روماني تحت عقود صليبية تحت واجهات مملوكية تحت ترميم من القرن العشرين، وقد ارتفع مستوى الأرض حتى اثني عشر متراً. وادي التيروبيون مدفون، ولهذا تبدو ساحة الحائط الغربي مستوية. قارن هذه الطبقة بالطبقة الهيرودية فتستقيم الجغرافيا: انسحبت الأسوار عن الجنوب، وامتلأ الوادي، وبقيت الشوارع في موضعها الذي وضعته روما.", es: "Lo que hace difícil leer la Ciudad Vieja es que nada se arrasó del todo: se construyó encima. Pavimento romano bajo bóvedas cruzadas bajo fachadas mamelucas bajo reconstrucción del siglo XX, y el suelo ha subido hasta doce metros. El valle del Tiropeón está enterrado, y por eso la plaza del Muro parece llana. Contraste esta capa con la herodiana y la geografía encaja: las murallas se retiraron del sur, el valle se rellenó y las calles siguen donde Roma las puso." },
-    look: { en: ["Stand on the Western Wall plaza and point down, not up: the Herodian street is about twelve metres below the paving.","Walk David Street and Chain Street end to end — you have just walked a Roman decumanus.","Leave by the Dung Gate and keep going downhill: only then are you entering the original Jerusalem."], he: ["עמדו ברחבת הכותל והצביעו למטה, לא למעלה: הרחוב ההרודיאני נמצא כשנים־עשר מטרים מתחת לריצוף.","הלכו את רחוב דוד ורחוב השלשלת מקצה לקצה — הרגע הלכתם בדקומנוס רומי.","צאו בשער האשפות והמשיכו במורד: רק אז אתם נכנסים לירושלים המקורית."], ar: ["قف في ساحة الحائط الغربي وأشِر إلى الأسفل لا إلى الأعلى: الشارع الهيرودي نحو اثني عشر متراً تحت البلاط.","امشِ شارع داود وطريق السلسلة من أوّلهما إلى آخرهما — فقد مشيت للتوّ في ديكومانوس روماني.","اخرج من باب المغاربة وواصل النزول: عندها فقط تدخل القدس الأصلية."], es: ["Párese en la plaza del Muro y señale hacia abajo, no hacia arriba: la calle herodiana está unos doce metros bajo el pavimento.","Recorra la calle David y la de la Cadena de punta a punta: acaba de caminar un decumano romano.","Salga por la Puerta de los Basureros y siga cuesta abajo: solo entonces entra en la Jerusalén original."] } }
+  {
+    "key": "canaan",
+    "tick": {
+      "en": "Canaanite"
+    },
+    "date": {
+      "en": "1800 BC"
+    },
+    "title": {
+      "en": "Canaanite Jerusalem — the City of David ridge"
+    },
+    "years": {
+      "en": "c. 1800 – 1000 BC"
+    },
+    "body": {
+      "en": "Jerusalem begins entirely outside today's walls. The whole city — about five hectares, smaller than the Temple Mount platform — sits on a narrow spur running south from the Mount, chosen for one reason: the Gihon Spring, the only permanent water in the region. Most of the area inside the Ottoman gates you walk through today was bare hillside and quarry in this period."
+    },
+    "look": {
+      "en": [
+        "The Gihon Spring and the Middle Bronze spring tower, reached by stairs below the City of David visitor centre.",
+        "Warren's Shaft — a natural shaft within the city's water system; its use for drawing water in this period is disputed.",
+        "Massive Canaanite fortification blocks, some over three metres thick, on the east slope above the Kidron."
+      ]
+    }
+  },
+  {
+    "key": "david",
+    "tick": {
+      "en": "David"
+    },
+    "date": {
+      "en": "1000–930 BC"
+    },
+    "title": {
+      "en": "David's city and Solomon's Temple"
+    },
+    "years": {
+      "en": "c. 1000 – 930 BC"
+    },
+    "body": {
+      "en": "David takes the Jebusite stronghold and it stays almost exactly the size it already was: a fortified ridge of about five hectares, entirely outside today's walls. He builds no temple. He buys Araunah's threshing floor on the rock to the north — at that moment still open ground beyond the city. It is Solomon who builds the Temple and his palace complex up there, and who ties them to the old town across the saddle called the Millo. For the whole of David's reign, everything your group calls the Old City is empty hillside."
+    },
+    "look": {
+      "en": [
+        "The Stepped Stone Structure on the eastern slope — the huge terracing usually identified with the Millo of 2 Samuel 5:9.",
+        "The Large Stone Structure above it, which its excavator identified as David's palace. The identification is contested.",
+        "Warren's Shaft and the Gihon Spring — the water system traditionally linked to David's men entering the city."
+      ]
+    },
+    "disputed": {
+      "en": "Very little here is settled. The Large Stone Structure's identification as David's palace is actively contested, the extent of Solomon's platform is unknown, and no wall of David or Solomon has been securely identified on the western or northern sides. Read the outline as the ridge the city occupied, not as a surveyed wall line."
+    }
+  },
+  {
+    "key": "hezekiah",
+    "tick": {
+      "en": "Hezekiah"
+    },
+    "date": {
+      "en": "715–686 BC"
+    },
+    "title": {
+      "en": "Hezekiah's Jerusalem — the city doubles"
+    },
+    "years": {
+      "en": "c. 715 – 686 BC"
+    },
+    "body": {
+      "en": "Refugees from the fallen northern kingdom pour in and Jerusalem spills west for the first time, across the Tyropoeon Valley and onto the Western Hill. Hezekiah throws a wall seven metres thick around the new quarter — the Broad Wall you can stand beside in the Jewish Quarter — producing a single continuous circuit that holds the Western Hill, the old ridge and the Temple platform together. Facing Sennacherib's siege in 701 BC he also cuts a 533-metre tunnel through solid rock to bring the Gihon's water inside the walls, to the Pool of Siloam. The city jumps from about five hectares to something on the order of fifty or sixty — the largest Jerusalem will be until Herod."
+    },
+    "look": {
+      "en": [
+        "The Broad Wall itself — seven metres thick, still standing shoulder-high in the Jewish Quarter.",
+        "Hezekiah's Tunnel: you can wade all 533 metres of it, from the Gihon Spring to the Pool of Siloam.",
+        "The Israelite Tower and the remains of a city gate at the north end of the Jewish Quarter excavations."
+      ]
+    },
+    "disputed": {
+      "en": "The honest limits for this era. Fixed by excavation: the Broad Wall — drawn here at its real length and place in the Jewish Quarter, not stretched into a whole northern wall — plus the tunnel and the Siloam pool. Inferred from the Broad Wall: the rest of the northern line. Estimated: the wall along the western crest, the southern line above the Hinnom, and where it crossed the Tyropoeon. Unknown: how the Temple precinct was enclosed, so that stretch of wall is simply not drawn and the dashed rectangle is only the presumed platform."
+    }
+  },
+  {
+    "key": "return",
+    "tick": {
+      "en": "Return"
+    },
+    "date": {
+      "en": "538–332 BC"
+    },
+    "title": {
+      "en": "Return from exile — the small city of Ezra and Nehemiah"
+    },
+    "years": {
+      "en": "538 – 332 BC"
+    },
+    "body": {
+      "en": "The exiles come back to a city a fraction of its former size. The Western Hill and Mount Zion are abandoned and stay in ruins for the next four centuries; Jerusalem contracts back onto the old ridge and the Temple platform, with perhaps a few thousand people. Zerubbabel's modest Second Temple rises on the same rock in 516 BC — no grand esplanade yet. Nehemiah rebuilds the wall in fifty-two days in 445 BC, and because the Iron Age wall down the eastern slope had collapsed into rubble he builds his higher up the ridge. This is the one era where the city gets smaller at the moment of its restoration."
+    },
+    "look": {
+      "en": [
+        "The wall segment at the top of the City of David's eastern slope, identified by its excavator as Nehemiah's.",
+        "The collapsed Iron Age terraces below it — the rubble Nehemiah's builders could not clear (Nehemiah 4:10).",
+        "Nothing at all on the Western Hill: four centuries of empty ground is itself the evidence."
+      ]
+    },
+    "disputed": {
+      "en": "The attribution of that wall segment to Nehemiah is contested, and the size of the post-exilic Temple platform is simply unknown — both are drawn here as best estimates."
+    }
+  },
+  {
+    "key": "hasmonean",
+    "tick": {
+      "en": "Maccabees"
+    },
+    "date": {
+      "en": "167–37 BC"
+    },
+    "title": {
+      "en": "Maccabean and Hasmonean Jerusalem — the four hundred years usually skipped"
+    },
+    "years": {
+      "en": "167 – 37 BC"
+    },
+    "body": {
+      "en": "Between Nehemiah's small city and the one Jesus saw lies the period most timelines jump straight over, and it is the period in which the shape of the later city was decided. The Maccabean revolt against Antiochus IV recaptured and rededicated the Temple in 164 BC — the event Hanukkah remembers, and the feast John 10:22 places Jesus at. Under the Hasmonean kings who followed, Jerusalem climbed back onto the Western Hill for the first time since 586 BC and enclosed it with the circuit Josephus calls the First Wall: from the citadel by today's Jaffa Gate, east along the line of David Street and Chain Street to the Temple, then round the City of David ridge and back up the Hinnom side. Herod inherited that wall rather than building it. They also threw a viaduct across the Tyropoeon Valley to link the Upper City to the Temple, replaced the Seleucid citadel with their own fortress, the Baris, north of the platform, and enlarged the Temple courts. When Herod arrived in 37 BC he did not design a new city; he rebuilt this one at greater scale."
+    },
+    "look": {
+      "en": [
+        "The Hasmonean tower in the base of the Citadel by Jaffa Gate — the oldest standing fortification in the Old City.",
+        "Wilson's Arch, whose Hasmonean predecessor carried the viaduct from the Upper City to the Temple across the buried valley.",
+        "The First Wall's line under David Street and Chain Street: walk it and you are walking the northern edge of the Maccabean city.",
+        "Excavated stretches of the First Wall on Mount Zion, outside today's Zion Gate.",
+        "The Hasmonean aqueduct and reservoirs that first brought water to the city from the south."
+      ]
+    },
+    "disputed": {
+      "en": "The First Wall's course is the best-attested ancient circuit here, from Josephus and from excavation, and it is drawn solid. The Baris fortress is placed north of the platform where Herod later built the Antonia, but its size is unknown. The Akra — the Seleucid citadel of 1 and 2 Maccabees — is deliberately not drawn: its location is genuinely unsettled, with proposals on the Western Hill, the Ophel and the City of David, and a 2015 excavation south of the platform is one candidate rather than a conclusion. The extent of the Hasmonean Temple courts is also unknown; Herod's platform buried the evidence."
+    },
+    "flag": {
+      "en": "The layer that explains Hanukkah, and where Herod's city came from."
+    }
+  },
+  {
+    "key": "herod",
+    "tick": {
+      "en": "Second Temple"
+    },
+    "date": {
+      "en": "37 BC–AD 70"
+    },
+    "title": {
+      "en": "Second Temple Jerusalem — the city Jesus saw"
+    },
+    "years": {
+      "en": "37 BC – AD 70"
+    },
+    "body": {
+      "en": "This is the Jerusalem of the Gospels. Herod doubles the Temple platform to the size it still is — the retaining walls you touch at the Western Wall are his. The Upper City of priestly mansions covers the Western Hill, separated from the Temple by the deep Tyropoeon Valley and joined to it by monumental stairs at Wilson's and Robinson's Arches. And Golgotha, with its rock-cut tombs, lies in an abandoned quarry OUTSIDE the Second Wall. That is the single fact that unlocks the Old City: the Church of the Holy Sepulchre stands inside the walls today because the wall moved, not the tomb."
+    },
+    "flag": {
+      "en": "The key layer for a Gospel itinerary — most features here are first-century; the Third Wall, dated on the map, was built after Jesus' ministry."
+    },
+    "look": {
+      "en": [
+        "Robinson's Arch and the collapsed stones still lying on the Herodian street where Roman soldiers threw them in AD 70.",
+        "The Southern Steps, worn and uneven by design, where pilgrims entered the Temple courts.",
+        "Wilson's Arch, now deep inside the Western Wall tunnels, once carrying a bridge over the valley from the Upper City.",
+        "The Pool of Siloam's monumental steps — the pool of John 9, still being excavated."
+      ]
+    },
+    "disputed": {
+      "en": "The Second Wall's course is genuinely disputed — no continuous stretch has been found — but every proposed line leaves Golgotha outside the city. The Third Wall (dashed, far north) was built by Agrippa I in AD 41–44, after Jesus' lifetime, and its identification is also contested."
+    }
+  },
+  {
+    "key": "aelia",
+    "tick": {
+      "en": "Roman"
+    },
+    "date": {
+      "en": "c. AD 130–324"
+    },
+    "title": {
+      "en": "Aelia Capitolina — the grid that survives"
+    },
+    "years": {
+      "en": "c. AD 130 – 324"
+    },
+    "body": {
+      "en": "After AD 70 the city is levelled; Hadrian founds it as a Roman colony, Aelia Capitolina, around AD 130, and its urban form develops further after the Bar Kokhba revolt is crushed in AD 135. Two colonnaded cardines run south from the north gate; a decumanus runs east from the west gate to the Temple Mount. This is the single most useful thing a visitor can know: the souq you get lost in is not a medieval accident, it is a Roman grid. Khan el-Zeit and El-Wad are the two cardines; David Street and Chain Street are the decumanus. The southern hills — the City of David, Mount Zion — are left outside, and stay outside from now on."
+    },
+    "look": {
+      "en": [
+        "The Roman paving and column bases of the Cardo, exposed under the Jewish Quarter.",
+        "Hadrian's triple gate under today's Damascus Gate — you can walk down to the Roman threshold.",
+        "The Lithostrotos paving stones beneath the Sisters of Zion convent, Roman, not the pavement of Pilate's trial."
+      ]
+    }
+  },
+  {
+    "key": "byz",
+    "tick": {
+      "en": "Byzantine"
+    },
+    "date": {
+      "en": "AD 324–638"
+    },
+    "title": {
+      "en": "Byzantine Jerusalem — the Madaba Map city"
+    },
+    "years": {
+      "en": "AD 324 – 638"
+    },
+    "body": {
+      "en": "Constantine's engineers cut the hillside away around the tomb, quarry Golgotha into a free-standing rock, and raise the first Church of the Holy Sepulchre facing the Cardo. Two centuries later Justinian extends the Cardo south to the vast Nea Church. The Madaba mosaic map, made about 560, shows this exact city from above: colonnaded main street, two great churches — with little emphasis given to the former Temple precinct. Byzantine rule was not continuous throughout this span: a Sasanian Persian army captured the city in 614, and Byzantine control was only restored in 629 after a fifteen-year interruption — this layer shows the city's Byzantine-built form, not uninterrupted Byzantine governance."
+    },
+    "look": {
+      "en": [
+        "The rock of Golgotha, still standing inside the church, its quarried face visible in the Chapel of Adam.",
+        "Justinian's Nea Church foundations and cistern at the south edge of the Jewish Quarter.",
+        "The Madaba Map itself — worth showing your group before you walk in through the Jaffa Gate."
+      ]
+    }
+  },
+  {
+    "key": "muslim",
+    "tick": {
+      "en": "Early Muslim"
+    },
+    "date": {
+      "en": "637/638–1099"
+    },
+    "title": {
+      "en": "Early Muslim Jerusalem — the Haram takes shape"
+    },
+    "years": {
+      "en": "637/638 – 1099"
+    },
+    "body": {
+      "en": "Jerusalem surrenders in 637/638, and the Temple Mount — which had long contained extensive open and ruined areas after AD 70 — becomes the centre of the city again. The Dome of the Rock is finished in 691/692, al-Aqsa about 705, and an Umayyad palace quarter rises immediately south of the platform. Major inherited street corridors continue, with alteration, but the weight of the city shifts east and south toward the Haram. This is the era that produced the skyline your group photographs from the Mount of Olives: the golden dome is Umayyad, not biblical, and it stands within the ancient Temple precinct, near one leading proposed location of the sanctuary — the exact footprint is not archaeologically established."
+    },
+    "look": {
+      "en": [
+        "The Dome of the Rock itself — an Umayyad building of 691, the oldest surviving Islamic monument in the world.",
+        "The excavated Umayyad palaces and administrative buildings in the Ophel park, immediately south of the Haram.",
+        "The Double Gate and its stairs in the southern wall: Herodian courses below, Umayyad work above — one wall, two eras."
+      ]
+    }
+  },
+  {
+    "key": "crusader",
+    "tick": {
+      "en": "Crusader"
+    },
+    "date": {
+      "en": "1099–1187"
+    },
+    "title": {
+      "en": "Crusader Jerusalem — the quarters take shape"
+    },
+    "years": {
+      "en": "1099 – 1187"
+    },
+    "body": {
+      "en": "The Crusaders inherit the Roman-Byzantine street plan, with its major corridors continuing, and organise the city into several religious and institutional districts. The familiar four-quarter division handed to tourists on a map today was standardized much later, chiefly by nineteenth-century Western mapmakers. The Crusaders gather Constantine's separate shrines under a single Romanesque roof: the church you walk into is essentially their building. The Dome of the Rock becomes Templum Domini, al-Aqsa becomes the Templars' headquarters, and the covered markets of the Muristan are laid out."
+    },
+    "look": {
+      "en": [
+        "The Holy Sepulchre's south façade and bell tower — twelfth-century work, largely unaltered.",
+        "The three parallel vaulted market streets south of David Street, still trading.",
+        "St Anne's Church by the Pool of Bethesda, the purest Crusader interior in the city."
+      ]
+    }
+  },
+  {
+    "key": "ayyubid",
+    "tick": {
+      "en": "Ayyubid"
+    },
+    "date": {
+      "en": "1187–1260"
+    },
+    "title": {
+      "en": "Ayyubid Jerusalem — walls torn down, then debated"
+    },
+    "years": {
+      "en": "1187 – 1260"
+    },
+    "body": {
+      "en": "Saladin retakes the city from the Crusaders in 1187, and the Ayyubid sultans who follow hold it, with an interruption, until the Mamluks take over in 1260. The most consequential act of this period is a demolition, not a construction: in 1219, fearing he could not defend the city against a new Crusade, al-Malik al-Mu'azzam Isa ordered the walls torn down. Jerusalem stood unwalled for much of the rest of the period, and the circuit was not substantially rebuilt until the Ottomans. Do not read this layer's wall line as continuously standing — treat it as the inherited circuit before 1219, since no separate unwalled-state geometry is drawn here."
+    },
+    "look": {
+      "en": [
+        "The Citadel by Jaffa Gate, refortified piecemeal through the period despite the wider demolition.",
+        "Scattered wall stubs and gate foundations from before 1219, now isolated rather than continuous.",
+        "The continuing Mamluk-era construction boom just beginning at the Haram's edges, a preview of the next layer."
+      ]
+    },
+    "disputed": {
+      "en": "The 1219 demolition is well documented in the sources but its full extent (which stretches came down, and when partial rebuilding began under later Ayyubid rule) is debated. This layer reuses the Crusader-period wall line for orientation; it should not be read as evidence that a continuous fortification stood throughout 1219–1260."
+    }
+  },
+  {
+    "key": "mamluk",
+    "tick": {
+      "en": "Mamluk"
+    },
+    "date": {
+      "en": "1260–1517"
+    },
+    "title": {
+      "en": "Mamluk Jerusalem — where the maze comes from"
+    },
+    "years": {
+      "en": "1260 – 1517"
+    },
+    "body": {
+      "en": "The street plan continues largely as inherited, but the texture changes markedly. The Mamluks pack the approaches to the Haram with madrasas, pilgrim hostels, tombs and markets, stacked two and three storeys over the Roman line and roofed across it. This is the layer that makes visitors say 'maze': the grid is still under your feet, but it has been vaulted over, built into and narrowed for three centuries. If a street feels like a tunnel, you are in a Mamluk street."
+    },
+    "look": {
+      "en": [
+        "Chain Street (Tariq Bab al-Silsila): a continuous run of Mamluk façades with striped masonry and stalactite portals.",
+        "The Ashrafiyya and Tankiziyya madrasas built right up against the Haram's western edge.",
+        "Ablutions fountains and sabils still set into the walls along the approaches."
+      ]
+    }
+  },
+  {
+    "key": "ottoman",
+    "tick": {
+      "en": "Ottoman"
+    },
+    "date": {
+      "en": "c. 1538"
+    },
+    "title": {
+      "en": "Suleiman's walls, 1538 — the walls everyone assumes are ancient"
+    },
+    "years": {
+      "en": "1538 – 1917"
+    },
+    "body": {
+      "en": "Suleiman the Magnificent rebuilds the circuit — and this is the crux of the whole confusion. These walls are less than 500 years old, and they follow the Roman-Byzantine line, not the biblical one. As a result, the oldest Jerusalem there is falls outside them: the City of David, the Gihon Spring, the Pool of Siloam and Mount Zion all end up outside the gates. A group that only walks inside these walls never sets foot in the city of David, Hezekiah, or the Siloam of John 9."
+    },
+    "look": {
+      "en": [
+        "Suleiman's dedicatory inscriptions over the Jaffa and Damascus Gates, dated by the Muslim year.",
+        "The seam in the eastern wall south of the Golden Gate, where Ottoman masonry sits on Herodian courses.",
+        "The ramparts walk — the fastest way to show a group what the walls include and, crucially, exclude."
+      ]
+    }
+  },
+  {
+    "key": "today",
+    "tick": {
+      "en": "Today"
+    },
+    "date": {
+      "en": "now"
+    },
+    "title": {
+      "en": "The Old City today — everything at once"
+    },
+    "years": {
+      "en": "1917 – present"
+    },
+    "body": {
+      "en": "What makes the Old City hard to read is that nothing was ever demolished flat — it was built over. Roman paving lies under Crusader vaults under Mamluk façades under twentieth-century reconstruction, and the ground has risen by up to twelve metres. The Tyropoeon Valley is buried, which is why the Western Wall plaza feels level. Set this layer against the Herodian one and the geography snaps into place: the walls shrank away from the south, the valley filled, several streets still trace, though not always exactly, the corridors Rome laid down."
+    },
+    "look": {
+      "en": [
+        "Stand on the Western Wall plaza and point down, not up: the Herodian street is about twelve metres below the paving.",
+        "Walk David Street and Chain Street end to end — you have just walked a Roman decumanus.",
+        "Leave by the Dung Gate and keep going downhill: only then are you entering the original Jerusalem."
+      ]
+    }
+  }
 ];
 
 const LB = [
-  { k: "modwall", la: 31.78315, lo: 35.23180, e: [], mod: true, dx: 0, dy: 0, a: "middle", w: 700, c: "#2f4f66", n: { en: "Today's Old City wall — Ottoman, 1538", he: "חומת העיר העתיקה של היום — עות'מאנית, 1538", ar: "سور البلدة القديمة اليوم — عثماني، ١٥٣٨", es: "Muralla actual de la Ciudad Vieja — otomana, 1538" }, s: { en: "less than 500 years old", he: "פחות מ־500 שנה", ar: "عمرها أقل من ٥٠٠ سنة", es: "menos de 500 años" } },
-  { k: "neh", la: 31.77340, lo: 35.23572, e: ["return"], dx: 16, dy: 0, a: "start", w: 700, c: "#8a5a2b", n: { en: "Nehemiah's wall, 445 BCE", he: "חומת נחמיה, 445 לפנה\"ס", ar: "سور نحميا، ٤٤٥ ق.م", es: "Muralla de Nehemías, 445 a.C." }, s: { en: "built higher up the slope than the old wall", he: "נבנתה גבוה יותר במדרון מן החומה הקודמת", ar: "بُني أعلى في المنحدر من السور القديم", es: "construida más arriba que la muralla vieja" } },
-  { k: "abandoned", la: 31.77390, lo: 35.23020, e: ["return"], dx: 0, dy: 0, a: "middle", w: 600, c: "#a8452f", n: { en: "Western Hill — abandoned", he: "הגבעה המערבית — נעזבה", ar: "التلة الغربية — مهجورة", es: "Colina Occidental — abandonada" }, s: { en: "in ruins for four centuries", he: "בחורבנה ארבע מאות שנה", ar: "خراب أربعة قرون", es: "en ruinas cuatro siglos" } },
-  { k: "zerub", la: 31.77860, lo: 35.23520, e: ["return"], dx: 0, dy: 0, a: "middle", w: 600, c: "#7a5a2a", n: { en: "Zerubbabel's Temple, 516 BCE", he: "מקדש זרובבל, 516 לפנה\"ס", ar: "هيكل زربابل، ٥١٦ ق.م", es: "Templo de Zorobabel, 516 a.C." }, s: { en: "platform size unknown", he: "גודל הרחבה אינו ידוע", ar: "حجم الساحة غير معروف", es: "tamaño de la explanada desconocido" } },
-  { k: "millo", la: 31.77440, lo: 35.23520, e: ["david"], dx: -14, dy: 0, a: "end", w: 600, c: "#7a5a2a", n: { en: "The Millo / Stepped Stone Structure", he: "המילוא / המבנה המדורג", ar: "الملّو / البناء المدرّج", es: "El Milló / Estructura Escalonada" } },
-  { k: "threshing", la: 31.77860, lo: 35.23516, e: ["david"], dx: 0, dy: 0, a: "middle", w: 600, c: "#7a5a2a", n: { en: "Araunah's threshing floor", he: "גורן ארוונה", ar: "بيدر أرونة", es: "Era de Arauna" }, s: { en: "bought by David, built on by Solomon", he: "נקנה בידי דוד, נבנה בידי שלמה", ar: "اشتراه داود وبنى عليه سليمان", es: "comprada por David, edificada por Salomón" } },
-  { k: "stChristian", la: 31.77890, lo: 35.22878, e: [], mod: true, dx: -13, dy: 0, a: "end", w: 600, c: "#2f4f66", n: { en: "Christian Quarter Rd", he: "רחוב הרובע הנוצרי", ar: "شارع حارة النصارى", es: "C. del Barrio Cristiano" } },
-  { k: "stFrancis", la: 31.77962, lo: 35.22892, e: [], mod: true, dx: 13, dy: 0, a: "start", w: 600, c: "#2f4f66", n: { en: "St Francis St", he: "רחוב סנט פרנציסקוס", ar: "شارع القديس فرنسيس", es: "C. San Francisco" } },
-  { k: "stArm", la: 31.77450, lo: 35.22855, e: [], mod: true, dx: 13, dy: 0, a: "start", w: 600, c: "#2f4f66", n: { en: "Armenian Patriarchate Rd", he: "רחוב הפטריארכיה הארמנית", ar: "شارع دير الأرمن", es: "C. Patriarcado Armenio" } },
-  { k: "stJewish", la: 31.77510, lo: 35.23172, e: [], mod: true, dx: 13, dy: 0, a: "start", w: 600, c: "#2f4f66", n: { en: "Jewish Quarter Rd", he: "רחוב הרובע היהודי", ar: "شارع حارة اليهود", es: "C. del Barrio Judío" } },
-  { k: "stSouq", la: 31.77655, lo: 35.23028, e: [], mod: true, dx: -13, dy: 0, a: "end", w: 600, c: "#2f4f66", n: { en: "Triple souq (Muristan)", he: "שוקי המוריסטן", ar: "أسواق المورستان", es: "Triple souq (Muristán)" } },
-  { k: "gNew", la: 31.77931, lo: 35.22628, e: ["ottoman","today"], dx: -13, dy: 0, a: "end", w: 500, c: "#2f4f66", n: { en: "New Gate", he: "השער החדש", ar: "الباب الجديد", es: "Puerta Nueva" } },
-  { k: "gHerod", la: 31.78300, lo: 35.23375, e: ["ottoman","today"], dx: 0, dy: -13, a: "middle", w: 500, c: "#2f4f66", n: { en: "Herod's Gate", he: "שער הפרחים", ar: "باب الساهرة", es: "Puerta de Herodes" } },
-  { k: "gZion", la: 31.77286, lo: 35.22936, e: ["ottoman","today"], dx: 0, dy: 13, a: "middle", w: 500, c: "#2f4f66", n: { en: "Zion Gate", he: "שער ציון", ar: "باب النبي داود", es: "Puerta de Sión" } },
-  { k: "gihon", la: 31.77300, lo: 35.23600, e: "all", dx: 16, dy: 4, a: "start", w: 500, c: "#2f6b72", n: { en: "Gihon Spring", he: "מעיין הגיחון", ar: "عين الجيحون", es: "Manantial de Guijón" } },
-  { k: "siloam", la: 31.77021, lo: 35.23538, e: ["muslim","return","hezekiah","herod","aelia","byz","crusader","mamluk","ottoman","today"], dx: 16, dy: 4, a: "start", w: 500, c: "#2f6b72", n: { en: "Pool of Siloam", he: "בריכת השילוח", ar: "بركة سلوان", es: "Piscina de Siloé" }, s: { en: "outside today's walls", he: "מחוץ לחומות היום", ar: "خارج أسوار اليوم", es: "extramuros hoy" } },
-  { k: "cod", la: 31.77235, lo: 35.23558, e: "all", dx: 0, dy: 0, a: "middle", w: 700, c: "#7a5a2a", n: { en: "City of David ridge", he: "רכס עיר דוד", ar: "تلّة مدينة داود", es: "Colina de la Ciudad de David" }, s: { en: "the original Jerusalem", he: "ירושלים המקורית", ar: "القدس الأصلية", es: "la Jerusalén original" } },
-  { k: "tunnel", la: 31.77160, lo: 35.23560, e: ["return","hezekiah","herod","today"], dx: 16, dy: 4, a: "start", w: 500, c: "#2f6b72", n: { en: "Hezekiah's Tunnel", he: "נקבת חזקיהו", ar: "نفق حزقيا", es: "Túnel de Ezequías" } },
-  { k: "tm", la: 31.77960, lo: 35.23560, e: ["muslim","herod","aelia","byz","crusader","mamluk","ottoman","today"], dx: 0, dy: 0, a: "middle", w: 700, c: "#7a5a2a", n: { en: "Temple Mount / Haram al-Sharif", he: "הר הבית / אל־חרם א־שריף", ar: "الحرم الشريف / جبل الهيكل", es: "Monte del Templo / Haram al-Sharif" }, s: { en: "Herod's platform, unchanged", he: "רחבת הורדוס, ללא שינוי", ar: "ساحة هيرودس دون تغيير", es: "explanada de Herodes, intacta" } },
-  { k: "temple", la: 31.77805, lo: 35.23505, e: ["herod"], dx: 0, dy: 0, a: "middle", w: 700, c: "#7a5a2a", n: { en: "Herod's Temple", he: "מקדש הורדוס", ar: "هيكل هيرودس", es: "Templo de Herodes" } },
-  { k: "stoa", la: 31.77620, lo: 35.23575, e: ["herod"], dx: 16, dy: 4, a: "start", w: 500, c: "#7a5a2a", n: { en: "Royal Stoa", he: "הסטוא המלכותית", ar: "الرواق الملكي", es: "Stoa Real" } },
-  { k: "antonia", la: 31.78050, lo: 35.23540, e: ["herod"], dx: 16, dy: -6, a: "start", w: 500, c: "#7a5a2a", n: { en: "Antonia Fortress", he: "מצודת אנטוניה", ar: "قلعة أنطونيا", es: "Fortaleza Antonia" } },
-  { k: "ww", la: 31.77680, lo: 35.23400, e: ["muslim","herod","aelia","byz","crusader","mamluk","ottoman","today"], dx: -14, dy: 0, a: "end", w: 700, c: "#7a5a2a", n: { en: "Western Wall", he: "הכותל המערבי", ar: "الحائط الغربي / البراق", es: "Muro Occidental" } },
-  { k: "rob", la: 31.77606, lo: 35.23431, e: ["herod"], dx: -14, dy: 22, a: "end", w: 500, c: "#7a5a2a", n: { en: "Robinson's Arch", he: "קמרון רובינסון", ar: "قوس روبنسون", es: "Arco de Robinson" } },
-  { k: "wil", la: 31.77700, lo: 35.23445, e: ["herod"], dx: -14, dy: -20, a: "end", w: 500, c: "#7a5a2a", n: { en: "Wilson's Arch", he: "קמרון וילסון", ar: "قوس ويلسون", es: "Arco de Wilson" } },
-  { k: "hs", la: 31.77839, lo: 35.22972, e: ["muslim","byz","crusader","mamluk","ottoman","today"], dx: -14, dy: 0, a: "end", w: 700, c: "#7a5a2a", n: { en: "Church of the Holy Sepulchre", he: "כנסיית הקבר", ar: "كنيسة القيامة", es: "Santo Sepulcro" } },
-  { k: "golg", la: 31.77860, lo: 35.22960, e: ["herod"], dx: -14, dy: 0, a: "end", w: 700, c: "#a8452f", n: { en: "Golgotha & the tomb", he: "גולגותא והקבר", ar: "الجُلجُثة والقبر", es: "Gólgota y la tumba" }, s: { en: "OUTSIDE the city wall", he: "מחוץ לחומת העיר", ar: "خارج سور المدينة", es: "FUERA de la muralla" } },
-  { k: "broad", la: 31.77568, lo: 35.23050, e: ["hezekiah"], dx: 0, dy: -16, a: "middle", w: 700, c: "#7a5a2a", n: { en: "Broad Wall", he: "החומה הרחבה", ar: "السور العريض", es: "Muro Ancho" }, s: { en: "Hezekiah, 8th c. BCE", he: "חזקיהו, המאה ה־8 לפנה\"ס", ar: "حزقيا، القرن ٨ ق.م", es: "Ezequías, s. VIII a.C." } },
-  { k: "kidron", la: 31.77900, lo: 35.23860, e: "all", dx: 0, dy: 0, a: "start", w: 500, c: "#8a7550", n: { en: "Kidron Valley", he: "נחל קדרון", ar: "وادي قدرون", es: "Valle de Cedrón" } },
-  { k: "hinnom", la: 31.77020, lo: 35.22780, e: "all", dx: 0, dy: 0, a: "middle", w: 500, c: "#8a7550", n: { en: "Hinnom Valley", he: "גיא בן־הינום", ar: "وادي جهنّم", es: "Valle de Hinón" } },
-  { k: "tyro", la: 31.77420, lo: 35.23452, e: "all", dx: -14, dy: 0, a: "end", w: 600, c: "#8a7550", n: { en: "Tyropoeon Valley", he: "עמק גיא־התירופיון", ar: "وادي التيروبيون", es: "Valle del Tiropeón" }, s: { en: "buried under the modern city", he: "קבור תחת העיר המודרנית", ar: "مدفون تحت المدينة الحديثة", es: "enterrado bajo la ciudad actual" } },
-  { k: "zion", la: 31.77181, lo: 35.22879, e: ["muslim","hezekiah","herod","aelia","byz","crusader","mamluk","ottoman","today"], dx: 0, dy: 0, a: "middle", w: 600, c: "#7a5a2a", n: { en: "Mount Zion", he: "הר ציון", ar: "جبل صهيون", es: "Monte Sión" } },
-  { k: "cit", la: 31.77618, lo: 35.22782, e: ["muslim","herod","aelia","byz","crusader","mamluk","ottoman","today"], dx: -14, dy: -10, a: "end", w: 500, c: "#7a5a2a", n: { en: "Citadel / Tower of David", he: "המצודה / מגדל דוד", ar: "القلعة / برج داود", es: "Ciudadela / Torre de David" } },
-  { k: "jaffa", la: 31.77661, lo: 35.22755, e: ["ottoman","today"], dx: -14, dy: 14, a: "end", w: 500, c: "#2f4f66", n: { en: "Jaffa Gate", he: "שער יפו", ar: "باب الخليل", es: "Puerta de Jafa" } },
-  { k: "dam", la: 31.78164, lo: 35.23050, e: ["muslim","aelia","byz","crusader","mamluk","ottoman","today"], dx: 0, dy: -14, a: "middle", w: 500, c: "#2f4f66", n: { en: "Damascus Gate", he: "שער שכם", ar: "باب العمود", es: "Puerta de Damasco" } },
-  { k: "dung", la: 31.77472, lo: 35.23389, e: ["ottoman","today"], dx: 0, dy: 22, a: "middle", w: 500, c: "#2f4f66", n: { en: "Dung Gate", he: "שער האשפות", ar: "باب المغاربة", es: "Puerta de los Basureros" } },
-  { k: "lions", la: 31.78083, lo: 35.23694, e: ["ottoman","today"], dx: 14, dy: 0, a: "start", w: 500, c: "#2f4f66", n: { en: "Lions' Gate", he: "שער האריות", ar: "باب الأسباط", es: "Puerta de los Leones" } },
-  { k: "cardow", la: 31.77935, lo: 35.23032, e: ["muslim","aelia","byz","crusader","mamluk","ottoman","today"], dx: -14, dy: 0, a: "end", w: 600, c: "#2f4f66", n: { en: "Cardo → Khan el-Zeit", he: "הקרדו → חאן א־זית", ar: "الكاردو → خان الزيت", es: "Cardo → Khan el-Zeit" } },
-  { k: "cardoe", la: 31.77878, lo: 35.23212, e: ["muslim","aelia","byz","crusader","mamluk","ottoman","today"], dx: 14, dy: 0, a: "start", w: 600, c: "#2f4f66", n: { en: "East Cardo → El-Wad St", he: "הקרדו המזרחי → אל־ואד", ar: "الكاردو الشرقي → الواد", es: "Cardo este → El-Wad" } },
-  { k: "decn", la: 31.78088, lo: 35.23340, e: ["muslim","aelia","byz","crusader","mamluk","ottoman","today"], dx: 0, dy: -18, a: "middle", w: 600, c: "#2f4f66", n: { en: "North Decumanus \u2192 Via Dolorosa", he: "\u05d4\u05d3\u05e7\u05d5\u05de\u05e0\u05d5\u05e1 \u05d4\u05e6\u05e4\u05d5\u05e0\u05d9 \u2192 \u05d5\u05d9\u05d4 \u05d3\u05d5\u05dc\u05d5\u05e8\u05d5\u05d6\u05d4", ar: "\u0627\u0644\u062f\u064a\u0643\u0648\u0645\u0627\u0646\u0648\u0633 \u0627\u0644\u0634\u0645\u0627\u0644\u064a \u2192 \u0637\u0631\u064a\u0642 \u0627\u0644\u0623\u0644\u0627\u0645", es: "Decumano norte \u2192 V\u00eda Dolorosa" } },
-  { k: "umay", la: 31.77535, lo: 35.23510, e: ["muslim"], dx: 0, dy: 22, a: "middle", w: 600, c: "#7a5a2a", n: { en: "Umayyad palaces, 8th c.", he: "\u05d0\u05e8\u05de\u05d5\u05e0\u05d5\u05ea \u05d0\u05d5\u05de\u05d9\u05d9\u05d9\u05dd, \u05d4\u05de\u05d0\u05d4 \u05d4\u05f8\u05f8", ar: "\u0627\u0644\u0642\u0635\u0648\u0631 \u0627\u0644\u0623\u0645\u0648\u064a\u0629\u060c \u0627\u0644\u0642\u0631\u0646 \u0627\u0644\u0640\u0668", es: "Palacios omeyas, s. VIII" } },
-  { k: "dec", la: 31.77690, lo: 35.22930, e: ["muslim","aelia","byz","crusader","mamluk","ottoman","today"], dx: 0, dy: 20, a: "middle", w: 600, c: "#2f4f66", n: { en: "Decumanus → David St / Chain St", he: "הדקומנוס → רחוב דוד / השלשלת", ar: "الديكومانوس → شارع داود / السلسلة", es: "Decumano → calle David / de la Cadena" } },
-  { k: "nea", la: 31.77445, lo: 35.23085, e: ["byz"], dx: 0, dy: 22, a: "middle", w: 500, c: "#7a5a2a", n: { en: "Nea Church", he: "כנסיית הנֵאָה", ar: "كنيسة النيّا", es: "Iglesia Nea" } },
-  { k: "beth", la: 31.78145, lo: 35.23593, e: ["herod","byz","crusader"], dx: 14, dy: 0, a: "start", w: 500, c: "#2f6b72", n: { en: "Pool of Bethesda", he: "בריכת בית־חסדא", ar: "بركة بيت حسدا", es: "Piscina de Betesda" } },
-  { k: "upper", la: 31.77380, lo: 35.22940, e: ["herod"], dx: 0, dy: 0, a: "middle", w: 600, c: "#7a5a2a", n: { en: "Upper City", he: "העיר העליונה", ar: "المدينة العليا", es: "Ciudad Alta" }, s: { en: "priestly mansions", he: "בתי הכוהנים", ar: "قصور الكهنة", es: "mansiones sacerdotales" } },
-  { k: "ophel", la: 31.77520, lo: 35.23570, e: ["david","return","hezekiah","herod"], dx: 14, dy: 0, a: "start", w: 500, c: "#7a5a2a", n: { en: "Ophel", he: "העופל", ar: "العوفل", es: "Ofel" } },
-  { k: "2w", la: 31.77900, lo: 35.23130, e: ["herod"], dx: -14, dy: -6, a: "end", w: 600, c: "#a8452f", n: { en: "Second Wall", he: "החומה השנייה", ar: "السور الثاني", es: "Segunda Muralla" }, s: { en: "course disputed", he: "המסלול במחלוקת", ar: "المسار موضع خلاف", es: "trazado en disputa" } },
-  { k: "3w", la: 31.78560, lo: 35.23050, e: ["herod"], dx: 0, dy: -16, a: "middle", w: 600, c: "#a8452f", n: { en: "Third Wall — Agrippa I, 41–44 CE", he: "החומה השלישית — אגריפס א', 41–44", ar: "السور الثالث — أغريباس الأول، ٤١–٤٤م", es: "Tercera Muralla — Agripa I, 41–44 d.C." }, s: { en: "after Jesus' lifetime; line disputed", he: "אחרי ימי ישוע; הקו במחלוקת", ar: "بعد زمن المسيح؛ المسار متنازع عليه", es: "posterior a Jesús; trazado en disputa" } },
-  { k: "muslimq", la: 31.78000, lo: 35.23380, e: ["mamluk","ottoman","today"], dx: 0, dy: 0, a: "middle", w: 600, c: "#2f4f66", n: { en: "Muslim Quarter", he: "הרובע המוסלמי", ar: "الحارة الإسلامية", es: "Barrio Musulmán" } },
-  { k: "jewishq", la: 31.77540, lo: 35.23200, e: ["crusader","mamluk","ottoman","today"], dx: 0, dy: 0, a: "middle", w: 600, c: "#2f4f66", n: { en: "Jewish Quarter", he: "הרובע היהודי", ar: "حارة اليهود", es: "Barrio Judío" } },
-  { k: "christq", la: 31.77950, lo: 35.22810, e: ["crusader","mamluk","ottoman","today"], dx: 0, dy: 0, a: "middle", w: 600, c: "#2f4f66", n: { en: "Christian Quarter", he: "הרובע הנוצרי", ar: "حارة النصارى", es: "Barrio Cristiano" } },
-  { k: "armq", la: 31.77480, lo: 35.22880, e: ["crusader","mamluk","ottoman","today"], dx: 0, dy: 0, a: "middle", w: 600, c: "#2f4f66", n: { en: "Armenian Quarter", he: "הרובע הארמני", ar: "حارة الأرمن", es: "Barrio Armenio" } },
-  { k: "wwp", la: 31.77655, lo: 35.23320, e: ["today"], dx: -12, dy: 20, a: "end", w: 600, c: "#2f4f66", n: { en: "Western Wall plaza", he: "רחבת הכותל", ar: "ساحة الحائط الغربي", es: "Plaza del Muro" }, s: { en: "flat — the valley is beneath it", he: "שטוחה — העמק מתחתיה", ar: "مستوية — والوادي تحتها", es: "llana: el valle está debajo" } },
-  { k: "dome", la: 31.77802, lo: 35.23516, e: ["muslim","crusader","mamluk","ottoman","today"], dx: 0, dy: 2, a: "middle", w: 600, c: "#7a5a2a", n: { en: "Dome of the Rock", he: "כובד הסלע", ar: "قبة الصخرة", es: "Cúpula de la Roca" } },
-  { k: "aqsa", la: 31.77618, lo: 35.23576, e: ["muslim","crusader","mamluk","ottoman","today"], dx: 14, dy: 4, a: "start", w: 500, c: "#7a5a2a", n: { en: "Al-Aqsa Mosque", he: "מסגד אל־אקצא", ar: "المسجد الأقصى", es: "Mezquita de al-Aqsa" } },
-  { k: "golden", la: 31.77889, lo: 35.23694, e: ["muslim","crusader","mamluk","ottoman","today"], dx: 14, dy: 0, a: "start", w: 500, c: "#2f4f66", n: { en: "Golden Gate", he: "שער הרחמים", ar: "باب الرحمة", es: "Puerta Dorada" } }
+  {
+    "k": "firstwall",
+    "la": 31.77706,
+    "lo": 35.2309,
+    "e": [
+      "hasmonean"
+    ],
+    "dx": 0,
+    "dy": -16,
+    "a": "middle",
+    "w": 700,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "The First Wall — Hasmonean"
+    },
+    "s": {
+      "en": "Herod inherited this circuit"
+    }
+  },
+  {
+    "k": "baris",
+    "la": 31.78035,
+    "lo": 35.23518,
+    "e": [
+      "hasmonean"
+    ],
+    "dx": 14,
+    "dy": -6,
+    "a": "start",
+    "w": 500,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "The Baris fortress"
+    },
+    "s": {
+      "en": "Herod rebuilt it as the Antonia"
+    }
+  },
+  {
+    "k": "hasmtemple",
+    "la": 31.7786,
+    "lo": 35.2352,
+    "e": [
+      "hasmonean"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 700,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "The Second Temple, rededicated 164 BC"
+    },
+    "s": {
+      "en": "the Hanukkah temple"
+    }
+  },
+  {
+    "k": "hasmbridge",
+    "la": 31.777,
+    "lo": 35.23365,
+    "e": [
+      "hasmonean"
+    ],
+    "dx": -14,
+    "dy": 0,
+    "a": "end",
+    "w": 500,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Viaduct to the Temple"
+    },
+    "s": {
+      "en": "under Wilson’s Arch"
+    }
+  },
+  {
+    "k": "modwall",
+    "la": 31.78315,
+    "lo": 35.2318,
+    "e": [],
+    "mod": true,
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 700,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Today's Old City wall — Ottoman, 1538"
+    },
+    "s": {
+      "en": "less than 500 years old"
+    }
+  },
+  {
+    "k": "neh",
+    "la": 31.7734,
+    "lo": 35.23572,
+    "e": [
+      "return"
+    ],
+    "dx": 16,
+    "dy": 0,
+    "a": "start",
+    "w": 700,
+    "c": "#8a5a2b",
+    "n": {
+      "en": "Nehemiah's wall, 445 BC"
+    },
+    "s": {
+      "en": "built higher up the slope than the old wall"
+    }
+  },
+  {
+    "k": "abandoned",
+    "la": 31.7739,
+    "lo": 35.2302,
+    "e": [
+      "return"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 600,
+    "c": "#a8452f",
+    "n": {
+      "en": "Western Hill — abandoned"
+    },
+    "s": {
+      "en": "in ruins for four centuries"
+    }
+  },
+  {
+    "k": "zerub",
+    "la": 31.7786,
+    "lo": 35.2352,
+    "e": [
+      "return"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 600,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Zerubbabel's Temple, 516 BC"
+    },
+    "s": {
+      "en": "platform size unknown"
+    }
+  },
+  {
+    "k": "millo",
+    "la": 31.7744,
+    "lo": 35.2352,
+    "e": [
+      "david"
+    ],
+    "dx": -14,
+    "dy": 0,
+    "a": "end",
+    "w": 600,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "The Millo / Stepped Stone Structure"
+    }
+  },
+  {
+    "k": "threshing",
+    "la": 31.7786,
+    "lo": 35.23516,
+    "e": [
+      "david"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 600,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Araunah's threshing floor"
+    },
+    "s": {
+      "en": "bought by David, built on by Solomon"
+    }
+  },
+  {
+    "k": "stChristian",
+    "la": 31.7789,
+    "lo": 35.22878,
+    "e": [],
+    "mod": true,
+    "dx": -13,
+    "dy": 0,
+    "a": "end",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Christian Quarter Rd"
+    }
+  },
+  {
+    "k": "stFrancis",
+    "la": 31.77962,
+    "lo": 35.22892,
+    "e": [],
+    "mod": true,
+    "dx": 13,
+    "dy": 0,
+    "a": "start",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "St Francis St"
+    }
+  },
+  {
+    "k": "stArm",
+    "la": 31.7745,
+    "lo": 35.22855,
+    "e": [],
+    "mod": true,
+    "dx": 13,
+    "dy": 0,
+    "a": "start",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Armenian Patriarchate Rd"
+    }
+  },
+  {
+    "k": "stJewish",
+    "la": 31.7751,
+    "lo": 35.23172,
+    "e": [],
+    "mod": true,
+    "dx": 13,
+    "dy": 0,
+    "a": "start",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Jewish Quarter Rd"
+    }
+  },
+  {
+    "k": "stSouq",
+    "la": 31.77655,
+    "lo": 35.23028,
+    "e": [],
+    "mod": true,
+    "dx": -13,
+    "dy": 0,
+    "a": "end",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Triple souq (Muristan)"
+    }
+  },
+  {
+    "k": "gNew",
+    "la": 31.77931,
+    "lo": 35.22628,
+    "e": [
+      "ottoman",
+      "today"
+    ],
+    "dx": -13,
+    "dy": 0,
+    "a": "end",
+    "w": 500,
+    "c": "#2f4f66",
+    "n": {
+      "en": "New Gate"
+    }
+  },
+  {
+    "k": "gHerod",
+    "la": 31.783,
+    "lo": 35.23375,
+    "e": [
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": -13,
+    "a": "middle",
+    "w": 500,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Herod's Gate"
+    }
+  },
+  {
+    "k": "gZion",
+    "la": 31.77286,
+    "lo": 35.22936,
+    "e": [
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": 13,
+    "a": "middle",
+    "w": 500,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Zion Gate"
+    }
+  },
+  {
+    "k": "gihon",
+    "la": 31.773,
+    "lo": 35.236,
+    "e": "all",
+    "dx": 16,
+    "dy": 4,
+    "a": "start",
+    "w": 500,
+    "c": "#2f6b72",
+    "n": {
+      "en": "Gihon Spring"
+    }
+  },
+  {
+    "k": "siloam",
+    "la": 31.77021,
+    "lo": 35.23538,
+    "e": [
+      "muslim",
+      "return",
+      "hezekiah",
+      "herod",
+      "aelia",
+      "byz",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 16,
+    "dy": 4,
+    "a": "start",
+    "w": 500,
+    "c": "#2f6b72",
+    "n": {
+      "en": "Pool of Siloam"
+    },
+    "s": {
+      "en": "outside today's walls"
+    }
+  },
+  {
+    "k": "cod",
+    "la": 31.77235,
+    "lo": 35.23558,
+    "e": "all",
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 700,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "City of David ridge"
+    },
+    "s": {
+      "en": "the original Jerusalem"
+    }
+  },
+  {
+    "k": "tunnel",
+    "la": 31.7716,
+    "lo": 35.2356,
+    "e": [
+      "return",
+      "hezekiah",
+      "herod",
+      "today"
+    ],
+    "dx": 16,
+    "dy": 4,
+    "a": "start",
+    "w": 500,
+    "c": "#2f6b72",
+    "n": {
+      "en": "Hezekiah's Tunnel"
+    }
+  },
+  {
+    "k": "tm",
+    "la": 31.7796,
+    "lo": 35.2356,
+    "e": [
+      "muslim",
+      "herod",
+      "aelia",
+      "byz",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 700,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Temple Mount / Haram al-Sharif"
+    },
+    "s": {
+      "en": "Largely preserves Herod's platform outline"
+    }
+  },
+  {
+    "k": "temple",
+    "la": 31.77805,
+    "lo": 35.23505,
+    "e": [
+      "herod"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 700,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Herod's Temple"
+    }
+  },
+  {
+    "k": "stoa",
+    "la": 31.7762,
+    "lo": 35.23575,
+    "e": [
+      "herod"
+    ],
+    "dx": 16,
+    "dy": 4,
+    "a": "start",
+    "w": 500,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Royal Stoa"
+    }
+  },
+  {
+    "k": "antonia",
+    "la": 31.7805,
+    "lo": 35.2354,
+    "e": [
+      "herod"
+    ],
+    "dx": 16,
+    "dy": -6,
+    "a": "start",
+    "w": 500,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Antonia Fortress"
+    }
+  },
+  {
+    "k": "ww",
+    "la": 31.7768,
+    "lo": 35.234,
+    "e": [
+      "muslim",
+      "herod",
+      "aelia",
+      "byz",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": -14,
+    "dy": 0,
+    "a": "end",
+    "w": 700,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Western Wall"
+    }
+  },
+  {
+    "k": "rob",
+    "la": 31.77606,
+    "lo": 35.23431,
+    "e": [
+      "herod"
+    ],
+    "dx": -14,
+    "dy": 22,
+    "a": "end",
+    "w": 500,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Robinson's Arch"
+    }
+  },
+  {
+    "k": "wil",
+    "la": 31.777,
+    "lo": 35.23445,
+    "e": [
+      "herod"
+    ],
+    "dx": -14,
+    "dy": -20,
+    "a": "end",
+    "w": 500,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Wilson's Arch"
+    }
+  },
+  {
+    "k": "hs",
+    "la": 31.77839,
+    "lo": 35.22972,
+    "e": [
+      "muslim",
+      "byz",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": -14,
+    "dy": 0,
+    "a": "end",
+    "w": 700,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Church of the Holy Sepulchre"
+    }
+  },
+  {
+    "k": "golg",
+    "la": 31.7786,
+    "lo": 35.2296,
+    "e": [
+      "herod"
+    ],
+    "dx": -14,
+    "dy": 0,
+    "a": "end",
+    "w": 700,
+    "c": "#a8452f",
+    "n": {
+      "en": "Golgotha & the tomb"
+    },
+    "s": {
+      "en": "OUTSIDE the city wall"
+    }
+  },
+  {
+    "k": "broad",
+    "la": 31.77568,
+    "lo": 35.2305,
+    "e": [
+      "hezekiah"
+    ],
+    "dx": 0,
+    "dy": -16,
+    "a": "middle",
+    "w": 700,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Broad Wall"
+    },
+    "s": {
+      "en": "Hezekiah, 8th c. BC"
+    }
+  },
+  {
+    "k": "kidron",
+    "la": 31.779,
+    "lo": 35.2386,
+    "e": "all",
+    "dx": 0,
+    "dy": 0,
+    "a": "start",
+    "w": 500,
+    "c": "#8a7550",
+    "n": {
+      "en": "Kidron Valley"
+    }
+  },
+  {
+    "k": "hinnom",
+    "la": 31.7702,
+    "lo": 35.2278,
+    "e": "all",
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 500,
+    "c": "#8a7550",
+    "n": {
+      "en": "Hinnom Valley"
+    }
+  },
+  {
+    "k": "tyro",
+    "la": 31.7742,
+    "lo": 35.23452,
+    "e": "all",
+    "dx": -14,
+    "dy": 0,
+    "a": "end",
+    "w": 600,
+    "c": "#8a7550",
+    "n": {
+      "en": "Tyropoeon Valley"
+    },
+    "s": {
+      "en": "buried under the modern city"
+    }
+  },
+  {
+    "k": "zion",
+    "la": 31.77181,
+    "lo": 35.22879,
+    "e": [
+      "muslim",
+      "hezekiah",
+      "herod",
+      "aelia",
+      "byz",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 600,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Mount Zion"
+    }
+  },
+  {
+    "k": "cit",
+    "la": 31.77618,
+    "lo": 35.22782,
+    "e": [
+      "muslim",
+      "herod",
+      "aelia",
+      "byz",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": -14,
+    "dy": -10,
+    "a": "end",
+    "w": 500,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Citadel / Tower of David"
+    }
+  },
+  {
+    "k": "jaffa",
+    "la": 31.77661,
+    "lo": 35.22755,
+    "e": [
+      "ottoman",
+      "today"
+    ],
+    "dx": -14,
+    "dy": 14,
+    "a": "end",
+    "w": 500,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Jaffa Gate"
+    }
+  },
+  {
+    "k": "dam",
+    "la": 31.78164,
+    "lo": 35.2305,
+    "e": [
+      "muslim",
+      "aelia",
+      "byz",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": -14,
+    "a": "middle",
+    "w": 500,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Damascus Gate"
+    }
+  },
+  {
+    "k": "dung",
+    "la": 31.77472,
+    "lo": 35.23389,
+    "e": [
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": 22,
+    "a": "middle",
+    "w": 500,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Dung Gate"
+    }
+  },
+  {
+    "k": "lions",
+    "la": 31.78083,
+    "lo": 35.23694,
+    "e": [
+      "ottoman",
+      "today"
+    ],
+    "dx": 14,
+    "dy": 0,
+    "a": "start",
+    "w": 500,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Lions' Gate"
+    }
+  },
+  {
+    "k": "cardow",
+    "la": 31.77935,
+    "lo": 35.23032,
+    "e": [
+      "muslim",
+      "aelia",
+      "byz",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": -14,
+    "dy": 0,
+    "a": "end",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Cardo → Khan el-Zeit"
+    }
+  },
+  {
+    "k": "cardoe",
+    "la": 31.77878,
+    "lo": 35.23212,
+    "e": [
+      "muslim",
+      "aelia",
+      "byz",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 14,
+    "dy": 0,
+    "a": "start",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "East Cardo → El-Wad St"
+    }
+  },
+  {
+    "k": "decn",
+    "la": 31.78088,
+    "lo": 35.2334,
+    "e": [
+      "muslim",
+      "aelia",
+      "byz",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": -18,
+    "a": "middle",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "North Decumanus → Via Dolorosa"
+    }
+  },
+  {
+    "k": "umay",
+    "la": 31.77535,
+    "lo": 35.2351,
+    "e": [
+      "muslim"
+    ],
+    "dx": 0,
+    "dy": 22,
+    "a": "middle",
+    "w": 600,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Umayyad palaces, 8th c."
+    }
+  },
+  {
+    "k": "dec",
+    "la": 31.7769,
+    "lo": 35.2293,
+    "e": [
+      "muslim",
+      "aelia",
+      "byz",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": 20,
+    "a": "middle",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Decumanus → David St / Chain St"
+    }
+  },
+  {
+    "k": "nea",
+    "la": 31.77445,
+    "lo": 35.23085,
+    "e": [
+      "byz"
+    ],
+    "dx": 0,
+    "dy": 22,
+    "a": "middle",
+    "w": 500,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Nea Church"
+    }
+  },
+  {
+    "k": "beth",
+    "la": 31.78145,
+    "lo": 35.23593,
+    "e": [
+      "herod",
+      "byz",
+      "crusader"
+    ],
+    "dx": 14,
+    "dy": 0,
+    "a": "start",
+    "w": 500,
+    "c": "#2f6b72",
+    "n": {
+      "en": "Pool of Bethesda"
+    }
+  },
+  {
+    "k": "upper",
+    "la": 31.7738,
+    "lo": 35.2294,
+    "e": [
+      "herod"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 600,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Upper City"
+    },
+    "s": {
+      "en": "priestly mansions"
+    }
+  },
+  {
+    "k": "ophel",
+    "la": 31.7752,
+    "lo": 35.2357,
+    "e": [
+      "david",
+      "return",
+      "hezekiah",
+      "herod"
+    ],
+    "dx": 14,
+    "dy": 0,
+    "a": "start",
+    "w": 500,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Ophel"
+    }
+  },
+  {
+    "k": "2w",
+    "la": 31.779,
+    "lo": 35.2313,
+    "e": [
+      "herod"
+    ],
+    "dx": -14,
+    "dy": -6,
+    "a": "end",
+    "w": 600,
+    "c": "#a8452f",
+    "n": {
+      "en": "Second Wall"
+    },
+    "s": {
+      "en": "course disputed"
+    }
+  },
+  {
+    "k": "3w",
+    "la": 31.7856,
+    "lo": 35.2305,
+    "e": [
+      "herod"
+    ],
+    "dx": 0,
+    "dy": -16,
+    "a": "middle",
+    "w": 600,
+    "c": "#a8452f",
+    "n": {
+      "en": "Third Wall — Agrippa I, AD 41–44"
+    },
+    "s": {
+      "en": "after Jesus' lifetime; line disputed"
+    }
+  },
+  {
+    "k": "muslimq",
+    "la": 31.78,
+    "lo": 35.2338,
+    "e": [
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Muslim Quarter"
+    }
+  },
+  {
+    "k": "jewishq",
+    "la": 31.7754,
+    "lo": 35.232,
+    "e": [
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Jewish Quarter"
+    }
+  },
+  {
+    "k": "christq",
+    "la": 31.7795,
+    "lo": 35.2281,
+    "e": [
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Christian Quarter"
+    }
+  },
+  {
+    "k": "armq",
+    "la": 31.7748,
+    "lo": 35.2288,
+    "e": [
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": 0,
+    "a": "middle",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Armenian Quarter"
+    }
+  },
+  {
+    "k": "wwp",
+    "la": 31.77655,
+    "lo": 35.2332,
+    "e": [
+      "today"
+    ],
+    "dx": -12,
+    "dy": 20,
+    "a": "end",
+    "w": 600,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Western Wall plaza"
+    },
+    "s": {
+      "en": "flat — the valley is beneath it"
+    }
+  },
+  {
+    "k": "dome",
+    "la": 31.77802,
+    "lo": 35.23516,
+    "e": [
+      "muslim",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 0,
+    "dy": 2,
+    "a": "middle",
+    "w": 600,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Dome of the Rock"
+    }
+  },
+  {
+    "k": "aqsa",
+    "la": 31.77618,
+    "lo": 35.23576,
+    "e": [
+      "muslim",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 14,
+    "dy": 4,
+    "a": "start",
+    "w": 500,
+    "c": "#7a5a2a",
+    "n": {
+      "en": "Al-Aqsa Mosque"
+    }
+  },
+  {
+    "k": "golden",
+    "la": 31.77889,
+    "lo": 35.23694,
+    "e": [
+      "muslim",
+      "crusader",
+      "ayyubid",
+      "mamluk",
+      "ottoman",
+      "today"
+    ],
+    "dx": 14,
+    "dy": 0,
+    "a": "start",
+    "w": 500,
+    "c": "#2f4f66",
+    "n": {
+      "en": "Golden Gate"
+    }
+  }
 ];
-
 
 window.JD = { P, T, LEG, SECKEYS, CS, ERAS, LB };

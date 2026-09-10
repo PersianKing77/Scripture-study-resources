@@ -66,6 +66,7 @@
     .ctrlfab[aria-expanded="true"]{background:var(--terra); color:#f4ecda; border-color:var(--terra)}
     .ctrlfab2[aria-expanded="true"]{background:var(--indigo); color:#f4ecda}
     .hdracts,.hdracts2{display:none}
+    #dtgrail,#dtgpanel{display:none}
     body.ctrl-open .hdracts,body.ctrl2-open .hdracts2{display:flex; flex-direction:column; align-items:stretch; gap:5px;
       position:fixed; top:calc(max(10px, env(safe-area-inset-top)) + 40px); z-index:80; width:168px;
       max-height:calc(100vh - 64px); overflow-y:auto; background:#f4ecda; border:1px solid #8d8266; border-radius:3px;
@@ -238,6 +239,14 @@
   .panel{border-left:1px solid var(--rule); overflow:hidden; display:grid; grid-template-rows:auto auto minmax(0,1fr)}
   .cfmreturn{display:flex; padding:8px 12px; border-bottom:1px solid var(--rule); background:#f7ece6}
   .cfmreturn[hidden]{display:none}
+  .cfmweeknav{display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid var(--rule); background:#eee4d0}
+  .cfmweeknav[hidden]{display:none}
+  .cfmweeknav button{border:1px solid var(--line); background:#f4ecda; color:var(--ink); cursor:pointer;
+    width:34px; height:34px; border-radius:2px; font-size:16px; line-height:1}
+  .cfmweeknav button:hover{background:#fff}
+  .cfmweeknav button:disabled{opacity:.4; cursor:default}
+  .cfmweeknav span{flex:1; text-align:center; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2)}
   .cfmreturn button{width:100%; display:flex; align-items:center; gap:6px; background:var(--terra); color:#f4ecda;
     border:0; border-radius:3px; padding:10px 13px; cursor:pointer; font-family:"IBM Plex Mono",monospace;
     font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 3px 10px #241f1833}
@@ -251,7 +260,7 @@
   .tabs{display:flex; border-bottom:1px solid var(--rule); background:#eee4d0;
     overflow-x:auto; scrollbar-width:none}
   .tabs::-webkit-scrollbar{display:none}
-  .tabs button{flex:1 1 auto; min-width:0; white-space:nowrap; border:0; background:none; cursor:pointer; padding:9px 5px 8px;
+  .tabs button{flex:1 1 auto; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border:0; background:none; cursor:pointer; padding:9px 5px 8px;
     font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.04em; text-transform:uppercase;
     color:var(--ink-2); border-bottom:2px solid transparent}
   .tabs button:hover{color:var(--ink)}
@@ -474,7 +483,7 @@
   .focusring{animation:spin 1.6s linear infinite}
   .focus-label{font-size:12px; font-family:"EB Garamond",Georgia,serif; paint-order:stroke; stroke:#f4ecda;
     stroke-width:3.5px; stroke-linejoin:round; pointer-events:none}
-  #map.sat .focus-label,#map.relief .focus-label{stroke:#000000c9}
+  #map.sat .focus-label,#map.relief .focus-label{stroke:#000000c9; fill:#fff !important}
   @keyframes pulse{0%{opacity:.85; r:9}70%{opacity:0; r:22}100%{opacity:0; r:22}}
 
   /* ---- shared overlay shell: guide, camp diagram, study sheet ---- */
@@ -583,12 +592,12 @@
     footer{display:none}
     .rail{position:fixed; top:0; bottom:0; left:0; width:min(332px,87vw); z-index:42;
       background:#f4ecda; border-right:1px solid var(--rule); padding-bottom:20px;
-      transform:translateX(-102%); transition:transform .22s ease; box-shadow:8px 0 30px #241f1826;
+      transform:translateX(-102%); box-shadow:8px 0 30px #241f1826;
       -webkit-overflow-scrolling:touch}
     body.drawer-open .rail{transform:none}
     .panel{position:fixed; left:0; right:0; bottom:0; height:min(45vh,420px); z-index:42;
       background:#f4ecda; border-left:0; border-top:1px solid var(--rule);
-      transform:translateY(102%); transition:transform .22s ease;
+      transform:translateY(102%);
       box-shadow:0 -10px 30px #241f1826}
     body.sheet-open main aside.panel{transform:none}
     .scrim{display:block; position:fixed; inset:0; background:#241f1833; z-index:41;
@@ -637,7 +646,7 @@
     body.hide-rail main{grid-template-columns:minmax(0,1fr)}
     .panel{position:fixed; top:0; right:0; bottom:0; width:min(30vw,380px); z-index:42;
       border-top:0; transform:translateX(102%);
-      transition:transform .22s ease; box-shadow:-10px 0 30px #241f1826}
+      box-shadow:-10px 0 30px #241f1826}
     body.tab-panel-open .panel{transform:none}
     .tourbar,#cfmbar{bottom:14px; max-width:min(520px, calc(100% - 76px)); max-height:54vh; overflow-y:auto}
     .tournav{position:sticky; bottom:-11px; z-index:1; background:#f4ecdaf5; margin:8px -12px -11px;
@@ -660,7 +669,7 @@
   <div class="hdracts" id="hdracts">
     <button class="aboutbtn" id="tgheader" aria-pressed="true">Top bar</button>
     <button class="aboutbtn" id="mbbrowse" aria-pressed="false">Left side panel</button>
-    <button class="aboutbtn" id="mbpanel" aria-pressed="false">Details panel</button>
+    <button class="aboutbtn" id="mbpanel" aria-pressed="false">Right panel</button>
     <button class="aboutbtn" id="mbtime" aria-pressed="false">Timeline</button>
     <button class="aboutbtn" id="tglayers" aria-pressed="true">Map layers</button>
     <button class="aboutbtn" id="laychip-all">All layers on</button>
@@ -672,7 +681,7 @@
   <div class="hdracts2" id="hdracts2">
     <button class="aboutbtn" id="dtgrail" aria-pressed="true">Left panel</button>
     <button class="aboutbtn" id="dtgpanel" aria-pressed="true">Right panel</button>
-    <button class="aboutbtn" id="cfmbtn" title="Weekly Reading — this week's reading on the map (w)">Weekly Reading</button>
+    <button class="aboutbtn" id="cfmbtn" title="Weekly Reading — this week’s reading on the map (w)">Weekly Reading</button>
     <button class="aboutbtn" id="presentbtn" title="Presenter mode — large type, high contrast, no controls (m or p)">Presenter</button>
     <button class="aboutbtn" id="sheetbtn" title="Printable study sheet for the current week or era">Study sheet</button>
     <button class="aboutbtn" id="sharebtn" title="Copy a link that reopens exactly this view">Share view</button>
@@ -756,7 +765,12 @@
   </div>
 
   <aside class="panel">
-    <div class="cfmreturn" id="cfmreturn" hidden><button id="cfmreturnbtn">‹ Back to this week's reading</button></div>
+    <div class="cfmweeknav" id="cfmweeknav" hidden>
+      <button id="cfmwnprev" aria-label="Previous week" title="Previous week">‹</button>
+      <span id="cfmwnlabel"></span>
+      <button id="cfmwnnext" aria-label="Next week" title="Next week">›</button>
+    </div>
+    <div class="cfmreturn" id="cfmreturn" hidden><button id="cfmreturnbtn">‹ Back to this week’s reading</button></div>
     <div class="tabs" id="tabs"></div>
     <div class="pane" id="pane-era"></div>
     <div class="pane" id="pane-cfm" hidden></div>
@@ -819,7 +833,7 @@
         bottom of the screen to choose the traditional (15th c. BC), archaeological (13th c. BC), or both-shown view.
       </div>
       <div class="subhead">On the evidence</div>
-      <p>Every scripture reference in the atlas — more than six hundred across places, events, journeys, campaigns, finds and the 52 weekly readings — was checked against book and chapter counts. Regnal dates follow Thiele's
+      <p>Every scripture reference in the atlas — more than six hundred across places, events, journeys, campaigns, finds and the 52 weekly readings — was checked against book and chapter counts. Regnal dates follow Thiele’s
         synchronised chronology. Inscription dates, findspots and museum holdings were checked against published
         translations and museum records; disputed points — Samaria falling in 722 or 720, the figure on the Black
         Obelisk — are named as disputed.</p>
@@ -827,7 +841,7 @@
       <p>Every route leg was checked against the coastline and stepped through real roads, rivers and caravan
         stations: none crosses water, and none runs more than about 200 km without a waystation — except the
         Arabian incense road, where the desert genuinely is that empty. Routes follow the historic network
-        (Via Maris, the King's Highway, the Euphrates road) but remain schematic, and kingdom outlines are
+        (Via Maris, the King’s Highway, the Euphrates road) but remain schematic, and kingdom outlines are
         approximate zones, not surveyed frontiers.</p>
       <div class="subhead">On the Jerusalem plan</div>
       <p>Walls, gates, valleys and the water system are drawn from the excavated and surveyed lines in four
@@ -858,21 +872,20 @@
       </ul>
       <div class="subhead">Time and text</div>
       <ul>
-        <li><em>Timeline</em> (key C) opens the chronology: Judah and Israel's kings side by side, the prophets who
+        <li><em>Timeline</em> (key C) opens the chronology: Judah and Israel’s kings side by side, the prophets who
           overlap them, and the empires above. Click a reign to read it; click a prophet to fly to his home town.</li>
         <li>Every scripture reference is a button. In the <em>Verses</em> tab, place names inside the text are
           clickable and the map follows the verse you are reading.</li>
       </ul>
       <div class="subhead">Seeing the ground</div>
       <ul>
-        <li><em>Jerusalem plan</em> (key J), or open Jerusalem's entry and pick a building phase.</li>
-        <li><em>Satellite</em> swaps the parchment for NASA imagery that provides regional geographic context; it is not site-level archaeological photography.</li>
-      </ul>
+        <li><em>Jerusalem plan</em> (key J), or open Jerusalem’s entry and pick a building phase.</li>
+              </ul>
       <div class="subhead">Sources</div>
       <ul>
         <li>Coastlines and modern borders: Natural Earth, public domain, 1:50m.</li>
         <li>Scripture text: American Standard Version (1901), public domain worldwide — no jurisdiction requires a licence.</li>
-        <li>Imagery and relief: NASA Blue Marble and NASA shaded relief with bathymetry, public domain, served through
+        <li>Relief: NASA shaded relief with bathymetry, public domain, served through
           NASA GIBS. Imagery needs a connection; without one the atlas falls back to the drawn map.</li>
         <li>Elevations are the recorded heights of the named places, quoted in each place entry.</li>
         <li>Dates are editorial choices, not settled facts: each era says which chronology it follows and what the
@@ -894,7 +907,7 @@
         ideas and tools.</p>
       <p>He is the author and editor of more than fifty books and nearly a thousand articles and blog posts, and a
         builder of scripture study resources: the ScripturePlus app with Scripture Central, whose scripture YouTube
-        channel he co-hosted to more than fifty million views, and BYU's Virtual Scripture Group, whose team spent
+        channel he co-hosted to more than fifty million views, and BYU’s Virtual Scripture Group, whose team spent
         more than five years reconstructing New Testament Jerusalem in three dimensions. This atlas belongs to that
         same body of work — tools made so that ordinary readers can see what specialists see.</p>
       <p>He leads tours to Israel and the Middle East, China, India, Central America, Europe, and the national parks
@@ -923,7 +936,7 @@
 
     <div class="modalpane" data-pane="terms" hidden>
       <p class="lede">Terms of use, refund policy &amp; license.</p>
-      <div class="subhead">1. What you're getting</div>
+      <div class="subhead">1. What you’re getting</div>
       <p>This product is a Beta: an interactive atlas of places, finds, peoples, tours, campaigns and journeys
         across the Old Testament and intertestamental period, with accompanying essays and reference material,
         published by Taylor Halverson, Ph.D. ("Publisher"). It is a teaching aid and historical model, not a
@@ -931,7 +944,7 @@
       <div class="subhead">2. License to use</div>
       <p>Publisher grants the purchaser or recipient a personal, non-exclusive, non-transferable license to view
         and use this product for personal study, teaching, and classroom use. Redistribution of the product file
-        itself, or extraction of its map data, essays, or illustrations for republication, requires Publisher's
+        itself, or extraction of its map data, essays, or illustrations for republication, requires Publisher’s
         prior written permission. Third-party components (typefaces, code libraries, map and imagery sources)
         remain under their own licenses; see THIRD-PARTY-NOTICES.md and the Credits &amp; licences tab.</p>
       <div class="subhead">3. Scripture text</div>
@@ -939,20 +952,20 @@
         worldwide; no permission is required to reproduce it, and none is claimed here beyond what this license
         already grants for the product as a whole.</p>
       <div class="subhead">4. Refunds</div>
-      <p>If this product was purchased through a store or platform, that platform's refund policy governs first.
+      <p>If this product was purchased through a store or platform, that platform’s refund policy governs first.
         Where Publisher sells directly, a full refund is available on request within 14 days of purchase,
         provided the product has not been redistributed; request a refund via
-        <a href="mailto:support@taylorhalverson.com">support@taylorhalverson.com</a>.</p>
+        <a href="mailto:info@taylorhalverson.com">info@taylorhalverson.com</a>.</p>
       <div class="subhead">5. No warranty of scholarly conclusion</div>
       <p>Because this is a Beta reconstruction of disputed and debated ancient geography and chronology, Publisher
         makes no warranty that any specific dating, identification, or interpretation shown will not be revised
-        in a later edition. The product is provided "as is" for its stated teaching purpose.</p>
+        in a later edition. The product is provided “as is” for its stated teaching purpose.</p>
       <div class="subhead">6. Limitation of liability</div>
-      <p>To the extent permitted by law, Publisher's liability for any claim arising from this product is limited
+      <p>To the extent permitted by law, Publisher’s liability for any claim arising from this product is limited
         to the amount paid for it.</p>
       <div class="subhead">7. Governing law &amp; contact</div>
       <p>To request a refund or ask a licensing question, contact
-        <a href="mailto:support@taylorhalverson.com">support@taylorhalverson.com</a> or use
+        <a href="mailto:info@taylorhalverson.com">info@taylorhalverson.com</a> or use
         <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>.
         The user agrees that
         any legal action, dispute, or proceeding arising out of or relating to this product must be brought
@@ -1083,7 +1096,7 @@ const state = {
   passage: null, highlight: [], verseIds: [], campaign: null, find: null, allFinds: false, focus: null, tour: null,
   layers: { routes:false, places:false, events:false, campaigns:false, finds:false,
             kingdoms:false, roads:false, distances:false, tribes:false, modern:false,
-            terrain:false, relief:false, satellite:false, city:false,
+            terrain:false, relief:false, city:false,
             names:false, certainty:false },
   cityPeriod: "nehemiah",
   chronoModel: (()=>{ try{ return localStorage.getItem("otatlas:chrono") || "neutral"; }catch(e){ return "neutral"; } })()
@@ -1139,14 +1152,14 @@ const CHRON = {
   exodus:"Undated. Traditional models place it in the 15th century BC, read from the 480 years of 1 Kgs 6:1; other reconstructions place it in the 13th century under Ramesses II — a difference of about 200 years. The atlas does not pick one as the archaeological date.",
   conquest:"No single conquest horizon is agreed. The traditional narrative setting follows whichever exodus model is in view (15th or 13th c. BC); settlement archaeology shows highland population growth chiefly in the late 13th–12th centuries BC.",
   judges:"The spans in Judges overlap and are not meant to be added; the totals here are approximate.",
-  kingdom:"Regnal dates follow Thiele's synchronised chronology of Judah and Israel.",
-  divided:"Regnal dates follow Thiele. Samaria's fall is given as 722 BC; 720 BC is the competing date, and the atlas flags it as disputed.",
+  kingdom:"Regnal dates follow Thiele’s synchronised chronology of Judah and Israel.",
+  divided:"Regnal dates follow Thiele. Samaria’s fall is given as 722 BC; 720 BC is the competing date, and the atlas flags it as disputed.",
   judah:"Assyrian and Babylonian records fix this century to within a year or two — the firmest dates in the atlas.",
   exile:"Persian-period dates rest on dated administrative records. The relative order of Ezra and Nehemiah is an open question, and the atlas takes the traditional order.",
   persia:"Persian regnal years are fixed by Babylonian and Egyptian dated documents. What is uncertain is Judean internal history, for which there is almost no narrative between Nehemiah and Alexander.",
   hellenistic:"Ptolemaic and Seleucid regnal years are firm; the Babylonian diaries date Gaugamela to the day. Events inside Judea before 175 BC are sparsely dated.",
   hasmonean:"1 Maccabees dates events by the Seleucid era, which converts cleanly; 2 Maccabees uses a different reckoning and sometimes disagrees by a year.",
-  roman:"Roman and Judean events here are dated within a year or two. Herod's death is placed in 4 BC from his sons' regnal years and a lunar eclipse; a minority argues for 1 BC."
+  roman:"Roman and Judean events here are dated within a year or two. Herod’s death is placed in 4 BC from his sons' regnal years and a lunar eclipse; a minority argues for 1 BC."
 };
 
 const projection = d3.geoMercator();
@@ -1251,7 +1264,7 @@ function buildBase(topo){
   land = clipFeatures(countries);
   coast = clipMesh(topojson.mesh(topo, topo.objects.countries, (a,b)=>a===b));
   borders = clipMesh(topojson.mesh(topo, topo.objects.countries, (a,b)=>a!==b));
-  gLand.append("path").attr("class","landmass").attr("fill","var(--parch)");
+  gLand.append("g").attr("class","landmass-group");
   gLand.append("path").attr("class","coast").attr("fill","none").attr("stroke","#8f8362").attr("stroke-width",0.9);
   gModern.append("path").attr("class","border").attr("fill","none").attr("stroke","#2f6d8c")
     .attr("stroke-width",1).attr("stroke-dasharray","7 4");
@@ -1272,7 +1285,10 @@ d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json")
   .catch(()=>d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json").then(buildBase));
 
 function paintGeo(){
-  gLand.select(".landmass").datum(land).attr("d",path);
+  const lp = gLand.select(".landmass-group").selectAll("path").data(land.features);
+  lp.enter().append("path").attr("class","landmass").attr("fill","var(--parch)")
+    .merge(lp).attr("d",path);
+  lp.exit().remove();
   gLand.select(".coast").datum(coast).attr("d",path);
   gModern.select(".border").datum(borders).attr("d",path);
 
@@ -1673,15 +1689,19 @@ function renderHalos(){
 function flyTo(c, k){
   const target = k || Math.max(transform.k, 3.2);
   const p = projection(c);
-  const {visW, visH} = visibleStageSize();
-  const t = d3.zoomIdentity.translate(visW/2 - p[0]*target, visH/2 - p[1]*target).scale(target);
+  const {visW, visH, topOffset} = visibleStageSize();
+  const t = d3.zoomIdentity.translate(visW/2 - p[0]*target, topOffset + visH/2 - p[1]*target).scale(target);
   svg.transition().duration(RM?0:700).call(zoom.transform, t);
 }
 function visibleStageSize(){
   let visW = W, visH = H;
   if(window.innerWidth<=820) visH = H - (document.body.classList.contains("sheet-open") ? Math.min(H*0.45, 420) : 0);
   else if(window.innerWidth<=1280) visW = W - (document.body.classList.contains("tab-panel-open") ? Math.min(W*0.30, 380) : 0);
-  return {visW, visH};
+  const layerbarEl = document.getElementById("layerbar");
+  const topOffset = (!document.body.classList.contains("hide-layers") && layerbarEl)
+    ? layerbarEl.getBoundingClientRect().height + 18 : 0;
+  visH -= topOffset;
+  return {visW, visH, topOffset};
 }
 
 /* =========================== focus marker =========================== */
@@ -1775,7 +1795,7 @@ function spotlightVerse(ids, fit){
       .attr("stroke-dasharray",`${6/k} ${4/k}`)
       .attr("d",line(ids.map(id=>projection(S[id].c))));
   }
-  // draw the verse's places as pins + labels in their own right, so a passage from
+  // draw the verse’s places as pins + labels in their own right, so a passage from
   // another era still gets a dot, a name and a click target
   const vd = ids.map(id=>({...S[id], xy:projection(S[id].c),
     inEra: ERAS[state.era].sites.includes(id)}));
@@ -1799,15 +1819,13 @@ function spotlightVerse(ids, fit){
   }
 }
 
-/* =========================== raster tiles (satellite / relief) =========================== */
-function activeTileset(){ return state.layers.satellite ? "satellite"
-  : state.layers.relief ? "relief" : null; }
+/* =========================== raster tiles (relief) =========================== */
+function activeTileset(){ return state.layers.relief ? "relief" : null; }
 function renderTiles(){
   const set = activeTileset();
   const svgEl = document.getElementById("map");
-  svgEl.classList.toggle("sat", set==="satellite");
   svgEl.classList.toggle("relief", set==="relief");
-  gLand.select(".landmass").attr("fill-opacity", set==="relief" ? 0.35 : set ? 0 : 1);
+  gLand.selectAll(".landmass").attr("fill-opacity", set==="relief" ? 0.35 : set ? 0 : 1);
   gWater.selectAll(".lake").attr("fill-opacity", set?0:1);
   document.getElementById("tilecredit").textContent = set ? TILESETS[set].credit : "";
   if(!set){ gTiles.selectAll("*").remove(); return; }
@@ -1891,7 +1909,7 @@ function itineraryEl(pathArr, color){
         <td>${S[l.from].n.replace(/ \(.*\)/,"")} <span class="arw">→</span> ${S[l.to].n.replace(/ \(.*\)/,"")}</td>
         <td class="num">${Math.round(l.km)} km</td>
         <td class="num day">${days(l.km)} d</td></tr>`).join("")}</tbody></table>
-    <div class="note" style="margin-top:6px">Distances measured along the road waypoints of this route, not straight lines. A day's walk in the ancient Near East ran 15 km with flocks and children, 25–30 km for a caravan or army on a made road.</div>`;
+    <div class="note" style="margin-top:6px">Distances measured along the road waypoints of this route, not straight lines. A day’s walk in the ancient Near East ran 15 km with flocks and children, 25–30 km for a caravan or army on a made road.</div>`;
   const sel = box.querySelector(".pacesel");
   sel.value = String(PACE);
   sel.onchange = e=>{ PACE = +e.target.value;
@@ -1926,9 +1944,10 @@ function eraForRef(ref){
 }
 async function openPassage(ref){
   state.passage = {ref, verses:null, error:null};
+  if(state.cfm) state.cfmRef = ref;
   setTab("scripture");
   const ei = eraForRef(ref);                       // read Joshua, get the Conquest map
-  if(ei>=0 && ei!==state.era) setEra(ei, false);
+  if(!state.cfm && ei>=0 && ei!==state.era) setEra(ei, false);
   state.highlight = placesForRef(ref).map(e=>e.c).filter(Boolean);
   renderHalos();
   renderScripturePane();
@@ -1979,7 +1998,7 @@ TABS.forEach(([id,label])=>{
   b.setAttribute("role","tab");
   b.onclick = ()=>setTab(id); tabsEl.appendChild(b);
 });
-function setTab(id){
+function setTab(id, skipShow){
   state.tab = id;
   document.getElementById("pane-detail").hidden = true;
   tabsEl.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current", b.dataset.tab===id));
@@ -1991,7 +2010,8 @@ function setTab(id){
   if(id==="finds") renderFindsPane();
   if(id==="peoples") renderPeoplesPane();
   if(id==="scripture") renderScripturePane();
-  if(id!=="cfm" && id!=="tours") ensurePanelVisible();
+  if(id!=="cfm" && id!=="tours" && !skipShow) ensurePanelVisible();
+  if(state.cfm) document.getElementById("cfmreturn").hidden = (id==="scripture" || id==="cfm");
 }
 
 function refRow(refStr){
@@ -2122,7 +2142,6 @@ function whereBlock(id){
     ${s.w?`<div class="wrow"><span class="wk">Further reading</span><span class="wv"><a href="https://en.wikipedia.org/wiki/${s.w}" target="_blank" rel="noopener">${s.w.replace(/_/g," ")} — Wikipedia</a></span></div>`:""}
     <div class="wrow"><span class="wk">Cite as</span><span class="wv mono" style="font-size:10px">Halverson, Taylor. “${s.n}.” <i>The Old Testament &amp; Intertestamental Atlas</i>, ${s.c[1].toFixed(4)}, ${s.c[0].toFixed(4)}. Accessed ${new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})}.</span></div>
     <div class="wrow"><span class="wk">See it</span><span class="wv groundrow">
-      <button class="chip" data-ground="sat">Satellite</button>
       <button class="chip" data-ground="relief">Relief</button>
       <button class="chip" data-ground="close">Closest zoom</button>
     </span></div></div>`;
@@ -2132,7 +2151,6 @@ function wireGround(root, id){
   root.querySelectorAll("[data-ground]").forEach(b=>{
     b.onclick = ()=>{
       const mode = b.dataset.ground;
-      if(mode==="sat") toggleLayer("satellite", true);
       if(mode==="relief") toggleLayer("relief", true);
       flyTo(s.c, mode==="close" ? 1400 : 700);
       focusOn(s.c, s.n, "var(--terra)");
@@ -2653,8 +2671,6 @@ chronoModelSel.onchange = e => applyChronoModel(e.target.value);
 
 /* =========================== layers UI =========================== */
 const TILESETS = {
-  satellite:{ url:(z,x,y)=>`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/GoogleMapsCompatible_Level8/${z}/${y}/${x}.jpeg`,
-              maxZ:8, credit:"Imagery: NASA Blue Marble — public domain, via NASA GIBS" },
   relief:{    url:(z,x,y)=>`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/${z}/${y}/${x}.jpeg`,
               maxZ:8, credit:"Relief and bathymetry: NASA Blue Marble — public domain, via NASA GIBS" }
 };
@@ -2688,7 +2704,7 @@ function relayoutRoadLabels(){
 function relayoutCityLabels(){
   if(!state.layers.city) return;
   const k = transform.k, sr = svg.node().getBoundingClientRect(), boxes = [];
-  gLabels.selectAll("text").each(function(){        // the era's own place names hold their ground
+  gLabels.selectAll("text").each(function(){        // the era’s own place names hold their ground
     if(this.getAttribute("display")==="none") return;
     const b = this.getBoundingClientRect();
     if(b.width) boxes.push([b.left,b.top,b.right,b.bottom]);
@@ -2766,7 +2782,7 @@ const LAYERS = [
   ["campaigns","Campaigns","4"],["finds","Finds","5"],["kingdoms","Kingdoms","6"],
   ["roads","Trade roads","7"],["distances","Distances","8"],["tribes","Tribes","9"],
   ["terrain","Land + rainfall","g"],["modern","Borders + cities","0"],
-  ["relief","Relief (NASA)","r"],["satellite","Satellite (NASA)","s"],
+  ["relief","Relief (NASA)","r"],
   ["names","Then & now","n"],["certainty","Certainty","k"],
   ["city","Jerusalem plan","j"]
 ];
@@ -2801,7 +2817,7 @@ const layerChips = [];
 LAYERS.forEach(([key,label,k])=>{
   const b = document.createElement("button");
   b.className = "lchip" + (key==="modern"?" modern":"") +
-    (["satellite","relief"].includes(key)?" basemap":"");
+    (["relief"].includes(key)?" basemap":"");
   layerChips.push(b);
   b.textContent = label; b.title = "Layer "+k+" — click to toggle";
   b.setAttribute("aria-pressed", state.layers[key]);
@@ -2817,8 +2833,8 @@ function syncLayerUI(){
     ctrlLayersEl.querySelectorAll("input")[i].checked = state.layers[key];
   });
 }
-const BASES = ["satellite","relief"];
-/* a basemap choice is the reader's, not the view's: keep it unless the caller names one */
+const BASES = ["relief"];
+/* a basemap choice is the reader’s, not the view’s: keep it unless the caller names one */
 function baseToKeep(map){
   return BASES.some(b=>b in map) ? null : (BASES.find(b=>state.layers[b]) || null);
 }
@@ -2827,7 +2843,6 @@ function setLayers(map){
   const keep = baseToKeep(map);
   LAYERS.forEach(([key])=>state.layers[key] = !!map[key]);
   restoreBase(keep);
-  if(state.layers.satellite) state.layers.relief = false;
   gTiles.selectAll("*").remove();
   syncLayerUI();
   if(land){ paintOverlays(); renderMap(false); renderTiles(); }
@@ -2835,7 +2850,7 @@ function setLayers(map){
 function toggleLayer(key, on){
   state.layers[key] = on;
   syncLayerUI();
-  const bases = ["satellite","relief"];                        // one basemap at a time
+  const bases = ["relief"];                                      // basemap toggle
   if(bases.includes(key)){
     if(on) bases.forEach(b=>{ if(b!==key) state.layers[b] = false; });
     gTiles.selectAll("*").remove();                            // drop the old set before re-tiling
@@ -3231,12 +3246,14 @@ function fitBox(box, animate=true){
   state.lastBox = box;
   const bar = document.getElementById("cfmbar"), tb = document.getElementById("tourbar");
   const shown = [bar, tb].find(b=>b && !b.hidden);
-  const bottom = shown ? Math.min(H*0.45, shown.getBoundingClientRect().height + 56) : 0;
-  projection.fitExtent([[22,22],[W-22,H-22-bottom]], {type:"MultiPoint",coordinates:[
+  const {visW, visH, topOffset} = visibleStageSize();
+  const bottomCap = visH<460 ? 0.32 : 0.45;
+  const bottom = shown ? Math.min(visH*bottomCap, shown.getBoundingClientRect().height + 56) : 0;
+  projection.fitExtent([[22,topOffset+22],[visW-22,topOffset+visH-22-bottom]], {type:"MultiPoint",coordinates:[
     [box[0][0],box[0][1]],[box[1][0],box[0][1]],[box[1][0],box[1][1]],[box[0][0],box[1][1]]]});
   paintGeo();
   const t = d3.zoomIdentity;
-  if(animate) svg.transition().duration(650).call(zoom.transform,t); else svg.call(zoom.transform,t);
+  svg.call(zoom.transform,t);
   transform = t; root.attr("transform",t); renderMap(false); updateScale(); renderHalos();
 }
 const theatersEl = document.getElementById("theaters");
@@ -3257,7 +3274,6 @@ function setLayersQuiet(map){
   const keep = baseToKeep(map);
   LAYERS.forEach(([key])=>state.layers[key] = !!map[key]);
   restoreBase(keep);
-  if(state.layers.satellite) state.layers.relief = false;
   gTiles.selectAll("*").remove();
   syncLayerUI();
   if(land){ paintOverlays(); renderTiles(); }
@@ -3272,17 +3288,17 @@ function cfmWeekNow(){
 function cfmBox(week){
   if(week.box) return week.box;
   const pts = week.pl.map(id=>S[id] && S[id].c).filter(Boolean);
-  if(!pts.length) return ERAS[Math.max(0,ERAS.findIndex(e=>e.id===week.era))].focus;
+  if(!pts.length){ const ei = ERAS.findIndex(e=>e.id===week.era); return ei>=0 ? ERAS[ei].focus : ERAS[0].focus; }
   const lon = pts.map(p=>p[0]), lat = pts.map(p=>p[1]);
   const w0=Math.min(...lon), w1=Math.max(...lon), s0=Math.min(...lat), s1=Math.max(...lat);
-  const padX = Math.max(0.55, (w1-w0)*0.22), padY = Math.max(0.45, (s1-s0)*0.22);
+  const padX = Math.max(1.1, (w1-w0)*0.42), padY = Math.max(0.85, (s1-s0)*0.42);
   return [[w0-padX, s0-padY],[w1+padX, s1+padY]];
 }
 function openWeek(n){
   const week = CFM.find(c=>c.w===n);
   if(!week) return;
   if(state.tour) document.getElementById("tourexit").click();
-  state.cfm = n;
+  state.cfm = n; state.cfmRef = null;
   const ei = ERAS.findIndex(e=>e.id===week.era);
   if(ei>=0 && ei!==state.era) setEra(ei, false);
   setLayersQuiet(Object.fromEntries(week.lay.split(/\s+/).map(k=>[k,true])));
@@ -3315,14 +3331,23 @@ function openWeek(n){
   });
   document.getElementById("cfmprev").disabled = week.w<=1;
   document.getElementById("cfmnext").disabled = week.w>=CFM.length;
+  document.getElementById("cfmweeknav").hidden = false;
+  document.getElementById("cfmwnlabel").textContent = `Week ${week.w} of ${CFM.length}`;
+  document.getElementById("cfmwnprev").disabled = week.w<=1;
+  document.getElementById("cfmwnnext").disabled = week.w>=CFM.length;
   cfmBar.hidden = false;
   fitBox(cfmBox(week));
-  if(state.tab==="cfm") markCfmActive();
-  document.getElementById("cfmreturn").hidden = false;
+  if(state.tab==="cfm"){ markCfmActive(); scrollCfmToActive(); }
+  document.getElementById("cfmreturn").hidden = true;
 }
 function markCfmActive(){
   document.querySelectorAll("#pane-cfm .cfmweek").forEach(b=>
     b.setAttribute("aria-current", String(Number(b.dataset.w)===state.cfm)));
+}
+function scrollCfmToActive(){
+  const pane = document.getElementById("pane-cfm");
+  const active = pane.querySelector('.cfmweek[aria-current="true"]');
+  if(active) pane.scrollTop += (active.getBoundingClientRect().top - pane.getBoundingClientRect().top) - 12;
 }
 function renderCfmPane(){
   const p = document.getElementById("pane-cfm"), now = cfmWeekNow();
@@ -3334,28 +3359,41 @@ function renderCfmPane(){
       Weeks whose reading has no earthly setting — a vision, a genealogy, a psalm — say so instead of inventing one.</p></div>
     ${cur ? `<div class="cfmnow"><span class="k">Week ${cur.w} · the current week</span>
       <span class="t">${cur.t}</span>
-      <button class="chip" id="cfmgo">Open this week's map</button></div>` : ""}`;
-  if(cur) p.querySelector("#cfmgo").onclick = ()=>openWeek(cur.w);
+      <div class="groundrow"><button class="chip" id="cfmgo">Open this week’s map</button>
+      <button class="chip" id="cfmread">Read this week’s reading</button></div></div>` : ""}`;
+  if(cur){
+    p.querySelector("#cfmgo").onclick = ()=>openWeek(cur.w);
+    p.querySelector("#cfmread").onclick = ()=>{
+      openWeek(cur.w);
+      const r = (cur.refs||[])[0] ? parseRef(cur.refs[0]) : null;
+      if(r) openPassage(r); else ensurePanelVisible();
+    };
+  }
   CFM.forEach(c=>{
     const b = document.createElement("button");
     b.className = "cfmweek"; b.dataset.w = c.w;
     b.setAttribute("aria-current", String(c.w===state.cfm));
     b.innerHTML = `<span class="wn${c.w===now?" here":""}">${c.w}</span>
       <span><span class="t">${c.t}</span><br><span class="note">${c.note}</span></span>`;
-    b.onclick = ()=>{ openWeek(c.w); markCfmActive(); };
+    b.onclick = ()=>{ openWeekAndRead(c.w); markCfmActive(); };
     p.appendChild(b);
   });
+  scrollCfmToActive();
 }
 document.getElementById("cfmexit").onclick = ()=>{
-  cfmBar.hidden = true; state.cfm = null; state.highlight = []; state.verseIds = [];
+  cfmBar.hidden = true; state.cfm = null; state.cfmRef = null; state.highlight = []; state.verseIds = [];
   gVerse.selectAll("*").remove(); renderHalos(); markCfmActive();
   document.getElementById("cfmreturn").hidden = true;
+  document.getElementById("cfmweeknav").hidden = true;
 };
-document.getElementById("cfmprev").onclick = ()=>openWeek((state.cfm||1)-1);
-document.getElementById("cfmnext").onclick = ()=>openWeek((state.cfm||0)+1);
+document.getElementById("cfmprev").onclick = ()=>openWeekAndRead((state.cfm||1)-1);
+document.getElementById("cfmnext").onclick = ()=>openWeekAndRead((state.cfm||0)+1);
+document.getElementById("cfmwnprev").onclick = ()=>openWeekAndRead((state.cfm||1)-1);
+document.getElementById("cfmwnnext").onclick = ()=>openWeekAndRead((state.cfm||0)+1);
 document.getElementById("cfmdetail").onclick = ()=>{ setTab("cfm"); ensurePanelVisible(); };
 document.getElementById("cfmbtn").onclick = ()=>{
   setTab("cfm");
+  ensurePanelVisible();
   const now = cfmWeekNow();
   if(now) openWeek(now);
 };
@@ -3581,7 +3619,7 @@ function mapSnapshot(wpx, simple){
   node.querySelectorAll(".halo, .hovertip, .route-hit, title").forEach(n=>n.remove());
   if(simple){                                     // imagery tiles print badly
     node.querySelectorAll("image").forEach(n=>n.remove());
-    node.classList.remove("sat","relief");
+    node.classList.remove("relief");
     node.querySelectorAll(".landmass, .lake").forEach(n=>n.setAttribute("fill-opacity",1));
   }
   return node.outerHTML;
@@ -3707,10 +3745,10 @@ const GUIDE = [
   { t:"The map is the document", b:`<p>Thirteen eras run down the left rail and across the bottom timeline. Everything else — layers, panel, tours — is a way of asking a question about the map.</p>
       <div class="guidefig">Try it: press the left and right arrow keys to walk through the eras.</div>` },
   { t:"Layers sit above the map", b:`<p>The chips along the top of the map switch what is drawn: journeys, places, events, campaigns, finds, trade roads, tribal allotments, rainfall belts.</p>
-      <div class="guidefig"><b>Then &amp; now</b> adds each site's modern name; <b>Certainty</b> recolours the pins by how securely the place is identified.</div>` },
+      <div class="guidefig"><b>Then &amp; now</b> adds each site’s modern name; <b>Certainty</b> recolours the pins by how securely the place is identified.</div>` },
   { t:"Read by the week", b:`<p><b>Weekly Reading</b> (key w) opens a week-by-week Old Testament reading sequence. Pick a week and the atlas sets the era, the layers, the scale and the places for that reading — and says plainly when a week has no earthly setting.</p>` },
   { t:"Take it to class", b:`<p><b>Presenter</b> (key m) strips the controls and enlarges every label for a projector. <b>Study sheet</b> makes a printable handout of the week or era on screen — map, places, coordinates, and questions.</p>` },
-  { t:"Look at the real ground", b:`<p><b>Satellite</b> swaps the parchment for imagery and stays on as you move around. The <b>Scale</b> presets (shift-1 to shift-5) jump between the Crescent, Egypt and Sinai, Canaan, the ridge country and Jerusalem.</p>` },
+  { t:"Look at the real ground", b:`<p><b>Relief (NASA)</b> swaps the parchment for shaded terrain and stays on as you move around. The <b>Scale</b> presets (shift-1 to shift-5) jump between the Crescent, Egypt and Sinai, Canaan, the ridge country and Jerusalem.</p>` },
   { t:"Keep what you find", b:`<p><b>Share view</b> copies a link that reopens exactly this era, zoom, layers and place — paste it into your lesson notes. Search (key /) reaches places, events, peoples, objects, weeks and scripture references.</p>
       <div class="guidefig">Press <b>?</b> at any time to reopen this guide.</div>` }
 ];
@@ -3738,7 +3776,7 @@ document.getElementById("guidenext").onclick = ()=>{
 };
 try{ if(!localStorage.getItem("ot-atlas-guide-seen")) setTimeout(openGuide, 900); }catch(e){}
 
-/* =========================== imagery that isn't there =========================== */
+/* =========================== imagery that isn’t there =========================== */
 /* Offline or behind a firewall the tile servers simply fail; say so and fall back to the drawn map. */
 let tileFails = 0;
 gTiles.node().addEventListener("error", ()=>{
@@ -3759,8 +3797,7 @@ const CREDIT_SECTIONS = [
     ["Ancient roads, kingdom zones and rainfall belts", "Drawn for this atlas as schematic reconstructions from the standard route and climate literature. They are interpretive lines, not surveyed boundaries."],
     ["Jerusalem plan", "Drawn for this atlas from the excavated and surveyed wall, gate and water-system lines of the Davidic, Solomonic, Hezekian and Nehemian phases; reconstructed stretches are named in each entry."]
   ]],
-  ["Satellite imagery and relief", [
-    ["Blue Marble: Next Generation", "NASA Earth Observatory — Reto St\u00f6ckli, Nazmi El Saleous and Marit Jentoft-Nilsen. Public domain. Courtesy NASA/GSFC."],
+  ["Relief imagery", [
     ["Shaded relief with bathymetry", "NASA Global Imagery Browse Services (GIBS), Earth Observing System Data and Information System. Public domain. Courtesy NASA/GSFC/ESDIS."],
     ["Delivery", "Tiles are requested from NASA GIBS at view time. Without a connection the atlas draws its own parchment map instead."]
   ]],
@@ -3813,7 +3850,7 @@ function renderCredits(){
       build makes requests to the services listed above for libraries, geographic data, optional map imagery, and
       scripture text; those providers may receive standard network information such as IP address, browser headers,
       and the requested resource. The offline build bundles application libraries and geographic data, but scripture
-      text and optional satellite imagery still require network access unless those resources are separately
+      text and optional relief imagery still require network access unless those resources are separately
       bundled. It makes no requests for photographs — none are loaded at runtime.</p>`;
 }
 document.getElementById("creditsbtn").onclick = ()=> openAbout("credits");
@@ -3865,8 +3902,8 @@ function setOverlay(which){
   // drive the overlays inline as well: nothing in the cascade can then hold them shut
   const rail = document.querySelector(".rail"), panel = document.querySelector(".panel");
   if(isCompact()){
-    rail.style.transform  = which==="browse" ? "none" : "";
-    panel.style.transform = which==="panel"  ? "none" : "";
+    rail.style.transform  = "";
+    panel.style.transform = "";
     scrim.style.opacity = which==="browse" ? "1" : "0";
     scrim.style.pointerEvents = which==="browse" ? "auto" : "none";
   } else {
@@ -3923,14 +3960,10 @@ mbBtn.panel.onclick = ()=>{ document.body.classList.remove("map-only"); mbBtn.ma
 mbBtn.time.onclick = ()=>{ document.body.classList.remove("map-only"); mbBtn.map.setAttribute("aria-pressed","false");
   if(isCompact()) toggleOverlay("time"); else toggleStatic("hide-timeline", mbBtn.time); };
 const tgLayers = document.getElementById("tglayers");
-document.getElementById("dtgrail").onclick = e=>{
-  const on = !document.body.classList.toggle("hide-rail");
-  e.target.setAttribute("aria-pressed", String(on));
-  syncPanelToggles();
-};
+document.getElementById("dtgrail").onclick = ()=>{ mbBtn.browse.click(); };
 document.getElementById("dtgpanel").onclick = e=>{
-  const on = !document.body.classList.toggle("hide-panel");
-  e.target.setAttribute("aria-pressed", String(on));
+  mbBtn.panel.click();
+  e.target.setAttribute("aria-pressed", String(!document.body.classList.contains("hide-panel")));
   syncPanelToggles();
 };
 tgLayers.onclick = ()=>{
@@ -3940,24 +3973,30 @@ tgLayers.onclick = ()=>{
 scrim.onclick = closeOverlays;
 function setTabPanelOpen(open){
   document.body.classList.toggle("tab-panel-open", open);
-  document.querySelector(".panel").style.transform = open ? "none" : "";
+  document.querySelector(".panel").style.transform = "";
   syncPanelToggles();
 }
 function returnToCfmReading(){
+  const wk = state.cfm, ref = state.cfmRef;
   state.passage=null; state.highlight=[]; state.verseIds=[];
   gVerse.selectAll("*").remove(); renderHalos();
   closeDetail();
-  if(isCompact()) closeOverlays();
-  else if(window.innerWidth<=1280) setTabPanelOpen(false);
-  else { document.body.classList.add("hide-panel"); mbBtn.panel.setAttribute("aria-pressed","false"); syncPanelToggles(); }
+  if(wk){ openWeek(wk); ensurePanelVisible(); if(ref) openPassage(ref); else setTab("cfm"); }
+  else setTab("cfm");
 }
 document.getElementById("cfmreturnbtn").onclick = returnToCfmReading;
+function openWeekAndRead(n){
+  openWeek(n);
+  const week = CFM.find(c=>c.w===n);
+  const r0 = week && (week.refs||[])[0] ? parseRef(week.refs[0]) : null;
+  if(r0) openPassage(r0);
+}
 function ensurePanelVisible(){
   document.body.classList.remove("map-only");
   mbBtn.map.setAttribute("aria-pressed","false");
   if(isCompact()){
     document.body.classList.add("sheet-open"); document.body.classList.remove("drawer-open");
-    document.querySelector(".panel").style.transform = "none";
+    document.querySelector(".panel").style.transform = "";
     document.querySelector(".rail").style.transform = "";
     scrim.style.opacity = "0"; scrim.style.pointerEvents = "none";
     mbBtn.panel.setAttribute("aria-pressed","true"); mbBtn.browse.setAttribute("aria-pressed","false");
@@ -3998,7 +4037,7 @@ Object.values(mbBtn).forEach(b=>b.addEventListener("click", ()=>userToggledView=
 tgHeader.addEventListener("click", ()=>userToggledView=true);
 function isLandscapePhone(){ return window.innerWidth<=900 && window.innerHeight<=500 && window.innerWidth>window.innerHeight; }
 function applyLandscapePhoneDefault(){
-  if(userToggledView || window.innerWidth>1280) return;
+  if(userToggledView || !isLandscapePhone()) return;
   document.body.classList.add("map-only", "hide-header");
   mbBtn.map.setAttribute("aria-pressed","true");
   tgHeader.setAttribute("aria-pressed","false");
@@ -4021,7 +4060,7 @@ window.addEventListener("resize", applyLandscapePhoneDefault);
 applyLandscapePhoneDefault();
 /* opening a place from the map should surface the sheet, not hide the answer in it */
 const _setTab = setTab;
-setTab = function(id){ _setTab(id); if(isCompact() && document.body.classList.contains("drawer-open")) closeOverlays(); };
+setTab = function(id, skipShow){ _setTab(id, skipShow); if(isCompact() && document.body.classList.contains("drawer-open")) closeOverlays(); };
 
 /* Device-preview harness: the frame viewer drives these states without touching the screen. */
 window.addEventListener("message", e=>{
@@ -4056,7 +4095,7 @@ function readHash(){
   if(eraP!==null && ERAS[Number(eraP)]){
     setEra(Number(eraP), false);
     applyLayers();
-    setTab("era");
+    setTab("era", true);
     if(place && S[place]) openPlace(place);
     if(v){
       const [k,x,y] = v.split(",").map(Number);
@@ -4066,7 +4105,7 @@ function readHash(){
     return;
   }
   applyLayers();
-  setTab("era");
+  setTab("era", true);
 }
 readHash();
 applyLandscapePhoneDefault();
