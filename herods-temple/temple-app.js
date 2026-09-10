@@ -7,9 +7,19 @@ const el = id => document.getElementById(id);
 const stageEl = el('stage');
 
 // ---------- renderer / scene ----------
-const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance', preserveDrawingBuffer: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
+// Phones get a cheaper render path: capped pixel ratio, no MSAA, no shadow map.
+// Tablets and desktop are unaffected (same thresholds as the mobile chrome elsewhere: <1200px width + coarse pointer + <700px = phone).
+function isPhoneRenderTier() {
+  try {
+    return window.matchMedia('(max-width: 1200px)').matches
+      && window.matchMedia('(pointer: coarse)').matches
+      && window.innerWidth < 700;
+  } catch (e) { return false; }
+}
+const PHONE_TIER = isPhoneRenderTier();
+const renderer = new THREE.WebGLRenderer({ antialias: !PHONE_TIER, powerPreference: 'high-performance', preserveDrawingBuffer: true });
+renderer.setPixelRatio(PHONE_TIER ? 1 : Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = !PHONE_TIER;
 renderer.shadowMap.type = THREE.PCFShadowMap;
 // The sun only moves when the hour changes, and nothing in the scene animates, so the
 // shadow map is re-rendered on demand instead of on every frame.
@@ -1007,6 +1017,7 @@ requestAnimationFrame(tick);
 setInterval(() => { if (performance.now() - last > 240) frame(performance.now()); }, 240);
 
 function isNarrow() { return window.matchMedia('(max-width: 1200px)').matches; }   // phone and tablet chrome alike
+function isPhone() { return PHONE_TIER; }   // the stricter phone-only tier used for render cost, exposed for reuse
 const indexEl = () => el('index');
 let gutter = { left: 0, right: 0 };
 function applyViewOffset() {
