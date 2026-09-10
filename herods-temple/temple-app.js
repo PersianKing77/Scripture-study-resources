@@ -824,7 +824,7 @@ const WALK_SPEED = 4.4, RUN_MULT = 2.6, ACCEL = 26, DRAG = 11, STEP_UP = 0.62, S
 function hits(dir, reach) {
   const eyeY = walk.pos.y;
   for (const h of [0.45, 1.45]) {             // shin height and chest height
-    for (const off of [-SHOULDER * 0.6, 0, SHOULDER * 0.6]) {
+    for (const off of (PHONE_TIER ? [0] : [-SHOULDER * 0.6, 0, SHOULDER * 0.6])) {
       const o = new THREE.Vector3(-dir.z * off, 0, dir.x * off);
       probe.set(new THREE.Vector3(walk.pos.x + o.x, eyeY + h, walk.pos.z + o.z), dir);
       if (probe.intersectObject(model, true).some(x => x.object.userData.layer !== 'roof' && x.distance < reach)) return true;
