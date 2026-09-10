@@ -1666,28 +1666,36 @@ function variantNotes(q) {
    data/web-nt.js as window.WEB_TEXT, so every passage renders here, offline, with no link-out. */
 function localPassage(q) {
   const T = window.WEB_TEXT; if (!T) return null;
-  // "Book C", "Book C1-C2" (whole chapters), "Book C:V" or "Book C:V1-V2" (one chapter, verse range)
-  const m = String(q).match(/^\s*((?:[1-3]\s*)?[A-Za-z][A-Za-z ]*?)(?:\s+(\d+)(?:-(\d+))?(?::(\d+)(?:\s*[-\u2013]\s*(\d+))?)?)?\s*$/);
+  // "Book", "Book C", "Book C1-C2" (whole chapters), "Book C:V", "Book C:V1-V2" (one chapter),
+  // or "Book C1:V1-C2:V2" (a verse range spanning chapters, e.g. reading-plan segments).
+  const m = String(q).trim().match(/^((?:[1-3]\s*)?[A-Za-z][A-Za-z ]*?)(?:\s+(\d+)(?::(\d+))?(?:-(?:(\d+):)?(\d+))?)?$/);
   if (!m) return null;
   const want = m[1].trim().toLowerCase();
   const bookKey = Object.keys(T).find(b => b.toLowerCase() === want
     || b.toLowerCase().replace(/\s+/g, "") === want.replace(/\s+/g, ""));
   if (!bookKey) return null;
   const allCh = Object.keys(T[bookKey]).map(Number);
-  const chFrom = m[2] ? +m[2] : Math.min.apply(null, allCh), chTo = m[3] ? +m[3] : (m[2] ? chFrom : Math.max.apply(null, allCh));
-  const vFrom = m[4] ? +m[4] : 1, vTo = m[5] ? +m[5] : (m[4] ? +m[4] : 9999);
+  const hasCh = m[2] != null, vFromGiven = m[3] != null, hasDash = m[5] != null;
+  const chFrom = hasCh ? +m[2] : Math.min.apply(null, allCh);
+  const vFrom = vFromGiven ? +m[3] : 1;
+  let chTo, vTo;
+  if (!hasCh) { chTo = Math.max.apply(null, allCh); vTo = 9999; }
+  else if (hasDash && m[4] != null) { chTo = +m[4]; vTo = +m[5]; }
+  else if (hasDash && vFromGiven) { chTo = chFrom; vTo = +m[5]; }
+  else if (hasDash) { chTo = +m[5]; vTo = 9999; }
+  else { chTo = chFrom; vTo = vFromGiven ? vFrom : 9999; }
   const verses = [];
   for (let c = chFrom; c <= chTo; c++) {
     const ch = T[bookKey][c]; if (!ch) continue;
     Object.keys(ch).map(Number).sort((a, b) => a - b)
-      .filter(v => c !== chFrom || c !== chTo || (v >= vFrom && v <= vTo))
-      .filter(v => (c !== chFrom || v >= vFrom) && (c !== chTo || v <= vTo))
+      .filter(v => (c > chFrom || v >= vFrom) && (c < chTo || v <= vTo))
       .forEach(v => verses.push({ chapter: c, verse: v, text: ch[String(v)] }));
   }
   if (!verses.length) return null;
-  const ref = chFrom === chTo
-    ? `${bookKey} ${chFrom}${m[4] ? ":" + m[4] + (m[5] ? "-" + m[5] : "") : ""}`
-    : `${bookKey} ${chFrom}-${chTo}`;
+  const ref = !hasCh ? bookKey
+    : chFrom === chTo
+      ? `${bookKey} ${chFrom}${vFromGiven ? ":" + vFrom + (hasDash ? "-" + vTo : "") : ""}`
+      : `${bookKey} ${chFrom}${vFromGiven ? ":" + vFrom : ""}-${chTo}${(m[4] != null || vFromGiven) ? ":" + vTo : ""}`;
   return { reference: ref, verses, local: true };
 }
 function openPassage(ref) {

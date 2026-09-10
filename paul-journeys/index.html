@@ -563,8 +563,21 @@
     .brand { font-size: 18px; }
     button.tool { padding: 7px 8px; letter-spacing: .06em; }
   }
-  /* tablet-class widths: the timeline is collapsible there too, from the rail */
-  @media (max-width: 1180px) and (min-width: 821px) and (min-height: 541px) {
+  /* tablet-class widths: the timeline is collapsible there too, from the rail.
+     Split in two so 1001-1180px is never gated by height — below 1000px, the phone-landscape
+     query (max-height:540, max-width:1000) takes over with its own always-visible tabbar toggle,
+     so this second block only needs to defer to it, not duplicate its height condition. */
+  @media (max-width: 1180px) and (min-width: 1001px) {
+    .viewtoggle { display: inline-flex; }
+    body:not(.timeline-on) footer { display: none; }
+    body:not(.timeline-on) #app, body:not(.timeline-on) #app.detail-open {
+      grid-template-rows: 58px 1fr 0px; }
+    body:not(.timeline-on) #detail { bottom: 0; }
+    body.rail-collapsed #app { grid-template-columns: 0px 1fr 0px; }
+    body.rail-collapsed #app.detail-open { grid-template-columns: 0px 1fr 430px; }
+    body.rail-collapsed #rail { display: none; }
+  }
+  @media (max-width: 1000px) and (min-width: 821px) and (min-height: 541px) {
     .viewtoggle { display: inline-flex; }
     body:not(.timeline-on) footer { display: none; }
     body:not(.timeline-on) #app, body:not(.timeline-on) #app.detail-open {
