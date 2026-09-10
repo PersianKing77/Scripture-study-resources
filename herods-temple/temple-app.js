@@ -757,8 +757,8 @@ renderer.domElement.addEventListener('pointermove', e => {
     return;
   }
   if (look) {                                  // drag anywhere on the view to look around
-    walk.yawT -= (e.clientX - look.x) * 0.0038;
-    walk.pitchT = clamp(walk.pitchT - (e.clientY - look.y) * 0.0038, -1.2, 1.1);
+    walk.yawT += (e.clientX - look.x) * 0.0038;
+    walk.pitchT = clamp(walk.pitchT + (e.clientY - look.y) * 0.0038, -1.2, 1.1);
     look = { x: e.clientX, y: e.clientY };
   }
 });
@@ -955,7 +955,7 @@ if (planCv) {
 
 let last = performance.now();
 function frame(now) {
-  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  const dt = Math.min(0.1, (now - last) / 1000); last = now;
   if (flight) {
     const p = Math.min(1, (now - flight.t0) / flight.dur);
     const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
