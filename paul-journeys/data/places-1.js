@@ -191,7 +191,7 @@ lystra: {
 },
 
 derbe: {
-  name: "Derbe", modern: "Kerti Höyük, near Karaman, Türkiye", region: "Lycaonia", lat: 37.35, lng: 33.28, tier: "stop",
+  name: "Derbe", modern: "Kerti Höyük, near Karaman, Türkiye", region: "Lycaonia", lat: 37.349, lng: 33.362, tier: "stop",
   dates: "c. AD 47–48; revisited AD 49, 53",
   narrative: "The turning point of the first journey. After the stoning at Lystra Paul walked on to Derbe, preached, 'and had taught many' — with no recorded opposition — then retraced the whole route to strengthen the new churches rather than take the short road home over the Cilician Gates. Gaius of Derbe later travelled with him (Acts 20:4).",
   greco: "A frontier town of the Lycaonian plain, absorbed into the Roman province of Galatia; under Claudius it bore the title Claudioderbe. Its position made it the last settlement before the Isaurian mountain country.",

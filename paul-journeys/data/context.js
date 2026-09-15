@@ -3,6 +3,7 @@
 window.PAUL_CONTEXT = {
 lanes: [
   { id: "emperor", label: "Emperor", color: "#5b6f8c", items: [
+    { name: "Augustus", t0: 4, t1: 14, note: "First emperor; reigned from 27 BC. Died in AD 14 — this atlas opens near the end of his reign, in Paul's childhood at Tarsus." },
     { name: "Tiberius", t0: 14, t1: 37, note: "Emperor at the crucifixion and at Paul's conversion. Withdrew to Capri; Judea was left to prefects." },
     { name: "Caligula", t0: 37, t1: 41, note: "Ordered his statue erected in the Jerusalem temple; only his death in 41 prevented it (Josephus, Ant. 18.261–309)." },
     { name: "Claudius", t0: 41, t1: 54, note: "Expelled Jews from Rome over disturbances about 'Chrestus' (c. AD 49); annexed Lycia as a province in 43; the famine of Acts 11:28 falls in his reign." },

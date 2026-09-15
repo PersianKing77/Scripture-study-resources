@@ -8,8 +8,8 @@
   script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://unpkg.com;
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
   font-src 'self' https://fonts.gstatic.com;
-  img-src 'self' data: blob:;
-  connect-src 'self';
+  img-src 'self' data: blob: https://api.mapbox.com;
+  connect-src 'self' https://api.mapbox.com;
   object-src 'none'; frame-src 'none'">
 <title>The Journeys of Paul — An Interactive Study Atlas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,6 +53,7 @@
   header { grid-area: head; display: flex; align-items: center; gap: 18px;
     padding: 0 18px; background: linear-gradient(180deg, #16211a00, #0000), var(--ink-2);
     border-bottom: 1px solid var(--line); z-index: 700; }
+  .brand { margin-top: 6px; }
   .brand { font-family: "EB Garamond", serif; font-size: 21px; letter-spacing: .02em; white-space: nowrap; }
   .brand span { color: var(--gold); }
   .brand .beta { font-family: "IBM Plex Mono", monospace; font-style: normal; font-size: 9px;
@@ -60,7 +61,7 @@
     border-radius: 2px; padding: 2px 5px; vertical-align: 3px; margin-left: 4px; }
   .brand small { display: block; font-family: "IBM Plex Mono", monospace; font-size: 9.5px;
     letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-top: 1px; }
-  .searchwrap { position: relative; flex: 1 1 220px; min-width: 180px; max-width: 430px; }
+  .searchwrap { position: relative; flex: 1 1 110px; min-width: 140px; max-width: 215px; }
   #search { width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--parch);
     padding: 8px 11px 8px 32px; border-radius: 3px; font-family: inherit; font-size: 13px; }
   #search:focus { outline: none; border-color: var(--gold-dim); }
@@ -92,10 +93,18 @@
   body.railfocus #rail > .tools { display: none; }
   .moremenu.open { display: flex; }
   .moremenu button.tool { text-align: left; width: 100%; }
+  .menu-label { font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--muted); padding: 8px 4px 3px; }
+  .menu-label:first-child { padding-top: 2px; }
+  .basemap-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 0 0 2px; }
+  .basemap-row button { text-align: center; padding: 6px 3px; font-size: 9px; letter-spacing: .04em; }
+  .basemap-row button.on { color: var(--gold); border-color: var(--gold-dim); background: #241f14; }
   button.tool { background: var(--ink); border: 1px solid var(--line); color: var(--parch-dim);
     font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .1em;
     text-transform: uppercase; padding: 7px 11px; border-radius: 3px; cursor: pointer; white-space: nowrap; }
   button.tool:hover { border-color: var(--gold-dim); color: var(--parch); }
+  button.tool:disabled { opacity: .35; cursor: default; }
+  button.tool:disabled:hover { border-color: var(--line); color: var(--parch-dim); }
   button.tool.on { background: #2c2410; border-color: var(--gold-dim); color: var(--gold); }
 
   /* ---------- left rail ---------- */
@@ -103,6 +112,11 @@
     overflow-y: auto; padding-bottom: 20px; }
   .railhead { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; letter-spacing: .18em;
     text-transform: uppercase; color: var(--muted); padding: 15px 16px 7px; }
+  .railctrls { padding: 12px 16px 8px; display: flex; flex-direction: column; gap: 7px;
+    border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+  .railctrls-hint { font-size: 10.5px; color: var(--muted); line-height: 1.4; }
+  .railctrls-btns { display: flex; gap: 6px; }
+  .railctrls-btns button.tool { flex: 1; font-size: 9.5px; padding: 6px 8px; }
   .jrow { display: flex; align-items: flex-start; gap: 9px; padding: 9px 14px; cursor: pointer;
     border-left: 3px solid transparent; }
   .jrow:focus-visible, .stop:focus-visible, .res:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
@@ -124,8 +138,8 @@
   .stop .nm { color: var(--parch-dim); }
   .stop.now .nm { color: var(--gold); }
   .stop .mode { color: var(--muted); font-size: 10px; }
-  .railnote { padding: 12px 16px; font-size: 11.5px; color: var(--muted); line-height: 1.5;
-    border-top: 1px solid var(--line); margin-top: 8px; }
+  .railnote { padding: 9px 16px 14px; font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+  #legend { border-top: 1px solid var(--line); margin-top: 8px; }
 
   /* ---------- map ---------- */
   #map { grid-area: map; background: #7fa0a6; position: relative; }
@@ -133,10 +147,12 @@
   .leaflet-container { background: #7fa0a6; font-family: "IBM Plex Sans", sans-serif; }
   .leaflet-bar a, .leaflet-control-attribution { background: #16202688 !important; color: #b9c3c0 !important;
     border-color: #2b3a42 !important; }
+  .leaflet-top, .leaflet-bottom { z-index: 400 !important; }
   .leaflet-control-attribution a { color: var(--gold) !important; }
   .plabel { background: #0e1418e0; border: 1px solid #ffffff26; box-shadow: 0 1px 4px #0006;
     border-radius: 2px; font-family: "EB Garamond", serif; font-size: 13px; color: #f7efdc;
-    text-shadow: none; padding: 1px 5px 2px; white-space: nowrap; }
+    text-shadow: none; padding: 1px 5px 2px; white-space: nowrap; pointer-events: auto !important; cursor: pointer; }
+  .plabel:hover { border-color: var(--gold-dim); color: var(--gold); }
   .plabel.small { font-size: 11.5px; color: #e2dac6; background: #0e1418c9; padding: 0 4px 1px; }
   /* Gospel-era sites read cool against Paul's parchment labels */
   .plabel.gospel { color: #dff0f6; border-color: #a9d2e04d; background: #0b1720e8; }
@@ -156,13 +172,15 @@
   /* No transition on the grid track and no entrance animation with a hidden from-state:
      an interpolating track or a stalled clock must never be able to hide the panel. */
   #app.detail-open #detail { display: block; }
-  .dhead { padding: 16px 20px 14px; border-bottom: 1px solid var(--line); position: sticky; top: 0;
+  .dhead { padding: 16px 160px 14px 20px; border-bottom: 1px solid var(--line); position: sticky; top: 0;
     background: linear-gradient(180deg, #1b262c, #151e24); z-index: 5; }
   .dhead h2 { font-size: 27px; line-height: 1.05; }
   .dsub { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--muted);
     margin-top: 6px; letter-spacing: .04em; }
-  .dclose { position: absolute; right: 14px; top: 14px; background: none; border: none;
-    color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; }
+  .dtopbar { position: absolute; right: 14px; top: 14px; display: flex; gap: 5px; align-items: center; z-index: 2; }
+  .dtopbar button.tool { padding: 4px 8px; font-size: 9.5px; min-height: 26px; white-space: nowrap; }
+  .dclose { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1;
+    padding: 2px 5px; }
   .dclose:hover { color: var(--parch); }
   .dactions { display: flex; gap: 7px; margin-top: 12px; }
   .sect { padding: 15px 20px; border-bottom: 1px solid #202c33; }
@@ -211,12 +229,22 @@
   #scrub { position: absolute; left: 0; right: 0; bottom: 4px; width: 100%; -webkit-appearance: none;
     appearance: none; background: none; margin: 0; }
   #scrub::-webkit-slider-runnable-track { height: 2px; background: #33444d; }
-  #scrub::-webkit-slider-thumb { -webkit-appearance: none; width: 3px; height: 30px; background: var(--gold);
-    margin-top: -19px; cursor: ew-resize; box-shadow: 0 0 8px #c9a22788; }
-  #scrub::-moz-range-thumb { width: 3px; height: 30px; border: none; background: var(--gold); }
-  .ticks { position: absolute; left: 0; right: 0; bottom: -3px; height: 14px; }
-  .tick { position: absolute; font-family: "IBM Plex Mono", monospace; font-size: 9px; color: var(--muted);
-    transform: translateX(-50%); }
+  #scrub::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 26px; border-radius: 5px;
+    background-color: #f2e9d6; background-repeat: no-repeat; background-position: center; background-size: 15px;
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M8%207L3%2012l5%205M16%207l5%205-5%205%22%20fill%3D%22none%22%20stroke%3D%22%23151e24%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E");
+    border: 1px solid #8a7220; margin-top: -12px; cursor: ew-resize; box-shadow: 0 1px 5px #0007;
+    transition: transform .12s, box-shadow .12s; }
+  #scrub:hover::-webkit-slider-thumb, #scrub:focus::-webkit-slider-thumb, #scrub:active::-webkit-slider-thumb {
+    transform: scale(1.18); box-shadow: 0 2px 12px #000a, 0 0 0 6px #f2e9d629; }
+  #scrub::-moz-range-thumb { width: 24px; height: 26px; border-radius: 5px; border: 1px solid #8a7220;
+    background-color: #f2e9d6; background-repeat: no-repeat; background-position: center; background-size: 15px;
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M8%207L3%2012l5%205M16%207l5%205-5%205%22%20fill%3D%22none%22%20stroke%3D%22%23151e24%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E");
+    cursor: ew-resize; box-shadow: 0 1px 5px #0007; transition: transform .12s, box-shadow .12s; }
+  #scrub:hover::-moz-range-thumb, #scrub:focus::-moz-range-thumb, #scrub:active::-moz-range-thumb {
+    transform: scale(1.18); box-shadow: 0 2px 12px #000a, 0 0 0 6px #f2e9d629; }
+  .ticks { position: absolute; left: 0; right: 0; bottom: -3px; height: 14px; z-index: 2; }
+  .tick { position: absolute; font-family: "IBM Plex Mono", monospace; font-size: 9px; color: var(--parch-dim);
+    background: var(--ink-2); padding: 0 3px; border-radius: 2px; transform: translateX(-50%); }
   .tick::before { content: ""; position: absolute; left: 50%; top: -6px; width: 1px; height: 4px; background: #3b4c54; }
   /* a Gospel-era lesson week: Paul's clock does not apply, so the bands step back */
   body.gweek .bands, body.gweek #year { opacity: .3; }
@@ -258,9 +286,14 @@
     border-bottom: 1px solid var(--line); color: var(--muted); cursor: pointer; min-height: 46px;
     font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .14em;
     text-transform: uppercase; text-align: left; padding: 0 16px; }
+  .tools.empty { display: none; }
   .railtoggle.on { color: var(--gold); }
   .viewtoggle { display: none; }
-  .viewtoggle.on { color: var(--gold); border-color: var(--gold-dim); }
+  .railcollapse { display: none; align-items: center; gap: 5px; }
+  .railcollapse .chev { display: inline-block; font-size: 12px; transition: transform .2s; }
+  body.rail-collapsed .railcollapse .chev { transform: rotate(180deg); }
+  .viewtoggle.on { color: var(--gold); border-color: var(--gold-dim); background: transparent; }
+  .viewtoggle.on:hover { color: var(--parch); }
   /* bottom action bar — phone and tablet portrait only; one button always returns to the map */
   #tabbar { grid-area: bar; display: none; grid-auto-flow: column; grid-auto-columns: 1fr;
     border-top: 1px solid var(--line); background: var(--ink-2); z-index: 830;
@@ -286,7 +319,11 @@
     color: var(--parch-dim); cursor: pointer; }
   .lay:hover { background: var(--ink-3); color: var(--parch); }
   .lay input { accent-color: var(--gold); }
-  .readnav { display: flex; gap: 7px; padding: 0 16px 10px; }
+  .lay-summary { padding: 9px 16px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--muted); cursor: pointer; border-top: 1px solid var(--line); }
+  .lay-summary:hover { color: var(--parch); }
+  .readnav { display: flex; gap: 7px; padding: 10px 16px; position: sticky; top: 50px;
+    background: var(--ink-2); z-index: 2; border-bottom: 1px solid var(--line); }
   .readnav button { flex: 1; }
   .ritem { padding: 9px 16px; border-left: 3px solid transparent; cursor: pointer; }
   .ritem:hover { background: var(--ink-3); }
@@ -309,14 +346,24 @@
   /* land, drawn from a static public-domain coastline file (Natural Earth via world-atlas), not
      a live tile service — no per-request usage policy applies, and it renders even if the fetch
      that loads it fails (see .notiles fallback below). */
-  .landmass { fill: #d8cca4; stroke: #7a6a45; stroke-width: .8; fill-opacity: 1; stroke-opacity: .8; }
+  .landmass { fill: #d8cca4; stroke: #7a6a45; stroke-width: .8; fill-opacity: 1; stroke-opacity: .8;
+    transition: opacity .3s ease, fill-opacity .3s ease; }
+  /* a live tile basemap already renders the coastline — CSS, not Leaflet setStyle(), has to win this:
+     setStyle() writes plain SVG presentation attributes, which stylesheet rules always outrank */
+  body.livebasemap .landmass { opacity: 0 !important; }
+  body.livebasemap .lakepoly { opacity: 0 !important; fill-opacity: 0 !important; }
+  #map.parchment .leaflet-tile-pane { opacity: .7; filter: sepia(.4) saturate(.7) contrast(.95)
+    brightness(1.08) blur(.5px) hue-rotate(-6deg); mix-blend-mode: multiply; }
+  #map.parchment { background: #e2d5b6; }
+  .leaflet-control-attribution { background: #f3e9d4 !important; color: #645436 !important; font-size: 9.5px !important; }
+  .leaflet-control-attribution a { color: #4a3d2e !important; }
 
 
   /* no basemap available (offline): a plain flat sea ground (a fine repeating grid moirés into
      ugly bands once the browser downscales the map at low zoom, so keep this flat) */
   body.notiles #map { background: #b7cdd2; }
-  body.notiles #map .leaflet-tile-pane { display: none; }
-  body.notiles #map::before { content: "No basemap — offline. Routes, cities and every article still work.";
+  body.notiles:not(.livebasemap) #map .leaflet-tile-pane { display: none; }
+  body.notiles:not(.livebasemap) #map::before { content: "No basemap — offline. Routes, cities and every article still work.";
     position: absolute; left: 50%; transform: translateX(-50%); bottom: 12px; z-index: 700;
     background: #0e1418e6; border: 1px solid var(--line); border-radius: 3px; padding: 5px 11px;
     font-family: "IBM Plex Mono", monospace; font-size: 9.5px; letter-spacing: .1em;
@@ -353,14 +400,16 @@
   }
 
   /* over satellite imagery the parchment labels need a darker plate to stay readable */
-  body.sat .placelabel { background: #0b1013f2; border-color: #ffffff40; }
+  body.sat .plabel { background: #0b1013; border-color: #ffffff40; color: #f7efdc; filter: none; box-shadow: 0 1px 3px #000a; }
+  body.sat .plabel.small { color: #e2dac6; }
+  body.sat .plabel.gospel, body.sat .plabel.gospel.small { color: #dff0f6; }
   body.sat .provlabel { color: #ffe9b0; text-shadow: 0 0 5px #000, 0 0 10px #000c; }
   body.sat .letterlabel { background: #1d0f1ff5; }
 
   /* ---- Presenter mode: for meetinghouse TVs and projectors ---- */
   body.present { --present: 1; }
   body.present #btnPresent { background: var(--gold); color: #0e1418; border-color: var(--gold); }
-  body.present .placelabel { font-size: 16px; padding: 3px 8px 4px; border-width: 1.5px; }
+  body.present .plabel { font-size: 16px; padding: 3px 8px 4px; border-width: 1.5px; }
   body.present .letterlabel { font-size: 17px; padding: 3px 9px 4px; }
   body.present .letterlabel .carrier { font-size: 11px; }
   body.present .provlabel { font-size: 14px; letter-spacing: .28em; color: #3a3120;
@@ -386,10 +435,13 @@
   .cfmbar { display: flex; gap: 6px; padding: 0 16px 10px; }
   .cfmbar button { flex: 1; }
   .cfmbar button.wide { flex: 1.6; }
-  #cfmsel { width: calc(100% - 32px); margin: 0 16px 10px; background: var(--ink);
+  #cfmsel { width: calc(100% - 32px); margin: 14px 16px 10px; background: var(--ink);
     border: 1px solid var(--line); color: var(--parch); font-family: inherit; font-size: 12.5px;
     padding: 8px 9px; border-radius: 3px; }
-  .witem { padding: 9px 16px; border-left: 3px solid transparent; cursor: pointer; }
+  .witem { padding: 9px 16px; border-left: 3px solid transparent; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .witem .wgo { flex: 0 0 auto; font-family: "IBM Plex Mono", monospace; font-size: 9.5px;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
   .witem:hover { background: var(--ink-3); }
   .witem.on { background: #241f14; border-left-color: var(--gold); }
   .witem .wk { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; letter-spacing: .12em;
@@ -556,6 +608,12 @@
   @media (max-width: 1320px) {
     button.tool { font-size: 9.5px; padding: 7px 8px; letter-spacing: .07em; }
   }
+  /* the 1150px rule above un-stickies .railtabs so the legacy #rail .tools toolbar can pin instead;
+     phone/tablet landscape don't use that toolbar, so restore the tab bar's own pin there —
+     otherwise it scrolls away and Prev/Next ends up floating mid-list with nothing above it */
+  @media (max-height: 540px) and (max-width: 1000px), (max-width: 1000px) and (min-width: 821px) and (min-height: 541px), (max-width: 820px) and (orientation: landscape) {
+    #rail .railtabs { position: sticky; top: 0; }
+  }
   @media (max-width: 1180px) {
     header { gap: 12px; padding: 0 12px; }
     .brand small { display: none; }
@@ -566,8 +624,17 @@
      Split in two so 1001-1180px is never gated by height — below 1000px, the phone-landscape
      query (max-height:540, max-width:1000) takes over with its own always-visible tabbar toggle,
      so this second block only needs to defer to it, not duplicate its height condition. */
+  @media (min-width: 1181px) {
+    .viewtoggle, .railcollapse { display: inline-flex; }
+    body:not(.timeline-on) footer { display: none; }
+    body:not(.timeline-on) #app, body:not(.timeline-on) #app.detail-open { grid-template-rows: 58px 1fr 0px; }
+    body:not(.timeline-on) #detail { bottom: 0; }
+    body.rail-collapsed #app { grid-template-columns: 0px 1fr 0px; }
+    body.rail-collapsed #app.detail-open { grid-template-columns: 0px 1fr 430px; }
+    body.rail-collapsed #rail { display: none; }
+  }
   @media (max-width: 1180px) and (min-width: 1001px) {
-    .viewtoggle { display: inline-flex; }
+    .viewtoggle, .railcollapse { display: inline-flex; }
     body:not(.timeline-on) footer { display: none; }
     body:not(.timeline-on) #app, body:not(.timeline-on) #app.detail-open {
       grid-template-rows: 58px 1fr 0px; }
@@ -577,7 +644,7 @@
     body.rail-collapsed #rail { display: none; }
   }
   @media (max-width: 1000px) and (min-width: 821px) and (min-height: 541px) {
-    .viewtoggle { display: inline-flex; }
+    .viewtoggle, .railcollapse { display: inline-flex; }
     body:not(.timeline-on) footer { display: none; }
     body:not(.timeline-on) #app, body:not(.timeline-on) #app.detail-open {
       grid-template-rows: 58px 1fr 0px; }
@@ -603,9 +670,9 @@
     .stop { padding-top: 10px; padding-bottom: 10px; }
     .jrow { padding-top: 13px; padding-bottom: 13px; }
     .ritem { padding-top: 13px; padding-bottom: 13px; }
-    .dclose { width: 44px; height: 44px; right: 8px; top: 8px; font-size: 26px; }
-    #scrub::-webkit-slider-thumb { width: 16px; border-radius: 3px; }
-    #scrub::-moz-range-thumb { width: 16px; border-radius: 3px; }
+    .dclose { font-size: 24px; padding: 4px 6px; }
+    #scrub::-webkit-slider-thumb { width: 20px; height: 24px; background-size: 12px; border-radius: 4px; }
+    #scrub::-moz-range-thumb { width: 20px; height: 24px; background-size: 12px; border-radius: 4px; }
     .res { padding: 13px 12px; }
     .occ { padding: 4px 0; }
   }
@@ -632,7 +699,12 @@
       border-top: 1px solid var(--line); z-index: 810;
       padding-bottom: env(safe-area-inset-bottom, 0); }
     body.timeline-on #detail { bottom: 150px; }
-    .dhead { padding: 14px 16px 12px; }
+    .dhead { padding: 14px 130px 12px 16px; transition: padding .16s ease; }
+    .dhead.compact { padding: 9px 128px 9px 16px; }
+    .dhead.compact .dsub { display: none; }
+    .dhead.compact .dactions { display: none; }
+    .dhead.compact h2 { font-size: 16px; line-height: 1.2; }
+    .dhead.compact .dtopbar { top: 8px; }
     .sect { padding: 14px 16px; }
     #results { max-height: 56vh; }
     .sheet { max-height: 92vh; border-radius: 6px; }
@@ -643,7 +715,7 @@
     footer { padding: 8px 14px 12px; }
     #year small { letter-spacing: .08em; }
     .leaflet-control-attribution { font-size: 9px; }
-    .leaflet-control-zoom { margin-left: 8px !important; margin-top: 8px !important; }
+    .leaflet-control-zoom { margin-right: 8px !important; margin-top: 8px !important; }
     .dhead h2 { font-size: 23px; }
     #eventlabel { display: none; }
     #year { font-size: 19px; min-width: 84px; }
@@ -658,7 +730,10 @@
       border-radius: 14px 14px 0 0; box-shadow: 0 -20px 44px #000b; }
     #detail .dhead::before { content: ""; position: absolute; top: 8px; left: 50%; width: 46px;
       height: 4px; transform: translateX(-50%); border-radius: 3px; background: var(--line); }
-    #detail .dhead { padding-top: 20px; cursor: pointer; }
+    #detail .dhead { padding-top: 16px; cursor: pointer; }
+    #detail .dhead .dtopbar { top: 16px; }
+    #detail .dhead.compact .dtopbar { top: 10px; }
+    #detail .dhead.compact::before { opacity: .5; }
     body.timeline-on #detail { height: 44vh; bottom: 136px; }
     body.sheet-full #detail { height: auto; top: 52px; border-radius: 0; }
   }
@@ -671,7 +746,7 @@
     body.timeline-on #app, body.timeline-on #app.detail-open {
       grid-template-rows: 46px 1fr auto 46px; }
     body:not(.timeline-on) footer { display: none; }
-    .viewtoggle { display: none; }
+    .viewtoggle, .railcollapse { display: none; }
     #tabbar { display: grid; }
     #tabbar button { font-size: 8.5px; letter-spacing: .1em; min-height: 40px; }
     #tabbar button b { font-size: 15px; }
@@ -688,13 +763,24 @@
     #rail .tools button.tool { flex: 1 1 44%; font-size: 8.5px; padding: 6px 4px; }
     #detail { position: fixed; top: 46px; bottom: 46px; left: 0; right: auto;
       width: 46%; min-width: 296px; max-width: 430px; border-left: none;
-      border-right: 1px solid var(--line); box-shadow: 14px 0 40px #000a; z-index: 810; }
+      border-right: 1px solid var(--line); box-shadow: 14px 0 40px #000a; z-index: 810;
+      transition: width .22s ease, max-width .22s ease; }
+    body.sheet-full #detail { width: 94vw; max-width: none; }
+    #detail .dhead { cursor: pointer; padding-top: 16px; }
+    #detail .dhead::before { content: ""; position: absolute; top: 6px; left: 50%; width: 34px;
+      height: 4px; transform: translateX(-50%); border-radius: 3px; background: var(--line); }
+    #detail .dhead.compact::before { opacity: .5; }
     #focusbadge, #cmpbadge { top: 6px; left: auto; right: 8px; transform: none;
       max-width: min(300px, 46vw); padding: 5px 7px 5px 10px; }
     #focusbadge .ft { font-size: 13px; }
     #focusbadge .fl, #cmpbadge .fl { font-size: 8.5px; }
-    .dhead { padding: 11px 14px 10px; }
+    .dhead { padding: 11px 130px 10px 14px; }
     .dhead h2 { font-size: 20px; }
+    .dhead.compact { padding: 8px 128px 8px 14px; }
+    .dhead.compact .dsub { display: none; }
+    .dhead.compact .dactions { display: none; }
+    .dhead.compact h2 { font-size: 15px; line-height: 1.2; }
+    .dhead.compact .dtopbar { top: 6px; }
     .sect { padding: 11px 14px; }
     footer { padding: 5px 12px 7px; }
     #year { font-size: 16px; min-width: 68px; }
@@ -733,7 +819,7 @@
   body.light header { background: linear-gradient(180deg, #ffffff, #00000000), var(--ink-2); }
   body.light .res { border-bottom-color: var(--line); }
   body.light .res mark { background: #f6e5a6; color: #4a3c10; }
-  body.light button.tool.on { background: #f5e8c2; }
+  body.light button.tool.on { background: #f5e8c2; color: #4a3410; }
   body.light .moremenu { box-shadow: 0 18px 40px #3a301c33; }
   body.light #results, body.light .sheet { box-shadow: 0 22px 60px #3a301c2e; }
   body.light .jrow.active, body.light .ritem.on { background: #ece3cf; }
@@ -755,9 +841,12 @@
   body.light .provlabel { color: #6b5a34; text-shadow: 0 0 4px #fffc, 0 0 8px #fff9; }
   body.light .letterlabel { background: #f6e9f1f0; border-color: #00000026; color: #3a2436; }
   body.light .letterlabel .carrier { color: #8d4f74; }
-  body.light.sat .placelabel { background: #0b1013f2; border-color: #ffffff40; }
+  body.light.sat .plabel { background: #0b1013; border-color: #ffffff40; color: #f7efdc; filter: none; box-shadow: 0 1px 3px #000a; }
+  body.light.sat .plabel.small { color: #e2dac6; }
+  body.light.sat .plabel.gospel, body.light.sat .plabel.gospel.small { color: #dff0f6; }
   body.light.sat .letterlabel { background: #1d0f1ff5; color: #f0dcc4; }
   body.light.present .provlabel { color: #4a3f27; }
+  body.light.sat .provlabel { color: #ffe9b0; text-shadow: 0 0 5px #000, 0 0 10px #000c; }
   body.light.present #btnPresent { color: #fdfaf3; }
   /* panels, sheets and tables */
   body.light .dhead { background: linear-gradient(180deg, #fffdf7, #f6f1e5); }
@@ -783,7 +872,7 @@
   body.light .conf.traditional, body.light .conf.unlocated { color: #8a4a2c; border-color: #d8b09b; }
   body.light .seg { color: #100d06; font-weight: 500; border-color: #00000029; }
   body.light .seg.now { color: #000; }
-  body.light .mon.on { background: #f5e8c2; }
+  body.light .mon.on { background: #f5e8c2; color: #4a3410; }
   body.light .mon.closed { color: #9c3f2e; border-color: #d8ab9f; }
   body.light .mon.risky { color: #8a6a12; }
   body.light .passage .pl { color: #8a6a12; border-bottom-color: #b3922f; }
@@ -799,37 +888,39 @@
   <header>
     <a class="skiplink" href="#search">Skip to search</a>
     <button class="tool" id="btnMenu" title="Menu" aria-label="Open the itinerary rail">☰</button>
-    <div class="brand">The Journeys of <span>Paul</span><small>Interactive Study Atlas · Acts &amp; the Epistles · WEB</small><span class="beta">BETA</span></div>
+    <div class="brand">The Journeys of <span>Paul</span><span class="beta">BETA</span><small>Interactive Study Atlas · Acts &amp; the Epistles · WEB</small></div>
     <div class="searchwrap">
       <input id="search" type="text" placeholder="Search cities, people, scripture, archaeology…" autocomplete="off">
       <div id="results"></div>
     </div>
     <button class="tool" id="btnPlay" style="flex:none">▶ Play</button>
     <div class="tools" id="tools">
-      <button class="tool" id="btnPeople">People</button>
-      <button class="tool" id="btnLetters">Letters</button>
-      <button class="tool" id="btnDates">Chronology</button>
-      <button class="tool" id="btnCFM" title="The 52-week New Testament reading year, mapped">Weeks</button>
-      <button class="tool" id="btnRead" title="Read Acts and the epistles, full WEB text, in order">Read</button>
-      <button class="tool" id="btnCompare" data-secondary>Compare</button>
+      <div class="menu-label" data-secondary>Study Paul</div>
+      <button class="tool" id="btnPeople" data-secondary>People</button>
+      <button class="tool" id="btnNet" data-secondary>Paul's Companions</button>
+      <button class="tool" id="btnLetters" data-secondary>Paul's Letters</button>
+      <button class="tool" id="btnDates" data-secondary>Paul's Chronology</button>
+      <button class="tool" id="btnCFM" data-secondary title="The 52-week New Testament reading year, mapped">Reading Weeks</button>
+      <button class="tool" id="btnRead" data-secondary title="Read Acts and the epistles, full WEB text, in order">Read in Order</button>
+      <div class="menu-label" data-secondary>Map &amp; distance</div>
+      <button class="tool" id="btnCompare" data-secondary>Compare Itineraries</button>
       <button class="tool" id="btnCalc" data-secondary>Distance</button>
-      <button class="tool" id="btnMarks" data-secondary>Bookmarks</button>
-      <button class="tool" id="btnNet" data-secondary>Companions</button>
-      <button class="tool" id="btnExport" data-secondary title="Copy a link and print handouts for this view">Export</button>
-      <button class="tool" id="btnQuiz" data-secondary title="Map recall drill">Quiz</button>
       <button class="tool" id="btnUnits" data-secondary>km</button>
-      <button class="tool" id="btnHelp" data-secondary>?</button>
-      <button class="tool" id="btnSources" data-secondary>Sources</button>
-      <button class="tool" id="btnAbout" data-secondary>About</button>
-      <button class="tool" id="btnLicence" data-secondary>Credits</button>
+      <div class="menu-label" data-secondary>Save &amp; learn</div>
+      <button class="tool" id="btnMarks" data-secondary>Bookmarks</button>
+      <button class="tool" id="btnExport" data-secondary title="Copy a link and print handouts for this view">Export</button>
+      <button class="tool" id="btnQuiz" data-secondary>Quiz</button>
       <button class="tool" id="btnPresent" data-secondary title="Larger type and heavier routes for classroom projection">Present</button>
+      <div class="menu-label" data-secondary>Help &amp; settings</div>
+      <button class="tool" id="btnHelp" data-secondary>?</button>
+      <button class="tool" id="btnTheme" data-secondary title="Switch between light and dark">Light</button>
+      <button class="tool" id="btnAbout" data-secondary title="About, sources and credits">About</button>
     </div>
     <div class="pinned">
-      <button class="tool viewtoggle" id="btnRailToggle" title="Show or hide the index column">Index</button>
+      <button class="tool viewtoggle railcollapse" id="btnRailToggle" title="Show or hide the study panel: itineraries, readings and study weeks"><span class="chev">‹</span>Study</button>
       <button class="tool viewtoggle" id="btnTimeTop" title="Show or hide the timeline">Timeline</button>
-      <button class="tool" id="btnTheme" title="Switch between light and dark">Light</button>
     </div>
-    <div class="morewrap" id="moreWrap"><button class="tool" id="btnMore" title="More tools">More ▾</button>
+    <div class="morewrap" id="moreWrap"><button class="tool" id="btnMore" title="Tools">Tools ▾</button>
       <div class="moremenu" id="moreMenu"></div>
     </div>
   </header>
@@ -842,19 +933,35 @@
       <button id="railClose" aria-label="Close index" title="Close index">×</button>
     </div>
     <div class="tabpane" data-pane="itin">
-      <div class="railhead">Click a name to focus, ● to hide</div>
+      <div class="railctrls">
+        <span class="railctrls-hint">Tap a journey's dot to show or hide its route on the map</span>
+        <div class="railctrls-btns">
+          <button class="tool" id="btnClearRoutes">Clear map</button>
+          <button class="tool" id="btnShowAllRoutes">Show all</button>
+        </div>
+        <span class="railctrls-hint" style="margin-top:4px">Base map</span>
+        <div class="basemap-row">
+          <button class="tool" id="bmOffline" data-bm="offline" title="No live map \u2014 fully offline schematic">Offline</button>
+          <button class="tool" id="bmPlain" data-bm="plain" title="OpenStreetMap, untinted">Plain</button>
+          <button class="tool" id="bmParchment" data-bm="parchment" title="OpenTopoMap with a sepia parchment tint">Parchment</button>
+          <button class="tool" id="bmSatellite" data-bm="satellite" title="NASA Blue Marble satellite imagery">Satellite</button>
+        </div>
+        <button class="tool" id="bmHideModern" style="width:100%" title="Plain and Parchment normally show today's roads, cities and borders from the tile provider; this swaps their imagery for a clean, unlabeled satellite base so only the ancient overlay reads">Hide modern roads &amp; labels</button>
+      </div>
       <div id="jlist"></div>
-      <div class="railhead">Map layers</div>
-      <div id="layers">
-        <label class="lay"><input type="checkbox" data-layer="roads"> Roman roads</label>
-        <label class="lay"><input type="checkbox" data-layer="provinces"> Roman provinces</label>
+      <details id="layers" style="margin-top:14px">
+        <summary class="lay-summary">Map layers</summary>
+        <label class="lay"><input type="checkbox" data-layer="roads" checked> Roman roads</label>
+        <label class="lay"><input type="checkbox" data-layer="provinces" checked> Roman provinces</label>
         <label class="lay"><input type="checkbox" data-layer="letters"> Epistles — written &amp; sent</label>
         <label class="lay"><input type="checkbox" data-layer="gospel"> Gospel sites — the life of Jesus</label>
-      </div>
-      <div class="railnote" id="railnote"></div>
+      </details>
+      <details id="legend" style="margin-top:2px">
+        <summary class="lay-summary">Legend</summary>
+        <div class="railnote" id="railnote"></div>
+      </details>
     </div>
     <div class="tabpane" data-pane="read" hidden>
-      <div class="railhead">Acts in order — the map follows along</div>
       <div class="readnav">
         <button class="tool" id="readPrev">← Prev</button>
         <button class="tool" id="readNext">Next →</button>
@@ -862,7 +969,6 @@
       <div id="readlist"></div>
     </div>
     <div class="tabpane" data-pane="cfm" hidden>
-      <div class="railhead">Study weeks — a reading year through the New Testament</div>
       <select id="cfmsel" aria-label="Choose a study week"></select>
       <div class="cfmbar">
         <button class="tool" id="cfmPrev">← Week</button>
@@ -913,14 +1019,14 @@
     </div>
     <div class="tl-track">
       <div class="bands" id="bands"></div>
-      <input id="scrub" type="range" min="4" max="69" step="0.02" value="46" aria-label="Year — drag to move through the timeline">
+      <input id="scrub" type="range" min="4" max="69" step="0.02" value="4" aria-label="Year — drag to move through the timeline">
       <div class="ticks" id="ticks"></div>
     </div>
     <div class="ctxlanes" id="ctxlanes"></div>
   </footer>
 
   <nav id="tabbar" aria-label="Primary">
-    <button id="tbIndex" aria-label="Open the index, weeks and tools"><b>&#9776;</b>Menu</button>
+    <button id="tbIndex" aria-label="Open the index, weeks and tools"><b>&#9776;</b>Study</button>
     <button id="tbMap" class="on" aria-label="Back to the map"><b>&#9678;</b>Map</button>
     <button id="tbTime" aria-label="Show or hide the timeline"><b>&#9201;</b>Timeline</button>
     <button id="tbRead" aria-label="Read Acts and the epistles, full WEB text"><b>&#128214;</b>Read</button>

@@ -100,8 +100,8 @@ capernaum: {
 },
 
 bethsaida: {
-  name: "Bethsaida", modern: "et-Tell / el-Araj, Israel", region: "Gaulanitis (Philip's tetrarchy)",
-  lat: 32.9106, lng: 35.6306, tier: "major", era: "gospel", dates: "c. AD 28–30",
+  name: "Bethsaida", modern: "el-Araj / et-Tell, Israel", region: "Gaulanitis (Philip's tetrarchy)",
+  lat: 32.8817, lng: 35.6275, tier: "major", era: "gospel", dates: "c. AD 28–30",
   narrative: "The home town of Philip, Andrew and Peter, and the place where Jesus healed a blind man in two stages — the only healing in the Gospels that comes in stages. Luke sets the feeding of the five thousand in a desert place belonging to Bethsaida. Like Chorazin and Capernaum it stands under the woe pronounced on towns that saw everything and did nothing.",
   greco: "Philip the tetrarch raised the village to the status of a city and renamed it Julias, after the emperor's daughter or his wife Livia-Julia; Josephus says Philip was buried there. It lay just east of the Jordan's inflow, outside Antipas' Galilee — which is why Jesus crosses to it when he wants to leave Antipas' jurisdiction.",
   archaeology: "The identification is genuinely contested. Et-Tell, excavated since 1987, has an Iron Age gate and Roman-period remains but sits well back from the modern shoreline. El-Araj, closer to the lake and excavated since 2016, has produced a first-century settlement, a Roman bathhouse, and a Byzantine basilica its excavators call the Church of the Apostles — the church the Bavarian bishop Willibald says he visited in 725, built over the house of Peter and Andrew. A Greek inscription found there in 2022 naming the 'chief of the apostles' shows at least that Byzantine Christians located Peter's house at this site rather than at Capernaum. Sedimentation has moved the shoreline since antiquity, which is what makes the question hard.",
@@ -520,8 +520,8 @@ capernaum: { names: { greek: "Καφαρναούμ", latin: "Capharnaum", other:
     { who: "Josephus, Life 403", type: "summary", text: "Josephus, injured near the lake, was carried to a village he calls Kepharnokon — the same place under a Greek spelling." }] },
 
 bethsaida: { names: { greek: "Βηθσαϊδά", latin: "Bethsaida Julias", other: "Aramaic Beth Tsaida, 'house of the fisher'" },
-  confidence: { level: "probable", basis: "The city is securely attested in Josephus, but its location is contested between et-Tell and el-Araj; the shoreline has moved since antiquity." },
-  coord: "Et-Tell mound; el-Araj lies 1.5 km south, nearer the lake.", elev: -160, wiki: "Bethsaida",
+  confidence: { level: "probable", basis: "El-Araj, on the lake shore, has the stronger recent case (first-century village, a Byzantine church its excavators tie to Peter's house, a 2022 apostle inscription); et-Tell, the older Iron Age candidate 1.5 km north and set back from the shore, remains a minority pick." },
+  coord: "El-Araj, on the Sea of Galilee shore near the Jordan's inflow; et-Tell mound lies 1.5 km north.", elev: -160, wiki: "Bethsaida",
   sources: [
     { who: "Josephus, Antiquities 18.28", type: "summary", text: "Philip the tetrarch raised the village of Bethsaida on the lake of Gennesaret to the dignity of a city and called it Julias, after the emperor's daughter." }] },
 

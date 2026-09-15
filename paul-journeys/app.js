@@ -29,7 +29,7 @@ const store = (() => {
 })();
 
 const state = {
-  year: 46, visible: new Set(J.map(j => j.id)), active: "j1",
+  year: T0, visible: new Set(J.map(j => j.id)), active: null,
   place: null, ctx: null, playing: false, evIdx: 0,
   overlay: { on: false, a: null, b: null, sharedOnly: false, prev: null },
   cfm: { week: null, places: new Set(), journeys: new Set() }
@@ -66,19 +66,83 @@ function daysFor(km, mode) {
   const d = mode === "sea" ? km / 130 : km / 27;
   return d < 1.2 ? "about a day" : Math.round(d) + " days";
 }
-/* distance units: kilometres, Roman miles (1,479 m) or stadia (185 m) */
-const UNITS = { key: store.d.units || "km" };
+/* distance units: American miles (default), kilometres, Roman miles (1,479 m) or stadia (185 m).
+   One-time migration: earlier sessions defaulted to km before this became mi \u2014 an old unset or
+   km value should not silently outrank the new default forever. */
+if (!store.d.unitsMigratedV2) {
+  if (!store.d.units || store.d.units === "km") store.d.units = "mi";
+  store.d.unitsMigratedV2 = "1"; store.save();
+}
+const UNITS = { key: store.d.units || "mi" };
 function fmtDist(km) {
   if (!km) return "—";
-  if (UNITS.key === "mi") return Math.round(km / 1.479).toLocaleString() + " Roman mi";
+  if (UNITS.key === "mi") return Math.round(km / 1.60934).toLocaleString() + " mi";
+  if (UNITS.key === "rmi") return Math.round(km / 1.479).toLocaleString() + " Roman mi";
   if (UNITS.key === "st") return Math.round(km / 0.185).toLocaleString() + " stadia";
   return Math.round(km).toLocaleString() + " km";
 }
 function journeyKm(j) { return j.stops.reduce((s, _, i) => s + legKm(j, i), 0); }
 
 /* ---------- map ---------- */
-const map = L.map("map", { center: [37.6, 27.5], zoom: 5, zoomControl: true, worldCopyJump: false,
+const map = L.map("map", { center: [37.6, 27.5], zoom: 5, zoomControl: false, worldCopyJump: false,
   minZoom: 3, maxZoom: 17, attributionControl: false });
+L.control.zoom({ position: "topright" }).addTo(map);   // topleft collides with the rail's tab row when it's open
+/* Optional live basemaps — off ("offline") by default so the atlas still works with no network and
+   no per-view tracking; a reader who wants real imagery can opt in from the Tools menu. Each preset
+   pulls from a public tile service with its own usage terms and required attribution (shown below
+   the map whenever one is active). The schematic landmass fill is hidden while a live tile is on,
+   since the tile itself already renders the coastline. */
+const MAPBOX_TOKEN = "pk.eyJ1IjoiZXhvZHVzdG91cnNtYXBzIiwiYSI6ImNtdTMydWd5djAydzIyeXB6czRvN2V1aDEifQ.Kjf1faxolYvaliA8kTgNdQ";
+const BASEMAP_PRESETS = {
+  plain: { url: "https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/512/{z}/{x}/{y}{r}?access_token=" + MAPBOX_TOKEN,
+    cleanUrl: "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/512/{z}/{x}/{y}{r}?access_token=" + MAPBOX_TOKEN,
+    attribution: '&copy; <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+    maxZoom: 19, tileSize: 512, zoomOffset: -1 },
+  parchment: { url: "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/tiles/512/{z}/{x}/{y}{r}?access_token=" + MAPBOX_TOKEN,
+    cleanUrl: "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/512/{z}/{x}/{y}{r}?access_token=" + MAPBOX_TOKEN,
+    attribution: '&copy; <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+    maxZoom: 19, tileSize: 512, zoomOffset: -1 },
+  satellite: { url: "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/512/{z}/{x}/{y}{r}?access_token=" + MAPBOX_TOKEN,
+    attribution: '&copy; <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+    maxZoom: 19, tileSize: 512, zoomOffset: -1 }
+};
+const BASEMAP_ORDER = ["offline", "plain", "parchment", "satellite"];
+const BASEMAP_LABEL = { offline: "Offline", plain: "Plain", parchment: "Parchment", satellite: "Satellite" };
+let baseTileLayer = null, baseAttrib = null, landLayerRef = null;
+let basemapKey = BASEMAP_ORDER.indexOf(store.d.basemap) > -1 ? store.d.basemap : "offline";
+function setBasemap(key) {
+  basemapKey = key;
+  if (baseTileLayer) { map.removeLayer(baseTileLayer); baseTileLayer = null; }
+  if (baseAttrib) { map.removeControl(baseAttrib); baseAttrib = null; }
+  document.getElementById("map").classList.toggle("parchment", key === "parchment" && !hideModernOn);
+  document.body.classList.toggle("livebasemap", key !== "offline");
+  document.body.classList.toggle("sat", key === "satellite" || (hideModernOn && key !== "offline"));   // clean-tile swap is satellite imagery too — labels need the same dark-plate contrast treatment
+  if (key !== "offline") {
+    const preset = BASEMAP_PRESETS[key];
+    const url = (hideModernOn && preset.cleanUrl) ? preset.cleanUrl : preset.url;
+    baseTileLayer = L.tileLayer(url, { subdomains: preset.subdomains || "abc",
+      maxZoom: preset.maxZoom, tileSize: preset.tileSize, zoomOffset: preset.zoomOffset || 0,
+      fadeAnimation: false }).addTo(map).bringToBack();
+    baseTileLayer.on("tileerror", e => { e.tile.style.opacity = 0; });
+    baseTileLayer.on("tileload", e => { e.tile.style.opacity = 1; });
+    baseAttrib = L.control.attribution({ position: "bottomright", prefix: false })
+      .addAttribution(preset.attribution).addTo(map);
+  }
+  document.querySelectorAll(".basemap-row button").forEach(b => b.classList.toggle("on", b.dataset.bm === key));
+  store.d.basemap = key; store.save();
+}
+document.querySelectorAll(".basemap-row button").forEach(b => b.addEventListener("click", () => setBasemap(b.dataset.bm)));
+let hideModernOn = false;   // session-only; never persisted, so a stale value can't make basemaps look identical after reload
+const modernToggle = document.getElementById("bmHideModern");
+if (modernToggle) {
+  modernToggle.addEventListener("click", () => {
+    hideModernOn = !hideModernOn;
+    modernToggle.classList.toggle("on", hideModernOn);
+  document.getElementById("map").classList.toggle("parchment", basemapKey === "parchment" && !hideModernOn);   // re-evaluate the tint against the new hideModernOn value, not the stale one from setBasemap's last run
+    modernToggle.textContent = hideModernOn ? "Show modern roads & labels" : "Hide modern roads & labels";
+    setBasemap(basemapKey);
+  });
+}
 /* No live tile service is used: hosted basemap tiles (Esri, OpenStreetMap, etc.) carry usage
    policies and, at commercial scale, licensing terms this atlas has not cleared. Coastlines are
    instead drawn once from a static, public-domain vector file (Natural Earth land boundaries,
@@ -94,11 +158,11 @@ if (window.topojson) {
   fetchLand().catch(() => new Promise(res => setTimeout(res, 1200)).then(fetchLand)).then(topo => {
     const land = topojson.feature(topo, topo.objects.land);
     scrubLandArtifacts(land);
-    L.geoJSON(land, { interactive: false, className: "landmass" })
-      .addTo(map).bringToBack();
+    landLayerRef = L.geoJSON(land, { interactive: false, className: "landmass" }).addTo(map).bringToBack();
     document.body.classList.remove("notiles");
   }).catch(() => { /* still unavailable: falls back to the plain sea ground below */ });
 }
+/* Dead Sea and Sea of Galilee are rendered by the live basemap tiles themselves; no schematic overlay needed. */
 /* the 50m land file has a handful of small rings that legitimately straddle the antimeridian
    (Wrangel Island, far-east Arctic islands). Plotted raw, the jump from +179 to -180 draws a
    straight line clear across the whole map — the horizontal band seen in testing. Unwrap just
@@ -189,6 +253,7 @@ allPlaceIds.forEach(id => {
     fillOpacity: .95, opacity: .55, className: "marker-dot"
   }).addTo(markerLayer);
   m.on("click", () => selectPlace(id));
+  m.on("tooltipopen", e => { e.tooltip.getElement().onclick = () => selectPlace(id); });
   m.bindTooltip(p.name.split(" (")[0], { permanent: true, direction: "right", offset: [7, 0],
     className: "plabel" + (isMajor ? "" : " small") });
   placeMarks[id] = m;
@@ -211,7 +276,7 @@ function updateLabels() {
     else if (z >= 5.5) show = major;
     else show = major && onActive;
     el.style.display = show ? "" : "none";
-    el.style.opacity = firstYear[id] <= state.year ? 1 : .5;
+    el.style.opacity = firstYear[id] <= state.year ? 1 : .78;
     if (show) cands.push({ id, el, prio: (state.place === id ? 0 : 0) + (onActive ? 1 : 3) + (major ? 0 : 1) });
   });
   // greedy de-collision: keep the higher-priority label, hide whatever overlaps it
@@ -393,6 +458,7 @@ function buildRail() {
     row.setAttribute("aria-label", row.querySelector(".jname").textContent + " — toggle or open itinerary");
     row.addEventListener("click", (e) => {
       if (e.target.classList.contains("jswatch")) { toggleJourney(row.dataset.j); return; }
+      if (state.active === row.dataset.j) { state.active = null; buildRail(); renderAll(); return; }
       setActive(row.dataset.j, true);
     });
   });
@@ -402,6 +468,7 @@ function buildRail() {
     st.addEventListener("click", () => {
       const j = journeyOf(st.dataset.j), i = +st.dataset.i;
       state.year = j.timeline[i]; state.active = j.id;
+      state.visible = new Set([j.id]);   // opening a stop must solo its journey too, or older routes/cities stay stuck on the map
       selectPlace(j.stops[i].place, { jid: j.id, i });
       flyToVisible(P[j.stops[i].place].lat, P[j.stops[i].place].lng, Math.max(map.getZoom(), 7), { duration: .8 });
       renderAll();
@@ -414,16 +481,25 @@ function toggleJourney(id) {
   state.visible.has(id) ? state.visible.delete(id) : state.visible.add(id);
   buildRail(); renderAll();
 }
+$("#btnClearRoutes").onclick = () => {
+  if (state.overlay.on) exitCompare();
+  state.visible = new Set(); state.active = null;
+  buildRail(); renderAll();
+};
+$("#btnShowAllRoutes").onclick = () => {
+  if (state.overlay.on) exitCompare();
+  state.visible = new Set(J.map(j => j.id));
+  buildRail(); renderAll();
+};
 function setActive(id, fit) {
   if (state.overlay.on && id !== state.overlay.a && id !== state.overlay.b) exitCompare();
   state.active = id;
-  if (!state.visible.has(id)) state.visible.add(id);
+  state.visible = new Set([id]);   // selecting a journey solos it \u2014 clicking through journeys must not pile up old routes
   const j = journeyOf(id);
   state.year = j.timeline[j.timeline.length - 1];
   if (fit) {
     const pts = j.stops.map(s => [P[s.place].lat, P[s.place].lng]);
     map.flyToBounds(L.latLngBounds(pts).pad(0.18), { duration: .9, ...fitPad() });
-    if (isCompact()) document.body.classList.remove("rail-open");
   }
   buildRail(); renderAll();
 }
@@ -471,7 +547,7 @@ function wirePanel() {
     if (prev.t === "person") showPerson(prev.k);
     if (prev.t === "letter") showLetterPanel(prev.k);
     if (prev.t === "cfm") showCFMPanel(prev.k);
-    if (prev.t === "passage") showPassagePanel(prev.k);
+    if (prev.t === "passage") showPassagePanel(prev.k, prev.opts);
   });
   const cl = d.querySelector(".dclose"); if (cl) cl.onclick = closeDetail;
   $("#app").classList.add("detail-open");
@@ -479,10 +555,13 @@ function wirePanel() {
   d.scrollTop = 0;
   setTimeout(() => map.invalidateSize(), 320);
 }
-function panelHead(title, sub, crumb) {
+function panelHead(title, sub, crumb, extraBtns) {
   return `<div class="dhead">
-    <button class="dclose" title="Close">×</button>
-    ${panelHist.length > 1 ? `<button class="tool" id="panelBack" style="margin-bottom:9px">← Back</button>` : ""}
+    <div class="dtopbar">
+      ${extraBtns || ""}
+      ${panelHist.length > 1 ? `<button class="tool" id="panelBack" title="Back">&#8592; Back</button>` : ""}
+      <button class="dclose" title="Close">&times;</button>
+    </div>
     ${crumb ? `<div class="dsub" style="margin:0 0 5px">${crumb}</div>` : ""}
     <h2>${title}</h2>
     <div class="dsub">${sub}</div></div>`;
@@ -660,7 +739,7 @@ function selectPlace(id, ctx) {
   $("#detail").querySelectorAll(".occ").forEach(el => el.addEventListener("click", () => {
     const j = journeyOf(el.dataset.j), i = +el.dataset.i;
     state.active = j.id; state.year = j.timeline[i];
-    if (!state.visible.has(j.id)) state.visible.add(j.id);
+    state.visible = new Set([j.id]);   // jumping to an occurrence must solo that journey, not pile onto whatever was already visible
     panelHist.pop();
     selectPlace(id, { jid: j.id, i }); buildRail(); renderAll();
   }));
@@ -732,17 +811,24 @@ function play() {
   state.playing = true; $("#btnPlay").textContent = "❙❙ Pause"; $("#btnPlay").classList.add("on");
   const ev = events();
   if (state.year >= ev[ev.length - 1].t - 0.001) state.year = ev[0].t;
+  if (isCompact()) { document.body.classList.remove("rail-open"); tabMark("tbMap"); }
   lastTick = performance.now();
+  let lastActiveJ = null;
   const step = (now) => {
     if (!state.playing) return;
     const dt = now - lastTick; lastTick = now;
     const list = events();
     let next = list.find(e => e.t > state.year + 1e-6);
     if (!next) { pause(); return; }
-    const prevT = (list.filter(e => e.t <= state.year + 1e-6).pop() || list[0]).t;
-    const span = Math.max(0.001, next.t - prevT);
+    const prevEv = list.filter(e => e.t <= state.year + 1e-6).pop() || list[0];
+    const span = Math.max(0.001, next.t - prevEv.t);
     state.year += (dt / EV_MS) * span;
     if (state.year > next.t) state.year = next.t;
+    if (prevEv.j.id !== lastActiveJ) {
+      lastActiveJ = prevEv.j.id;
+      state.active = lastActiveJ;
+      buildRail();
+    }
     renderAll();
     raf = requestAnimationFrame(step);
   };
@@ -985,40 +1071,16 @@ $("#btnMarks").onclick = () => {
   }));
 };
 
-/* sources & method */
-$("#btnSources").onclick = () => {
-  const M = window.PAUL_METHOD; if (!M) return;
-  openModal("Sources & method", `<div class="help">
-    <p>${M.intro}</p>
-    <h3 style="margin:22px 0 10px;font-size:19px">How the atlas is built</h3>
-    ${M.rules.map(r => `<div class="prow"><h4>${r.h}</h4><p>${r.t}</p></div>`).join("")}
-    <h3 style="margin:24px 0 10px;font-size:19px">How confidence is graded</h3>
-    <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Every city's Gazetteer block carries one of
-      these grades and the evidence behind it.</p>
-    ${M.confidence.map(c => { const cc = document.body.classList.contains("light") && c.cl ? c.cl : c.c;
-      return `<div class="prow" style="border-left:3px solid ${cc};padding-left:11px">
-      <h4 style="color:${cc}">${c.g}</h4><p>${c.t}</p></div>`; }).join("")}
-    <h3 style="margin:24px 0 10px;font-size:19px">The five fixed points</h3>
-    <p>${M.fixed}</p>
-    <h3 style="margin:24px 0 10px;font-size:19px">Works consulted</h3>
-    ${M.works.map(w => `<h4 style="margin:16px 0 7px;font-family:'IBM Plex Mono',monospace;font-size:10px;
-      letter-spacing:.14em;text-transform:uppercase;color:var(--gold)">${w.sect}</h4>
-      <ul style="margin:0;padding-left:18px">${w.items.map(i =>
-        `<li style="font-size:13px;line-height:1.6;color:var(--parch-dim);margin-bottom:6px">${i}</li>`).join("")}</ul>`).join("")}
-    <h3 style="margin:24px 0 10px;font-size:19px">Known limits</h3>
-    <ul style="margin:0;padding-left:18px">${M.limits.map(l =>
-      `<li style="font-size:13px;line-height:1.6;color:var(--parch-dim);margin-bottom:7px">${l}</li>`).join("")}</ul>
-    <p style="margin-top:20px;font-size:12.5px;color:var(--muted)">Errors are the author's, not the sources'.
-      Corrections and better evidence are welcome, and are worked into the next revision.</p>
-  </div>`);
-};
+/* sources & method \u2014 folded into the About modal's own tab; see openAbout() */
 
 function openAbout(tab) {
   const YR = new Date().getFullYear();
+  const M = window.PAUL_METHOD || {};
   openModal("About this atlas", `<div class="help">
   <div class="railtabs" id="abtabs" style="position:static;margin:-6px 0 18px">
     <button class="rtab on" data-atab="about">About</button>
     <button class="rtab" data-atab="credits">Credits &amp; Licences</button>
+    <button class="rtab" data-atab="method">Sources &amp; Method</button>
     <button class="rtab" data-atab="terms">Terms of Use</button>
   </div>
 
@@ -1155,6 +1217,30 @@ function openAbout(tab) {
   welcome by way of <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>.</p>
   </div>
 
+  <div data-apane="method" hidden>
+  <p>${M.intro || ""}</p>
+  <h3 style="margin:22px 0 10px;font-size:19px">How the atlas is built</h3>
+  ${(M.rules || []).map(r => `<div class="prow"><h4>${r.h}</h4><p>${r.t}</p></div>`).join("")}
+  <h3 style="margin:24px 0 10px;font-size:19px">How confidence is graded</h3>
+  <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Every city's Gazetteer block carries one of
+    these grades and the evidence behind it.</p>
+  ${(M.confidence || []).map(c => { const cc = document.body.classList.contains("light") && c.cl ? c.cl : c.c;
+    return `<div class="prow" style="border-left:3px solid ${cc};padding-left:11px">
+    <h4 style="color:${cc}">${c.g}</h4><p>${c.t}</p></div>`; }).join("")}
+  <h3 style="margin:24px 0 10px;font-size:19px">The five fixed points</h3>
+  <p>${M.fixed || ""}</p>
+  <h3 style="margin:24px 0 10px;font-size:19px">Works consulted</h3>
+  ${(M.works || []).map(w => `<h4 style="margin:16px 0 7px;font-family:'IBM Plex Mono',monospace;font-size:10px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--gold)">${w.sect}</h4>
+    <ul style="margin:0;padding-left:18px">${w.items.map(i =>
+      `<li style="font-size:13px;line-height:1.6;color:var(--parch-dim);margin-bottom:6px">${i}</li>`).join("")}</ul>`).join("")}
+  <h3 style="margin:24px 0 10px;font-size:19px">Known limits</h3>
+  <ul style="margin:0;padding-left:18px">${(M.limits || []).map(l =>
+    `<li style="font-size:13px;line-height:1.6;color:var(--parch-dim);margin-bottom:7px">${l}</li>`).join("")}</ul>
+  <p style="margin-top:20px;font-size:12.5px;color:var(--muted)">Errors are the author's, not the sources'.
+    Corrections and better evidence are welcome, and are worked into the next revision.</p>
+  </div>
+
   <div data-apane="terms" hidden>
   ${CH("1. What this is")}
   <p style="color:var(--muted);font-size:13px">This beta presents a schematic educational reconstruction based on selected published research. Dates,
@@ -1198,7 +1284,8 @@ function openAbout(tab) {
     panes.forEach(p => { p.hidden = p.dataset.apane !== b.dataset.atab; });
   });
   if (tab === "credits") tabs[1].click();
-  if (tab === "terms") tabs[2].click();
+  if (tab === "method") tabs[2].click();
+  if (tab === "terms") tabs[3].click();
 }
 const CH = (t) => `<h4 style="margin:22px 0 6px;font-family:'IBM Plex Mono',monospace;font-size:10px;` +
   `letter-spacing:.14em;text-transform:uppercase;color:var(--gold)">${t}</h4>`;
@@ -1250,7 +1337,7 @@ $("#btnHelp").onclick = () => openModal("How to use this atlas", `<div class="he
   world — click any of them to jump the map to that year and read the note. <b>Companions</b> charts which
   named person appears on which itinerary. <b>Distance</b> now takes a month: the sea was legally and
   practically closed from November to March, and the summer etesian northerlies made westward runs crawl.
-  The <b>km</b> button cycles kilometres, Roman miles (1,479 m) and stadia (185 m).</p>
+  The <b>mi</b> button cycles miles, kilometres, Roman miles (1,479 m) and stadia (185 m).</p>
   <p><b>Reading the text.</b> 'Read the full passage' in any city panel, in a reading-plan entry, or beside
   a person's references links out to the World English Bible (WEB) at biblegateway.com — this atlas calls
   no scripture API of its own.</p>
@@ -1274,7 +1361,7 @@ $("#btnHelp").onclick = () => openModal("How to use this atlas", `<div class="he
   rather than on Acts.</p></div>`);
 
 /* ---------- overlay layers: roads, provinces, epistles ---------- */
-const layerState = { roads: false, provinces: false, letters: false, gospel: false };
+const layerState = { roads: true, provinces: true, letters: false, gospel: false };
 const roadLayer = L.layerGroup(), provLayer = L.layerGroup(), letterLayer = L.layerGroup();
 
 /* ---------- Gospel-era sites (data/gospels.js) ----------
@@ -1289,6 +1376,7 @@ GOSPEL_IDS.forEach(id => {
     color: "#a9d2e0", fillColor: "#20475a", fillOpacity: .95, opacity: .9, className: "marker-dot" })
     .addTo(gospelLayer);
   m.on("click", () => selectPlace(id));
+  m.on("tooltipopen", e => { e.tooltip.getElement().onclick = () => selectPlace(id); });
   m.bindTooltip(p.name.split(" (")[0], { permanent: true, direction: "right", offset: [7, 0],
     className: "plabel gospel" + (major ? "" : " small") });
   gospelMarks[id] = m;
@@ -1336,6 +1424,7 @@ map.on("moveend", () => setTimeout(updateGospelLabels, 100));
   L.marker([p.lat, p.lng], { interactive: false, icon: L.divIcon({ className: "provlabel",
     html: p.name, iconSize: null }) }).addTo(provLayer);
 });
+roadLayer.addTo(map); provLayer.addTo(map);   // on by default \u2014 a bare landmass with no roads or province names reads as blank
 const shortCarrier = (c) => {
   if (!c || /^Unnamed/i.test(c)) return "";                     // no courier named
   const hedge = /^Probably\s+/i.test(c);
@@ -1501,18 +1590,23 @@ function gotoReading(i) {
   if (r.jid) { state.active = r.jid; state.visible.add(r.jid); }
   if (r.t) state.year = r.t;
   buildRail(); buildReading(); renderAll();
-  selectPlace(r.place);
   const p = P[r.place];
   if (p) flyToVisible(p.lat, p.lng, Math.max(map.getZoom(), 6), { duration: .9 });
   const el = $(`#readlist .ritem[data-r="${i}"]`);
   if (el) $("#rail").scrollTop = Math.max(0, el.offsetTop - 160);
   document.body.classList.remove("rail-open");
+  showPassagePanel(r.ref);   // the point of tapping a reading row is to read it, not to open its place card
 }
 $("#readPrev").onclick = () => gotoReading(readIdx <= 0 ? 0 : readIdx - 1);
 $("#readNext").onclick = () => gotoReading(readIdx + 1 >= READ.length ? READ.length - 1 : readIdx + 1);
 
 /* rail tabs */
 document.querySelectorAll(".rtab").forEach(tab => tab.addEventListener("click", () => {
+  // on phone the place/week detail sheet covers the rail entirely — switching rail tabs
+  // (Itineraries / Read Acts / Weeks) must drop it, or the tab click looks like it did nothing
+  // on the phone/place/week detail sheet AND the tablet-landscape overlay drawer, the detail
+  // panel visually sits on top of the rail — a tab switch underneath it looks like nothing happened
+  if (window.innerWidth <= 1080 && $("#app").classList.contains("detail-open")) closeDetail();
   document.querySelectorAll(".rtab").forEach(t => t.classList.toggle("on", t === tab));
   document.querySelectorAll(".tabpane").forEach(p => p.hidden = p.dataset.pane !== tab.dataset.tab);
   document.body.classList.toggle("railfocus", tab.dataset.tab !== "itin");
@@ -1551,13 +1645,25 @@ function flyToVisible(lat, lng, zoom, opts) {
 
 /* the sheet's grab bar expands it to full height and back */
 $("#detail").addEventListener("click", e => {
-  if (window.innerWidth > 820 || window.innerHeight < window.innerWidth) return;
+  const portraitPhone = window.innerWidth <= 820 && window.innerHeight >= window.innerWidth;
+  const landscapePhone = window.innerHeight <= 540 && window.innerWidth <= 1000 && window.innerWidth > window.innerHeight;
+  if (!portraitPhone && !landscapePhone) return;
   if (e.target.closest("button, a, .chip, input")) return;
   const head = e.target.closest(".dhead");
   if (!head || e.clientY - head.getBoundingClientRect().top > 22) return;
   document.body.classList.toggle("sheet-full");
   setTimeout(() => map.invalidateSize(true), 300);
 });
+
+/* collapse the sheet's header to a slim title bar once the reader scrolls past it,
+   so the article gets the room the title/subtitle/actions block was holding */
+$("#detail").addEventListener("scroll", () => {
+  // 1080px covers the phone-landscape / small-tablet overlay-drawer breakpoint too, where
+  // #detail is a narrow, short fixed panel and the header eats an even bigger share of it
+  if (window.innerWidth > 1080) return;
+  const head = $("#detail .dhead");
+  if (head) head.classList.toggle("compact", $("#detail").scrollTop > 36);
+}, { passive: true });
 
 /* bottom action bar (<=820px). Each button dismisses whatever overlays the map,
    lets the map re-measure, and only then changes what is shown. */
@@ -1589,9 +1695,11 @@ $("#railClose").onclick = () => {
 $("#tbIndex").onclick = () => {
   const open = document.body.classList.toggle("rail-open");
   if (open) {
+    document.body.classList.remove("rail-collapsed");   // a stale desktop "collapse" preference must never hide the mobile drawer
     railEl.scrollTop = 0;
     const itin = document.querySelector('.rtab[data-tab="itin"]');
     if (itin && !itin.classList.contains("on")) itin.click();
+    state.active = null; buildRail();   // Menu always opens with itineraries collapsed, not whichever one reading left active
   }
   tabMark(open ? "tbIndex" : "tbMap");
 };
@@ -1602,13 +1710,18 @@ function setTimeline(on) {
   document.body.classList.toggle("timeline-on", on);
   $("#btnTimeTop").classList.toggle("on", on);
   $("#tbTime").classList.toggle("on", on);
-  store.set("timeline", on ? "1" : "");
+  store.set("timeline", on ? "1" : "0");
   setTimeout(() => { map.invalidateSize(true); renderMap(); }, 300);
 }
 const toggleTimeline = () => setTimeline(!document.body.classList.contains("timeline-on"));
 $("#btnTimeTop").onclick = toggleTimeline;
 $("#tbTime").onclick = toggleTimeline;
-setTimeline(store.get("timeline") === "1");   /* off unless the reader asked for it */
+{
+  // wide desktop had no way to hide the timeline at all before \u2014 default stays on there
+  // unless the reader has explicitly turned it off; narrower layouts keep defaulting to off
+  const storedTL = store.get("timeline");
+  setTimeline(storedTL === "1" || (storedTL !== "0" && window.innerWidth > 1180));
+}
 
 /* tablet landscape: the index column folds away so the map can have the width */
 $("#btnRailToggle").onclick = () => {
@@ -1626,8 +1739,12 @@ $("#tbMap").onclick = () => {
   tabMark("tbMap");
 };
 $("#tbRead").onclick = () => {
+  // opens the Read Acts list collapsed — jumping straight into a passage skipped the list entirely
   document.body.classList.add("rail-open");
-  document.querySelector('.rtab[data-tab="read"]').click();
+  document.body.classList.remove("rail-collapsed");
+  const read = document.querySelector('.rtab[data-tab="read"]');
+  if (read && !read.classList.contains("on")) read.click();
+  railEl.scrollTop = 0;
   tabMark("tbRead");
 };
 
@@ -1651,29 +1768,32 @@ document.addEventListener("click", e => { if (!moreWrap.contains(e.target)) clos
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeMore(); });
 
 function placeTools() {
-  const narrow = window.innerWidth <= 1150, phone = isCompact();
-  if (narrow && toolsEl.parentElement !== railEl) railEl.insertBefore(toolsEl, railEl.firstChild);
-  if (!narrow && toolsEl.parentElement !== headerEl) headerEl.insertBefore(toolsEl, pinnedEl);
-  /* on a phone the header has no room for Map — it joins the rail set; Light/Dark stays pinned */
-  const roam = [];
-  roam.forEach(b => {
-    if (phone && b.parentElement !== toolsEl) toolsEl.appendChild(b);
-    if (!phone && b.parentElement !== pinnedEl) pinnedEl.insertBefore(b, $("#btnTheme"));
-  });  /* pull everything back, then spill whatever will not fit into the More menu */
-  while (moreMenu.firstChild) toolsEl.appendChild(moreMenu.firstChild);
+  const narrow = window.innerWidth <= 1150;
+  while (moreMenu.firstChild) toolsEl.appendChild(moreMenu.firstChild);   // reset before recomputing
   closeMore();
-  if (narrow) { moreWrap.classList.remove("on"); return; }
-  moreWrap.classList.add("on");
-  /* secondary tools always live in the menu, so the header set never shuffles with window width */
+  if (narrow) {
+    if (toolsEl.parentElement !== railEl) railEl.insertBefore(toolsEl, railEl.firstChild);
+    if (moreWrap.parentElement !== railEl) railEl.insertBefore(moreWrap, toolsEl);
+  } else {
+    if (toolsEl.parentElement !== headerEl) headerEl.insertBefore(toolsEl, pinnedEl);
+    if (moreWrap.parentElement !== headerEl) headerEl.insertBefore(moreWrap, pinnedEl);
+  }
+  /* secondary tools always live in the menu — on phone that means everything: the rail's
+     three tabs (Itineraries / Read Acts / Weeks) are the only buttons left visible there */
   [...toolsEl.children].filter(b => b.hasAttribute("data-secondary"))
     .forEach(b => moreMenu.appendChild(b));
-  let guard = 40;
-  while (toolsEl.scrollWidth > toolsEl.clientWidth + 1 && toolsEl.children.length > 1 && guard--)
-    moreMenu.insertBefore(toolsEl.lastElementChild, moreMenu.firstChild);
+  if (!narrow) {
+    let guard = 40;
+    while (toolsEl.scrollWidth > toolsEl.clientWidth + 1 && toolsEl.children.length > 1 && guard--)
+      moreMenu.insertBefore(toolsEl.lastElementChild, moreMenu.firstChild);
+  }
   moreWrap.classList.toggle("on", moreMenu.children.length > 0);
+  toolsEl.classList.toggle("empty", toolsEl.children.length === 0);
 }
 placeTools();
 window.addEventListener("resize", placeTools);
+/* run once the boot chain above has built #btnBasemap and everything setBasemap touches */
+setBasemap(basemapKey);
 
 /* ---------- WEB passage reader (links out on demand; nothing fetched by this app) ---------- */
 const PLACE_ALIASES = [
@@ -1783,18 +1903,39 @@ function openPassage(ref) {
     }));
   }
 }
-function showPassagePanel(ref) {
+function showPassagePanel(ref, opts) {
   if (!ref) return;
   const q = ref.replace(/[–—]/g, "-").trim();
-  panelHist.push({ t: "passage", k: q });
+  panelHist.push({ t: "passage", k: q, opts: opts || null });
   state.place = null;
   const data = localPassage(q);
-  $("#detail").innerHTML = panelHead(q, "WORLD ENGLISH BIBLE (WEB) — public domain worldwide", "SCRIPTURE") +
+  // reached via a study week (the Weeks tab): step forward/back through the schedule, not the Acts reading order
+  const weekNav = opts && opts.week != null;
+  const prevWeek = weekNav ? weekWithPassage(opts.week, -1) : null;
+  const nextWeek = weekNav ? weekWithPassage(opts.week, 1) : null;
+  const idx = weekNav ? -1 : READ.findIndex(r => r.ref.replace(/[–—]/g, "-") === q);   // this reading's place in the Acts/epistles reading order, if it has one
+  const nav = weekNav
+    ? `<button class="tool" id="passagePrev" title="Previous week's reading" ${prevWeek == null ? "disabled" : ""}>&#8249;</button>
+      <button class="tool" id="passageNext" title="Next week's reading" ${nextWeek == null ? "disabled" : ""}>&#8250;</button>`
+    : idx > -1 ? `<button class="tool" id="passagePrev" title="Previous reading" ${idx <= 0 ? "disabled" : ""}>&#8249;</button>
+    <button class="tool" id="passageNext" title="Next reading" ${idx >= READ.length - 1 ? "disabled" : ""}>&#8250;</button>` : "";
+  $("#detail").innerHTML = panelHead(q, "", "", `${nav}<button class="tool" id="passageMenu" title="Menu">&#9776;</button>`) +
     `<div class="sect"><div class="passage" id="ptext">${data ? "" :
       `<p style="color:var(--muted);font-size:13.5px;line-height:1.7">"${q}" isn't in the atlas's bundled
        New Testament text. Every reference cited elsewhere in this atlas is bundled and readable offline —
        try Search above instead.</p>`}</div></div>`;
   wirePanel();
+  $("#passageMenu").onclick = () => {
+    closeDetail();
+    document.body.classList.add("rail-open");
+  };
+  if (weekNav) {
+    if (prevWeek != null) $("#passagePrev").onclick = () => openWeekReading(prevWeek);
+    if (nextWeek != null) $("#passageNext").onclick = () => openWeekReading(nextWeek);
+  } else if (idx > -1) {
+    if (idx > 0) $("#passagePrev").onclick = () => gotoReading(idx - 1);
+    if (idx < READ.length - 1) $("#passageNext").onclick = () => gotoReading(idx + 1);
+  }
   if (data) {
     const box = $("#ptext");
     box.innerHTML = data.verses.map(v =>
@@ -1902,16 +2043,17 @@ $("#btnNet").onclick = () => {
 };
 
 /* ---------- units toggle ---------- */
-const unitLabel = { km: "km", mi: "Roman mi", st: "stadia" };
+const unitLabel = { mi: "mi", km: "km", rmi: "Roman mi", st: "stadia" };
 function applyUnits() {
   $("#btnUnits").textContent = unitLabel[UNITS.key];
-  $("#btnUnits").title = UNITS.key === "km" ? "Kilometres — click for Roman miles"
-    : UNITS.key === "mi" ? "Roman miles of 1,479 m — click for stadia"
-    : "Stadia of 185 m — click for kilometres";
+  $("#btnUnits").title = UNITS.key === "mi" ? "Miles — click for kilometres"
+    : UNITS.key === "km" ? "Kilometres — click for Roman miles"
+    : UNITS.key === "rmi" ? "Roman miles of 1,479 m — click for stadia"
+    : "Stadia of 185 m — click for miles";
   buildRail(); if (state.place) selectPlace(state.place, state.ctx);
 }
 $("#btnUnits").onclick = () => {
-  UNITS.key = UNITS.key === "km" ? "mi" : UNITS.key === "mi" ? "st" : "km";
+  UNITS.key = UNITS.key === "mi" ? "km" : UNITS.key === "km" ? "rmi" : UNITS.key === "rmi" ? "st" : "mi";
   store.d.units = UNITS.key; store.save(); applyUnits();
 };
 
@@ -1934,12 +2076,32 @@ function buildCFM() {
   $("#cfmsel").innerHTML = CFM.map(w =>
     `<option value="${w.week}">${w.title}</option>`).join("");
   $("#wlist").innerHTML = CFM.map(w => `<div class="witem${state.cfm.week === w.week ? " on" : ""}" data-w="${w.week}">
-    <div class="wk">WEEK ${w.week}</div>
-    <div class="wr">${w.readings}</div>
-    ${w.places.length ? "" : `<div class="wo">${w.week === 0 ? "ORIENTATION" : "OUTSIDE THIS ATLAS"}</div>`}</div>`).join("");
+    <div style="min-width:0">
+      <div class="wk">WEEK ${w.week}</div>
+      <div class="wr">${w.readings}</div>
+      ${w.places.length ? "" : `<div class="wo">${w.week === 0 ? "ORIENTATION" : "OUTSIDE THIS ATLAS"}</div>`}
+    </div>
+    <div class="wgo">Read &rarr;</div></div>`).join("");
   $("#wlist").querySelectorAll(".witem").forEach(el =>
-    el.addEventListener("click", () => setWeek(+el.dataset.w)));
+    el.addEventListener("click", () => openWeekReading(+el.dataset.w)));
   if (state.cfm.week != null) $("#cfmsel").value = String(state.cfm.week);
+}
+// tapping a week goes straight into its scripture text (map/lesson context loads behind it,
+// same as setWeek — Back from the passage still reaches the lesson panel, X reaches the map)
+function openWeekReading(n) {
+  setWeek(n);
+  const w = CFM.find(x => x.week === n); if (!w) return;
+  const seg = w.readings.split(";").map(s => s.trim().replace(/[–—]/g, "-")).find(s => localPassage(s));
+  if (seg) showPassagePanel(seg, { week: n });
+}
+// walks the study-week schedule for the nearest week (in dir) that has a readable passage segment
+function weekWithPassage(n, dir) {
+  for (let w = n + dir; CFM.some(x => x.week === w) || (dir > 0 ? w <= CFM[CFM.length - 1].week : w >= CFM[0].week); w += dir) {
+    const week = CFM.find(x => x.week === w); if (!week) continue;
+    const seg = week.readings.split(";").map(s => s.trim().replace(/[–—]/g, "-")).find(s => localPassage(s));
+    if (seg) return week.week;
+  }
+  return null;
 }
 function setWeek(n) {
   const w = CFM.find(x => x.week === n); if (!w) return;
@@ -2026,10 +2188,12 @@ function showCFMPanel(n) {
     return ch >= +m[1] && ch <= +m[2];
   });
   $("#detail").innerHTML = `<div class="dhead">
-    <button class="dclose" title="Close">×</button>
-    <div class="dactions" style="margin-bottom:9px">
-      <button class="tool" id="cfmPrev2">← Previous week</button>
-      <button class="tool" id="cfmNext2">Next week →</button>
+    <div class="dtopbar">
+      <button class="tool" id="cfmMenu" title="Menu">&#9776;</button>
+      <button class="tool" id="cfmPrev2" title="Previous week">&#8249;</button>
+      <button class="tool" id="cfmNext2" title="Next week">&#8250;</button>
+      ${panelHist.length > 1 ? `<button class="tool" id="panelBack" title="Back">&#8592;</button>` : ""}
+      <button class="dclose" title="Close">&times;</button>
     </div>
     <div class="dsub" style="margin:0 0 5px">STUDY WEEK</div>
     <h2>${w.title}</h2>
@@ -2058,6 +2222,7 @@ function showCFMPanel(n) {
     ${sect("For discussion", w.prompts.map(q => `<div class="discq"><p>${q}</p></div>`).join(""))}
   `;
   wirePanel();
+  $("#cfmMenu").onclick = () => { closeDetail(); document.body.classList.add("rail-open"); };
   $("#cfmPrev2").onclick = () => stepWeek(-1);
   $("#cfmNext2").onclick = () => stepWeek(1);
   $("#detail .dclose").onclick = () => { exitCFM(); closeDetail(); };
@@ -2080,9 +2245,8 @@ $("#btnCFM").onclick = () => {
   if (state.cfm.week != null) showCFMPanel(state.cfm.week);
 };
 $("#btnRead").onclick = () => {
-  document.querySelector('.rtab[data-tab="read"]').click();
-  if (isCompact()) document.body.classList.add("rail-open");
   document.body.classList.remove("rail-collapsed");
+  gotoReading(readIdx < 0 ? 0 : readIdx);
 };
 
 /* light / dark theme: remembered, defaults to the system setting */
@@ -2484,8 +2648,7 @@ function readableOn(hex) {
   return lum > 0.35 ? "#100d06" : "#fdf4e0";
 }
 
-/* credits & licences live on the About panel's second tab */
-$("#btnLicence").onclick = () => openAbout("credits");
+/* credits & licences live on the About panel's own tab now (button folded into About) */
 
 /* ---------- boot ---------- */
 function renderAll() { renderMap(); renderTimeline(); renderContextNow(); writeHash(); }
