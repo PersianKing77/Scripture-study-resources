@@ -9,12 +9,12 @@
   /* Self-contained visual layer for this page only — does not touch the
      shared stylesheet, so nothing else on the site is affected. */
   :root {
-    --parchment-a: #f3ead9;
-    --parchment-b: #e8dcc2;
-    --ink: #2f2416;
-    --ink-soft: #5b4c37;
-    --gold: #9c7a3c;
-    --gold-line: rgba(156, 122, 60, 0.35);
+    --parchment-a: #16202E;
+    --parchment-b: #0E1520;
+    --ink: #ECEAE0;
+    --ink-soft: #A9B3C2;
+    --gold: #D4AF5A;
+    --gold-line: rgba(212, 175, 90, 0.3);
   }
 
   body {
@@ -60,10 +60,10 @@
   }
 
   .login-card {
-    background: #fffdf8;
+    background: #1B2635;
     border: 1px solid var(--gold-line);
     border-radius: 4px;
-    box-shadow: 0 18px 50px rgba(47, 36, 22, 0.18), 0 2px 8px rgba(47, 36, 22, 0.08);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2);
     padding: 44px 40px 36px;
     max-width: 440px;
     width: 100%;
@@ -105,17 +105,18 @@
     box-sizing: border-box;
     padding: 12px 14px;
     font-size: 15px;
-    border: 1px solid #cbb98f;
+    border: 1px solid #38465A;
     border-radius: 3px;
     margin-bottom: 18px;
-    background: #fff;
+    background: #0E1520;
+    color: var(--ink);
   }
 
   .login-card button {
     width: 100%;
     padding: 13px 16px;
     background: var(--ink);
-    color: #f3ead9;
+    color: #16202E;
     border: none;
     border-radius: 3px;
     font-size: 15px;
@@ -125,7 +126,7 @@
   }
 
   .login-card button:hover {
-    background: #1e170e;
+    background: #D6D3C6;
   }
 
   .login-status {
@@ -135,7 +136,7 @@
   }
 
   .login-status.pending { color: var(--ink-soft); }
-  .login-status.error { color: #9c3b3b; }
+  .login-status.error { color: #E28A72; }
 
   .login-foot {
     margin-top: 26px;
@@ -164,34 +165,34 @@
   <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="sea" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#c9b989"/>
-        <stop offset="100%" stop-color="#bfae7c"/>
+        <stop offset="0%" stop-color="#1F2E3F"/>
+        <stop offset="100%" stop-color="#263A4F"/>
       </linearGradient>
     </defs>
 
     <!-- Mediterranean coastline (stylized Levant coast) -->
     <path d="M0 60 C 120 90, 160 180, 130 260 C 100 340, 150 420, 190 480 C 230 540, 210 620, 170 700 C 140 750, 90 780, 0 790 Z"
-          fill="url(#sea)" opacity="0.55"/>
+          fill="url(#sea)" opacity="0.7"/>
 
     <!-- Jordan River -->
     <path d="M470 120 C 460 220, 500 300, 480 380 C 465 440, 500 520, 470 620 C 455 670, 480 720, 460 780"
-          fill="none" stroke="#8a9a7a" stroke-width="4" opacity="0.55"/>
+          fill="none" stroke="#3D5468" stroke-width="4" opacity="0.6"/>
 
     <!-- Sea of Galilee -->
-    <ellipse cx="478" cy="360" rx="26" ry="34" fill="#9fb08a" opacity="0.5"/>
+    <ellipse cx="478" cy="360" rx="26" ry="34" fill="#2E4358" opacity="0.6"/>
 
     <!-- Dead Sea -->
     <path d="M440 640 C 470 630, 500 660, 495 710 C 490 750, 450 760, 430 730 C 415 700, 415 655, 440 640 Z"
-          fill="#8f9a7a" opacity="0.45"/>
+          fill="#2E4358" opacity="0.55"/>
 
     <!-- Trade-route dotted lines -->
-    <path d="M150 300 L470 360 L700 200 L1000 150" fill="none" stroke="#9c7a3c"
-          stroke-width="1.5" stroke-dasharray="2 8" opacity="0.4"/>
-    <path d="M470 360 L620 560 L780 640 L980 600" fill="none" stroke="#9c7a3c"
-          stroke-width="1.5" stroke-dasharray="2 8" opacity="0.4"/>
+    <path d="M150 300 L470 360 L700 200 L1000 150" fill="none" stroke="#D4AF5A"
+          stroke-width="1.5" stroke-dasharray="2 8" opacity="0.35"/>
+    <path d="M470 360 L620 560 L780 640 L980 600" fill="none" stroke="#D4AF5A"
+          stroke-width="1.5" stroke-dasharray="2 8" opacity="0.35"/>
 
     <!-- City markers -->
-    <g fill="#7a5a2e" opacity="0.55" font-family="Georgia, serif" font-size="17">
+    <g fill="#D4AF5A" opacity="0.5" font-family="Georgia, serif" font-size="17">
       <circle cx="150" cy="300" r="4"/><text x="160" y="296">Caesarea</text>
       <circle cx="470" cy="470" r="5"/><text x="482" y="466">Jerusalem</text>
       <circle cx="478" cy="330" r="3.5"/><text x="490" y="326">Capernaum</text>
@@ -201,7 +202,7 @@
     </g>
 
     <!-- Fine decorative border -->
-    <rect x="18" y="18" width="1164" height="764" fill="none" stroke="#9c7a3c" stroke-width="1" opacity="0.3"/>
+    <rect x="18" y="18" width="1164" height="764" fill="none" stroke="#D4AF5A" stroke-width="1" opacity="0.25"/>
   </svg>
 </div>
 
