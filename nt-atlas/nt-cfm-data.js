@@ -18,6 +18,11 @@ const MED_PLACES = [
   id:"antioch-syria", name:"Antioch of Syria", greek:"Ἀντιόχεια", modern:"Antakya, Türkiye",
   lat:36.2021, lon:36.1610, cat:"city", region:"Syria (Roman province)",
   blurb:"Third city of the empire, and the church that first sent missionaries out — and first wore the name Christian.",
+  related: [
+    { name:'Daphne sanctuary and suburb', era:'Hellenistic and Roman periods', conf:'certain', note:'A wooded suburb of Antioch famous for its sanctuary of Apollo and Artemis and as a leisure retreat for the wealthy.', sig:'Illustrates the pagan, pleasure-oriented culture the young Antioch church grew up alongside in the empire\'s third city.', wiki:'https://en.wikipedia.org/wiki/Special:Search?search=Daphne%20sanctuary%20and%20suburb' },
+    { name:'Seleucia Pieria', era:'Hellenistic and Roman periods', conf:'certain', note:'Antioch\'s port city on the Mediterranean coast, the sailing point for ships leaving the region.', sig:'Almost certainly the port Paul and Barnabas sailed from at the start of the first missionary journey (Acts 13:4).', wiki:'https://en.wikipedia.org/wiki/Seleucia_Pieria' },
+    { name:'Titus Tunnel', era:'Roman period (2nd century AD)', conf:'certain', note:'A massive Roman rock-cut water-diversion tunnel protecting Seleucia Pieria\'s harbor from flood silt.', sig:'An engineering feat later than Paul\'s voyages, but marking the same harbor\'s continued Roman-era importance.', wiki:'https://en.wikipedia.org/wiki/Vespasianus_Titus_Tunnel' }
+  ],
   scriptures:[
     { ref: "Acts 11:26", text: "When he had found him, he brought him to Antioch. For a whole year they were gathered together with the assembly, and taught many people. The disciples were first called Christians in Antioch." },
     { ref: "Acts 13:2–3", text: "As they served the Lord and fasted, the Holy Spirit said, “Separate Barnabas and Saul for me, for the work to which I have called them.” Then, when they had fasted and prayed and laid their hands on them, they sent them away." }
@@ -36,6 +41,9 @@ const MED_PLACES = [
   id:"tarsus", name:"Tarsus", greek:"Ταρσός", modern:"Tarsus, Türkiye",
   lat:36.9177, lon:34.8947, cat:"city", region:"Cilicia (Roman province)",
   blurb:"Paul's home city — a university town on a navigable river, and the reason he could argue in Greek and claim Rome.",
+  related: [
+    { name:'Tarsus Roman road', era:'Roman period', conf:'certain', note:'Roman period. Excavated street segment illustrates the urban infrastructure of Paul\'s home city.', sig:'Relates to Acts 9:30; 11:25; 21:39.', wiki:'https://en.wikipedia.org/wiki/Tarsus' }
+  ],
   scriptures:[
     { ref: "Acts 21:39", text: "But Paul said, “I am a Jew, from Tarsus in Cilicia, a citizen of no insignificant city. I beg you, allow me to speak to the people.”" },
     { ref: "Acts 22:3", text: "“I am indeed a Jew, born in Tarsus of Cilicia, but brought up in this city at the feet of Gamaliel, instructed according to the strict tradition of the law of our fathers, being zealous for God, even as you all are today." }
@@ -55,6 +63,12 @@ const MED_PLACES = [
   id:"salamis-cyprus", name:"Salamis (Cyprus)", greek:"Σαλαμίς", modern:"near Famagusta, Cyprus",
   lat:35.1830, lon:33.9060, cat:"city", region:"Cyprus (Roman province)",
   blurb:"The eastern port of Cyprus and the first stop of the first mission — where they preached in the synagogues of the Jews.",
+  related: [
+    { name:'Salamis synagogue tradition', era:'Roman period', conf:'probable', note:'Roman period. Acts mentions multiple synagogues; proposed remains and inscriptions provide contextual evidence.', sig:'Relates to Acts 13:5.', wiki:'https://en.wikipedia.org/wiki/Salamis' },
+    { name:'Soloi Cyprus', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Theater, agora, and later basilica document island urbanism.', sig:'Relates to Context for Roman Cyprus.', wiki:'https://en.wikipedia.org/wiki/Soli' },
+    { name:'Kition', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Port city helps model maritime movement around Cyprus.', sig:'Relates to Acts 11:19; 13:4-13 context.', wiki:'https://en.wikipedia.org/wiki/Kition' },
+    { name:'Cyprus copper mines', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Mining and slag explain the island\'s name association and economy.', sig:'Relates to Acts 4:36; 11:19; 13; Barnabas context.', wiki:'https://en.wikipedia.org/wiki/Mining_industry_of_Cyprus' }
+  ],
   scriptures:[{ ref: "Acts 13:5", text: "When they were at Salamis, they proclaimed God’s word in the Jewish synagogues. They had also John as their attendant." }],
   geo:"A harbour facing Syria, a single day's sail from Seleucia with a following wind — which is why Cyprus, and not Asia Minor, is the first field.",
   greco:"The island's chief commercial city, rebuilt repeatedly after earthquakes, with a gymnasium, theatre and grand baths.",
@@ -70,6 +84,12 @@ const MED_PLACES = [
   id:"paphos", name:"Paphos", greek:"Πάφος", modern:"Kato Paphos, Cyprus",
   lat:34.7570, lon:32.4060, cat:"city", region:"Cyprus (Roman province)",
   blurb:"The Roman capital of Cyprus, where a proconsul believed, a sorcerer was blinded, and Saul begins to be called Paul.",
+  related: [
+    { name:'Paphos agora', era:'Roman period', conf:'certain', note:'Roman period. Civic center illustrates the proconsular capital\'s public setting.', sig:'Relates to Acts 13:6-12.', wiki:'https://en.wikipedia.org/wiki/Paphos' },
+    { name:'Paphos Roman governor\'s complex candidate', era:'Roman period', conf:'probable', note:'Roman period. Administrative remains help visualize the proconsul\'s institutional setting.', sig:'Relates to Acts 13:7.', wiki:'https://en.wikipedia.org/wiki/Paphos_Archaeological_Park' },
+    { name:'Kourion', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. City, theater, houses, baths, and inscriptions broaden the island\'s provincial context.', sig:'Relates to Context for Roman Cyprus.', wiki:'https://en.wikipedia.org/wiki/Kourion' },
+    { name:'Amathus', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Port and sanctuary city illustrates Cypriot religious and commercial networks.', sig:'Relates to Context for Roman Cyprus.', wiki:'https://en.wikipedia.org/wiki/Amathus' }
+  ],
   scriptures:[{ ref: "Acts 13:12", text: "Then the proconsul, when he saw what was done, believed, being astonished at the teaching of the Lord." }],
   geo:"The island's south-western harbour, the natural point of departure for the run north-west to the Pamphylian coast.",
   greco:"Seat of the proconsul and of the cult of Aphrodite, whose sanctuary drew pilgrims from across the Aegean — the first named Roman official to believe does so in a shrine city.",
@@ -101,6 +121,15 @@ const MED_PLACES = [
   id:"antioch-pisidia", name:"Antioch of Pisidia", greek:"Ἀντιόχεια τῆς Πισιδίας", modern:"Yalvaç, Türkiye",
   lat:38.3062, lon:31.1900, cat:"city", region:"Galatia & southern Asia Minor",
   blurb:"A Roman colony on the plateau, and the pulpit where Paul preaches his first recorded sermon.",
+  related: [
+    { name:'Pisidian Antioch Augusteum', era:'Augustan and Julio-Claudian periods', conf:'certain', note:'Augustan and Julio-Claudian periods. Imperial sanctuary documents ruler cult in a Roman colony.', sig:'Relates to Acts 13:16-41 context; imperial cult.', wiki:'https://en.wikipedia.org/wiki/Antioch_of_Pisidia' },
+    { name:'Pisidian Antioch synagogue candidate', era:'Roman period', conf:'conjectural', note:'Roman period. Proposed synagogue locality belongs in reconstructions of Paul\'s sermon setting.', sig:'Relates to Acts 13:14-48.', wiki:'https://en.wikipedia.org/wiki/Antioch_of_Pisidia' },
+    { name:'Yalvac inscriptional corpus', era:'Roman period', conf:'certain', note:'Roman period. Colonial inscriptions preserve offices, names, cults, and Latin-Greek civic culture.', sig:'Relates to Acts 13-14.', wiki:'https://en.wikipedia.org/wiki/Yalva%C3%A7' },
+    { name:'Temple of Augustus and Rome at Ancyra', era:'Augustan period', conf:'certain', note:'Augustan period. Monumentum Ancyranum preserves Augustus\' official achievements and imperial ideology.', sig:'Relates to Luke 2:1; Acts 17:7; imperial context.', wiki:'https://en.wikipedia.org/wiki/Temple_of_Augustus_and_Rome' },
+    { name:'Pessinus', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Galatian sanctuary-city helps reconstruct ethnic and cultic Galatia.', sig:'Relates to Galatians context.', wiki:'https://en.wikipedia.org/wiki/Pessinus' },
+    { name:'Gordion', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Settlement history and Galatian occupation illuminate central Anatolia.', sig:'Relates to Galatians context.', wiki:'https://en.wikipedia.org/wiki/Gordion' },
+    { name:'Res Gestae Divi Augusti', era:'Augustan period', conf:'certain', note:'Augustan period. Official inscription presents Augustus\' own account of power, benefaction, censuses, and honors.', sig:'Relates to Luke 2:1; Acts 17:7.', wiki:'https://en.wikipedia.org/wiki/Res_Gestae_Divi_Augusti' }
+  ],
   scriptures:[
     { ref: "Acts 13:46", text: "Paul and Barnabas spoke out boldly, and said, “It was necessary that God’s word should be spoken to you first. Since indeed you thrust it from you, and judge yourselves unworthy of eternal life, behold, we turn to the Gentiles." },
     { ref: "Acts 13:49", text: "The Lord’s word was spread abroad throughout all the region." }
@@ -134,6 +163,9 @@ const MED_PLACES = [
   id:"lystra", name:"Lystra", greek:"Λύστρα", modern:"Hatunsaray, Türkiye",
   lat:37.5800, lon:32.4530, cat:"town", region:"Galatia & southern Asia Minor",
   blurb:"A small colony where a lame man walked, the crowd cried 'the gods are come down', and Paul was stoned — and probably where Timothy grew up.",
+  related: [
+    { name:'Lystra colony inscription', era:'Roman imperial period', conf:'certain', note:'Roman imperial period. Epigraphic evidence helped secure the ancient city\'s identification.', sig:'Relates to Acts 14:6-23; 16:1-2.', wiki:'https://en.wikipedia.org/wiki/Lystra' }
+  ],
   scriptures:[
     { ref: "Acts 14:11", text: "When the multitude saw what Paul had done, they lifted up their voice, saying in the language of Lycaonia, “The gods have come down to us in the likeness of men!”" },
     { ref: "Acts 16:1", text: "He came to Derbe and Lystra: and behold, a certain disciple was there, named Timothy, the son of a Jewess who believed; but his father was a Greek." }
@@ -152,6 +184,9 @@ const MED_PLACES = [
   id:"derbe", name:"Derbe", greek:"Δέρβη", modern:"Kerti Hüyük, Türkiye",
   lat:37.3500, lon:33.2500, cat:"town", region:"Galatia & southern Asia Minor",
   blurb:"The turning point of the first journey — the furthest east they went before walking the whole route back.",
+  related: [
+    { name:'Derbe inscription', era:'Roman imperial period', conf:'certain', note:'Roman imperial period. Inscription naming Derbe helped resolve the city\'s regional location.', sig:'Relates to Acts 14:6,20-21.', wiki:'https://en.wikipedia.org/wiki/Derbe' }
+  ],
   scriptures:[{ ref: "Acts 14:21", text: "When they had preached the Good News to that city, and had made many disciples, they returned to Lystra, Iconium, and Antioch," }],
   geo:"On the eastern edge of the Lycaonian plain near the road to the Cilician Gates — from here Antioch of Syria was reachable overland, but they chose to retrace their steps instead.",
   greco:"A frontier town of the Roman province of Galatia, on the boundary with the client kingdom of Commagene-Cappadocia.",
@@ -168,6 +203,9 @@ const MED_PLACES = [
   id:"troas", name:"Troas", greek:"Τρωάς", modern:"Dalyan, near Çanakkale, Türkiye",
   lat:39.8140, lon:26.1590, cat:"city", region:"Asia (Roman province)",
   blurb:"The port where a vision of a man of Macedonia turned the mission west into Europe.",
+  related: [
+    { name:'Alexandria Troas harbor', era:'Roman period', conf:'certain', note:'Roman period. Harbor remains reconstruct Aegean departures and arrivals.', sig:'Relates to Acts 16:11; 20:5-6,13.', wiki:'https://en.wikipedia.org/wiki/Alexandria_Troas' }
+  ],
   scriptures:[
     { ref: "Acts 16:9", text: "A vision appeared to Paul in the night. There was a man of Macedonia standing, begging him, and saying, “Come over into Macedonia and help us.”" },
     { ref: "Acts 20:9", text: "A certain young man named Eutychus sat in the window, weighed down with deep sleep. As Paul spoke still longer, being weighed down by his sleep, he fell down from the third floor, and was taken up dead." }
@@ -186,6 +224,26 @@ const MED_PLACES = [
   id:"ephesus", name:"Ephesus", greek:"Ἔφεσος", modern:"Selçuk, Türkiye",
   lat:37.9410, lon:27.3410, cat:"city", region:"Asia (Roman province)",
   blurb:"The great city of Asia, home of Artemis and of Paul's longest stay — three years, a riot, and a letter that never scolds.",
+  related: [
+    { name:'Ephesus Great Theater', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Theater is the named or strongly implied setting of the silversmith riot.', sig:'Relates to Acts 19:29-41.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Ephesus Arkadiane', era:'Roman period', conf:'certain', note:'Roman period. Harbor street connects port and theater, mapping arrival, trade, and crowd movement.', sig:'Relates to Acts 18-20 context.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Ephesus harbor basin', era:'Roman period', conf:'certain', note:'Roman period. Silted harbor and channels explain Ephesus\' maritime prominence.', sig:'Relates to Acts 18:19; 20:1; 1 Cor 16:8.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Ephesus Commercial Agora', era:'Roman period', conf:'certain', note:'Roman period. Market architecture illuminates trade, artisans, slavery, and civic economy.', sig:'Relates to Acts 19:23-27; Eph 6:5-9.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Ephesus State Agora', era:'Roman period', conf:'certain', note:'Roman period. Administrative complex defines civic governance and public religion.', sig:'Relates to Acts 19 context.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Ephesus Prytaneion', era:'Roman period', conf:'certain', note:'Roman period. Civic hearth and priestly offices clarify the city\'s sacral administration.', sig:'Relates to Acts 19:35.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Temple of Artemis at Ephesus', era:'Archaic through Roman periods', conf:'certain', note:'Archaic through Roman periods. Temple remains and votives anchor Artemis devotion and the silversmith economy.', sig:'Relates to Acts 19:24-35.', wiki:'https://en.wikipedia.org/wiki/Temple_of_Artemis' },
+    { name:'Ephesian Artemis statues', era:'Roman period', conf:'certain', note:'Roman period. Cult statues visualize the deity acclaimed in Acts.', sig:'Relates to Acts 19:24-35.', wiki:'https://en.wikipedia.org/wiki/Temple_of_Artemis' },
+    { name:'Ephesus Curetes Street', era:'Roman period', conf:'certain', note:'Roman period. Processional street connects civic and cultic monuments.', sig:'Relates to Acts 19 context.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Ephesus Terrace Houses', era:'First century BCE onward', conf:'certain', note:'First century BCE onward. Elite residences illuminate household structure, art, dining, slavery, and patronage.', sig:'Relates to Eph 5-6; Acts 20:20.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Ephesus latrines', era:'Roman period', conf:'certain', note:'Roman period. Public sanitation and sociability enrich reconstruction of daily urban experience.', sig:'Relates to Context for Roman urban life.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Ephesus baths of Scholastica', era:'Roman period', conf:'certain', note:'Roman period. Bath complex illustrates public leisure and benefaction.', sig:'Relates to Context for Roman urban life.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Ephesus Library of Celsus', era:'Early second century CE', conf:'certain', note:'Early second century CE. Later but near-contemporary monument visualizes elite memorialization and literacy.', sig:'Relates to Context for Ephesian civic culture.', wiki:'https://en.wikipedia.org/wiki/Library_of_Celsus' },
+    { name:'Ephesus Serapeion', era:'Roman period', conf:'certain', note:'Roman period. Sanctuary documents Egyptian cult in the plural religious environment.', sig:'Relates to Acts 19:26; religious context.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Ephesus Domitian Temple', era:'Late first century CE', conf:'certain', note:'Late first century CE. Imperial-cult complex is directly relevant to Revelation\'s social world.', sig:'Relates to Rev 2:1-7; imperial cult context.', wiki:'https://en.wikipedia.org/wiki/Temple_of_the_Sebastoi' },
+    { name:'Ephesus inscription calling city neokoros', era:'Roman period', conf:'certain', note:'Roman period. Inscriptions confirm the title translated temple keeper in Acts.', sig:'Relates to Acts 19:35.', wiki:'https://en.wikipedia.org/wiki/Ephesus' },
+    { name:'Ephesus Asiarch inscriptions', era:'Roman period', conf:'certain', note:'Roman period. Epigraphic evidence documents the elite officials called Asiarchs.', sig:'Relates to Acts 19:31.', wiki:'https://en.wikipedia.org/wiki/Asiarch' },
+    { name:'Ephesus grammateus inscriptions', era:'Roman period', conf:'certain', note:'Roman period. Civic inscriptions attest the city secretary office central to ending the riot.', sig:'Relates to Acts 19:35.', wiki:'https://en.wikipedia.org/wiki/Ephesus' }
+  ],
   scriptures:[
     { ref: "Acts 19:10", text: "This continued for two years, so that all those who lived in Asia heard the word of the Lord Jesus, both Jews and Greeks." },
     { ref: "Acts 19:28", text: "When they heard this they were filled with anger, and cried out, saying, “Great is Artemis of the Ephesians!”" },
@@ -205,6 +263,10 @@ const MED_PLACES = [
   id:"miletus", name:"Miletus", greek:"Μίλητος", modern:"Balat, Türkiye",
   lat:37.5300, lon:27.2770, cat:"city", region:"Asia (Roman province)",
   blurb:"Where Paul called the Ephesian elders down to the shore and told them they would not see his face again.",
+  related: [
+    { name:'Miletus theater', era:'Roman period', conf:'certain', note:'Roman period. Large theater illustrates assembly spaces in an Ionian port.', sig:'Relates to Acts 20 context.', wiki:'https://en.wikipedia.org/wiki/Miletus' },
+    { name:'Miletus harbor monuments', era:'Roman period', conf:'certain', note:'Roman period. Harbor basins and monuments clarify Paul\'s maritime route.', sig:'Relates to Acts 20:15-17.', wiki:'https://en.wikipedia.org/wiki/Miletus' }
+  ],
   scriptures:[{ ref: "Acts 20:37–38", text: "They all wept a lot, and fell on Paul’s neck and kissed him, sorrowing most of all because of the word which he had spoken, that they should see his face no more. And they accompanied him to the ship." }],
   geo:"Thirty miles south of Ephesus at the mouth of the Maeander, with four harbours — deliberately chosen so the ship need not enter Ephesus and lose days (Acts 20:16).",
   greco:"The old intellectual capital of Ionia — home of Thales and Anaximander — by now a wealthy but declining port, its harbour filling with river silt.",
@@ -220,6 +282,11 @@ const MED_PLACES = [
   id:"colossae", name:"Colossae", greek:"Κολοσσαί", modern:"near Honaz, Türkiye",
   lat:37.7900, lon:29.2600, cat:"town", region:"Asia (Roman province)",
   blurb:"A declining wool town in the Lycus valley that Paul never visited — and wrote one of his densest letters to.",
+  related: [
+    { name:'Laodicea aqueduct and calcified pipes', era:'Roman period', conf:'certain', note:'Roman period. Water system and mineral deposits contribute to interpretation of lukewarm water imagery.', sig:'Relates to Rev 3:15-16.', wiki:'https://en.wikipedia.org/wiki/Laodicea_on_the_Lycus' },
+    { name:'Laodicea textile and dye evidence', era:'Roman period', conf:'probable', note:'Roman period. Regional black wool and textile economy clarify wealth and white-garment rhetoric.', sig:'Relates to Rev 3:17-18.', wiki:'https://en.wikipedia.org/wiki/Laodicea_on_the_Lycus' },
+    { name:'Laodicea medical-school tradition', era:'Roman period', conf:'probable', note:'Roman period. Medical inscriptions and regional pharmacology contribute to eye-salve interpretations.', sig:'Relates to Rev 3:18.', wiki:'https://en.wikipedia.org/wiki/Laodicea_on_the_Lycus' }
+  ],
   scriptures:[
     { ref: "Colossians 1:16", text: "For by him all things were created, in the heavens and on the earth, things visible and things invisible, whether thrones or dominions or principalities or powers; all things have been created through him, and for him." },
     { ref: "Colossians 4:16", text: "When this letter has been read among you, cause it to be read also in the assembly of the Laodiceans; and that you also read the letter from Laodicea." }
@@ -253,6 +320,9 @@ const MED_PLACES = [
   id:"hierapolis", name:"Hierapolis", greek:"Ἱεράπολις", modern:"Pamukkale, Türkiye",
   lat:37.9250, lon:29.1250, cat:"city", region:"Asia (Roman province)",
   blurb:"The hot-spring spa above the Lycus valley, named with Laodicea and Colossae as one cluster of churches.",
+  related: [
+    { name:'Hierapolis Plutonium', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Toxic cave sanctuary documents ritual performance and underworld cult.', sig:'Relates to Col 4:13; context for local religion.', wiki:'https://en.wikipedia.org/wiki/Ploutonion_at_Hierapolis' }
+  ],
   scriptures:[{ ref: "Colossians 4:13", text: "For I testify about him, that he has great zeal for you, and for those in Laodicea, and for those in Hierapolis." }],
   geo:"On a terrace of white travertine formed by mineral springs, in sight of Laodicea across the valley — three towns within a morning's walk of each other.",
   greco:"A healing sanctuary and resort with a Plutonium emitting lethal gas, a great theatre, and one of the largest necropolises in Asia Minor.",
@@ -268,6 +338,9 @@ const MED_PLACES = [
   id:"smyrna", name:"Smyrna", greek:"Σμύρνα", modern:"İzmir, Türkiye",
   lat:38.4190, lon:27.1390, cat:"city", region:"Asia (Roman province)",
   blurb:"Loyal to Rome, hostile to the church, and the one of the seven cities that receives no rebuke.",
+  related: [
+    { name:'Smyrna agora', era:'Roman period', conf:'certain', note:'Roman period. Civic center, graffiti, and inscriptions illuminate commerce and public identity.', sig:'Relates to Rev 2:8-11.', wiki:'https://en.wikipedia.org/wiki/Smyrna' }
+  ],
   scriptures:[{ ref: "Revelation 2:9", text: "“I know your works, oppression, and your poverty (but you are rich), and the blasphemy of those who say they are Jews, and they are not, but are a synagogue of Satan." }],
   geo:"A deep, sheltered gulf harbour at the end of the Hermus valley road — the best natural port on the Asian coast, and Ephesus' rival for its traffic.",
   greco:"A city that claimed Homer, built a temple to Rome as early as 195 BC, and won the right to an imperial temple under Tiberius; its crowned hilltop street was called the Golden Street.",
@@ -283,6 +356,13 @@ const MED_PLACES = [
   id:"pergamum", name:"Pergamum", greek:"Πέργαμος", modern:"Bergama, Türkiye",
   lat:39.1320, lon:27.1840, cat:"city", region:"Asia (Roman province)",
   blurb:"Acropolis city of the imperial cult, the altar of Zeus and the healing god — 'where Satan's seat is'.",
+  related: [
+    { name:'Pergamum Great Altar', era:'Second century BCE', conf:'certain', note:'Second century BCE. Monumental altar is one proposed background for the phrase throne of Satan.', sig:'Relates to Rev 2:13 context.', wiki:'https://en.wikipedia.org/wiki/Pergamon_Altar' },
+    { name:'Pergamum Trajaneum', era:'Second century CE', conf:'certain', note:'Second century CE. Imperial temple illustrates ruler worship though completed after Revelation\'s likely date.', sig:'Relates to Rev 2:13; imperial cult context.', wiki:'https://en.wikipedia.org/wiki/Pergamon' },
+    { name:'Pergamum Temple of Athena', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Acropolis sanctuary demonstrates the city\'s dense sacred topography.', sig:'Relates to Rev 2:12-17 context.', wiki:'https://en.wikipedia.org/wiki/Pergamon' },
+    { name:'Pergamum Asklepieion', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Healing sanctuary and serpent symbolism illuminate local religious life.', sig:'Relates to Rev 2:12-17 context.', wiki:'https://en.wikipedia.org/wiki/Asclepieion_of_Pergamon' },
+    { name:'Pergamum theater', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Steep theater visualizes the city\'s acropolis and civic spectacle.', sig:'Relates to Rev 2:12-17 context.', wiki:'https://en.wikipedia.org/wiki/Pergamon' }
+  ],
   scriptures:[{ ref: "Revelation 2:13", text: "“I know your works and where you dwell, where Satan’s throne is. You hold firmly to my name, and didn’t deny my faith in the days of Antipas my witness, my faithful one, who was killed among you, where Satan dwells." }],
   geo:"A steep cone rising a thousand feet above the Caicus plain, fifteen miles inland — a fortress capital rather than a port.",
   greco:"Capital of the Attalid kingdom, willed to Rome in 133 BC; site of the first imperial temple in Asia (29 BC), the great altar of Zeus, a library of 200,000 rolls, and the Asclepieion where patients slept for cures.",
@@ -298,6 +378,9 @@ const MED_PLACES = [
   id:"thyatira", name:"Thyatira", greek:"Θυάτειρα", modern:"Akhisar, Türkiye",
   lat:38.9220, lon:27.8360, cat:"town", region:"Asia (Roman province)",
   blurb:"A guild town of dyers and metalworkers — Lydia's home city, and the church warned about accommodation.",
+  related: [
+    { name:'Thyatira guild inscriptions', era:'Roman period', conf:'certain', note:'Roman period. Numerous inscriptions document occupational associations behind debates over work and idolatry.', sig:'Relates to Acts 16:14; Rev 2:18-29.', wiki:'https://en.wikipedia.org/wiki/Thyatira' }
+  ],
   scriptures:[
     { ref: "Acts 16:14", text: "A certain woman named Lydia, a seller of purple, of the city of Thyatira, one who worshiped God, heard us; whose heart the Lord opened to listen to the things which were spoken by Paul." },
     { ref: "Revelation 2:19", text: "“I know your works, your love, faith, service, patient endurance, and that your last works are more than the first." }
@@ -316,6 +399,11 @@ const MED_PLACES = [
   id:"sardis", name:"Sardis", greek:"Σάρδεις", modern:"Sart, Türkiye",
   lat:38.4880, lon:28.0400, cat:"city", region:"Asia (Roman province)",
   blurb:"The old Lydian capital, twice captured while its guards slept — told to watch, and to remember it has a name only.",
+  related: [
+    { name:'Sardis Temple of Artemis', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Unfinished monumental temple exemplifies local cult and urban ambition.', sig:'Relates to Rev 3:1-6 context.', wiki:'https://en.wikipedia.org/wiki/Sardis' },
+    { name:'Sardis Roman bath gymnasium', era:'Roman period', conf:'certain', note:'Roman period. Civic complex illustrates status, education, bathing, and benefaction.', sig:'Relates to Rev 3:1-6 context.', wiki:'https://en.wikipedia.org/wiki/Sardis' },
+    { name:'Sardis synagogue', era:'Third century CE main phase', conf:'certain', note:'Third century CE main phase. Later synagogue and donor inscriptions show the city\'s substantial Jewish community.', sig:'Relates to Rev 3:1-6; Jewish diaspora context.', wiki:'https://en.wikipedia.org/wiki/Sardis' }
+  ],
   scriptures:[{ ref: "Revelation 3:2", text: "Wake up, and keep the things that remain, which you were about to throw away, for I have found no works of yours perfected before my God." }],
   geo:"On a spur of Mount Tmolus above the Hermus plain, where the gold-bearing Pactolus stream runs down — a citadel thought unassailable, and taken by surprise twice.",
   greco:"Croesus' capital and the western terminus of the Persian royal road; under Rome a wealthy textile city, rebuilt after the earthquake of AD 17 with imperial help.",
@@ -347,6 +435,14 @@ const MED_PLACES = [
   id:"philippi", name:"Philippi", greek:"Φίλιπποι", modern:"near Krinides, Greece",
   lat:41.0130, lon:24.2870, cat:"city", region:"Macedonia (Roman province)",
   blurb:"A Roman veterans' colony with no synagogue — where the first European convert was a businesswoman and the first church met by a river.",
+  related: [
+    { name:'Philippi bema', era:'Roman period', conf:'certain', note:'Roman period. Tribunal platform illustrates judicial proceedings in the colony.', sig:'Relates to Acts 16:19-22.', wiki:'https://johnsanidopoulos.com/2018/06/the-prison-of-apostles-paul-and-silas.html' },
+    { name:'Philippi basilicas', era:'Late antique period', conf:'certain', note:'Late antique period. Early Christian basilicas document the later prominence of the community.', sig:'Relates to Philippians reception history.', wiki:'https://johnsanidopoulos.com/2018/06/the-prison-of-apostles-paul-and-silas.html' },
+    { name:'Philippi theater', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Theater and later arena alterations illustrate civic entertainment.', sig:'Relates to Context for colony public life.', wiki:'https://johnsanidopoulos.com/2018/06/the-prison-of-apostles-paul-and-silas.html' },
+    { name:'Philippi traditional prison', era:'Roman structure of uncertain function', conf:'conjectural', note:'Roman structure of uncertain function. Small vaulted building became associated with Paul and Silas.', sig:'Relates to Acts 16:23-34.', wiki:'https://johnsanidopoulos.com/2018/06/the-prison-of-apostles-paul-and-silas.html' },
+    { name:'Gangites River Lydia baptism site', era:'Ancient landscape; modern commemoration', conf:'probable', note:'Ancient landscape; modern commemoration. River and road corridor provide a plausible area for the place of prayer.', sig:'Relates to Acts 16:13-15.', wiki:'https://en.wikipedia.org/wiki/Special:Search?search=Gangites%20River%20Lydia%20baptism%20site' },
+    { name:'Via Egnatia at Philippi', era:'Roman period', conf:'certain', note:'Roman period. Paved road physically connects Paul\'s Macedonian itinerary.', sig:'Relates to Acts 16:11-17:15.', wiki:'https://en.wikipedia.org/wiki/Via_Egnatia' }
+  ],
   scriptures:[
     { ref: "Acts 16:13", text: "On the Sabbath day we went outside of the city by a riverside, where we supposed there was a place of prayer, and we sat down, and spoke to the women who had come together." },
     { ref: "Philippians 4:11", text: "Not that I speak because of lack, for I have learned in whatever state I am, to be content in it." }
@@ -365,6 +461,12 @@ const MED_PLACES = [
   id:"thessalonica", name:"Thessalonica", greek:"Θεσσαλονίκη", modern:"Thessaloniki, Greece",
   lat:40.6403, lon:22.9350, cat:"city", region:"Macedonia (Roman province)",
   blurb:"Capital and port of Macedonia — three sabbaths of preaching, a riot, and two of the earliest letters in the New Testament.",
+  related: [
+    { name:'Roman Forum of Thessalonica', era:'Roman period', conf:'certain', note:'Roman period. Civic center clarifies the setting of magistrates and public accusation.', sig:'Relates to Acts 17:5-9.', wiki:'https://en.wikipedia.org/wiki/Roman_Forum_(Thessaloniki)' },
+    { name:'Vardar Gate inscription', era:'Second century CE', conf:'certain', note:'Second century CE. Inscription attests politarchs, validating Luke\'s distinctive civic title.', sig:'Relates to Acts 17:6,8.', wiki:'https://en.wikipedia.org/wiki/Special:Search?search=Vardar%20Gate%20inscription' },
+    { name:'Thessalonica politarch inscriptions', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Multiple inscriptions establish politarch as a genuine Macedonian civic office.', sig:'Relates to Acts 17:6,8.', wiki:'https://en.wikipedia.org/wiki/Politarch' },
+    { name:'Thessalonica Serapeion', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Egyptian cult sanctuary illustrates conversion from local gods.', sig:'Relates to 1 Thess 1:9; religious context.', wiki:'https://en.wikipedia.org/wiki/Thessaloniki' }
+  ],
   scriptures:[
     { ref: "Acts 17:6", text: "When they didn’t find them, they dragged Jason and certain brothers before the rulers of the city, crying, “These who have turned the world upside down have come here also," },
     { ref: "1 Thessalonians 1:8", text: "For from you the word of the Lord has been declared, not only in Macedonia and Achaia, but also in every place your faith toward God has gone out; so that we need not to say anything." }
@@ -398,6 +500,16 @@ const MED_PLACES = [
   id:"athens", name:"Athens", greek:"Ἀθῆναι", modern:"Athens, Greece",
   lat:37.9720, lon:23.7260, cat:"city", region:"Achaia (Roman province)",
   blurb:"A university museum of a city, full of altars — where Paul preached from a pagan inscription and a few believed.",
+  related: [
+    { name:'Areopagus hill', era:'Classical and Roman periods', conf:'certain', note:'Classical and Roman periods. Council location or institution frames Paul\'s address.', sig:'Relates to Acts 17:19,22.', wiki:'https://en.wikipedia.org/wiki/Areopagus' },
+    { name:'Acropolis of Athens', era:'Classical and Roman periods', conf:'certain', note:'Classical and Roman periods. Dense sacred skyline embodies the city\'s many cults.', sig:'Relates to Acts 17:16,22-23.', wiki:'https://en.wikipedia.org/wiki/Acropolis_of_Athens' },
+    { name:'Temple of Athena Nike', era:'Classical period', conf:'certain', note:'Classical period. Acropolis sanctuary contributes to the religious topography Paul observed.', sig:'Relates to Acts 17 religious context.', wiki:'https://en.wikipedia.org/wiki/Temple_of_Athena_Nike' },
+    { name:'Erechtheion', era:'Classical period', conf:'certain', note:'Classical period. Multi-cult sanctuary illustrates complex Athenian sacred tradition.', sig:'Relates to Acts 17 religious context.', wiki:'https://en.wikipedia.org/wiki/Erechtheion' },
+    { name:'Temple of Hephaestus', era:'Classical through Roman periods', conf:'certain', note:'Classical through Roman periods. Well-preserved agora temple visualizes the built religious environment.', sig:'Relates to Acts 17:16-29.', wiki:'https://en.wikipedia.org/wiki/Temple_of_Hephaestus' },
+    { name:'Odeion of Agrippa', era:'Augustan period', conf:'certain', note:'Augustan period. Auditorium demonstrates elite cultural architecture in Paul\'s Athens.', sig:'Relates to Acts 17 context.', wiki:'https://en.wikipedia.org/wiki/Odeon_of_Agrippa' },
+    { name:'Altar to unknown gods from Athens', era:'Roman period', conf:'probable', note:'Roman period. Athenian inscriptions and literary testimony attest altars to unknown or unnamed gods, though no exact singular match survives.', sig:'Relates to Acts 17:23.', wiki:'https://en.wikipedia.org/wiki/Unknown_God' },
+    { name:'Athenian marketplace boundary stones', era:'Classical and later', conf:'certain', note:'Classical and later. Inscribed horoi identify and regulate the agora space.', sig:'Relates to Acts 17:17.', wiki:'https://en.wikipedia.org/wiki/Ancient_Agora_of_Athens' }
+  ],
   scriptures:[
     { ref: "Acts 17:23", text: "For as I passed along, and observed the objects of your worship, I found also an altar with this inscription: ‘TO AN UNKNOWN GOD.’ What therefore you worship in ignorance, this I announce to you." },
     { ref: "Acts 17:28", text: "‘For in him we live, and move, and have our being.’ As some of your own poets have said, ‘For we are also his offspring.’" }
@@ -416,6 +528,23 @@ const MED_PLACES = [
   id:"corinth", name:"Corinth", greek:"Κόρινθος", modern:"Ancient Corinth, Greece",
   lat:37.9060, lon:22.8790, cat:"city", region:"Achaia (Roman province)",
   blurb:"Two harbours, one isthmus, and eighteen months of teaching — the church that generated more surviving correspondence than any other.",
+  related: [
+    { name:'Corinth Roman Forum', era:'Roman period', conf:'certain', note:'Roman period. Civic center provides the setting for Gallio\'s tribunal.', sig:'Relates to Acts 18:12-17.', wiki:'https://en.wikipedia.org/wiki/Ancient_Corinth' },
+    { name:'Corinth bema', era:'Roman period', conf:'certain', note:'Roman period. Monumental tribunal is the probable location of Paul\'s hearing before Gallio.', sig:'Relates to Acts 18:12-17; 2 Cor 5:10.', wiki:'https://en.wikipedia.org/wiki/Ancient_Corinth' },
+    { name:'Corinth North Market shops', era:'Roman period', conf:'certain', note:'Roman period. Shops illuminate artisan work and meat-market commerce.', sig:'Relates to Acts 18:2-3; 1 Cor 10:25.', wiki:'https://en.wikipedia.org/wiki/Ancient_Corinth' },
+    { name:'Corinth South Stoa', era:'Greek and Roman periods', conf:'certain', note:'Greek and Roman periods. Administrative and commercial complex structures the forum\'s south side.', sig:'Relates to Acts 18 context.', wiki:'https://en.wikipedia.org/wiki/Ancient_Corinth' },
+    { name:'Temple of Apollo at Corinth', era:'Archaic through Roman periods', conf:'certain', note:'Archaic through Roman periods. Prominent temple contributes to the city\'s polytheistic environment.', sig:'Relates to 1 Cor 8-10; 12:2.', wiki:'https://en.wikipedia.org/wiki/Ancient_Corinth' },
+    { name:'Temple E at Corinth', era:'Roman period', conf:'probable', note:'Roman period. Large forum temple is often linked to imperial cult, relevant to civic religion.', sig:'Relates to 1 Cor 8-10; imperial cult context.', wiki:'https://en.wikipedia.org/wiki/Ancient_Corinth' },
+    { name:'Corinth Asklepieion', era:'Greek and Roman periods', conf:'certain', note:'Greek and Roman periods. Anatomical votives and dining rooms illuminate healing and body imagery.', sig:'Relates to 1 Cor 6:19; 12:12-27; healing context.', wiki:'https://en.wikipedia.org/wiki/Ancient_Corinth' },
+    { name:'Fountain of Peirene', era:'Greek and Roman periods', conf:'certain', note:'Greek and Roman periods. Monumental fountain illustrates urban water supply and civic mythology.', sig:'Relates to Acts 18 context; 1 Cor 10:4.', wiki:'https://en.wikipedia.org/wiki/Pirene_(fountain)' },
+    { name:'Fountain of Glauke', era:'Greek and Roman periods', conf:'certain', note:'Greek and Roman periods. Rock-cut fountain forms part of the forum landscape.', sig:'Relates to Acts 18 context.', wiki:'https://en.wikipedia.org/wiki/Ancient_Corinth' },
+    { name:'Lechaion harbor', era:'Greek and Roman periods', conf:'certain', note:'Greek and Roman periods. Harbor basins and warehouses support Paul\'s departure for Syria.', sig:'Relates to Acts 18:18.', wiki:'https://en.wikipedia.org/wiki/Lechaeum' },
+    { name:'Corinth synagogue inscription', era:'Roman period', conf:'certain', note:'Roman period. Fragmentary lintel naming Hebrews or a synagogue supports Jewish communal presence.', sig:'Relates to Acts 18:4-8.', wiki:'https://en.wikipedia.org/wiki/Ancient_Corinth' },
+    { name:'Corinth curse tablets', era:'Roman period', conf:'certain', note:'Roman period. Lead curses reveal everyday ritual appeals and competitive anxieties.', sig:'Relates to 1 Cor 5:5; 12:3; 16:22 context.', wiki:'https://en.wikipedia.org/wiki/Ancient_Corinth' },
+    { name:'Isthmian sanctuary', era:'Greek and Roman periods', conf:'certain', note:'Greek and Roman periods. Stadium, baths, temple, and festival evidence illuminate Paul\'s athletic imagery.', sig:'Relates to 1 Cor 9:24-27.', wiki:'https://en.wikipedia.org/wiki/Isthmian_Games' },
+    { name:'Isthmian stadium', era:'Greek and Roman periods', conf:'certain', note:'Greek and Roman periods. Racecourse and starting mechanisms provide direct context for running metaphors.', sig:'Relates to 1 Cor 9:24-27.', wiki:'https://en.wikipedia.org/wiki/Isthmian_Games' },
+    { name:'Diolkos', era:'Archaic through Roman periods', conf:'certain', note:'Archaic through Roman periods. Paved haulway moved ships and cargo across the isthmus.', sig:'Relates to Acts 18 maritime context.', wiki:'https://en.wikipedia.org/wiki/Diolkos' }
+  ],
   scriptures:[
     { ref: "Acts 18:11", text: "He lived there a year and six months, teaching the word of God among them." },
     { ref: "1 Corinthians 1:10", text: "Now I beg you, brothers, through the name of our Lord, Jesus Christ, that you all speak the same thing, and that there be no divisions among you, but that you be perfected together in the same mind and in the same judgment." }
@@ -434,6 +563,9 @@ const MED_PLACES = [
   id:"cenchreae", name:"Cenchreae", greek:"Κεγχρεαί", modern:"Kechries, Greece",
   lat:37.8850, lon:22.9900, cat:"town", region:"Achaia (Roman province)",
   blurb:"Corinth's eastern harbour, with a congregation of its own and a deacon named Phebe who carried Romans west.",
+  related: [
+    { name:'Cenchreae harbor installations', era:'Roman period', conf:'certain', note:'Roman period. Submerged moles and waterfront remains reconstruct the Saronic port.', sig:'Relates to Acts 18:18; Rom 16:1.', wiki:'https://en.wikipedia.org/wiki/Kechries' }
+  ],
   scriptures:[{ ref: "Romans 16:1–2", text: "I commend to you Phoebe, our sister, who is a servant of the assembly that is at Cenchreae, that you receive her in the Lord, in a way worthy of the saints, and that you assist her in whatever matter she may need from you, for she herself also has been a helper of many, and of my own self." }],
   geo:"Seven miles east of Corinth on the Saronic Gulf, the harbour facing Asia — where Paul sailed for Ephesus and cut his hair for a vow (Acts 18:18).",
   greco:"A working port with moles, warehouses and a sanctuary of Isis, described by Pausanias and pictured in mosaics found in the harbour.",
@@ -450,6 +582,15 @@ const MED_PLACES = [
   id:"crete-fair-havens", name:"Fair Havens, Crete", greek:"Καλοὶ Λιμένες", modern:"Kaloi Limenes, Crete",
   lat:34.9280, lon:24.7900, cat:"site", region:"Islands of the voyage",
   blurb:"The anchorage where Paul advised wintering, was overruled, and the ship put to sea into a north-easter.",
+  related: [
+    { name:'Salmone Cape', era:'Ancient cape landscape', conf:'certain', note:'Ancient cape landscape. Eastern promontory is the named turning point along Crete.', sig:'Relates to Acts 27:7.', wiki:'https://en.wikipedia.org/wiki/Cape_Sideros' },
+    { name:'Lasea', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Ruined settlement near Fair Havens confirms Luke\'s otherwise obscure coastal city.', sig:'Relates to Acts 27:8.', wiki:'https://en.wikipedia.org/wiki/Lasaea' },
+    { name:'Phoenix harbor Crete', era:'Roman period', conf:'probable', note:'Roman period. Candidate harbors at modern Loutro and nearby bays shape nautical reconstructions.', sig:'Relates to Acts 27:12.', wiki:'https://en.wikipedia.org/wiki/Phoenix_(Crete)' },
+    { name:'Cauda Gavdos', era:'Roman period island', conf:'certain', note:'Roman period island. Small island south of Crete provided lee during the storm.', sig:'Relates to Acts 27:16.', wiki:'https://en.wikipedia.org/wiki/Gavdos' },
+    { name:'Adriatic Sea Acts voyage', era:'Ancient maritime region', conf:'certain', note:'Ancient maritime region. Ancient Adrias could include the central Mediterranean, correcting modern-map assumptions.', sig:'Relates to Acts 27:27.', wiki:'https://en.wikipedia.org/wiki/Adriatic_Sea' },
+    { name:'Crete Gortyn', era:'Roman period', conf:'certain', note:'Roman period. Provincial capital, law code, basilica, theater, and cults contextualize Titus\' Cretan mission.', sig:'Relates to Titus 1:5; 10-14.', wiki:'https://en.wikipedia.org/wiki/Gortyna' },
+    { name:'Knossos Roman city', era:'Roman period', conf:'certain', note:'Roman period. Major Cretan city illustrates island urbanism and cult.', sig:'Relates to Titus 1:5 context.', wiki:'https://en.wikipedia.org/wiki/Knossos' }
+  ],
   scriptures:[{ ref: "Acts 27:11", text: "But the centurion gave more heed to the master and to the owner of the ship than to those things which were spoken by Paul." }],
   geo:"A roadstead on the south coast of Crete behind small islands — sheltered but, Luke says, not commodious to winter in. The next harbour, Phenice, lay forty miles west.",
   greco:"Crete was a Roman province joined to Cyrene; the grain run from Alexandria to Rome sheltered along its south coast when the etesian winds blew.",
@@ -465,6 +606,12 @@ const MED_PLACES = [
   id:"malta", name:"Malta (Melita)", greek:"Μελίτη", modern:"St Paul's Bay, Malta",
   lat:35.9550, lon:14.4000, cat:"site", region:"Islands of the voyage",
   blurb:"Where 276 people came ashore on boards and broken pieces, and the barbarous people showed no little kindness.",
+  related: [
+    { name:'Munxar Reef anchors', era:'Roman-period anchor assemblage claimed', conf:'contested', note:'Roman-period anchor assemblage claimed. Lead anchor stocks have been associated with a proposed shipwreck location.', sig:'Relates to Acts 27:29-32,40.', wiki:'https://en.wikipedia.org/wiki/St._Paul%27s_Bay' },
+    { name:'St Thomas Bay Malta candidate', era:'Ancient coast', conf:'contested', note:'Ancient coast. Alternative nautical reconstruction identifies a southeastern landing zone.', sig:'Relates to Acts 27:39-44.', wiki:'https://en.wikipedia.org/wiki/Special:Search?search=St%20Thomas%20Bay%20Malta%20candidate' },
+    { name:'San Pawl Milqi Roman villa', era:'Roman period', conf:'probable', note:'Roman period. Large agricultural villa is traditionally associated with Publius.', sig:'Relates to Acts 28:7-10.', wiki:'https://en.wikipedia.org/wiki/San_Pawl_Milqi' },
+    { name:'Rabat Malta catacombs', era:'Late Roman period', conf:'certain', note:'Late Roman period. Burial complexes document later Christian and Jewish communities.', sig:'Relates to Acts 28 reception context.', wiki:'https://en.wikipedia.org/wiki/Rabat' }
+  ],
   scriptures:[
     { ref: "Acts 28:1–2", text: "When we had escaped, then they learned that the island was called Malta. The natives showed us uncommon kindness; for they kindled a fire, and received us all, because of the present rain, and because of the cold." },
     { ref: "Acts 28:11", text: "After three months, we set sail in a ship of Alexandria which had wintered in the island, whose sign was “The Twin Brothers.”" }
@@ -483,6 +630,10 @@ const MED_PLACES = [
   id:"puteoli", name:"Puteoli", greek:"Ποτίολοι", modern:"Pozzuoli, Italy",
   lat:40.8230, lon:14.1220, cat:"city", region:"Italy & the west",
   blurb:"The grain port of Rome, where Paul landed in Italy and found brethren already waiting.",
+  related: [
+    { name:'Puteoli macellum', era:'Roman period', conf:'certain', note:'Roman period. Market complex illustrates the port\'s commercial scale.', sig:'Relates to Acts 28:13-14 context.', wiki:'https://en.wikipedia.org/wiki/Macellum_of_Pozzuoli' },
+    { name:'Puteoli harbor moles', era:'Roman period', conf:'certain', note:'Roman period. Submerged and recorded piers define Rome\'s major Bay of Naples port.', sig:'Relates to Acts 28:13.', wiki:'https://en.wikipedia.org/wiki/Pozzuoli' }
+  ],
   scriptures:[{ ref: "Acts 28:13–14", text: "From there we circled around and arrived at Rhegium. After one day, a south wind sprang up, and on the second day we came to Puteoli, where we found brothers, and were entreated to stay with them for seven days. So we came to Rome." }],
   geo:"On the Bay of Naples, the terminus of the Alexandrian grain fleet, 130 miles from Rome by the Via Campana and the Appian Way.",
   greco:"Italy's chief eastern-trade harbour before Ostia was enlarged, with a mole whose piers still stand and a cosmopolitan dockside population.",
@@ -498,6 +649,33 @@ const MED_PLACES = [
   id:"rome", name:"Rome", greek:"Ῥώμη", modern:"Roma, Italy",
   lat:41.8930, lon:12.4830, cat:"capital", region:"Italy & the west",
   blurb:"The head of the empire and the end of the book — two years in his own hired house, preaching with no man forbidding him.",
+  related: [
+    { name:'Palatine Hill imperial palaces', era:'Augustan through Flavian periods', conf:'certain', note:'Augustan through Flavian periods. Palace complex gives context for the praetorium and Caesar\'s household.', sig:'Relates to Phil 1:13; 4:22.', wiki:'https://en.wikipedia.org/wiki/Palatine_Hill' },
+    { name:'Praetorian Camp', era:'Tiberian period onward', conf:'certain', note:'Tiberian period onward. Barracks of the Praetorian Guard are relevant to one interpretation of Paul\'s praetorium.', sig:'Relates to Phil 1:13.', wiki:'https://en.wikipedia.org/wiki/Castra_Praetoria' },
+    { name:'Colosseum', era:'Flavian period, 70s-80 CE', conf:'certain', note:'Flavian period, 70s-80 CE. Amphitheater belongs to the later first-century world of Revelation, though claims of mass Christian martyrdom there are poorly evidenced.', sig:'Relates to Context for persecution and spectacle.', wiki:'https://en.wikipedia.org/wiki/Colosseum' },
+    { name:'Circus Maximus', era:'Republican and imperial periods', conf:'certain', note:'Republican and imperial periods. Mass entertainment venue illustrates competition and imperial benefaction.', sig:'Relates to 1 Cor 9:24-27; spectacle context.', wiki:'https://en.wikipedia.org/wiki/Circus_Maximus' },
+    { name:'Ara Pacis', era:'Augustan period', conf:'certain', note:'Augustan period. Altar\'s imagery and inscriptions materialize Augustan claims of peace, fertility, and order.', sig:'Relates to Luke 2:14; 1 Thess 5:3; imperial peace ideology.', wiki:'https://en.wikipedia.org/wiki/Ara_Pacis' },
+    { name:'Mausoleum of Augustus', era:'Augustan period', conf:'certain', note:'Augustan period. Dynastic monument represents the regime under which Jesus was born.', sig:'Relates to Luke 2:1; imperial context.', wiki:'https://en.wikipedia.org/wiki/Mausoleum_of_Augustus' },
+    { name:'Temple of Peace spoils display', era:'Flavian period', conf:'certain', note:'Flavian period. Complex housed captured Jerusalem treasures and imperial victory imagery.', sig:'Relates to Temple destruction context.', wiki:'https://en.wikipedia.org/wiki/Temple_of_Peace' },
+    { name:'Catacomb of Priscilla', era:'Second century CE onward', conf:'certain', note:'Second century CE onward. Burials and paintings document developing Roman Christian communities.', sig:'Relates to Rom 16 reception; early Christianity.', wiki:'https://en.wikipedia.org/wiki/Catacomb_of_Priscilla' },
+    { name:'Catacomb of Callixtus', era:'Second to fourth centuries CE', conf:'certain', note:'Second to fourth centuries CE. Christian cemetery preserves names, symbols, and community organization.', sig:'Relates to Early Christian reception.', wiki:'https://en.wikipedia.org/wiki/Catacomb_of_Callixtus' },
+    { name:'Vatican necropolis', era:'First to fourth centuries CE', conf:'probable', note:'First to fourth centuries CE. Roman cemetery beneath St Peter\'s includes a venerated grave central to Peter\'s burial tradition.', sig:'Relates to 1 Pet 5:13 possible; Peter tradition.', wiki:'https://en.wikipedia.org/wiki/Vatican_Necropolis' },
+    { name:'Tomb of Paul at San Paolo fuori le Mura', era:'Roman cemetery; later basilica', conf:'probable', note:'Roman cemetery; later basilica. Sarcophagus and cult site preserve an early tradition of Paul\'s burial on the Ostian Way.', sig:'Relates to 2 Tim 4; Pauline martyr tradition.', wiki:'https://en.wikipedia.org/wiki/Basilica_of_Saint_Paul_Outside_the_Walls' },
+    { name:'Nero\'s Domus Aurea', era:'Neronian period', conf:'certain', note:'Neronian period. Palace remains materialize Nero\'s post-fire building program and elite display.', sig:'Relates to Rev 13; 17; imperial context.', wiki:'https://en.wikipedia.org/wiki/Domus_Aurea' },
+    { name:'Domitian\'s Stadium', era:'Late first century CE', conf:'certain', note:'Late first century CE. Stadium and imperial building program belong to Revelation\'s probable political setting.', sig:'Relates to Rev imperial context.', wiki:'https://en.wikipedia.org/wiki/Stadium_of_Domitian' },
+    { name:'Temple of Vespasian and Titus', era:'Flavian period', conf:'certain', note:'Flavian period. Deified emperors\' temple illustrates ruler cult at Rome.', sig:'Relates to Rev imperial-cult context.', wiki:'https://en.wikipedia.org/wiki/Temple_of_Vespasian_and_Titus' },
+    { name:'Ostia Antica', era:'Roman period', conf:'certain', note:'Roman period. Port city, apartments, guild halls, synagogue, temples, and warehouses model Rome\'s commercial world.', sig:'Relates to Acts 28 maritime and Roman context.', wiki:'https://en.wikipedia.org/wiki/Ostia_Antica' },
+    { name:'Portus', era:'Claudian and Trajanic periods', conf:'certain', note:'Claudian and Trajanic periods. Imperial harbor complex explains grain supply and sea travel to Rome.', sig:'Relates to Acts 27-28 maritime context.', wiki:'https://en.wikipedia.org/wiki/Portus' },
+    { name:'Ostia synagogue', era:'First century CE onward', conf:'certain', note:'First century CE onward. One of Europe\'s earliest synagogues documents Jewish life at Rome\'s port.', sig:'Relates to Acts 28:17; Rom 2-4; 9-11.', wiki:'https://en.wikipedia.org/wiki/Ostia_Synagogue' },
+    { name:'Ostia guild halls', era:'Roman period', conf:'certain', note:'Roman period. Scholae and mosaics document occupational and commercial associations.', sig:'Relates to Rom 12; 1 Cor 8-10 context.', wiki:'https://en.wikipedia.org/wiki/Ostia_Antica' },
+    { name:'Insulae at Ostia', era:'Roman period', conf:'certain', note:'Roman period. Apartment blocks illustrate living conditions for nonelite urban residents.', sig:'Relates to Rom 16; household-church context.', wiki:'https://en.wikipedia.org/wiki/Ostia_Antica' },
+    { name:'House of the Menander Pompeii', era:'Destroyed 79 CE', conf:'certain', note:'Destroyed 79 CE. Elite house and service spaces preserve a near-contemporary Roman household.', sig:'Relates to Household and slavery context in Pauline letters.', wiki:'https://en.wikipedia.org/wiki/Pompeii' },
+    { name:'Pompeii bakeries', era:'First century CE', conf:'certain', note:'First century CE. Mills, ovens, and loaves illuminate production and food metaphors.', sig:'Relates to Matt 13:33; Luke 13:21; 1 Cor 5:6; bread imagery.', wiki:'https://en.wikipedia.org/wiki/Pompeii' },
+    { name:'Pompeii fullonicae', era:'First century CE', conf:'certain', note:'First century CE. Fulleries demonstrate textile cleaning and urban trades.', sig:'Relates to Rev 3:4-5,18; 7:14 context.', wiki:'https://en.wikipedia.org/wiki/Pompeii' },
+    { name:'Pompeii household shrines', era:'First century CE', conf:'certain', note:'First century CE. Lararia reveal domestic cult practice encountered by converts.', sig:'Relates to 1 Cor 8-10; Rom 1; household religion.', wiki:'https://en.wikipedia.org/wiki/Pompeii' },
+    { name:'Pompeii electoral graffiti', era:'First century CE', conf:'certain', note:'First century CE. Wall notices show popular political communication and social networks.', sig:'Relates to Rom 13; civic context.', wiki:'https://en.wikipedia.org/wiki/Roman_graffiti' },
+    { name:'Pompeii brothel graffiti', era:'First century CE', conf:'certain', note:'First century CE. Building and inscriptions document sexual commerce without establishing its prevalence across the empire.', sig:'Relates to 1 Cor 6:12-20; Rom 1:24-27 context.', wiki:'https://en.wikipedia.org/wiki/Lupanar' }
+  ],
   scriptures:[
     { ref: "Acts 28:30–31", text: "Paul stayed two whole years in his own rented house, and received all who were coming to him, preaching God’s Kingdom, and teaching the things concerning the Lord Jesus Christ with all boldness, without hindrance." },
     { ref: "Romans 1:16", text: "For I am not ashamed of the Good News of Christ, because it is the power of God for salvation for everyone who believes; for the Jew first, and also for the Greek." }
@@ -936,6 +1114,18 @@ MED_PLACES.push(
   id:"alexandria", name:"Alexandria", greek:"Ἀλεξάνδρεια", modern:"Alexandria, Egypt",
   lat:31.2001, lon:29.9187, cat:"capital", region:"Egypt & the south",
   blurb:"Second city of the empire, home of the Septuagint and of Apollos — and the port whose grain ships carried Paul to Rome.",
+  related: [
+    { name:'Alexandrian grain ship archaeology', era:'Roman period', conf:'certain', note:'Roman period. Ship depictions, wrecks, amphorae, and port installations illuminate the large grain carriers in Acts.', sig:'Relates to Acts 27:6,38; 28:11.', wiki:'https://en.wikipedia.org/wiki/Alexandria' },
+    { name:'Pharos of Alexandria', era:'Ptolemaic and Roman periods', conf:'certain', note:'Ptolemaic and Roman periods. Lighthouse and submerged remains symbolize the navigation system of Alexandrian shipping.', sig:'Relates to Acts 27-28 maritime context.', wiki:'https://en.wikipedia.org/wiki/Lighthouse_of_Alexandria' },
+    { name:'Alexandria Jewish inscriptions', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Synagogue dedications and papyri document a large Greek-speaking Jewish community.', sig:'Relates to Acts 6:9; 18:24.', wiki:'https://en.wikipedia.org/wiki/History_of_the_Jews_in_Alexandria' },
+    { name:'Leontopolis Jewish temple', era:'Second century BCE to 73 CE', conf:'probable', note:'Second century BCE to 73 CE. Archaeological and literary evidence for a Jewish temple in Egypt broadens understanding of diaspora worship.', sig:'Relates to Jewish diaspora and Temple context.', wiki:'https://en.wikipedia.org/wiki/Leontopolis' },
+    { name:'Elephantine Roman-period community', era:'Roman period', conf:'certain', note:'Roman period. Southern Egyptian settlement illustrates long-lived Jewish diaspora networks.', sig:'Relates to Acts 2:10 diaspora context.', wiki:'https://en.wikipedia.org/wiki/Elephantine' },
+    { name:'Apollonia Cyrenaica', era:'Greek and Roman periods', conf:'certain', note:'Greek and Roman periods. Harbor of Cyrene illuminates travel between Libya and the eastern Mediterranean.', sig:'Relates to Cyrene maritime context.', wiki:'https://en.wikipedia.org/wiki/Apollonia_(Cyrenaica)' },
+    { name:'Berenice Benghazi', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Urban remains and Jewish inscriptions document Cyrenaican diaspora life.', sig:'Relates to Acts 2:10; Cyrenaica context.', wiki:'https://en.wikipedia.org/wiki/Berenice' },
+    { name:'Meroe', era:'Meroitic period', conf:'certain', note:'Meroitic period. Royal city and inscriptions belong to the kingdom ruled by the Kandake named by title in Acts.', sig:'Relates to Acts 8:27.', wiki:'https://en.wikipedia.org/wiki/Mero%C3%AB' },
+    { name:'Royal pyramids of Meroe', era:'Meroitic period', conf:'certain', note:'Meroitic period. Royal burials materialize the dynasty behind the title Kandake.', sig:'Relates to Acts 8:27.', wiki:'https://en.wikipedia.org/wiki/Pyramids_of_Mero%C3%AB' },
+    { name:'Berenike Red Sea port', era:'Ptolemaic and Roman periods', conf:'certain', note:'Ptolemaic and Roman periods. Harbor, trade goods, and roads document routes connecting Egypt, Arabia, India, and Africa.', sig:'Relates to Acts 8 Ethiopia and Red Sea travel context.', wiki:'https://en.wikipedia.org/wiki/Berenice_Troglodytica' }
+  ],
   scriptures:[
     { ref: "Acts 18:24", text: "Now a certain Jew named Apollos, an Alexandrian by race, an eloquent man, came to Ephesus. He was mighty in the Scriptures." },
     { ref: "Acts 27:6", text: "There the centurion found a ship of Alexandria sailing for Italy, and he put us on board." },
@@ -955,6 +1145,11 @@ MED_PLACES.push(
   id:"babylon", name:"Babylon", greek:"Βαβυλών", modern:"near Al Hillah, Iraq",
   lat:32.5355, lon:44.4275, cat:"city", region:"Mesopotamia & the east",
   blurb:"The old city of the exile — a real Jewish centre on the Euphrates, and the name the New Testament gives to imperial power.",
+  related: [
+    { name:'Mesopotamia Seleucia Ctesiphon', era:'Hellenistic and Parthian periods', conf:'certain', note:'Hellenistic and Parthian periods. Twin capitals and Jewish communities contextualize Pentecost pilgrims from Mesopotamia.', sig:'Relates to Acts 2:9.', wiki:'https://en.wikipedia.org/wiki/Al-Mada%27in' },
+    { name:'Ecbatana', era:'Parthian period', conf:'certain', note:'Parthian period. Median capital and Jewish diaspora traditions map the eastern Pentecost horizon.', sig:'Relates to Acts 2:9 Media context.', wiki:'https://en.wikipedia.org/wiki/Ecbatana' },
+    { name:'Persepolis', era:'Achaemenid site visible in Parthian era', conf:'certain', note:'Achaemenid site visible in Parthian era. Imperial ruins provide geographic and cultural context for Persian pilgrims.', sig:'Relates to Acts 2:9 Persia context.', wiki:'https://en.wikipedia.org/wiki/Persepolis' }
+  ],
   scriptures:[
     { ref: "1 Peter 5:13", text: "She who is in Babylon, chosen together with you, greets you; and so does Mark, my son." },
     { ref: "Revelation 18:2", text: "He cried with a mighty voice, saying, “Fallen, fallen is Babylon the great, and she has become a habitation of demons, a prison of every unclean spirit, and a prison of every unclean and hateful bird!" },
@@ -974,6 +1169,11 @@ MED_PLACES.push(
   id:"bithynia-pontus", name:"Bithynia & Pontus", greek:"Βιθυνία καὶ Πόντος", modern:"İzmit and the Black Sea coast, Türkiye",
   lat:40.7654, lon:29.9408, cat:"city", region:"Bithynia & Pontus",
   blurb:"The province the Spirit closed to Paul at Mysia — and one of the five that Peter later writes to.",
+  related: [
+    { name:'Pontus Amisus', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Black Sea port anchors the Pontic diaspora and Petrine addressees.', sig:'Relates to Acts 2:9; 1 Pet 1:1.', wiki:'https://en.wikipedia.org/wiki/Samsun' },
+    { name:'Bithynia Nicomedia', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Provincial capital anchors the region the Spirit prevents Paul from entering and later Christian communities.', sig:'Relates to Acts 16:7; 1 Pet 1:1.', wiki:'https://en.wikipedia.org/wiki/Nicomedia' },
+    { name:'Cappadocia Caesarea Mazaca', era:'Hellenistic and Roman periods', conf:'certain', note:'Hellenistic and Roman periods. Provincial capital locates Cappadocian diaspora and later Christian networks.', sig:'Relates to Acts 2:9; 1 Pet 1:1.', wiki:'https://en.wikipedia.org/wiki/Kayseri' }
+  ],
   scriptures:[
     { ref: "Acts 16:7", text: "When they had come opposite Mysia, they tried to go into Bithynia, but the Spirit didn’t allow them." },
     { ref: "1 Peter 1:1", text: "Peter, an apostle of Jesus Christ, to the chosen ones who are living as foreigners in the Dispersion in Pontus, Galatia, Cappadocia, Asia, and Bithynia," }
@@ -992,6 +1192,10 @@ MED_PLACES.push(
   id:"spain", name:"Spain (Hispania)", greek:"Σπανία", modern:"Tarragona, Spain",
   lat:41.1189, lon:1.2445, cat:"site", region:"Hispania & the far west",
   blurb:"The western end of the empire, and the field Paul was still planning when the record stops.",
+  related: [
+    { name:'Corduba', era:'Roman period', conf:'certain', note:'Roman period. Major Baetican city represents the urban network of Roman Spain.', sig:'Relates to Rom 15:24,28 context.', wiki:'https://en.wikipedia.org/wiki/C%C3%B3rdoba' },
+    { name:'Emerita Augusta', era:'Roman period', conf:'certain', note:'Roman period. Colony and road hub help model Iberian travel and provincial culture.', sig:'Relates to Rom 15:24,28 context.', wiki:'https://en.wikipedia.org/wiki/Augusta_Emerita' }
+  ],
   scriptures:[
     { ref: "Romans 15:24", text: "whenever I travel to Spain, I will come to you. For I hope to see you on my journey, and to be helped on my way there by you, if first I may enjoy your company for a while." },
     { ref: "Romans 15:20", text: "yes, making it my aim to preach the Good News, not where Christ was already named, that I might not build on another’s foundation." }
@@ -1004,6 +1208,233 @@ MED_PLACES.push(
   questions:[
     "Paul chose ground where no one had preached (Romans 15:20). What is gained, and what is risked, by starting where there is no foothold?",
     "The New Testament ends with a plan unfinished. How does that shape the way you think about your own unfinished work?"
+  ]
+}
+);
+
+MED_PLACES.push(
+{
+  id:"attalia", name:"Attalia", greek:"Ἀττάλεια", modern:"Antalya, Türkiye",
+  lat:36.8969, lon:30.7133, cat:"city", region:"Galatia & southern Asia Minor",
+  blurb:"The harbor city where Paul and Barnabas caught a ship home at the end of the first missionary journey.",
+  scriptures:[
+    { ref: "Acts 14:25-26", text: "When they had spoken the word in Perga, they went down to Attalia. From there they sailed to Antioch, from where they had been committed to the grace of God for the work which they had fulfilled." }
+  ],
+  greco:"A Hellenistic port founded by Attalus II of Pergamon, serving as the coastal outlet for Perga and the Pamphylian plain — the natural place to find a ship back to Syrian Antioch.",
+  jewish:"No distinct Jewish community is recorded here in Acts; the city functions purely as a point of departure, not a mission stop.",
+  arch:"Roman-period harbor and city walls survive in modern Antalya\'s old town (Kaleiçi), including the Hadrian\'s Gate built later than Paul\'s visit.",
+  geo:"A natural harbor on the Gulf of Antalya, at the southwestern edge of the Pamphylian plain below Perga.",
+  why:"Marks the quiet, practical bookend of the first missionary journey — no sermon, no riot, just a ship home.",
+  questions:[
+    "Why does Luke bother naming an otherwise uneventful departure point?"
+  ]
+},
+{
+  id:"assos", name:"Assos", greek:"Ἄσσος", modern:"Behramkale, Türkiye",
+  lat:39.4886, lon:26.3406, cat:"town", region:"Asia (Roman province)",
+  blurb:"The port where Paul rejoined his companions by sea after walking the coast road alone from Troas.",
+  scriptures:[
+    { ref: "Acts 20:13-14", text: "But we, going ahead to the ship, set sail for Assos, intending to take Paul aboard there, for so he had arranged, intending himself to go by land. When he met us at Assos, we took him aboard, and came to Mitylene." }
+  ],
+  greco:"A fortified hill city above a small harbor on the Gulf of Edremit, with a Doric temple of Athena crowning its acropolis.",
+  jewish:"Not mentioned as a mission stop; purely a travel waypoint on Paul\'s return route from Macedonia.",
+  arch:"A well-preserved Hellenistic city wall, agora, and Temple of Athena remain on the acropolis above the ancient harbor.",
+  geo:"A steep coastal town on the Troad peninsula, a day\'s walk south of Troas along the shore road.",
+  why:"A small, human detail in the middle of a compressed itinerary: Paul chose to walk this leg alone rather than sail.",
+  questions:[
+    "What might have drawn Paul to take the overland route between Troas and Assos rather than staying with the ship?"
+  ]
+},
+{
+  id:"neapolis-macedonia", name:"Neapolis", greek:"Νεάπολις", modern:"Kavala, Greece",
+  lat:40.94, lon:24.41, cat:"town", region:"Macedonia (Roman province)",
+  blurb:"The port where Paul first set foot in Europe, at the eastern end of the Via Egnatia.",
+  scriptures:[
+    { ref: "Acts 16:11-12", text: "Setting sail therefore from Troas, we made a straight course to Samothrace, and the day following to Neapolis; and from there to Philippi, which is a city of Macedonia, the foremost of the district, a Roman colony." }
+  ],
+  greco:"A Thasian colony turned Roman harbor town, serving as the maritime gateway to the Via Egnatia and Macedonia\'s interior.",
+  jewish:"No Jewish community mentioned; Luke moves the narrative straight through to Philippi.",
+  arch:"Limited ancient remains survive beneath modern Kavala; the ancient acropolis and some wall sections are identified.",
+  geo:"A natural harbor on a small peninsula, the closest Macedonian port to Samothrace and the shortest Aegean crossing from Troas.",
+  why:"The literal first step of the gospel\'s crossing from Asia into Europe — Luke marks the geography precisely because the shift matters.",
+  questions:[
+    "Why might Luke pause to name this one-sentence stopover on the way to Philippi?"
+  ]
+},
+{
+  id:"amphipolis", name:"Amphipolis", greek:"Ἀμφίπολις", modern:"near Amfipoli, Greece",
+  lat:40.82, lon:23.84, cat:"town", region:"Macedonia (Roman province)",
+  blurb:"A Via Egnatia way-station Paul passed on the overland road from Philippi to Thessalonica.",
+  related:[
+    { name:'Lion of Amphipolis', era:'Hellenistic period', conf:'certain', note:'A monumental stone lion, reassembled from fragments, that once crowned a roadside tomb monument near the Strymon crossing.', sig:'Marks the ancient roadside landscape travelers on the Via Egnatia — including Paul\'s party — would have passed.', wiki:'https://en.wikipedia.org/wiki/Lion_of_Amphipolis' }
+  ],
+  scriptures:[
+    { ref: "Acts 17:1", text: "Now when they had passed through Amphipolis and Apollonia, they came to Thessalonica, where there was a Jewish synagogue." }
+  ],
+  greco:"A strategic bridge-town on the Strymon River, controlling the crossing on the Via Egnatia and famous already for its role in classical and Hellenistic warfare.",
+  jewish:"Not recorded as having a synagogue in Acts — Luke moves through it without stopping to preach, unlike Thessalonica just ahead.",
+  arch:"City walls, a bridge over the Strymon, and a famous Hellenistic lion-tomb monument survive near the site.",
+  geo:"On the Strymon River where the Via Egnatia crosses it, roughly a day\'s journey from Philippi.",
+  why:"One of Luke\'s compressed travel notices — three named stops in one verse, marking distance and pace rather than event.",
+  questions:[
+    "What does Luke\'s terse travel notice (naming three towns in one verse) tell us about which stops mattered narratively and which didn\'t?"
+  ]
+},
+{
+  id:"apollonia-macedonia", name:"Apollonia", greek:"Ἀπολλωνία", modern:"near Apollonia, Greece",
+  lat:40.86, lon:23.55, cat:"town", region:"Macedonia (Roman province)",
+  blurb:"A second Via Egnatia way-station between Amphipolis and Thessalonica, named in the same single verse.",
+  scriptures:[
+    { ref: "Acts 17:1", text: "Now when they had passed through Amphipolis and Apollonia, they came to Thessalonica, where there was a Jewish synagogue." }
+  ],
+  greco:"A minor Macedonian road-station on the Via Egnatia, with little surviving visible archaeology compared with its larger neighbors.",
+  jewish:"Not recorded as a mission stop; Luke\'s synagogue notice attaches to Thessalonica just after, not to this town.",
+  arch:"Limited excavated remains; the site\'s exact identification and layout are less secure than most Macedonian stations.",
+  geo:"Somewhere on the Via Egnatia between Amphipolis and Thessalonica, in the Mygdonia district.",
+  why:"Confirms the itinerary was a real, specific overland road journey, not a vague summary — Luke names even the minor waypoints.",
+  questions:[
+    "Why might a Gospel writer bother naming towns where nothing narratively happens?"
+  ]
+},
+{
+  id:"nicopolis", name:"Nicopolis", greek:"Νικόπολις", modern:"near Preveza, Greece",
+  lat:39, lon:20.7333, cat:"city", region:"Achaia (Roman province)",
+  blurb:"The city where Paul asks Titus to meet him for the winter — probably this Nicopolis in Epirus, though the letter doesn't say which.",
+  related:[
+    { name:'Monument of Augustus at Nicopolis', era:'Augustan period', conf:'certain', note:'A victory monument built on the hillside above Nicopolis, incorporating captured ships\' rams, commemorating Augustus\' win at the nearby Battle of Actium.', sig:'Displays the imperial ideology of the exact regime under which Jesus was born (Luke 2:1) and the city Paul later plans to winter in.', wiki:'https://en.wikipedia.org/wiki/Campsite_Memorial_of_Augustus' }
+  ],
+  scriptures:[
+    { ref: "Titus 3:12", text: "When I send Artemas to you, or Tychicus, be diligent to come to me to Nicopolis, for I have determined to winter there." }
+  ],
+  greco:"Augustus founded this \'Victory City\' on the site of his camp before the Battle of Actium, and it became the leading city of Roman Epirus.",
+  jewish:"No Jewish community or synagogue is mentioned in connection with Paul\'s plan; the letter gives no further detail about his stay.",
+  arch:"Extensive Roman remains include a theater, odeon, aqueduct, and later Byzantine basilicas at the archaeological site near Preveza.",
+  geo:"On a narrow isthmus near the Ambracian Gulf on Greece\'s northwest coast — several other ancient cities also bore the name Nicopolis, so the identification is not certain.",
+  why:"One of the last concrete travel plans in Paul\'s letters, showing his ministry continuing to move west even in the Pastoral Epistles\' later, more institutional concerns.",
+  questions:[
+    "What does Paul\'s specific winter travel planning (Titus 3:12) suggest about how the Pastoral Epistles were meant to function alongside personal correspondence?"
+  ]
+},
+{
+  id:"illyricum", name:"Illyricum", greek:"Ἰλλυρικόν", modern:"Albania / Montenegro coast",
+  lat:41.3275, lon:19.456, cat:"site", region:"Illyricum (Roman province)",
+  blurb:"The northwestern edge of Paul's self-described mission field — never narrated in Acts, only claimed in Romans.",
+  scriptures:[
+    { ref: "Romans 15:19", text: "in the power of signs and wonders, in the power of God's Spirit; so that from Jerusalem, and around as far as Illyricum, I have fully preached the Good News of Christ." }
+  ],
+  greco:"A Roman province along the eastern Adriatic coast, reached from Macedonia via the western extension of the Via Egnatia through Dyrrhachium and Apollonia.",
+  jewish:"No specific Jewish community or city is named; Paul cites the region only as a geographic limit, not a narrated mission stop.",
+  arch:"Roman-period ports and road stations survive at Dyrrhachium (Durrës) and Apollonia (Albania), the two major cities on this stretch of coast.",
+  geo:"The Adriatic coastal region northwest of Macedonia, reached by the western arm of the Via Egnatia.",
+  why:"Paul\'s own summary of his mission\'s reach (Romans 15:19) is broader than anything Acts narrates in detail — a reminder that Luke\'s account is selective, not exhaustive.",
+  questions:[
+    "Why might Paul mention reaching \'as far as Illyricum\' when Acts never narrates a visit there?"
+  ],
+  related:[
+    { name:'Dyrrhachium (Durrës)', era:'Hellenistic and Roman periods', conf:'probable', note:'The Adriatic terminus of the Via Egnatia, a major port city on the Illyrian coast.', sig:'Not named in the New Testament, but the most likely city Paul\'s Illyricum claim would have included.', wiki:'https://en.wikipedia.org/wiki/Durr%C3%ABs' },
+    { name:'Apollonia (Illyria)', era:'Hellenistic and Roman periods', conf:'probable', note:'A major Via Egnatia city in ancient Illyria, distinct from the Macedonian Apollonia of Acts 17:1.', sig:'Illustrates the scale of Roman urbanization along the Illyrian stretch of Paul\'s claimed mission horizon.', wiki:'https://en.wikipedia.org/wiki/Apollonia_(Illyria)' }
+  ]
+},
+{
+  id:"myra", name:"Myra", greek:"Μύρα", modern:"Demre, Türkiye",
+  lat:36.2325, lon:29.9639, cat:"city", region:"Islands of the voyage",
+  blurb:"The Lycian port where Paul's prisoner convoy transferred to the Alexandrian grain ship bound for Italy.",
+  scriptures:[
+    { ref: "Acts 27:5-6", text: "When we had sailed across the sea which is off Cilicia and Pamphylia, we came to Myra, a city of Lycia. There the centurion found a ship of Alexandria sailing to Italy, and he put us on board." }
+  ],
+  greco:"A major Lycian port city with its own theater and rock-cut tombs, serving as a hub for grain ships running between Egypt and Rome.",
+  jewish:"No Jewish community mentioned; Myra functions in Acts purely as a transfer point in a Roman prisoner transport.",
+  arch:"A well-preserved Roman theater and dramatic Lycian rock-cut tombs survive at Myra; its harbor, Andriake, has produced a large Roman granary and customs house.",
+  geo:"On the southern Lycian coast, with its port at nearby Andriake, on the sea route between Egypt and the Aegean.",
+  why:"The exact kind of maritime, commercial detail Luke gets right — a real grain-shipping route, a real transfer point, on a real voyage to Rome.",
+  questions:[
+    "What does the casual ease of finding \'a ship of Alexandria\' at Myra suggest about how routine grain shipping was in the eastern Mediterranean?"
+  ],
+  related:[
+    { name:'Andriake harbor', era:'Roman period', conf:'certain', note:'Myra\'s port, with a large Roman granary (built under Hadrian) and customs house.', sig:'The actual harbor facility behind Acts 27:5-6\'s brief mention of finding a grain ship at Myra.', wiki:'https://en.wikipedia.org/wiki/Andriake' }
+  ]
+},
+{
+  id:"patara", name:"Patara", greek:"Πάταρα", modern:"Gelemiş, Türkiye",
+  lat:36.2661, lon:29.3161, cat:"city", region:"Islands of the voyage",
+  blurb:"The Lycian port where Paul changed ships on the way to Jerusalem at the end of the third missionary journey.",
+  scriptures:[
+    { ref: "Acts 21:1", text: "When it happened that we had parted from them and had set sail, we came with a straight course to Cos, and the next day to Rhodes, and from there to Patara." }
+  ],
+  greco:"A major Lycian federal capital and port, with a well-preserved theater, bathhouse, and a Roman lighthouse built under Nero.",
+  jewish:"No Jewish community mentioned in Acts; Patara appears solely as a maritime connection point.",
+  arch:"A Roman theater, a parliament building (Bouleuterion) of the Lycian League, and an inscribed lighthouse dated to AD 64-65 survive at the site.",
+  geo:"On the southwestern Lycian coast at the mouth of the Xanthos River, a major stop for ships running between the Aegean and the Levant.",
+  why:"Marks the transfer to a larger Phoenician-bound ship that would carry Paul the rest of the way to Tyre — another precise nautical detail in Luke\'s travel narrative.",
+  questions:[
+    "What does the level of nautical detail in Acts 21:1-3 suggest about Luke\'s own experience of Mediterranean sea travel?"
+  ],
+  related:[
+    { name:'Patara lighthouse', era:'Neronian period (dedicated AD 64-65)', conf:'certain', note:'An inscribed Roman lighthouse at the harbor entrance, one of the oldest surviving lighthouses in the world.', sig:'Physical, dated evidence for the exact navigation infrastructure operating during Paul\'s own lifetime and voyages.', wiki:'https://en.wikipedia.org/wiki/Patara_(Lycia)' }
+  ]
+},
+{
+  id:"rhodes", name:"Rhodes", greek:"Ῥόδος", modern:"Rhodes, Greece",
+  lat:36.4349, lon:28.2176, cat:"city", region:"Islands of the voyage",
+  blurb:"The great island port Paul's ship touched on the coastal route to Patara at the end of the third journey.",
+  scriptures:[
+    { ref: "Acts 21:1", text: "When it happened that we had parted from them and had set sail, we came with a straight course to Cos, and the next day to Rhodes, and from there to Patara." }
+  ],
+  greco:"A major Hellenistic and Roman maritime power in its own right, famous for its harbor, its (by then fallen) Colossus, and its law code governing maritime trade across the Mediterranean.",
+  jewish:"No Jewish community mentioned in this brief travel notice; Rhodes appears only as a waypoint.",
+  arch:"Extensive Hellenistic and Roman remains survive in the old city and the acropolis; the ancient harbor entrance once framed by the Colossus is still in use.",
+  geo:"A large island off the southwestern coast of Asia Minor, on the direct sailing route between the Aegean islands and the Lycian coast.",
+  why:"One of several islands Luke names in quick succession, tracing a real coasting route rather than a summary — the kind of detail only someone who made or closely followed the voyage would include.",
+  questions:[
+    "Why might Luke record this leg of the journey (Acts 21:1) in such precise island-by-island detail compared with other, more eventful stretches of Acts?"
+  ]
+},
+{
+  id:"cnidus", name:"Cnidus", greek:"Κνίδος", modern:"Knidos, Türkiye",
+  lat:36.6913, lon:27.3667, cat:"site", region:"Islands of the voyage",
+  blurb:"The exposed cape where the winds turned against Paul's prisoner-transport ship, forcing it south toward Crete.",
+  scriptures:[
+    { ref: "Acts 27:7", text: "When we had sailed slowly many days, and had come with difficulty opposite Cnidus, the wind not allowing us further, we sailed under the lee of Crete, opposite Salmone." }
+  ],
+  greco:"A Greek city on a narrow peninsula with twin harbors, famous in antiquity for a celebrated cult statue of Aphrodite by Praxiteles.",
+  jewish:"No Jewish community mentioned; Cnidus appears in Acts purely as a navigational turning point in a storm-plagued voyage.",
+  arch:"Two ancient harbors, a theater, and a sanctuary terrace survive at the site, on a peninsula still exposed to strong prevailing winds.",
+  geo:"At the tip of a long, narrow peninsula on the southwestern coast of Asia Minor, exposed to the strong northwesterly winds of the eastern Mediterranean.",
+  why:"The precise geographic point where Luke\'s storm narrative turns — the moment the voyage to Rome stops being routine and becomes the ordeal of Acts 27.",
+  questions:[
+    "How does naming the exact point where the wind turned against the ship change the way you read the rest of the storm narrative?"
+  ]
+},
+{
+  id:"syracuse", name:"Syracuse", greek:"Συρακοῦσαι", modern:"Siracusa, Sicily, Italy",
+  lat:37.0700, lon:15.2900, cat:"city", region:"Italy & the west",
+  blurb:"The great Sicilian harbor city where Paul's ship put in for three days on the final leg to Rome.",
+  scriptures:[
+    { ref: "Acts 28:12", text: "Touching at Syracuse, we stayed there three days." }
+  ],
+  greco:"Once the largest and wealthiest Greek city in the western Mediterranean, home to Archimedes, and by Paul's day a substantial Roman provincial port with its own quarries, theater, and amphitheater.",
+  jewish:"No Jewish community or synagogue is mentioned in this brief travel notice; the stop is purely nautical.",
+  arch:"A large Greek theater, Roman amphitheater, and the ancient limestone quarries (the Latomie) survive in modern Syracuse; extensive catacombs from later Christian centuries also exist beneath the city.",
+  geo:"On Sicily's southeastern coast, a natural stopover for ships running the Egypt-to-Rome grain route around the island.",
+  why:"A three-day pause that Luke records without comment — a reminder that even Paul's most dramatic voyage (Acts 27-28) included long, uneventful stretches.",
+  questions:[
+    "Why might Luke record the exact length of an otherwise uneventful stop like this one?"
+  ]
+},
+{
+  id:"forum-appii", name:"Forum of Appius", greek:"Ἀππίου Φόρον", modern:"Borgo Faiti, near Latina, Italy",
+  lat:41.47, lon:12.87, cat:"site", region:"Italy & the west",
+  blurb:"A roadside market town on the Appian Way where Roman believers came out to meet Paul on his final approach to the capital.",
+  scriptures:[
+    { ref: "Acts 28:15", text: "When the brothers heard of us, they came to meet us as far as The Market of Appius and The Three Taverns. When Paul saw them, he thanked God and took courage." }
+  ],
+  greco:"A way-station on the Appian Way through the Pontine Marshes, roughly 43 Roman miles south of Rome, named for the road\'s builder, Appius Claudius.",
+  jewish:"No Jewish community is named here; the town\'s significance in Acts is entirely about the Roman Christian community traveling out to meet Paul.",
+  arch:"The site\'s exact remains are largely unexcavated beneath later settlement; it is known chiefly from ancient itineraries and literary references (including Horace) to the road station.",
+  geo:"On the Appian Way at the edge of the Pontine Marshes, a multi-day walk south of Rome — the point where a canal barge route through the marshes met the paved road again.",
+  why:"A small, human detail of welcome — ordinary believers walking a considerable distance down the Appian Way to meet Paul before he reaches Rome, prompting his most direct expression of relief in Acts.",
+  questions:[
+    "What does the Roman church\'s willingness to travel this far to meet Paul suggest about how his reputation had already reached the capital?"
   ]
 }
 );

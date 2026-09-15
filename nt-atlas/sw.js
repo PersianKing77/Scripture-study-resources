@@ -4,13 +4,13 @@
    view you have already studied comes back without a network.
    Registered only over http(s) — opened straight off disk this never runs. */
 
-const APP = 'nt-atlas-v9';
+const APP = 'nt-atlas-v13';
 const TILES = 'nt-atlas-tiles-v1';
 const TILE_CEILING = 1200;
 
-/* OpenTopoMap's tiles (CC BY-SA, fair-use policy) permit caching for reasonable,
-   non-bulk use. Offline mode relies on this; if the basemap preset changes, revisit
-   this gate. Only tiles a user has actually viewed are cached, up to TILE_CEILING —
+/* Mapbox tiles are served under a paid commercial licence tied to our access
+   token, so caching a user's own viewed tiles for offline reuse is covered.
+   Only tiles a user has actually viewed are cached, up to TILE_CEILING —
    there is no prefetch or bulk download. */
 const TILE_CACHE = true;
 
@@ -22,6 +22,7 @@ const SHELL = [
   'nt-cfm-data.js',
   'nt-cfm-2027.js',
   'nt-scholarship.js',
+  'nt-archaeology-data.js',
   'nt-scripture-text.js',
   'vendor/leaflet-1.9.4/leaflet.css',
   'vendor/leaflet-1.9.4/leaflet.js',
@@ -64,7 +65,7 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
 
   /* tiles: serve what we have, fetch and keep what we do not */
-  if(TILE_CACHE && (/tile\.openstreetmap\.org$/.test(url.hostname) || /\.tile\.opentopomap\.org$/.test(url.hostname) || /^tile\.openmaps\.fr$/.test(url.hostname))){
+  if(TILE_CACHE && (/^api\.mapbox\.com$/.test(url.hostname) || /tile\.openstreetmap\.org$/.test(url.hostname) || /\.tile\.opentopomap\.org$/.test(url.hostname) || /^tile\.openmaps\.fr$/.test(url.hostname))){
     e.respondWith(caches.open(TILES).then(async c => {
       const hit = await c.match(req);
       if(hit) return hit;

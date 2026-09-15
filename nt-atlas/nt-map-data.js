@@ -8,6 +8,14 @@ const PLACES = [
   id: "nazareth", name: "Nazareth", greek: "Ναζαρέτ", modern: "Nāṣerat / Nazareth, Israel",
   lat: 32.7021, lon: 35.2978, cat: "town", region: "Galilee (Herod Antipas)",
   blurb: "An obscure agricultural village of perhaps 200–400 people, hidden in a limestone bowl a mile off the Via Maris.",
+  related: [
+    { name:'First-century house under the Sisters of Nazareth convent', era:'Early Roman period', conf:'probable', note:'A rock-cut domestic structure beneath the convent, later venerated by Byzantine and Crusader Christians.', sig:'May preserve an early-remembered Nazareth house, though the link to Jesus\' own family is unprovable.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Nazareth' },
+    { name:'House at the International Marian Center', era:'Early Roman period', conf:'probable', note:'Domestic remains excavated nearby demonstrate ordinary settlement contemporary with Jesus\' childhood.', sig:'No personal association claimed — general evidence the village was inhabited when the Gospels place him there.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Nazareth' },
+    { name:'Kokhim tombs', era:'Early Roman period', conf:'certain', note:'Rock-cut burial caves on the village\'s edge, of a standard Jewish type of the period.', sig:'Help define the settlement\'s size and Jewish population at the time of Jesus.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Nazareth' },
+    { name:'Agricultural terraces and winepresses', era:'Roman period', conf:'certain', note:'Rock-cut winepresses and terraced field walls surround the ancient village core.', sig:'Ground the parables of vineyards, terraces, and rural labor in Nazareth\'s own economy.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Nazareth' },
+    { name:'Mount Precipice', era:'Landscape; later tradition', conf:'conjectural', note:'A cliff south of Nazareth traditionally shown as where the crowd tried to throw Jesus off (Luke 4:29).', sig:'The Gospel names no mountain — the identification is devotional, not archaeological.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Mount_Precipice' }
+  ],
+
   scriptures: [
     { ref: "Luke 1:26–27", text: "Now in the sixth month, the angel Gabriel was sent from God to a city of Galilee, named Nazareth, to a virgin pledged to be married to a man whose name was Joseph, of David’s house. The virgin’s name was Mary." },
     { ref: "John 1:46", text: "Nathanael said to him, “Can any good thing come out of Nazareth?” Philip said to him, “Come and see.”" },
@@ -29,12 +37,19 @@ const PLACES = [
   id: "sepphoris", name: "Sepphoris", greek: "Σεπφωρίς / Autokratoris", modern: "Tzippori, Israel",
   lat: 32.7524, lon: 35.2794, cat: "city", region: "Galilee (Herod Antipas)",
   blurb: "Antipas' first capital, four miles from Nazareth — the Greco-Roman city Jesus never once enters in the Gospels.",
+  related: [
+    { name:'Yodfat (Jotapata)', era:'First century AD', conf:'certain', note:'A fortified Lower Galilean town besieged and destroyed by Vespasian\'s legions in AD 67 — Josephus commanded its defense.', sig:'Houses, ritual baths, and battle debris preserve a whole Galilean community at the exact moment the war that shapes the Synoptics\' apocalyptic language began.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Yodfat' }
+  ],
+
   scriptures: [
     { ref: "Matthew 4:23", text: "Jesus went about in all Galilee, teaching in their synagogues, preaching the Good News of the Kingdom, and healing every disease and every sickness among the people." }
   ],
   greco: "Josephus calls it 'the ornament of all Galilee.' Burned by Rome in 4 BC after the revolt of Judas son of Ezekias and its people enslaved, it was rebuilt by Antipas as Autokratoris with a theatre seating several thousand, a colonnaded cardo, and mosaic villas — including the famous 'Mona Lisa of the Galilee.'",
   jewish: "After AD 135 Sepphoris became a rabbinic centre: Rabbi Judah ha-Nasi moved the Sanhedrin here and compiled the Mishnah in this city c. AD 200. Yet even in its Roman heyday its coins bear no pagan image, and the city held dozens of miqva'ot — Hellenistic form, Jewish substance.",
   arch: "Theatre, Roman villa mosaics, a Nile Festival building, a 4th-century synagogue with a zodiac mosaic, and an extensive network of ritual baths and cisterns.",
+  related: [
+    { name:'Dionysus Mosaic (House of Dionysus)', era:'c. AD 200', conf:'certain', note:'A lavish triclinium floor mosaic depicting 15 scenes from the life and cult of Dionysus, including a celebrated portrait nicknamed the "Mona Lisa of the Galilee."', sig:'Direct evidence of the thoroughly Greco-Roman elite culture at Antipas\' capital, four miles from the village where Jesus grew up.', src:['See: https://www.pbs.org/wnet/story-jews/explore-the-diaspora/mosaic/'], wiki:'https://www.pbs.org/wnet/story-jews/explore-the-diaspora/mosaic/' }
+  ],
   geo: "On a hill commanding the road from the Mediterranean to the Sea of Galilee, with the Beth Netofa valley as its breadbasket. Visible from the ridge above Nazareth.",
   why: "The Gospels' silence is itself data. Jesus works the villages and avoids the two Herodian capitals (Sepphoris, Tiberias) — a deliberate strategy of the margins, not the centre.",
   questions: [
@@ -46,6 +61,18 @@ const PLACES = [
   id: "capernaum", name: "Capernaum", greek: "Καφαρναούμ (Kefar Naḥum)", modern: "Kfar Nahum, Israel",
   lat: 32.8808, lon: 35.5751, cat: "city", region: "Galilee (Herod Antipas)",
   blurb: "Jesus' operational base — 'his own city' — a fishing and customs town of ~1,500 on the lake's north shore.",
+  related: [
+    { name:'First-century basalt houses', era:'First century AD', conf:'certain', note:'Small, low, black-basalt courtyard houses excavated across the village, roofed in branches and packed earth.', sig:'Explains how a crowded room could be opened up from the roof to lower a paralyzed man (Mark 2:1–12).', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Capernaum' },
+    { name:'"House of Peter"', era:'1st century BC – Byzantine', conf:'probable', note:'A basalt domestic structure that received unusual plastering and, later, a Byzantine church built directly over it.', sig:'The building\'s special early Christian treatment suggests it was remembered as significant — plausibly Peter\'s house of Mark 1:29 — though this can\'t be proven.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Capernaum' },
+    { name:'Synagogue foundations beneath the later synagogue', era:'1st century AD, under later remains', conf:'contested', note:'Basalt walls underlying the monumental white synagogue may belong to an earlier building.', sig:'If correctly dated, this could be the very synagogue where Jesus taught and healed (Mark 1:21); the dating is debated.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Capernaum' },
+    { name:'White limestone synagogue', era:'Late Roman period', conf:'certain', note:'An imported white-limestone synagogue built over the basalt foundations, centuries after Jesus.', sig:'Marks the site\'s continued importance to the Jewish community, even though the standing structure postdates the Gospels.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Capernaum' },
+    { name:'Harbor installations', era:'Roman period', conf:'certain', note:'Breakwaters and shoreline structures mark Capernaum\'s role as a fishing and lake-transport hub.', sig:'The physical setting for calling fishermen, boarding boats, and the crossings that punctuate Mark\'s Gospel.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Capernaum' },
+    { name:'Tabgha harbor', era:'Roman period', conf:'probable', note:'Shoreline and harbor remains on the fertile plain just west of Capernaum.', sig:'Supports the traditional siting of the feeding miracles near this stretch of shore, without pinpointing the exact spot.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Tabgha' },
+    { name:'Church of the Multiplication, Tabgha', era:'Byzantine period', conf:'probable', note:'A Byzantine church with a famous loaves-and-fishes mosaic floor, marking the traditional feeding-miracle site.', sig:'Early Christian veneration of this shore, though the exact location of the miracle (Matthew 14; John 6) is not fixed by archaeology.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Church_of_the_Multiplication' },
+    { name:'Mensa Christi, Tabgha', era:'Byzantine and later', conf:'conjectural', note:'A shoreline church tradition commemorating the risen Jesus\' breakfast with the disciples (John 21:1–14).', sig:'Devotional siting rather than an archaeologically fixed location.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Church_of_the_Primacy_of_Saint_Peter' },
+    { name:'Mount of Beatitudes', era:'Roman landscape; modern church', conf:'conjectural', note:'A natural amphitheater-shaped hillside above Tabgha, traditionally shown as the setting for the Sermon on the Mount.', sig:'The Gospels name no mountain (Matthew 5:1) — the site is a visualization aid, not an identified location.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Mount_of_Beatitudes' }
+  ],
+
   scriptures: [
     { ref: "Matthew 4:13", text: "Leaving Nazareth, he came and lived in Capernaum, which is by the sea, in the region of Zebulun and Naphtali," },
     { ref: "Mark 1:21–22", text: "They went into Capernaum, and immediately on the Sabbath day he entered into the synagogue and taught. They were astonished at his teaching, for he taught them as having authority, and not as the scribes." },
@@ -65,8 +92,17 @@ const PLACES = [
 },
 {
   id: "bethsaida", name: "Bethsaida (Julias)", greek: "Βηθσαϊδά", modern: "et-Tell / el-Araj, Israel",
-  lat: 32.9106, lon: 35.6299, cat: "town", region: "Gaulanitis (Herod Philip)",
+  lat: 32.8836, lon: 35.6316, cat: "town", region: "Gaulanitis (Herod Philip)",
   blurb: "'House of the fisherman' — hometown of Peter, Andrew and Philip, raised to a Greek polis by Herod Philip.",
+  related: [
+    { name:'et-Tell (Bethsaida candidate)', era:'Hellenistic and Roman periods', conf:'contested', note:'A mound east of the Jordan\'s entry into the lake, the traditional and long-excavated Bethsaida candidate.', sig:'Its distance from the present shoreline (lake levels have shifted) is the main objection to this identification.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Bethsaida' },
+    { name:'el-Araj (Bethsaida candidate)', era:'Roman and Byzantine periods', conf:'contested', note:'A site directly on the ancient shoreline with Roman-period remains and a Byzantine church.', sig:'Closer to the water than et-Tell, and gaining ground as excavation continues — the two-site debate is still open.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Bethsaida' },
+    { name:'Church of the Apostles, el-Araj', era:'Byzantine period', conf:'probable', note:'A Byzantine basilica with a dedicatory inscription, excavated at el-Araj.', sig:'Byzantine tradition specifically commemorated Peter and Andrew here — later testimony, not first-century proof, but a strong vote for el-Araj.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Bethsaida' },
+    { name:'Gamla', era:'First century AD', conf:'certain', note:'A Golan hill town with houses, a pre-70 synagogue, and dramatic destruction debris from Vespasian\'s siege in AD 67.', sig:'One of the best-preserved snapshots of a Jewish Golan community in the exact generation of the apostles.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Gamla' },
+    { name:'Gamla synagogue', era:'1st century BC – AD 67', conf:'certain', note:'A pre-70 synagogue hall, one of a handful known from before the Temple\'s destruction.', sig:'A close material parallel for the kind of building Jesus taught in around the lake.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Gamla' },
+    { name:'Jordan River north of the lake', era:'Ancient landscape', conf:'certain', note:'The river\'s entry into the Sea of Galilee, past Bethsaida, on its course down from its Baptism-associated stretches further south.', sig:'Anchors the region\'s water geography that John\'s Baptist ministry and the Gospels\' lake crossings depend on.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Jordan_River' }
+  ],
+
   uncertain: true,
   scriptures: [
     { ref: "John 1:44", text: "Now Philip was from Bethsaida, of the city of Andrew and Peter." },
@@ -75,7 +111,7 @@ const PLACES = [
   ],
   greco: "Philip the tetrarch refounded it as Julias c. AD 30, honouring a member of the imperial family — Josephus names Julia; whether he means Augustus' daughter or (after her fall from favour) Livia under her adopted name is debated. Philip was buried there — a village upgraded into a Greek city with the tetrarch's tomb in it. Outside Antipas' jurisdiction, it was Jesus' nearest political bolt-hole from Galilee.",
   jewish: "A mixed frontier population: Jewish fishing families like Peter's alongside Greek-speaking settlers, which explains why three of the Twelve carry Greek names (Philip, Andrew) and why Greek-speaking pilgrims later approach Jesus through Philip (John 12:20–22).",
-  arch: "Two candidate sites, and the balance has shifted. Et-Tell, on a basalt spur about a mile inland, yields an Iron Age gate and Roman-period remains, but its distance from the water has troubled scholars since 1880 and no Byzantine church has been found there. El-Araj, on the shoreline, has produced a first-century fishing village beneath a fifth-century basilica whose mosaic — uncovered in 2022 — asks the intercession of the 'chief and commander of the heavenly apostles', matching the eighth-century pilgrim Willibald's account of a church at Bethsaida over the house of Peter and Andrew. Excavators now regard el-Araj as the stronger candidate, though they stop short of calling it proven. The marker here stands at et-Tell; el-Araj lies nearer the shore.",
+  arch: "Two candidate sites, and the balance has shifted. Et-Tell, on a basalt spur about a mile inland, yields an Iron Age gate and Roman-period remains, but its distance from the water has troubled scholars since 1880 and no Byzantine church has been found there. El-Araj, on the shoreline, has produced a first-century fishing village beneath a fifth-century basilica whose mosaic — uncovered in 2022 — asks the intercession of the 'chief and commander of the heavenly apostles', matching the eighth-century pilgrim Willibald's account of a church at Bethsaida over the house of Peter and Andrew. Excavators now regard el-Araj as the stronger candidate, though they stop short of calling it proven. The marker here now stands at el-Araj, on the shore; et-Tell lies about a mile inland.",
   geo: "East of the Jordan's inflow into the lake, in the fertile, marshy Bethsaida plain. The 'desert place' of the feeding of the 5,000 lies on the grassy slopes just east.",
   why: "Bethsaida supplies a third of the inner circle, hosts the only two-stage healing in the Gospels, and shares Capernaum's woe (Matt 11:21). It is also where crossing a border becomes a ministry tactic.",
   questions: [
@@ -104,6 +140,14 @@ const PLACES = [
   id: "magdala", name: "Magdala (Taricheae)", greek: "Μαγδαλά / Ταριχέαι", modern: "Migdal, Israel",
   lat: 32.8272, lon: 35.5160, cat: "town", region: "Galilee (Herod Antipas)",
   blurb: "The lake's fish-salting industrial town, and the home of Mary called Magdalene.",
+  related: [
+    { name:'Magdala synagogue', era:'1st century BC – 1st century AD', conf:'certain', note:'One of the best-preserved pre-AD-70 synagogues found anywhere in Galilee.', sig:'Direct material evidence for the kind of synagogue setting the Gospels describe Jesus using throughout the region.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Magdala' },
+    { name:'The Magdala Stone', era:'First century AD', conf:'certain', note:'A carved stone block found in the synagogue, bearing a menorah and Temple-related imagery.', sig:'Rare pre-70 visual evidence for how a Galilean Jewish community imagined the Jerusalem Temple.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Magdala_stone' },
+    { name:'Harbor installations', era:'Roman period', conf:'certain', note:'Quays and waterfront structures serving Magdala\'s fish-processing economy.', sig:'Physical evidence for the fishing and salting trade (Tarichaeae, \'the place of salted fish\') that gave Mary Magdalene\'s hometown its economy.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Magdala' },
+    { name:'Ritual baths (mikvaot)', era:'Early Roman period', conf:'certain', note:'Stepped, spring-fed immersion pools found throughout the town.', sig:'Shows purity practice was observed even in this commercially Hellenized lakeside town.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Magdala' },
+    { name:'Dalmanutha harbor candidate', era:'Roman period', conf:'conjectural', note:'Harbor remains near Magdala proposed as the otherwise unlocated Dalmanutha of Mark 8:10.', sig:'An unproven attempt to place a place-name that appears nowhere else in ancient sources.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Magdala' }
+  ],
+
   scriptures: [
     { ref: "Matthew 15:39", text: "Then he sent away the multitudes, got into the boat, and came into the borders of Magdala." },
     { ref: "Luke 8:2–3", text: "and certain women who had been healed of evil spirits and infirmities: Mary who was called Magdalene, from whom seven demons had gone out; and Joanna, the wife of Chuzas, Herod’s steward; Susanna; and many others; who served them from their possessions." }
@@ -122,6 +166,13 @@ const PLACES = [
   id: "tiberias", name: "Tiberias", greek: "Τιβεριάς", modern: "Tverya, Israel",
   lat: 32.7940, lon: 35.5320, cat: "city", region: "Galilee (Herod Antipas)",
   blurb: "Antipas' new lakeside capital, named for the emperor — mentioned once, never entered.",
+  related: [
+    { name:'Roman theater', era:'Roman period', conf:'certain', note:'A Greco-Roman theater built into Tiberias\'s hillside.', sig:'Physical evidence of Tiberias\'s thoroughly Hellenized civic culture, distinct from the rural villages Jesus actually visited.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Tiberias' },
+    { name:'Harbor installations', era:'Roman period', conf:'certain', note:'Quay and waterfront remains for Tiberias\'s lake traffic.', sig:'Anchors the boats \'from Tiberias\' that John 6:23 mentions arriving at the feeding-miracle site.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Tiberias' },
+    { name:'Khirbet Wadi Hamam synagogue', era:'Late Roman period, earlier settlement below', conf:'probable', note:'A decorated synagogue and village west of the lake, with settlement layers reaching earlier.', sig:'The standing synagogue postdates Jesus, but the site shows the kind of rural Jewish community common around the lake in his time.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Khirbet_Wadi_Hammam' },
+    { name:'Huqoq village and synagogue', era:'Roman and Byzantine periods', conf:'certain', note:'A village with a later synagogue famous for elaborate mosaic floors.', sig:'Shows the continuity and eventual flourishing of Jewish communal life in this same lakeside region.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Huqoq' }
+  ],
+
   scriptures: [
     { ref: "John 6:23", text: "However boats from Tiberias came near to the place where they ate the bread after the Lord had given thanks." }
   ],
@@ -159,6 +210,11 @@ const PLACES = [
   id: "cana", name: "Cana of Galilee", greek: "Κανὰ τῆς Γαλιλαίας", modern: "Kafr Kanna / Khirbet Qana, Israel",
   lat: 32.7490, lon: 35.3392, cat: "town", region: "Galilee (Herod Antipas)",
   blurb: "Site of the first sign — water into wine at a village wedding.",
+  related: [
+    { name:'Kafr Kanna (Cana tradition)', era:'Roman through modern periods', conf:'contested', note:'The long-standing pilgrimage site for Cana, with its own ancient settlement remains.', sig:'A later and weaker rival to Khirbet Qana in the archaeological record, but the site continuous Christian tradition has visited since antiquity.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Kafr_Kanna' },
+    { name:'Ain Qana (Lebanon candidate)', era:'Roman period landscape', conf:'conjectural', note:'A Lebanese village proposed as an alternative Cana, preserving an older regional naming tradition.', sig:'Kept for completeness — mainstream scholarship favors the Galilean candidates.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Cana' }
+  ],
+
   uncertain: true,
   scriptures: [
     { ref: "John 2:6–11", text: "Now there were six water pots of stone set there after the Jews’ way of purifying, containing two or three metretes apiece. Jesus said to them, “Fill the water pots with water.” They filled them up to the brim. He said to them, “Now draw some out, and take it to the ruler of the feast.” So they took it. When the ruler of the feast tasted the water now become wine, and didn’t know where it came from (but the servants who had drawn the water knew), the ruler of the feast called the bridegroom, and said to him, “Everyone serves the good wine first, and when the guests have drunk freely, then that which is worse. You have kept the good wine until now!” This beginning of his signs Jesus did in Cana of Galilee, and revealed his glory; and his disciples believed in him." },
@@ -176,7 +232,7 @@ const PLACES = [
 },
 {
   id: "nain", name: "Nain", greek: "Ναΐν", modern: "Nein, Israel",
-  lat: 32.6318, lon: 35.3436, cat: "town", region: "Galilee (Herod Antipas)",
+  lat: 32.6306, lon: 35.3500, cat: "town", region: "Galilee (Herod Antipas)",
   blurb: "Where Jesus stopped a funeral procession and raised a widow's only son.",
   scriptures: [
     { ref: "Luke 7:12–15", text: "Now when he came near to the gate of the city, behold, one who was dead was carried out, the only son of his mother, and she was a widow. Many people of the city were with her. When the Lord saw her, he had compassion on her, and said to her, “Don’t cry.” He came near and touched the coffin, and the bearers stood still. He said, “Young man, I tell you, arise!” He who was dead sat up, and began to speak. And he gave him to his mother." }
@@ -214,6 +270,12 @@ const PLACES = [
   id: "gennesaret", name: "Plain of Gennesaret", greek: "Γεννησαρέτ", modern: "Ginosar, Israel",
   lat: 32.8475, lon: 35.5228, cat: "site", region: "Galilee (Herod Antipas)",
   blurb: "The lake's fertile crescent — and the shore where a first-century fishing boat was found.",
+  related: [
+    { name:'Ginosar shoreline', era:'Roman period', conf:'certain', note:'The fertile plain and harbor evidence bordering the lake at Gennesaret.', sig:'Matches the Gospels\' description of a landing place for crowds and boats (Matthew 14:34).', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Ginosar' },
+    { name:'The Sea of Galilee boat', era:'1st century BC – 1st century AD', conf:'certain', note:'A wooden fishing boat, preserved in lake mud and recovered in 1986, of a type used on the Sea of Galilee in this period.', sig:'The best direct physical evidence for the kind of small craft the disciples fished and crossed the lake in.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Sea_of_Galilee_Boat' },
+    { name:'Arbel caves and village', era:'Hellenistic and Roman periods', conf:'certain', note:'Cliffside caves and a settlement overlooking Gennesaret and the routes around the lake.', sig:'Frames the terrain travelers moved through between the lakeside towns.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Mount_Arbel' }
+  ],
+
   scriptures: [
     { ref: "Mark 6:53–56", text: "When they had crossed over, they came to land at Gennesaret, and moored to the shore. When they had come out of the boat, immediately the people recognized him, and ran around that whole region, and began to bring those who were sick, on their mats, to where they heard he was. Wherever he entered, into villages, or into cities, or into the country, they laid the sick in the marketplaces, and begged him that they might just touch the fringe of his garment; and as many as touched him were made well." },
     { ref: "Luke 5:4–6", text: "When he had finished speaking, he said to Simon, “Put out into the deep, and let down your nets for a catch.” Simon answered him, “Master, we worked all night, and took nothing; but at your word I will let down the net.” When they had done this, they caught a great multitude of fish, and their net was breaking." }
@@ -255,6 +317,10 @@ const PLACES = [
   id: "hippos", name: "Hippos (Susita)", greek: "Ἵππος", modern: "Sussita, Golan, Israel",
   lat: 32.7787, lon: 35.6600, cat: "decapolis", region: "Decapolis",
   blurb: "A Decapolis city on a flat-topped mountain directly across the water from Capernaum.",
+  related: [
+    { name:'Susita necropolis', era:'Roman period', conf:'certain', note:'Rock-cut tomb fields outside Hippos\'s walls.', sig:'Regional context for a man living \'among the tombs\' (Mark 5:2–5) in the Decapolis territory across the lake.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Hippos_(ancient_site)' }
+  ],
+
   scriptures: [
     { ref: "Matthew 5:14", text: "You are the light of the world. A city located on a hill can’t be hidden." },
     { ref: "Mark 7:31", text: "Again he departed from the borders of Tyre and Sidon, and came to the sea of Galilee, through the middle of the region of Decapolis." }
@@ -271,7 +337,7 @@ const PLACES = [
 },
 {
   id: "gadara", name: "Gadara", greek: "Γάδαρα", modern: "Umm Qais, Jordan",
-  lat: 32.6553, lon: 35.6840, cat: "decapolis", region: "Decapolis",
+  lat: 32.6565, lon: 35.6777, cat: "decapolis", region: "Decapolis",
   blurb: "A Decapolis city of poets and philosophers, whose territory reached the lake.",
   scriptures: [
     { ref: "Matthew 8:28", text: "When he came to the other side, into the country of the Gergesenes, two people possessed by demons met him there, coming out of the tombs, exceedingly fierce, so that nobody could pass that way." }
@@ -288,8 +354,13 @@ const PLACES = [
 },
 {
   id: "gerasa", name: "Gerasa", greek: "Γέρασα", modern: "Jerash, Jordan",
-  lat: 32.2811, lon: 35.8911, cat: "decapolis", region: "Decapolis",
+  lat: 32.2806, lon: 35.8972, cat: "decapolis", region: "Decapolis",
   blurb: "The best-preserved Roman provincial city in the Near East, and a Decapolis heavyweight.",
+  related: [
+    { name:'Capitolias (Beit Ras)', era:'1st-2nd century AD', conf:'certain', note:'A Decapolis member city in northern Jordan, founded later than most of the league.', sig:'One of the ten (or more) cities the Gospels group together simply as \'the Decapolis\' (Matthew 4:25) without naming individually.', wiki:'https://en.wikipedia.org/wiki/Capitolias' },
+    { name:'Dion', era:'Hellenistic and Roman periods', conf:'probable', note:'A little-excavated Decapolis city, location debated among several candidate sites in northern Jordan.', sig:'Named in ancient lists of the Decapolis league but not individually mentioned in the New Testament.', wiki:'https://en.wikipedia.org/wiki/Dium_(Coele-Syria)' },
+    { name:'Raphana', era:'Hellenistic and Roman periods', conf:'conjectural', note:'A Decapolis league member whose exact location is not securely identified.', sig:'Kept for completeness as one of the ten cities Pliny lists for the Decapolis region.', wiki:'https://en.wikipedia.org/wiki/Raphana' }
+  ],
   scriptures: [
     { ref: "Mark 5:1", text: "They came to the other side of the sea, into the country of the Gadarenes." },
     { ref: "Mark 8:1–3", text: "In those days, when there was a very great multitude, and they had nothing to eat, Jesus called his disciples to himself, and said to them, “I have compassion on the multitude, because they have stayed with me now three days, and have nothing to eat. If I send them away fasting to their home, they will faint on the way, for some of them have come a long way.”" }
@@ -308,6 +379,10 @@ const PLACES = [
   id: "scythopolis", name: "Scythopolis (Beth Shean)", greek: "Σκυθόπολις", modern: "Beit She'an, Israel",
   lat: 32.5003, lon: 35.5008, cat: "decapolis", region: "Decapolis",
   blurb: "The only Decapolis city west of the Jordan, and its leading member.",
+  related: [
+    { name:'Roman theater', era:'Roman period', conf:'certain', note:'A well-preserved Roman theater at the heart of Scythopolis\'s civic center.', sig:'Physical evidence for the thoroughly Greco-Roman urban culture of the Decapolis\'s leading city, adjacent to rural Galilee.', wiki:'https://en.wikipedia.org/wiki/Beit_She%27an' },
+    { name:'Bath complex', era:'Roman period', conf:'certain', note:'A large Roman public bathhouse among Scythopolis\'s civic buildings.', sig:'Everyday evidence of Roman urban life in the one Decapolis city that sat immediately across the Jordan from Jewish Galilee.', wiki:'https://en.wikipedia.org/wiki/Beit_She%27an' }
+  ],
   scriptures: [
     { ref: "Mark 7:31", text: "Again he departed from the borders of Tyre and Sidon, and came to the sea of Galilee, through the middle of the region of Decapolis." }
   ],
@@ -342,6 +417,9 @@ const PLACES = [
   id: "philadelphia", name: "Philadelphia (Rabbath Ammon)", greek: "Φιλαδέλφεια", modern: "Amman, Jordan",
   lat: 31.9539, lon: 35.9450, cat: "decapolis", region: "Decapolis",
   blurb: "The southernmost Decapolis city, on the King's Highway.",
+  related: [
+    { name:'Roman theater', era:'2nd century AD', conf:'certain', note:'A large hillside Roman theater at Philadelphia (modern Amman).', sig:'Marks the southern reach of Decapolis Hellenistic culture into what had been Ammonite territory.', wiki:'https://en.wikipedia.org/wiki/Roman_Theatre_(Amman)' }
+  ],
   scriptures: [
     { ref: "Mark 7:31", text: "Again he departed from the borders of Tyre and Sidon, and came to the sea of Galilee, through the middle of the region of Decapolis." }
   ],
@@ -390,6 +468,11 @@ const PLACES = [
   id: "damascus", name: "Damascus", greek: "Δαμασκός", modern: "Dimashq, Syria",
   lat: 33.5138, lon: 36.2920, cat: "city", region: "Syria / Decapolis league",
   blurb: "The great caravan city north-east of Galilee, and the road on which Saul was stopped.",
+  related: [
+    { name:'Straight Street', era:'Roman period, still the city\'s main street', conf:'probable', note:'Damascus\'s ancient colonnaded east-west decumanus, still a working street in the old city today.', sig:'The most concrete surviving link to the geography of Acts 9\'s narrative — Judas\'s house \'on the street called Straight\' (Acts 9:11) plausibly stood along this route.', wiki:'https://en.wikipedia.org/wiki/Straight_Street' },
+    { name:'Bab Kisan', era:'Roman period gate, later rebuilt', conf:'contested', note:'A city gate in the old wall, traditionally shown as the place Saul was lowered in a basket to escape (Acts 9:25).', sig:'A devotional identification rather than an archaeologically verified location for the escape.', wiki:'https://en.wikipedia.org/wiki/Bab_Kisan' },
+    { name:'House of Ananias tradition', era:'Later tradition, uncertain date', conf:'conjectural', note:'A chapel in the old city traditionally identified as the home of Ananias, who restored Saul\'s sight (Acts 9:10-19).', sig:'A pilgrimage tradition with no confirmed first-century archaeological basis.', wiki:'https://en.wikipedia.org/wiki/Saint_Ananias_House' }
+  ],
   scriptures: [
     { ref: "Acts 9:3–5", text: "As he traveled, he got close to Damascus, and suddenly a light from the sky shone around him. He fell on the earth, and heard a voice saying to him, “Saul, Saul, why do you persecute me?” He said, “Who are you, Lord?” The Lord said, “I am Jesus, whom you are persecuting." },
     { ref: "Acts 9:25", text: "but his disciples took him by night, and let him down through the wall, lowering him in a basket." }
@@ -410,6 +493,12 @@ const PLACES = [
   id: "caesarea-philippi", name: "Caesarea Philippi", greek: "Καισάρεια ἡ Φιλίππου / Panias", modern: "Banias, Golan",
   lat: 33.2483, lon: 35.6944, cat: "city", region: "Gaulanitis (Herod Philip)",
   blurb: "A pagan sanctuary at the springs of the Jordan, where Peter confessed the Christ.",
+  related: [
+    { name:'Sanctuary of Pan at Banias', era:'Hellenistic and Roman periods', conf:'certain', note:'Rock-cut niches and temple platforms cut into the cliff above the Jordan\'s source spring, dedicated to the god Pan.', sig:'The pagan sanctuary landscape Peter\'s confession of Jesus as Christ (Matthew 16:13–20) directly confronts.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Banias' },
+    { name:'Temple of Augustus at Banias', era:'Herodian period', conf:'probable', note:'An imperial-cult temple built by Herod the Great and enlarged by his son Philip, near the Pan sanctuary.', sig:'Ruler-cult worship at the very site where Jesus asks who people say he is.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Banias' },
+    { name:'Omrit temple complex', era:'Late 1st century BC onward', conf:'contested', note:'A Roman temple a few miles south of Banias, possibly the Augusteum Josephus associates with the region.', sig:'An alternative candidate for the imperial temple tied to Philip\'s tetrarchy — the identification with Banias\'s temple is debated.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Omrit' }
+  ],
+
   scriptures: [
     { ref: "Matthew 16:13–16", text: "Now when Jesus came into the parts of Caesarea Philippi, he asked his disciples, saying, “Who do men say that I, the Son of Man, am?” They said, “Some say John the Baptizer, some, Elijah, and others, Jeremiah, or one of the prophets.” He said to them, “But who do you say that I am?” Simon Peter answered, “You are the Christ, the Son of the living God.”" },
     { ref: "Matthew 16:18", text: "I also tell you that you are Peter, and on this rock I will build my assembly, and the gates of Hades will not prevail against it." },
@@ -430,6 +519,11 @@ const PLACES = [
   id: "hermon", name: "Mount Hermon", greek: "Ἀερμών", modern: "Jebel esh-Sheikh",
   lat: 33.4160, lon: 35.8570, cat: "site", region: "Iturea / Phoenicia border",
   blurb: "The snow-capped 'high mountain apart' — the leading alternative site of the Transfiguration.",
+  related: [
+    { name:'Tel Anafa', era:'Hellenistic period', conf:'certain', note:'An elite house with imported luxury goods, in the Huleh Valley north of the Sea of Galilee.', sig:'Shows the cultural and trade networks reaching this frontier region before and around the New Testament period.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Tel_Anafa' },
+    { name:'Kedesh Roman temple', era:'Roman period', conf:'certain', note:'A temple complex in Upper Galilee reflecting regional pagan cult practice.', sig:'Context for the kind of sanctuary landscape early Jewish and Christian communities lived alongside in the north.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Kedesh' }
+  ],
+
   uncertain: true,
   scriptures: [
     { ref: "Mark 9:2", text: "After six days Jesus took with him Peter, James, and John, and brought them up onto a high mountain privately by themselves, and he was changed into another form in front of them." },
@@ -449,6 +543,11 @@ const PLACES = [
   id: "tyre", name: "Tyre", greek: "Τύρος", modern: "Sur, Lebanon",
   lat: 33.2705, lon: 35.1960, cat: "city", region: "Phoenicia (Roman Syria)",
   blurb: "Phoenician port city where a Gentile mother out-argued Jesus and won her daughter's healing.",
+  related: [
+    { name:'Roman hippodrome', era:'2nd-3rd century AD', conf:'certain', note:'One of the largest and best-preserved Roman hippodromes in the world, at Tyre.', sig:'Later than the Gospel episode, but marks Tyre\'s continuing importance as a major Roman Phoenician city.', wiki:'https://en.wikipedia.org/wiki/Tyre_Hippodrome' },
+    { name:'Tyre necropolis', era:'Roman period', conf:'certain', note:'An extensive Roman-period cemetery with elaborately decorated sarcophagi outside the city.', sig:'Documents the wealth and Greco-Roman culture of the port city Jesus and later Paul (Acts 21:3-6) both visited.', wiki:'https://en.wikipedia.org/wiki/Tyre' },
+    { name:'Sarepta (Sarafand)', era:'Iron Age through Roman periods', conf:'certain', note:'A Phoenician coastal town between Tyre and Sidon, with a long excavated history back to Elijah\'s day.', sig:'Regional context for the Phoenician coast Jesus travels through in Mark 7:24-31, between Tyre and Sidon.', wiki:'https://en.wikipedia.org/wiki/Sarepta' }
+  ],
   scriptures: [
     { ref: "Mark 7:24–30", text: "From there he arose, and went away into the borders of Tyre and Sidon. He entered into a house, and didn’t want anyone to know it, but he couldn’t escape notice. For a woman, whose little daughter had an unclean spirit, having heard of him, came and fell down at his feet. Now the woman was a Greek, a Syrophoenician by race. She begged him that he would cast the demon out of her daughter. But Jesus said to her, “Let the children be filled first, for it is not appropriate to take the children’s bread and throw it to the dogs.” But she answered him, “Yes, Lord. Yet even the dogs under the table eat the children’s crumbs.” He said to her, “For this saying, go your way. The demon has gone out of your daughter.” She went away to her house, and found the child having been laid on the bed, with the demon gone out." },
     { ref: "Matthew 11:21–22", text: "“Woe to you, Chorazin! Woe to you, Bethsaida! For if the mighty works had been done in Tyre and Sidon which were done in you, they would have repented long ago in sackcloth and ashes. But I tell you, it will be more tolerable for Tyre and Sidon on the day of judgment than for you." }
@@ -487,6 +586,10 @@ const PLACES = [
   id: "sychar", name: "Sychar / Jacob's Well", greek: "Συχάρ", modern: "Balata, near Nablus",
   lat: 32.2035, lon: 35.2815, cat: "site", region: "Samaria (Roman prefect)",
   blurb: "The well at the foot of Gerizim where Jesus asked a Samaritan woman for a drink.",
+  related: [
+    { name:'Shechem (Tell Balata)', era:'Bronze Age through Roman periods', conf:'certain', note:'The ancient city mound adjacent to Sychar and Jacob\'s Well, one of the oldest continuously significant sites in the central highlands.', sig:'Gives the deep historical layer beneath the New Testament\'s brief Samaritan episode — a city already ancient by Jesus\' day.', wiki:'https://en.wikipedia.org/wiki/Shechem' },
+    { name:'Jacob\'s Well', era:'Roman period feature, older tradition', conf:'probable', note:'A deep stone-lined well still shown today beneath a modern church, at the traditional site of John 4\'s encounter.', sig:'The well itself is a real, physically continuous water source, whatever the exact age of the visible shaft.', wiki:'https://en.wikipedia.org/wiki/Jacob%27s_Well' }
+  ],
   scriptures: [
     { ref: "John 4:6–10", text: "Jacob’s well was there. Jesus therefore, being tired from his journey, sat down by the well. It was about the sixth hour. A woman of Samaria came to draw water. Jesus said to her, “Give me a drink.” For his disciples had gone away into the city to buy food. The Samaritan woman therefore said to him, “How is it that you, being a Jew, ask for a drink from me, a Samaritan woman?” (For Jews have no dealings with Samaritans.) Jesus answered her, “If you knew the gift of God, and who it is who says to you, ‘Give me a drink,’ you would have asked him, and he would have given you living water.”" },
     { ref: "John 4:20–24", text: "Our fathers worshiped in this mountain, and you Jews say that in Jerusalem is the place where people ought to worship.” Jesus said to her, “Woman, believe me, the hour comes, when neither in this mountain, nor in Jerusalem, will you worship the Father. You worship that which you don’t know. We worship that which we know; for salvation is from the Jews. But the hour comes, and now is, when the true worshipers will worship the Father in spirit and truth, for the Father seeks such to be his worshipers. God is spirit, and those who worship him must worship in spirit and truth.”" }
@@ -540,8 +643,8 @@ const PLACES = [
 },
 {
   id: "joppa", name: "Joppa", greek: "Ἰόππη", modern: "Yafo, Israel",
-  lat: 32.0540, lon: 34.7520, cat: "city", region: "Judea (Roman prefect)",
-  blurb: "The old Jewish port where Peter saw the vision that unlocked the Gentile mission.",
+  lat: 32.0531, lon: 34.7514, cat: "city", region: "Judea (Roman prefect)",
+  blurb: "The old Jewish port where Peter saw the vision that unlocked the Gentile mission — the marker sits at the traditional House of Simon the Tanner, in Old Jaffa near the port.",
   scriptures: [
     { ref: "Acts 10:9–15", text: "Now on the next day as they were on their journey, and got close to the city, Peter went up on the housetop to pray at about noon. He became hungry and desired to eat, but while they were preparing, he fell into a trance. He saw heaven opened and a certain container descending to him, like a great sheet let down by four corners on the earth, in which were all kinds of four-footed animals of the earth, wild animals, reptiles, and birds of the sky. A voice came to him, “Rise, Peter, kill and eat!” But Peter said, “Not so, Lord; for I have never eaten anything that is common or unclean.” A voice came to him again the second time, “What God has cleansed, you must not call unclean.”" },
     { ref: "Acts 9:36–40", text: "Now there was at Joppa a certain disciple named Tabitha, which when translated, means Dorcas. This woman was full of good works and acts of mercy which she did. In those days, she became sick, and died. When they had washed her, they laid her in an upper room. As Lydda was near Joppa, the disciples, hearing that Peter was there, sent two men to him, imploring him not to delay in coming to them. Peter got up and went with them. When he had come, they brought him into the upper room. All the widows stood by him weeping, and showing the coats and garments which Dorcas had made while she was with them. Peter sent them all out, and knelt down and prayed. Turning to the body, he said, “Tabitha, get up!” She opened her eyes, and when she saw Peter, she sat up." },
@@ -549,7 +652,7 @@ const PLACES = [
   ],
   greco: "A poor natural harbour but the only Jewish-controlled port; Simon Maccabeus took it for the Hasmoneans. Peter lodges with a tanner ('Simon a tanner') — a trade despised for its stench and impurity.",
   jewish: "Joppa is where Jonah fled from a mission to Gentile Nineveh. Peter, at the same port, is told three times to stop refusing. Luke's readers would not have missed it.",
-  arch: "Tel Yafo with Egyptian gate remains; Hellenistic and Roman levels; an extensive Jewish necropolis with Greek inscriptions.",
+  arch: "Tel Yafo with Egyptian gate remains; Hellenistic and Roman levels; an extensive Jewish necropolis with Greek inscriptions. The traditional House of Simon the Tanner, marked by a mosque today, stands on the shore just south of the old port — tradition, not excavation, ties the building itself to Acts 10.",
   geo: "On the Judean coast 35 miles from Jerusalem and 30 south of Caesarea.",
   why: "Where the ceremonial law's boundary is redrawn — not by argument but by a vision, a knock at the door, and three men waiting outside.",
   questions: [
@@ -563,6 +666,10 @@ const PLACES = [
   id: "bethabara", name: "Bethany beyond Jordan", greek: "Βηθανία πέραν τοῦ Ἰορδάνου", modern: "al-Maghtas, Jordan",
   lat: 31.8370, lon: 35.5390, cat: "site", region: "Perea (Herod Antipas)",
   blurb: "John's baptising place on the east bank — where Jesus was baptised and identified.",
+  related: [
+    { name:'"Bethabara" textual variant', era:'Manuscript tradition', conf:'contested', note:'Some ancient manuscripts of John 1:28 read \'Bethabara\' rather than \'Bethany\' beyond the Jordan; the site name itself is disputed at the text-critical level.', sig:'The New Testament\'s own manuscripts disagree on this place\'s name — a rare case where the atlas\'s location debate starts in the text, not just the ground.', wiki:'https://en.wikipedia.org/wiki/Al-Maghtas' },
+    { name:'Qasr al-Yahud', era:'Byzantine through modern periods', conf:'probable', note:'The modern pilgrimage baptismal site on the West Bank side of the Jordan, adjacent to al-Maghtas.', sig:'The active, continuously-used baptism site today, sitting essentially across the river from the excavated al-Maghtas remains.', wiki:'https://en.wikipedia.org/wiki/Qasr_al-Yahud' }
+  ],
   uncertain: true,
   scriptures: [
     { ref: "Matthew 3:13–17", text: "Then Jesus came from Galilee to the Jordan to John, to be baptized by him. But John would have hindered him, saying, “I need to be baptized by you, and you come to me?” But Jesus, answering, said to him, “Allow it now, for this is the fitting way for us to fulfill all righteousness.” Then he allowed him. Jesus, when he was baptized, went up directly from the water: and behold, the heavens were opened to him. He saw the Spirit of God descending as a dove, and coming on him. Behold, a voice out of the heavens said, “This is my beloved Son, with whom I am well pleased.”" },
@@ -680,6 +787,11 @@ const PLACES = [
   id: "emmaus", name: "Emmaus", greek: "Ἐμμαούς", modern: "Imwas / Latrun (or Abu Ghosh)",
   lat: 31.8390, lon: 34.9890, cat: "town", region: "Judea (Roman prefect)",
   blurb: "The road where the risen Jesus walked unrecognised and expounded the Scriptures.",
+  related: [
+    { name:'Motza (Emmaus candidate)', era:'Roman period', conf:'contested', note:'A village close to Jerusalem, proposed as Emmaus based on some ancient manuscripts giving \'sixty stadia\' rather than \'sixty-three miles\' from the city.', sig:'A closer, textually-motivated alternative to Imwas/Nicopolis, which sits much farther from Jerusalem than Luke\'s \'seven miles\' (Luke 24:13) implies for most manuscripts.', wiki:'https://en.wikipedia.org/wiki/Motza' },
+    { name:'Qalunya (Emmaus candidate)', era:'Roman period', conf:'conjectural', note:'A village near Jerusalem sometimes proposed as a closer-distance Emmaus candidate.', sig:'Reflects the same distance problem driving the Motza candidacy — kept as a minor alternative.', wiki:'https://en.wikipedia.org/wiki/Qalunya' },
+    { name:'Abu Ghosh (Kiriath-jearim) tradition', era:'Roman through Crusader periods', conf:'contested', note:'A village on the Jerusalem-Joppa road with its own long Emmaus pilgrimage tradition and a Crusader-era church.', sig:'A geographically closer rival to Imwas, kept alive mainly by continuous pilgrim visitation rather than textual or archaeological proof.', wiki:'https://en.wikipedia.org/wiki/Abu_Ghosh' }
+  ],
   uncertain: true,
   scriptures: [
     { ref: "Luke 24:13–16", text: "Behold, two of them were going that very day to a village named Emmaus, which was sixty stadia from Jerusalem. They talked with each other about all of these things which had happened. While they talked and questioned together, Jesus himself came near, and went with them. But their eyes were kept from recognizing him." },
@@ -758,6 +870,70 @@ const PLACES = [
     "Why does Jesus act in the Court of the Gentiles specifically?",
     "How do the concentric courts shape the meaning of the torn veil?",
     "What replaces the Temple in the New Testament's imagination?"
+  ],
+  related: [
+  { name:'Herodian Temple Mount expansion', note:'Platform walls, fills, gates, stairs, and adjacent streets define the Temple setting of the Gospels and Acts.', era:'Late first century BCE to 70 CE', wiki:'https://en.wikipedia.org/wiki/Temple_Mount' },
+  { name:'Western Wall', note:'Retaining-wall masonry preserves part of the expanded Temple platform.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Western_Wall' },
+  { name:'Robinson\'s Arch', note:'Springing stones and street remains reconstruct a monumental stairway into the Temple complex.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Robinson%27s_Arch' },
+  { name:'Wilson\'s Arch', note:'Bridge arch connected the western hill with the Temple platform.', era:'Herodian to later Roman phases', wiki:'https://en.wikipedia.org/wiki/Wilson%27s_Arch_(Jerusalem)' },
+  { name:'Barclay\'s Gate', note:'Blocked western entrance preserves access architecture of the Temple platform.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Gates_of_the_Temple_Mount' },
+  { name:'Hulda Gates', note:'Southern entrances and passageways model ordinary pilgrim access to the Temple.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Huldah_Gates' },
+  { name:'Double Gate', note:'Surviving southern portal belongs to the Temple access system.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Huldah_Gates' },
+  { name:'Triple Gate', note:'Southern portal complex forms part of the Temple approach.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Huldah_Gates' },
+  { name:'Southern Steps', note:'Broad stairs and plaza provide a plausible setting for teaching and pilgrim assembly.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Southern_Wall' },
+  { name:'Temple Mount mikvaot', note:'Numerous ritual baths document purification practices around the sanctuary.', era:'Second Temple period', wiki:'https://en.wikipedia.org/wiki/Temple_Mount' },
+  { name:'Trumpeting Place inscription', note:'Inscribed corner stone identifies a place for priestly trumpet signals on the Temple enclosure.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Trumpeting_Place_inscription' },
+  { name:'Temple Warning inscription', note:'Greek warning to non-Jews directly illuminates the barrier involved in Paul\'s arrest and Ephesians\' metaphor.', era:'First century CE', wiki:'https://en.wikipedia.org/wiki/Temple_Warning_inscription' },
+  { name:'Temple Warning inscription fragment', note:'Second surviving fragment confirms the wording and placement of the Gentile warning system.', era:'First century CE', wiki:'https://en.wikipedia.org/wiki/Temple_Warning_inscription' },
+  { name:'Royal Stoa', note:'Monumental basilica along the southern platform is relevant to commerce and public activity near the Temple. Superstructure reconstructed from fragments and texts.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Royal_Stoa_(Jerusalem)' },
+  { name:'Temple Mount paving stones', note:'Paving and architectural fragments document the sanctuary\'s monumental finish.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Temple_Mount' },
+  { name:'Herodian street below Robinson\'s Arch', note:'Street, shops, and destruction debris preserve the Temple\'s urban setting and 70 CE collapse.', era:'First century CE', wiki:'https://en.wikipedia.org/wiki/Robinson%27s_Arch' },
+  { name:'Tyropoeon Valley drainage channel', note:'Sewer and escape deposits reveal city infrastructure and the revolt\'s end.', era:'First century CE', wiki:'https://en.wikipedia.org/wiki/Tyropoeon_Valley' },
+  { name:'Pilgrimage Road from Siloam', note:'Stepped street linked the Pool of Siloam and Temple approaches.', era:'First century CE', wiki:'https://en.wikipedia.org/wiki/Stepped_street_(Jerusalem)' },
+  { name:'Siloam inscription findspot and tunnel outlet', note:'Water system and pool landscape clarify the topography of Jesus\' healing at Siloam.', era:'Iron Age feature used later', wiki:'https://en.wikipedia.org/wiki/Siloam_tunnel' },
+  { name:'Lower Pool of Siloam', note:'Excavated stepped pool is the strongest archaeological candidate for the pool named in John.', era:'Second Temple period', wiki:'https://en.wikipedia.org/wiki/Pool_of_Siloam' },
+  { name:'Upper Pool of Siloam', note:'Traditional pool and water installations show the complex history of Siloam identifications. Which basin John intended was long debated.', era:'Earlier through Roman periods', wiki:'https://en.wikipedia.org/wiki/Pool_of_Siloam' },
+  { name:'Pool of Bethesda', note:'Twin pools, porticoes, healing cult evidence, and later churches strongly match John\'s topography.', era:'Second Temple through Byzantine periods', wiki:'https://en.wikipedia.org/wiki/Pool_of_Bethesda' },
+  { name:'Asclepius and Serapis sanctuary at Bethesda', note:'Votive and cultic remains illuminate the site\'s later healing associations. Precise relationship to John\'s episode debated.', era:'Roman period', wiki:'https://en.wikipedia.org/wiki/Pool_of_Bethesda' },
+  { name:'Birket Israel', note:'Former rival identification for Bethesda belongs in the interpretive history. Generally rejected as John\'s Bethesda.', era:'Second Temple and later', wiki:'https://en.wikipedia.org/wiki/Birket_Israel' },
+  { name:'Pool of Israel / Struthion Pool', note:'Fortress-adjacent reservoir informs reconstructions north of the Temple.', era:'Hasmonean and Herodian periods', wiki:'https://en.wikipedia.org/wiki/Birket_Israel' },
+  { name:'Antonia Fortress', note:'Fortress location and stairs explain the Roman intervention in Paul\'s arrest. Exact footprint debated.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Antonia_Fortress' },
+  { name:'Ecce Homo arch', note:'Later Roman arch became incorporated into a passion tradition but postdates Jesus. Not a first-century gate.', era:'Hadrianic second century CE', wiki:'https://en.wikipedia.org/wiki/Aelia_Capitolina' },
+  { name:'Lithostrotos pavement at Sisters of Zion', note:'Paving long identified with Gabbatha is now commonly dated after Jesus. Traditional identification rejected by many archaeologists.', era:'Second century CE', wiki:'https://en.wikipedia.org/wiki/Convent_of_the_Sisters_of_Zion' },
+  { name:'Herod\'s Palace western hill', note:'Palace remains near the present Citadel are a leading location for Pilate\'s Jerusalem praetorium. Exact trial locus unresolved.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Herod%27s_Palace_(Jerusalem)' },
+  { name:'Tower of Phasael', note:'Massive tower base preserves part of Herod\'s western-palace defenses.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Tower_of_David_(northeast_tower)' },
+  { name:'Kishle excavations', note:'Walls and palace-associated remains refine the western-hill praetorium model.', era:'Hasmonean through Ottoman periods', wiki:'https://en.wikipedia.org/wiki/Tower_of_David' },
+  { name:'Jaffa Gate Herodian remains', note:'Fortification remains define western access to the upper city and palace.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Jaffa_Gate' },
+  { name:'Gethsemane ritual bath', note:'Ritual bath and agricultural cave support first-century activity near the traditional garden. Does not identify the exact garden.', era:'First century CE', wiki:'https://en.wikipedia.org/wiki/Gethsemane' },
+  { name:'Gethsemane olive press cave', note:'Agricultural installation fits the place-name meaning and local land use.', era:'Roman period', wiki:'https://en.wikipedia.org/wiki/Gethsemane' },
+  { name:'Kidron Valley', note:'Tombs, roads, and watercourse map Jesus\' route from the city toward Gethsemane.', era:'Second Temple period landscape', wiki:'https://en.wikipedia.org/wiki/Kidron_Valley' },
+  { name:'Tomb of Absalom', note:'Monumental tomb illustrates elite funerary display criticized in Gospel rhetoric. Traditional name is not historical.', era:'Late Second Temple period', wiki:'https://en.wikipedia.org/wiki/Tomb_of_Absalom' },
+  { name:'Tomb of Zechariah', note:'Monumental funerary architecture acquired a later Zechariah association. Attribution is traditional.', era:'Late Second Temple period', wiki:'https://en.wikipedia.org/wiki/Tomb_of_Zechariah' },
+  { name:'Tomb of the Sons of Hezir', note:'Inscribed priestly-family tomb gives direct evidence for Jerusalem elite burial.', era:'Second century BCE', wiki:'https://en.wikipedia.org/wiki/Tomb_of_Benei_Hezir' },
+  { name:'Dominus Flevit ossuary cemetery', note:'Large ossuary cemetery documents burial forms and names around Jesus\' time.', era:'First century BCE to first century CE', wiki:'https://en.wikipedia.org/wiki/Dominus_Flevit_Church' },
+  { name:'Sanhedria tombs', note:'Rock-cut tomb complex illustrates elite Jerusalem burial architecture. Association with the Sanhedrin is traditional.', era:'Late Second Temple period', wiki:'https://en.wikipedia.org/wiki/Tombs_of_the_Sanhedrin' },
+  { name:'Tombs of the Kings', note:'Monumental tomb generally linked to Queen Helena of Adiabene and her dynasty.', era:'First century CE', wiki:'https://en.wikipedia.org/wiki/Tombs_of_the_Kings_(Jerusalem)' },
+  { name:'Jason\'s Tomb', note:'Inscribed and painted tomb illuminates elite Jewish burial and maritime imagery.', era:'First century BCE', wiki:'https://en.wikipedia.org/wiki/Jason%27s_Tomb' },
+  { name:'Akeldama tombs', note:'Rock-cut tombs occupy the traditional Field of Blood area south of Jerusalem. Exact purchased field cannot be identified.', era:'Late Second Temple period', wiki:'https://en.wikipedia.org/wiki/Akeldama' },
+  { name:'Hinnom Valley', note:'The valley\'s geography is essential to interpreting Gehenna language.', era:'Second Temple landscape', wiki:'https://en.wikipedia.org/wiki/Gehenna' },
+  { name:'Herodian Quarter', note:'Elite houses, mikvaot, mosaics, and destruction layers reconstruct the upper city\'s social world.', era:'First century BCE to 70 CE', wiki:'https://en.wikipedia.org/wiki/Herodian_Quarter' },
+  { name:'Burnt House', note:'Priestly-family house and destruction assemblage materialize the Roman siege horizon.', era:'Destroyed 70 CE', wiki:'https://en.wikipedia.org/wiki/Burnt_House' },
+  { name:'Palatial Mansion', note:'Large elite residence offers context for Jerusalem\'s priestly aristocracy. No direct link to a named New Testament figure.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Herodian_Quarter' },
+  { name:'Mount Zion Cenacle tradition', note:'Traditional location of the Last Supper and Pentecost has strong reception importance but limited first-century evidence. Current structure postdates the events.', era:'Present fabric Crusader and later', wiki:'https://en.wikipedia.org/wiki/Cenacle' },
+  { name:'Church of Saint Peter in Gallicantu', note:'Traditional Caiaphas-house complex includes cisterns, steps, and earlier remains. Identification of Caiaphas\'s house is disputed.', era:'Byzantine and later', wiki:'https://en.wikipedia.org/wiki/Church_of_Saint_Peter_in_Gallicantu' },
+  { name:'Armenian Quarter Caiaphas-house candidate', note:'Alternative upper-city model places the high priest\'s residence nearer elite Herodian houses. Hypothetical location.', era:'Herodian period', wiki:'https://en.wikipedia.org/wiki/Armenian_Quarter' },
+  { name:'Holy Sepulchre quarry and tombs', note:'Quarry, rock-cut tombs, and location outside the first-century wall make this the strongest traditional crucifixion-burial area. Exact tomb and cross position cannot be demonstrated archaeologically.', era:'Iron Age quarry; first-century tombs; later churches', wiki:'https://en.wikipedia.org/wiki/Church_of_the_Holy_Sepulchre' },
+  { name:'Gordon\'s Calvary', note:'Popular alternative site illustrates modern reception but lacks persuasive first-century burial evidence. Archaeological dating weighs against identification.', era:'Iron Age tomb; modern identification', wiki:'https://en.wikipedia.org/wiki/Garden_Tomb' },
+  { name:'Garden Tomb', note:'Alternative burial tradition is useful pedagogically for comparing tomb forms and evidentiary claims. Tomb predates the first century by centuries.', era:'Iron Age tomb', wiki:'https://en.wikipedia.org/wiki/Garden_Tomb' },
+  { name:'Gennath Gate', note:'Gate and wall reconstructions affect whether proposed crucifixion sites lay outside the city. Exact location debated.', era:'Second Temple period', wiki:'https://en.wikipedia.org/wiki/Special:Search?search=Gennath%20Gate' },
+  { name:'First Wall', note:'Excavated fortifications constrain first-century city limits.', era:'Hasmonean and Herodian periods', wiki:'https://en.wikipedia.org/wiki/Walls_of_Jerusalem' },
+  { name:'Second Wall', note:'Reconstructed northern wall line is central to crucifixion-site analysis. Course incompletely known.', era:'Second Temple period', wiki:'https://en.wikipedia.org/wiki/Walls_of_Jerusalem' },
+  { name:'Third Wall', note:'Agrippan fortification and siege evidence define Jerusalem\'s later New Testament-era expansion. Competing wall identifications.', era:'Mid-first century CE', wiki:'https://en.wikipedia.org/wiki/Walls_of_Jerusalem' },
+  { name:'Broad first-century stepped street on Mount Zion', note:'Ancient stair routes help reconstruct movement between upper city, Kidron, and Mount of Olives.', era:'Roman period', wiki:'https://en.wikipedia.org/wiki/Mount_Zion' },
+  { name:'Jerusalem aqueducts', note:'Low- and high-level aqueducts explain water supply for pools, palace, and Temple.', era:'Hasmonean and Herodian periods', wiki:'https://en.wikipedia.org/wiki/Solomon%27s_Pools' },
+  { name:'Solomon\'s Pools', note:'Reservoir complex fed Jerusalem through aqueduct systems. Individual construction phases debated.', era:'Second Temple and later phases', wiki:'https://en.wikipedia.org/wiki/Solomon%27s_Pools' },
+  { name:'Ophel excavations', note:'Buildings, streets, and installations immediately south of the Temple refine the city\'s sacred approach.', era:'Iron Age through Roman periods', wiki:'https://en.wikipedia.org/wiki/Ophel' },
+  { name:'City of David Roman-period street', note:'Urban route connects Siloam, lower city, and Temple approaches.', era:'First century CE', wiki:'https://en.wikipedia.org/wiki/City_of_David_(archaeological_site)' }
   ]
 },
 {
@@ -920,7 +1096,7 @@ const PLACES = [
 },
 {
   id: "egypt", name: "Egypt — the flight", greek: "Αἴγυπτος", modern: "Nile Delta / Old Cairo",
-  lat: 30.0060, lon: 31.2300, cat: "site", region: "Roman province of Egypt",
+  lat: 30.0060, lon: 31.2300, cat: "site", region: "Egypt & the south",
   blurb: "Where the holy family fled from Herod — the house of bondage turned place of refuge.",
   uncertain: true,
   scriptures: [
@@ -966,6 +1142,235 @@ const OLIVET_MORE = [
 }
 ];
 PLACES.push.apply(PLACES, OLIVET_MORE);
+
+const JUDEA_MORE = [
+{
+  id: "bethphage", name: "Bethphage", greek: "Βηθφαγή", modern: "At-Tur, Mount of Olives, Jerusalem",
+  lat: 31.7746, lon: 35.2519, cat: "site", region: "Jerusalem",
+  blurb: "A small village on the Mount of Olives' east slope, where the Triumphal Entry begins.",
+  scriptures: [
+    { ref: "Matthew 21:1", text: "When they came near to Jerusalem, and came to Bethsphage, to the Mount of Olives, then Jesus sent two disciples," },
+    { ref: "Luke 19:29", text: "It happened, when he drew near to Bethsphage and Bethany, at the mountain that is called Olivet, he sent two of his disciples," }
+  ],
+  greco: "A hamlet on the road up from Jericho and Bethany, at the point where travelers crested the Mount of Olives and Jerusalem first came into view — the natural staging point for a procession into the city.",
+  jewish: "Later rabbinic sources treat Bethphage as marking a Sabbath-limit boundary near Jerusalem, suggesting the village had some recognized civic function relative to the Temple city.",
+  arch: "No excavated remains are confidently tied to the ancient village; the name survives in the modern neighborhood of At-Tur and a Franciscan chapel marking the traditional site.",
+  geo: "On the ridge between Bethany and the summit of Olivet, on the pilgrim road from Jericho — the last rise before the Temple comes into full view.",
+  why: "Names the exact spot where Jesus deliberately stages a prophetic action — riding in on a donkey, not a warhorse — quoting Zechariah 9:9 without saying so.",
+  questions: [
+    "Why does the location matter for reading the Entry as a deliberate, planned sign rather than a spontaneous acclamation?"
+  ]
+},
+{
+  id: "ein-kerem", name: "Ein Kerem", greek: "—", modern: "Ein Karem, Jerusalem",
+  lat: 31.7638, lon: 35.1636, cat: "town", region: "Judea (Roman prefect)",
+  blurb: "A spring-fed village in the Judean hills, traditionally identified as the home of Elizabeth and Zechariah and the birthplace of John the Baptist.",
+  scriptures: [
+    { ref: "Luke 1:39-40", text: "Mary arose in those days and went into the hill country with haste, into a city of Judah, and entered into the house of Zacharias, and greeted Elizabeth." }
+  ],
+  greco: "Luke names no specific town for Zechariah's home, only 'a city of Judah' in the hill country south-west of Jerusalem; Ein Kerem's identification is a later Byzantine tradition, not a first-century record.",
+  jewish: "A working village with its own spring, in the priestly countryside near Jerusalem where a priest like Zechariah (Luke 1:5) could plausibly have lived and served his Temple rotation.",
+  arch: "Byzantine and later churches (the Visitation, St. John in the Mountains) mark the traditional sites; no first-century material has been tied to the New Testament narrative specifically.",
+  geo: "A steep valley village with a perennial spring, in the Judean hill country a few miles west of Jerusalem — plausible terrain for Luke's 'hill country of Judah.'",
+  why: "If the tradition holds any historical memory, it locates the Visitation and the Magnificat in a real, identifiable place rather than an anonymous 'somewhere in Judea.'",
+  questions: [
+    "What is gained and lost when a devotional tradition supplies a location the text itself declines to name?"
+  ]
+},
+{
+  id: "herodium", name: "Herodium", greek: "Ἡρώδειον", modern: "Jabal al-Fureidis, West Bank",
+  lat: 31.6656, lon: 35.2436, cat: "site", region: "Judea (Roman prefect)",
+  blurb: "Herod the Great's artificial cone-shaped mountain fortress-palace, and probably his burial place.",
+  scriptures: [
+    { ref: "Matthew 2:19", text: "But when Herod was dead, behold, an angel of the Lord appeared in a dream to Joseph in Egypt, saying," }
+  ],
+  greco: "Herod raised an existing hill into a stark artificial cone visible from Jerusalem, ringed by concentric walls with round towers, and built a palace, gardens, and a monumental pool complex at its base — engineering meant to be seen from the Holy City itself.",
+  jewish: "Josephus names Herodium as the site of Herod's funeral procession and burial; a monumental tomb and mausoleum excavated on the hill's slope in 2007 is widely, though not universally, identified as his tomb.",
+  arch: "A circular fortress-palace on the summit; a lower palace, bathhouse, and the largest artificial pool known from the ancient world at the foot of the hill; the possible royal tomb and theater box built for Herod's final visit.",
+  geo: "A conical hill on the edge of the Judean desert, visible from Bethlehem and Jerusalem — Herod built here largely so the fortress could be seen from the capital.",
+  why: "No NT verse names Herodium, but it is the physical monument to the king whose death (Matthew 2) drives the flight into Egypt — an outsized display of power the size of the fear it was meant to inspire.",
+  questions: [
+    "What does the scale of Herod's building program suggest about the political world the infant Jesus was born into?"
+  ]
+},
+{
+  id: "masada", name: "Masada", greek: "Μασάδα", modern: "Masada, Israel",
+  lat: 31.3156, lon: 35.3536, cat: "site", region: "Judea (Roman prefect)",
+  blurb: "Herod's desert clifftop fortress, and the site of the Jewish rebels' last stand and mass suicide in AD 73.",
+  scriptures: [
+    { ref: "Matthew 24:15-16", text: "When therefore you see the abomination of desolation, spoken of through Daniel the prophet, standing in the holy place (let the reader understand), then let those who are in Judea flee to the mountains," }
+  ],
+  greco: "Herod fortified this isolated Dead Sea plateau as a refuge palace; two generations later the Sicarii held it against Rome for three years, and Josephus describes the defenders' final choice rather than surrender.",
+  jewish: "No NT verse names Masada; it stands in the atlas as background for the same First Jewish Revolt whose approach the Olivet Discourse (Matthew 24) foresees, and whose end shapes how the Gospels were remembered and written.",
+  arch: "Herod's palace complexes, cisterns cut into the rock, a synagogue converted by the rebels, and the Roman siege ramp and camps still visible below the cliff.",
+  geo: "An isolated rock plateau above the Dead Sea's western shore, reachable in the New Testament period only by a narrow path — chosen for defensibility, not comfort.",
+  why: "The clearest single archaeological bookend to the New Testament period: the same war whose devastation the Gospels' apocalyptic language anticipates ends here, in AD 73.",
+  questions: [
+    "Why include a site with no New Testament narrative in a New Testament atlas — what does it explain that scripture alone does not?"
+  ]
+},
+{
+  id: "ein-gedi", name: "Ein Gedi", greek: "Ἐνγαδδί", modern: "Ein Gedi, Israel",
+  lat: 31.4614, lon: 35.3925, cat: "site", region: "Judea (Roman prefect)",
+  blurb: "A freshwater oasis on the Dead Sea's western shore, named in the Hebrew Bible and inhabited through the New Testament period.",
+  scriptures: [
+    { ref: "Matthew 24:15-16", text: "When therefore you see the abomination of desolation, spoken of through Daniel the prophet, standing in the holy place (let the reader understand), then let those who are in Judea flee to the mountains," }
+  ],
+  greco: "An oasis fed by year-round springs, cultivated for balsam and other valuable crops in the Roman period, and populated through the era of the New Testament though never named in it.",
+  jewish: "Known from the Song of Songs and named in a later synagogue mosaic inscription found at the site listing zodiac signs and communal regulations.",
+  arch: "A Roman-period Jewish village with a synagogue (later than the New Testament period) and an inscribed floor mosaic; earlier Iron Age and Chalcolithic remains nearby.",
+  geo: "The Dead Sea's largest freshwater oasis, on the desert route between Jerusalem/Judea's hill country and the sea's western shore — landscape context for the Judean wilderness the Gospels describe.",
+  why: "Kept in the atlas as landscape and regional context for Judea's desert fringe, not for a direct New Testament narrative event.",
+  questions: [
+    "How does the presence of a lush oasis change the way you picture the 'wilderness' of the Judean desert?"
+  ]
+},
+{
+  id: "antipatris", name: "Antipatris", greek: "Ἀντιπατρίς", modern: "Tel Afek, Israel",
+  lat: 32.0995, lon: 34.9345, cat: "town", region: "Judea (Roman prefect)",
+  blurb: "A Roman way-station city Herod named for his father — the overnight stop on Paul's forced march from Jerusalem to Caesarea.",
+  scriptures: [
+    { ref: "Acts 23:31-32", text: "So the soldiers, according to the instructions given to them, took Paul and brought him by night to Antipatris. But on the next day they left the horsemen to go with him, and returned to the barracks." }
+  ],
+  greco: "Herod the Great rebuilt an older mound at the head springs of the Yarkon River and named it for his father Antipater, on the main coastal road (the Via Maris) connecting Jerusalem to Caesarea Maritima.",
+  jewish: "A mixed city on the border between Judea proper and the coastal plain, positioned exactly at the midpoint of the roughly 40-mile road so that a night march from Jerusalem would reach it by morning.",
+  arch: "Excavations at Tel Afek (Aphek) reveal occupation layers from the Bronze Age through the Roman period, including remains of the Roman-era way-station city; an Ottoman fortress (Binar Bashi) now stands on part of the site.",
+  geo: "At the springs feeding the Yarkon River, on the coastal plain route between the Judean hills and the Mediterranean coast — the logical overnight halt on the road to Caesarea.",
+  why: "A precise, verifiable detail in Luke's narrative: an escort of soldiers moving a prisoner overnight to a real, locatable way-station before handing him off for the rest of the journey by daylight.",
+  questions: [
+    "What does Luke's inclusion of this specific, minor stopover suggest about his sources for the Acts narrative?"
+  ],
+  related: [
+    { name:'Gophna', era:'Roman period', conf:'probable', note:'A Judean hill town on the road network connecting Jerusalem toward Antipatris and the coast.', sig:'Marks the interior road system a Jerusalem prisoner escort could have used en route to the coastal highway.', src:['Israel Antiquities Authority survey; academic excavation reports'], wiki:'https://en.wikipedia.org/wiki/Jifna' }
+  ]
+},
+{
+  id: "lydda", name: "Lydda", greek: "Λύδδα", modern: "Lod, Israel",
+  lat: 31.9467, lon: 34.8908, cat: "town", region: "Judea (Roman prefect)",
+  blurb: "A town on the coastal plain where Peter healed the paralyzed Aeneas, on the road between Jerusalem and Joppa.",
+  scriptures: [
+    { ref: "Acts 9:32-34", text: "As Peter travelled throughout all those parts, he came down also to Lydda. There he found a certain man named Aeneas, who had been bedridden for eight years, because he was paralyzed. Peter said to him, \"Aeneas, Jesus Christ heals you. Get up, and make your bed!\" Immediately he arose." }
+  ],
+  greco: "A market town on the road between Jerusalem and the port of Joppa, in a fertile plain — an ordinary stop on the route the apostles traveled between the capital and the coast.",
+  jewish: "Later rabbinic sources treat Lydda as a significant town with its own sages; in Peter's day it was simply one of the Judean towns with an existing community of believers ('those parts,' Acts 9:32).",
+  arch: "Excavations in modern Lod have revealed Roman-period remains including a well-known mosaic floor from a wealthy villa, though not specifically tied to the New Testament episode.",
+  geo: "On the coastal plain about eleven miles from Joppa, at a natural crossing point of routes running north-south along the coast and east-west up to Jerusalem.",
+  why: "The Aeneas healing is Luke's hinge between the Jerusalem church's ministry and Peter's move to Joppa, where the Cornelius episode — and the Gentile mission — begins.",
+  questions: [
+    "Why does Luke pair a healing at Lydda with the raising of Tabitha at nearby Joppa (Acts 9:36-43) in the same short passage?"
+  ]
+},
+{
+  id: "azotus", name: "Azotus", greek: "Ἄζωτος", modern: "Ashdod, Israel",
+  lat: 31.7975, lon: 34.6555, cat: "town", region: "Judea (Roman prefect)",
+  blurb: "The old Philistine city of Ashdod, where Philip reappeared after baptizing the Ethiopian official on the road to Gaza.",
+  scriptures: [
+    { ref: "Acts 8:39-40", text: "When they came up out of the water, the Spirit caught Philip away, and the officer didn't see him any more, for he went on his way rejoicing. But Philip was found at Azotus. Passing through, he preached the Good News to all the cities, until he came to Caesarea." }
+  ],
+  greco: "Ancient Ashdod, one of the five Philistine cities of the Hebrew Bible, still an active coastal town in the Roman period under its Greek name Azotus.",
+  jewish: "By the first century Azotus was a mixed coastal city, part of the string of towns along the Via Maris that Philip evangelizes on his way north to Caesarea.",
+  arch: "Tel Ashdod preserves occupation layers from the Bronze Age Philistine city through the Hellenistic and Roman periods; a separate Roman-period port site, Ashdod-Yam, lies nearer the coast.",
+  geo: "On the southern coastal plain between Gaza and Joppa, on the coastal highway linking Egypt to Syria — a natural waypoint for Philip's northward preaching circuit.",
+  why: "Marks Luke's telescoped summary of an entire preaching campaign ('all the cities') in a single sentence, ending at Caesarea where Philip settles (Acts 21:8).",
+  questions: [
+    "What does the sudden, almost supernatural travel between Gaza and Azotus (Acts 8:39-40) suggest about how Luke wants this mission understood?"
+  ]
+},
+{
+  id: "gaza", name: "Gaza", greek: "Γάζα", modern: "Gaza City, Gaza Strip",
+  lat: 31.5017, lon: 34.4668, cat: "city", region: "Judea (Roman prefect)",
+  blurb: "The old Philistine and Nabatean trade city, on the desert road where Philip met the Ethiopian court official.",
+  scriptures: [
+    { ref: "Acts 8:26-27", text: "But an angel of the Lord spoke to Philip, saying, \"Arise, and go toward the south, to the way that goes down from Jerusalem to Gaza. This is a desert.\" He arose and went; and behold, there was a man of Ethiopia, a eunuch of great authority under Candace, queen of the Ethiopians, who was over all her treasure, who had come to Jerusalem to worship." }
+  ],
+  greco: "An ancient Philistine city and, by the first century, a wealthy caravan terminus for the incense trade from Arabia — Luke's 'desert' road describes the route south of the settled Judean hill country.",
+  jewish: "A gentile city with a long-standing Jewish minority; the road south from it toward Egypt and Arabia made it a natural point for a foreign court official's return journey.",
+  arch: "Little of the Roman-period city survives beneath the modern city; ancient Gaza's port and trade infrastructure are known chiefly through literary sources rather than extensive excavation.",
+  geo: "The southernmost major city of the coastal plain, at the edge of the desert route toward Egypt and the Sinai — the last major town before the desert crossing.",
+  why: "The setting for one of the New Testament's clearest depictions of the gospel crossing ethnic and geographic boundaries — a court official of a foreign African kingdom, reading Isaiah, baptized on a desert road.",
+  questions: [
+    "Why might Luke have chosen this particular, geographically remote encounter to follow immediately after the Samaritan mission (Acts 8:4-25)?"
+  ]
+},
+{
+  id: "samaria-sebaste", name: "Samaria (Sebaste)", greek: "Σαμάρεια / Σεβαστή", modern: "Sebastia, West Bank",
+  lat: 32.2761, lon: 35.1892, cat: "city", region: "Samaria (Roman prefect)",
+  blurb: "The old capital of the northern kingdom, rebuilt by Herod as the Greco-Roman city Sebaste — where Philip's preaching and Simon the sorcerer meet.",
+  scriptures: [
+    { ref: "Acts 8:5-7", text: "Philip, coming down to the city of Samaria, proclaimed to them the Christ. The multitudes listened with one accord to the things that were spoken by Philip, when they heard and saw the miracles which he did." },
+    { ref: "Acts 8:9", text: "But there was a certain man, Simon by name, who used to practice sorcery in the city before, and amazed the people of Samaria, making himself out to be some great one." }
+  ],
+  greco: "Herod the Great rebuilt the ancient capital as a fully Hellenistic city under the name Sebaste ('Augustus') in honor of the emperor, with a temple to Augustus, a theater, a stadium, and colonnaded streets.",
+  jewish: "To Judean eyes this was a compromised, half-Samaritan, half-pagan city — exactly the kind of place the Jerusalem church needed persuading to accept as a genuine mission field (Acts 8:14-17, the sending of Peter and John).",
+  arch: "An Augusteum (temple to Augustus and Roma) on the summit, a Roman theater, a forum and basilica, a stadium, and city walls — one of Herod's most thoroughly Hellenized building projects.",
+  geo: "A fortified hilltop in the central highlands of Samaria, dominating the surrounding valleys — chosen originally by the kings of Israel for the same defensive reasons Herod later prized it.",
+  why: "The first deliberate crossing of the Jerusalem church's mission into non-Jewish, non-Judean territory — the narrative and theological hinge Acts 1:8's 'Samaria' promise depends on.",
+  questions: [
+    "Why does Luke give Simon the sorcerer so much space in this founding story of the Samaritan mission?"
+  ]
+},
+{
+  id: "aenon-salim", name: "Aenon near Salim", greek: "Αἰνών ἐγγὺς τοῦ Σαλείμ", modern: "near Nablus, West Bank",
+  lat: 32.21, lon: 35.335, cat: "site", region: "Samaria (Roman prefect)",
+  blurb: "An otherwise unknown place, named only for its abundant water, where John the Baptist kept baptizing after Jesus' ministry began.",
+  scriptures: [
+    { ref: "John 3:23", text: "Now John himself was baptizing in Enon near Salim, because there was much water there. They came, and were baptized." }
+  ],
+  greco: "John's Gospel names the site only by its water supply ('Aenon' derives from a Semitic word for springs) — a detail of local hydrology rather than political geography, and it cannot be tied with confidence to any single modern location.",
+  jewish: "Multiple villages named Salim are attested in the region around Samaria and the Jordan Valley, and Byzantine pilgrim tradition located Aenon in more than one spot, none confirmed archaeologically.",
+  arch: "No excavated site has been securely identified as the New Testament's Aenon; the coordinates given here mark a leading candidate near a village still called Salim, east of Nablus.",
+  geo: "Somewhere in the Jordan Valley or Samaria's eastern edge, at a place with unusually abundant springs — precisely the detail John's Gospel preserves and modern geography cannot pin down.",
+  why: "Shows John the Baptist continuing an independent ministry in parallel with Jesus' own (John 3:22-30) — the last clear glimpse of the Baptist's own following before his arrest.",
+  questions: [
+    "What does it mean for the Gospel to preserve such a specific detail (abundant water) about a place it does not expect the reader to be able to locate?"
+  ]
+},
+{
+  id: "arimathea", name: "Arimathea", greek: "Ἀριμαθαία", modern: "Rentis (or Ramathaim), West Bank",
+  lat: 32.0397, lon: 34.9539, cat: "town", region: "Judea (Roman prefect)",
+  blurb: "The unlocated hometown of Joseph, the wealthy council member who asked Pilate for Jesus' body.",
+  scriptures: [
+    { ref: "Matthew 27:57-58", text: "When evening had come, a rich man from Arimathea, named Joseph, who himself was also Jesus' disciple, came. This man went to Pilate, and asked for Jesus' body. Then Pilate commanded the body to be released." }
+  ],
+  greco: "All four Gospels name Joseph's hometown but give no other geographical marker for it; ancient and modern identifications range across several candidate sites in the hill country and coastal plain northwest of Jerusalem.",
+  jewish: "Joseph is described as a respected member of the council (Mark 15:43) — a Sanhedrin member wealthy enough to own a new, unused rock-cut tomb near Jerusalem, regardless of which town he called home.",
+  arch: "No site has been securely excavated and identified as ancient Arimathea; Rentis, a village northwest of Jerusalem, is among the leading traditional candidates but the identification remains conjectural.",
+  geo: "Somewhere in the Judean hill country or coastal plain northwest of Jerusalem, close enough that Joseph could act quickly to secure Jesus' body before the Sabbath (John 19:42).",
+  why: "Joseph's unnamed-location hometown matters less than his action: a member of the very council that condemned Jesus takes the political risk of publicly claiming the body.",
+  questions: [
+    "Why might all four Gospels preserve Joseph's status and courage in such consistent detail while never giving Arimathea's location?"
+  ]
+}
+];
+PLACES.push.apply(PLACES, JUDEA_MORE);
+
+const NABATAEA_MORE = [
+{
+  id: "petra", name: "Petra", greek: "Πέτρα", modern: "Petra, Jordan", uncertain: true,
+  lat: 30.3285, lon: 35.4444, cat: "city", region: "Nabataea",
+  blurb: "The rock-cut Nabataean capital — background for the kingdom whose governor Paul fled at Damascus.",
+  scriptures: [
+    { ref: "2 Corinthians 11:32-33", text: "In Damascus the governor under Aretas the king guarded the city gates desiring to arrest me. Through a window I was let down in a basket by the wall, and escaped his hands." },
+    { ref: "Galatians 1:17", text: "neither did I go up to Jerusalem to those who were apostles before me, but I went away into Arabia, and came again to Damascus." }
+  ],
+  greco: "The Nabataean kingdom's spectacular rock-cut capital, carved into sandstone canyons, controlling the incense and spice caravan routes between Arabia and the Mediterranean; its king Aretas IV (9 BC - AD 40) is the 'king' whose governor confronts Paul at Damascus.",
+  jewish: "No NT verse names Petra itself; Paul's 'Arabia' (Galatians 1:17) most likely refers to the Nabataean kingdom of which Petra was the capital, making it background rather than a narrated location.",
+  arch: "Monumental rock-cut facades (the Treasury, the Monastery), a colonnaded street, temples, and an elaborate water-management system carved into the sandstone cliffs.",
+  geo: "A hidden capital accessible chiefly through a narrow canyon (the Siq), in the mountains of southern Jordan — the heart of Nabataean territory bordering Judea's southeast.",
+  why: "Fixes the political geography behind two of Paul's own biographical details: an unnamed stretch of time in 'Arabia' and a narrow escape from a king whose territory and reach extended to Damascus itself.",
+  questions: ["What does Paul's brief, unexplained time in 'Arabia' (Galatians 1:17) suggest about the three years between his conversion and his first visit to Jerusalem?"],
+  related: [
+    { name:'Bostra (Bosra)', era:'Nabataean and Roman periods', conf:'certain', note:'A major Nabataean city in southern Syria, later the Roman provincial capital of Arabia.', sig:'Shows the northern reach of the Nabataean kingdom whose king, Aretas IV, controlled Damascus in Paul\'s day.', wiki:'https://en.wikipedia.org/wiki/Bosra' },
+    { name:'Avdat (Oboda)', era:'Nabataean and Byzantine periods', conf:'certain', note:'A Nabataean caravan station in the Negev desert, on the incense route toward Gaza.', sig:'Marks the trade network connecting Petra to the Mediterranean coast at Gaza.', wiki:'https://en.wikipedia.org/wiki/Avdat' },
+    { name:'Shivta (Sobata)', era:'Nabataean through Byzantine periods', conf:'certain', note:'A Nabataean and later Byzantine desert town in the Negev.', sig:'Part of the same Negev caravan-town network as Avdat, sustaining Nabataean trade.', wiki:'https://en.wikipedia.org/wiki/Shivta' },
+    { name:'Mamshit (Mampsis)', era:'Nabataean and Roman periods', conf:'certain', note:'A well-preserved Nabataean caravan town in the Negev, with elaborate merchant houses.', sig:'Evidence for the wealth the incense trade generated across the kingdom Paul briefly entered.', wiki:'https://en.wikipedia.org/wiki/Mampsis' },
+    { name:'Hegra (Mada\'in Salih)', era:'Nabataean period', conf:'certain', note:'The Nabataean kingdom\'s second city, far to the south in the Arabian peninsula, with rock-cut tombs modeled on Petra\'s.', sig:'Shows how far south Nabataean power and culture reached — the kingdom Paul entered was a major regional power, not a minor tribal territory.', wiki:'https://en.wikipedia.org/wiki/Hegra' },
+    { name:'Arabian incense route', era:'Nabataean and Roman periods', conf:'certain', note:'A network of caravan stations carrying frankincense and myrrh from southern Arabia north through Nabataean territory to the Mediterranean.', sig:'The trade network that made the Nabataean kingdom Paul entered wealthy and strategically important, not a marginal desert backwater.', wiki:'https://en.wikipedia.org/wiki/Incense_trade_route' },
+    { name:'Marib', era:'Sabaean and Roman-era periods', conf:'certain', note:'A temple city and dam far to the south in Yemen, capital of the Sabaean kingdom that supplied much of the ancient world\'s incense.', sig:'Marks the far end of the incense-trade network passing through Nabataean Arabia, background context for Paul\'s time there.', wiki:'https://en.wikipedia.org/wiki/Marib' }
+  ]
+}
+];
+PLACES.push.apply(PLACES, NABATAEA_MORE);
 
 /* ——— EVENTS: grouped by phase and theme, each pinned to a place ——— */
 const EVENTS = [
@@ -1200,7 +1605,7 @@ const SACRED = [
 const JERUSALEM_FEATURES = [
 { name:"Kidron Valley", note:"Between the city and Olivet; crossed on the night of the arrest, and where David fled from Absalom.", path:[[31.7900,35.2400],[31.7830,35.2390],[31.7770,35.2385],[31.7700,35.2370],[31.7620,35.2340]] },
 { name:"Hinnom Valley (Gehenna)", note:"The southern ravine of child sacrifice under Ahaz and Manasseh; its name became the New Testament word for hell.", path:[[31.7760,35.2230],[31.7710,35.2260],[31.7680,35.2320],[31.7660,35.2370],[31.7700,35.2370]] },
-{ name:"First-century city wall (approximate)", note:"The line of the wall in AD 30. Golgotha and the tomb lay just outside it to the north-west.", path:[[31.7760,35.2250],[31.7810,35.2290],[31.7830,35.2350],[31.7815,35.2380],[31.7760,35.2390],[31.7700,35.2370],[31.7680,35.2320],[31.7700,35.2260],[31.7760,35.2250]] },
+{ name:"First-century city wall (approximate)", note:"The line of the wall in AD 30, roughly a kilometre across \u2014 the Temple Mount at its north-east corner, the City of David spur to the south, the Upper City to the west. Golgotha and the tomb lay just outside it to the north-west.", path:[[31.7757,35.2280],[31.7810,35.2335],[31.7797,35.2360],[31.7760,35.2365],[31.7705,35.2350],[31.7715,35.2270],[31.7757,35.2280]] },
 { name:"The Stepped Street", note:"The paved pilgrim ascent from the Pool of Siloam to the Temple's southern steps, excavated in full.", path:[[31.7703,35.2354],[31.7730,35.2350],[31.7755,35.2348],[31.7770,35.2350]] }
 ];
 
@@ -1295,11 +1700,11 @@ const JERUSALEM_FEATURES = [
 
 /* ——— THE TWELVE (and where they came from) ——— */
 const APOSTLES = [
-{ n:"Simon Peter", town:"Bethsaida", lat:32.9106, lon:35.6299, ref:"John 1:44; Mark 1:29",
+{ n:"Simon Peter", town:"Bethsaida", lat:32.8836, lon:35.6316, ref:"John 1:44; Mark 1:29",
   note:"Born at Bethsaida in Philip's territory; by the time Jesus calls him he keeps a household — with his wife and mother-in-law — at Capernaum in Antipas'. A fisherman working the north shore with his brother Andrew." },
-{ n:"Andrew", town:"Bethsaida", lat:32.9106, lon:35.6299, ref:"John 1:35–42",
+{ n:"Andrew", town:"Bethsaida", lat:32.8836, lon:35.6316, ref:"John 1:35–42",
   note:"First a disciple of John the Baptist at the Jordan, and the one who fetches Peter. A Greek name, from a border town — he is the disciple Greek-speaking pilgrims later approach (John 12:20–22)." },
-{ n:"Philip", town:"Bethsaida", lat:32.9106, lon:35.6299, ref:"John 1:43–46",
+{ n:"Philip", town:"Bethsaida", lat:32.8836, lon:35.6316, ref:"John 1:43–46",
   note:"Also of Bethsaida, also Greek-named. He is the one who says 'come and see' to Nathanael's contempt for Nazareth." },
 { n:"James son of Zebedee", town:"Capernaum", lat:32.8808, lon:35.5751, ref:"Mark 1:19–20",
   note:"Partner in a fishing business with hired servants — not destitute. Nicknamed with his brother 'sons of thunder'; the first apostle executed, by Agrippa I (Acts 12:2)." },

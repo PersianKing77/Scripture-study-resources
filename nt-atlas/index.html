@@ -18,7 +18,7 @@
      known dependencies. Defense-in-depth only — every innerHTML write in this app uses
      authored content or the esc() helper on user text, so this is a second line of defense,
      useful for enterprise/education procurement security review. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://tile.opentopomap.org https://*.tile.opentopomap.org https://tile.openmaps.fr https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://api.maptiler.com https://tiles.stadiamaps.com https://gibs.earthdata.nasa.gov; font-src 'self'; connect-src 'self' https://tile.opentopomap.org https://*.tile.opentopomap.org https://tile.openmaps.fr https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com; base-uri 'self'; object-src 'none'; frame-ancestors 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://tile.opentopomap.org https://*.tile.opentopomap.org https://tile.openmaps.fr https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://api.maptiler.com https://tiles.stadiamaps.com https://gibs.earthdata.nasa.gov https://api.mapbox.com; font-src 'self'; connect-src 'self' https://tile.opentopomap.org https://*.tile.opentopomap.org https://tile.openmaps.fr https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://api.mapbox.com; base-uri 'self'; object-src 'none'; frame-ancestors 'self'">
 <style>
   :root{
     --ink:#241c14; --ink-2:#4a3d2e; --ink-3:#645436; --ink-4:#7a6a54;
@@ -46,7 +46,7 @@
   ::-webkit-scrollbar-track{background:var(--parch-3)}
   ::-webkit-scrollbar-thumb{background:var(--rule-2);border:2px solid var(--parch-3)}
 
-  .app{display:grid;grid-template-columns:var(--panel-w) 1fr;grid-template-rows:auto 1fr;height:100%}
+  .app{display:grid;grid-template-columns:var(--panel-w) 1fr;grid-template-rows:auto 1fr;height:100%;position:relative}
 
   /* ——— masthead ——— */
   header{
@@ -72,6 +72,9 @@
     color:var(--ink);background:#b6a37e;padding:2px 5px;border-radius:2px;vertical-align:2px;margin-left:5px}
   header .sub{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#b6a37e;white-space:nowrap}
   header .spacer{flex:1}
+  /* folded into Tools on every layout; kept in the DOM only as the source the
+     mobile Views sheet clones its buttons from */
+  .viewbar,.basetoggle{display:none!important}
   .basetoggle{display:flex;flex:none;border:1px solid #6b5b41;border-radius:2px;overflow:hidden}
   .basetoggle button{
     font-family:'Spectral',serif;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
@@ -104,13 +107,13 @@
     background:#fdf9ef;border:1px solid var(--rule);color:var(--ink);border-radius:2px;
   }
   .search input:focus{outline:none;border-color:var(--red)}
-  .qhint{font-size:10.5px;color:var(--ink-3);margin-top:5px;letter-spacing:.02em}
+  .qhint{font-size:10.5px;color:var(--ink-2);margin-top:5px;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between;gap:8px}
   .qhint em{font-style:normal;color:var(--red)}
   .refbanner{padding:8px 14px;background:#f0e4c8;border-bottom:1px solid var(--rule);
     font-size:11.5px;color:var(--ink-2)}
   .refbanner b{color:var(--red);font-weight:500}
   /* guided tours */
-  .tourhead{padding:13px 14px 12px;background:var(--ink);color:var(--parch-2);border-bottom:1px solid var(--rule-2)}
+  .tourhead{padding:13px 14px 12px;background:var(--ink);color:var(--parch-2);border-bottom:1px solid var(--rule-2);position:sticky;top:0;z-index:4;isolation:isolate}
   .tourhead h3{font-size:19px;line-height:1.15}
   .tourhead .ts{font-size:11.5px;color:#b6a37e;line-height:1.45;margin-top:5px}
   .tourhead button{margin-top:9px;font-family:'Spectral',serif;font-size:10.5px;letter-spacing:.1em;
@@ -137,6 +140,13 @@
     background:var(--ink);color:var(--parch-2);border:0;padding:7px 13px;cursor:pointer;border-radius:2px}
   .stepnav button:disabled{background:transparent;color:var(--ink-3);border:1px solid var(--rule-2);cursor:default}
   .stepnav .cnt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  /* pinned to the (non-scrolling) detail header, next to the title, so it never
+     scrolls out of reach while reading a long step's note below */
+  .stepnavhead{display:flex;align-items:center;gap:10px;margin-top:8px}
+  .stepnavhead button{font-family:'Spectral',serif;font-size:14px;
+    background:var(--ink);color:var(--parch-2);border:0;width:30px;height:30px;cursor:pointer;border-radius:2px;flex:none}
+  .stepnavhead button:disabled{background:transparent;color:var(--ink-3);border:1px solid var(--rule-2);cursor:default}
+  .stepnavhead .cnt{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
   /* the Herods */
   .herod{border-bottom:1px solid var(--rule);padding:13px 0}
   .herod h4{font-size:20px;line-height:1.1}
@@ -148,7 +158,7 @@
   .tally{display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:11.5px;color:var(--ink-2);
     background:#f0e4c8;border-bottom:1px solid var(--rule)}
   .tally .chip{padding:2px 8px;font-size:10px}
-  .fhint{font-size:11px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}width:100%;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:2px}
+  .fhint{font-size:11px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;background:none;border:0;padding:0;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px}
   .chip{
     font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:3.5px 8px;
     border:1px solid var(--rule-2);background:transparent;color:var(--ink-2);cursor:pointer;border-radius:11px;
@@ -158,10 +168,16 @@
   .asidebody{flex:1;display:flex;flex-direction:column;min-height:0}
   .listwrap{flex:1;overflow-y:auto;min-height:0}
   .grouphdr{
-    font-family:'Cormorant Garamond',serif;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--ink-3);padding:14px 14px 5px;border-bottom:1px solid var(--rule);
+    font-family:'Cormorant Garamond',serif;font-size:13.5px;font-weight:600;letter-spacing:.04em;
+    color:var(--ink);padding:14px 14px 5px;border-bottom:1px solid var(--rule);
     background:var(--parch-2);position:sticky;top:0;z-index:3;isolation:isolate;
   }
+  .listintro{font-size:12px;color:var(--ink-2);line-height:1.5;padding:12px 14px;background:var(--parch-3);
+    border-bottom:1px solid var(--rule-2)}
+  .layersbar{padding:10px 14px;border-bottom:1px solid var(--rule-2)}
+  .supersec{font-family:'Cormorant Garamond',serif;font-size:11.5px;letter-spacing:.1em;font-style:italic;
+    color:#5c2418;padding:16px 14px 4px;border-top:2px solid var(--rule-2)}
+  .supersec:first-child{border-top:0}
   .item{
     padding:9px 14px;border-bottom:1px solid #e2d5b6;cursor:pointer;display:block;width:100%;text-align:left;
     background:transparent;border-left:3px solid transparent;font-family:'Spectral',serif;
@@ -184,6 +200,15 @@
   .swatch{width:12px;height:12px;flex:none;margin-top:3px;border:1px solid var(--ink-3)}
   .ringctl{padding:8px 14px 12px;border-bottom:1px solid #e2d5b6;font-size:11.5px;color:var(--ink-2)}
   .ringctl select{font-family:'Spectral',serif;font-size:12px;padding:4px;background:#fdf9ef;border:1px solid var(--rule);width:100%;margin-top:5px}
+  .archlist{padding:0 14px 10px;border-bottom:1px solid #e2d5b6}
+  .archlist summary{cursor:pointer;list-style:none;font-size:11.5px;color:var(--ink-3);padding:6px 0;display:flex;align-items:center;gap:6px}
+  .archlist summary::-webkit-details-marker{display:none}
+  .archlist summary::before{content:'▸';font-size:10px;transition:transform .15s ease;flex:none}
+  .archlist[open] summary::before{transform:rotate(90deg)}
+  .architem{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid #ece1c8;padding:8px 4px;cursor:pointer;font-family:'Spectral',serif}
+  .architem:hover{background:#f8f1e0}
+  .architem .ait{display:block;font-size:12.5px;color:var(--ink)}
+  .architem .aie{display:block;font-size:10.5px;color:var(--ink-3);margin-top:1px}
 
   /* ——— map ——— */
   .mapwrap{position:relative;min-height:0}
@@ -192,6 +217,21 @@
     opacity:.7;   /* recedes OpenTopoMap's own roads/place-names so the atlas's
                      own labels read as the map, not competition */
     filter:sepia(.4) saturate(.7) contrast(.95) brightness(1.08) blur(.5px) hue-rotate(-6deg);
+  }
+  /* satellite imagery has no flat colour of its own to contrast against, so region
+     borders, route lines and labels get a white halo + stronger fill here only \u2014
+     parchment and plain keep their original, already-legible styling untouched */
+  .sat-mode .leaflet-shade-pane path{
+    filter:drop-shadow(0 0 1.6px #fff) drop-shadow(0 0 1.6px #fff) drop-shadow(0 0 1.6px #fff);
+  }
+  .sat-mode .leaflet-shade-pane path[fill-opacity]{fill-opacity:.35!important}
+  .sat-mode .leaflet-lines-pane path{
+    filter:drop-shadow(0 0 1.6px #fff) drop-shadow(0 0 1.6px #fff) drop-shadow(0 0 1.6px #fff);
+  }
+  .sat-mode .rlabel{text-shadow:0 0 4px #fff,0 0 4px #fff,0 0 4px #fff;opacity:.95!important}
+  .sat-mode .tinylabel, .sat-mode .chiplabel{
+    color:#0d0906!important;
+    text-shadow:0 0 2px #fff,0 0 3px #fff,0 0 4px #fff,0 0 6px #fff,0 0 6px #fff,0 1px 2px rgba(0,0,0,.85)!important;
   }
   .parchment #map::after{
     content:"";position:absolute;inset:0;pointer-events:none;z-index:399;
@@ -216,9 +256,9 @@
   .pin.cap i{width:17px;height:17px;left:-8.5px;top:-8.5px;border-width:2.5px}
   .pin.city i{width:14px;height:14px;left:-7px;top:-7px}
   .pin b{
-    position:absolute;left:11px;top:-9px;white-space:nowrap;
+    position:absolute;left:13px;top:-12px;white-space:nowrap;
     font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5px;letter-spacing:.01em;
-    color:#20180f;text-shadow:0 0 2px #fff,0 0 4px #fff,0 1px 3px rgba(0,0,0,.6);
+    color:#20180f;text-shadow:0 0 2px #fff,0 0 3px #fff,0 0 4px #fff,0 1px 3px rgba(0,0,0,.6);
   }
   .pin.cap b{font-size:16px;letter-spacing:.06em;text-transform:uppercase;left:14px;top:-27px}
   .pin.flip.cap b{right:14px}
@@ -253,6 +293,12 @@
   .z1 .pin.m2 b,.z2 .pin.m2 b,.z3 .pin.m2 b,.z4 .pin.m2 b{display:block}
   .z1 .pin.m2 em,.z2 .pin.m2 em,.z3 .pin.m2 em,.z4 .pin.m2 em{display:block}
   .pin.m2 i{width:10px;height:10px;left:-5px;top:-5px}
+  /* satellite imagery has dark water and mixed terrain that a thin white halo can't beat \u2014
+     stack the halo much heavier here, same trick as the region/route labels use */
+  .sat-mode .pin b, .sat-mode .pin em{
+    color:#0d0906;
+    text-shadow:0 0 2px #fff,0 0 3px #fff,0 0 4px #fff,0 0 6px #fff,0 0 6px #fff,0 1px 2px rgba(0,0,0,.85);
+  }
   .zfar .pin b,.zfar .pin em{display:none}
   .zfar .pin.keyfar b{display:block}
   .zfar .pin.p3 i,.zfar .pin.p4 i,.zfar .pin.m2 i{width:7px;height:7px;left:-3.5px;top:-3.5px}
@@ -266,12 +312,22 @@
   }
   .tinylabel{font-size:10.5px;letter-spacing:.05em;color:#241c14;white-space:nowrap;pointer-events:none;
     text-shadow:0 0 2px #fff,0 0 4px #fff,0 1px 2px rgba(0,0,0,.55)}
+  /* bold, dark, haloed text — no background box, which read as a strange floating
+     rectangle over the terrain; the halo alone carries contrast on any base map */
+  .chiplabel{font-family:'Spectral',serif;font-size:12px;font-weight:700;letter-spacing:.01em;
+    color:#2b1f14;white-space:nowrap;pointer-events:none;
+    text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 5px #fff,0 1px 2px rgba(0,0,0,.5)}
   .dot{width:7px;height:7px;border-radius:50%;border:1px solid #fdf9ef}
   .leaflet-tooltip.nt{
     background:var(--ink);color:var(--parch-2);border:0;border-radius:2px;font-size:11.5px;
-    padding:4px 8px;box-shadow:none;font-family:'Spectral',serif;max-width:230px;white-space:normal;
+    padding:5px 10px;box-shadow:none;font-family:'Spectral',serif;width:max-content;
+    min-width:120px;max-width:min(78vw,320px);white-space:normal;line-height:1.45;
   }
   .leaflet-tooltip.nt::before{border-top-color:var(--ink);border-bottom-color:var(--ink)}
+  .leaflet-tooltip.aptip{width:400px;max-width:min(90vw,440px)}
+  .leaflet-tooltip.archtip{width:340px;max-width:min(88vw,380px)}
+  .aptip-grid{display:flex;flex-wrap:wrap;gap:10px}
+  .aptip-grid > div{flex:1 1 130px;min-width:120px}
 
   /* map overlays */
   .mapui{position:absolute;z-index:800;pointer-events:none}
@@ -297,6 +353,7 @@
   .prof svg{width:100%;height:auto;display:block;margin:10px 0 0;background:#fdf9ef;border:1px solid var(--rule)}
   .prof p{font-size:13.5px;line-height:1.6;margin:9px 0 0;text-wrap:pretty}
   .viewbar{display:flex;flex:none;align-items:center;gap:0}
+
   .viewbar .vlbl{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#8b7856;margin-right:9px}
   .viewbar .zbtn{border-radius:0;border-right-width:0;box-shadow:none;background:transparent;color:#b6a37e;border-color:#6b5b41}
   .viewbar .zbtn:first-of-type{border-radius:2px 0 0 2px}
@@ -442,15 +499,12 @@
   body.present .tourhead h3{font-size:30px}
   body.present .tourhead .ts{font-size:16px}
   body.present .glink,body.present .tourhead button{font-size:13.5px;padding:8px 13px}
-  /* the classroom tools: a quiz run from the front of a room has to be readable
-     from the back of it, and the chronology band is a teaching aid, not a control */
-  body.present .quizbar,body.present .measurebar{padding:14px 20px;gap:18px;max-width:min(96%,900px)}
-  body.present .quizbar .qq{font-size:34px}
-  body.present .quizbar .qs,body.present .quizbar .qfb,
+  /* the classroom tools: the chronology band is a teaching aid, not a control */
+  body.present .measurebar{padding:14px 20px;gap:18px;max-width:min(96%,900px)}
   body.present .measurebar .mhint{font-size:17px}
   body.present .measurebar .mval{font-size:28px}
-  body.present .measurebar span,body.present .quizbar span{line-height:1.35}
-  body.present .quizbar button,body.present .measurebar button{font-size:15px;padding:11px 15px}
+  body.present .measurebar span{line-height:1.35}
+  body.present .measurebar button{font-size:15px;padding:11px 15px}
   body.present .tl-t{font-size:17px}
   body.present .tl-pn{font-size:13px}
   body.present .tl-k{width:17px;height:17px}
@@ -518,8 +572,7 @@
     header .cfmbar .zbtn{flex:none}
     /* the bottom bar carries Tools, and the Views sheet carries the base toggle,
        so the masthead sheds them rather than hiding them past the right edge */
-    header #btn-tools,header #btn-present,header .basetoggle{display:none}
-    .viewbar{display:none}
+    header #btn-tools,header .basetoggle{display:none}
     /* the panel is a bottom sheet, not a side drawer: the map keeps the top ~62%
        of the screen so it's visible whenever the panel or detail is open, and the
        sheet itself scrolls for reading rather than covering the map sideways */
@@ -587,8 +640,10 @@
       box-shadow:0 -6px 18px rgba(36,28,20,.18)}
     .viewsheet.open{display:flex}
     .viewsheet .zbtn{flex:1 1 44%;padding:12px 8px;font-size:11px;text-align:center}
-    .viewsheet .basetoggle{flex:1 1 100%;justify-content:center}
-    .viewsheet .basetoggle button{flex:1;padding:11px 8px}
+    .viewsheet .basetoggle{flex:1 1 100%;display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden}
+    .viewsheet .basetoggle button{padding:11px 8px;border-right:1px solid rgba(107,91,65,.4);border-bottom:1px solid rgba(107,91,65,.4)}
+    .viewsheet .basetoggle button:nth-child(2n){border-right:0}
+    .viewsheet .basetoggle button:nth-last-child(-n+2){border-bottom:0}
   }
   @media (max-width:700px){
     .detail{width:100%;border-left:0}
@@ -611,6 +666,11 @@
     .dhead{padding-bottom:2px}
     .dtools{padding:2px 8px 6px;gap:4px;background:var(--parch-3);border-bottom:1px solid var(--rule-2);margin-top:-1px}
     .dtools button{padding:4px 6px;font-size:8.5px}
+    /* narrow panel here \u2014 keep Previous/Next/Walk on one row and small, so the
+       scripture text below gets the vertical space instead */
+    .cw-nav{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none}
+    .cw-nav::-webkit-scrollbar{display:none}
+    .cw-nav button{font-size:9.5px!important;padding:5px 7px!important;flex:none;white-space:nowrap}
   }
   @media (max-width:600px){
     header .title{font-size:15px}
@@ -618,7 +678,7 @@
     /* Full NT is redundant on a phone or a portrait tablet: the blank “Pick a
        week…” option exits the lesson already, and the arrows are the navigation
        that matters */
-    header #cfm-off{display:none}
+    header #cfm-study{display:none}
     .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
     .tabs button{font-size:9px;letter-spacing:0;padding-left:6px;padding-right:6px;flex:1 0 auto;white-space:nowrap}
     .dbody{padding:0 13px 24px}
@@ -652,6 +712,10 @@
   .dmorebtn{display:none}
   .asidemorebtn{display:none}
   .item .star{position:absolute;right:11px;top:9px;font-size:13px;color:#b0862f}
+  summary.grouphdr{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between}
+  summary.grouphdr::-webkit-details-marker{display:none}
+  summary.grouphdr::after{content:'▸';font-size:11px;transition:transform .15s ease;flex:none;margin-left:8px}
+  details[open] > summary.grouphdr::after{transform:rotate(90deg)}
   .item{position:relative}
   .packbar{position:sticky;top:0;z-index:5;background:var(--parch-2);border-bottom:1px solid var(--rule-2);
     padding:9px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -661,11 +725,14 @@
   .item.picked .chk{background:#3a2f22;box-shadow:inset 0 0 0 2px #fdf9ef}
 
   /* ——— study tools menu ——— */
-  .toolsmenu{position:fixed;z-index:2400;background:var(--parch-2);border:1px solid var(--rule-2);
-    box-shadow:0 8px 26px rgba(36,28,20,.24);padding:5px;display:none;min-width:250px;
+  .toolsmenu{position:absolute;z-index:2400;background:var(--parch-2);border:1px solid var(--rule-2);
+    box-shadow:0 8px 26px rgba(36,28,20,.24);padding:5px;display:none;min-width:250px;width:290px;right:20px;
     max-width:calc(100vw - 16px);
     overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
   .toolsmenu.open{display:block}
+  /* desktop panel-hidden: stays in the grid (so the map keeps its own column)
+     but collapses to nothing visible or interactive */
+  aside.panel-off{overflow:hidden;padding:0;border-right:0;visibility:hidden}
   .toolsmenu button{display:block;width:100%;text-align:left;background:none;border:0;
     font-family:'Spectral',serif;font-size:12.5px;color:var(--ink);padding:8px 10px;cursor:pointer;line-height:1.35}
   .toolsmenu button:hover{background:#eadfc4}
@@ -675,33 +742,27 @@
   .toolsmenu .tmsec{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--ink-3);padding:8px 10px 4px;border-top:1px solid var(--rule);margin-top:3px}
   .toolsmenu .tmsec:first-child{border-top:0;margin-top:0}
+  .toolsmenu .tmrow{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:2px 10px 6px}
+  .toolsmenu .tmrow button{width:auto;display:block;text-align:center;font-size:10.5px;
+    padding:8px 3px;border:1px solid var(--rule-2);border-radius:3px;background:var(--parch-3)}
+  .toolsmenu .tmrow button:hover{background:#eadfc4}
+  .toolsmenu .tmrow button.on{background:#3a2f22;color:var(--parch-2);border-color:#3a2f22}
 
   /* ——— measure ——— */
-  .measurebar,.quizbar{position:absolute;left:50%;transform:translateX(-50%);top:12px;z-index:1300;
+  .measurebar{position:absolute;left:50%;transform:translateX(-50%);top:12px;z-index:1300;
     background:var(--parch-2);border:1px solid var(--rule-2);box-shadow:0 4px 16px rgba(36,28,20,.22);
     padding:9px 13px;font-size:12px;display:none;align-items:center;gap:13px;
     max-width:min(94%,620px);line-height:1.4}
   body.measure .measurebar{display:flex}
-  body.quiz .quizbar{display:flex}
   body.measure #map{cursor:crosshair}
-  .measurebar .mval,.quizbar .qq{font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.2}
-  .quizbar .qq{white-space:nowrap;font-size:19px}
-  .quizbar .qs{white-space:nowrap}
-  .measurebar .mhint,.quizbar .qs{color:var(--ink-3);font-size:11px}
-  .measurebar button,.quizbar button{font-family:'Spectral',serif;font-size:10.5px;letter-spacing:.08em;
+  .measurebar .mval{font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.2}
+  .measurebar .mhint{color:var(--ink-3);font-size:11px}
+  .measurebar button{font-family:'Spectral',serif;font-size:10.5px;letter-spacing:.08em;
     text-transform:uppercase;background:#fdf9ef;border:1px solid var(--rule-2);color:var(--ink);
     padding:6px 9px;cursor:pointer;white-space:nowrap}
-  .measurebar button:hover,.quizbar button:hover{background:#3a2f22;color:var(--parch-2)}
+  .measurebar button:hover{background:#3a2f22;color:var(--parch-2)}
   .mlabel{font-family:'Spectral',serif;font-size:11px;color:#241c14;background:rgba(243,233,212,.9);
     border:1px solid var(--rule-2);padding:2px 6px;white-space:nowrap;transform:translate(-50%,-50%)}
-  /* map recall: the labels come off, the dots stay clickable */
-  body.quiz .pin b,body.quiz .pin em,body.quiz .rlabel{display:none!important}
-  body.quiz .pin.qright i{box-shadow:0 0 0 6px rgba(63,107,74,.5),0 0 0 1px rgba(36,28,20,.6)}
-  body.quiz .pin.qwrong i{box-shadow:0 0 0 6px rgba(140,58,43,.45),0 0 0 1px rgba(36,28,20,.6)}
-  body.quiz .pin.qshow b{display:block!important;color:#3f6b4a;font-weight:700}
-  .quizbar .qfb{font-size:11.5px}
-  .quizbar .qfb.ok{color:#3f6b4a}
-  .quizbar .qfb.no{color:#8c3a2b}
 
   /* ——— chronology band ——— */
   .timeline{position:absolute;left:0;right:0;bottom:0;z-index:1150;background:rgba(243,233,212,.96);
@@ -779,14 +840,11 @@
     </div>
     <div class="spacer"></div>
     <button class="hdrbtn" id="btn-panel" style="display:none">Index</button>
-    <button class="hdrbtn presentbtn" id="btn-present" title="Presenter mode — large type and high-contrast routes for a classroom screen (P)" aria-pressed="false">Presenter</button>
-    <button class="hdrbtn" id="btn-tools" aria-expanded="false" aria-haspopup="true" title="Measure, chronology, map recall, saved places, images and packets">Tools ▾</button>
     <div class="cfmbar">
-      <span class="vlbl">CFM</span>
       <button class="zbtn" id="cfm-prev" title="Previous week" aria-label="Previous CFM week">◀</button>
       <select id="cfm-sel" aria-label="CFM week"></select>
       <button class="zbtn" id="cfm-next" title="Next week" aria-label="Next CFM week">▶</button>
-      <button class="zbtn" id="cfm-off" title="Show the whole New Testament world">Full NT</button>
+      <button class="zbtn" id="cfm-study" title="Open the lesson panel for this week">Study</button>
     </div>
     <div class="viewbar">
       <span class="vlbl">View</span>
@@ -798,8 +856,10 @@
     <div class="basetoggle">
       <button id="bt-parch" data-mode="parchment">Parchment</button>
       <button id="bt-plain" data-mode="plain" class="on">Plain</button>
+      <button id="bt-minimal" data-mode="minimal">Minimal</button>
       <button id="bt-sat" data-mode="satellite">Satellite</button>
     </div>
+    <button class="hdrbtn" id="btn-tools" aria-expanded="false" aria-haspopup="true" title="Views, map style, presenter mode, and study tools">Tools ▾</button>
   </header>
   <div class="toolsmenu" id="toolsmenu" role="menu" aria-label="Study tools"></div>
 
@@ -816,7 +876,9 @@
     <div class="asidebody" id="asidebody">
       <div class="search">
         <input id="q" type="search" placeholder="Search places, events, or a scripture…">
-        <div class="qhint">Try a reference — <em>Mark 5</em>, <em>Jn 4:6</em>, <em>Acts 10</em></div>
+        <div class="qhint"><span>Try a reference — <em>Mark 5</em>, <em>Jn 4:6</em>, <em>Acts 10</em></span>
+          <button type="button" class="chip" id="gtoggle" style="flex:none;display:none">Expand all</button>
+        </div>
       </div>
       <div class="filters" id="filters"></div>
       <div class="listwrap" id="list"></div>
@@ -828,12 +890,11 @@
     <div id="map" role="application" aria-label="Map of the New Testament world. Place markers are reachable by keyboard."></div>
     <div class="detail" id="detail" role="dialog" aria-label="Details" aria-modal="false"></div>
     <div class="measurebar" id="measurebar" role="status"></div>
-    <div class="quizbar" id="quizbar" role="status"></div>
     <div class="timeline" id="timeline"></div>
   </div>
   <div class="viewsheet" id="viewsheet"></div>
   <div class="mobilebar" id="mobilebar">
-    <button id="mb-index" aria-expanded="false">Index</button>
+    <button id="mb-index" aria-expanded="false">Study</button>
     <button id="mb-map">Map</button>
     <button id="mb-views" aria-expanded="false">Views</button>
     <button id="mb-tools" aria-expanded="false" aria-haspopup="true">Tools</button>
@@ -846,6 +907,7 @@
 <script src="nt-cfm-data.js"></script>
 <script src="nt-cfm-2027.js"></script>
 <script src="nt-scholarship.js"></script>
+<script src="nt-archaeology-data.js"></script>
 <script src="nt-scripture-text.js"></script>
 <script>
 (function(){
@@ -1006,7 +1068,7 @@
     center:[32.30,35.45], zoom:9, zoomControl:false, minZoom:4, maxZoom:17,
     zoomSnap:.5, worldCopyJump:false, fadeAnimation:false
   });
-  L.control.zoom({position:'bottomleft'}).addTo(map);
+  L.control.zoom({position:'topright'}).addTo(map);
   L.control.scale({position:'bottomright', imperial:true, metric:true}).addTo(map);
   /* ——— basemap ———
      ONE place to change the tile source. The OSM Foundation's own tile server is
@@ -1016,6 +1078,7 @@
      (or your own Protomaps/PMTiles host) and everything downstream — the panel
      credit, the print footer, the PNG export — picks up the new attribution.
      See LICENSES.md. */
+  const MAPBOX_TOKEN = 'pk.eyJ1IjoiZXhvZHVzdG91cnNtYXBzIiwiYSI6ImNtdTMydWd5djAydzIyeXB6czRvN2V1aDEifQ.Kjf1faxolYvaliA8kTgNdQ';
   const BASEMAP_PRESETS = {
 
     /* CURRENT — OpenTopoMap: free, no API key, no account, funded by donations.
@@ -1093,6 +1156,43 @@
       attribution: '© Stadia Maps © Stamen Design © OpenMapTiles © OpenStreetMap contributors',
       credit: 'base map © Stadia Maps, Stamen Design, OpenMapTiles and OpenStreetMap contributors',
       maxZoom: 20, licensed: true
+    },
+
+    /* Mapbox — paid provider, commercial licence, no rate-limit blocking.
+       Free up to 50K map loads/month, then $5/1000. Used for all three base
+       modes below so the app no longer depends on donated free tile servers. */
+    mapboxOutdoors: {
+      url: 'https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/tiles/512/{z}/{x}/{y}{r}?access_token=' + MAPBOX_TOKEN,
+      attribution: '© <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+      credit: 'base map © Mapbox, © OpenStreetMap contributors',
+      maxZoom: 20, tileSize: 512, zoomOffset: -1, licensed: true
+    },
+    mapboxStreets: {
+      url: 'https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/512/{z}/{x}/{y}{r}?access_token=' + MAPBOX_TOKEN,
+      attribution: '© <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+      credit: 'base map © Mapbox, © OpenStreetMap contributors',
+      maxZoom: 20, tileSize: 512, zoomOffset: -1, licensed: true
+    },
+    mapboxSatellite: {
+      url: 'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/512/{z}/{x}/{y}{r}?access_token=' + MAPBOX_TOKEN,
+      attribution: '© <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors, Maxar',
+      credit: 'satellite imagery © Mapbox, Maxar',
+      maxZoom: 22, tileSize: 512, zoomOffset: -1, licensed: true
+    },
+    mapboxSatellitePlain: {
+      url: 'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/512/{z}/{x}/{y}{r}?access_token=' + MAPBOX_TOKEN,
+      attribution: '© <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener">Mapbox</a>, Maxar',
+      credit: 'satellite imagery © Mapbox, Maxar (no modern roads or place names)',
+      maxZoom: 22, tileSize: 512, zoomOffset: -1, licensed: true
+    },
+    /* a genuinely flat, minimal style — pale background, thin grey roads, small light
+       labels — for readers who want the ancient overlay to be the only strong colour
+       on screen, unlike Streets/Outdoors which are colourful basemaps in their own right. */
+    mapboxLight: {
+      url: 'https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/512/{z}/{x}/{y}{r}?access_token=' + MAPBOX_TOKEN,
+      attribution: '© <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+      credit: 'base map © Mapbox, © OpenStreetMap contributors',
+      maxZoom: 20, tileSize: 512, zoomOffset: -1, licensed: true
     }
   };
 
@@ -1100,16 +1200,19 @@
      Everything downstream — the Licences panel, the print footer, the PNG export
      credit, and the sw.js caching gate — follows from this choice. */
   const BASE_MODES = {
-    parchment: { preset: 'openTopo', tint: true,  label: 'Parchment' },
-    modern:    { preset: 'openTopo', tint: false, label: 'Modern' },
-    plain:     { preset: 'osm',      tint: false, label: 'Plain' },
-    satellite: { preset: 'nasaBlueMarble', tint: false, label: 'Satellite' }
+    parchment: { preset: 'mapboxOutdoors', tint: true,  label: 'Parchment' },
+    modern:    { preset: 'mapboxOutdoors', tint: false, label: 'Modern' },
+    plain:     { preset: 'mapboxStreets',  tint: false, label: 'Plain' },
+    minimal:   { preset: 'mapboxLight',    tint: false, label: 'Minimal' },
+    satellite: { preset: 'mapboxSatellite', tint: false, label: 'Satellite' }
   };
-  let BASEMAP = BASEMAP_PRESETS.osm, currentPresetKey = 'osm';
+  let BASEMAP = BASEMAP_PRESETS.mapboxStreets, currentPresetKey = 'mapboxStreets';
   let baseTileLayer = L.tileLayer(BASEMAP.url, {
     subdomains: BASEMAP.subdomains || 'abc',
     attribution: BASEMAP.attribution,
     maxZoom: BASEMAP.maxZoom,
+    tileSize: BASEMAP.tileSize || 256,
+    zoomOffset: BASEMAP.zoomOffset || 0,
     crossOrigin: 'anonymous'   /* lets the view be composited into a saveable PNG */
   }).addTo(map);
   function swapTileLayer(presetKey){
@@ -1121,6 +1224,8 @@
       attribution: preset.attribution,
       maxZoom: preset.maxZoom,
       maxNativeZoom: preset.maxNativeZoom || preset.maxZoom,
+      tileSize: preset.tileSize || 256,
+      zoomOffset: preset.zoomOffset || 0,
       crossOrigin: 'anonymous'
     }).addTo(map);
     currentPresetKey = presetKey;
@@ -1137,15 +1242,20 @@
   }
 
   const mapEl = document.getElementById('map');
-  let baseMode = 'plain', parchment = false;
+  let baseMode = 'plain', parchment = false, satLabels = true;
   function setBase(mode){
     const cfg = BASE_MODES[mode] || BASE_MODES.parchment;
     baseMode = mode;
     parchment = !!cfg.tint;
-    BASEMAP = BASEMAP_PRESETS[cfg.preset];
+    BASEMAP = BASEMAP_PRESETS[mode === 'satellite' && !satLabels ? 'mapboxSatellitePlain' : cfg.preset];
     mapEl.parentElement.classList.toggle('parchment', parchment);
-    swapTileLayer(cfg.preset);
+    mapEl.parentElement.classList.toggle('sat-mode', mode === 'satellite');
+    swapTileLayer(mode === 'satellite' && !satLabels ? 'mapboxSatellitePlain' : cfg.preset);
     syncBaseButtons();
+  }
+  function setSatLabels(on){
+    satLabels = on;
+    if(baseMode === 'satellite') setBase('satellite');
   }
   mapEl.parentElement.classList.remove('parchment');
   document.querySelectorAll('.basetoggle button').forEach(b => b.onclick = () => setBase(b.dataset.mode));
@@ -1206,21 +1316,15 @@
     const m = L.marker([p.lat,p.lon], {
       pane:'marks',
       icon: L.divIcon({className:'', html:
-        `<div class="${cls} conf-${p.conf}" data-pid="${p.id}" tabindex="0" role="button" aria-label="${esc(p.name)}, ${esc(p.region)}. ${esc((TIERS[p.conf]||{}).label || '')}"><i style="background:${CAT_COLOR[p.cat]||'#4a3d2e'}"></i><b>${SHORT[p.id] || p.name.split(' (')[0]}</b><em class="modname" style="display:none">${p.modern}</em></div>`,
+        `<div class="${cls} conf-${p.conf}" data-pid="${p.id}" tabindex="0" role="button" aria-label="${esc(p.name)}, ${esc(p.region)}. ${esc((TIERS[p.conf]||{}).label || '')}"><i style="background:${CAT_COLOR[p.cat]||'#4a3d2e'}"></i><b>${SHORT[p.id] || p.name.split(' (')[0]}</b></div>`,
         iconSize:[0,0], iconAnchor:[0,0]})
     });
     m.on('click', () => select(p.id));
+    m.bindTooltip(`<b>${esc(p.name)}</b><br><i>${esc(p.region)}</i>${p.blurb ? `<br>${esc(p.blurb)}` : ''}`, {className:'nt', direction:'top', offset:[0,-8]});
     m.addTo(L_.places);
     placeMarkers[p.id] = m;
   });
   L_.places.addTo(map);
-
-  /* jerusalem sites are their own toggle */
-  grp('jerusalem');
-  D.JERUSALEM_FEATURES.forEach(f => {
-    L.polyline(f.path, {pane:'lines', color:'#5b4a35', weight:2, dashArray:'2 4', opacity:.85})
-      .bindTooltip(`<b>${f.name}</b><br>${f.note}`, {className:'nt', sticky:true}).addTo(L_.jerusalem);
-  });
 
   /* roads */
   grp('roads');
@@ -1277,6 +1381,8 @@
     L.circleMarker([s.lat,s.lon], {pane:'lines', radius:5, color:'#fdf9ef', weight:1.5,
       fillColor: pagan ? '#4b3f8f' : (s.kind.indexOf('Synagogue')===0 ? '#b3862f' : '#8c3a2b'), fillOpacity:1})
       .bindTooltip(`<b>${s.name}</b><br><i>${s.kind}</i><br>${s.note}`, {className:'nt'}).addTo(L_.sacred);
+    L.marker([s.lat,s.lon], {pane:'lines', interactive:false, icon:L.divIcon({className:'', iconSize:[0,0],
+      html:`<div class="chiplabel" style="transform:translate(-50%,10px);font-size:10px">${s.name}</div>`})}).addTo(L_.sacred);
   });
 
   /* rabbinic */
@@ -1284,6 +1390,8 @@
   D.RABBINIC.forEach(r => {
     L.circleMarker([r.lat,r.lon], {pane:'lines', radius:6, color:'#b3862f', weight:2, fillColor:'#f3e9d4', fillOpacity:.9})
       .bindTooltip(`<b>${r.name}</b><br>${r.note}`, {className:'nt'}).addTo(L_.rabbinic);
+    L.marker([r.lat,r.lon], {pane:'lines', interactive:false, icon:L.divIcon({className:'', iconSize:[0,0],
+      html:`<div class="chiplabel" style="transform:translate(-50%,10px);font-size:10px">${r.name}</div>`})}).addTo(L_.rabbinic);
   });
 
   /* apostles' hometowns */
@@ -1292,14 +1400,30 @@
   D.APOSTLES.forEach(a => {
     (byTown[a.town] = byTown[a.town] || {lat:a.lat, lon:a.lon, list:[]}).list.push(a);
   });
-  Object.entries(byTown).forEach(([town, g]) => {
-    const body = g.list.map(a => `<b style="font-weight:500">${a.n}</b> — ${a.note} <i>(${a.ref})</i>`).join('<br><br>');
+  const APOSTLE_SHORT = {
+    'Simon Peter':'Peter', 'James son of Zebedee':'James', 'John son of Zebedee':'John', 'Matthew (Levi)':'Matthew'
+  };
+  Object.entries(byTown).forEach(([town, g], i) => {
+    /* a wide grid of short entries instead of one long stacked column — the old format
+       made a 3-apostle town's tooltip a narrow strip several screens tall */
+    const body = g.list.length > 1
+      ? `<div class="aptip-grid">` + g.list.map(a =>
+          `<div><b style="font-weight:600">${a.n}</b><br><span style="font-size:10.5px;opacity:.85">${a.note}</span><br><i style="font-size:10px">${a.ref}</i></div>`).join('') + `</div>`
+      : `<b style="font-weight:500">${g.list[0].n}</b><br>${g.list[0].note} <i>(${g.list[0].ref})</i>`;
     L.circleMarker([g.lat,g.lon], {pane:'lines', radius:7, color:'#8c1f0f', weight:2, fillColor:'#f3e9d4', fillOpacity:.95})
-      .bindTooltip(`<b>${town}</b><br><br>${body}`, {className:'nt'}).addTo(L_.apostles);
-    const one = g.list.length === 1 && g.list[0].n.length < 24;
-    const label = one ? g.list[0].n : (g.list.length > 1 ? g.list.length + ' of the Twelve' : 'Four of the Twelve');
+      .bindTooltip(`<b>${town}</b><br><br>${body}`, {className: g.list.length > 1 ? 'nt aptip' : 'nt'}).addTo(L_.apostles);
+    /* name every apostle in the label directly \u2014 towns with several apostles (Bethsaida, Capernaum)
+       used to both say the same generic "3 of the Twelve", indistinguishable without hovering */
+    const label = g.list.length === 1 && g.list[0].n.indexOf(', ') > -1
+      ? g.list[0].n.split(', ').map(n => n.split(' ')[0]).join(', ') + ' — towns unrecorded'
+      : g.list.length === 1
+      ? g.list[0].n
+      : g.list.map(a => APOSTLE_SHORT[a.n] || a.n.split(' ')[0]).join(', ') + ' (' + town + ')';
+    /* alternate the label above/below the dot so towns close together (Bethsaida, Capernaum)
+       don't stack their text on top of each other */
+    const dy = i % 2 === 0 ? 15 : -24;
     L.marker([g.lat,g.lon], {pane:'lines', interactive:false, icon:L.divIcon({className:'', iconSize:[0,0],
-      html:`<div class="tinylabel" style="transform:translate(-50%,15px);color:#8c1f0f">${label}</div>`})}).addTo(L_.apostles);
+      html:`<div class="chiplabel" style="transform:translate(-50%,${dy}px)">${label}</div>`})}).addTo(L_.apostles);
   });
 
   /* harbours of the Sea of Galilee */
@@ -1312,8 +1436,16 @@
   /* the active guided tour's connecting path */
   grp('tourpath');
 
-  /* journeys */
-  grp('journeys');
+  /* journeys — Jesus' own ten routes and Paul's five (missions, voyage, seven churches)
+     get separate layer groups so switching one off never touches the other */
+  grp('journeys'); grp('paulJourneys');
+  const isPaul = j => j.phase === 'The Apostolic Mission';
+  const JOURNEY_SHORT = {
+    'j-infancy':'Nativity journey', 'j-baptism':'To the Jordan & wilderness', 'j-galilee-circuit':'Galilean circuit',
+    'j-decapolis':'Into the Decapolis', 'j-north':'Northern journey (Tyre, Sidon, Caesarea Philippi)',
+    'j-samaria':'Through Samaria', 'j-tojerusalem':'Final journey to Jerusalem', 'j-passion':'Passion week',
+    'j-resurrection':'After the Resurrection', 'j-acts':'Acts 1:8 \u2014 out to Damascus'
+  };
   const journeyLines = {};
   D.JOURNEYS.forEach(j => {
     const g = L.layerGroup();
@@ -1321,6 +1453,11 @@
     const line = L.polyline(j.path, {pane:'lines', color:j.color, weight:3.5, opacity:.95, dashArray:'11 6'});
     line.bindTooltip(`<b>${j.name}</b><br><i>${j.refs}</i><br>${j.note}`, {className:'nt', sticky:true});
     line.addTo(g);
+    /* a name tag at the midpoint so several lines on screen at once can be told apart
+       without hovering each one \u2014 same halo styling as every other map label */
+    const mid = j.path[Math.floor(j.path.length / 2)];
+    L.marker(mid, {pane:'lines', interactive:false, icon:L.divIcon({className:'', iconSize:[0,0],
+      html:`<div class="tinylabel" style="transform:translate(-50%,-13px);color:${j.color};font-weight:600">${JOURNEY_SHORT[j.id] || j.name}</div>`})}).addTo(g);
     journeyLines[j.id] = g;
   });
 
@@ -1338,13 +1475,6 @@
       });
     L.marker([p.lat,p.lon], {pane:'shade', interactive:false, icon:L.divIcon({className:'', iconSize:[0,0],
       html:`<div class="tinylabel" style="transform:translate(-50%,-24px);color:#8c3a2b">walking radius from ${p.name.split(' (')[0]}</div>`})}).addTo(L_.rings);
-  }
-
-  /* modern names */
-  function setModernNames(on){
-    document.querySelectorAll('.modname').forEach(e => e.style.display = on ? '' : 'none');
-    mapEl.classList.toggle('shownames', on);
-    if(typeof declutterLabels === 'function') declutterLabels();
   }
 
   /* zoom tiers: reveal smaller places as the reader zooms in */
@@ -1429,8 +1559,11 @@
     if(s.x && s.y) return fn();
     requestAnimationFrame(() => { map.invalidateSize({animate:false}); fn(); });
   }
+  let flyGen = 0;
   function goToBounds(b, pad){
+    const gen = ++flyGen;
     afterLayout(() => {
+      if(gen !== flyGen) return; /* a newer fly was requested while this one waited on layout */
       let bb = b;
       /* a zero-area bounds makes Leaflet's getBoundsZoom divide by zero and hand back
          NaN, which strands the map at the identity transform for good */
@@ -1444,7 +1577,9 @@
   }
   function goToPoint(latlng, zoom){
     const target = L.latLng(latlng[0] !== undefined ? latlng : [latlng.lat, latlng.lng]);
+    const gen = ++flyGen;
     afterLayout(() => {
+      if(gen !== flyGen) return;
       const z = Math.max(map.getMinZoom(), Math.min(map.getMaxZoom(), (+zoom || map.getZoom())));
       const s = map.getSize();
       /* shift the target by half the panel width so the place sits in the middle of
@@ -1492,6 +1627,16 @@
   }
   /* the open sheet's height, mobile-only counterpart to drawerWidth() — zero in
      landscape-phone mode, where the drawer occupies width, not height */
+  /* which side of the map a fly-to needs to pad away from — in landscape-phone mode
+     the Lesson/Places panel opens on the LEFT, not the right like everywhere else,
+     so padding it on paddingBottomRight (as if it were a right-side panel) pushed
+     the actual centre of the view off to one side instead of centring it */
+  function flyPad(gutter, vgutter){
+    const leftSide = isLandscapePhone() && aside.classList.contains('open') && !detail.classList.contains('open');
+    return leftSide
+      ? {paddingTopLeft:[gutter + 26, 26], paddingBottomRight:[26, vgutter + 36]}
+      : {paddingTopLeft:[26, 26], paddingBottomRight:[gutter + 26, vgutter + 36]};
+  }
   function sheetHeight(){
     if(isLandscapePhone()) return 0;
     const open = detail.classList.contains('open') ? detail : (aside.classList.contains('open') ? aside : null);
@@ -1516,31 +1661,38 @@
     {id:'culture', t:'Jewish, Samaritan & Gentile territory', d:'The religious geography behind every border crossing in the Gospels.', c:'#3f6b6b'},
     {id:'roads', t:'Roman roads & trade routes', d:'Via Maris, the King\'s Highway, the Ridge Route, the valley roads and the Jericho ascent — through the real passes and fords.', c:'#7a5c34'},
     {sec:'Sacred & scholarly sites'},
-    {id:'sacred', t:'Synagogues, temples & sanctuaries', d:'Jewish synagogues, the Temple, pagan cult sites, and imperial shrines.', c:'#4b3f8f'},
-    {id:'rabbinic', t:'Rabbinic-era towns & academies', d:'Where the Mishnah, the Talmud and the Masoretic text were made.', c:'#b3862f'},
+    {id:'sacred', t:'Synagogues, temples & sanctuaries', d:'14 sites: Herod\'s Temple & the Bethesda shrine (Jerusalem); synagogues at Magdala, Capernaum, Gamla, Chorazin; the Samaritan Temple site (Gerizim); imperial/pagan temples at Sebaste, Caesarea, Caesarea Philippi, Tyre, Sidon, Gerasa, Hippos, Philadelphia.', c:'#4b3f8f'},
+    {id:'rabbinic', t:'Rabbinic-era towns & academies', d:'8 sites: Sepphoris, Tiberias, Jerusalem, Yavneh, Lydda, Bene Berak, Beth Shearim, Qumran — where the Mishnah, the Talmud and the Masoretic text were made.', c:'#b3862f'},
+    {sec:'Archaeological discoveries'},
+    {id:'archInscr', t:'Inscriptions', d:'Stone and papyrus inscriptions bearing on the New Testament — the Pilate Stone, the Theodotos and Temple Warning inscriptions, and more.', c:'#8c3a2b', arch:true},
+    {id:'archMs', t:'Manuscripts & texts', d:'Early copies and canon evidence — P52, Codex Sinaiticus, the Dead Sea Scrolls, the Muratorian Fragment.', c:'#3f5f8f', arch:true},
+    {id:'archArch', t:'Architecture & ruins', d:'Excavated buildings behind the narrative — the Pool of Siloam, Gamla’s synagogue, Herodium, the theatres of Ephesus and Athens.', c:'#6b6028', arch:true},
+    {id:'archArtifact', t:'Coins & artifacts', d:'Everyday objects named or implied in the text — the Tyrian shekel, the widow’s mite, the Sea of Galilee boat.', c:'#8a6a1f', arch:true},
+    {id:'archDestr', t:'War & destruction evidence', d:'The Jewish Revolt in the ground — Masada, Gamla, the Burnt House, Robinson’s Arch, the Arch of Titus.', c:'#5c2418', arch:true},
+    {id:'archArt', t:'Art, mosaics & ossuaries', d:'The visual record — the Magdala Stone, Sepphoris and Hammat Tiberias mosaics, Dura-Europos, early Christian catacomb art.', c:'#6b3f6b', arch:true},
     {sec:'Narrative'},
     {id:'places', t:'Place names & markers', d:'Every site in the index.', c:'#8c3a2b', on:true},
     {id:'apostles', t:'The Twelve — where they came from', d:'Hometowns and trades of the apostles, and the four whose towns the Gospels never name.', c:'#8c1f0f'},
-    {id:'jerusalem', t:"Jerusalem's valleys, wall & pilgrim street", d:'Kidron, Hinnom, the AD 30 wall line, and the stepped ascent from Siloam.', c:'#5b4a35'},
     {id:'journeys', t:'Jesus\' journeys as traced routes', d:'All ten routes at once. Use the Journeys tab to show them one at a time.', c:'#b0442e'},
-    {id:'modern', t:'Modern place names overlay', d:'Show today\'s name beneath each ancient one.', c:'#5b4a35', virtual:true}
+    {id:'paulJourneys', t:"Paul's journeys as traced routes", d:'His three missions, the voyage to Rome, and the seven churches circuit — kept separate from Jesus\' routes above. Use the Journeys tab to show them one at a time.', c:'#7a3f8f'}
   ];
 
   const layerOn = {};
   function applyLayer(id, on){
     layerOn[id] = on;
-    if(id === 'modern'){ setModernNames(on); return; }
     if(id === 'rings' && on) drawRings();
-    if(id === 'journeys'){
+    if(id === 'journeys' || id === 'paulJourneys'){
+      const grpKey = id;
+      const subset = D.JOURNEYS.filter(j => isPaul(j) === (id === 'paulJourneys'));
       if(on){
-        L_.journeys.addTo(map);
-        /* switching the layer on with nothing individually chosen shows every route;
-           a specific route or an active filter takes precedence */
-        const anyChosen = Object.keys(journeyOn).some(k => journeyOn[k]) || autoOn.size > 0 || cfmOn.size > 0;
-        if(!anyChosen) D.JOURNEYS.forEach(j => journeyOn[j.id] = true);
+        L_[grpKey].addTo(map);
+        /* switching the layer on with nothing individually chosen shows every route in
+           this subset; a specific route or an active filter takes precedence */
+        const anyChosen = subset.some(j => journeyOn[j.id]) || autoOn.size > 0 || cfmOn.size > 0;
+        if(!anyChosen) subset.forEach(j => journeyOn[j.id] = true);
       } else {
-        map.removeLayer(L_.journeys);
-        D.JOURNEYS.forEach(j => journeyOn[j.id] = false);
+        map.removeLayer(L_[grpKey]);
+        subset.forEach(j => journeyOn[j.id] = false);
       }
       refreshJourneys();
       if(tab === 'journeys') render();
@@ -1548,6 +1700,19 @@
     }
     if(on) L_[id].addTo(map); else if(L_[id]) map.removeLayer(L_[id]);
   }
+
+  /* archaeological discoveries — one Leaflet group per category, one checkbox each */
+  const ARCH_GRP = {inscription:'archInscr', manuscript:'archMs', architecture:'archArch', artifact:'archArtifact', destruction:'archDestr', art:'archArt'};
+  Object.values(ARCH_GRP).forEach(grp);
+  (D.ARCHAEOLOGY || []).forEach(a => {
+    const lg = ARCH_GRP[a.cat]; if(!lg) return;
+    const color = (D.ARCH_CATEGORIES[a.cat] || {}).color || '#5c2418';
+    const srcLine = a.src && a.src[0] ? `<br><i style="opacity:.75">${a.src[0]}</i>` : '';
+    L.circleMarker([a.lat,a.lon], {pane:'lines', radius:5, color:'#fdf9ef', weight:1.5, fillColor:color, fillOpacity:1})
+      .bindTooltip(`<b>${a.name}</b><br><span style="opacity:.7">${a.era}</span><br>${a.blurb}<br><br>${a.sig}${srcLine}`, {className:'nt archtip'}).addTo(L_[lg]);
+    L.marker([a.lat,a.lon], {pane:'lines', interactive:false, icon:L.divIcon({className:'', iconSize:[0,0],
+      html:`<div class="chiplabel" style="transform:translate(-50%,10px);font-size:10px">${a.name}</div>`})}).addTo(L_[lg]);
+  });
 
   const journeyOn = {};
   const autoOn = new Set();
@@ -1567,10 +1732,11 @@
   }
   function refreshJourneys(){
     D.JOURNEYS.forEach(j => {
-      const want = layerOn.journeys && (journeyOn[j.id] || autoOn.has(j.id) || cfmOn.has(j.id));
-      const has = L_.journeys.hasLayer(journeyLines[j.id]);
-      if(want && !has) journeyLines[j.id].addTo(L_.journeys);
-      if(!want && has) L_.journeys.removeLayer(journeyLines[j.id]);
+      const grpKey = isPaul(j) ? 'paulJourneys' : 'journeys';
+      const want = layerOn[grpKey] && (journeyOn[j.id] || autoOn.has(j.id) || cfmOn.has(j.id));
+      const has = L_[grpKey].hasLayer(journeyLines[j.id]);
+      if(want && !has) journeyLines[j.id].addTo(L_[grpKey]);
+      if(!want && has) L_[grpKey].removeLayer(journeyLines[j.id]);
     });
   }
 
@@ -1580,9 +1746,13 @@
   const qEl = document.getElementById('q');
   let tab = 'places', query = '', selected = null;
   const phaseSel = new Set(), themeSel = new Set();
+  let refOpen = false;
+  let placeGroupOpen = {}, eventGroupOpen = {}, layerGroupOpen = {}, journeyGroupOpen = {}, filtersOpen = false, archListOpen = {};
 
   document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
     tab = b.dataset.tab;
+    if(tab === 'tours' && tourId) clearTour();
+    if(tab === 'cfm' && cfmWeek !== null){ cfmWeek = null; cfmPaint(); cfmOn.clear(); refreshJourneys(); }
     document.querySelectorAll('.tabs button').forEach(x => {
       const on = x === b;
       x.classList.toggle('on', on);
@@ -1624,10 +1794,13 @@
     if(v) document.documentElement.style.setProperty('--panel-w', '0px');
     else document.documentElement.style.removeProperty('--panel-w');
     if(isMobileLayout()){
-      aside.style.display = v ? 'none' : '';
+      /* the drawer is already closed by default on mobile, so "hidden" just means
+         force it shut \u2014 never leave a stray inline display:none that would
+         outlive this state and strand the Study/Index button unable to reopen it */
+      aside.style.display = '';
       if(v && aside.classList.contains('open')) closeDrawer();
     } else {
-      aside.style.display = '';
+      aside.classList.toggle('panel-off', v);
     }
     afterLayout(() => map.invalidateSize(false));
   }
@@ -1675,7 +1848,11 @@
   function syncBaseButtons(){
     document.querySelectorAll('.basetoggle button').forEach(b => b.classList.toggle('on', b.dataset.mode === baseMode));
   }
-  mbIndex.onclick = () => { aside.classList.contains('open') ? closeDrawer() : openDrawer(); };
+  mbIndex.onclick = () => {
+    if(aside.classList.contains('open') && tab === 'cfm'){ closeDrawer(); return; }
+    if(panelHidden) setPanelHidden(false);
+    setTab('cfm'); render(); openDrawer();
+  };
   /* the panels slide out over .32s. Measuring once, immediately, captures the
      geometry from BEFORE the animation, so the map looks slow to give back the
      space — measure again when the transition has landed. */
@@ -1699,7 +1876,7 @@
   function scrubMarkup(list){
     scrubList = list;
     if(!scrubOn){
-      return `<div class="scrub"><button class="soff" id="scrubon">Play the timeline →</button></div>`;
+      return `<div class="scrub"><button class="soff" id="scrubon">Step through in order →</button></div>`;
     }
     scrubIx = Math.max(0, Math.min(list.length - 1, scrubIx));
     const e = list[scrubIx] || {};
@@ -1844,18 +2021,52 @@
     else if(tab === 'journeys') renderJourneys();
     else renderLayers();
     listEl.scrollTop = savedScroll;
+    syncGToggle();
   }
+  function syncGToggle(){
+    const gt = document.getElementById('gtoggle');
+    if(!gt) return;
+    const relevant = tab === 'places' || tab === 'events' || tab === 'layers';
+    gt.style.display = relevant ? '' : 'none';
+    if(!relevant) return;
+    const groups = [...listEl.querySelectorAll('.pgroup,.egroup,.lgroup')];
+    const refDetails = listEl.querySelector('.refgroup');
+    const all = refDetails ? groups.concat(refDetails) : groups;
+    const allOpen = all.length > 0 && all.every(d => d.open);
+    gt.textContent = allOpen ? 'Collapse all' : 'Expand all';
+  }
+  document.getElementById('gtoggle').onclick = () => {
+    const groups = [...listEl.querySelectorAll('.pgroup,.egroup,.lgroup')];
+    const refDetails = listEl.querySelector('.refgroup');
+    const all = refDetails ? groups.concat(refDetails) : groups;
+    const allOpen = all.length > 0 && all.every(d => d.open);
+    groups.forEach(d => {
+      d.open = !allOpen;
+      (d.dataset.pg !== undefined ? placeGroupOpen : d.dataset.eg !== undefined ? eventGroupOpen : layerGroupOpen)
+        [d.dataset.pg ?? d.dataset.eg ?? d.dataset.lg] = !allOpen;
+    });
+    if(refDetails){ refDetails.open = !allOpen; refOpen = !allOpen; }
+    if(tab === 'places') renderPlaces();
+    else if(tab === 'events') renderEvents();
+    else if(tab === 'layers') renderLayers();
+    syncGToggle();
+  };
 
   function renderFilters(){
     const anyOn = phaseSel.size || themeSel.size;
     const chip = (o, on) => `<button class="chip${on?' on':''}" data-f="${o}" aria-pressed="${on?'true':'false'}">${o}</button>`;
     filtersEl.innerHTML =
-      '<div class="fhint">Filter the map — tap several to combine</div>' +
-      '<div class="chiprow">' +
-      chip('All', !anyOn) +
-      PHASES.map(o => chip(o, phaseSel.has(o))).join('') +
-      THEMES.map(o => chip(o, themeSel.has(o))).join('') +
-      '</div>';
+      `<button type="button" class="fhint" id="fbtoggle" aria-expanded="${filtersOpen ? 'true' : 'false'}">
+         <span>Filter the map${anyOn ? ' — ' + (phaseSel.size + themeSel.size) + ' active' : ' — tap several to combine'}</span>
+         <span style="margin-left:auto">${filtersOpen ? '▾' : '▸'}</span>
+       </button>` +
+      (filtersOpen ? '<div class="chiprow">' +
+        chip('All', !anyOn) +
+        PHASES.map(o => chip(o, phaseSel.has(o))).join('') +
+        THEMES.map(o => chip(o, themeSel.has(o))).join('') +
+        '</div>' : '');
+    const fb = filtersEl.querySelector('#fbtoggle');
+    if(fb) fb.onclick = () => { filtersOpen = !filtersOpen; renderFilters(); };
     filtersEl.querySelectorAll('.chip').forEach(c => c.onclick = () => {
       const f = c.dataset.f;
       if(f === 'All'){ phaseSel.clear(); themeSel.clear(); }
@@ -1934,12 +2145,8 @@
       return;
     }
     const refblock = (query || tourId) ? '' :
-      `<div class="grouphdr">Reference</div>
-       <button class="item" data-ref="about">
-         <div class="nm">About this atlas</div>
-         <div class="mt">Prepared by Taylor Halverson, PhD · beta version</div>
-         <div class="rf">About the author, sources, and how to use it</div>
-       </button>
+      `<details class="refgroup"${refOpen ? ' open' : ''}>
+       <summary class="grouphdr">Reference</summary>
        <button class="item" data-ref="herods">
          <div class="nm">The Herods — who's who</div>
          <div class="mt">Five rulers called Herod, two Philips, four generations</div>
@@ -1947,15 +2154,27 @@
        <button class="item" data-ref="profiles">
          <div class="nm">Elevation profiles</div>
          <div class="mt">The Jericho ascent, the pilgrim road, and the whole rift</div>
-       </button>`;
-    listEl.innerHTML = banner + packBar() + savedBlock() + refblock + order.map(r =>
-      `<div class="grouphdr">${r}</div>` + groups[r].map(p =>
+       </button>
+       </details>`;
+    const HOLY_LAND = new Set(['Galilee (Herod Antipas)','Gaulanitis (Herod Philip)','Decapolis','Decapolis / Gaulanitis','Iturea / Phoenicia border','Phoenicia (Roman Syria)','Syria / Decapolis league','Samaria (Roman prefect)','Judea (Roman prefect)','Perea (Herod Antipas)','Jerusalem']);
+    const intro = (query || tourId) ? '' :
+      `<div class="listintro">${pool.length} places across ${order.length} regions. Grouped in two parts: first the <b>Holy Land</b> \u2014 where the Gospels happen, Galilee to Jerusalem \u2014 then the <b>wider Mediterranean world</b> of Acts and the Epistles. New here? Start with Galilee below.</div>`;
+    let sawHoly = false, sawMed = false;
+    listEl.innerHTML = banner + intro + packBar() + savedBlock() + refblock + order.map(r => {
+      let superhdr = '';
+      if(HOLY_LAND.has(r) && !sawHoly){ sawHoly = true; superhdr = `<div class="supersec">The Holy Land \u2014 where the Gospels happen, Galilee to Jerusalem</div>`; }
+      else if(!HOLY_LAND.has(r) && !sawMed){ sawMed = true; superhdr = `<div class="supersec">The wider Mediterranean world \u2014 Acts and the Epistles, Paul's missions to the voyage to Rome</div>`; }
+      return superhdr + `<details class="pgroup" data-pg="${esc(r)}"${placeGroupOpen[r] === true ? ' open' : ''}>
+       <summary class="grouphdr">${r}</summary>
+       ${groups[r].map(p =>
         `<button class="item${selected===p.id?' on':''}${pack.has(p.id)?' picked':''}" data-pid="${p.id}">
            <div class="nm">${p.name}</div>
            <div class="mt">${p.modern}</div>
            <div class="mt" style="font-size:11px">${(TIERS[p.conf]||{}).label || ''} · ${p.lat.toFixed(3)}, ${p.lon.toFixed(3)}</div>
-           ${packMode ? '<span class="chk"></span>' : (stars.has(p.id) ? '<span class="star" title="Saved">★</span>' : '')}
-         </button>`).join('')).join('');
+           ${packMode ? '<span class="chk"></span>' : (stars.has(p.id) ? '<span class="star" title="Saved">\u2605</span>' : '')}
+         </button>`).join('')}
+       </details>`;
+    }).join('');
     bindItems();
   }
 
@@ -1980,12 +2199,15 @@
     const tally = active
       ? `<div class="tally">${evs.length} event${evs.length===1?'':'s'} · ${hlPlaces.size} place${hlPlaces.size===1?'':'s'} lit on the map<button class="chip" id="clearf">Clear</button></div>` : '';
     listEl.innerHTML = banner + scrubMarkup(evs) + tally + PHASES.filter(ph => groups[ph]).map(ph =>
-      `<div class="grouphdr">${ph}</div>` + groups[ph].map(e =>
+      `<details class="egroup" data-eg="${esc(ph)}"${eventGroupOpen[ph] === true ? ' open' : ''}>
+       <summary class="grouphdr">${ph}</summary>
+       ${groups[ph].map(e =>
         `<button class="item${selected===e.place?' on':''}" data-pid="${e.place}" data-eid="${e.id}">
            <div class="nm">${e.t}</div>
            <div class="rf">${e.ref} · ${(byId[e.place]||{}).name||''}</div>
            <div class="mt" style="font-style:normal;color:var(--ink-3)">${e.s}</div>
-         </button>`).join('')).join('');
+         </button>`).join('')}
+       </details>`).join('');
     const cf = listEl.querySelector('#clearf');
     if(cf) cf.onclick = () => { phaseSel.clear(); themeSel.clear(); applyHighlight(); render(); updateLegend(); };
     bindScrub();
@@ -1993,17 +2215,25 @@
   }
 
   function renderJourneys(){
-    listEl.innerHTML = `<div class="grouphdr">Traced routes — tap to show on the map</div>` +
-      D.JOURNEYS.map(j =>
+    const jesusJ = D.JOURNEYS.filter(j => !isPaul(j)), paulJ = D.JOURNEYS.filter(isPaul);
+    const rowsFor = list => list.map(j =>
         `<label class="lyr" style="border-left:3px solid ${j.color}">
            <input type="checkbox" data-jid="${j.id}"${journeyOn[j.id]?' checked':''}>
            <span><span class="lt">${j.name}</span>
              <span class="ld" style="display:block"><b style="color:#8c3a2b;font-weight:400">${j.refs}</b> — ${j.note}</span></span>
-         </label>`).join('') +
+         </label>`).join('');
+    const jgroup = (key, label, list) =>
+      `<details class="jgroup" data-jg="${key}"${journeyGroupOpen[key] !== false ? ' open' : ''}>
+         <summary class="grouphdr">${label} <span style="font-weight:400;opacity:.7">(${list.length})</span></summary>
+         ${rowsFor(list)}
+       </details>`;
+    listEl.innerHTML = jgroup('jesus', "Jesus' journeys — tap to show on the map", jesusJ) +
+      jgroup('paul', "Paul's journeys — tap to show on the map", paulJ) +
       `<div class="ringctl" style="border-top:1px solid #c3b190;margin-top:8px">
          <button class="chip" id="j-all">Show all routes</button>
          <button class="chip" id="j-none" style="margin-left:6px">Hide all</button>
        </div>`;
+    listEl.querySelectorAll('.jgroup').forEach(d => d.ontoggle = () => { journeyGroupOpen[d.dataset.jg] = d.open; });
     listEl.querySelectorAll('input[data-jid]').forEach(cb => cb.onchange = () => setJourney(cb.dataset.jid, cb.checked));
     listEl.querySelector('#j-all').onclick = () => {
       D.JOURNEYS.forEach(j => setJourney(j.id, true));
@@ -2020,7 +2250,9 @@
 
   function setJourney(id, on){
     journeyOn[id] = on;
-    if(on && !layerOn.journeys) setLayerCheckbox('journeys', true);
+    const j = D.JOURNEYS.find(x => x.id === id);
+    const grpKey = j && isPaul(j) ? 'paulJourneys' : 'journeys';
+    if(on && !layerOn[grpKey]) setLayerCheckbox(grpKey, true);
     else refreshJourneys();
     updateLegend();
     if(on){
@@ -2040,23 +2272,122 @@
   }
 
   function renderLayers(){
-    listEl.innerHTML = '<div class="layers">' + LAYERS.map(l => {
-      if(l.sec) return `<div class="lyr-sec">${l.sec}</div>`;
-      return `<label class="lyr">
+    const sections = [];
+    let cur = { sec: '', items: [] };
+    LAYERS.forEach(l => {
+      if(l.sec){ cur = { sec: l.sec, items: [] }; sections.push(cur); }
+      else cur.items.push(l);
+    });
+    listEl.innerHTML = '<div class="layers">' +
+      `<div class="layersbar"><button class="chip" id="layers-clear">${LAYERS.filter(l=>l.id).some(l=>layerOn[l.id]) ? 'Turn off all layers' : 'Turn on all layers'}</button></div>` +
+      sections.map(s => {
+      const open = layerGroupOpen[s.sec] === true;
+      return `<details class="lgroup" data-lg="${esc(s.sec)}"${open ? ' open' : ''}>
+        <summary class="grouphdr">${s.sec}</summary>
+        ${s.items.map(l => `<label class="lyr">
           <input type="checkbox" data-lid="${l.id}"${layerOn[l.id]?' checked':''}>
           <span class="swatch" style="background:${l.c}"></span>
           <span><span class="lt">${l.t}</span><span class="ld">${l.d}</span></span>
         </label>` + (l.ring ? `<div class="ringctl">Measure walking distance from:
-          <select id="ringsel">${D.PLACES.map(p => `<option value="${p.id}"${p.id===ringCenter?' selected':''}>${p.name}</option>`).join('')}</select></div>` : '');
+          <select id="ringsel">${D.PLACES.map(p => `<option value="${p.id}"${p.id===ringCenter?' selected':''}>${p.name}</option>`).join('')}</select></div>` : '') + (l.arch ? renderArchList(l.id) : '')).join('')}
+        </details>`;
     }).join('') + '</div>';
+    listEl.querySelectorAll('.lgroup').forEach(d => d.ontoggle = () => { layerGroupOpen[d.dataset.lg] = d.open; });
+    listEl.querySelectorAll('.archlist').forEach(d => d.ontoggle = () => { archListOpen[d.dataset.ag] = d.open; });
+    listEl.querySelectorAll('.architem').forEach(b => b.onclick = () => selectArch(b.dataset.aid));
     listEl.querySelectorAll('input[data-lid]').forEach(cb => cb.onchange = () => { applyLayer(cb.dataset.lid, cb.checked); updateLegend(); writeHash(); });
+    const lc = listEl.querySelector('#layers-clear');
+    if(lc) lc.onclick = () => {
+      const turnOn = !LAYERS.filter(l => l.id).some(l => layerOn[l.id]);
+      LAYERS.filter(l => l.id).forEach(l => applyLayer(l.id, turnOn));
+      updateLegend(); writeHash(); render();
+    };
     const rs = listEl.querySelector('#ringsel');
     if(rs) rs.onchange = () => { ringCenter = rs.value; if(layerOn.rings) drawRings(); };
+    bindItems();
   }
 
+  function renderArchList(catLayerId){
+    const cat = Object.keys(ARCH_GRP).find(c => ARCH_GRP[c] === catLayerId);
+    const items = (D.ARCHAEOLOGY || []).filter(a => a.cat === cat);
+    const unplaced = (D.ARCHAEOLOGY_UNPLACED || []).filter(a => a.cat === cat);
+    const all = items.concat(unplaced);
+    const open = archListOpen[catLayerId] === true;
+    return `<details class="archlist" data-ag="${catLayerId}"${open ? ' open' : ''}>
+      <summary>${all.length} site${all.length===1?'':'s'}${unplaced.length ? ` (${unplaced.length} not yet mapped)` : ''} — tap any to open</summary>
+      ${all.map(a => `<button class="architem" data-aid="${a.id}">
+        <span class="ait">${a.name}${a.lat===undefined?' <i style="opacity:.6;font-style:normal">— not plotted</i>':''}</span><span class="aie">${a.era}</span>
+      </button>`).join('')}
+    </details>`;
+  }
+  function selectArch(aid){
+    const a = (D.ARCHAEOLOGY || []).find(x => x.id === aid) || (D.ARCHAEOLOGY_UNPLACED || []).find(x => x.id === aid); if(!a) return;
+    if(lastDetailView && lastDetailView.kind !== 'arch') navBack = navBack || { label: lastDetailView.label, fn: lastDetailView.fn };
+    const catLabel = (D.ARCH_CATEGORIES[a.cat] || {}).label || a.cat;
+    detail.innerHTML = `
+      <div class="dhead">
+        ${navBack ? `<button class="dclose" id="detailBack" style="left:14px;right:auto" title="Back">←</button>` : ''}
+        <button class="dclose" title="Close">×</button>
+        <h2>${a.name}</h2>
+        <div class="dhead-extra">
+          <div class="cat">${catLabel}</div>
+          <div class="mod"><b style="font-weight:500">Era:</b> ${a.era}</div>
+          ${a.lat===undefined ? '<div class="mod">Findspot too broad for a precise map pin — listed here, not plotted.</div>' : ''}
+        </div>
+      </div>
+      <div class="dbody">
+        <div class="blurb">${linkPlaces(a.blurb, a.place)}</div>
+        <div class="sec"><h3>Why it matters for the New Testament</h3><p>${linkPlaces(a.sig, a.place)}</p>${confChip(a)}</div>
+        ${confBlock(a)}
+        ${a.place && byId[a.place] ? `<div class="sec"><button class="chip" id="archgoplace">See ${esc(byId[a.place].name)} on the map</button></div>` : ''}
+        <div class="sec"><h3>Sources</h3><ul class="srclist">${a.src.map(s => `<li>${s}</li>`).join('')}</ul></div>
+        ${a.wiki ? `<div class="sec"><a class="chip" href="${a.wiki}" target="_blank" rel="noopener">Look this up on Wikipedia ↗</a></div>` : ''}
+      </div>`;
+    openPanel();
+    const bb = detail.querySelector('#detailBack');
+    if(bb) bb.onclick = () => { const nb = navBack; navBack = null; nb.fn(); };
+    const gp = detail.querySelector('#archgoplace');
+    if(gp) gp.onclick = () => select(a.place);
+    wireGeolinks(detail);
+    lastDetailView = { kind:'arch', label: a.name, fn: () => selectArch(aid) };
+    if(isMobileLayout()) closeDrawer();
+    if(a.lat !== undefined) goToPoint([a.lat, a.lon], Math.max(map.getZoom(), 12));
+  }
   function bindItems(){
+    const refDetails = listEl.querySelector('.refgroup');
+    if(refDetails) refDetails.ontoggle = () => { refOpen = refDetails.open; };
+    listEl.querySelectorAll('.pgroup').forEach(d => {
+      const summary = d.querySelector('summary');
+      /* a real click, not the native toggle event: re-renders (e.g. from selecting a
+         place) recreate this <details open> from scratch, and some browsers fire a
+         spurious 'toggle' on that reconnection \u2014 which used to re-fly to the whole
+         region and clobber the place-specific fly that had just run */
+      summary.onclick = e => {
+        e.preventDefault();
+        const willOpen = !d.open;
+        d.open = willOpen;
+        placeGroupOpen[d.dataset.pg] = willOpen;
+        if(!willOpen) return;
+        const ids = D.PLACES.filter(p => p.region === d.dataset.pg).map(p => p.id);
+        const idSet = new Set(ids);
+        Object.entries(placeMarkers).forEach(([id, m]) => {
+          const el = m.getElement && m.getElement(); if(!el) return;
+          const pin = el.querySelector('.pin'); if(!pin) return;
+          pin.classList.toggle('hl', idSet.has(id));
+          pin.classList.toggle('dim', !idSet.has(id));
+        });
+        const pts = ids.map(id => byId[id]).filter(Boolean).map(p => [p.lat, p.lon]);
+        if(pts.length > 1){
+          const gutter = drawerShift() > 0 ? drawerWidth() : 0;
+          const vgutter = isMobileLayout() ? sheetHeight() : 0;
+          goToBounds(L.latLngBounds(pts), {paddingTopLeft:[26,26], paddingBottomRight:[gutter + 26, vgutter + 36], maxZoom:12});
+        } else if(pts.length === 1){
+          goToPoint(pts[0], 10);
+        }
+      };
+    });
+    listEl.querySelectorAll('.egroup').forEach(d => d.ontoggle = () => { eventGroupOpen[d.dataset.eg] = d.open; });
     listEl.querySelectorAll('[data-ref="herods"]').forEach(b => b.onclick = showHerods);
-    listEl.querySelectorAll('[data-ref="about"]').forEach(b => b.onclick = showAbout);
     listEl.querySelectorAll('[data-ref="profiles"]').forEach(b => b.onclick = showProfiles);
     listEl.querySelectorAll('.item[data-pid]').forEach(b => b.onclick = () => {
       if(tab === 'cfm' && cfmWeek !== null) navBack = { label: cfmByWeek[cfmWeek].title, fn: () => setCfmWeek(cfmWeek) };
@@ -2088,10 +2419,11 @@
     if(layerOn.culture) rows.push(['kd','#3f6b6b','Gentile territory'],['kd','#a8763c','Samaritan territory']);
     if(layerOn.water) rows.push(['k','#2f6b78','The Jordan']);
     if(layerOn.rings) rows.push(['k','#8c3a2b',"Day's walk ring"]);
-    const js = D.JOURNEYS.filter(j => (journeyOn[j.id] || autoOn.has(j.id)) && layerOn.journeys);
+    Object.entries(ARCH_GRP).forEach(([cat,lg]) => { if(layerOn[lg]) rows.push(['kd', D.ARCH_CATEGORIES[cat].color, D.ARCH_CATEGORIES[cat].label]); });
+    const js = D.JOURNEYS.filter(j => (journeyOn[j.id] || autoOn.has(j.id)) && layerOn[isPaul(j) ? 'paulJourneys' : 'journeys']);
     js.forEach(j => rows.push(['k', j.color, j.name.replace(/ \(.*\)/,'')]));
     document.getElementById('legend').innerHTML = (rows.length
-      ? '<h4>Legend</h4>' + rows.map(([k,c,t]) => {
+      ? '<h4>Legend<button class="lgbtn" title="Hide the legend">✕</button></h4>' + rows.map(([k,c,t]) => {
           /* the two confidence rows have to look like what they describe, or the key
              is telling the reader something the map is not */
           const style = k === 'k' ? 'border-top-color:' + c
@@ -2101,7 +2433,7 @@
           const cls = (k === 'kdash' || k === 'khollow') ? 'kd' : k;
           return `<div class="row"><span class="${cls}" style="${style}"></span><span>${t}</span></div>`;
         }).join('')
-      : '<h4>Legend</h4><div class="row" style="color:var(--ink-3)"><span>No layers shown.</span></div>')
+      : '<h4>Legend<button class="lgbtn" title="Hide the legend">✕</button></h4><div class="row" style="color:var(--ink-3)"><span>No layers shown.</span></div>')
       + '<div class="srcnote">Place confidence describes identification of the physical location; it does not by itself mean scripture or history locates the <i>event</i> there too — see "Event location" notes in place detail where they differ. Historical overlays drawn after Josephus, the Mishnah, and modern excavation reports; boundaries and routes are approximate. Base map © OpenStreetMap contributors.</div>';
     const legendEl = document.getElementById('legend');
     legendEl.style.display = legendVisible ? '' : 'none';
@@ -2127,18 +2459,12 @@
     }
     const t = tourById[tourId];
     listEl.innerHTML =
-      `<div class="tourhead"><h3>${t.name}</h3><div class="ts">${t.sub}</div>
-         <button id="exittour">← All tours</button>
-         <button id="printtour">Print this tour</button>
-         <button id="linktour">Copy link</button></div>` +
+      `<div class="tourhead"><h3>${t.name}</h3><div class="ts">${t.sub}</div></div>` +
       t.steps.map((s,i) =>
         `<div class="step${i===tourStep?' on':''}" data-si="${i}" role="button" tabindex="0">
            <span class="num">${i+1}</span>
            <span><span class="st">${s.t}</span><button class="sr" data-tsi="${i}" style="display:block">${s.ref}</button></span>
          </div>`).join('');
-    listEl.querySelector('#exittour').onclick = exitTour;
-    listEl.querySelector('#printtour').onclick = () => printTour(t);
-    listEl.querySelector('#linktour').onclick = e => copyLink(e.currentTarget);
     listEl.querySelectorAll('[data-si]').forEach(el => {
       el.onclick = () => goStep(+el.dataset.si);
       el.onkeydown = ev => { if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); goStep(+el.dataset.si); } };
@@ -2223,7 +2549,9 @@
     D.JOURNEYS.forEach(j => journeyOn[j.id] = false);
     cfmOn.clear();
     (w.relevantJourneyIds || []).forEach(id => cfmOn.add(id));
-    setLayerCheckbox('journeys', cfmOn.size > 0);
+    const relJ = [...cfmOn].map(id => D.JOURNEYS.find(j => j.id === id)).filter(Boolean);
+    setLayerCheckbox('journeys', relJ.some(j => !isPaul(j)));
+    setLayerCheckbox('paulJourneys', relJ.some(j => isPaul(j)));
     refreshJourneys();
     cfmPaint();
     const sel = document.getElementById('cfm-sel'); if(sel) sel.value = String(n);
@@ -2232,7 +2560,7 @@
       const gutter = drawerShift() > 0 ? drawerWidth() : 0;
       const vgutter = isMobileLayout() ? sheetHeight() : 0;
       goToBounds(L.latLngBounds(w.targetBounds),
-        {paddingTopLeft:[26,26], paddingBottomRight:[gutter + 26, vgutter + 36], maxZoom:16});
+        Object.assign({maxZoom:16}, flyPad(gutter, vgutter)));
     }
     if(isMobileLayout() && !detail.classList.contains('open')) openDrawer();
     writeHash();
@@ -2243,6 +2571,7 @@
     cfmOn.clear();
     D.JOURNEYS.forEach(j => journeyOn[j.id] = false);
     setLayerCheckbox('journeys', false);
+    setLayerCheckbox('paulJourneys', false);
     cfmPaint();
     const sel = document.getElementById('cfm-sel'); if(sel) sel.value = '';
     render(); updateLegend();
@@ -2266,7 +2595,7 @@
   }
   function renderCFM(){
     if(cfmWeek === null){
-      listEl.innerHTML = '<div class="grouphdr">CFM ' + (D.CFM_YEAR || '') + ' — the year, week by week</div>' +
+      listEl.innerHTML =
         CFM.map(w => `<button class="item" data-cw="${w.week}">
             <div class="nm">${w.title}</div>
             <div class="mt" style="font-style:normal;color:var(--ink-3)">${w.lessonDates ? w.lessonDates + ' · ' : ''}${w.readings}</div>
@@ -2281,17 +2610,13 @@
     listEl.innerHTML =
       `<div class="tourhead">
          <h3>${w.title}</h3>
-         <div class="ts">${w.readings}</div>
          ${w.lessonTitle ? `<div class="ts" style="font-style:normal;margin-top:5px">
            <span style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)">${D.CFM_YEAR || ''} lesson${w.lessonDates ? ' · ' + w.lessonDates : ''}</span><br>
            <i>${w.lessonTitle}</i></div>` : ''}
-         <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+         <div class="cw-nav" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
            <button id="cw-prev"${cfmWeek === 0 ? ' disabled' : ''}>◀ Previous</button>
            <button id="cw-next"${cfmWeek === CFM.length - 1 ? ' disabled' : ''}>Next ▶</button>
-           <button id="cw-all">All weeks</button>
-           <button id="cw-off">Full NT</button>
-           <button id="cw-print">Print this lesson</button>
-           <button id="cw-link">Copy link</button>
+           ${pls.length ? `<button id="cw-walk" style="background:var(--red);color:var(--parch-2);border-color:var(--red)">Walk through ▶</button>` : ''}
          </div>
          ${navBack ? `<button class="glink" id="cw-back" style="background:transparent;cursor:pointer">← Back to ${esc(navBack.label)}</button>` : ''}
        </div>` +
@@ -2318,11 +2643,18 @@
     wireGeolinks(listEl);
     listEl.querySelector('#cw-prev').onclick = () => stepCfm(-1);
     listEl.querySelector('#cw-next').onclick = () => stepCfm(1);
-    listEl.querySelector('#cw-all').onclick = () => { cfmWeek = null; cfmPaint(); cfmOn.clear(); refreshJourneys(); render(); updateLegend(); writeHash(); };
-    listEl.querySelector('#cw-off').onclick = exitCfm;
-    listEl.querySelector('#cw-print').onclick = () => printWeek(w);
-    listEl.querySelector('#cw-link').onclick = e => copyLink(e.currentTarget);
+    const cwWalk = listEl.querySelector('#cw-walk');
+    if(cwWalk) cwWalk.onclick = () => startLessonWalkthrough(w);
     bindItems();
+  }
+  /* a lesson walked step by step, one site at a time — reuses the guided-tour
+     engine (arrow keys, Back/Next, the pinned header nav) rather than a parallel one */
+  function startLessonWalkthrough(w){
+    const steps = (w.relevantPlaceIds || []).map(pid => byId[pid]).filter(Boolean)
+      .map(p => ({ place: p.id, t: p.name, ref: w.readings, note: p.blurb || '' }));
+    if(!steps.length) return;
+    tourById['cfm-' + w.week] = { id: 'cfm-' + w.week, name: w.title, sub: w.readings, steps };
+    enterTour('cfm-' + w.week);
   }
 
   /* ——— printable study sheets ——— */
@@ -2555,18 +2887,91 @@
     if(x) x.focus();
   }
 
-  /* ——— about ——— */
-  function showAbout(){
-    detail.innerHTML = `
-      <div class="dhead">
-        <button class="dclose" title="Close">×</button>
-        <div class="cat">About</div>
-        <h2>New Testament Atlas</h2>
-        <div class="grk">Beta version</div>
-        <div class="mod" style="font-size:13px;margin-top:8px"><b style="font-weight:500">Prepared by Taylor Halverson, PhD</b></div>
-        <div class="reg"><a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a></div>
-      </div>
-      <div class="dbody">
+  /* ——— about & sources: one panel, four tabs ———
+     Overview, sources & scholarship, licences & attribution, and reporting an
+     error used to be four separate Tools entries; a beta reader complained
+     they didn't know which one to open, so they're one panel now. */
+  const ABOUT_TABS = [
+    {id:'overview', label:'Overview'},
+    {id:'sources', label:'Sources & scholarship'},
+    {id:'licences', label:'Licences & attribution'},
+    {id:'report', label:'Report an error'}
+  ];
+  const FEEDBACK_EMAIL = 'insights@taylorhalverson.com';
+  function aboutTabBody(tab){
+    if(tab === 'sources') return `
+        <div class="sec"><h3>Sources &amp; cautions</h3>
+          <p>Scripture is quoted from the World English Bible, a public-domain modern-English translation. Historical and cultural notes draw on Josephus,
+          the Mishnah and Talmud, Greco-Roman writers, and published excavation reports. Where archaeology and
+          the ancient sources disagree — as over the date the Samaritan temple on Gerizim fell — both are given.</p>
+          <p>Political boundaries and journey routes are drawn from real terrain but remain approximate —
+          ancient frontiers were zones, not lines. Where a site's identification is genuinely debated
+          (Cana, Bethsaida, Emmaus, the Praetorium, the mount of the Transfiguration), the panel says so and
+          names the competing candidates rather than resolving them.</p>
+          <p>Parchment tints the Mapbox Outdoors map; Modern removes the tint. Plain swaps to Mapbox's
+          standard street style; Minimal is a flat, mostly-monochrome base for readers who want the ancient
+          overlay to be the only strong colour on screen; Satellite shows Mapbox's satellite imagery.
+          ${BASEMAP.credit.charAt(0).toUpperCase() + BASEMAP.credit.slice(1)}.</p>
+          ${(D.GENERAL_SOURCES || []).length ? `<h3 style="margin-top:15px">Cited throughout</h3>
+            <ul class="srclist">${D.GENERAL_SOURCES.map(s => `<li>${s}</li>`).join('')}</ul>
+            <p class="srccav">Individual places name their own literature in the Sources section of each panel.</p>` : ''}</div>
+        <div class="sec"><h3>How sure are we?</h3>
+          <p>Every place carries a graded identification — <b style="font-weight:500">secure</b>,
+          <b style="font-weight:500">probable</b>, <b style="font-weight:500">contested</b> or
+          <b style="font-weight:500">conjectural</b> — shown as a chip in its panel and on the map itself:
+          contested sites wear a dashed ring, conjectural ones a hollow dot. Where two candidates are argued
+          in print, the panel lays out both. Every panel also lists its sources by author and title.</p></div>`;
+    if(tab === 'licences'){
+      const rows = [
+        ['Leaflet 1.9.4', 'BSD 2-Clause', 'Mapping library: projection, panning, zoom, markers and vector overlays. Copyright © 2010–2024 Volodymyr Agafonkin; © 2010–2011 CloudMade.'],
+        ['Cormorant Garamond', 'SIL Open Font License 1.1', 'Display and title type. Designed by Christian Thalmann, Catharsis Fonts.'],
+        ['Spectral', 'SIL Open Font License 1.1', 'Body and interface type. Designed by Production Type.'],
+        ['Basemap tiles', BASEMAP.licensed ? 'Licensed source' : 'OpenStreetMap — ODbL 1.0',
+          BASEMAP.credit.charAt(0).toUpperCase() + BASEMAP.credit.slice(1) + '. Attribution appears on screen, in print and in exported images.'],
+        ['Scripture', 'Public domain worldwide', 'World English Bible, cited by book, chapter and verse. A modern-English translation released into the public domain with no territorial restrictions.'],
+        ['Ancient sources', 'Public domain', 'Josephus, the Mishnah, Strabo, Pliny, Pausanias and Eusebius, cited by book and section.'],
+        ['Scholarly citations', 'Bibliographic facts', 'Author, title and year.'],
+        ['Everything else', '© Taylor Halverson', 'Place descriptions, historical context, confidence gradings, discussion prompts, coordinates, route traces, and the interface.']
+      ];
+      return `
+        <div class="blurb">The sources, data, software and typefaces the atlas is built from, with the
+          licence under which each is used.</div>
+        ${rows.map(([n, l, d]) => `<div class="sec"><h3>${n}</h3>
+          <div class="kv"><b>Licence</b><span>${l}</span></div>
+          <p style="margin-top:7px">${d}</p></div>`).join('')}
+        <div class="sec"><h3>Leaflet notice</h3>
+          <p style="font-size:11.5px;color:var(--ink-2)">Copyright © 2010–2024 Volodymyr Agafonkin;
+          copyright © 2010–2011 CloudMade. All rights reserved. Redistribution and use in source and
+          binary forms, with or without modification, are permitted provided that the conditions of the
+          BSD 2-Clause License are met.</p></div>
+        <div class="sec"><h3>Independence</h3>
+          <p>An independent study resource, not affiliated with or endorsed by any church. CFM readings and
+          dates are stated as facts and link to the official manual; no curriculum text or artwork is reproduced.</p></div>
+        <div class="sec"><h3>Full account</h3>
+          <p>Every source, credit and licence notice, with the full BSD, OFL and ODbL terms and the
+          preferred form of citation, is set out on the attributions page.</p>
+          <p style="margin-top:9px"><a href="attributions.html">Attributions, licences and citation</a></p></div>`;
+    }
+    if(tab === 'report'){
+      const ctx = selected && byId[selected] ? byId[selected].name : 'the atlas';
+      const body = encodeURIComponent('Where: ' + ctx + '\nLink: ' + location.href +
+        '\n\nWhat looks wrong:\n\n\nWhat it should say (and where that comes from):\n\n');
+      return `
+        <div class="blurb">This atlas makes specific claims about specific places. If one of them is wrong —
+          a coordinate, a date, a reading of an excavation, a scripture reference — that is worth more than a compliment.</div>
+        <div class="sec"><h3>What helps most</h3>
+          <p>Name the place, quote the line, and say what it should say. If the correction rests on a
+            publication, name it: the sources list in every panel is there so a claim can be argued.</p></div>
+        <div class="sec"><h3>Send it</h3>
+          <div class="cfmweeks">
+            <a class="chip" style="text-decoration:none" href="mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('NT Atlas beta — correction: ' + ctx)}&body=${body}">Email the correction</a>
+            <a class="chip" style="text-decoration:none" href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>
+            <button class="chip" id="fblink">Copy the link to this view</button>
+          </div>
+          <p class="srccav">A link carries your place, your layers and your lesson week, so a correction can be
+            reproduced exactly as you saw it.</p></div>`;
+    }
+    return `
         <div class="blurb">An interactive atlas of the world of the Gospels and early Acts — Galilee, the Decapolis,
           Samaria, Judea and Jerusalem as they stood around AD 30 — built for study rather than sightseeing.</div>
         <div class="sec"><h3>Beta reconstruction notice</h3>
@@ -2582,13 +2987,6 @@
           what has been excavated there, why the geography mattered, its graded identification and sources,
           and questions for discussion.</p></div>
 
-        <div class="sec"><h3>How sure are we?</h3>
-          <p>Every place carries a graded identification — <b style="font-weight:500">secure</b>,
-          <b style="font-weight:500">probable</b>, <b style="font-weight:500">contested</b> or
-          <b style="font-weight:500">conjectural</b> — shown as a chip in its panel and on the map itself:
-          contested sites wear a dashed ring, conjectural ones a hollow dot. Where two candidates are argued
-          in print, the panel lays out both. Every panel also lists its sources by author and title.</p></div>
-
         <div class="sec"><h3>How to use it</h3>
           <p><b style="font-weight:500">Search a reference.</b> Type <em>Mark 5</em>, <em>Jn 4:6</em> or
           <em>Acts 10</em> and the atlas finds the places and events tied to that passage.</p>
@@ -2596,36 +2994,14 @@
           matching places light up, everything else recedes, and the relevant route draws itself. Tap several to combine.</p>
           <p><b style="font-weight:500">Walk a tour.</b> The Tours tab steps through a sequence with Back and Next.</p>
           <p><b style="font-weight:500">Turn layers on and off.</b> Boundaries, roads, terrain, harbours, the Twelve,
-          rabbinic academies, sacred sites, walking distances, modern names.</p>
+          rabbinic academies, sacred sites, walking distances, and a comprehensive archaeological-discoveries layer —
+          inscriptions, manuscripts, ruins, coins, war evidence and art bearing on the New Testament.</p>
           <p><b style="font-weight:500">Print or share.</b> Any place or tour prints as a study sheet, and the link
           in your address bar carries your place and your active layers.</p>
           <p><b style="font-weight:500">Study tools.</b> The <em>Tools</em> menu measures the distance and days
-          on foot between any two places, shows the chronology band, runs a map-recall drill with the labels
-          off, saves the view as an image, builds a multi-place printed packet, and keeps your saved places
-          and notes — which print on the sheet with the rest. Shortcuts: <em>M</em>, <em>T</em>, <em>Q</em>,
-          <em>S</em>, <em>P</em> for presenter mode.</p></div>
-
-        <div class="sec"><h3>Sources &amp; cautions</h3>
-          <p>Scripture is quoted from the World English Bible, a public-domain modern-English translation. Historical and cultural notes draw on Josephus,
-          the Mishnah and Talmud, Greco-Roman writers, and published excavation reports. Where archaeology and
-          the ancient sources disagree — as over the date the Samaritan temple on Gerizim fell — both are given.</p>
-          <p>Political boundaries and journey routes are drawn from real terrain but remain approximate —
-          ancient frontiers were zones, not lines. Where a site's identification is genuinely debated
-          (Cana, Bethsaida, Emmaus, the Praetorium, the mount of the Transfiguration), the panel says so and
-          names the competing candidates rather than resolving them.</p>
-          <p>Parchment tints the modern (OpenTopoMap) map; Modern removes the tint. Plain swaps to a
-          simpler OpenStreetMap style with far less line-work; Satellite shows NASA's free Blue Marble imagery.
-          ${BASEMAP.credit.charAt(0).toUpperCase() + BASEMAP.credit.slice(1)}.</p>
-          ${(D.GENERAL_SOURCES || []).length ? `<h3 style="margin-top:15px">Cited throughout</h3>
-            <ul class="srclist">${D.GENERAL_SOURCES.map(s => `<li>${s}</li>`).join('')}</ul>
-            <p class="srccav">Individual places name their own literature in the Sources section of each panel.</p>` : ''}</div>
-
-        <div class="sec"><h3>Beta</h3>
-          <p>This is a beta version. Corrections and additions are welcome — use
-          <b style="font-weight:500">Tools → Report an error</b>, which carries a link to the exact view you
-          were looking at, or write by way of
-          <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>.
-          There is also a <a href="about.html">plain-language overview page</a> for sharing.</p></div>
+          on foot between any two places, shows the chronology band, saves the view as an image, builds a
+          multi-place printed packet, and keeps your saved places and notes — which print on the sheet with
+          the rest. Shortcuts: <em>M</em>, <em>T</em>, <em>S</em>, <em>P</em> for presenter mode.</p></div>
 
         <div class="sec"><h3>About the author</h3>
           <p><b style="font-weight:500">Taylor Halverson, Ph.D.</b><br>
@@ -2654,53 +3030,28 @@
         <div class="sec"><h3>Elsewhere</h3>
           <div class="kv"><b>Insights</b><span><a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a></span></div>
           <div class="kv"><b>Books</b><span><a href="https://books.taylorhalverson.com" target="_blank" rel="noopener">books.taylorhalverson.com</a></span></div>
-          <div class="kv"><b>Tours</b><span><a href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com</a></span></div></div>
-      </div>`;
-    openPanel();
+          <div class="kv"><b>Tours</b><span><a href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com</a></span></div></div>`;
   }
-
-  /* ——— licences & attribution ———
-     A product that gets sold needs its dependencies stated where a buyer can
-     read them. The full inventory, with the sale-readiness checklist, is in
-     LICENSES.md at the project root. */
-  function showLicences(){
-    const rows = [
-      ['Leaflet 1.9.4', 'BSD 2-Clause', 'Mapping library: projection, panning, zoom, markers and vector overlays. Copyright © 2010–2024 Volodymyr Agafonkin; © 2010–2011 CloudMade.'],
-      ['Cormorant Garamond', 'SIL Open Font License 1.1', 'Display and title type. Designed by Christian Thalmann, Catharsis Fonts.'],
-      ['Spectral', 'SIL Open Font License 1.1', 'Body and interface type. Designed by Production Type.'],
-      ['Basemap tiles', BASEMAP.licensed ? 'Licensed source' : 'OpenStreetMap — ODbL 1.0',
-        BASEMAP.credit.charAt(0).toUpperCase() + BASEMAP.credit.slice(1) + '. Attribution appears on screen, in print and in exported images.'],
-      ['Scripture', 'Public domain worldwide', 'World English Bible, cited by book, chapter and verse. A modern-English translation released into the public domain with no territorial restrictions.'],
-      ['Ancient sources', 'Public domain', 'Josephus, the Mishnah, Strabo, Pliny, Pausanias and Eusebius, cited by book and section.'],
-      ['Scholarly citations', 'Bibliographic facts', 'Author, title and year.'],
-      ['Everything else', '© Taylor Halverson', 'Place descriptions, historical context, confidence gradings, discussion prompts, coordinates, route traces, and the interface.']
-    ];
+  function showAboutSources(tab){
+    tab = tab && ABOUT_TABS.some(t => t.id === tab) ? tab : 'overview';
     detail.innerHTML = `
       <div class="dhead">
         <button class="dclose" title="Close">×</button>
-        <div class="cat">Attribution</div>
-        <h2>Licences</h2>
+        <div class="cat">About</div>
+        <h2>New Testament Atlas</h2>
+        <div class="grk">Beta version</div>
       </div>
       <div class="dbody">
-        <div class="blurb">The sources, data, software and typefaces the atlas is built from, with the
-          licence under which each is used.</div>
-        ${rows.map(([n, l, d]) => `<div class="sec"><h3>${n}</h3>
-          <div class="kv"><b>Licence</b><span>${l}</span></div>
-          <p style="margin-top:7px">${d}</p></div>`).join('')}
-        <div class="sec"><h3>Leaflet notice</h3>
-          <p style="font-size:11.5px;color:var(--ink-2)">Copyright © 2010–2024 Volodymyr Agafonkin;
-          copyright © 2010–2011 CloudMade. All rights reserved. Redistribution and use in source and
-          binary forms, with or without modification, are permitted provided that the conditions of the
-          BSD 2-Clause License are met.</p></div>
-        <div class="sec"><h3>Independence</h3>
-          <p>An independent study resource, not affiliated with or endorsed by any church. CFM readings and
-          dates are stated as facts and link to the official manual; no curriculum text or artwork is reproduced.</p></div>
-        <div class="sec"><h3>Full account</h3>
-          <p>Every source, credit and licence notice, with the full BSD, OFL and ODbL terms and the
-          preferred form of citation, is set out on the attributions page.</p>
-          <p style="margin-top:9px"><a href="attributions.html">Attributions, licences and citation</a></p></div>
+        <div class="cfmweeks" style="margin-bottom:4px">${ABOUT_TABS.map(t =>
+          `<button class="chip${t.id === tab ? ' on' : ''}" data-atab="${t.id}">${t.label}</button>`).join('')}</div>
+        <div id="abouttabbody">${aboutTabBody(tab)}</div>
       </div>`;
     openPanel();
+    detail.querySelectorAll('[data-atab]').forEach(b => b.onclick = () => showAboutSources(b.dataset.atab));
+    if(tab === 'report'){
+      const c = detail.querySelector('#fblink');
+      if(c) c.onclick = e => copyLink(e.currentTarget);
+    }
   }
 
   /* ——— the Herods ——— */  function showHerods(){
@@ -2733,7 +3084,6 @@
   function select(pid, eid, step){
     const p = byId[pid]; if(!p) return;
     /* the study tools take the click before the panel does */
-    if(quiz){ quizAnswer(pid); return; }
     if(measureOn){ measurePick(pid); return; }
     if(packMode){ togglePack(pid); return; }
     /* picking a place outside a tour ends the tour, so the view and the link agree */
@@ -2747,19 +3097,17 @@
         ${navBack ? `<button class="dclose" id="detailBack" style="left:14px;right:auto" title="Back">←</button>` : ''}
         <button class="dclose" title="Close">×</button>
         <h2>${p.name}</h2>
+        ${step ? `<div class="stepnavhead">
+          <button id="tprev"${tourStep===0?' disabled':''} aria-label="Previous step">◀</button>
+          <span class="cnt">Step ${tourStep+1} of ${tourById[tourId].steps.length}</span>
+          <button id="tnext"${tourStep===tourById[tourId].steps.length-1?' disabled':''} aria-label="Next step">▶</button>
+        </div>` : ''}
         <div class="dhead-extra">
           <div class="cat">${p.cat === 'jerusalem' ? 'Jerusalem — within the walls' : p.cat}</div>
           ${p.greek && p.greek !== '—' ? `<div class="grk">${p.greek}</div>` : ''}
           <div class="mod"><b style="font-weight:500">Today:</b> ${p.modern}</div>
           <div class="reg">${p.region}</div>
-          ${confChip(p)}
         </div>
-      </div>
-      <div class="dtools" id="dtools">
-        <button id="dmore" class="dmorebtn" title="More actions" aria-expanded="false">⋯</button>
-        <button id="dprint">Print study sheet</button>
-        <button id="dstar"></button>
-        <button id="dlink">Copy link</button>
       </div>
       <div class="dbody">
         ${step ? `<div class="stepblock">
@@ -2767,14 +3115,8 @@
           <h4>${step.t}</h4>
           <div class="sr">${step.ref}</div>
           <p>${linkPlaces(step.note, p.id)}</p>
-          <div class="stepnav">
-            <button id="tprev"${tourStep===0?' disabled':''}>◀ Back</button>
-            <button id="tnext"${tourStep===tourById[tourId].steps.length-1?' disabled':''}>Next ▶</button>
-            <span class="cnt">${tourStep+1} / ${tourById[tourId].steps.length}</span>
-          </div>
         </div>` : ''}
         <div class="blurb">${linkPlaces(p.blurb, p.id)}</div>
-        ${confBlock(p)}
 
         <div class="sec"><h3>Scripture <span style="color:var(--ink-3);letter-spacing:.06em">— World English Bible</span></h3>
           ${p.scriptures.map(s => { const vv = versesForRef(s.ref); return `<div class="scrip"><div class="ref">${s.ref}</div><div class="txt">${vv ? versesHTML(vv.verses, p.id) : linkPlaces(s.text, p.id)}</div></div>`; }).join('')}
@@ -2788,11 +3130,13 @@
         <div class="sec"><h3>Geography — why the place mattered</h3><p>${linkPlaces(p.geo, p.id)}</p></div>
         <div class="sec"><h3>The Greco-Roman world</h3><p>${linkPlaces(p.greco, p.id)}</p></div>
         <div class="sec"><h3>Second Temple &amp; rabbinic Judaism</h3><p>${linkPlaces(p.jewish, p.id)}</p></div>
-        <div class="sec"><h3>Archaeology</h3><p>${linkPlaces(p.arch, p.id)}</p></div>
+        <div class="sec"><h3>Archaeology</h3><p>${linkPlaces(p.arch, p.id)}</p>${confChip(p)}</div>
         <div class="sec"><h3>Why it matters</h3><p>${linkPlaces(p.why, p.id)}</p></div>
+        ${p.related ? `<div class="sec"><h3>Related archaeological features</h3><div class="srclist">${p.related.map(r => `<div style="margin-bottom:10px"><a href="${r.wiki}" target="_blank" rel="noopener" style="font-weight:500">${esc(r.name)}</a> <span style="color:var(--ink-3);font-size:11px">(${esc(r.era)})</span>${r.conf ? ` <span style="color:var(--ink-3);font-size:11px">· ${esc(r.conf)}</span>` : ''}<br>${esc(r.note)}${r.sig ? `<br><span style="color:var(--ink-2)">${esc(r.sig)}</span>` : ''}${r.src ? `<br><span style="color:var(--ink-3);font-size:11px">${(Array.isArray(r.src)?r.src:[r.src]).map(s=>esc(s)).join(' · ')}</span>` : ''}</div>`).join('')}</div></div>` : ''}
         <div class="sec"><h3>For discussion</h3><ol class="qs">${p.questions.map(q => `<li>${linkPlaces(q, p.id)}</li>`).join('')}</ol></div>
-        ${cwks.length ? `<div class="sec"><h3>In CFM</h3>
+        ${cwks.length ? `<div class="sec"><h3>Other weekly readings</h3>
           <div class="cfmweeks">${cwks.map(w => `<button class="chip" data-cw="${w.week}">${cfmShort(w)}</button>`).join('')}</div></div>` : ''}
+        ${confBlock(p)}
         ${p.sources ? `<div class="sec"><h3>Sources</h3>
           <ul class="srclist">${p.sources.map(s => `<li>${s}</li>`).join('')}</ul></div>` : ''}
 
@@ -2808,14 +3152,6 @@
         </div>
       </div>`;
     openPanel();
-    detail.querySelector('#dprint').onclick = () => printPlace(p);
-    detail.querySelector('#dlink').onclick = e => copyLink(e.currentTarget);
-    const starBtn = detail.querySelector('#dstar');
-    paintStar(starBtn, pid);
-    starBtn.onclick = () => {
-      toggleStar(pid); paintStar(starBtn, pid); render();
-      say(stars.has(pid) ? p.name + ' saved' : p.name + ' removed from saved places');
-    };
     const nb = detail.querySelector('#dnote'), ns = detail.querySelector('#dnotest');
     if(nb){
       nb.value = notes[pid] || '';
@@ -2828,12 +3164,6 @@
       };
     }
     const bb = detail.querySelector('#detailBack');
-    const dtoolsEl = detail.querySelector('#dtools'), dmore = detail.querySelector('#dmore');
-    if(isMobileLayout()) dtoolsEl.classList.add('collapsed');
-    if(dmore) dmore.onclick = () => {
-      const open = dtoolsEl.classList.toggle('collapsed') === false;
-      dmore.setAttribute('aria-expanded', String(open));
-    };
     detail.classList.remove('scrolled');
     const dbodyScroller = detail.querySelector('.dbody');
     if(dbodyScroller) dbodyScroller.onscroll = () => { detail.classList.toggle('scrolled', dbodyScroller.scrollTop > 16); };
@@ -2877,8 +3207,7 @@
     declutterLabels();
 
     const isJlem = p.cat === 'jerusalem' || p.id === 'jerusalem';
-    if(isJlem && !layerOn.jerusalem) setLayerCheckbox('jerusalem', true);
-    const targetZoom = isJlem ? 15.5 : (map.getZoom() < 10 ? 11 : map.getZoom());
+    const targetZoom = isJlem ? 15.5 : (step ? Math.max(map.getZoom(), 14) : (map.getZoom() < 10 ? 11 : map.getZoom()));
     goToPoint([p.lat, p.lon], targetZoom);
     render(); updateLegend();
     try{ localStorage.setItem('ntatlas.sel', pid); }catch(e){}
@@ -2922,7 +3251,7 @@
 
   /* ——— quick views ——— */
   const VIEWS = {
-    whole:   {c:[32.36,35.52], z:8.5},
+    whole:   {c:[32.36,35.52], z:8},
     galilee: {c:[32.83,35.50], z:11},
     decapolis:{c:[32.45,36.00], z:9.5},
     jerusalem:{c:[31.7776,35.2340], z:14.5, jlem:true}
@@ -2930,7 +3259,6 @@
   function goView(name){
     const v = VIEWS[name]; if(!v) return;
     goToPoint(v.c, v.z);
-    if(v.jlem && !layerOn.jerusalem) setLayerCheckbox('jerusalem', true);
     document.querySelectorAll('[data-view]').forEach(x => x.classList.toggle('on', x.dataset.view === name));
     updateLegend();
   }
@@ -2957,24 +3285,25 @@
   cfmSel.onchange = () => { if(cfmSel.value === '') exitCfm(); else setCfmWeek(+cfmSel.value); };
   document.getElementById('cfm-prev').onclick = () => stepCfm(-1);
   document.getElementById('cfm-next').onclick = () => stepCfm(1);
-  document.getElementById('cfm-off').onclick = exitCfm;
+  document.getElementById('cfm-study').onclick = () => {
+    if(!panelHidden && tab === 'cfm'){ setPanelHidden(true); return; }
+    if(panelHidden) setPanelHidden(false);
+    setTab('cfm'); render(); if(isMobileLayout()) openDrawer();
+  };
 
   /* ——— presenter mode ——— */
-  const btnPresent = document.getElementById('btn-present');
-  /* the flag lives in the masthead flow, immediately after the Presenter button,
-     so it is reachable at every width — including narrow screens, where the
-     header sheds that button and the flag becomes the only way out */
+  /* the flag lives in the masthead flow, right after the title block, so it is
+     reachable at every width — including narrow screens, where the toggle
+     itself now lives only in the Tools menu */
   const presentFlag = document.createElement('button');
   presentFlag.type = 'button';
   presentFlag.className = 'presentflag';
   presentFlag.title = 'Leave presenter mode and return every type size to normal (P)';
   presentFlag.innerHTML = 'Exit presenter <span class="x">✕</span>';
   presentFlag.onclick = () => setPresent(false);
-  btnPresent.insertAdjacentElement('afterend', presentFlag);
+  document.querySelector('header .titleblock').insertAdjacentElement('afterend', presentFlag);
   function setPresent(on, quiet){
     document.body.classList.toggle('present', on);
-    btnPresent.setAttribute('aria-pressed', on ? 'true' : 'false');
-    btnPresent.textContent = on ? 'Presenter on' : 'Presenter';
     styleJourneys();
     /* the flag joins the masthead, which can push it onto a second row — so the
        header has to be re-measured, not just the map invalidated */
@@ -2983,7 +3312,6 @@
     declutterLabels();
     if(!quiet){ try{ localStorage.setItem('nt-atlas-present', on ? '1' : '0'); }catch(e){} }
   }
-  btnPresent.onclick = () => setPresent(!document.body.classList.contains('present'));
   document.addEventListener('keydown', e => {
     if(e.key !== 'p' && e.key !== 'P') return;
     const t = e.target;
@@ -3114,13 +3442,6 @@
     return {short: Math.round(km) + ' km · ' + Math.round(mi) + ' mi',
             long: Math.round(km).toLocaleString() + ' km · ' + Math.round(mi).toLocaleString() + ' miles'};
   }
-  /* a bare quantity for the quiz hint — never zero */
-  function fmtGap(km){
-    const mi = km * 0.621371;
-    if(km < 1.6) return Math.max(10, Math.round(km * 1000 / 10) * 10) + ' metres';
-    if(mi < 10) return mi.toFixed(1) + ' miles';
-    return Math.round(mi) + ' miles';
-  }
   const shortName = p => SHORT[p.id] || p.name.split(' (')[0];
   function onFoot(mi){
     const km = mi / 0.621371;
@@ -3141,7 +3462,7 @@
     const a = byId[mA], b = byId[mB];
     if(!a){
       measurebar.innerHTML = `<span class="mval">Measure</span>
-        <span class="mhint">Tap a place on the map, then tap a second one.</span>
+        <span class="mhint">Tap any two place markers on the map (the round dots) to measure the straight-line distance and walking time between them.</span>
         <button id="mclose">Done</button>`;
     } else if(!b){
       measurebar.innerHTML = `<span class="mval">From ${a.name}</span>
@@ -3211,137 +3532,6 @@
     say(on ? 'Chronology band shown' : 'Chronology band hidden');
   }
 
-  /* ——— map recall ———
-     Labels off, dots on. This is the drill a teacher runs weekly, and the
-     reason they keep a map open at all. */
-  const QUIZ_SETS = [
-    {id:'galilee', n:'Galilee & the lake', f:p => /Galilee|Gaulanitis/.test(p.region)},
-    {id:'jerusalem', n:'Jerusalem, within the walls', f:p => p.cat === 'jerusalem' || p.id === 'jerusalem'},
-    {id:'judea', n:'Judea, Samaria & the coast', f:p => /Judea|Samaria|Perea|Phoenicia/.test(p.region)},
-    {id:'decapolis', n:'The Decapolis & the north', f:p => /Decapolis|Syria|Iturea/.test(p.region)},
-    {id:'paul', n:"Paul's world", f:p => MEDREGIONS.has(p.region)},
-    {id:'all', n:'The whole atlas', f:() => true}
-  ];
-  let quiz = null;
-  const quizbar = document.getElementById('quizbar');
-  function showQuizPicker(){
-    detail.innerHTML = `
-      <div class="dhead">
-        <button class="dclose" title="Close">×</button>
-        <div class="cat">Practice</div>
-        <h2>Map recall</h2>
-        <div class="mod">The names come off the map. You put them back.</div>
-      </div>
-      <div class="dbody">
-        <div class="blurb">Ten places, one at a time, with the labels hidden. Tap the dot you think it is —
-          a miss tells you how far off you were and in which direction, and a second miss shows you the answer.</div>
-        <div class="sec"><h3>Choose a set</h3>
-          <div class="cfmweeks">${QUIZ_SETS.map(s => {
-            const n = D.PLACES.filter(s.f).length;
-            return `<button class="chip" data-qz="${s.id}" style="white-space:nowrap">${s.n} · ${n}</button>`;
-          }).join('')}</div></div>
-        <div class="sec"><h3>Why bother</h3>
-          <p>Geography is the one part of scripture study that rewards recall directly: once the map is in your head,
-          every crossing of the lake, every journey up to Jerusalem, and every road Paul takes carries its own
-          argument without a footnote.</p></div>
-      </div>`;
-    openPanel();
-    detail.querySelectorAll('[data-qz]').forEach(b => b.onclick = () => startQuiz(b.dataset.qz));
-  }
-  function startQuiz(setId){
-    const s = QUIZ_SETS.find(x => x.id === setId) || QUIZ_SETS[0];
-    const pool = D.PLACES.filter(s.f);
-    if(pool.length < 4){ say('Not enough places in that set.'); return; }
-    const order = pool.slice().sort(() => Math.random() - .5).slice(0, Math.min(10, pool.length));
-    quiz = {set:s, pool, q:order, i:0, score:0, miss:0};
-    if(measureOn) setMeasure(false);
-    closeDetail(); closeViews(); if(isMobileLayout()) closeDrawer();
-    document.body.classList.add('quiz');
-    map.fitBounds(L.latLngBounds(pool.map(p => [p.lat, p.lon])).pad(.06), {animate:false});
-    applyZoomTier();
-    clearQuizMarks();
-    paintQuiz();
-    buildToolsMenu();
-    say('Map recall started. ' + order.length + ' places.');
-  }
-  function clearQuizMarks(){
-    mapEl.querySelectorAll('.pin').forEach(el => el.classList.remove('qright','qwrong','qshow'));
-  }
-  function paintQuiz(fb, cls){
-    if(!quiz) return;
-    const t = quiz.q[quiz.i];
-    quizbar.innerHTML = `
-      <span class="qq">${t ? 'Where is ' + shortName(t) + '?' : 'Done'}</span>
-      <span><span class="qs">${quiz.i + 1} of ${quiz.q.length} · score ${quiz.score}</span>
-      ${fb ? `<br><span class="qfb ${cls || ''}">${fb}</span>` : ''}</span>
-      <button id="qskip">Skip</button><button id="qend">End</button>`;
-    quizbar.querySelector('#qskip').onclick = () => revealAndAdvance();
-    quizbar.querySelector('#qend').onclick = endQuiz;
-  }
-  function pinEl(pid){
-    const m = placeMarkers[pid], el = m && m.getElement && m.getElement();
-    return el ? el.querySelector('.pin') : null;
-  }
-  function revealAndAdvance(){
-    const t = quiz.q[quiz.i];
-    const el = pinEl(t.id);
-    if(el){ el.classList.add('qshow','qwrong'); }
-    setTimeout(() => { clearQuizMarks(); nextQuestion(); }, 1400);
-    paintQuiz('The answer was ' + t.name + '.', 'no');
-  }
-  function nextQuestion(){
-    quiz.i++; quiz.miss = 0;
-    if(quiz.i >= quiz.q.length) return finishQuiz();
-    paintQuiz();
-  }
-  function quizAnswer(pid){
-    const t = quiz.q[quiz.i];
-    if(!t) return;
-    if(pid === t.id){
-      quiz.score++;
-      const el = pinEl(pid); if(el) el.classList.add('qright','qshow');
-      paintQuiz('Right — ' + t.name + '.', 'ok');
-      setTimeout(() => { clearQuizMarks(); nextQuestion(); }, 900);
-      return;
-    }
-    quiz.miss++;
-    const hit = byId[pid];
-    const km = haversine(hit, t);
-    const el = pinEl(pid); if(el) el.classList.add('qwrong');
-    setTimeout(() => { const e2 = pinEl(pid); if(e2) e2.classList.remove('qwrong'); }, 900);
-    if(quiz.miss >= 2) return revealAndAdvance();
-    paintQuiz(`That is ${shortName(hit)} — ${shortName(t)} is ${fmtGap(km)} ${bearingWord(hit, t)} of it. One more try.`, 'no');
-  }
-  function finishQuiz(){
-    const pct = Math.round(quiz.score / quiz.q.length * 100);
-    const verdict = pct >= 90 ? 'You know this map.' : pct >= 70 ? 'Solid — the gaps are worth a second pass.'
-      : pct >= 40 ? 'Worth running again; the map rewards repetition.' : 'Start with one region rather than the whole atlas.';
-    const set = quiz.set;
-    detail.innerHTML = `
-      <div class="dhead">
-        <button class="dclose" title="Close">×</button>
-        <div class="cat">Practice</div>
-        <h2>${quiz.score} of ${quiz.q.length}</h2>
-        <div class="mod">${set.n} · ${verdict}</div>
-      </div>
-      <div class="dbody">
-        <div class="sec"><h3>Run it again</h3>
-          <div class="cfmweeks">${QUIZ_SETS.map(s => `<button class="chip" data-qz="${s.id}">${s.n}</button>`).join('')}</div></div>
-      </div>`;
-    endQuiz(true);
-    openPanel();
-    detail.querySelectorAll('[data-qz]').forEach(b => b.onclick = () => startQuiz(b.dataset.qz));
-  }
-  function endQuiz(keepPanel){
-    quiz = null;
-    document.body.classList.remove('quiz');
-    clearQuizMarks();
-    if(!keepPanel) closeDetail();
-    buildToolsMenu();
-    declutterLabels();
-    say('Map recall ended.');
-  }
-
   /* ——— save the view as an image ———
      Composites the tiles, the vector panes and the labels onto a canvas, with the
      credit strip printed in, so a teacher can drop the view into a slide. */
@@ -3368,11 +3558,7 @@
       { font: "9px Spectral, Georgia, serif", h: 11, color: '#6b5c46',
         text: '© ' + new Date().getFullYear() + ' Taylor Halverson · insights.taylorhalverson.com · ' + BASEMAP.credit },
       { font: "9px Spectral, Georgia, serif", h: 11, color: '#6b5c46',
-        text: currentPresetKey === 'openTopo'
-          ? 'OpenTopoMap portion licensed CC BY-SA 3.0 — reuse of that portion remains under CC BY-SA · creativecommons.org/licenses/by-sa/3.0'
-          : currentPresetKey === 'osm'
-          ? 'OpenStreetMap data licensed ODbL 1.0 — reuse of that data remains under ODbL · opendatacommons.org/licenses/odbl'
-          : 'NASA imagery is in the public domain — no licence restrictions on reuse' }
+        text: 'Map tiles © Mapbox, © OpenStreetMap contributors — mapbox.com/about/maps, openstreetmap.org/copyright' }
     ];
     const wrapped = creditLines.map(l => ({ ...l, lines: wrapCanvasText(measure, l.text, l.font, maxTextW) }));
     const totalLines = wrapped.reduce((n, l) => n + l.lines.length, 0);
@@ -3482,55 +3668,101 @@
   function buildToolsMenu(){
     const item = (id, label, sub, on) =>
       `<button data-t="${id}"${on ? ' class="on"' : ''} role="menuitem">${label}<span class="ts">${sub}</span></button>`;
-    toolsMenu.innerHTML =
+    let menu =
       '<div class="tmsec">See it differently</div>' +
-      item('panel', panelHidden ? 'Show the places & lesson panel (left panel)' : 'Hide the places & lesson panel (left panel)',
-        'The list with Places, Events, Lesson, Tours and Routes — not the place-detail panel', !panelHidden) +
-      item('legend', legendVisible ? 'Hide the map legend (left panel)' : 'Show the map legend (left panel)',
-        'The colour key, at the bottom of the places & lesson panel', legendVisible) +
+      item('panel', panelHidden ? 'Show the places & lesson panel' : 'Hide the places & lesson panel',
+        '', !panelHidden) +
+      '<div class="tmsec">Map style</div>' +
+      '<div class="tmrow">' +
+        `<button data-t="base-parchment"${baseMode==='parchment'?' class="on"':''} role="menuitem">Parchment</button>` +
+        `<button data-t="base-plain"${baseMode==='plain'?' class="on"':''} role="menuitem">Plain</button>` +
+        `<button data-t="base-minimal"${baseMode==='minimal'?' class="on"':''} role="menuitem">Minimal</button>` +
+        `<button data-t="base-satellite"${baseMode==='satellite'?' class="on"':''} role="menuitem">Satellite</button>` +
+      '</div>' +
+      (baseMode === 'satellite' ? item('sat-labels', satLabels ? 'Hide modern streets & names' : 'Show modern streets & names',
+        '', satLabels) : '') +
+      item('legend', legendVisible ? 'Hide the map legend' : 'Show the map legend',
+        '', legendVisible) +
       item('present', document.body.classList.contains('present') ? 'Presenter mode on' : 'Presenter mode',
         'Room-sized type and heavier routes (P)', document.body.classList.contains('present')) +
-      item('base', 'Switch map style (' + BASE_MODES[baseMode].label + ')',
-        'Cycle Parchment → Plain → Satellite') +
       item('timeline', document.body.classList.contains('timeline-on') ? 'Hide the chronology band' : 'Chronology band',
         'Every event in narrative order (T)', document.body.classList.contains('timeline-on')) +
-      '<div class="tmsec">Measure &amp; practise</div>' +
-      item('quiz', 'Map recall', 'Labels off — put the names back (Q)', !!quiz) +
+      '<div class="tmsec">Jump to a region</div>' +
+      item('view-whole', 'Whole region', 'Reframe the map to Galilee through Jerusalem') +
+      item('view-galilee', 'Galilee', 'The lake and its shore towns') +
+      item('view-decapolis', 'Decapolis', 'The Greek cities east of the Jordan') +
+      item('view-jerusalem', 'Jerusalem', 'Inside the walls') +
+      '<div class="tmsec">Measure</div>' +
       item('profiles', 'Elevation profiles', 'What “going up to Jerusalem” actually cost') +
       '<div class="tmsec">Take it with you</div>' +
       item('image', 'Save this view as an image', 'A PNG with the credit printed in') +
       item('packet', packMode ? 'Finish the study packet' : 'Build a study packet',
         'Several places, printed as one handout', packMode) +
-      item('saved', 'Saved places & notes', stars.size ? stars.size + ' saved · your notes print on the sheet' : 'Nothing saved yet') +
-      '<div class="tmsec">This atlas</div>' +
-      item('about', 'About &amp; sources', 'Who made it, what it rests on') +
-      item('licences', 'Licences &amp; attribution', 'Every third-party part, and its terms') +
-      item('aboutpage', 'About this project', 'The overview page') +
-      item('feedback', 'Report an error', 'Corrections are the point of a beta');
-    toolsMenu.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { closeTools(); runTool(b.dataset.t); });
+      item('saved', 'Saved places & notes', stars.size ? stars.size + ' saved · your notes print on the sheet' : 'Nothing saved yet');
+    if(selected && byId[selected]){
+      const p = byId[selected];
+      menu += '<div class="tmsec">This place — ' + p.name + '</div>' +
+        item('print', 'Print study sheet', 'This place, formatted for a handout') +
+        item('star', stars.has(selected) ? 'Remove from saved' : 'Save this place', 'Saved places print on the study sheet (S)', stars.has(selected)) +
+        item('copylink', 'Copy link to this place', 'Carries your active layers and lesson week');
+    }
+    menu += '<div class="tmsec">This atlas</div>' +
+      item('about', 'About &amp; sources', 'Overview, scholarship, licences, and reporting an error');
+    if(cfmWeek !== null && cfmByWeek[cfmWeek]){
+      const w = cfmByWeek[cfmWeek];
+      menu += '<div class="tmsec">This lesson — ' + w.title + '</div>' +
+        item('cwprint', 'Print this lesson', 'Sites, routes and discussion prompts, formatted as a handout') +
+        item('cwlink', 'Copy link to this lesson', 'Carries this week and your active layers') +
+        item('cwall', 'All weeks', 'Back to the weekly readings list') +
+        item('cwoff', 'Full map', 'Leave the lesson and see the whole atlas');
+    }
+    if(tourId && tourById[tourId]){
+      const t = tourById[tourId];
+      menu += '<div class="tmsec">This tour — ' + t.name + '</div>' +
+        item('tourprint', 'Print this tour', 'Every step, formatted as a handout') +
+        item('tourlink', 'Copy link to this tour', 'Carries the current step and your active layers');
+    }
+    toolsMenu.innerHTML = menu;
+    toolsMenu.querySelectorAll('[data-t]').forEach(b => b.onclick = () => {
+      const t = b.dataset.t;
+      const stayOpen = t.indexOf('base-') === 0 || t === 'sat-labels';
+      if(!stayOpen) closeTools();
+      runTool(t);
+    });
+  }
+  /* anchored with position:absolute relative to .app rather than position:fixed
+     relative to the viewport — fixed's containing block silently changes to any
+     transformed ancestor (a host page's zoom/canvas chrome), which put this menu
+     in the wrong place; .app is our own layout box and is never affected by that */
+  function fitToolsMenu(){
+    const appRect = document.querySelector('.app').getBoundingClientRect();
+    const r = toolsAnchor.getBoundingClientRect();
+    const gap = 6, edge = 12;
+    toolsMenu.style.maxHeight = 'none';
+    toolsMenu.style.top = (r.bottom - appRect.top + gap) + 'px';
+    const h = toolsMenu.scrollHeight;
+    const below = appRect.bottom - r.bottom - gap - edge;
+    const above = r.top - appRect.top - gap - edge;
+    if(h > below && above > below){
+      toolsMenu.style.top = Math.max(edge, r.top - appRect.top - gap - Math.min(h, above)) + 'px';
+      toolsMenu.style.maxHeight = Math.min(h, above) + 'px';
+    } else {
+      toolsMenu.style.maxHeight = Math.max(140, below) + 'px';
+    }
   }
   function openTools(anchor){
     toolsAnchor = anchor || toolsBtn;
     buildToolsMenu();
     closeViews();
     const inBar = toolsAnchor === mbTools;
-    const r = toolsAnchor.getBoundingClientRect();
-    const gap = 6, edge = 12;
-    toolsMenu.style.right = inBar ? '8px' : Math.max(8, window.innerWidth - r.right) + 'px';
+    /* the header-anchored case (desktop) is pinned by plain CSS (right:20px, matching
+       the header's own right padding) — no rect math, so no host-chrome scaling can
+       throw it off; only the mobile bottom-bar anchor needs a JS override */
+    toolsMenu.style.right = inBar ? '8px' : '';
+    toolsMenu.classList.add('open');
     /* measure, then clamp: below the anchor if it fits, otherwise above it, and
        scrolling inside either way — the feedback path must always be reachable */
-    toolsMenu.style.maxHeight = 'none';
-    toolsMenu.style.top = (r.bottom + gap) + 'px';
-    toolsMenu.classList.add('open');
-    const h = toolsMenu.scrollHeight;
-    const below = window.innerHeight - r.bottom - gap - edge;
-    const above = r.top - gap - edge;
-    if(h > below && above > below){
-      toolsMenu.style.top = Math.max(edge, r.top - gap - Math.min(h, above)) + 'px';
-      toolsMenu.style.maxHeight = Math.min(h, above) + 'px';
-    } else {
-      toolsMenu.style.maxHeight = Math.max(140, below) + 'px';
-    }
+    fitToolsMenu();
     toolsBtn.setAttribute('aria-expanded', String(!inBar));
     mbTools.setAttribute('aria-expanded', String(inBar));
     mbTools.classList.toggle('on', inBar);
@@ -3545,27 +3777,84 @@
   mbTools.onclick = e => { e.stopPropagation(); toolsMenu.classList.contains('open') ? closeTools() : openTools(mbTools); };
   document.addEventListener('click', e => {
     if(!toolsMenu.classList.contains('open')) return;
-    if(toolsMenu.contains(e.target) || e.target === toolsBtn || e.target === mbTools) return;
+    /* not toolsMenu.contains(e.target): a stayOpen click (guides, base map...)
+       rebuilds toolsMenu.innerHTML first, detaching e.target before this listener
+       runs, so contains() would wrongly say "outside" \u2014 composedPath is fixed
+       at dispatch time and stays correct after that mutation */
+    const path = e.composedPath ? e.composedPath() : [e.target];
+    if(path.indexOf(toolsMenu) !== -1 || e.target === toolsBtn || e.target === mbTools) return;
     closeTools();
   });
   function runTool(t){
     if(t === 'legend'){ legendVisible = !legendVisible; updateLegend(); if(legendVisible && isMobileLayout()) openDrawer(); buildToolsMenu(); return; }
     if(t === 'panel'){ setPanelHidden(!panelHidden); if(!panelHidden && isMobileLayout()) openDrawer(); buildToolsMenu(); return; }
     if(t === 'timeline') return setTimelineOn(!document.body.classList.contains('timeline-on'));
-    if(t === 'quiz') return quiz ? endQuiz() : showQuizPicker();
     if(t === 'profiles') return showProfiles();
     if(t === 'image') return exportImage();
-    if(t === 'about') return showAbout();
-    if(t === 'licences') return showLicences();
-    if(t === 'aboutpage'){ location.href = 'about.html'; return; }
-    if(t === 'present'){ setPresent(!document.body.classList.contains('present')); return; }
-    if(t === 'base'){
-      const order = ['parchment','plain','satellite'];
-      setBase(order[(order.indexOf(baseMode) + 1) % order.length]);
-      buildToolsMenu();
+    if(t === 'cwprint'){ if(cfmWeek !== null && cfmByWeek[cfmWeek]) printWeek(cfmByWeek[cfmWeek]); return; }
+    if(t === 'cwlink'){
+      writeHash();
+      const url = location.href, done = () => say('Link copied');
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, done);
+      else {
+        const ta = document.createElement('textarea');
+        ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        document.body.removeChild(ta); done();
+      }
       return;
     }
-    if(t === 'feedback') return showFeedback();
+    if(t === 'cwall'){ cfmWeek = null; cfmPaint(); cfmOn.clear(); refreshJourneys(); render(); updateLegend(); writeHash(); return; }
+    if(t === 'cwoff') return exitCfm();
+    if(t === 'tourprint'){ if(tourId && tourById[tourId]) printTour(tourById[tourId]); return; }
+    if(t === 'tourlink'){
+      writeHash();
+      const url = location.href, done = () => say('Link copied');
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, done);
+      else {
+        const ta = document.createElement('textarea');
+        ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        document.body.removeChild(ta); done();
+      }
+      return;
+    }
+    if(t === 'about') return showAboutSources();
+    if(t === 'print'){ if(selected && byId[selected]) printPlace(byId[selected]); return; }
+    if(t === 'star'){
+      if(!selected) return;
+      toggleStar(selected); buildToolsMenu(); render();
+      say(stars.has(selected) ? 'Saved' : 'Removed from saved');
+      return;
+    }
+    if(t === 'copylink'){
+      if(!selected) return;
+      writeHash();
+      const url = location.href, done = () => say('Link copied');
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, done);
+      else {
+        const ta = document.createElement('textarea');
+        ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        document.body.removeChild(ta); done();
+      }
+      return;
+    }
+    if(t.indexOf('view-') === 0){ closeViews(); closeDrawer(); closeDetail(); map.invalidateSize(); requestAnimationFrame(() => goView(t.slice(5))); return; }
+    if(t === 'present'){ setPresent(!document.body.classList.contains('present')); return; }
+    if(t.indexOf('base-') === 0){
+      setBase(t.slice(5));
+      buildToolsMenu(); fitToolsMenu();
+      return;
+    }
+    if(t === 'sat-labels'){
+      setSatLabels(!satLabels);
+      buildToolsMenu(); fitToolsMenu();
+      return;
+    }
     if(t === 'saved'){
       setTab('places'); packMode = false; render();
       if(isMobileLayout()) openDrawer();
@@ -3581,39 +3870,6 @@
     }
   }
 
-  /* ——— report an error ——— */
-  const FEEDBACK_EMAIL = 'insights@taylorhalverson.com';
-  function showFeedback(){
-    const ctx = selected && byId[selected] ? byId[selected].name : 'the atlas';
-    const body = encodeURIComponent('Where: ' + ctx + '\nLink: ' + location.href +
-      '\n\nWhat looks wrong:\n\n\nWhat it should say (and where that comes from):\n\n');
-    detail.innerHTML = `
-      <div class="dhead">
-        <button class="dclose" title="Close">×</button>
-        <div class="cat">Beta</div>
-        <h2>Report an error</h2>
-        <div class="mod">The first hundred readers will find things no audit would.</div>
-      </div>
-      <div class="dbody">
-        <div class="blurb">This atlas makes specific claims about specific places. If one of them is wrong —
-          a coordinate, a date, a reading of an excavation, a scripture reference — that is worth more than a compliment.</div>
-        <div class="sec"><h3>What helps most</h3>
-          <p>Name the place, quote the line, and say what it should say. If the correction rests on a
-            publication, name it: the sources list in every panel is there so a claim can be argued.</p></div>
-        <div class="sec"><h3>Send it</h3>
-          <div class="cfmweeks">
-            ${FEEDBACK_EMAIL ? `<a class="chip" style="text-decoration:none" href="mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('NT Atlas beta — correction: ' + ctx)}&body=${body}">Email the correction</a>` : ''}
-            <a class="chip" style="text-decoration:none" href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>
-            <button class="chip" id="fblink">Copy the link to this view</button>
-          </div>
-          <p class="srccav">A link carries your place, your layers and your lesson week, so a correction can be
-            reproduced exactly as you saw it.</p></div>
-      </div>`;
-    openPanel();
-    const c = detail.querySelector('#fblink');
-    if(c) c.onclick = e => copyLink(e.currentTarget);
-  }
-
   /* ——— keyboard shortcuts for the tools ——— */
   document.addEventListener('keydown', e => {
     const t = e.target;
@@ -3621,13 +3877,13 @@
     if(e.metaKey || e.ctrlKey || e.altKey) return;
     const k = e.key.toLowerCase();
     if(k === 't'){ e.preventDefault(); setTimelineOn(!document.body.classList.contains('timeline-on')); }
-    else if(k === 'q'){ e.preventDefault(); quiz ? endQuiz() : showQuizPicker(); }
-    else if(k === 's' && selected){ e.preventDefault(); toggleStar(selected);
-      paintStar(detail.querySelector('#dstar'), selected); render();
+    else if(k === 's' && selected){ e.preventDefault(); toggleStar(selected); render();
       say(stars.has(selected) ? 'Saved' : 'Removed from saved'); }
+    else if((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && tourId && tourById[tourId]){
+      e.preventDefault(); goStep(tourStep + (e.key === 'ArrowRight' ? 1 : -1));
+    }
     else if(e.key === 'Escape'){
       if(toolsMenu.classList.contains('open')) return closeTools();
-      if(quiz) return endQuiz();
       if(measureOn) return setMeasure(false);
       if(packMode){ packMode = false; render(); return; }
     }
