@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
 
 :root {
-  --parchment: #F1EADA;
-  --parchment-dim: #E7DEC9;
-  --ink: #211D16;
-  --stone: #5B5342;
-  --gold: #9C7A2E;
-  --gold-dim: #B99A4C;
-  --patina: #566B5F;
-  --line: #D8CDAF;
-  --card-bg: #FBF8F0;
+  --parchment: #141C28;
+  --parchment-dim: #0E1520;
+  --ink: #ECEAE0;
+  --stone: #A9B3C2;
+  --gold: #D4AF5A;
+  --gold-dim: #C79F4C;
+  --patina: #6E8C99;
+  --line: #2C3A4C;
+  --card-bg: #1B2635;
 }
 
 * { box-sizing: border-box; }
@@ -206,7 +206,7 @@ footer.site-footer {
   padding: 0.65rem 0.75rem;
   border: 1px solid var(--line);
   border-radius: 4px;
-  background: #fff;
+  background: #0E1520;
   color: var(--ink);
   margin-bottom: 1.1rem;
 }
@@ -229,7 +229,7 @@ footer.site-footer {
   cursor: pointer;
 }
 
-.login-card button:hover { background: #34301F; }
+.login-card button:hover { background: #D6D3C6; }
 .login-card button:disabled { opacity: 0.6; cursor: default; }
 
 .login-status {
@@ -238,7 +238,7 @@ footer.site-footer {
   min-height: 1.2em;
 }
 
-.login-status.error { color: #A3402F; }
+.login-status.error { color: #E28A72; }
 .login-status.pending { color: var(--stone); }
 
 .login-foot {
