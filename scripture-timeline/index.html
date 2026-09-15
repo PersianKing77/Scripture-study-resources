@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; }
+    a { color: #2B2620; }
+    a:hover { color: #8a6a2e; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes riseIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .tl-wide-block { display: block !important; }
+    .tl-narrow-flex { display: none !important; }
+    @media (max-width: 819px) {
+      .tl-wide-block { display: none !important; }
+      .tl-narrow-flex { display: flex !important; }
+      .tl-lane-row { flex-direction: column !important; align-items: stretch !important; }
+      .tl-lane-label-col { width: auto !important; margin-bottom: 8px; }
+      .tl-header-left { width: auto !important; flex: 1 1 100% !important; overflow: visible !important; }
+      .tl-compact-track { flex: 1 1 100% !important; margin-top: 8px !important; }
+      .tl-track-wrap { margin-top: 32px !important; }
+    }
+  </style>
+  <script src="./image-slot.js"></script>
+</helmet>
+
+<div style="{{ pageStyle }}">
+
+  <!-- MODULE A: TOP BAR -->
+  <section style="{{ moduleAStyle }}" data-screen-label="Module A — Top bar">
+    <div style="{{ heroInnerStyle }}">
+      <div style="{{ topBarRowStyle }}">
+        <span style="{{ topBarTitleStyle }}">Composition &amp; Canonization Timeline</span>
+        <button style="{{ aboutBtnStyle }}" style-hover="{{ aboutBtnHoverStyle }}" onClick="{{ openAbout }}">ⓘ About this tool</button>
+      </div>
+    </div>
+  </section>
+
+  <sc-if value="{{ showAbout }}" hint-placeholder-val="{{ false }}">
+    <div style="{{ detailBackdropStyle }}" onClick="{{ closeAbout }}">
+      <div style="{{ aboutCardStyle }}" onClick="{{ stopProp }}">
+        <button style="{{ detailCloseStyle }}" style-hover="{{ detailCloseHoverStyle }}" onClick="{{ closeAbout }}">✕</button>
+        <div style="{{ eyebrowRowStyle }}">
+          <span style="{{ eyebrowStyle }}">Before we look at any data</span>
+          <button style="{{ whyBadgeSmallStyle }}" style-hover="{{ whyBadgeHoverStyle }}" onClick="{{ openWhyFourVerses }}" title="Why these four passages first?">?</button>
+        </div>
+        <h1 style="{{ headlineStyle }}">The tool visualizes what scholars share about the composition and canonization of the Bible and Bible-related ancient texts.</h1>
+
+        <div style="{{ quoteGridStyle }}">
+          <sc-for list="{{ pullQuotes }}" as="q" hint-placeholder-count="4">
+            <div style="{{ q.cardStyle }}">
+              <sc-if value="{{ q.hasTag }}" hint-placeholder-val="{{ false }}">
+                <p style="{{ q.tagStyle }}">{{ q.tag }}</p>
+              </sc-if>
+              <p style="{{ q.textStyle }}">{{ q.text }}</p>
+              <p style="{{ q.citeStyle }}">{{ q.citation }}</p>
+            </div>
+          </sc-for>
+        </div>
+
+        <p style="{{ goalStyle }}">The aim here is to see the Bible's real production history clearly — not to cast doubt on it, but to see it whole.</p>
+
+        <h3 style="{{ aboutSubheadingStyle }}">How to read this page</h3>
+        <p style="{{ aboutAuthorBodyStyle }}">This page pairs two things on purpose: what mainstream historical scholarship says about the Bible's setting, writing, and recognition as scripture, and what Restoration scripture adds to that picture. Toggle "Restoration data" on to see the second layer.</p>
+
+        <h3 style="{{ aboutSubheadingStyle }}">Why three rows per book?</h3>
+        <p style="{{ aboutAuthorBodyStyle }}">Narrative setting — when the events the book describes take place (e.g. Exodus is set c. 1400 BC). Composition — when it was actually written down, which is often centuries after the events, sometimes in stages. Canonization — when it was formally recognized as scripture by a religious community. Stacking all three lets you see the real gaps between story-time, writing-time, and recognition-time at a glance, instead of collapsing a book into one single date.</p>
+
+        <div style="{{ aboutAuthorDividerStyle }}"></div>
+        <h2 style="{{ aboutAuthorHeadingStyle }}">About the author</h2>
+        <p style="{{ aboutAuthorBodyStyle }}">Taylor Halverson is a scholar of scripture and a teacher of learners — an entrepreneurship professor in the BYU Marriott School of Business who spends his working life helping people find and act on the best ideas and tools available to them.</p>
+        <p style="{{ aboutAuthorBodyStyle }}">He is the author and editor of more than fifty books and nearly a thousand articles and blog posts, and a builder of scripture study resources: the ScripturePlus app with Scripture Central, whose scripture YouTube channel he co-hosted to more than fifty million views, and BYU's Virtual Scripture Group, whose team spent more than five years reconstructing New Testament Jerusalem in three dimensions. This timeline belongs to that same body of work — tools made so that ordinary readers can see what specialists see.</p>
+        <p style="{{ aboutAuthorBodyStyle }}">He leads tours to Israel and the Middle East, China, India, Central America, Europe, and the national parks of the American West, where he unfolds how geology, geography, civilization, and scriptural texts created our beautiful present day.</p>
+
+        <h3 style="{{ aboutSubheadingStyle }}">Academic training</h3>
+        <div style="{{ degreeGridStyle }}">
+          <sc-for list="{{ degrees }}" as="d" hint-placeholder-count="4">
+            <div style="{{ degreeRowStyle }}">
+              <span style="{{ degreeAbbrStyle }}">{{ d.abbr }}</span>
+              <span style="{{ degreeTextStyle }}">{{ d.text }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <p style="{{ aboutAuthorBodyStyle }}"><em>Two doctorates in two separate fields — the ancient world, and the design of learning. Both of them are in this tool.</em></p>
+
+        <h3 style="{{ aboutSubheadingStyle }}">Elsewhere</h3>
+        <div style="{{ elsewhereRowStyle }}">
+          <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener" style="{{ elsewhereLinkStyle }}" style-hover="{{ elsewhereLinkHoverStyle }}">insights.taylorhalverson.com</a>
+          <a href="https://books.taylorhalverson.com" target="_blank" rel="noopener" style="{{ elsewhereLinkStyle }}" style-hover="{{ elsewhereLinkHoverStyle }}">books.taylorhalverson.com</a>
+          <a href="https://exodustours.com" target="_blank" rel="noopener" style="{{ elsewhereLinkStyle }}" style-hover="{{ elsewhereLinkHoverStyle }}">exodustours.com</a>
+        </div>
+
+        <div style="{{ aboutAuthorDividerStyle }}"></div>
+        <h2 style="{{ aboutAuthorHeadingStyle }}">Attributions &amp; licenses</h2>
+        <p style="{{ aboutAuthorBodyStyle }}">Dating and confidence data compiled from the Biblical Dating Timeline master dataset (OT/NT book-level, Apocrypha and Pseudepigrapha book- and composite-layer data, Old Testament source-critical layers for Isaiah, New Testament synoptic pericopes, and Restoration data points).</p>
+        <p style="{{ aboutAuthorBodyStyle }}">Book covers in "Further reading" are used courtesy of Taylor Halverson's Study Library (books.taylorhalverson.com).</p>
+        <p style="{{ aboutAuthorBodyStyle }}">Typefaces: Newsreader and Karla, both open-source under the SIL Open Font License, served via Google Fonts.</p>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- MODULE B: TRIPLE TIMELINE -->
+  <section style="{{ moduleBStyle }}" data-screen-label="Module B — Triple timeline">
+    <div style="{{ moduleBInnerStyle }}">
+
+      <div style="{{ moduleBHeaderRowStyle }}">
+      </div>
+
+      <div class="tl-wide-block" style="{{ axisStickyWrapStyle }}">
+        <div style="{{ axisRowStyle }}">
+          <div style="{{ axisSpacerStyle }}"></div>
+          <div style="{{ axisTrackStyle }}">
+            <div style="{{ deepZoneStyle }}">
+              <span style="{{ deepZoneLabelStyle }}">deep past — compressed, not to scale</span>
+            </div>
+            <span style="{{ creationLabelStyle }}">Creation</span>
+            <sc-for list="{{ axisTicks }}" as="tick" hint-placeholder-count="7">
+              <div style="{{ tick.style }}">{{ tick.label }}</div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <div class="tl-narrow-flex" style="{{ mobileAxisStyle }}">
+        <sc-for list="{{ mobileAxisTicks }}" as="tick" hint-placeholder-count="7">
+          <span style="{{ mobileAxisTickStyle }}">{{ tick }}</span>
+        </sc-for>
+      </div>
+
+      <div style="{{ controlsRowStyle }}">
+        <div style="{{ chipGroupStyle }}">
+          <div style="{{ confidenceLabelRowStyle }}">
+            <span style="{{ controlLabelStyle }}">Corpus</span>
+            <button style="{{ whyBadgeSmallStyle }}" style-hover="{{ whyBadgeHoverStyle }}" onClick="{{ openWhyCorpus }}" title="Why can I filter by corpus?">?</button>
+          </div>
+          <div style="{{ chipRowStyle }}">
+            <sc-for list="{{ corpusChips }}" as="chip" hint-placeholder-count="3">
+              <button style="{{ chip.style }}" style-hover="{{ chip.hoverStyle }}" onClick="{{ chip.toggle }}">{{ chip.label }}</button>
+            </sc-for>
+          </div>
+          <p style="{{ tapHintStyle }}">Tap to show or hide a corpus</p>
+        </div>
+
+        <div style="{{ chipGroupStyle }}">
+          <div style="{{ confidenceLabelRowStyle }}">
+            <span style="{{ controlLabelStyle }}">Confidence</span>
+            <button style="{{ whyBadgeSmallStyle }}" style-hover="{{ whyBadgeHoverStyle }}" onClick="{{ openWhyConfidence }}" title="Why colored by confidence?">?</button>
+          </div>
+          <div style="{{ chipRowStyle }}">
+            <sc-for list="{{ confidenceChips }}" as="chip" hint-placeholder-count="3">
+              <button style="{{ chip.style }}" style-hover="{{ chip.hoverStyle }}" onClick="{{ chip.toggle }}">
+                <span style="{{ chip.dotStyle }}"></span>{{ chip.label }}
+              </button>
+            </sc-for>
+          </div>
+          <p style="{{ tapHintStyle }}">Tap to dim a confidence level</p>
+        </div>
+
+      </div>
+
+      <div class="tl-wide-block">
+        <div style="{{ legendBarStyle }}">
+        <div style="{{ legendGroupStyle }}">
+          <sc-for list="{{ legendItems }}" as="item" hint-placeholder-count="3">
+            <span style="{{ legendItemStyle }}"><span style="{{ item.dot }}"></span>{{ item.label }}</span>
+          </sc-for>
+        </div>
+        <div style="{{ legendDividerStyle }}"></div>
+        <div style="{{ legendGroupStyle }}">
+          <sc-for list="{{ legendConfItems }}" as="item" hint-placeholder-count="3">
+            <span style="{{ legendItemStyle }}"><span style="{{ item.dot }}"></span>{{ item.label }} (underline)</span>
+          </sc-for>
+        </div>
+        <div style="{{ legendDividerStyle }}"></div>
+        <div style="{{ legendGroupStyle }}">
+          <button style="{{ expandAllBtnStyle }}" style-hover="{{ expandAllBtnHoverStyle }}" onClick="{{ toggleExpandAll }}">{{ expandAllLabel }}</button>
+        </div>
+        </div>
+      </div>
+
+      <div style="{{ bookListStyle }}">
+        <sc-for list="{{ bookRows }}" as="book" hint-placeholder-count="12">
+          <div style="{{ book.blockStyle }}" onClick="{{ book.toggleExpand }}" data-book-id="{{ book.id }}">
+            <div style="{{ book.headerStyle }}">
+              <div class="tl-header-left" style="{{ book.headerLeftStyle }}">
+                <span style="{{ book.chevronStyle }}">{{ book.chevronChar }}</span>
+                <span style="{{ book.nameStyle }}">{{ book.name }}</span>
+                <span style="{{ book.corpusTagStyle }}">{{ book.corpusLabel }}</span>
+              </div>
+              <sc-if value="{{ book.showCollapsedRow }}" hint-placeholder-val="{{ true }}">
+                <div class="tl-narrow-flex" style="{{ book.summaryRowStyle }}">
+                  <span style="{{ book.summaryDotCoralStyle }}"></span>
+                  <span style="{{ book.summaryDotBlueStyle }}"></span>
+                  <span style="{{ book.summaryDotPurpleStyle }}"></span>
+                  <span style="{{ book.summaryTextStyle }}">{{ book.eraSummary }}</span>
+                </div>
+              </sc-if>
+              <sc-if value="{{ book.showCollapsedRow }}" hint-placeholder-val="{{ true }}">
+                <div class="tl-compact-track" style="{{ book.compactTrackStyle }}">
+                  <sc-for list="{{ book.compactLanes }}" as="cl" hint-placeholder-count="3">
+                    <div style="{{ cl.barStyle }}"></div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+
+            <sc-if value="{{ book.showLanes }}" hint-placeholder-val="{{ true }}">
+              <div style="{{ book.lanesWrapStyle }}">
+                <sc-for list="{{ book.lanes }}" as="lane" hint-placeholder-count="3">
+                  <div class="tl-lane-row" style="{{ lane.rowStyle }}">
+                    <div class="tl-lane-label-col" style="{{ lane.labelColStyle }}">
+                      <span style="{{ lane.dotStyle }}"></span>
+                      <span style="{{ lane.labelTextStyle }}">{{ lane.label }}</span>
+                      <button style="{{ lane.whyBtnStyle }}" style-hover="{{ lane.whyBtnHoverStyle }}" onClick="{{ lane.openWhy }}" title="Why does this matter?">?</button>
+                    </div>
+                    <div class="tl-track-wrap" style="{{ lane.trackWrapStyle }}">
+                      <div style="{{ lane.trackAreaStyle }}">
+                        <div style="{{ lane.barStyle }}"></div>
+                        <div style="{{ lane.underlineStyle }}"></div>
+                        <sc-if value="{{ lane.hasSegments }}" hint-placeholder-val="{{ false }}">
+                          <div class="tl-wide-block" style="position:absolute;inset:0;">
+                            <sc-for list="{{ lane.segments }}" as="seg" hint-placeholder-count="3">
+                              <div style="{{ seg.barStyle }}" title="{{ seg.title }}"></div>
+                              <div style="{{ seg.underlineStyle }}"></div>
+                            </sc-for>
+                          </div>
+                        </sc-if>
+                        <span style="{{ lane.rangeLabelStyle }}">{{ lane.rangeLabel }}</span>
+                      </div>
+                      <sc-if value="{{ lane.hasSegments }}" hint-placeholder-val="{{ false }}">
+                        <div class="tl-narrow-flex" style="{{ lane.segmentListStyle }}">
+                          <sc-for list="{{ lane.segments }}" as="seg" hint-placeholder-count="3">
+                            <div style="{{ seg.chipStyle }}">
+                              <span style="{{ seg.chipDotStyle }}"></span>
+                              <span style="{{ seg.chipTextStyle }}">{{ seg.title }} — {{ seg.rangeText }}</span>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                      <p style="{{ lane.captionStyle }}"><span style="{{ lane.confidenceTagStyle }}">{{ lane.confidenceWord }}.</span> {{ lane.caption }}</p>
+                    </div>
+                  </div>
+                </sc-for>
+
+                <sc-if value="{{ book.hasMissingLanes }}" hint-placeholder-val="{{ false }}">
+                  <p style="{{ book.missingLanesNoteStyle }}">{{ book.missingLanesNote }}</p>
+                </sc-if>
+
+                <sc-if value="{{ book.hasFinerView }}" hint-placeholder-val="{{ false }}">
+                  <div style="{{ profileRowStyle }}">
+                    <button style="{{ book.profileBtnStyle }}" style-hover="{{ book.profileBtnHoverStyle }}" onClick="{{ book.toggleProfile }}">
+                      {{ book.profileBtnLabel }}
+                    </button>
+                    <button style="{{ whyBadgeSmallStyle }}" style-hover="{{ whyBadgeHoverStyle }}" onClick="{{ openWhyCloserLook }}" title="Why does this book get a closer look?">?</button>
+                  </div>
+
+                  <sc-if value="{{ book.profileOpen }}" hint-placeholder-val="{{ false }}">
+                    <div style="{{ book.detailFinerWrapStyle }}">
+                      <p style="{{ detailFinerIntroStyle }}">{{ book.finerIntro }}</p>
+                      <sc-for list="{{ book.finerItems }}" as="item" hint-placeholder-count="3">
+                        <div style="{{ detailFinerItemStyle }}">
+                          <div style="{{ detailFinerItemHeadStyle }}">
+                            <span>{{ item.label }}</span>
+                            <span style="{{ item.rangeStyle }}">{{ item.rangeLabel }}</span>
+                          </div>
+                          <sc-if value="{{ item.detail }}" hint-placeholder-val="{{ false }}">
+                            <p style="{{ detailFinerDetailStyle }}">{{ item.detail }}</p>
+                          </sc-if>
+                        </div>
+                      </sc-for>
+                      <sc-if value="{{ book.hasFinerStats }}" hint-placeholder-val="{{ false }}">
+                        <sc-for list="{{ book.finerStats }}" as="stat" hint-placeholder-count="5">
+                          <div style="{{ detailStatRowStyle }}">
+                            <span style="{{ detailStatLabelStyle }}">{{ stat.label }}</span>
+                            <div style="{{ stat.barStyle }}"></div>
+                            <span style="{{ detailStatCountStyle }}">{{ stat.count }}</span>
+                          </div>
+                        </sc-for>
+                      </sc-if>
+                    </div>
+                  </sc-if>
+                </sc-if>
+
+                <sc-if value="{{ book.hasRestorationData }}" hint-placeholder-val="{{ false }}">
+                  <div style="{{ book.restorationRowStyle }}">
+                    <button style="{{ book.restorationToggleBtnStyle }}" style-hover="{{ book.restorationToggleBtnHoverStyle }}" onClick="{{ book.toggleRestoration }}">
+                      <span style="{{ book.restorationDotStyle }}"></span>{{ book.restorationToggleLabel }}
+                    </button>
+                    <sc-if value="{{ book.showRestorationLane }}" hint-placeholder-val="{{ false }}">
+                      <p style="{{ book.restorationCaptionStyle }}">{{ book.restorationCaption }}</p>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ showAbrahamCard }}" hint-placeholder-val="{{ false }}">
+        <div style="{{ abrahamCardStyle }}">
+          <p style="{{ abrahamEyebrowStyle }}">Restoration data — standalone record</p>
+          <h3 style="{{ abrahamTitleStyle }}">Book of Abraham</h3>
+          <p style="{{ abrahamBodyStyle }}">Not a Bible book, and not a revision of one — the Book of Abraham presents itself as Abraham's own record, translated by Joseph Smith 1835–1842 from papyri and canonized in 1880. It traditionally sits in the patriarchal era, c. 2000–1900 BC, contemporary with the setting of Genesis 12–25, and includes cosmology and creation material distinct from, though related to, Genesis 1. There is no mainstream critical composition date to compare it against — it stands as its own record.</p>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <!-- MODULE E: CLOSING FAQ -->
+  <section style="{{ moduleEStyle }}" data-screen-label="Module E — Closing FAQ">
+    <div style="{{ moduleEInnerStyle }}">
+      <p style="{{ faqEyebrowStyle }}">Q&amp;A</p>
+
+      <div style="{{ faqListStyle }}">
+        <sc-for list="{{ faqItems }}" as="item" hint-placeholder-count="5">
+          <div style="{{ item.itemStyle }}">
+            <div style="{{ item.qRowStyle }}" onClick="{{ item.toggle }}">
+              <p style="{{ item.qStyle }}">{{ item.q }}</p>
+              <span style="{{ item.chevronStyle }}">▾</span>
+            </div>
+            <p style="{{ item.aStyle }}">{{ item.a }}</p>
+          </div>
+        </sc-for>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MODULE F: GO DEEPER / FURTHER READING -->
+  <section style="{{ moduleFStyle }}" data-screen-label="Module F — Further Reading">
+    <div style="{{ moduleFInnerStyle }}">
+      <p style="{{ furtherIntroStyle }}">Further reading, book by book guides from biblical scholar Taylor Halverson, Ph.D.</p>
+      <div style="{{ furtherGridStyle }}">
+        <sc-for list="{{ furtherReading }}" as="fr" hint-placeholder-count="6">
+          <a href="{{ fr.url }}" target="_blank" rel="noopener" style="{{ fr.cardStyle }}" style-hover="{{ fr.cardHoverStyle }}">
+            <div style="{{ fr.coverWrapStyle }}">
+              <image-slot id="{{ fr.slotId }}" shape="rect" placeholder="Book cover" src="{{ fr.cover }}"></image-slot>
+            </div>
+            <div style="{{ fr.bodyStyle }}">
+              <p style="{{ fr.titleStyle }}">{{ fr.title }}</p>
+              <p style="{{ fr.descStyle }}">{{ fr.desc }}</p>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasWhy }}" hint-placeholder-val="{{ false }}">
+    <div style="{{ modalBackdropStyle }}" onClick="{{ closeWhy }}">
+      <div style="{{ modalCardStyle }}" onClick="{{ stopProp }}">
+        <p style="{{ modalTitleStyle }}">{{ whyTitle }}</p>
+        <p style="{{ modalBodyStyle }}">{{ whyBody }}</p>
+        <button style="{{ modalCloseStyle }}" style-hover="{{ modalCloseHoverStyle }}" onClick="{{ closeWhy }}">Close</button>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;restorationDefaultOn&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}, &quot;axisLabelStyle&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;BC/AD&quot;, &quot;options&quot;: [&quot;BC/AD&quot;, &quot;BCE/CE&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot;}}">
+const INK = '#2B2620';
+const INK_SOFT = '#6B6357';
+const BG = '#FAF6EF';
+const CARD_BG = '#FFFDF9';
+const BORDER = 'rgba(43,38,32,0.14)';
+const CORAL = '#F0997B';
+const BLUE = '#85B7EB';
+const PURPLE = '#AFA9EC';
+const GOLD = '#D4A24C';
+const GREEN = '#4C8F63';
+const AMBER = '#C1873A';
+const RED = '#B4573F';
+
+const SERIF = "'Newsreader', Georgia, serif";
+const SANS = "'Karla', sans-serif";
+
+const AXIS_MIN = -4000; // Creation — symbolic/traditional starting point
+const AXIS_BREAK = -1000; // boundary between compressed "deep past" and true-scale history
+const AXIS_MAX = 450;
+const DEEP_FRACTION = 0.10; // share of track width given to the compressed Creation→1000 BC zone
+
+const WHY_MATTERS_GENERIC = {
+  narrative: "Why does this matter? Knowing when a story is set — separate from when it was written down — shows you what's history and what's literary framing, without assuming either one.",
+  composition: "Why does this matter? Understanding why scholars date a book's writing the way they do is more useful than just being told a date — you can weigh the reasoning yourself.",
+  canonization: "Why does this matter? A book being read and a book being recognized as scripture are different milestones — this dates the community's decision, not the text's origin."
+};
+
+const FURTHER_READING = [
+  { title: 'An Introduction to the Apocrypha', desc: 'A book-by-book guide placing each Apocrypha book in its ancient Jewish setting.', cover: './assets/cover-apocrypha-intro.jpg', url: 'https://books.taylorhalverson.com/#book-52' },
+  { title: 'An Introduction to Each Old Testament Book', desc: 'Insights on how to read each book of the Old Testament, Genesis through Malachi.', cover: './assets/cover-ot-intro.jpg', url: 'https://books.taylorhalverson.com/#book-05' },
+  { title: 'An Introduction to Each New Testament Book', desc: 'Twenty-seven New Testament introductions — history, culture, theology, Restoration connections.', cover: './assets/cover-nt-intro.jpg', url: 'https://books.taylorhalverson.com/#book-17' },
+  { title: 'What Happened Between the Old and New Testament', desc: 'Four hundred years of empires, languages, and Jewish hope that shaped the world of Jesus.', cover: './assets/cover-between-testaments.jpg', url: 'https://books.taylorhalverson.com/#book-15' },
+  { title: 'Prophets and Prophecy in the Old Testament', desc: "Understanding the voice of the LORD — each prophet from Moses and Deborah to Isaiah and Malachi.", cover: './assets/cover-prophets-prophecy.jpg', url: 'https://books.taylorhalverson.com/#book-03' },
+  { title: 'Kings and Kingship in Ancient Israel', desc: 'Every king who ruled Israel and Judah from Saul to Zedekiah, measured by covenant faithfulness.', cover: './assets/cover-kings-kingship.jpg', url: 'https://books.taylorhalverson.com/#book-04' },
+  { title: 'Ancient Scripture Beyond the Bible, Volume 1: Worlds Before Christ', desc: 'An introduction to the Old Testament pseudepigrapha and New Testament apocrypha for Latter-day Saints.', cover: './assets/cover-beyond-bible-v1.jpg', url: 'https://books.taylorhalverson.com/#book-16' },
+  { title: 'Ancient Scripture Beyond the Bible, Volume 2: Israel Reimagines Scripture', desc: 'An introduction to the Old Testament pseudepigrapha and New Testament apocrypha for Latter-day Saints.', cover: './assets/cover-beyond-bible-v2.jpg', url: 'https://books.taylorhalverson.com/#book-49' },
+  { title: 'Ancient Scripture Beyond the Bible, Volume 3: Jesus Remembered and Reimagined', desc: 'An introduction to the Old Testament pseudepigrapha and New Testament apocrypha for Latter-day Saints.', cover: './assets/cover-beyond-bible-v3.jpg', url: 'https://books.taylorhalverson.com/#book-50' },
+  { title: 'Ancient Scripture Beyond the Bible, Volume 4: Apostles, Visions, and Letters', desc: 'An introduction to the Old Testament pseudepigrapha and New Testament apocrypha for Latter-day Saints.', cover: './assets/cover-beyond-bible-v4.jpg', url: 'https://books.taylorhalverson.com/#book-51' }
+];
+
+const FAQ_ITEMS = [
+  { q: 'Does this mean the Bible is unreliable?', a: "No. Knowing how something was assembled doesn't tell you whether the Spirit can speak through it. Latter-day Saint scripture openly shows inspired texts reaching their final form through real, sometimes long, human processes — and members have always read them as scripture anyway." },
+  { q: "If someone other than the name on the cover wrote part of a book, is it still inspired?", a: "Restoration scripture doesn't require single authorship to be inspired. The Book of Mormon itself is a centuries-later compilation by Mormon from earlier records, and the Doctrine and Covenants gathers revelations given across decades to different people. Composite origin and inspired content have never been opposites here." },
+  { q: 'Why have I never heard about the Documentary Hypothesis or Deutero-Isaiah at church?', a: "Sunday School is built around faith and application, not textual history — that's a curriculum choice, not a cover-up. Apostles and BYU scholars have written about these questions for decades; this page draws on that same publicly available work." },
+  { q: "Does this threaten the Book of Mormon's claim that Isaiah's words were on the brass plates?", a: "There is a great deal from the ancient past that simply isn't known with certainty. We know Nephi quoted Isaiah, and some scholars think portions of Isaiah were written after Nephi's time — so scholars currently have an open question about the dating. But an open scholarly question doesn't change the fact that Nephi included Isaiah's writings, as did other Book of Mormon writers." },
+  { q: 'What am I supposed to do with all this?', a: 'Whatever Christ told the Nephites to do with Isaiah: search it — and trust that even a complicated text can still carry the truth he intends it to carry.' }
+];
+
+const CONF_COLOR = { green: GREEN, amber: AMBER, red: RED };
+const CONF_WORD = { green: 'Broad consensus', amber: 'Majority view, real minority', red: 'Genuinely contested' };
+
+const WHY = {
+  fourVerses: {
+    title: 'Why start with these four?',
+    body: "These come from Restoration scripture itself, not from outside scholarship. Before you see any historical or academic claim on this page, it's worth knowing that your own tradition already anticipated it."
+  },
+  lanes: {
+    title: 'What do the three rows mean?',
+    body: "Narrative setting — when the events the book describes take place (e.g. Exodus is set c. 1400 BC). Composition — when it was actually written down, which is often centuries after the events, sometimes in stages. Canonization — when it was formally recognized as scripture by a religious community. Stacking all three lets you see the real gaps between story-time, writing-time, and recognition-time at a glance, instead of collapsing a book into one single date."
+  },
+  confidence: {
+    title: 'Why are some dates green, amber, or red?',
+    body: "Because scholars don't agree equally on everything. Green means broad consensus, amber means a majority view with a real minority position, and red means the question is genuinely contested. This shows you how solid the ground is, not just what's being claimed."
+  },
+  restoration: {
+    title: 'Why is this off by default?',
+    body: "So you can first see what mainstream scholarship says on its own terms, then choose to see what Restoration scripture adds. It's an optional overlay, not a competing timeline — that's why it appears in a different color and only when you ask for it."
+  },
+  corpus: {
+    title: 'Why can I filter by corpus?',
+    body: "Old Testament, New Testament, Apocrypha, and Pseudepigrapha were produced, read, and treated as scripture in very different ways. Filtering lets you focus on one collection at a time instead of comparing books that were never meant to sit on the same shelf."
+  },
+  profile: {
+    title: "Why is there a deeper view?",
+    body: "A single bar can only show a date range. The full profile gives you the evidence behind it — and for a few books, the compositional layers a single date range would otherwise flatten into one line."
+  },
+  closerLook: {
+    title: "Why does this book get a closer look?",
+    body: "Some books aren't one thing written at one time — they're several pieces from different periods, bound together. Where the sources show that clearly, we break the single date range into its real parts instead of averaging them into one misleading number."
+  },
+  howToRead: {
+    title: 'How to read this page',
+    body: "This page pairs two things on purpose: what mainstream historical scholarship says about the Bible's setting, writing, and recognition as scripture, and what Restoration scripture adds to that picture. They're kept visually separate — Restoration data is an optional overlay, off by default — so you can see mainstream scholarship on its own terms first, then choose to bring in what your own tradition offers. Colors mark how solid the historical evidence is, because scholarly claims aren't all equally certain. Every choice on this page has a reason, available with a tap, for exactly this purpose: nothing here should feel like it's hiding something from you."
+  }
+};
+
+let BOOKS = []; // loaded from ./books-data.js at mount time
+
+function pct(year) {
+  let p;
+  if (year <= AXIS_BREAK) {
+    const t = (year - AXIS_MIN) / (AXIS_BREAK - AXIS_MIN);
+    p = t * DEEP_FRACTION * 100;
+  } else {
+    const t = (year - AXIS_BREAK) / (AXIS_MAX - AXIS_BREAK);
+    p = DEEP_FRACTION * 100 + t * (1 - DEEP_FRACTION) * 100;
+  }
+  return Math.max(0, Math.min(100, p));
+}
+
+const GRID_YEARS = [-1000, -700, -500, -300, -100, 100, 300];
+const GRID_LINE_BG = GRID_YEARS.map(y => {
+  const p = pct(y);
+  return `linear-gradient(to right, transparent ${p - 0.05}%, rgba(43,38,32,0.18) ${p}%, transparent ${p + 0.05}%)`;
+}).join(',');
+
+function yearLabel(year, style) {
+  if (style === 'BCE/CE') {
+    return year < 0 ? `${-year} BCE` : `${year || 1} CE`;
+  }
+  return year < 0 ? `${-year} BC` : `AD ${year || 1}`;
+}
+
+class Component extends DCLogic {
+  state = {
+    activeCorpus: { OT: true, NT: true, Apoc: true, Pseudepigrapha: true },
+    booksLoaded: false,
+    activeConfidence: { green: true, amber: true, red: true },
+    restorationOn: this.props.restorationDefaultOn ?? false,
+    expandedBooks: {},
+    whyKey: null,
+    whyCustom: null,
+    detailBookId: null,
+    openFaq: {},
+    showAbout: false,
+    openRestoration: {},
+    openProfile: {},
+    showAbraham: false
+  };
+
+  toggleFaq(i) {
+    this.setState(s => ({ openFaq: { ...s.openFaq, [i]: !s.openFaq[i] } }));
+  }
+
+  toggleCorpus(key) {
+    this.setState(s => ({ activeCorpus: { ...s.activeCorpus, [key]: !s.activeCorpus[key] } }));
+  }
+
+  toggleConfidence(key) {
+    this.setState(s => ({ activeConfidence: { ...s.activeConfidence, [key]: !s.activeConfidence[key] } }));
+  }
+
+  toggleBookExpand(id) {
+    this.setState(s => {
+      const next = !s.expandedBooks[id];
+      if (next) history.replaceState(null, '', `#book=${id}`);
+      return { expandedBooks: { ...s.expandedBooks, [id]: next } };
+    });
+  }
+
+  expandAllBooks() {
+    const visible = BOOKS.filter(b => this.state.activeCorpus[b.corpus]);
+    const next = {};
+    visible.forEach(b => { next[b.id] = true; });
+    this.setState({ expandedBooks: next });
+  }
+
+  collapseAllBooks() {
+    this.setState({ expandedBooks: {} });
+  }
+
+  componentDidMount() {
+    import('./books-data.js').then(m => {
+      BOOKS = m.BOOKS;
+      this.setState({ booksLoaded: true }, () => this.applyHash());
+    });
+    window.addEventListener('hashchange', this.applyHash);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('hashchange', this.applyHash);
+  }
+
+  applyHash = () => {
+    const m = window.location.hash.match(/book=([a-z0-9-]+)/i);
+    if (!m) return;
+    const id = m[1].toLowerCase();
+    if (!BOOKS.find(b => b.id === id)) return;
+    this.setState(s => ({ expandedBooks: { ...s.expandedBooks, [id]: true } }), () => {
+      requestAnimationFrame(() => {
+        const el = document.querySelector(`[data-book-id="${id}"]`);
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
+      });
+    });
+  };
+
+  makeLane(key, label, color, spec, activeConfidence, axisStyle) {
+    const left = pct(spec.start);
+    const rawWidth = pct(spec.end) - left;
+    const width = Math.max(rawWidth, 1.6);
+    const confColor = CONF_COLOR[spec.confidence];
+    const dim = !activeConfidence[spec.confidence];
+    const rangeLabel = spec.symbolicLabel ? spec.symbolicLabel : (spec.start === spec.end ? yearLabel(spec.start, axisStyle) : `${yearLabel(spec.start, axisStyle)} – ${yearLabel(spec.end, axisStyle)}`);
+    const align = left < 10 ? 'left' : (left > 78 ? 'right' : 'center');
+    const translateX = align === 'left' ? '0' : (align === 'right' ? '-100%' : '-50%');
+    const labelLeft = align === 'left' ? left : (align === 'right' ? left + width : left + width / 2);
+    const segments = spec.segments ? spec.segments.map(seg => {
+      const sLeft = pct(seg.start);
+      const sWidth = Math.max(pct(seg.end) - sLeft, 1.2);
+      const sConfColor = CONF_COLOR[seg.confidence];
+      const sDim = !activeConfidence[seg.confidence];
+      return {
+        barStyle: `position:absolute;left:${sLeft}%;width:${sWidth}%;top:2px;bottom:6px;border-radius:4px;background:${color};opacity:${sDim ? 0.35 : 0.92};box-shadow:inset 0 0 0 1px rgba(255,255,255,0.55);`,
+        underlineStyle: `position:absolute;left:${sLeft}%;width:${sWidth}%;bottom:0;height:3px;border-radius:2px;background:${sConfColor};opacity:${sDim ? 0.4 : 1};`,
+        title: seg.label,
+        rangeText: seg.start === seg.end ? yearLabel(seg.start, axisStyle) : `${yearLabel(seg.start, axisStyle)} – ${yearLabel(seg.end, axisStyle)}`,
+        chipStyle: `display:flex;align-items:center;gap:8px;padding:5px 0;opacity:${sDim ? 0.5 : 1};`,
+        chipDotStyle: `width:8px;height:8px;border-radius:2px;background:${sConfColor};flex-shrink:0;`,
+        chipTextStyle: `font-family:${SANS};font-size:12px;color:${INK};line-height:1.4;`
+      };
+    }) : [];
+    const hasSegments = segments.length > 0;
+    const whyText = spec.whyMatters || WHY_MATTERS_GENERIC[key];
+    return {
+      key,
+      label: hasSegments ? `${label} — ${segments.length} parts` : label,
+      hasSegments,
+      segments,
+      segmentListStyle: `display:flex;flex-direction:column;gap:0;margin:8px 0 0;padding:10px 12px;background:rgba(43,38,32,0.04);border-radius:8px;`,
+      whyBtnStyle: `width:16px;height:16px;border-radius:50%;border:1px solid ${BORDER};background:transparent;color:${INK_SOFT};font-family:${SANS};font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;margin-left:6px;line-height:1;padding:0;`,
+      whyBtnHoverStyle: `border-color:${INK};color:${INK};`,
+      openWhy: (e) => { e.stopPropagation(); this.setState({ whyCustom: { title: 'Why does this matter?', body: whyText } }); },
+      leftPct: left,
+      widthPct: width,
+      dotStyle: `width:9px;height:9px;border-radius:50%;background:${color};display:inline-block;margin-right:8px;flex-shrink:0;`,
+      labelTextStyle: `font-family:${SANS};font-size:13px;font-weight:600;color:${INK};`,
+      labelColStyle: `display:flex;align-items:center;width:200px;flex-shrink:0;box-sizing:border-box;padding-right:12px;`,
+      rowStyle: `display:flex;align-items:flex-start;gap:0;padding:10px 0;opacity:${dim ? 0.38 : 1};transition:opacity .2s;`,
+      trackWrapStyle: `flex:1;min-width:0;`,
+      trackAreaStyle: `position:relative;height:20px;border-radius:6px;background-image:${GRID_LINE_BG};border-bottom:1px solid ${BORDER};`,
+      barStyle: hasSegments ? `display:none;` : `position:absolute;left:${left}%;width:${width}%;top:2px;bottom:6px;border-radius:5px;background:${color}${spec.symbolic ? 'aa' : ''};${spec.symbolic ? `border:2px dashed ${INK_SOFT};` : ''}`,
+      underlineStyle: hasSegments ? `display:none;` : `position:absolute;left:${left}%;width:${width}%;bottom:0;height:3px;border-radius:2px;background:${confColor};`,
+      rangeLabel,
+      rangeLabelStyle: `position:absolute;left:${labelLeft}%;bottom:26px;transform:translateX(${translateX});font-family:${SANS};font-size:11px;font-weight:700;color:${INK};white-space:nowrap;letter-spacing:.01em;`,
+      captionStyle: `font-family:${SANS};font-size:12.5px;color:${INK_SOFT};margin:24px 0 0;line-height:1.45;`,
+      caption: hasSegments ? `Spans ${segments.length} distinct written parts across this range, each dated separately below — not one debated date. ${spec.caption}` : spec.caption,
+      confidenceWord: CONF_WORD[spec.confidence],
+      confidenceTagStyle: `font-family:${SANS};font-size:11px;font-weight:700;color:${confColor};white-space:nowrap;`
+    };
+  }
+
+  renderVals() {
+    const axisStyle = this.props.axisLabelStyle ?? 'BC/AD';
+
+    const pullQuotes = [
+      { tag: '', text: '"...all things that he spake have been and shall be, even according to the words which he spake." Christ himself commands the Nephites to search Isaiah\'s words and calls them "great."', citation: '3 Nephi 23:1–3' },
+      { tag: '', text: '"...I will raise up another like unto thee; and they shall be had again among the children of men" — after "the children of men shall esteem my words as naught and take many of them from the book."', citation: 'Moses 1:41' }
+    ].map(q => ({
+      ...q,
+      hasTag: !!q.tag,
+      cardStyle: `background:${CARD_BG};border:1px solid ${BORDER};border-radius:10px;padding:22px 24px;animation:riseIn .5s ease both;`,
+      tagStyle: `font-family:${SANS};font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:${GOLD};margin:0 0 8px;`,
+      textStyle: `font-family:${SERIF};font-style:italic;font-size:16.5px;line-height:1.55;color:${INK};margin:0 0 12px;`,
+      citeStyle: `font-family:${SANS};font-size:12.5px;font-weight:600;letter-spacing:.02em;color:${INK_SOFT};margin:0;text-transform:uppercase;`
+    }));
+
+    const corpusChips = ['OT', 'NT', 'Apoc', 'Pseudepigrapha'].map(key => {
+      const active = this.state.activeCorpus[key];
+      return {
+        key,
+        label: key === 'OT' ? 'Old Testament' : key === 'NT' ? 'New Testament' : key === 'Apoc' ? 'Apocrypha' : 'Pseudepigrapha',
+        style: `font-family:${SANS};font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;border:1px solid ${active ? INK : BORDER};background:${active ? INK : 'transparent'};color:${active ? BG : INK_SOFT};cursor:pointer;transition:all .15s;white-space:nowrap;`,
+        hoverStyle: `border-color:${INK};`,
+        toggle: () => this.toggleCorpus(key)
+      };
+    });
+
+    const confidenceChips = ['green', 'amber', 'red'].map(key => {
+      const active = this.state.activeConfidence[key];
+      return {
+        key,
+        label: CONF_WORD[key],
+        dotStyle: `width:9px;height:9px;border-radius:50%;background:${CONF_COLOR[key]};display:inline-block;margin-right:7px;`,
+        style: `display:inline-flex;align-items:center;font-family:${SANS};font-size:13px;font-weight:500;padding:7px 14px;border-radius:999px;border:1px solid ${active ? CONF_COLOR[key] : BORDER};background:${active ? CONF_COLOR[key] + '18' : 'transparent'};color:${active ? INK : INK_SOFT};cursor:pointer;transition:all .15s;white-space:nowrap;`,
+        hoverStyle: `border-color:${CONF_COLOR[key]};`,
+        toggle: () => this.toggleConfidence(key)
+      };
+    });
+
+    const axisTicks = [-1000, -700, -500, -300, -100, 100, 300].map(year => ({
+      style: `position:absolute;left:${pct(year)}%;transform:translateX(-50%);font-family:${SANS};font-size:10px;color:${INK_SOFT};white-space:nowrap;`,
+      label: yearLabel(year, axisStyle)
+    }));
+    const deepZoneStyle = `position:absolute;left:0;width:${pct(AXIS_BREAK)}%;top:0;bottom:0;border-right:1px dashed ${INK_SOFT};`;
+    const deepZoneLabelStyle = `position:absolute;left:2px;top:-13px;font-family:${SANS};font-size:9px;font-style:italic;color:${INK_SOFT};white-space:nowrap;`;
+    const creationLabelStyle = `position:absolute;left:0;top:12px;transform:translateX(0);font-family:${SANS};font-size:10px;color:${INK_SOFT};white-space:nowrap;`;
+
+    const activeConf = this.state.activeConfidence;
+
+    const CORPUS_ORDER = { OT: 0, NT: 1, Apoc: 2, Pseudepigrapha: 3 };
+    const bookRows = BOOKS
+      .filter(b => this.state.activeCorpus[b.corpus])
+      .map((b, i) => ({ b, i }))
+      .sort((x, y) => {
+        const co = CORPUS_ORDER[x.b.corpus] - CORPUS_ORDER[y.b.corpus];
+        if (co !== 0) return co;
+        if (x.b.corpus === 'OT' || x.b.corpus === 'NT') return x.i - y.i;
+        const xStart = x.b.composition ? x.b.composition.start : (x.b.narrative ? x.b.narrative.start : 0);
+        const yStart = y.b.composition ? y.b.composition.start : (y.b.narrative ? y.b.narrative.start : 0);
+        return xStart - yStart;
+      })
+      .map(({ b }) => b)
+      .map(b => {
+        const isOpen = !!this.state.expandedBooks[b.id];
+        const specsAll = [
+          ['narrative', 'Narrative setting', CORAL, b.narrative],
+          ['composition', 'Composition', BLUE, b.composition],
+          ['canonization', 'Canonization', PURPLE, b.canonization]
+        ];
+        const present = specsAll.filter(s => s[3]);
+        const lanes = present.map(([key, label, color, spec]) => this.makeLane(key, label, color, spec, activeConf, axisStyle));
+        const missingLaneNotes = specsAll.filter(s => !s[3]).map(([key, label]) => {
+          if (key === 'canonization' && b.neverCanonized) return 'Never canonized — preserved as scripture outside the biblical canon.';
+          if (key === 'narrative' && b.noNarrativeSetting) return b.noNarrativeSetting;
+          return `${label}: not yet catalogued for this corpus.`;
+        });
+        const compactLanes = present.flatMap(([key, , color, spec], i) => {
+          const top = i * 9;
+          if (spec.segments) {
+            return spec.segments.map((seg, si) => ({
+              key: `${key}-${si}`,
+              barStyle: `position:absolute;left:${pct(seg.start)}%;width:${Math.max(pct(seg.end) - pct(seg.start), 1)}%;top:${top}px;height:6px;border-radius:3px;background:${color};opacity:${activeConf[seg.confidence] ? 1 : 0.35};`
+            }));
+          }
+          return [{ key, barStyle: `position:absolute;left:${pct(spec.start)}%;width:${Math.max(pct(spec.end) - pct(spec.start), 1.6)}%;top:${top}px;height:6px;border-radius:3px;background:${color};opacity:${activeConf[spec.confidence] ? 1 : 0.35};` }];
+        });
+        const restOpen = !!this.state.openRestoration[b.id];
+        const showRestorationLane = restOpen && !!b.restoration;
+        const sortByComposition = b.corpus === 'Apoc' || b.corpus === 'Pseudepigrapha';
+        const summaryStart = sortByComposition ? b.composition.start : (b.narrative ? b.narrative.start : b.composition.start);
+        const summaryEnd = sortByComposition ? b.composition.end : (b.canonization ? b.canonization.end : b.composition.end);
+        return {
+          id: b.id,
+          name: b.name,
+          corpusLabel: b.corpusLabel,
+          eraSummary: `${yearLabel(summaryStart, axisStyle)} → ${yearLabel(summaryEnd, axisStyle)}`,
+          lanes,
+          hasMissingLanes: missingLaneNotes.length > 0,
+          missingLanesNote: missingLaneNotes.join(' '),
+          compactLanes,
+          hasFinerView: !!b.finerView,
+          showRestorationLane,
+          hasRestorationData: !!b.restoration,
+          restorationToggleLabel: restOpen ? 'Hide Restoration data' : 'Restoration data',
+          toggleRestoration: (e) => { e.stopPropagation(); this.setState(s => ({ openRestoration: { ...s.openRestoration, [b.id]: !s.openRestoration[b.id] } })); },
+          restorationCaption: b.restoration,
+          showCollapsedRow: !isOpen,
+          compactTrackStyle: `position:relative;height:33px;flex:1;`,
+          showLanes: isOpen,
+          chevronChar: isOpen ? '▾' : '▸',
+          toggleExpand: () => this.toggleBookExpand(b.id),
+          blockStyle: `background:${CARD_BG};border:1px solid ${BORDER};border-radius:12px;margin-bottom:10px;overflow:hidden;cursor:pointer;`,
+          headerStyle: `display:flex;align-items:center;gap:0;padding:14px 20px;flex-wrap:wrap;`,
+          headerLeftStyle: `display:flex;align-items:flex-start;gap:8px;width:200px;flex-shrink:0;box-sizing:border-box;padding-right:12px;`,
+          profileOpen: !!this.state.openProfile[b.id],
+          profileBtnLabel: this.state.openProfile[b.id] ? 'Hide closer look' : 'A closer look →',
+          toggleProfile: (e) => { e.stopPropagation(); this.setState(s => ({ openProfile: { ...s.openProfile, [b.id]: !s.openProfile[b.id] } })); },
+          finerIntro: b.finerView ? b.finerView.intro : '',
+          finerItems: b.finerView ? (b.finerView.items || []).map(it => {
+            const confColor = it.confidence ? CONF_COLOR[it.confidence] : INK_SOFT;
+            return {
+              label: it.label,
+              rangeLabel: it.start !== undefined ? (it.start === it.end ? yearLabel(it.start, axisStyle) : `${yearLabel(it.start, axisStyle)} – ${yearLabel(it.end, axisStyle)}`) : '',
+              rangeStyle: `font-family:${SANS};font-weight:700;white-space:nowrap;color:${confColor};`,
+              detail: it.detail || ''
+            };
+          }) : [],
+          hasFinerStats: !!(b.finerView && b.finerView.stat && b.finerView.stat.length),
+          finerStats: (b.finerView && b.finerView.stat ? b.finerView.stat : []).map(s => ({ label: s.label, count: s.count, barStyle: `width:${Math.min(s.count * 3, 100)}%;background:${BLUE};height:8px;border-radius:4px;` })),
+          detailFinerWrapStyle: `margin-top:14px;padding-top:16px;border-top:2px solid ${INK};`,
+          chevronStyle: `font-family:${SANS};font-size:13px;color:${INK_SOFT};width:12px;display:inline-block;flex-shrink:0;margin-top:2px;`,
+          nameStyle: `font-family:${SERIF};font-size:15.5px;font-weight:600;color:${INK};line-height:1.3;`,
+          corpusTagStyle: `font-family:${SANS};font-size:10px;font-weight:700;color:${INK_SOFT};background:rgba(43,38,32,0.06);padding:2px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.02em;flex-shrink:0;`,
+          corpusLabel: b.corpus === 'OT' ? 'OT' : (b.corpus === 'NT' ? 'NT' : (b.corpus === 'Apoc' ? 'APOC' : 'PSEUD')),
+          summaryRowStyle: `display:flex;align-items:center;gap:5px;`,
+          summaryDotCoralStyle: `width:8px;height:8px;border-radius:50%;background:${CORAL};`,
+          summaryDotBlueStyle: `width:8px;height:8px;border-radius:50%;background:${BLUE};`,
+          summaryDotPurpleStyle: `width:8px;height:8px;border-radius:50%;background:${PURPLE};`,
+          summaryTextStyle: `font-family:${SANS};font-size:12.5px;color:${INK_SOFT};margin-left:6px;`,
+          lanesWrapStyle: `padding:4px 20px 18px;animation:fadeIn .25s ease;`,
+          restorationRowStyle: `display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:10px 0 4px;margin-top:6px;border-top:1px dashed ${GOLD};`,
+          restorationToggleBtnStyle: `display:inline-flex;align-items:center;font-family:${SANS};font-size:12.5px;font-weight:600;color:${INK};background:transparent;border:1px solid ${GOLD};border-radius:999px;padding:6px 12px;cursor:pointer;`,
+          restorationToggleBtnHoverStyle: `background:rgba(212,162,76,0.1);`,
+          restorationDotStyle: `width:9px;height:9px;border-radius:50%;background:${GOLD};display:inline-block;margin-right:8px;flex-shrink:0;`,
+          restorationLabelStyle: `font-family:${SANS};font-size:13px;font-weight:600;color:${INK};`,
+          restorationTextWrapStyle: `flex:1;min-width:0;`,
+          missingLanesNoteStyle: `font-family:${SANS};font-size:11.5px;font-style:italic;color:${INK_SOFT};opacity:.75;margin:2px 0 0;padding-left:200px;`,
+          profileBtnStyle: `padding:8px 16px;border-radius:999px;border:1px solid ${INK};background:transparent;color:${INK};font-family:${SANS};font-size:12.5px;font-weight:600;cursor:pointer;`,
+          profileBtnHoverStyle: `background:${INK};color:${BG};`,
+          restorationCaptionStyle: `font-family:${SANS};font-size:12.5px;color:#8a6a2e;line-height:1.5;margin:2px 0 0;font-style:italic;`
+        };
+      });
+
+    let detailBook = null;
+
+    const faqItems = FAQ_ITEMS.map((item, i) => {
+      const open = !!this.state.openFaq[i];
+      return {
+        q: item.q, a: item.a, open,
+        toggle: () => this.toggleFaq(i),
+        itemStyle: `border-bottom:1px solid ${BORDER};padding:20px 0;`,
+        qRowStyle: `display:flex;justify-content:space-between;align-items:center;gap:16px;cursor:pointer;`,
+        qStyle: `font-family:${SERIF};font-size:18px;font-weight:600;color:${INK};margin:0;line-height:1.35;`,
+        chevronStyle: `font-family:${SANS};font-size:15px;color:${INK_SOFT};flex-shrink:0;transition:transform .2s;transform:rotate(${open ? '180deg' : '0deg'});`,
+        aStyle: `font-family:${SANS};font-size:14.5px;color:${INK_SOFT};line-height:1.65;margin:${open ? '14px' : '0'} 0 0;max-height:${open ? '400px' : '0'};overflow:hidden;transition:margin .2s;`
+      };
+    });
+
+    const why = this.state.whyCustom || (this.state.whyKey ? WHY[this.state.whyKey] : null);
+
+    return {
+      pageStyle: `background:${BG};color:${INK};font-family:${SANS};min-height:100vh;position:relative;`,
+      howToReadBtnStyle: `position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:50%;background:${INK};color:${BG};border:none;font-family:${SERIF};font-size:20px;font-style:italic;cursor:pointer;z-index:40;box-shadow:0 4px 16px rgba(43,38,32,0.25);`,
+      howToReadBtnHoverStyle: `background:#3d362c;`,
+      openWhyHowToRead: () => this.setState({ whyKey: 'howToRead' }),
+
+      moduleAStyle: `padding:20px 20px 0;display:flex;justify-content:center;position:sticky;top:0;z-index:20;background:${BG};`,
+      heroInnerStyle: `max-width:920px;width:100%;`,
+      topBarRowStyle: `display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid ${BORDER};`,
+      topBarTitleStyle: `font-family:${SERIF};font-size:18px;font-weight:600;color:${INK};`,
+      aboutBtnStyle: `font-family:${SANS};font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:999px;border:1px solid ${BORDER};background:transparent;color:${INK_SOFT};cursor:pointer;white-space:nowrap;`,
+      aboutBtnHoverStyle: `border-color:${INK};color:${INK};`,
+      showAbout: this.state.showAbout,
+      openAbout: () => this.setState({ showAbout: true }),
+      closeAbout: () => this.setState({ showAbout: false }),
+      aboutCardStyle: `background:${CARD_BG};border-radius:16px;max-width:760px;width:100%;padding:40px 40px 44px;box-shadow:0 24px 70px rgba(43,38,32,0.35);animation:riseIn .2s ease;position:relative;max-height:86vh;overflow-y:auto;`,
+      aboutAuthorDividerStyle: `border-top:1px solid ${BORDER};margin:36px 0 28px;`,
+      aboutAuthorHeadingStyle: `font-family:${SERIF};font-size:22px;font-weight:600;color:${INK};margin:0 0 14px;`,
+      aboutAuthorBodyStyle: `font-family:${SANS};font-size:14px;line-height:1.65;color:${INK_SOFT};margin:0 0 14px;`,
+      aboutSubheadingStyle: `font-family:${SANS};font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:${INK};margin:24px 0 12px;`,
+      degrees: [
+        { abbr: 'Ph.D.', text: 'Judaism & Christianity in Antiquity — Indiana University' },
+        { abbr: 'Ph.D.', text: 'Instructional Systems Technology — Indiana University' },
+        { abbr: 'M.A.', text: 'Biblical Studies — Yale University' },
+        { abbr: 'B.A.', text: 'Ancient Near Eastern Studies — Brigham Young University' }
+      ],
+      degreeGridStyle: `display:flex;flex-direction:column;gap:8px;margin-bottom:16px;`,
+      degreeRowStyle: `display:flex;align-items:baseline;gap:10px;`,
+      degreeAbbrStyle: `font-family:${SANS};font-size:12px;font-weight:700;color:${GOLD};width:44px;flex-shrink:0;`,
+      degreeTextStyle: `font-family:${SANS};font-size:13.5px;color:${INK};`,
+      elsewhereRowStyle: `display:flex;flex-wrap:wrap;gap:16px;margin-bottom:4px;`,
+      elsewhereLinkStyle: `font-family:${SANS};font-size:13px;font-weight:600;color:${INK};text-decoration:underline;text-decoration-color:${BORDER};`,
+      elsewhereLinkHoverStyle: `text-decoration-color:${INK};`,
+      eyebrowRowStyle: `display:flex;align-items:center;gap:10px;margin-bottom:18px;`,
+      eyebrowStyle: `font-family:${SANS};font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:${INK_SOFT};`,
+      whyBadgeStyle: `width:22px;height:22px;border-radius:50%;border:1px solid ${BORDER};background:transparent;color:${INK_SOFT};font-family:${SANS};font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;`,
+      whyBadgeSmallStyle: `width:18px;height:18px;border-radius:50%;border:1px solid ${BORDER};background:transparent;color:${INK_SOFT};font-family:${SANS};font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;`,
+      whyBadgeHoverStyle: `border-color:${INK};color:${INK};`,
+      headlineStyle: `font-family:${SERIF};font-size:clamp(28px,4.4vw,42px);font-weight:600;line-height:1.28;margin:0 0 36px;color:${INK};`,
+      quoteGridStyle: `display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;`,
+      pullQuotes,
+      goalStyle: `font-family:${SERIF};font-style:italic;font-size:19px;line-height:1.6;color:${INK};text-align:center;max-width:600px;margin:0 auto 48px;`,
+      scrollCueStyle: `display:flex;flex-direction:column;align-items:center;gap:6px;font-family:${SANS};font-size:12.5px;color:${INK_SOFT};letter-spacing:.03em;`,
+      scrollArrowStyle: `font-size:16px;`,
+
+      moduleBStyle: `padding:20px 20px 90px;display:flex;justify-content:center;border-top:1px solid ${BORDER};`,
+      moduleBInnerStyle: `max-width:920px;width:100%;`,
+      moduleBHeaderRowStyle: `display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin:36px 0 20px;`,
+      moduleBTitleStyle: `font-family:${SERIF};font-size:26px;font-weight:600;margin:0 0 6px;color:${INK};`,
+      moduleBSubtitleStyle: `font-family:${SANS};font-size:14px;color:${INK_SOFT};margin:0;`,
+
+      controlsRowStyle: `display:flex;flex-wrap:wrap;gap:24px;margin-bottom:22px;padding:16px 18px;background:${CARD_BG};border:1px solid ${BORDER};border-radius:12px;`,
+      chipGroupStyle: `display:flex;flex-direction:column;gap:8px;`,
+      restorationGroupStyle: `display:flex;flex-direction:column;gap:8px;margin-left:auto;justify-content:center;`,
+      abrahamToggleBtnStyle: `font-family:${SANS};font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;border:1px solid ${GOLD};background:transparent;color:${INK};cursor:pointer;`,
+      abrahamToggleBtnHoverStyle: `background:rgba(212,162,76,0.1);`,
+      toggleAbraham: () => this.setState(s => ({ showAbraham: !s.showAbraham })),
+      controlLabelStyle: `font-family:${SANS};font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:${INK_SOFT};`,
+      tapHintStyle: `font-family:${SANS};font-size:11px;font-style:italic;color:${INK_SOFT};opacity:.7;margin:-4px 0 0;`,
+      confidenceLabelRowStyle: `display:flex;align-items:center;gap:6px;`,
+      chipRowStyle: `display:flex;flex-wrap:wrap;gap:8px;`,
+      corpusChips,
+      confidenceChips,
+
+      toggleRestoration: () => this.setState(s => ({ restorationOn: !s.restorationOn })),
+      toggleTrackStyle: `width:44px;height:26px;border-radius:999px;border:none;padding:3px;cursor:pointer;background:${this.state.restorationOn ? GOLD : 'rgba(43,38,32,0.18)'};transition:background .2s;position:relative;`,
+      toggleKnobStyle: `display:block;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;transform:translateX(${this.state.restorationOn ? '18px' : '0'});box-shadow:0 1px 3px rgba(0,0,0,0.3);`,
+
+      axisStickyWrapStyle: `position:sticky;top:73px;z-index:15;background:${BG};padding-top:26px;margin-bottom:10px;border-bottom:1px solid ${BORDER};box-shadow:0 6px 10px -8px rgba(43,38,32,0.3);`,
+      axisRowStyle: `display:flex;margin-bottom:6px;padding:0 20px 0 21px;`,
+      axisSpacerStyle: `width:200px;flex-shrink:0;box-sizing:border-box;padding-right:12px;`,
+      axisTrackStyle: `position:relative;flex:1;height:26px;`,
+      axisTicks,
+      mobileAxisStyle: `position:sticky;top:73px;z-index:15;background:${BG};border-bottom:1px solid ${BORDER};box-shadow:0 6px 10px -8px rgba(43,38,32,0.3);padding:8px 4px;gap:14px;overflow-x:auto;white-space:nowrap;`,
+      mobileAxisTicks: ['Creation', ...[-1000, -700, -500, -300, -100, 100, 300].map(y => yearLabel(y, axisStyle))],
+      mobileAxisTickStyle: `font-family:${SANS};font-size:11px;color:${INK_SOFT};flex-shrink:0;`,
+      deepZoneStyle,
+      deepZoneLabelStyle,
+      creationLabelStyle,
+
+      profileRowStyle: `display:flex;align-items:center;gap:8px;margin-top:14px;`,
+      bookListStyle: `display:flex;flex-direction:column;`,
+      bookRows,
+      showAbrahamCard: this.state.showAbraham,
+      abrahamCardStyle: `margin-top:14px;padding:20px 24px;border:1px dashed ${GOLD};border-radius:12px;background:rgba(212,162,76,0.06);`,
+      abrahamEyebrowStyle: `font-family:${SANS};font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:${GOLD};margin:0 0 6px;`,
+      abrahamTitleStyle: `font-family:${SERIF};font-size:19px;font-weight:600;color:${INK};margin:0 0 8px;`,
+      abrahamBodyStyle: `font-family:${SANS};font-size:13px;color:#8a6a2e;line-height:1.6;font-style:italic;margin:0;`,
+      legendBarStyle: `display:flex;flex-wrap:wrap;gap:20px;align-items:center;padding:12px 18px;margin-bottom:16px;background:rgba(43,38,32,0.04);border-radius:10px;`,
+      expandAllBtnStyle: `padding:6px 14px;border-radius:999px;border:1px solid ${BORDER};background:transparent;color:${INK_SOFT};font-family:${SANS};font-size:12px;font-weight:600;cursor:pointer;`,
+      expandAllBtnHoverStyle: `border-color:${INK};color:${INK};`,
+      expandAllBooks: () => this.expandAllBooks(),
+      collapseAllBooks: () => this.collapseAllBooks(),
+      expandAllLabel: Object.keys(this.state.expandedBooks).length > 0 ? 'Collapse all' : 'Expand all',
+      toggleExpandAll: () => {
+        if (Object.keys(this.state.expandedBooks).length > 0) this.collapseAllBooks();
+        else this.expandAllBooks();
+      },
+      legendGroupStyle: `display:flex;align-items:center;gap:14px;flex-wrap:wrap;`,
+      legendItemStyle: `display:flex;align-items:center;gap:6px;font-family:${SANS};font-size:12px;color:${INK_SOFT};`,
+      legendDividerStyle: `width:1px;align-self:stretch;background:${BORDER};`,
+      legendItems: [
+        { dot: `width:9px;height:9px;border-radius:50%;background:${CORAL};display:inline-block;`, label: 'Narrative setting' },
+        { dot: `width:9px;height:9px;border-radius:50%;background:${BLUE};display:inline-block;`, label: 'Composition' },
+        { dot: `width:9px;height:9px;border-radius:50%;background:${PURPLE};display:inline-block;`, label: 'Canonization' }
+      ],
+      legendConfItems: [
+        { dot: `width:14px;height:3px;border-radius:2px;background:${GREEN};display:inline-block;`, label: 'Broad consensus' },
+        { dot: `width:14px;height:3px;border-radius:2px;background:${AMBER};display:inline-block;`, label: 'Majority view' },
+        { dot: `width:14px;height:3px;border-radius:2px;background:${RED};display:inline-block;`, label: 'Contested' }
+      ],
+
+      detailBackdropStyle: `position:fixed;inset:0;background:rgba(43,38,32,0.5);display:flex;align-items:flex-start;justify-content:center;z-index:60;padding:40px 20px;overflow-y:auto;animation:fadeIn .15s ease;`,
+      detailCardStyle: `background:${CARD_BG};border-radius:16px;max-width:640px;width:100%;padding:32px 32px 36px;box-shadow:0 24px 70px rgba(43,38,32,0.35);animation:riseIn .2s ease;position:relative;`,
+      detailCloseStyle: `position:absolute;top:20px;right:20px;width:32px;height:32px;border-radius:50%;border:1px solid ${BORDER};background:transparent;color:${INK_SOFT};font-family:${SANS};font-size:16px;cursor:pointer;`,
+      detailCloseHoverStyle: `border-color:${INK};color:${INK};`,
+      detailTitleStyle: `font-family:${SERIF};font-size:28px;font-weight:600;color:${INK};margin:0 0 4px;padding-right:40px;`,
+      detailCorpusStyle: `font-family:${SANS};font-size:11px;font-weight:700;color:${INK_SOFT};background:rgba(43,38,32,0.06);padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.02em;display:inline-block;margin-bottom:20px;`,
+      detailLaneWrapStyle: `padding:16px 0 34px;border-top:1px solid ${BORDER};`,
+      detailLaneHeadStyle: `display:flex;align-items:center;gap:2px;margin-bottom:22px;`,
+      detailMissingStyle: `font-family:${SANS};font-size:12.5px;font-style:italic;color:${INK_SOFT};opacity:.8;padding:12px 0;border-top:1px solid ${BORDER};`,
+      detailRestoreStyle: `padding:14px 0;margin-top:4px;border-top:1px dashed ${GOLD};`,
+      detailRestoreLabelStyle: `font-family:${SANS};font-size:12px;font-weight:700;color:${GOLD};text-transform:uppercase;letter-spacing:.03em;margin:0 0 6px;`,
+      detailRestoreTextStyle: `font-family:${SANS};font-size:13px;color:#8a6a2e;line-height:1.55;font-style:italic;margin:0;`,
+      detailFinerWrapStyle: `margin-top:24px;padding-top:20px;border-top:2px solid ${INK};`,
+      finerTitleRowStyle: `display:flex;align-items:center;gap:8px;margin-bottom:4px;`,
+      detailFinerTitleStyle: `font-family:${SERIF};font-size:18px;font-weight:600;color:${INK};margin:0;`,
+      detailFinerIntroStyle: `font-family:${SANS};font-size:13px;color:${INK_SOFT};line-height:1.55;margin:0 0 14px;`,
+      detailFinerItemStyle: `padding:9px 0;border-bottom:1px solid ${BORDER};`,
+      detailFinerItemHeadStyle: `display:flex;justify-content:space-between;gap:12px;font-family:${SANS};font-size:13px;font-weight:600;color:${INK};margin-bottom:3px;`,
+      detailFinerRangeStyle: `font-weight:700;white-space:nowrap;`,
+      detailFinerDetailStyle: `font-family:${SANS};font-size:12px;color:${INK_SOFT};line-height:1.45;margin:0;`,
+      detailStatRowStyle: `display:flex;align-items:center;gap:10px;padding:5px 0;`,
+      detailStatLabelStyle: `font-family:${SANS};font-size:12px;color:${INK};width:230px;flex-shrink:0;`,
+      detailStatCountStyle: `font-family:${SANS};font-size:12px;font-weight:700;color:${INK_SOFT};width:28px;text-align:right;`,
+
+      faqItems,
+      furtherReading: FURTHER_READING.map((b, i) => ({
+        ...b,
+        slotId: `further-reading-cover-${i}`,
+        cardStyle: `display:flex;flex-direction:row;gap:14px;align-items:flex-start;background:${CARD_BG};border:1px solid ${BORDER};border-radius:10px;padding:14px;overflow:hidden;text-decoration:none;transition:border-color .15s,transform .15s;`,
+        cardHoverStyle: `border-color:${INK_SOFT};transform:translateY(-2px);`,
+        coverWrapStyle: `width:56px;flex-shrink:0;aspect-ratio:2/3;background:${BORDER};border-radius:4px;overflow:hidden;`,
+        bodyStyle: `padding:0;min-width:0;`,
+        titleStyle: `font-family:${SERIF};font-size:17px;font-weight:600;color:${INK};margin:0 0 8px;line-height:1.3;`,
+        descStyle: `font-family:${SANS};font-size:13.5px;line-height:1.55;color:${INK_SOFT};margin:0 0 14px;`,
+        linkStyle: `font-family:${SANS};font-size:12px;font-weight:600;letter-spacing:.03em;color:${INK};margin:0;`
+      })),
+      moduleFStyle: `padding:0 20px 100px;display:flex;justify-content:center;`,
+      moduleFInnerStyle: `max-width:960px;width:100%;`,
+      furtherHeadlineStyle: `font-family:${SERIF};font-size:clamp(24px,3.2vw,32px);font-weight:600;line-height:1.3;margin:0 0 12px;color:${INK};`,
+      furtherIntroStyle: `font-family:${SANS};font-size:15px;line-height:1.6;color:${INK_SOFT};margin:0 0 32px;max-width:640px;`,
+      furtherGridStyle: `display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;`,
+      moduleEStyle: `padding:80px 20px 100px;display:flex;justify-content:center;border-top:1px solid ${BORDER};`,
+      moduleEInnerStyle: `max-width:680px;width:100%;`,
+      faqEyebrowStyle: `font-family:${SANS};font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:${INK_SOFT};margin:0 0 16px;`,
+      faqHeadlineStyle: `font-family:${SERIF};font-size:clamp(26px,3.6vw,36px);font-weight:600;line-height:1.3;margin:0 0 40px;color:${INK};`,
+      faqListStyle: `border-top:1px solid ${BORDER};margin-bottom:56px;`,
+      closingCardStyle: `background:${CARD_BG};border:1px solid ${BORDER};border-radius:10px;padding:26px 28px;text-align:center;`,
+      closingTextStyle: `font-family:${SERIF};font-style:italic;font-size:17.5px;line-height:1.6;color:${INK};margin:0 0 14px;`,
+      closingCiteStyle: `font-family:${SANS};font-size:12.5px;font-weight:600;letter-spacing:.02em;color:${INK_SOFT};margin:0 0 20px;text-transform:uppercase;`,
+      closingLineStyle: `font-family:${SANS};font-size:14px;color:${INK_SOFT};margin:0;line-height:1.6;`,
+
+      hasWhy: !!why,
+      whyTitle: why ? why.title : '',
+      whyBody: why ? why.body : '',
+      openWhyFourVerses: () => this.setState({ whyKey: 'fourVerses' }),
+      openWhyLanes: () => this.setState({ whyKey: 'lanes' }),
+      openWhyConfidence: () => this.setState({ whyKey: 'confidence' }),
+      openWhyRestoration: () => this.setState({ whyKey: 'restoration' }),
+      openWhyCorpus: () => this.setState({ whyKey: 'corpus' }),
+      openWhyProfile: (e) => { e.stopPropagation(); this.setState({ whyKey: 'profile' }); },
+      openWhyCloserLook: () => this.setState({ whyKey: 'closerLook' }),
+      closeWhy: () => this.setState({ whyKey: null, whyCustom: null }),
+      stopProp: (e) => e.stopPropagation(),
+      modalBackdropStyle: `position:fixed;inset:0;background:rgba(43,38,32,0.4);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;animation:fadeIn .15s ease;`,
+      modalCardStyle: `background:${CARD_BG};border-radius:14px;max-width:460px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(43,38,32,0.3);animation:riseIn .2s ease;`,
+      modalTitleStyle: `font-family:${SERIF};font-size:20px;font-weight:600;margin:0 0 12px;color:${INK};`,
+      modalBodyStyle: `font-family:${SANS};font-size:14.5px;line-height:1.6;color:${INK_SOFT};margin:0 0 20px;`,
+      modalCloseStyle: `font-family:${SANS};font-size:13px;font-weight:600;padding:9px 18px;border-radius:8px;border:1px solid ${INK};background:transparent;color:${INK};cursor:pointer;`,
+      modalCloseHoverStyle: `background:${INK};color:${BG};`
+    };
+  }
+}
+</script>
+</body>
+</html>
