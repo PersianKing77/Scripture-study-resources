@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: oklch(97% 0.015 85); font-family: 'Source Sans 3', sans-serif; }
+    a { color: oklch(45% 0.11 250); }
+    a:hover { color: oklch(35% 0.11 250); }
+    ::-webkit-scrollbar { height: 8px; }
+  </style>
+  <script src="./nt-macro-data.js"></script>
+</helmet>
+
+<div style="position:fixed;top:12px;right:12px;z-index:200;display:{{ devSwitcherDisplay }};gap:4px;background:white;border:1px solid oklch(85% 0.01 85);border-radius:9px;padding:4px;box-shadow:0 6px 18px oklch(0% 0 0 / 0.15);">
+  <sc-for list="{{ previewModePills }}" as="pm" hint-placeholder-count="4">
+    <button style="{{ pm.style }}" onclick="{{ pm.onClick }}">{{ pm.name }}</button>
+  </sc-for>
+</div>
+
+<div style="{{ frameOuterStyle }}">
+<div style="{{ frameStyle }}">
+<div style="{{ containerStyle }}">
+
+  <sc-if value="{{ notReady }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:80px 0;font-size:14px;color:oklch(50% 0.02 60);">Loading…</div>
+  </sc-if>
+  <sc-if value="{{ !notReady }}" hint-placeholder-val="{{ true }}">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+      <div>
+        <div style="{{ titleStyle }}">The Four Gospels, One Story</div>
+        <div style="font-size:15px;color:oklch(40% 0.02 60);margin-top:4px;max-width:560px;">Where Matthew, Mark, Luke, and John agree and disagree on order — and what that tells us.</div>
+      </div>
+    </div>
+    <sc-if value="{{ !isMobile }}">
+    <div style="position:relative;flex-shrink:0;margin-left:auto;">
+      <button onclick="{{ onToggleTools }}" style="{{ toolsBtnStyle }}" aria-label="Tools">{{ toolsBtnLabel }}</button>
+      <sc-if value="{{ toolsOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;right:0;top:calc(100% + 6px);background:white;border:1px solid oklch(88% 0.01 85);border-radius:10px;box-shadow:0 10px 28px oklch(0% 0 0 / 0.14);padding:6px;min-width:240px;z-index:20;">
+          <div style="font-size:11px;letter-spacing:0.07em;text-transform:uppercase;color:oklch(58% 0.02 60);font-weight:700;padding:8px 12px 4px;">Views</div>
+          <button style="{{ tabMacroStyle }}" style-hover="{{ tabHoverStyle }}" onclick="{{ setViewMacro }}">Macro-Structure Drill-Down</button>
+          <button style="{{ tabReportStyle }}" style-hover="{{ tabHoverStyle }}" onclick="{{ setViewReport }}">Guided Report</button>
+
+          <div style="border-top:1px solid oklch(90% 0.01 85);margin:6px 4px;"></div>
+          <button style="display:flex;align-items:center;gap:8px;width:100%;text-align:left;border-radius:7px;border:none;background:transparent;padding:10px 12px;font-size:14px;font-weight:600;cursor:pointer;color:oklch(38% 0.02 60);" style-hover="{{ tabHoverStyle }}" onclick="{{ onOpenAbout }}">About this tool</button>
+          <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+            <div style="border-top:1px solid oklch(90% 0.01 85);margin:6px 4px;"></div>
+            <div style="font-size:11px;letter-spacing:0.07em;text-transform:uppercase;color:oklch(58% 0.02 60);font-weight:700;padding:8px 12px 6px;">Story color legend</div>
+            <div style="display:flex;flex-direction:column;gap:6px;padding:2px 12px 8px;">
+              <sc-for list="{{ v1.tradLegend }}" as="tl" hint-placeholder-count="6">
+                <span style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:oklch(38% 0.02 60);"><span style="width:14px;height:14px;border-radius:4px;background:color-mix(in oklch, {{ tl.color }} 32%, white);border:2px solid {{ tl.color }};display:inline-block;flex-shrink:0;"></span>{{ tl.name }}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ aboutOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:oklch(20% 0.01 60 / 0.45);z-index:50;display:flex;align-items:center;justify-content:center;padding:24px;" onclick="{{ onCloseAbout }}">
+      <div style="background:oklch(97% 0.02 85);border:1px solid oklch(85% 0.02 75);border-radius:4px;max-width:720px;width:100%;max-height:85vh;overflow:auto;box-shadow:0 20px 60px oklch(0% 0 0 / 0.3);" onclick="{{ stopProp }}">
+        <div style="padding:28px 32px 0;position:relative;">
+          <button onclick="{{ onCloseAbout }}" style="position:absolute;top:24px;right:28px;background:none;border:none;font-size:13px;letter-spacing:0.06em;color:oklch(45% 0.02 60);cursor:pointer;font-weight:600;">CLOSE ✕</button>
+          <div style="font-family:'Spectral',serif;font-weight:600;font-size:26px;color:oklch(25% 0.03 60);">About &amp; methodology</div>
+          <div style="font-size:12px;letter-spacing:0.08em;color:oklch(50% 0.03 60);margin-top:6px;text-transform:uppercase;">Prepared by Taylor Halverson, Ph.D.</div>
+          <div style="display:flex;gap:22px;margin-top:20px;border-bottom:1px solid oklch(85% 0.02 75);">
+            <button style="{{ aboutTabToolStyle }}" onclick="{{ setAboutTabTool }}">The tool</button>
+            <button style="{{ aboutTabAuthorStyle }}" onclick="{{ setAboutTabAuthor }}">Taylor Halverson, Ph.D.</button>
+          </div>
+        </div>
+        <div style="padding:22px 32px 32px;font-size:14.5px;line-height:1.65;color:oklch(30% 0.02 60);">
+          <sc-if value="{{ isAboutTool }}" hint-placeholder-val="{{ true }}">
+            <p style="margin:0 0 14px;">This tool lays the four Gospels side by side so you can see, at a glance, how Matthew, Mark, Luke, and John each ordered the story of Jesus — and where they diverge. Most scholars treat Mark as the earliest Gospel and the shared backbone Matthew and Luke built on; Q refers to sayings material Matthew and Luke share but Mark and John don't have.</p>
+            <p style="margin:0 0 14px;">Click any pericope (a self-contained episode or teaching unit) to see everywhere it appears across the four accounts, marked with pins and amber lines. Step through a single Gospel's full sequence with the gospel pills and Prev/Next controls, or collapse the detail panels to see just the shape of each Gospel's structure.</p>
+            <p style="margin:0;">Pericope divisions and ordering follow standard synopses used in Gospels scholarship. This is a study aid, not a substitute for the biblical text itself.</p>
+          </sc-if>
+          <sc-if value="{{ isAboutAuthor }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:0 0 14px;">Taylor Halverson is a scholar of scripture and a teacher of learners — an entrepreneurship professor in the BYU Marriott School of Business who spends his working life helping people find and act on the best ideas and tools available to them.</p>
+            <p style="margin:0 0 14px;">He is the author and editor of more than fifty books and nearly a thousand articles and blog posts, and a builder of scripture study resources: the ScripturePlus app with Scripture Central, whose scripture YouTube channel he co-hosted to more than fifty million views, and BYU's Virtual Scripture Group, whose team spent more than five years reconstructing New Testament Jerusalem in three dimensions. This map belongs to that same body of work — tools made so that ordinary readers can see what specialists see.</p>
+            <p style="margin:0 0 20px;">He leads tours to Israel and the Middle East, China, India, Central America, Europe, and the national parks of the American West, where he unfolds how geology, geography, civilization, and scriptural texts created our beautiful present day.</p>
+            <div style="font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:oklch(45% 0.03 60);font-weight:600;margin-bottom:10px;">Academic training</div>
+            <div style="display:grid;grid-template-columns:70px 1fr;gap:6px 14px;font-size:14px;margin-bottom:22px;">
+              <div style="font-weight:600;color:oklch(25% 0.03 60);">Ph.D.</div><div>Judaism &amp; Christianity in Antiquity — Indiana University</div>
+              <div style="font-weight:600;color:oklch(25% 0.03 60);">Ph.D.</div><div>Instructional Systems Technology — Indiana University</div>
+              <div style="font-weight:600;color:oklch(25% 0.03 60);">M.A.</div><div>Biblical Studies — Yale University</div>
+              <div style="font-weight:600;color:oklch(25% 0.03 60);">B.A.</div><div>Ancient Near Eastern Studies — Brigham Young University</div>
+            </div>
+            <p style="margin:0 0 20px;font-style:italic;color:oklch(38% 0.02 60);">Two doctorates in two separate fields — the ancient world, and the design of learning. Both of them are in this tool.</p>
+            <div style="font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:oklch(45% 0.03 60);font-weight:600;margin-bottom:10px;">Elsewhere</div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:14px;">
+              <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>
+              <a href="https://books.taylorhalverson.com" target="_blank" rel="noopener">books.taylorhalverson.com</a>
+              <a href="https://exodustours.com" target="_blank" rel="noopener">exodustours.com</a>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="display:flex;align-items:center;gap:10px;margin-top:{{ topRowMarginTop }};min-height:20px;font-size:13.5px;color:oklch(42% 0.02 60);flex-wrap:wrap;">
+    <sc-if value="{{ breadcrumb }}">
+      <span style="font-weight:700;color:oklch(28% 0.03 60);background:oklch(93% 0.03 250 / 0.6);border:1.5px solid oklch(60% 0.1 250);border-radius:7px;padding:5px 12px;">{{ breadcrumb }}</span>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ isMacroView }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ !isMobile }}">
+    <div style="display:flex;gap:14px;margin-top:16px;font-size:11.5px;color:oklch(45% 0.02 60);flex-wrap:wrap;align-items:center;">
+      <span style="font-weight:600;">Story color = which Gospels share it (blue = your current pick):</span>
+      <sc-for list="{{ v1.tradLegend }}" as="tl" hint-placeholder-count="6">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:16px;height:16px;border-radius:5px;background:color-mix(in oklch, {{ tl.color }} 32%, white);border:2px solid {{ tl.color }};display:inline-block;"></span>{{ tl.name }}</span>
+      </sc-for>
+    </div>
+    </sc-if>
+    <div style="{{ stepBarStyle }}">
+      <sc-if value="{{ isMobile }}">
+        <div style="position:absolute;top:8px;right:8px;">
+          <button onclick="{{ onToggleTools }}" style="{{ toolsBtnStyle }}" aria-label="Tools">{{ toolsBtnLabel }}</button>
+          <sc-if value="{{ toolsOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;right:0;top:calc(100% + 6px);background:white;border:1px solid oklch(88% 0.01 85);border-radius:10px;box-shadow:0 10px 28px oklch(0% 0 0 / 0.14);padding:6px;min-width:220px;z-index:20;">
+              <div style="font-size:11px;letter-spacing:0.07em;text-transform:uppercase;color:oklch(58% 0.02 60);font-weight:700;padding:8px 12px 4px;">Views</div>
+              <button style="{{ tabMacroStyle }}" style-hover="{{ tabHoverStyle }}" onclick="{{ setViewMacro }}">Macro-Structure Drill-Down</button>
+              <button style="{{ tabReportStyle }}" style-hover="{{ tabHoverStyle }}" onclick="{{ setViewReport }}">Guided Report</button>
+              <div style="border-top:1px solid oklch(90% 0.01 85);margin:6px 4px;"></div>
+              <button style="display:flex;align-items:center;gap:8px;width:100%;text-align:left;border-radius:7px;border:none;background:transparent;padding:10px 12px;font-size:14px;font-weight:600;cursor:pointer;color:oklch(38% 0.02 60);" style-hover="{{ tabHoverStyle }}" onclick="{{ onOpenAbout }}">About this tool</button>
+              <div style="border-top:1px solid oklch(90% 0.01 85);margin:6px 4px;"></div>
+              <div style="font-size:11px;letter-spacing:0.07em;text-transform:uppercase;color:oklch(58% 0.02 60);font-weight:700;padding:8px 12px 6px;">Story color legend</div>
+              <div style="display:flex;flex-direction:column;gap:6px;padding:2px 12px 8px;">
+                <sc-for list="{{ v1.tradLegend }}" as="tl" hint-placeholder-count="6">
+                  <span style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:oklch(38% 0.02 60);"><span style="width:14px;height:14px;border-radius:4px;background:color-mix(in oklch, {{ tl.color }} 32%, white);border:2px solid {{ tl.color }};display:inline-block;flex-shrink:0;"></span>{{ tl.name }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+      <span style="font-size:12.5px;font-weight:600;color:oklch(35% 0.05 250);">Step through:</span>
+      <sc-for list="{{ stepGospelPills }}" as="gp" hint-placeholder-count="4">
+        <button onclick="{{ gp.onClick }}" style="{{ gp.style }}">{{ gp.name }}</button>
+      </sc-for>
+      <button onclick="{{ onPrevPericope }}" style="{{ prevNextStyle }}">◂ Prev</button>
+      <button onclick="{{ onNextPericope }}" style="{{ prevNextStyle }}">Next ▸</button>
+      <sc-if value="{{ isMacroView }}">
+        <button onclick="{{ onCollapseAll }}" style="{{ collapseAllStyle }}">{{ collapseAllLabel }}</button>
+      </sc-if>
+      <span style="font-size:12px;color:oklch(48% 0.02 60);">{{ stepLabel }}</span>
+    </div>
+    <div style="{{ rowsWrapStyle }}">
+      <sc-for list="{{ rows }}" as="row" hint-placeholder-count="4">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="{{ row.nameStyle }}">{{ row.name }}</div>
+          <div style="flex:1;min-width:0;">
+          <div style="{{ barContainerStyle }}" ref="{{ row.barRef }}" onpointerdown="{{ row.onPinDown }}">
+            <div style="display:flex;width:100%;height:100%;border-radius:8px;overflow:hidden;">
+              <sc-for list="{{ row.segs }}" as="seg" hint-placeholder-count="4">
+                <div style="{{ seg.style }}" onclick="{{ seg.onClick }}" title="{{ seg.tip }}">
+                  <span style="{{ seg.labelStyle }}">{{ seg.label }}</span>
+                  <span style="{{ seg.chapterStyle }}">{{ seg.chapters }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ row.hasMarker }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ row.markerLineStyle }}" title="{{ row.markerTip }}"></div>
+              <div style="{{ row.markerPinStyle }}" title="{{ row.markerTip }}" onpointerdown="{{ row.onPinDown }}"></div>
+              <div style="{{ row.markerLabelStyle }}">{{ row.markerLabelText }}</div>
+            </sc-if>
+          </div>
+
+          <sc-if value="{{ row.hasExpanded }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ row.ticksHidden }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:8px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+                <span style="font-weight:700;font-size:14px;">{{ row.cardLabel }}</span>
+                <span style="font-size:12.5px;color:oklch(45% 0.02 60);">{{ row.cardRef }}</span>
+                <button onclick="{{ row.onToggleTicks }}" style="background:none;border:none;color:oklch(45% 0.11 250);font-size:12.5px;font-weight:600;cursor:pointer;padding:0;">{{ row.toggleTicksLabel }}</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ row.ticksVisible }}" hint-placeholder-val="{{ true }}">
+            <div style="margin-top:10px;background:oklch(99% 0.005 85);border:1px solid oklch(88% 0.01 85);border-radius:10px;padding:16px 18px;">
+              <sc-if value="{{ row.hasCard }}" hint-placeholder-val="{{ false }}">
+                <button onclick="{{ row.onToggleTicks }}" style="background:none;border:none;color:oklch(45% 0.11 250);font-size:12.5px;font-weight:600;cursor:pointer;padding:0;display:block;margin-bottom:10px;">Hide section detail</button>
+              </sc-if>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+                <div style="font-family:'Spectral',serif;font-style:italic;font-size:14.5px;color:oklch(38% 0.02 60);max-width:640px;">{{ row.expSummary }}</div>
+                <sc-if value="{{ row.hasConfidenceNote }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:12.5px;color:oklch(40% 0.02 60);white-space:nowrap;">{{ row.confidenceSymbol }} {{ row.confidenceLabel }}</div>
+                </sc-if>
+              </div>
+
+              <sc-if value="{{ row.showMarkToggle }}" hint-placeholder-val="{{ false }}">
+                <button onclick="{{ row.onToggleMarkSandwich }}" style="margin-top:10px;background:oklch(93% 0.01 85);border:none;border-radius:7px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;color:oklch(32% 0.02 60);">{{ row.markToggleLabel }}</button>
+              </sc-if>
+              <sc-if value="{{ row.showLukeToggle }}" hint-placeholder-val="{{ false }}">
+                <button onclick="{{ row.onToggleLukeFull }}" style="margin-top:10px;background:oklch(93% 0.01 85);border:none;border-radius:7px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;color:oklch(32% 0.02 60);">{{ row.lukeToggleLabel }}</button>
+              </sc-if>
+
+              <sc-if value="{{ row.showSandwiches }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:14px;margin-top:14px;flex-wrap:wrap;">
+                  <sc-for list="{{ row.sandwiches }}" as="sw" hint-placeholder-count="2">
+                    <div style="flex:1;min-width:260px;background:oklch(96% 0.01 250 / 0.4);border-radius:8px;padding:12px 14px;">
+                      <div style="font-weight:600;font-size:13.5px;margin-bottom:6px;">{{ sw.label }}</div>
+                      <div style="font-size:13px;color:oklch(35% 0.02 60);line-height:1.5;">{{ sw.note }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ row.showJohnTable }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:14px;overflow-x:auto;">
+                  <table style="border-collapse:collapse;width:100%;font-size:13px;">
+                    <thead>
+                      <tr style="text-align:left;color:oklch(45% 0.02 60);">
+                        <th style="padding:5px 6px;font-weight:600;border-bottom:1px solid oklch(88% 0.01 85);">#</th>
+                        <th style="padding:5px 10px;font-weight:600;border-bottom:1px solid oklch(88% 0.01 85);">Sign</th>
+                        <th style="padding:5px 10px;font-weight:600;border-bottom:1px solid oklch(88% 0.01 85);">Discourse</th>
+                        <th style="padding:5px 10px;font-weight:600;border-bottom:1px solid oklch(88% 0.01 85);">Festival</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <sc-for list="{{ row.johnRows }}" as="jr" hint-placeholder-count="7">
+                        <tr>
+                          <td style="padding:7px 6px;border-bottom:1px solid oklch(93% 0.005 85);color:oklch(50% 0.02 60);font-weight:700;">{{ jr.signNum }}</td>
+                          <td style="padding:7px 10px;border-bottom:1px solid oklch(93% 0.005 85);">{{ jr.sign }} <span style="color:oklch(55% 0.02 60);">{{ jr.signRef }}</span></td>
+                          <td style="padding:7px 10px;border-bottom:1px solid oklch(93% 0.005 85);">{{ jr.discourse }} <span style="color:oklch(55% 0.02 60);">{{ jr.discourseRef }}</span></td>
+                          <td style="padding:7px 10px;border-bottom:1px solid oklch(93% 0.005 85);">{{ jr.festival }}</td>
+                        </tr>
+                      </sc-for>
+                    </tbody>
+                  </table>
+                  <div style="margin-top:8px;font-size:12px;color:oklch(48% 0.02 60);">7 signs is a fairly standard scholarly count (though "walking on water" as a sign is disputed). There's no equivalent fixed count of "discourses" the way Matthew has five — some discourses simply cover more than one sign (Bethesda/Official's Son share one; Feeding/Walking share another), and Tabernacles has teaching with no sign attached.</div>
+                </div>
+              </sc-if>
+
+              <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:14px;">
+                <sc-for list="{{ row.ticks }}" as="t" hint-placeholder-count="15">
+                  <button onclick="{{ t.onClick }}" title="{{ t.tip }}" style="{{ t.style }}">
+                    <span style="{{ t.refStyle }}">{{ t.short }}</span>
+                    <span style="{{ t.nameStyle }}">{{ t.name }}</span>
+                  </button>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{ row.hasCard }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:16px;background:{{ row.cardBg }};border-radius:9px;padding:14px 16px;">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;">
+                    <div style="font-weight:700;font-size:15px;">{{ row.cardLabel }}</div>
+                    <div style="font-size:12.5px;color:oklch(40% 0.02 60);white-space:nowrap;">{{ row.cardRef }}</div>
+                  </div>
+                  <div style="font-size:13.5px;color:oklch(32% 0.02 60);line-height:1.55;margin-top:6px;">{{ row.cardSummary }}</div>
+                  <sc-if value="{{ row.cardHasWhy }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:10px;padding-top:10px;border-top:1px solid oklch(85% 0.01 85 / 0.6);font-size:13px;color:oklch(30% 0.02 60);line-height:1.55;"><strong>Why the difference:</strong> {{ row.cardWhy }}</div>
+                  </sc-if>
+                  <sc-if value="{{ row.cardHasConf }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:8px;font-size:12px;color:oklch(42% 0.02 60);">{{ row.cardConfSymbol }} {{ row.cardConfLabel }}</div>
+                  </sc-if>
+                  <sc-if value="{{ row.cardHasAlsoIn }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:10px;padding-top:10px;border-top:1px solid oklch(85% 0.01 85 / 0.6);font-size:12.5px;color:oklch(35% 0.02 60);"><strong>Also appears in:</strong> {{ row.cardAlsoIn }} — marked on the bars above.</div>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </div>
+            </sc-if>
+          </sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isReportView }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;gap:32px;margin-top:22px;align-items:flex-start;">
+      <div style="width:220px;flex-shrink:0;">
+        <sc-for list="{{ rep.rail }}" as="r" hint-placeholder-count="9">
+          <button onclick="{{ r.onClick }}" style="{{ r.style }}">{{ r.title }}</button>
+        </sc-for>
+        <button onclick="{{ rep.onToggleGlossary }}" style="margin-top:14px;background:none;border:none;color:oklch(45% 0.11 250);font-size:13px;font-weight:600;cursor:pointer;padding:8px 12px;text-align:left;display:block;">{{ rep.glossaryLabel }}</button>
+      </div>
+
+      <div style="flex:1;min-width:0;max-width:680px;">
+        <sc-if value="{{ rep.showGlossary }}" hint-placeholder-val="{{ false }}">
+          <div style="font-family:'Spectral',serif;font-weight:600;font-size:22px;">Glossary</div>
+          <div style="margin-top:14px;background:oklch(96% 0.01 85);border-radius:8px;padding:14px 16px;font-size:13px;color:oklch(35% 0.02 60);line-height:1.55;">
+            <sc-for list="{{ rep.glossaryItems }}" as="g" hint-placeholder-count="5">
+              <div style="margin-bottom:8px;"><strong>{{ g.term }}</strong> — {{ g.def }}</div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ !rep.showGlossary }}" hint-placeholder-val="{{ true }}">
+        <div style="font-family:'Spectral',serif;font-weight:600;font-size:22px;">{{ rep.sectionTitle }}</div>
+        <sc-if value="{{ rep.hasConfidence }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:6px;font-size:12.5px;color:oklch(42% 0.02 60);">{{ rep.confSym }} {{ rep.confLabel }}</div>
+        </sc-if>
+
+        <sc-for list="{{ rep.paragraphs }}" as="para" hint-placeholder-count="2">
+          <div style="font-size:15px;line-height:1.65;color:oklch(28% 0.02 60);margin-top:14px;">{{ para }}</div>
+        </sc-for>
+
+        <sc-if value="{{ rep.hasList }}" hint-placeholder-val="{{ false }}">
+          <ul style="margin-top:12px;padding-left:20px;">
+            <sc-for list="{{ rep.listItems }}" as="li" hint-placeholder-count="5">
+              <li style="font-size:14.5px;line-height:1.6;color:oklch(30% 0.02 60);margin-bottom:6px;">{{ li }}</li>
+            </sc-for>
+          </ul>
+        </sc-if>
+
+        <sc-if value="{{ rep.isPredict }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:18px;background:oklch(93% 0.03 150 / 0.4);border-radius:10px;padding:16px 18px;">
+            <div style="font-weight:600;font-size:14.5px;">Before you read on — where do you think Luke moves the Nazareth story?</div>
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+              <sc-for list="{{ rep.predictOptions }}" as="opt" hint-placeholder-count="3">
+                <button onclick="{{ opt.onClick }}" style="{{ opt.style }}">{{ opt.label }}</button>
+              </sc-for>
+            </div>
+            <sc-if value="{{ rep.predictRevealed }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:12px;font-size:13.5px;line-height:1.55;color:oklch(30% 0.02 60);">{{ rep.predictAnswer }}</div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ rep.hasEmbed }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:18px;background:oklch(97% 0.005 85);border:1px solid oklch(88% 0.01 85);border-radius:10px;padding:16px 18px;">
+            <div style="font-size:13px;font-weight:600;color:oklch(38% 0.02 60);">{{ rep.embedLabel }}</div>
+            <div style="font-family:'Spectral',serif;font-style:italic;font-size:13.5px;color:oklch(38% 0.02 60);margin-top:6px;">{{ rep.embedSummary }}</div>
+            <sc-if value="{{ rep.embedIsTicks }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;">
+                <sc-for list="{{ rep.embedItems }}" as="ei" hint-placeholder-count="10">
+                  <button onclick="{{ ei.onClick }}" style="background:oklch(93% 0.01 85);border:none;border-radius:5px;padding:4px 8px;font-size:11.5px;color:oklch(35% 0.02 60);cursor:pointer;font-weight:600;" style-hover="{{ embedChipHoverStyle }}">{{ ei.label }}</button>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ rep.embedIsTable }}" hint-placeholder-val="{{ false }}">
+              <div style="overflow-x:auto;margin-top:12px;">
+                <table style="border-collapse:collapse;width:100%;font-size:12.5px;">
+                  <tbody>
+                    <sc-for list="{{ rep.embedRows }}" as="jr" hint-placeholder-count="7">
+                      <tr>
+                        <td style="padding:6px 10px;border-bottom:1px solid oklch(93% 0.005 85);">{{ jr.sign }}</td>
+                        <td style="padding:6px 10px;border-bottom:1px solid oklch(93% 0.005 85);">{{ jr.discourse }}</td>
+                        <td style="padding:6px 10px;border-bottom:1px solid oklch(93% 0.005 85);">{{ jr.festival }}</td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  </sc-if>
+
+</div>
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;forcePreviewMode&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string&quot;}}">
+
+const TOUR = [
+  "Here's how the four Gospels tell the same story — in almost the same order.",
+  "But look what happens with the Nazareth story, highlighted below in Matthew and Luke.",
+  "Luke moves it to the very front. Click Luke's Galilean row, then the highlighted stop — every other Gospel's row will jump open to show the same story.",
+  "Explore freely from here — click any bar to drill in."
+];
+const GKEYS = ["mark","matthew","luke","john"];
+const SEG_TAGS = {
+  mark: ["Beginnings","Galilee","Toward Jerusalem","Passion & Resurrection"],
+  matthew: ["Birth & Baptism","Sermon on Mount","Ten Miracles","Mission Discourse","Controversies","Kingdom Parables","Turning Point","Church Discourse","Toward Jerusalem","Olivet Discourse","Passion & Resurrection"],
+  luke: ["Infancy","Baptist & Temptation","Galilee","Travel Narrative","Passion & Resurrection"],
+  john: ["Prologue","First Disciples","Sign 1","Samaritan Woman","Signs 2–3","Signs 4–5","Tabernacles","Sign 6","Sign 7: Lazarus","Entry to Jerusalem","Farewell Discourse","Passion","Resurrection"]
+};
+const CROSSREF_RE = /Compared|Duplicate Entry|\((Matthew|Mark|Luke|John)[’']s (Order|Placement)\)|Placement\)/i;
+function refSortKey(ref){
+  const m = String(ref).match(/(\d+)\.(\d+)/);
+  return m ? parseInt(m[1])*1000 + parseInt(m[2]) : 9999;
+}
+function cleanSubunits(list){
+  const seen = new Set();
+  return list.filter(su => {
+    if(CROSSREF_RE.test(su.label)) return false;
+    if(seen.has(su.ref)) return false;
+    seen.add(su.ref);
+    return true;
+  }).sort((a,b) => refSortKey(a.ref) - refSortKey(b.ref));
+}
+function plainConf(raw){
+  if(!raw) return {symbol:"", label:""};
+  const tier = raw.startsWith("contested") ? "contested" : raw.startsWith("majority-view") ? "majority-view" : "broad-consensus";
+  const symbol = tier==="contested" ? "○" : tier==="majority-view" ? "◐" : "●";
+  const prefix = tier==="contested" ? "Scholars disagree" : tier==="majority-view" ? "Most scholars agree" : "Scholars agree";
+  const rest = raw.replace(/^(contested|majority-view|broad-consensus)/, "").trim();
+  return {symbol, label: rest ? `${prefix} — ${rest}` : prefix};
+}
+
+class Component extends DCLogic {
+  state = {
+    gospelsOn: {matthew:true, mark:true, luke:true, john:true},
+    mode: "guided",
+    view: "macro",
+    expanded: {},
+    selected: null,
+    showMarkSandwich: false,
+    showLukeFull: false,
+    showTicksOverride: {},
+    selectedHomeG: null,
+    cardExpanded: false,
+    toolsOpen: false,
+    aboutOpen: false,
+    aboutTab: "tool",
+    keepCollapsed: false,
+    viewportW: (function(props){
+      const W = {phone:390, "phone-l":844, tablet:834, "tablet-l":1194, desktop:1280};
+      const forced = props && props.forcePreviewMode;
+      if(forced && W[forced]) return W[forced];
+      return typeof window !== "undefined" ? window.innerWidth : 1280;
+    })(this.props),
+    viewportH: (function(props){
+      const H = {phone:844, "phone-l":390, tablet:1194, "tablet-l":834, desktop:800};
+      const forced = props && props.forcePreviewMode;
+      if(forced && H[forced]) return H[forced];
+      return typeof window !== "undefined" ? window.innerHeight : 800;
+    })(this.props),
+    previewMode: "auto",
+    devMode: typeof window !== "undefined" && new URLSearchParams(window.location.search).has("devpreview"),
+    tourStep: 0,
+    tourDone: false,
+    showAllPericopes: false,
+    v1Selected: null,
+    v1Flagged: null,
+    reportSection: 1,
+    predictGuess: null,
+    showGlossary: false
+  };
+
+  componentDidMount(){
+    const DATA = window.NT_DATA;
+    if(DATA){
+      this.segLookup = {};
+      GKEYS.forEach(g => {
+        this.segLookup[g] = {};
+        DATA[g].forEach((seg, idx) => { seg.subunits.forEach(su => { this.segLookup[g][su.id] = idx; }); });
+      });
+    }
+    this._onResize = () => this.setState({viewportW: window.innerWidth, viewportH: window.innerHeight});
+    window.addEventListener("resize", this._onResize);
+    this.forceUpdate();
+    let tries = 0;
+    this._mountRetry = setInterval(() => {
+      tries++;
+      this.forceUpdate();
+      if(tries > 15) clearInterval(this._mountRetry);
+    }, 150);
+  }
+  componentWillUnmount(){ window.removeEventListener("resize", this._onResize); if(this._mountRetry) clearInterval(this._mountRetry); }
+  toggleShowAll(){ this.setState(s => ({showAllPericopes: !s.showAllPericopes, v1Selected:null, v1Flagged:null})); }
+  selectPericope(id){ this.setState(s => ({v1Selected: s.v1Selected===id ? null : id, v1Flagged:null})); }
+  openFlagged(id){ this.setState({v1Flagged:id, v1Selected:null}); }
+  crossLinkToMacro(p){
+    const expanded = {};
+    GKEYS.forEach(g => { const idx = this.segLookup && this.segLookup[g] ? this.segLookup[g][p.id] : null; if(idx!=null) expanded[g]=idx; });
+    this.setState({view:"macro", expanded, selected:p.id, v1Selected:null, v1Flagged:null});
+  }
+  setReportSection(id){ this.setState({reportSection:id, predictGuess:null, showGlossary:false}); }
+  setPredictGuess(k){ this.setState({predictGuess:k}); }
+  toggleGlossary(){ this.setState(s => ({showGlossary: !s.showGlossary})); }
+
+  toggleGospel(g){ this.setState(s => ({gospelsOn:{...s.gospelsOn, [g]: !s.gospelsOn[g]}})); }
+  setMode(m){ this.setState({mode:m}); }
+  setView(v){ this.setState({view:v, expanded:{}, selected:null, toolsOpen:false}); }
+  expandSeg(g,i){
+    this.setState(s => {
+      const same = s.expanded[g]===i;
+      return {expanded: {...s.expanded, [g]: same ? undefined : i}, showMarkSandwich:false, showLukeFull:false, keepCollapsed:false};
+    });
+  }
+  selectSub(g, id){ this.setState(s => {
+    const same = s.selected === id;
+    if(same) return {selected:null, selectedHomeG:null};
+    const expanded = s.keepCollapsed ? {} : {...s.expanded};
+    if(!s.keepCollapsed) GKEYS.forEach(gg => { const idx = this.segLookup && this.segLookup[gg] ? this.segLookup[gg][id] : null; if(idx!=null) expanded[gg]=idx; });
+    return {selected:id, expanded, selectedHomeG:g};
+  }); }
+  backToOverview(){ this.setState({expanded:{}, selected:null}); }
+  collapseAll(){ this.setState(s => {
+    const anyOpen = Object.keys(s.expanded).some(k=>s.expanded[k]!=null);
+    if(anyOpen) return {expanded:{}, keepCollapsed:true};
+    const expanded = {}; GKEYS.forEach(g => expanded[g]=0);
+    return {expanded, keepCollapsed:false};
+  }); }
+  toggleTools(){ this.setState(s => ({toolsOpen: !s.toolsOpen})); }
+  setPreviewMode(m){ this.setState({previewMode:m}); }
+  openAbout(){ this.setState({aboutOpen:true, toolsOpen:false}); }
+  closeAbout(){ this.setState({aboutOpen:false}); }
+  setAboutTab(t){ this.setState({aboutTab:t}); }
+  toggleMarkSandwich(){ this.setState(s => ({showMarkSandwich: !s.showMarkSandwich})); }
+  toggleLukeFull(){ this.setState(s => ({showLukeFull: !s.showLukeFull})); }
+  toggleTicksOverride(g){ this.setState(s => ({showTicksOverride:{...s.showTicksOverride, [g]: !s.showTicksOverride[g]}})); }
+  setStepGospel(g){ this.setState({selectedHomeG:g, selected:null, expanded:{}}); }
+  toggleCardExpanded(){ this.setState(s => ({cardExpanded: !s.cardExpanded})); }
+  startPinDrag(g, e){
+    e.preventDefault(); e.stopPropagation();
+    const el = this.barRefs && this.barRefs[g];
+    if(!el) return;
+    const ALL_PERICOPES = window.NT_PERICOPES || [];
+    const move = (ev) => {
+      const rect = el.getBoundingClientRect();
+      const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+      let pct = ((clientX - rect.left) / rect.width) * 100;
+      pct = Math.max(0, Math.min(100, pct));
+      let best = null, bestDist = Infinity;
+      ALL_PERICOPES.forEach(p => {
+        const pos = p.positions[g];
+        if(!pos) return;
+        const d = Math.abs(pos.pct - pct);
+        if(d < bestDist){ bestDist = d; best = p; }
+      });
+      if(best) this.setState(s => s.selected === best.id ? null : {selected: best.id, selectedHomeG: g});
+    };
+    const up = () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    move(e);
+  }
+  stepPericope(dir){
+    this.setState(s => {
+      const DATA = window.NT_DATA;
+      const g = s.selectedHomeG || "mark";
+      const fullList = cleanSubunits(DATA[g].flatMap(seg => seg.subunits));
+      if(!fullList.length) return {};
+      let pos = s.selected ? fullList.findIndex(su => su.id === s.selected) : -1;
+      if(pos === -1) pos = dir>0 ? -1 : fullList.length;
+      let next = pos + dir;
+      if(next < 0) next = fullList.length-1;
+      if(next >= fullList.length) next = 0;
+      const nextId = fullList[next].id;
+      return {selected: nextId, selectedHomeG: g};
+    });
+  }
+  tourNext(){ this.setState(s => s.tourStep >= TOUR.length-1 ? {tourDone:true, mode:"explore"} : {tourStep: s.tourStep+1}); }
+  tourSkip(){ this.setState({tourDone:true, mode:"explore"}); }
+
+  renderVals(){
+    const DATA = window.NT_DATA, META = window.NT_META;
+    const s = this.state;
+    if(!DATA || !META) return {isMacroView:false, isReportView:false, rows:[], gospelPills:[], notReady:true,
+      containerStyle:{maxWidth:"1240px", margin:"0 auto", padding:"60px 32px", color:"oklch(50% 0.02 60)", fontFamily:"'Source Sans 3', sans-serif", textAlign:"center", fontSize:"14px"}};
+
+    const forcedMode = this.props && this.props.forcePreviewMode;
+    const PRESETS = {phone:{w:390,h:844}, "phone-l":{w:844,h:390}, tablet:{w:834,h:1194}, "tablet-l":{w:1194,h:834}, desktop:{w:1280,h:null}};
+    const preset = forcedMode ? PRESETS[forcedMode] : (s.devMode ? PRESETS[s.previewMode] : null);
+    const effW = preset ? preset.w : s.viewportW;
+    const isPhone = effW < 640, isTablet = effW >= 640 && effW < 1024, isMobile = effW < 1024;
+    const segLabelMinPct = isPhone ? 7 : isTablet ? 4 : 2.5;
+    const effH = preset ? preset.h : s.viewportH;
+    const isLandscapeCompact = isMobile && effH < effW;
+    const previewModePills = [["auto","Auto"],["phone","Phone"],["phone-l","Phone ⟲"],["tablet","Tablet"],["tablet-l","Tablet ⟲"],["desktop","Desktop"]].map(([key,name]) => ({
+      key, name, onClick: () => this.setPreviewMode(key),
+      style:{border:"none", borderRadius:"6px", padding:"6px 9px", fontSize:"11.5px", fontWeight:600, cursor:"pointer",
+        background: s.previewMode===key ? "oklch(45% 0.14 250)" : "transparent", color: s.previewMode===key ? "white" : "oklch(40% 0.02 60)"}
+    }));
+    const frameOuterStyle = s.previewMode!=="auto" ? {background:"oklch(90% 0.01 85)", minHeight:"100vh", display:"flex", justifyContent:"center", padding:"36px 16px"} : {};
+    const frameStyle = preset ? {width:`${preset.w}px`, maxWidth:"100%", ...(preset.h ? {height:`${preset.h}px`, overflowY:"auto"} : {}), background:"oklch(97% 0.015 85)", border:"10px solid oklch(20% 0.01 85)", borderRadius: isPhone ? "34px" : "18px", boxShadow:"0 20px 50px oklch(0% 0 0 / 0.3)"} : {};
+
+    const pillBase = {border:"2px solid transparent", borderRadius:"8px", padding: "9px 18px", fontSize:"14px", fontWeight:700, cursor:"pointer", fontFamily:"'Source Sans 3', sans-serif"};
+    const gospelPills = GKEYS.map(g => {
+      const on = s.gospelsOn[g];
+      const color = META.gospels[g].color;
+      return {
+        key:g, name: META.gospels[g].name, onClick: () => this.toggleGospel(g),
+        style: {...pillBase, padding: isPhone ? "7px 14px" : "9px 18px", fontSize: isPhone ? "13px" : "14px",
+          background: on ? color : `color-mix(in oklch, ${color} 16%, white)`,
+          color: on ? "white" : color,
+          border: on ? "2px solid transparent" : `2px solid color-mix(in oklch, ${color} 45%, white)`}
+      };
+    });
+
+    const segBtn = {border:"none", padding:"9px 16px", fontSize:"13.5px", fontWeight:600, cursor:"pointer", borderRadius:"8px", background:"transparent"};
+    const modeGuidedStyle = {...segBtn, background: s.mode==="guided" ? "white" : "transparent", color: s.mode==="guided" ? "oklch(30% 0.05 60)" : "oklch(50% 0.02 60)", boxShadow: s.mode==="guided" ? "0 1px 3px oklch(0% 0 0 / 0.1)" : "none"};
+    const modeExploreStyle = {...segBtn, background: s.mode==="explore" ? "white" : "transparent", color: s.mode==="explore" ? "oklch(30% 0.05 60)" : "oklch(50% 0.02 60)", boxShadow: s.mode==="explore" ? "0 1px 3px oklch(0% 0 0 / 0.1)" : "none"};
+
+    const tabBase = {border:"none", background:"transparent", padding:"10px 16px", fontSize:"14px", fontWeight:600, cursor:"pointer", borderBottom:"2px solid transparent", marginBottom:"-1px"};
+    const tabStyle = (v) => ({border:"none", background: s.view===v ? "oklch(94% 0.03 250)" : "transparent", padding:"9px 12px", fontSize:"13.5px", fontWeight:600, cursor:"pointer", borderRadius:"7px", display:"block", width:"100%", textAlign:"left", color: s.view===v ? "oklch(32% 0.1 250)" : "oklch(35% 0.02 60)"});
+    const tabHoverStyle = {background:"oklch(95% 0.01 85)"};
+
+    let expandedGospelName = null, expandedSegLabel = null, selectedLabel = null;
+
+    const ALL_PERICOPES = window.NT_PERICOPES || [];
+    const TRAD_COLORS_LOOKUP = window.NT_TRADITION_COLORS || {};
+    const selectedPericope = s.selected ? ALL_PERICOPES.find(p => p.id === s.selected) : null;
+
+    const rows = GKEYS.map(g => {
+      const on = s.gospelsOn[g];
+      const color = META.gospels[g].color;
+      let discourseCount = 0;
+      const segs = DATA[g].map((seg, i) => {
+        const isExpanded = s.expanded[g]===i;
+        if(isExpanded){ expandedGospelName = META.gospels[g].name; expandedSegLabel = seg.label; }
+        const bg = seg.type==="discourse" ? `color-mix(in oklch, ${color} 40%, white)` : seg.type==="sign-block" ? `color-mix(in oklch, ${color} 72%, white)` : color;
+        const width = seg.endPct - seg.startPct;
+        let tag = (SEG_TAGS[g] && SEG_TAGS[g][i]) || seg.label;
+        if(g==="matthew" && seg.type==="discourse"){ discourseCount++; tag = `${discourseCount}. ${tag}`; }
+        const chNums = [];
+        seg.subunits.forEach(su => {
+          const dotNums = (su.ref.match(/\d+(?=\.)/g) || []).map(Number);
+          if(dotNums.length) chNums.push(...dotNums);
+          else { const m = su.ref.match(/^(\d+)/); if(m) chNums.push(Number(m[1])); }
+        });
+        const chLabel = chNums.length ? (Math.min(...chNums)===Math.max(...chNums) ? `ch ${Math.min(...chNums)}` : `ch ${Math.min(...chNums)}\u2013${Math.max(...chNums)}`) : "";
+        const showLabel = width > segLabelMinPct;
+        return {
+          key:i,
+          label: showLabel ? tag : "",
+          chapters: (showLabel && chLabel) ? `(${chLabel})` : "",
+          tip: `${seg.label} (${seg.startPct}–${seg.endPct}%)`,
+          onClick: () => this.expandSeg(g,i),
+          style: {
+            flexGrow: width, flexBasis: 0, minWidth: width < 2 ? "4px" : "0", overflow:"hidden",
+            background: bg, opacity: on ? 1 : 0.22,
+            display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", textAlign:"center", paddingTop:"4px",
+            cursor:"pointer", borderRight:"1px solid oklch(100% 0 0 / 0.5)",
+            outline: isExpanded ? "3px solid white" : "none", outlineOffset:"-3px",
+            boxShadow: isExpanded ? "inset 0 0 0 5px oklch(20% 0.02 60), 0 2px 8px oklch(0% 0 0 / 0.35)" : "none",
+            zIndex: isExpanded ? 2 : 1, position:"relative"
+          },
+          labelStyle: {color:"white", fontSize: isExpanded ? "11px" : "10px", fontWeight: isExpanded ? 800 : 700, padding:"0 3px", textShadow:"0 1px 2px oklch(0% 0 0 / 0.4)", overflow:"hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", display:"block", maxWidth:"100%", minWidth:0},
+          chapterStyle: {color:"oklch(96% 0.01 85 / 0.85)", fontSize:"8.5px", fontWeight:600, padding:"0 3px", overflow:"hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", display:"block", maxWidth:"100%", minWidth:0}
+        };
+      });
+
+      let expandedObj = null;
+      if(s.expanded[g] != null){
+        const idx = s.expanded[g];
+        const seg = DATA[g][idx];
+        const segKey = `${g}|${idx}`;
+        const isJohnSigns = seg.type==="sign-block";
+        const isMarkGalilean = g==="mark" && idx===1;
+        const isLukeTravel = g==="luke" && idx===3;
+
+        let subunits = cleanSubunits(seg.subunits);
+        if(isLukeTravel && !s.showLukeFull){
+          const sample = new Set(META.lukeTravelSample);
+          subunits = subunits.filter(su => sample.has(su.id));
+        }
+
+        const ticks = subunits.map(su => {
+          const isSel = s.selected === su.id;
+          const perInfo = ALL_PERICOPES.find(p => p.id === su.id);
+          const tradColor = perInfo ? (TRAD_COLORS_LOOKUP[perInfo.tradition] || "oklch(70% 0.01 60)") : "oklch(70% 0.01 60)";
+          return {
+            key: su.id,
+            short: su.ref,
+            name: su.label,
+            tip: su.label,
+            onClick: () => this.selectSub(g, su.id),
+            style: {
+              border: isSel ? "2.5px solid oklch(45% 0.19 255)" : `2px solid ${tradColor}`, borderRadius:"7px", padding:"5px 10px", fontSize:"11.5px", cursor:"pointer",
+              display:"flex", flexDirection:"column", alignItems:"flex-start", gap:"1px", textAlign:"left", maxWidth:"150px",
+              background: isSel ? "oklch(52% 0.18 255)" : `color-mix(in oklch, ${tradColor} 32%, white)`,
+              color: isSel ? "white" : "oklch(28% 0.02 60)", fontWeight: isSel ? 700 : 500
+            },
+            refStyle: {fontSize:"10.5px", opacity:0.75, fontWeight:600},
+            nameStyle: {fontSize:"11.5px", lineHeight:1.25, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", maxWidth:"140px"}
+          };
+        });
+
+        let card = null;
+        if(s.selected){
+          const su = seg.subunits.find(x => x.id === s.selected);
+          if(su){
+            selectedLabel = su.label;
+            const summary = META.pericopeSummaries[su.id];
+            const why = META.pericopeWhy[su.id];
+            const confRaw = META.pericopeConfidence[su.id];
+            let confSymbol = "", confLabel = "";
+            if(confRaw){ const pc = plainConf(confRaw); confSymbol = pc.symbol; confLabel = pc.label; }
+            const alsoIn = selectedPericope ? GKEYS.filter(gg => gg!==g && selectedPericope.positions[gg]).map(gg => `${META.gospels[gg].name} ${selectedPericope.positions[gg].ref}`).join("  ·  ") : "";
+            card = {
+              label: su.label, ref: `${META.gospels[g].name} ${su.ref}`,
+              summary: summary || `Part of "${seg.label}."`,
+              why, hasWhy: !!why,
+              confSymbol, confLabel, hasConf: !!confRaw,
+              alsoIn, hasAlsoIn: !!alsoIn
+            };
+          }
+        }
+
+        let confidenceNote = null;
+        if(isLukeTravel) confidenceNote = {symbol:"◐", label:"Most scholars agree — this is non-Markan material gathered along a journey frame, not a real itinerary"};
+        if(isJohnSigns) confidenceNote = {symbol:"○", label:"Scholars disagree — which unnamed feast (5:1) this is, and how tightly signs pair with discourses, is debated"};
+        if(isMarkGalilean) confidenceNote = {symbol:"●", label:"Scholars agree — Mark's \"sandwich\" technique is a recognized literary device"};
+
+        expandedObj = {
+          expSummary: META.segmentSummaries[segKey] || seg.label,
+          hasConfidenceNote: !!confidenceNote,
+          confidenceSymbol: confidenceNote ? confidenceNote.symbol : "",
+          confidenceLabel: confidenceNote ? confidenceNote.label : "",
+          showMarkToggle: isMarkGalilean,
+          markToggleLabel: s.showMarkSandwich ? "Hide sandwich examples" : "Show Mark's \"sandwich\" technique (advanced)",
+          onToggleMarkSandwich: () => this.toggleMarkSandwich(),
+          showSandwiches: isMarkGalilean && s.showMarkSandwich,
+          sandwiches: META.markSandwiches,
+          showLukeToggle: isLukeTravel,
+          lukeToggleLabel: s.showLukeFull ? `Show representative sample (${META.lukeTravelSample.length})` : `Show all ${cleanSubunits(seg.subunits).length} units`,
+          onToggleLukeFull: () => this.toggleLukeFull(),
+          showJohnTable: isJohnSigns,
+          johnRows: (() => { let n=0; return META.johnDualTrack.map(r => ({...r, signNum: r.signRef ? String(++n) : "—"})); })(),
+          ticks,
+          ticksHidden: !!s.showTicksOverride[g],
+          ticksVisible: !s.showTicksOverride[g],
+          onToggleTicks: () => this.toggleTicksOverride(g),
+          toggleTicksLabel: s.showTicksOverride[g] ? "Hide section detail" : "Show full section detail",
+          hasCard: !!card,
+          cardLabel: card ? card.label : "",
+          cardRef: card ? card.ref : "",
+          cardSummary: card ? card.summary : "",
+          cardHasWhy: card ? card.hasWhy : false,
+          cardWhy: card ? card.why : "",
+          cardHasConf: card ? card.hasConf : false,
+          cardConfSymbol: card ? card.confSymbol : "",
+          cardConfLabel: card ? card.confLabel : "",
+          cardHasAlsoIn: card ? card.hasAlsoIn : false,
+          cardAlsoIn: card ? card.alsoIn : "",
+          cardBg: `color-mix(in oklch, ${color} 12%, white)`
+        };
+      }
+
+      let markerLineStyle = null, markerPinStyle = null, markerTip = "", markerLabelStyle = null, markerLabelText = "";
+      if(selectedPericope && selectedPericope.positions[g]){
+        const pct = selectedPericope.positions[g].pct;
+        markerTip = `${selectedPericope.label} — ${META.gospels[g].name} ${selectedPericope.positions[g].ref}`;
+        markerLabelText = selectedPericope.positions[g].ref;
+        markerLineStyle = {position:"absolute", left:`${pct}%`, top:"0", bottom:"0", width:"3px", transform:"translateX(-50%)", zIndex:4, pointerEvents:"none", background:"oklch(72% 0.19 55)", boxShadow:"0 0 4px oklch(72% 0.19 55 / 0.7)"};
+        markerPinStyle = {position:"absolute", left:`${pct}%`, top:"-11px", width:"15px", height:"15px",
+          background: color, border:"2.5px solid white",
+          borderRadius:"50% 50% 50% 0", transform:"translateX(-50%) rotate(45deg)", boxShadow:"0 0 0 3px oklch(100% 0 0 / 0.9), 0 2px 6px oklch(0% 0 0 / 0.4)", zIndex:5, pointerEvents:"auto", cursor:"grab", touchAction:"none"};
+        markerLabelStyle = {position:"absolute", left:`${pct}%`, top:"-34px", transform:"translateX(-50%)", background: color, color:"white", fontSize:"11px", fontWeight:700, padding:"2px 7px", borderRadius:"5px", whiteSpace:"nowrap", zIndex:6, pointerEvents:"none", boxShadow:"0 2px 4px oklch(0% 0 0 / 0.25)"};
+      }
+
+      return {
+        key:g, name: META.gospels[g].name, labelColor: color, dimmed: !on,
+        nameStyle: {width: isPhone ? "44px" : "66px", flexShrink:0, fontFamily:"'Spectral',serif", fontWeight:600, fontSize: isPhone ? "12.5px" : "15px", textAlign:"right", color},
+        segs, hasExpanded: !!expandedObj,
+        hasMarker: !!markerPinStyle, markerLineStyle, markerPinStyle, markerTip, markerLabelStyle, markerLabelText,
+        barRef: (el) => { this.barRefs = this.barRefs || {}; this.barRefs[g] = el; },
+        onPinDown: (e) => this.startPinDrag(g, e),
+        ...(expandedObj || {})
+      };
+    });
+
+    let breadcrumb = "";
+    if(selectedPericope){
+      const openIn = GKEYS.filter(g=>selectedPericope.positions[g]).map(g=>META.gospels[g].name);
+      breadcrumb = `${selectedPericope.label} — found in ${openIn.join(", ")}`;
+    }
+    else if(expandedGospelName) breadcrumb = `${expandedGospelName} › ${expandedSegLabel}`;
+
+    const showTour = s.mode==="guided" && !s.tourDone && s.view==="macro";
+
+    // ---- View 1: Pericope Order Explorer ----
+    const PERICOPES = window.NT_PERICOPES || [];
+    const ANCHOR_SET = new Set(window.NT_ANCHORS || []);
+    const FLAGGED_SET = new Set(window.NT_FLAGGED || []);
+    const TRAD_COLORS = window.NT_TRADITION_COLORS || {};
+    const colX = {mark:12.5, matthew:37.5, luke:62.5, john:87.5};
+    const activePericopes = s.showAllPericopes ? PERICOPES : PERICOPES.filter(p => ANCHOR_SET.has(p.id));
+
+    const v1Dots = [], v1Lines = [];
+    activePericopes.forEach(p => {
+      const present = GKEYS.filter(g => p.positions[g]);
+      const isFlagged = FLAGGED_SET.has(p.id);
+      const isSelected = p.id === s.v1Selected;
+      present.forEach(g => {
+        const pct = p.positions[g].pct;
+        const on = s.gospelsOn[g];
+        const dotColor = s.showAllPericopes ? (TRAD_COLORS[p.tradition] || "oklch(50% 0.02 60)") : META.gospels[g].color;
+        const size = isFlagged ? 13 : isSelected ? 11 : 7;
+        v1Dots.push({
+          key: p.id+g,
+          title: `${p.label} — ${META.gospels[g].name} ${p.positions[g].ref}`,
+          onClick: () => this.selectPericope(p.id),
+          style: {position:"absolute", left:`${colX[g]}%`, top:`${pct}%`, transform:"translate(-50%,-50%)", width:size+"px", height:size+"px", borderRadius:"50%", background:dotColor, opacity: on?1:0.15, cursor:"pointer", border: isFlagged ? "2.5px solid oklch(55% 0.18 25)" : isSelected ? "2.5px solid oklch(25% 0.02 60)" : "1px solid white", padding:0, zIndex:3, boxShadow: isSelected||isFlagged ? "0 0 0 3px oklch(100% 0 0 / 0.7)" : "none"}
+        });
+      });
+      // only draw connecting lines for flagged pericopes (always) and the currently selected one — keeps the chart legible
+      if(isFlagged || isSelected){
+        for(let k=0;k<present.length-1;k++){
+          const gA = present[k], gB = present[k+1];
+          v1Lines.push({
+            key:p.id+gA+gB,
+            x1: colX[gA], y1: p.positions[gA].pct, x2: colX[gB], y2: p.positions[gB].pct,
+            stroke: isFlagged ? "oklch(55% 0.18 25)" : "oklch(25% 0.02 60)",
+            strokeWidthPx: isFlagged ? 2.4 : 2,
+            onClick: isFlagged ? () => this.openFlagged(p.id) : () => this.selectPericope(p.id),
+            lineStyle: {cursor: "pointer"}
+          });
+        }
+      }
+    });
+
+    let v1Detail = null;
+    if(s.v1Selected){
+      const p = PERICOPES.find(x => x.id === s.v1Selected);
+      if(p){
+        let confSym="", confLabel="";
+        if(p.confidence){ const pc = plainConf(p.confidence); confSym = pc.symbol; confLabel = pc.label; }
+        v1Detail = {
+          label: p.label,
+          positions: GKEYS.filter(g=>p.positions[g]).map(g=>`${META.gospels[g].name} ${p.positions[g].ref}`).join("  ·  "),
+          summary: p.summary, hasConf: !!p.confidence, confSym, confLabel,
+          canCrossLink: !!(this.segLookup && GKEYS.some(g => p.positions[g] && this.segLookup[g] && this.segLookup[g][p.id]!=null)),
+          onCrossLink: () => this.crossLinkToMacro(p)
+        };
+      }
+    }
+    let v1Flag = null;
+    if(s.v1Flagged){
+      const p = PERICOPES.find(x => x.id === s.v1Flagged);
+      if(p){
+        v1Flag = {
+          label: p.label,
+          rows: GKEYS.filter(g=>p.positions[g]).map(g=>({gospel:META.gospels[g].name, ref:p.positions[g].ref, color:META.gospels[g].color})),
+          why: p.why || ""
+        };
+      }
+    }
+
+    const v1 = {
+      onToggleAll: () => this.toggleShowAll(),
+      toggleLabel: s.showAllPericopes ? "Show 9 anchors only" : `Show all ${PERICOPES.length} pericopes`,
+      showingAll: s.showAllPericopes,
+      showChips: !s.showAllPericopes,
+      chips: activePericopes.map(p => {
+        const flagged = FLAGGED_SET.has(p.id), sel = p.id === s.v1Selected;
+        return {key:p.id, label: p.label, onClick: () => this.selectPericope(p.id),
+          style:{background: sel ? "oklch(30% 0.02 60)" : flagged ? "oklch(93% 0.06 25)" : "oklch(93% 0.01 85)",
+            color: sel ? "white" : flagged ? "oklch(45% 0.15 25)" : "oklch(35% 0.02 60)",
+            border: flagged && !sel ? "1px solid oklch(70% 0.12 25)" : "none",
+            borderRadius:"20px", padding:"6px 13px", fontSize:"12.5px", fontWeight:600, cursor:"pointer"}};
+      }),
+      tradLegend: Object.keys(TRAD_COLORS).map(k => ({key:k, name:k, color:TRAD_COLORS[k]})),
+      colBands: GKEYS.map((g,gi) => ({key:g, style:{position:"absolute", left:`${gi*25}%`, top:0, width:"25%", height:"100%", background: gi%2===0 ? "oklch(97% 0.005 85)" : "transparent"}})),
+      chapterTicks: (() => {
+        const CHAPTERS = {matthew:28, mark:16, luke:24, john:21};
+        const out = [];
+        GKEYS.forEach((g,gi) => {
+          const total = CHAPTERS[g];
+          for(let ch=5; ch<=total; ch+=5){
+            const pct = (ch/total)*100;
+            out.push({key:g+ch,
+              lineStyle:{position:"absolute", left:`${gi*25}%`, top:`${pct}%`, width:"25%", height:"1px", borderTop:"1px dashed oklch(85% 0.01 85)"},
+              labelStyle:{position:"absolute", left:`${gi*25+1}%`, top:`${pct}%`, transform:"translateY(-100%)", fontSize:"9.5px", color:"oklch(60% 0.02 60)"},
+              label:`ch ${ch}`});
+          }
+        });
+        return out;
+      })(),
+      colHeaders: GKEYS.map(g => ({key:g, name: META.gospels[g].name, style:{position:"absolute", left:`${colX[g]}%`, top:"8px", transform:"translateX(-50%)", fontSize:"13px", fontWeight:700, color: META.gospels[g].color}})),
+      lines: v1Lines, dots: v1Dots,
+      hasDetail: !!v1Detail, detailLabel: v1Detail?v1Detail.label:"", detailPositions: v1Detail?v1Detail.positions:"",
+      detailSummary: v1Detail?v1Detail.summary:"", detailHasConf: v1Detail?v1Detail.hasConf:false,
+      detailConfSym: v1Detail?v1Detail.confSym:"", detailConfLabel: v1Detail?v1Detail.confLabel:"",
+      detailCanCrossLink: v1Detail?v1Detail.canCrossLink:false, onCrossLink: v1Detail?v1Detail.onCrossLink:(()=>{}),
+      hasFlagged: !!v1Flag, flagLabel: v1Flag?v1Flag.label:"", flagRows: v1Flag?v1Flag.rows:[], flagWhy: v1Flag?v1Flag.why:""
+    };
+
+    // ---- View 3: Guided Report ----
+    const REPORT = window.NT_REPORT || [];
+    const GLOSSARY = window.NT_GLOSSARY || {};
+    const activeSection = REPORT.find(sec => sec.id === s.reportSection) || REPORT[0] || {paragraphs:[]};
+    const p033 = PERICOPES.find(p => p.id === "p033");
+    const predictLabels = {A:"To the very end, near the crucifixion", B:"To the very opening of his public ministry", C:"He leaves it where Mark has it, mid-ministry"};
+    const predictOptions = ["A","B","C"].map(k => {
+      const guessed = s.predictGuess === k, isCorrect = k==="B", revealed = !!s.predictGuess;
+      let bg = "oklch(97% 0.005 85)", border = "1px solid oklch(85% 0.01 85)";
+      if(revealed && isCorrect) { bg = "oklch(90% 0.09 150)"; border = "1px solid oklch(55% 0.12 150)"; }
+      else if(revealed && guessed) { bg = "oklch(91% 0.07 25)"; border = "1px solid oklch(55% 0.15 25)"; }
+      return {key:k, label: predictLabels[k], onClick: revealed ? undefined : () => this.setPredictGuess(k),
+        style:{background:bg, border, borderRadius:"7px", padding:"8px 14px", fontSize:"13px", cursor: revealed?"default":"pointer", color:"oklch(30% 0.02 60)"}};
+    });
+
+    let embedLabel="", embedSummary="", embedItems=[], embedRows=[], embedIsTicks=false, embedIsTable=false;
+    if(activeSection.embed === "matthew-discourse1"){
+      const seg = DATA.matthew[1];
+      embedLabel = "Matthew's Discourse 1, expanded"; embedSummary = META.segmentSummaries["matthew|1"];
+      embedItems = cleanSubunits(seg.subunits).map(su => ({key:su.id, label: su.ref, onClick: () => this.crossLinkToMacro({id:su.id})}));
+      embedIsTicks = true;
+    } else if(activeSection.embed === "luke-travel"){
+      const seg = DATA.luke[3]; const sample = new Set(META.lukeTravelSample);
+      embedLabel = "Luke's Travel Narrative, expanded (representative sample)"; embedSummary = META.segmentSummaries["luke|3"];
+      embedItems = cleanSubunits(seg.subunits).filter(su => sample.has(su.id)).map(su => ({key:su.id, label: su.ref, onClick: () => this.crossLinkToMacro({id:su.id})}));
+      embedIsTicks = true;
+    } else if(activeSection.embed === "john-signs"){
+      embedLabel = "John's signs, discourses, and festivals, aligned"; embedSummary = META.segmentSummaries["john|2"];
+      embedRows = META.johnDualTrack; embedIsTable = true;
+    }
+
+    const rep = {
+      rail: REPORT.map(sec => ({key:sec.id, title:`${sec.id}. ${sec.title}`, onClick: () => this.setReportSection(sec.id),
+        style:{display:"block", width:"100%", textAlign:"left", background: s.reportSection===sec.id ? "oklch(93% 0.01 85)" : "transparent", border:"none", borderRadius:"7px", padding:"9px 12px", fontSize:"13px", fontWeight: s.reportSection===sec.id?700:500, color: s.reportSection===sec.id ? "oklch(25% 0.02 60)" : "oklch(45% 0.02 60)", cursor:"pointer", marginBottom:"2px"}})),
+      onToggleGlossary: () => this.toggleGlossary(), glossaryLabel: s.showGlossary ? "Hide glossary" : "Glossary",
+      showGlossary: s.showGlossary, glossaryItems: Object.keys(GLOSSARY).sort((a,b)=>a.localeCompare(b)).map(t => ({key:t, term:t, def:GLOSSARY[t]})),
+      sectionTitle: `${activeSection.id}. ${activeSection.title}`,
+      hasConfidence: !!activeSection.confidence, confSym: activeSection.confidence?activeSection.confidence.symbol:"", confLabel: activeSection.confidence?activeSection.confidence.label:"",
+      paragraphs: activeSection.paragraphs || [],
+      hasList: !!(activeSection.list && activeSection.list.length), listItems: activeSection.list || [],
+      isPredict: !!activeSection.predictReveal, predictOptions,
+      predictRevealed: !!s.predictGuess, predictAnswer: p033 ? `${p033.why}` : "",
+      hasEmbed: !!activeSection.embed, embedLabel, embedSummary, embedIsTicks, embedItems, embedIsTable, embedRows,
+      embedChipHoverStyle: {background:"oklch(45% 0.14 250)", color:"white"}
+    };
+
+    return {
+      modeGuidedStyle, modeExploreStyle,
+      setModeGuided: () => this.setMode("guided"),
+      setModeExplore: () => this.setMode("explore"),
+      gospelPills,
+      tabMacroStyle: tabStyle("macro"), tabReportStyle: tabStyle("report"), tabHoverStyle,
+      setViewMacro: () => this.setView("macro"), setViewReport: () => this.setView("report"),
+      isMacroView: s.view==="macro", isReportView: s.view==="report",
+      showBack: Object.keys(s.expanded).some(k=>s.expanded[k]!=null), onBack: () => this.backToOverview(),
+      showCollapseAll: Object.keys(s.expanded).some(k=>s.expanded[k]!=null), onCollapseAll: () => this.collapseAll(),
+      collapseAllLabel: Object.keys(s.expanded).some(k=>s.expanded[k]!=null) ? "Collapse" : "Expand",
+      toolsOpen: s.toolsOpen, onToggleTools: () => this.toggleTools(),
+      frameOuterStyle: forcedMode ? {} : frameOuterStyle, frameStyle: forcedMode ? {width:"100%"} : frameStyle, previewModePills, devSwitcherDisplay: (s.devMode && !forcedMode) ? "flex" : "none",
+      isMobile, isPhone,
+      toolsBtnLabel: isMobile ? "☰" : "Tools ▾",
+      toolsBtnStyle: {background:"oklch(93% 0.01 85)", border:"none", borderRadius:"8px", padding: isMobile ? "9px 12px" : "9px 16px", fontSize: isMobile ? "16px" : "14px", fontWeight:600, cursor:"pointer", color:"oklch(30% 0.05 60)", whiteSpace:"nowrap"},
+      containerStyle: {maxWidth:"1240px", margin:"0 auto", padding: isPhone ? "18px 14px 60px" : isTablet ? "22px 20px 70px" : "28px 32px 80px", color:"oklch(22% 0.02 60)"},
+      titleStyle: {fontFamily:"'Spectral',serif", fontWeight:600, fontSize: isPhone ? "22px" : "28px", letterSpacing:"-0.01em"},
+      rowNameStyle: {width: isPhone ? "44px" : "66px", flexShrink:0, fontFamily:"'Spectral',serif", fontWeight:600, fontSize: isPhone ? "12.5px" : "15px", textAlign:"right"},
+      aboutOpen: s.aboutOpen, onOpenAbout: () => this.openAbout(), onCloseAbout: () => this.closeAbout(), stopProp: (e) => e.stopPropagation(),
+      isAboutTool: s.aboutTab==="tool", isAboutAuthor: s.aboutTab==="author",
+      setAboutTabTool: () => this.setAboutTab("tool"), setAboutTabAuthor: () => this.setAboutTab("author"),
+      aboutTabToolStyle: {border:"none", background:"transparent", padding:"10px 2px", fontSize:"13.5px", fontWeight:600, cursor:"pointer", borderBottom: s.aboutTab==="tool" ? "2px solid oklch(52% 0.14 45)" : "2px solid transparent", marginBottom:"-1px", color: s.aboutTab==="tool" ? "oklch(28% 0.03 60)" : "oklch(52% 0.02 60)"},
+      aboutTabAuthorStyle: {border:"none", background:"transparent", padding:"10px 2px", fontSize:"13.5px", fontWeight:600, cursor:"pointer", borderBottom: s.aboutTab==="author" ? "2px solid oklch(52% 0.14 45)" : "2px solid transparent", marginBottom:"-1px", color: s.aboutTab==="author" ? "oklch(28% 0.03 60)" : "oklch(52% 0.02 60)"},
+      onPrevPericope: () => this.stepPericope(-1), onNextPericope: () => this.stepPericope(1),
+      stepLabel: s.selected ? "" : `Start with ${META.gospels[s.selectedHomeG || "mark"].name}`,
+      stepGospelPills: GKEYS.map(g => ({key:g, name: META.gospels[g].name, onClick: () => this.setStepGospel(g), style:{border:"none", borderRadius:"6px", padding: isPhone ? "5px 8px" : "5px 10px", fontSize: isPhone ? "11px" : "12px", fontWeight:600, cursor:"pointer", background: (s.selectedHomeG||"mark")===g ? META.gospels[g].color : "white", color: (s.selectedHomeG||"mark")===g ? "white" : "oklch(35% 0.02 60)"}})),
+      stepBarStyle: {display:"flex", alignItems:"center", gap: isPhone ? "6px" : "10px", marginTop: isPhone ? "10px" : "14px", background: isMobile ? "oklch(97% 0.015 85)" : "oklch(96% 0.01 250 / 0.5)", borderRadius:"9px", padding: isMobile ? "9px 46px 9px 9px" : "9px 14px", flexWrap:"wrap", position: isMobile ? "sticky" : "static", top: isMobile ? "0" : "auto", zIndex: isMobile ? 15 : "auto", boxShadow: isMobile ? "0 2px 6px oklch(0% 0 0 / 0.08)" : "none"},
+      prevNextStyle: {background:"white", border:"1px solid oklch(80% 0.02 250)", borderRadius:"7px", padding: isPhone ? "5px 10px" : "6px 14px", fontSize: isPhone ? "12px" : "13px", fontWeight:600, cursor:"pointer", color:"oklch(32% 0.05 250)", whiteSpace:"nowrap"},
+      collapseAllStyle: {background:"oklch(93% 0.01 85)", border:"none", borderRadius:"6px", padding: isPhone ? "5px 10px" : "6px 12px", color:"oklch(32% 0.02 60)", fontSize: isPhone ? "12px" : "13px", fontWeight:600, cursor:"pointer"},
+      topRowMarginTop: isPhone ? "10px" : "16px",
+      rowsWrapStyle: {marginTop: isLandscapeCompact ? "6px" : "14px", display:"flex", flexDirection:"column", gap: isLandscapeCompact ? "8px" : "14px"},
+      barContainerStyle: {display:"flex", width:"100%", height:"46px", borderRadius:"8px", overflow:"visible", boxShadow:"0 0 0 1px oklch(85% 0.01 85 / 0.6)", position:"relative", marginTop: isLandscapeCompact ? "20px" : "34px"},
+      breadcrumb,
+      showTour, tourText: TOUR[s.tourStep], tourNextLabel: s.tourStep >= TOUR.length-1 ? "Start exploring" : "Next",
+      onTourNext: () => this.tourNext(), onTourSkip: () => this.tourSkip(),
+      rows, v1, rep
+    };
+  }
+}
+
+</script>
+</body>
+</html>
