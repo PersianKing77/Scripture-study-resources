@@ -1,0 +1,2543 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #DED3B8; }
+  * { box-sizing: border-box; }
+  a { color: #7C2317; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #B03A2C; }
+  ::selection { background: #C6A25A; color: #201A12; }
+  .bx::-webkit-scrollbar { width: 10px; }
+  .bx::-webkit-scrollbar-thumb { background: #B8A98A; }
+  .bx::-webkit-scrollbar-track { background: #E9E1CE; }
+  button:focus-visible, input:focus-visible, a:focus-visible, svg:focus-visible, [tabindex]:focus-visible {
+    outline: 2.5px solid #7C2317; outline-offset: 2px;
+  }
+  button, a, select { touch-action: manipulation; }
+  [data-sr] { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+  }
+  @media (max-width: 1120px) and (min-width: 821px) and (min-height: 471px) {
+    [data-root] { height: auto !important; min-height: 100vh; overflow: visible !important; }
+    [data-shell] { grid-template-columns: 1fr !important; overflow-x: hidden !important; }
+    [data-col="main"] { order: 1; min-height: 84vw; border-bottom: 1.5px solid #201A12; }
+    [data-col="right"] { order: 2; border-left: none !important; border-bottom: 1.5px solid #201A12; overflow: visible !important; padding: 20px 20px 32px !important; }
+    [data-col="left"] { order: 3; border-right: none !important; overflow: visible !important; }
+    [data-hdr] { flex-wrap: wrap; gap: 12px !important; }
+    [data-toolbar] { flex-wrap: wrap; }
+    [data-toolbar] button, [data-toolbar] a { padding: 5px 8px !important; font-size: 10px !important; white-space: nowrap; }
+    [data-ticks] { grid-template-columns: repeat(3, 1fr) !important; }
+  }
+  [data-panels-btn], [data-drawer-close], [data-backdrop], [data-landscape-rail] { display: none; }
+  @media (max-width: 1400px) and (min-height: 471px) {
+    [data-panels-btn] { display: flex !important; }
+  }
+  @media (max-width: 820px) {
+    [data-root] { height: 100vh !important; overflow: hidden !important; }
+    [data-shell] { grid-template-columns: 1fr !important; padding-bottom: 62px; }
+    [data-col="main"] { height: 100% !important; }
+    [data-col="left"], [data-col="right"] {
+      position: fixed !important; top: 0; bottom: 0; width: min(88vw, 380px); max-width: 380px;
+      z-index: 60; transition: transform 0.25s ease; box-shadow: 0 0 28px rgba(24,20,14,0.35);
+      padding-top: 54px !important;
+    }
+    [data-col="left"] { left: 0; transform: translateX(-102%); }
+    [data-col="left"][data-open="1"] { transform: translateX(0); }
+    [data-col="right"] { right: 0; left: auto !important; transform: translateX(102%); }
+    [data-col="right"][data-open="1"] { transform: translateX(0); }
+    [data-drawer-close] { display: flex !important; position: absolute; top: 10px; right: 10px; z-index: 5; width: 34px; height: 34px; }
+    [data-backdrop][data-open="1"] { display: block !important; position: fixed; inset: 0; z-index: 55; background: transparent; }
+    [data-hdr] { flex-wrap: wrap; gap: 10px !important; padding: 11px 14px 9px !important; }
+    [data-hdr] [data-toolbar] ~ div { display: none !important; }
+    [data-tagline] { display: none; }
+    footer > div:first-child { gap: 8px !important; }
+    footer button { min-width: 44px !important; padding: 6px 8px !important; }
+    [data-ticks] { grid-auto-flow: column; grid-template-columns: none !important; grid-auto-columns: minmax(64px, 1fr); overflow-x: auto; gap: 6px !important; -webkit-overflow-scrolling: touch; }
+    [data-landscape-rail] { display: none; }
+    aside button, aside select, [role="dialog"] button, [role="dialog"] select { min-height: 44px; }
+  }
+  @media (max-height: 470px) {
+    [data-root] { height: 100vh !important; overflow: hidden !important; }
+    [data-shell] { grid-template-columns: 1fr 64px !important; height: 100% !important; overflow: hidden !important; }
+    [data-col="main"] { order: initial !important; min-height: 0 !important; height: 100% !important; border-bottom: none !important; }
+    [data-col="left"], [data-col="right"] {
+      position: fixed !important; top: 0; bottom: 0; width: min(70vw, 340px); max-width: 340px;
+      z-index: 60; order: initial !important; border: none !important; overflow: auto !important;
+      transition: transform 0.25s ease; box-shadow: 0 0 28px rgba(24,20,14,0.35); padding-top: 46px !important;
+    }
+    [data-col="left"] { left: 0; transform: translateX(-102%); }
+    [data-col="left"][data-open="1"] { transform: translateX(0); }
+    [data-col="right"] { right: 0; left: auto !important; transform: translateX(102%); }
+    [data-col="right"][data-open="1"] { transform: translateX(0); }
+    [data-drawer-close] { display: flex !important; position: absolute; top: 8px; right: 8px; z-index: 5; width: 34px; height: 34px; }
+    [data-backdrop][data-open="1"] { display: block !important; position: fixed; inset: 0; z-index: 55; background: transparent; }
+    [data-hdr] { padding: 6px 10px !important; gap: 4px !important; flex-wrap: nowrap !important; }
+    [data-hdr] [style*="font-size:25px"] { font-size: 15px !important; }
+    [data-tagline] { display: none; }
+    footer { display: none !important; }
+    [data-landscape-rail] { display: flex !important; flex-direction: column; gap: 6px; padding: 8px 6px; background: #E9E1CE; border-left: 1.5px solid #201A12; }
+    aside button, aside select, [role="dialog"] button, [role="dialog"] select { min-height: 40px; }
+  }
+  @media print { [data-noprint] { display: none !important; } }
+</style>
+<script src="./image-slot.js"></script>
+<script src="./bethesda-3d.js"></script>
+<script src="./bethesda-essays-a.js"></script>
+<script src="./bethesda-essays-b.js"></script>
+<script src="./bethesda-teaching.js"></script>
+<script src="./bethesda-reference.js"></script>
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <rect width="120" height="120" fill="#DED3B8"></rect>
+    <rect x="30" y="24" width="60" height="34" fill="#3E8380" stroke="#201A12" stroke-width="2.4"></rect>
+    <rect x="30" y="62" width="60" height="34" fill="#3E8380" stroke="#201A12" stroke-width="2.4"></rect>
+    <line x1="30" y1="60" x2="90" y2="60" stroke="#7C2317" stroke-width="4"></line>
+  </svg>
+</template>
+</helmet>
+<div data-root="1" style="height:max(100vh,700px);display:flex;flex-direction:column;background:#DED3B8;font-family:'IBM Plex Mono',monospace;color:#201A12;overflow:hidden">
+
+  <header data-hdr="1" style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;padding:13px 22px 11px;border-bottom:1.5px solid #201A12;background:#E9E1CE">
+    <div style="min-width:0;flex:1 1 340px">
+      <div style="font-family:'EB Garamond',serif;font-size:25px;font-weight:600;letter-spacing:-0.01em;line-height:1;display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span>The Pool of Bethesda, Jerusalem</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#F3ECDC;background:#7C2317;padding:3px 7px;line-height:1">Beta</span></div>
+      <div data-tagline="1" style="font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#625743;margin-top:5px">Twenty-eight centuries on one hollow in the rock · drag the model to turn it</div>
+    </div>
+    <div style="display:flex;gap:10px 18px;align-items:flex-end;flex-wrap:wrap;justify-content:flex-end">
+      <div data-toolbar="1" data-noprint="1" style="display:flex;gap:5px;align-items:center;position:relative">
+        <button type="button" onClick="{{ togglePanelMenu }}" aria-expanded="{{ panelMenuOpen }}" data-panels-btn="1" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;background:#DED3B8;border:1.2px solid #C0B295;color:#3B3225;cursor:pointer;padding:6px 10px;min-height:32px;display:none;align-items:center;gap:6px"><span style="font-size:14px">▤</span> Panels</button>
+        <button type="button" onClick="{{ toggleMenu }}" aria-haspopup="true" aria-expanded="{{ menuOpen }}" style="{{ toolStyle }}">Tools ▾</button>
+        <sc-if value="{{ panelMenuOpen }}" hint-placeholder-val="{{ false }}">
+        <div data-noprint="1" data-panels-menu="1" style="position:absolute;top:100%;left:0;margin-top:6px;z-index:59;display:flex;flex-direction:column;gap:6px;background:#E9E1CE;border:1.5px solid #201A12;box-shadow:0 10px 26px rgba(24,20,14,0.3);padding:8px">
+          <button type="button" onClick="{{ pickWholeModel }}" style="min-height:44px;min-width:150px;font-family:'IBM Plex Mono',monospace;font-size:12px;text-align:left;padding:0 12px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">Whole model</button>
+          <button type="button" onClick="{{ pickControlsPanel }}" style="min-height:44px;min-width:150px;font-family:'IBM Plex Mono',monospace;font-size:12px;text-align:left;padding:0 12px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">Controls</button>
+          <button type="button" onClick="{{ pickReadingPanel }}" style="min-height:44px;min-width:150px;font-family:'IBM Plex Mono',monospace;font-size:12px;text-align:left;padding:0 12px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">Reading</button>
+        </div>
+        </sc-if>
+      </div>
+      <div style="text-align:right;flex:none;white-space:nowrap">
+        <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#625743">Period</div>
+        <div style="font-family:'EB Garamond',serif;font-size:18px;font-weight:600;line-height:1.2">{{ periodName }}</div>
+      </div>
+      <div style="border-left:1.5px solid #C0B295;padding-left:18px;text-align:right;flex:none;white-space:nowrap">
+        <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#625743">Date (proposed)</div>
+        <div style="font-family:'EB Garamond',serif;font-size:18px;font-weight:600;line-height:1.2">{{ periodSpan }}</div>
+      </div>
+    </div>
+  </header>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeMenu }}" data-noprint="1" style="position:fixed;inset:0;z-index:70;background:transparent">
+      <div onClick="{{ stop }}" style="position:absolute;top:0;right:0;width:min(78vw,320px);height:100%;background:#E9E1CE;border-left:1.5px solid #201A12;display:flex;flex-direction:column;padding:16px">
+        <button type="button" onClick="{{ closeMenu }}" aria-label="Close menu" style="align-self:flex-end;width:40px;height:40px;font-size:18px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#3B3225;margin-bottom:10px">×</button>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:#7E5F21;padding:0 10px 6px;border-bottom:1px solid #C0B295;margin-bottom:6px">View</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <button type="button" onClick="{{ menuTimeline }}" style="min-height:44px;font-family:'EB Garamond',serif;font-size:15px;text-align:left;padding:0 10px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">{{ timelineLabel }}</button>
+              <button type="button" onClick="{{ menuControls }}" aria-pressed="{{ leftVisible }}" style="min-height:44px;font-family:'EB Garamond',serif;font-size:15px;text-align:left;padding:0 10px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">{{ controlsLabel }}</button>
+              <button type="button" onClick="{{ menuReading }}" aria-pressed="{{ rightVisible }}" style="min-height:44px;font-family:'EB Garamond',serif;font-size:15px;text-align:left;padding:0 10px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">{{ readingLabel }}</button>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:#7E5F21;padding:0 10px 6px;border-bottom:1px solid #C0B295;margin-bottom:6px">Info</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <button type="button" onClick="{{ menuAbout }}" style="min-height:44px;font-family:'EB Garamond',serif;font-size:15px;text-align:left;padding:0 10px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">About</button>
+              <button type="button" onClick="{{ menuJohn }}" style="min-height:44px;font-family:'EB Garamond',serif;font-size:15px;text-align:left;padding:0 10px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">John 5</button>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:#7E5F21;padding:0 10px 6px;border-bottom:1px solid #C0B295;margin-bottom:6px">Actions</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <button type="button" onClick="{{ menuPresent }}" aria-pressed="{{ presentOn }}" style="min-height:44px;font-family:'EB Garamond',serif;font-size:15px;text-align:left;padding:0 10px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">{{ presentLabel }}</button>
+              <button type="button" onClick="{{ menuCopy }}" style="min-height:44px;font-family:'EB Garamond',serif;font-size:15px;text-align:left;padding:0 10px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">{{ copyLabel }}</button>
+              <button type="button" onClick="{{ menuQuiz }}" style="min-height:44px;font-family:'EB Garamond',serif;font-size:15px;text-align:left;padding:0 10px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">Self-check</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div data-shell="1" style="{{ shellStyle }}">
+
+    <sc-if value="{{ leftVisible }}" hint-placeholder-val="{{ false }}">
+    <aside data-col="left" data-noprint="1" data-open="{{ panelLeftOpen }}" class="bx" style="{{ leftPaneStyle }}">
+      <button type="button" onClick="{{ closeLeftPanel }}" data-drawer-close="1" aria-label="Close panel" style="background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;font-size:16px;color:#3B3225">×</button>
+      <div style="display:flex;gap:8px">
+        <button type="button" onClick="{{ expandAllSecs }}" style="flex:1;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;padding:6px 4px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#3B3225">Expand all</button>
+        <button type="button" onClick="{{ collapseAllSecs }}" style="flex:1;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;padding:6px 4px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#3B3225">Collapse all</button>
+      </div>
+      <section style="display:flex;flex-direction:column;gap:11px">
+        <button type="button" onClick="{{ toggleSecView }}" aria-expanded="{{ secOpen.view }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C0B295;padding:0 0 6px;background:none;border-top:none;border-left:none;border-right:none;cursor:pointer;font-family:'IBM Plex Mono',monospace"><span>View</span><span style="font-size:12px;flex:none">{{ secArrow.view }}</span></button>
+        <sc-if value="{{ secOpen.view }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <button type="button" onClick="{{ viewPlan }}" style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:6px 4px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#3B3225">Plan from above</button>
+          <button type="button" onClick="{{ viewLow }}" style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:6px 4px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#3B3225">Low angle</button>
+          <button type="button" onClick="{{ viewIso }}" style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:6px 4px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#3B3225">Reset view</button>
+          <button type="button" onClick="{{ spin }}" style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:6px 4px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#3B3225">{{ spinLabel }}</button>
+        </div>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:10.5px;color:#3B3225">
+          <span style="display:flex;justify-content:space-between"><span>Turn (compass)</span><span style="color:#625743">{{ yawText }}</span></span>
+          <input type="range" min="0" max="359" step="1" value="{{ yaw }}" onChange="{{ setYaw }}" onInput="{{ setYaw }}" style="width:100%;accent-color:#7C2317" />
+        </label>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:10.5px;color:#3B3225">
+          <span style="display:flex;justify-content:space-between"><span>Angle of view</span><span style="color:#625743">{{ tiltText }}</span></span>
+          <input type="range" min="12" max="90" step="1" value="{{ tilt }}" onChange="{{ setTilt }}" onInput="{{ setTilt }}" style="width:100%;accent-color:#7C2317" />
+        </label>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:10.5px;color:#3B3225">
+          <span style="display:flex;justify-content:space-between"><span>Zoom</span><span style="color:#625743">{{ zoomText }}</span></span>
+          <input type="range" min="0.65" max="1.8" step="0.05" value="{{ zoom }}" onChange="{{ setZoom }}" onInput="{{ setZoom }}" style="width:100%;accent-color:#7C2317" />
+        </label>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:10.5px;color:#3B3225">
+          <span style="display:flex;justify-content:space-between"><span>Model opacity</span><span style="color:#625743">{{ modelPct }}</span></span>
+          <input type="range" min="0.08" max="1" step="0.02" value="{{ modelOpacity }}" onChange="{{ setModelOpacity }}" onInput="{{ setModelOpacity }}" style="width:100%;accent-color:#7C2317" />
+        </label>
+        </sc-if>
+      </section>
+
+      <section style="display:flex;flex-direction:column;gap:9px">
+        <button type="button" onClick="{{ toggleSecReading }}" aria-expanded="{{ secOpen.reading }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C0B295;padding:0 0 6px;background:none;border-top:none;border-left:none;border-right:none;cursor:pointer;font-family:'IBM Plex Mono',monospace"><span>Reading the model</span><span style="font-size:12px;flex:none">{{ secArrow.reading }}</span></button>
+        <sc-if value="{{ secOpen.reading }}" hint-placeholder-val="{{ false }}">
+        <label style="display:flex;gap:9px;align-items:flex-start;font-size:11px;color:#3B3225;cursor:pointer">
+          <input type="checkbox" checked="{{ pinsOn }}" onChange="{{ togglePins }}" style="accent-color:#7C2317;width:15px;height:15px;margin-top:1px" />
+          <span>Scripture pins on the model</span>
+        </label>
+        <label style="display:flex;gap:9px;align-items:flex-start;font-size:11px;color:#3B3225;cursor:pointer">
+          <input type="checkbox" checked="{{ porticoOn }}" onChange="{{ togglePortico }}" style="accent-color:#7C2317;width:15px;height:15px;margin-top:1px" />
+          <span>Number the five porticoes</span>
+        </label>
+        <div style="font-size:10px;line-height:1.5;color:#625743">John 5:2 says five. Four run round the two basins; the fifth crosses the dam between them — the odd number nineteenth-century sceptics doubted, and the one the excavators found.</div>
+        <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#625743;margin-top:4px">What changed this phase</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <sc-for list="{{ newModes }}" as="m" hint-placeholder-count="3">
+            <button type="button" onClick="{{ m.pick }}" style="{{ m.style }}">{{ m.label }}</button>
+          </sc-for>
+        </div>
+        <div style="font-size:10px;line-height:1.5;color:#625743">{{ newNote }}</div>
+        <label style="display:flex;gap:9px;align-items:flex-start;font-size:11px;color:#3B3225;cursor:pointer">
+          <input type="checkbox" checked="{{ figuresOn }}" onChange="{{ toggleFigures }}" style="accent-color:#7C2317;width:15px;height:15px;margin-top:1px" />
+          <span>Stand a person in it for scale</span>
+        </label>
+        <div style="font-size:10px;line-height:1.5;color:#625743">Two figures 1.7 m tall, drawn to the same scale as everything else: one on the rim, one on the floor of the pool. The gap between them is the reason John 5:7 says <em>steppeth down</em>.</div>
+        <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#625743;margin-top:4px">Measure</div>
+        <button type="button" onClick="{{ toggleMeasure }}" aria-pressed="{{ measureOn }}" style="{{ measureBtnStyle }}">{{ measureLabel }}</button>
+        <sc-if value="{{ measureOn }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10px;line-height:1.5;color:#625743">Click two points on the model. Distances are read on the ground plane, so keep the view fairly overhead for an honest answer.</div>
+            <sc-if value="{{ hasMeasure }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1.2px solid #7C2317;background:#F7EFDD;padding:8px 9px;display:flex;flex-direction:column;gap:3px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#7C2317">{{ measure.m }}</span>
+                <span style="font-size:10.5px;color:#3B3225">{{ measure.royal }}</span>
+                <span style="font-size:10.5px;color:#3B3225">{{ measure.common }}</span>
+                <span style="font-size:9.5px;line-height:1.45;color:#6A5D41;margin-top:2px">Royal cubit 0.525 m · common cubit 0.445 m</span>
+              </div>
+            </sc-if>
+            <button type="button" onClick="{{ clearMeasure }}" style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:5px 8px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#3B3225">Clear the measurement</button>
+          </div>
+        </sc-if>
+        <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#625743;margin-top:4px">Evidence status</div>
+        <label style="display:flex;gap:9px;align-items:flex-start;font-size:11px;color:#3B3225;cursor:pointer">
+          <input type="checkbox" checked="{{ evidenceOn }}" onChange="{{ toggleEvidence }}" style="accent-color:#7C2317;width:15px;height:15px;margin-top:1px" />
+          <span>Show evidence status as a texture on every surface</span>
+        </label>
+        <sc-if value="{{ evidenceOn }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px;border:1.2px solid #C0B295;padding:8px 9px">
+            <sc-for list="{{ evidenceLegend }}" as="ev" hint-placeholder-count="7">
+              <div style="display:flex;gap:9px;align-items:flex-start">
+                <span style="{{ ev.swatch }}"></span>
+                <span style="display:flex;flex-direction:column;gap:1px">
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#201A12">{{ ev.name }}</span>
+                  <span style="font-family:'EB Garamond',serif;font-size:11.5px;line-height:1.3;color:#625743">{{ ev.desc }}</span>
+                </span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#625743;margin-top:4px">Touch</div>
+        <button type="button" onClick="{{ toggleTouch }}" style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:6px 8px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#3B3225;text-align:left">{{ touchLabel }}</button>
+        <div style="font-size:10px;line-height:1.5;color:#625743">On a phone or tablet: two fingers always turn the model, one finger scrolls the page. Switch this if you would rather one finger turned it.</div>
+        <sc-if value="{{ isSection }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px;padding-top:9px;border-top:1px solid #C0B295">
+            <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#625743">Elevation line</div>
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:10.5px;color:#3B3225">
+              <span style="display:flex;justify-content:space-between"><span>Height above the rim</span><span style="color:#625743">{{ elevText }}</span></span>
+              <input type="range" min="-14" max="20" step="0.5" value="{{ elev }}" onChange="{{ setElev }}" onInput="{{ setElev }}" style="width:100%;accent-color:#7C2317" />
+            </label>
+            <div style="font-size:10px;line-height:1.5;color:#625743">{{ elevGloss }}</div>
+            <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#625743;margin-top:6px">What you walk down through</div>
+            <div style="display:flex;flex-direction:column;border:1.2px solid #C0B295">
+              <sc-for list="{{ strata }}" as="st" hint-placeholder-count="9">
+                <div style="{{ st.rowStyle }}">
+                  <span style="{{ st.swatchStyle }}"></span>
+                  <span style="display:flex;flex-direction:column;gap:1px;min-width:0;padding:4px 7px 4px 0">
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#201A12">{{ st.era }}</span>
+                    <span style="font-family:'EB Garamond',serif;font-size:12.5px;line-height:1.3;color:#4A4030">{{ st.name }}</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#6A5D41">{{ st.range }}</span>
+                  </span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="font-size:9.5px;line-height:1.5;color:#6A5D41">Illustrative sequence — the real deposit varies sharply from one part of the site to another.</div>
+          </div>
+        </sc-if>
+        </sc-if>
+      </section>
+
+      <section style="display:flex;flex-direction:column;gap:9px">
+        <button type="button" onClick="{{ toggleSecKey }}" aria-expanded="{{ secOpen.key }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C0B295;padding:0 0 6px;background:none;border-top:none;border-left:none;border-right:none;cursor:pointer;font-family:'IBM Plex Mono',monospace"><span>Key to the model</span><span style="font-size:12px;flex:none">{{ secArrow.key }}</span></button>
+        <sc-if value="{{ secOpen.key }}" hint-placeholder-val="{{ false }}">
+        <sc-for list="{{ legend }}" as="k" hint-placeholder-count="6">
+          <div style="display:flex;gap:9px;align-items:flex-start">
+            <span style="width:19px;height:13px;flex:none;margin-top:2px;border:1.2px solid;border-color:{{ k.stroke }};background:{{ k.fill }}"></span>
+            <span style="font-size:11px;line-height:1.35;color:#3B3225">{{ k.name }}</span>
+          </div>
+        </sc-for>
+        <div style="font-size:10px;line-height:1.5;color:#625743;margin-top:2px">Heights and depths are to the same scale as the plan: the pools are cut some 13 m into the rock — about four storeys.</div>
+        </sc-if>
+      </section>
+
+      <sc-if value="{{ showGospelCompare }}" hint-placeholder-val="{{ true }}">
+      <section style="display:flex;flex-direction:column;gap:9px">
+        <button type="button" onClick="{{ toggleSecGospel }}" aria-expanded="{{ secOpen.gospel }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C0B295;padding:0 0 6px;background:none;border-top:none;border-left:none;border-right:none;cursor:pointer;font-family:'IBM Plex Mono',monospace"><span>Compare proposed Gospel settings</span><span style="font-size:12px;flex:none">{{ secArrow.gospel }}</span></button>
+        <sc-if value="{{ secOpen.gospel }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:10px;line-height:1.5;color:#625743">Two readings of where John 5 belongs on this ground — not a resolved question.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <sc-for list="{{ gospelButtons }}" as="gb" hint-placeholder-count="2">
+            <button type="button" onClick="{{ gb.pick }}" style="{{ gb.style }}">{{ gb.label }}</button>
+          </sc-for>
+        </div>
+        <button type="button" onClick="{{ gospelBoth }}" style="{{ gospelBothStyle }}">Show both, side by side</button>
+        <sc-if value="{{ gospelCaption }}" hint-placeholder-val="{{ false }}">
+          <div style="font-family:'EB Garamond',serif;font-size:14px;line-height:1.5;color:#3B3225;border:1.2px solid #C0B295;background:#F3ECDC;padding:8px 9px;text-wrap:pretty">{{ gospelCaption }}</div>
+        </sc-if>
+        </sc-if>
+      </section>
+      </sc-if>
+
+    </aside>
+    </sc-if>
+
+    <main data-col="main" style="display:flex;flex-direction:column;min-width:0;min-height:0;background:#EFE8D6">
+      <div style="padding:11px 20px 9px;border-bottom:1px solid #D8CBAB;display:flex;align-items:center;justify-content:space-between;gap:10px 18px;flex-wrap:wrap">
+        <div style="font-family:'EB Garamond',serif;font-size:15px;font-style:italic;color:#4A4030;line-height:1.4;text-wrap:pretty;min-width:210px;flex:1 1 210px">{{ strap }}</div>
+        <div style="display:flex;gap:5px;flex:none">
+          <sc-for list="{{ viewTabs }}" as="v" hint-placeholder-count="2">
+            <button type="button" onClick="{{ v.pick }}" style="{{ v.style }}">{{ v.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <sc-if value="{{ tourOn }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#201A12;color:#F3ECDC;padding:11px 18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <div style="display:flex;gap:5px;flex:none">
+            <button type="button" onClick="{{ tourBack }}" aria-label="Previous phase" style="{{ tourNavStyle }}">◀</button>
+            <button type="button" onClick="{{ tourPause }}" style="{{ tourNavStyle }}">{{ tourPauseLabel }}</button>
+            <button type="button" onClick="{{ tourNext }}" aria-label="Next phase" style="{{ tourNavStyle }}">▶</button>
+          </div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#C6A25A;flex:none">{{ tourStep }}</span>
+          <span style="font-family:'EB Garamond',serif;font-size:19px;line-height:1.35;text-wrap:pretty;flex:1 1 260px;min-width:0">{{ strap }}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#6A5D41;flex:none">{{ tourHint }}</span>
+        </div>
+      </sc-if>
+      <div style="flex:1;min-height:230px;display:flex;align-items:center;justify-content:center;padding:10px 16px 6px;position:relative">
+        <sc-if value="{{ isSection }}" hint-placeholder-val="{{ false }}">
+          <div style="width:100%;height:100%;display:flex;flex-direction:column;min-height:0">
+            <div style="flex:1;min-width:0;min-height:0;position:relative;display:flex;flex-direction:column">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#201A12;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Section looking north · through the middle of both pools</div>
+            <div style="flex:1;min-height:0;position:relative;margin-top:6px">
+            <svg ref="{{ secRef }}" viewBox="-46 -25 222 52" preserveAspectRatio="xMidYMid meet" role="img" aria-label="True-scale section through the middle of both pools, looking north. The basins are cut about thirteen metres into the rock; the strata above them are listed in the left panel." style="width:100%;height:100%;display:block">
+              <rect x="-46" y="-25" width="222" height="52" fill="#EFE8D6"></rect>
+              <rect x="-6" y="0" width="174" height="26" fill="#D8CBAB" stroke="#B8A98A" stroke-width="0.25"></rect>
+              <sc-for list="{{ sectionCuts }}" as="c" hint-placeholder-count="2">
+                <g>
+                  <rect x="{{ c.x }}" y="0" width="{{ c.w }}" height="{{ c.h }}" fill="#EFE8D6" stroke="{{ c.stroke }}" stroke-width="0.35"></rect>
+                  <rect x="{{ c.x }}" y="{{ c.wy }}" width="{{ c.w }}" height="{{ c.wh }}" fill="#3E8380" stroke="#255553" stroke-width="0.2"></rect>
+                </g>
+              </sc-for>
+              <sc-for list="{{ sectionShapes }}" as="s" hint-placeholder-count="6">
+                <rect x="{{ s.x }}" y="{{ s.y }}" width="{{ s.w }}" height="{{ s.h }}" fill="{{ s.fill }}" stroke="{{ s.stroke }}" stroke-width="0.25" stroke-dasharray="{{ s.dash }}"></rect>
+              </sc-for>
+              <line x1="-6" y1="0" x2="168" y2="0" stroke="#201A12" stroke-width="0.35"></line>
+              <sc-for list="{{ storeys }}" as="sm" hint-placeholder-count="5">
+                <line x1="-6" y1="{{ sm.y }}" x2="-3" y2="{{ sm.y }}" stroke="#6A5D41" stroke-width="0.25"></line>
+              </sc-for>
+              <sc-for list="{{ secFigures }}" as="sf" hint-placeholder-count="0">
+                <g>
+                  <line x1="{{ sf.x }}" y1="{{ sf.y0 }}" x2="{{ sf.x }}" y2="{{ sf.ys }}" stroke="#241E15" stroke-width="0.5" stroke-linecap="round"></line>
+                  <circle cx="{{ sf.x }}" cy="{{ sf.hy }}" r="0.3" fill="#241E15"></circle>
+                </g>
+              </sc-for>
+              <line x1="-6" y1="{{ elevY }}" x2="170" y2="{{ elevY }}" stroke="#7C2317" stroke-width="0.4" stroke-dasharray="2 1.4"></line>
+              <circle cx="170" cy="{{ elevY }}" r="0.9" fill="#7C2317"></circle>
+            </svg>
+            <div style="position:absolute;inset:0;pointer-events:none">
+              <sc-for list="{{ secLabels }}" as="sl" hint-placeholder-count="0">
+                <div style="{{ sl.style }}">{{ sl.t }}</div>
+              </sc-for>
+            </div>
+            </div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#625743;flex:none;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">True scale, no vertical exaggeration · left is north, right is south · 0 m is the present rim</div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ isModel }}" hint-placeholder-val="{{ true }}">
+        <div style="position:relative;width:100%;height:100%">
+        <svg ref="{{ modelRef }}" viewBox="-140 -128 280 250" preserveAspectRatio="xMidYMid meet" onMouseDown="{{ dragStart }}" onClick="{{ modelClick }}" onKeyDown="{{ modelKey }}" tabIndex="0" role="img" aria-label="Axonometric model of the Pool of Bethesda. Give it focus and use the arrow keys to turn it; hold shift to change the angle of view; plus and minus zoom." style="width:100%;height:100%;display:block;cursor:grab;touch-action:pan-y">
+          <defs>
+            <pattern id="bx-grid" width="12" height="12" patternUnits="userSpaceOnUse">
+              <path d="M12 0 L0 0 0 12" fill="none" stroke="#DCD0B0" stroke-width="0.3"></path>
+            </pattern>
+            <pattern id="ev-excavated" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#201A12" fill-opacity="0.06"></rect></pattern>
+            <pattern id="ev-secured" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r="0.7" fill="#201A12" fill-opacity="0.55"></circle></pattern>
+            <pattern id="ev-textual" width="8" height="4" patternUnits="userSpaceOnUse"><path d="M0 1 H8" stroke="#201A12" stroke-width="0.6" stroke-opacity="0.5"></path></pattern>
+            <pattern id="ev-inferred" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0 V6" stroke="#201A12" stroke-width="0.6" stroke-opacity="0.5"></path></pattern>
+            <pattern id="ev-conventional" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0 V6" stroke="#201A12" stroke-width="0.5" stroke-opacity="0.4"></path><path d="M0 0 H6" stroke="#201A12" stroke-width="0.5" stroke-opacity="0.4"></path></pattern>
+            <pattern id="ev-contested" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 1.5 H7" stroke="#7C2317" stroke-width="1.1" stroke-dasharray="2 1.6" stroke-opacity="0.7"></path></pattern>
+            <pattern id="ev-speculative" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.55" fill="#7C2317" fill-opacity="0.55"></circle></pattern>
+          </defs>
+          <rect x="-140" y="-128" width="280" height="250" fill="#EFE8D6"></rect>
+          <rect x="-140" y="-128" width="280" height="250" fill="url(#bx-grid)"></rect>
+
+
+          <sc-for list="{{ faces }}" as="f" hint-placeholder-count="14">
+            <polygon points="{{ f.pts }}" fill="{{ f.fill }}" fill-opacity="{{ f.fo }}" stroke="{{ f.stroke }}" stroke-opacity="{{ f.so }}" stroke-width="{{ f.sw }}" stroke-linejoin="round" onMouseEnter="{{ f.enter }}" onMouseLeave="{{ clearHover }}"></polygon>
+          </sc-for>
+
+          <sc-for list="{{ ghostFaces }}" as="g" hint-placeholder-count="0">
+            <polygon points="{{ g.pts }}" fill="{{ g.fill }}" fill-opacity="{{ g.fo }}" stroke="{{ g.stroke }}" stroke-opacity="{{ g.so }}" stroke-width="0.5" stroke-dasharray="2 1.6" stroke-linejoin="round"></polygon>
+          </sc-for>
+
+          <sc-for list="{{ evidenceFaces }}" as="ev" hint-placeholder-count="0">
+            <polygon points="{{ ev.pts }}" fill="{{ ev.pattern }}" stroke="none" style="pointer-events:none"></polygon>
+          </sc-for>
+
+          <sc-for list="{{ gospelMarks }}" as="gm" hint-placeholder-count="0">
+            <g style="pointer-events:none">
+              <circle cx="{{ gm.cx }}" cy="{{ gm.cy }}" r="4.5" fill="#F3ECDC" stroke="#7C2317" stroke-width="0.8"></circle>
+            </g>
+          </sc-for>
+
+          <sc-if value="{{ hasFocus }}" hint-placeholder-val="{{ false }}">
+            <circle cx="{{ focusMark.cx }}" cy="{{ focusMark.cy }}" r="6" fill="none" stroke="#7C2317" stroke-width="0.6" stroke-dasharray="2 1.6" style="pointer-events:none"></circle>
+          </sc-if>
+
+          <g>
+            <line x1="{{ scaleX1 }}" y1="112" x2="{{ scaleX2 }}" y2="112" stroke="#201A12" stroke-width="0.7"></line>
+            <line x1="{{ scaleX1 }}" y1="110" x2="{{ scaleX1 }}" y2="114" stroke="#201A12" stroke-width="0.7"></line>
+            <line x1="{{ scaleX2 }}" y1="110" x2="{{ scaleX2 }}" y2="114" stroke="#201A12" stroke-width="0.7"></line>
+            <line x1="{{ nx1 }}" y1="{{ ny1 }}" x2="{{ nx2 }}" y2="{{ ny2 }}" stroke="#201A12" stroke-width="0.8"></line>
+            <circle cx="{{ nx1 }}" cy="{{ ny1 }}" r="1.6" fill="#201A12"></circle>
+          </g>
+          <sc-for list="{{ figures }}" as="fg" hint-placeholder-count="0">
+            <g style="pointer-events:none">
+              <line x1="{{ fg.x }}" y1="{{ fg.y0 }}" x2="{{ fg.x }}" y2="{{ fg.ys }}" stroke="#241E15" stroke-width="{{ fg.sw }}" stroke-linecap="round"></line>
+              <circle cx="{{ fg.x }}" cy="{{ fg.hy }}" r="{{ fg.r }}" fill="#241E15"></circle>
+            </g>
+          </sc-for>
+          <sc-if value="{{ hasMeasure }}" hint-placeholder-val="{{ false }}">
+            <g style="pointer-events:none">
+              <line x1="{{ measure.x1 }}" y1="{{ measure.y1 }}" x2="{{ measure.x2 }}" y2="{{ measure.y2 }}" stroke="#7C2317" stroke-width="0.65" stroke-dasharray="2.5 1.5"></line>
+              <circle cx="{{ measure.x1 }}" cy="{{ measure.y1 }}" r="1.3" fill="#7C2317"></circle>
+              <circle cx="{{ measure.x2 }}" cy="{{ measure.y2 }}" r="1.3" fill="#7C2317"></circle>
+            </g>
+          </sc-if>
+        </svg>
+        <div style="position:absolute;inset:0;pointer-events:none">
+          <sc-for list="{{ planLabels }}" as="l" hint-placeholder-count="0">
+            <div style="{{ l.style }}">{{ l.t }}</div>
+          </sc-for>
+          <sc-for list="{{ modelText }}" as="mt" hint-placeholder-count="0">
+            <div style="{{ mt.style }}">{{ mt.t }}</div>
+          </sc-for>
+          <sc-for list="{{ porticoList }}" as="pc" hint-placeholder-count="0">
+            <div style="{{ pc.style }}" title="{{ pc.t }}">{{ pc.n }}</div>
+          </sc-for>
+          <sc-for list="{{ pinList }}" as="pn" hint-placeholder-count="0">
+            <button type="button" onClick="{{ pn.pick }}" aria-label="{{ pn.aria }}" style="{{ pn.style }}">{{ pn.n }}</button>
+          </sc-for>
+          <sc-for list="{{ gospelMarks }}" as="gm" hint-placeholder-count="0">
+            <div style="{{ gm.style }}">{{ gm.letter }}</div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ measureOn }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;left:6px;top:5px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#F3ECDC;background:#7C2317;padding:3px 8px;pointer-events:none">Measuring — click two points on the ground</div>
+        </sc-if>
+        </div>
+        </sc-if>
+        <sc-if value="{{ pinCard }}" hint-placeholder-val="{{ false }}">
+          <div class="bx" style="position:absolute;left:18px;bottom:14px;top:auto;width:min(430px,calc(100% - 36px));max-height:calc(100% - 28px);overflow-y:auto;background:#F3ECDC;border:1.5px solid #201A12;box-shadow:0 12px 30px rgba(24,20,14,0.28);padding:14px 16px 15px;z-index:3">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="width:17px;height:17px;flex:none;border-radius:50%;background:#7C2317;color:#F3ECDC;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:600">{{ pinCard.n }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#7E5F21">{{ pinCard.ref }}</span>
+                </div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#625743;margin-top:6px">{{ pinCard.where }}</div>
+              </div>
+              <button type="button" onClick="{{ closePin }}" style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:3px 8px;background:#DED3B8;border:1.2px solid #201A12;cursor:pointer;color:#201A12;flex:none">✕</button>
+            </div>
+            <p style="font-family:'EB Garamond',serif;font-size:16px;line-height:1.55;margin:11px 0 0;color:#241E15;text-wrap:pretty">{{ pinCard.asv }}</p>
+            <p style="font-family:'EB Garamond',serif;font-size:16px;font-style:italic;line-height:1.55;margin:9px 0 0;padding-top:9px;border-top:1px solid #D8CBAB;color:#5A4E3A;text-wrap:pretty">{{ pinCard.gloss }}</p>
+          </div>
+        </sc-if>
+      </div>
+      <div style="border-top:1px solid #C0B295;background:#E9E1CE;padding:7px 18px;font-size:11.5px;color:#3B3225;min-height:34px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#625743;flex:none">Feature</span>
+        <span aria-live="polite">{{ hoverText }}</span>
+      </div>
+      <div data-sr="1" aria-live="polite">{{ phaseAria }}</div>
+    </main>
+
+    <sc-if value="{{ rightVisible }}" hint-placeholder-val="{{ false }}">
+    <aside data-col="right" data-open="{{ panelRightOpen }}" class="bx" style="{{ rightPaneStyle }}">
+      <button type="button" onClick="{{ closeRightPanel }}" data-drawer-close="1" aria-label="Close panel" style="background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;font-size:16px;color:#3B3225">×</button>
+      <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#7E5F21">{{ periodSpan }}</div>
+      <h2 style="font-family:'EB Garamond',serif;font-size:31px;font-weight:600;line-height:1.12;margin:8px 0 10px;letter-spacing:-0.015em">{{ essayTitle }}</h2>
+      <div style="font-family:'EB Garamond',serif;font-size:16px;font-style:italic;color:#5A4E3A;line-height:1.5;padding-bottom:15px;border-bottom:1.5px solid #201A12">{{ essayDek }}</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.45;color:#7E5F21;margin-top:13px">{{ termHint }}</div>
+      <div style="display:flex;flex-direction:column;gap:15px;margin-top:13px">
+        <sc-for list="{{ paras }}" as="para" hint-placeholder-count="5">
+          <p style="font-family:'EB Garamond',serif;font-size:16.5px;line-height:1.62;margin:0;color:#241E15;text-wrap:pretty">
+            <sc-for list="{{ para.parts }}" as="part" hint-placeholder-count="1">
+              <span style="{{ part.style }}" onClick="{{ part.go }}">{{ part.t }}</span>
+            </sc-for>
+          </p>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ hasNote }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:22px;border:1.5px solid #201A12;background:#EFE8D6">
+          <button type="button" onClick="{{ toggleNote }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-align:left;padding:11px 14px;background:#E4DAC2;border:none;border-bottom:1.5px solid #201A12;cursor:pointer;color:#201A12">
+            <span>{{ note.title }}</span>
+            <span style="color:#7C2317;flex:none">{{ noteToggleMark }}</span>
+          </button>
+          <sc-if value="{{ noteOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:14px 16px 17px;display:flex;flex-direction:column;gap:12px">
+              <sc-for list="{{ note.body }}" as="np" hint-placeholder-count="4">
+                <p style="font-family:'EB Garamond',serif;font-size:16px;line-height:1.58;margin:0;color:#241E15;text-wrap:pretty">{{ np }}</p>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ hasTakeaway }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:14px;border:1.5px solid #7C2317;background:#F7EFDD">
+          <button type="button" onClick="{{ toggleTakeaway }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-align:left;padding:11px 14px;background:#7C2317;border:none;cursor:pointer;color:#F3ECDC">
+            <span>{{ takeaway.title }}</span>
+            <span style="flex:none">{{ takeawayToggleMark }}</span>
+          </button>
+          <sc-if value="{{ takeawayOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:14px 16px 17px;display:flex;flex-direction:column;gap:13px">
+              <p style="font-family:'EB Garamond',serif;font-size:16px;line-height:1.58;margin:0;color:#241E15;text-wrap:pretty">{{ takeaway.point }}</p>
+              <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#7E5F21;border-top:1px solid #DFCFA8;padding-top:11px">To discuss</div>
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <sc-for list="{{ takeaway.questions }}" as="q" hint-placeholder-count="4">
+                  <div style="display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start">
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7C2317;padding-top:3px">·</span>
+                    <span style="font-family:'EB Garamond',serif;font-size:16px;line-height:1.5;color:#241E15;text-wrap:pretty">{{ q }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <div style="margin-top:24px;padding-top:12px;border-top:1px solid #C9BB9C;font-size:10.5px;letter-spacing:0.05em;color:#625743">{{ wordCount }}</div>
+    </aside>
+    </sc-if>
+
+    <div data-landscape-rail="1" data-noprint="1">
+      <button type="button" onClick="{{ openLeftPanel }}" style="min-height:44px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.04em;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">Controls</button>
+      <button type="button" onClick="{{ openRightPanel }}" style="min-height:44px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.04em;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">Reading</button>
+      <button type="button" onClick="{{ toggleMenu }}" style="min-height:44px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.04em;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#201A12">Menu</button>
+    </div>
+  </div>
+
+  <div data-backdrop="1" data-open="{{ panelLeftOpen }}" onClick="{{ closeLeftPanel }}"></div>
+  <div data-backdrop="1" data-open="{{ panelRightOpen }}" onClick="{{ closeRightPanel }}"></div>
+
+
+
+  <sc-if value="{{ timelineOpen }}" hint-placeholder-val="{{ true }}">
+  <footer style="border-top:1.5px solid #201A12;background:#E9E1CE;padding:11px 22px 13px">
+    <div style="display:flex;align-items:center;gap:16px">
+      <button type="button" onClick="{{ prev }}" style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:6px 12px;background:#DED3B8;border:1.2px solid #201A12;cursor:pointer;color:#201A12">◀ Earlier</button>
+      <input type="range" min="0" max="{{ maxIdx }}" step="1" value="{{ idx }}" onChange="{{ setIdx }}" onInput="{{ setIdx }}" style="flex:1;accent-color:#7C2317;height:22px" />
+      <button type="button" onClick="{{ next }}" style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:6px 12px;background:#DED3B8;border:1.2px solid #201A12;cursor:pointer;color:#201A12">Later ▶</button>
+    </div>
+    <div data-ticks="1" style="display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-top:8px">
+      <sc-for list="{{ ticks }}" as="t" hint-placeholder-count="9">
+        <button type="button" onClick="{{ t.pick }}" style="{{ t.style }}">
+          <span style="display:block;font-size:11px;font-weight:500">{{ t.tick }}</span>
+          <span style="display:block;font-size:9.5px;line-height:1.25;margin-top:3px;opacity:0.72">{{ t.name }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </footer>
+  </sc-if>
+
+  <sc-if value="{{ about }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeAbout }}" style="position:fixed;inset:0;z-index:40;background:rgba(24,20,14,0.62);display:flex;align-items:center;justify-content:center;padding:36px">
+      <div onClick="{{ stop }}" ref="{{ modalRef }}" role="dialog" aria-modal="true" aria-label="About the Pool of Bethesda" tabIndex="-1" class="bx" style="width:min(720px,100%);max-height:88vh;overflow-y:auto;background:#F3ECDC;border:1.5px solid #201A12;box-shadow:0 24px 60px rgba(24,20,14,0.4)">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:22px 30px 16px;border-bottom:1.5px solid #201A12;background:#E9E1CE">
+          <div>
+            <div style="font-family:'EB Garamond',serif;font-size:27px;font-weight:600;line-height:1.15">The Pool of Bethesda</div>
+            <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#7E5F21;margin-top:7px">Prepared by <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener" style="color:#7C2317">Taylor Halverson, Ph.D.</a></div>
+          </div>
+          <button type="button" onClick="{{ closeAbout }}" style="font-family:'IBM Plex Mono',monospace;font-size:11px;padding:6px 11px;background:#DED3B8;border:1.2px solid #201A12;cursor:pointer;color:#201A12;flex:none">Close ✕</button>
+        </div>
+        <div style="display:flex;gap:0;padding:0 30px;background:#E9E1CE;border-bottom:1.5px solid #201A12;flex-wrap:wrap">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+            <button type="button" onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+
+        <div style="padding:22px 30px 36px;display:flex;flex-direction:column;gap:22px">
+
+          <sc-if value="{{ tabSite }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:22px">
+          <p style="font-family:'EB Garamond',serif;font-size:16.5px;line-height:1.6;margin:0;color:#241E15;text-wrap:pretty"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#F3ECDC;background:#7C2317;padding:2px 7px;margin-right:8px">Beta</span>Plans, dates and identifications are still being reviewed. Where scholars disagree — the date of the southern pool, whether the eastern basins were Jewish ritual baths or a healing shrine, how much of a pagan cult existed before AD 70, the exact plan of the Byzantine church — the model follows the reading most excavators have accepted and the essay says so.</p>
+
+          <section style="display:flex;flex-direction:column;gap:9px">
+            <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">What this is</div>
+            <p style="font-family:'EB Garamond',serif;font-size:16.5px;line-height:1.6;margin:0;color:#241E15;text-wrap:pretty">Nine building phases in one hollow of rock, from the Iron Age dam of about 800 BC to the excavated garden you can walk through today. Each phase is a reconstructed model of what actually stood on the ground, drawn in a common set of coordinates so that the phases sit on top of one another exactly as the archaeology does — and each is paired with an essay of roughly a thousand words written to be read straight through rather than consulted.</p>
+            <p style="font-family:'EB Garamond',serif;font-size:16.5px;line-height:1.6;margin:0;color:#241E15;text-wrap:pretty">The point of building it this way is that no photograph of Bethesda can show what the site is. Standing on the walkway above the pools you are looking at nine sites at once, stacked. A model you can turn, fade, ghost against another age, and lay over the present-day aerial can show that; a picture cannot.</p>
+          </section>
+
+          <section style="display:flex;flex-direction:column;gap:9px">
+            <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">Accuracy &amp; limits</div>
+            <p style="font-family:'EB Garamond',serif;font-size:15px;line-height:1.55;margin:0;color:#3B3225;text-wrap:pretty">The plan is redrawn from published excavation reports: Mauss's clearance from 1863, published 1888; the École Biblique campaigns of 1957–62 under de Vaux, Rousée and Duprez; and later re-examinations of the excavation records. Horizontal positions are approximate, and heights, roofing and vaulting are reconstruction throughout — there is no separate class of "certain" elevation here, so nothing is marked as such. The only dashed lines you will see are the ghosted comparison phase and the ring that marks a feature the essay has just sent you to. The northern pool is still largely unexcavated, so its later phases are the most conjectural thing here. The five porticoes of John 5 are not a guess — the foundations of four around the basins and a fifth on the dam were found — but their elevation is.</p>
+            <p style="font-family:'EB Garamond',serif;font-size:15px;line-height:1.55;margin:0;color:#3B3225;text-wrap:pretty">Overlay the site today draws the present compound from this atlas's own line-drawn plan, not from a photograph — there is no aerial or satellite imagery in this product.</p>
+          </section>
+
+          <section style="display:flex;flex-direction:column;gap:7px">
+            <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">Sources</div>
+            <p style="font-family:'EB Garamond',serif;font-size:14px;line-height:1.55;margin:0 0 6px;color:#625743;text-wrap:pretty">A reconstruction, not a survey. Footprints follow published excavation plans — Mauss's clearance from 1863, published 1888; the École Biblique campaigns of 1957–62 under de Vaux, Rousée and Duprez; and later re-examinations; elevations above ground are informed estimates.</p>
+            <sc-for list="{{ sources }}" as="s" hint-placeholder-count="10">
+              <div style="display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:start;padding-bottom:7px;border-bottom:1px solid #E2D8C0">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:#7C2317;padding-top:3px">{{ s.k }}</span>
+                <span style="font-family:'EB Garamond',serif;font-size:16px;line-height:1.5;color:#4A4030;text-wrap:pretty">{{ s.t }}</span>
+              </div>
+            </sc-for>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.5;color:#6A5D41;margin-top:8px">Corrections welcome — this is a Beta.</div>
+          </section>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ tabUse }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <p style="font-family:'EB Garamond',serif;font-size:16.5px;line-height:1.6;margin:0;color:#241E15;text-wrap:pretty">One site, nine phases, always drawn in the same frame and seen from the same angle unless you move it. Everything else here is a way of asking a question about that model — what changed, what survived, what is underneath, and where it all sits on the ground today.</p>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ howTo }}" as="h" hint-placeholder-count="10">
+                <div style="display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start;padding-bottom:10px;border-bottom:1px solid #E2D8C0">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:#7C2317;line-height:1.45;padding-top:2px">{{ h.k }}</div>
+                  <div style="font-family:'EB Garamond',serif;font-size:16px;line-height:1.52;color:#241E15;text-wrap:pretty">{{ h.v }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <p style="font-family:'EB Garamond',serif;font-size:15px;line-height:1.55;margin:0;color:#4A4030;text-wrap:pretty">Escape closes any panel. On a narrow screen the three columns scroll sideways rather than stacking, so the model keeps its proportions.</p>
+            <p style="font-family:'EB Garamond',serif;font-size:15px;line-height:1.55;margin:0;color:#4A4030;text-wrap:pretty">The timeline is spaced evenly by phase, not by elapsed years. Left and right arrow keys move through time; press P for presenter mode, T to start the tour.</p>
+            <section style="display:flex;flex-direction:column;gap:9px">
+              <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">Overlaying another age</div>
+              <p style="font-family:'EB Garamond',serif;font-size:15px;line-height:1.55;margin:0;color:#3B3225;text-wrap:pretty">The model can ghost the previous or next building phase behind the current one, or overlay the site as it looks today or in the age of the Gospel — a faint second layer for seeing what changed. This is a background rendering option rather than a control most readers need, so it isn't exposed on the main screen.</p>
+            </section>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ tabBio }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div>
+              <div style="font-family:'EB Garamond',serif;font-size:26px;font-weight:600;line-height:1.15">Taylor Halverson, Ph.D.</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#7E5F21;margin-top:8px">Author · Teacher · Tour leader · Scripture scholar</div>
+            </div>
+            <p style="font-family:'EB Garamond',serif;font-size:16.5px;line-height:1.6;margin:0;color:#241E15;text-wrap:pretty">Taylor Halverson is a scholar of scripture and a teacher of learners — an entrepreneurship professor in the BYU Marriott School of Business who spends his working life helping people find and act on the best ideas and tools available to them.</p>
+            <p style="font-family:'EB Garamond',serif;font-size:16.5px;line-height:1.6;margin:0;color:#241E15;text-wrap:pretty">He is the author and editor of more than fifty books and nearly a thousand articles and blog posts, and a builder of scripture study resources: the ScripturePlus app with Scripture Central, whose scripture YouTube channel he co-hosted to more than fifty million views, and BYU's Virtual Scripture Group, whose team spent more than five years reconstructing New Testament Jerusalem in three dimensions. This atlas of Bethesda belongs to that same body of work — tools made so that ordinary readers can see what specialists see.</p>
+            <p style="font-family:'EB Garamond',serif;font-size:16.5px;line-height:1.6;margin:0;color:#241E15;text-wrap:pretty">He leads tours to Israel and the Middle East, China, India, Central America, Europe, and the national parks of the American West, where he unfolds how geology, geography, civilization, and scriptural texts created our beautiful present day.</p>
+            <section style="display:flex;flex-direction:column;gap:7px">
+              <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">Academic training</div>
+              <sc-for list="{{ degrees }}" as="deg" hint-placeholder-count="4">
+                <div style="font-family:'EB Garamond',serif;font-size:15.5px;line-height:1.5;color:#241E15">{{ deg }}</div>
+              </sc-for>
+              <p style="font-family:'EB Garamond',serif;font-size:15px;font-style:italic;line-height:1.55;margin:8px 0 0;color:#5A4E3A;text-wrap:pretty">Two doctorates in two separate fields — the ancient world, and the design of learning. Both of them are in this tool.</p>
+            </section>
+            <section style="display:flex;flex-direction:column;gap:7px">
+              <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">Elsewhere</div>
+              <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#7C2317">insights.taylorhalverson.com</a>
+              <a href="https://books.taylorhalverson.com" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#7C2317">books.taylorhalverson.com</a>
+              <a href="https://exodustours.com" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#7C2317">exodustours.com</a>
+            </section>
+          </div>
+          </sc-if>
+
+
+          <sc-if value="{{ tabJohn }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:20px">
+            <div>
+              <div style="font-family:'EB Garamond',serif;font-size:26px;font-weight:600;line-height:1.15">John 5:1–16</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#7E5F21;margin-top:7px">The whole passage, not only the pinned verses</div>
+            </div>
+            <section style="border:1.5px solid #201A12;background:#EFE8D6;padding:12px 15px;display:flex;flex-direction:column;gap:9px">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#7C2317">Translation</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <sc-for list="{{ transButtons }}" as="tb" hint-placeholder-count="2">
+                  <button type="button" onClick="{{ tb.pick }}" aria-pressed="{{ tb.on }}" style="{{ tb.style }}">{{ tb.short }} · {{ tb.name }}</button>
+                </sc-for>
+              </div>
+              <div style="font-family:'EB Garamond',serif;font-size:14px;line-height:1.5;color:#241E15;text-wrap:pretty">{{ transNote }}</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.5;color:#5A4E3A">{{ transStatus }}</div>
+              <p style="font-family:'EB Garamond',serif;font-size:13.5px;font-style:italic;line-height:1.5;margin:0;color:#5A4E3A;text-wrap:pretty">The 1901 American Standard Version is in the public domain in the United States and is used throughout this edition. Verse 4 is printed only in the margin, not the main text; read the note on verse 4 above for why.</p>
+            </section>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ john }}" as="vs" hint-placeholder-count="16">
+                <div style="display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start">
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#7E5F21;padding-top:5px">{{ vs.v }}</span>
+                  <div style="display:flex;flex-direction:column;gap:5px">
+                    <p style="font-family:'EB Garamond',serif;font-size:16px;line-height:1.55;margin:0;color:#241E15;text-wrap:pretty">{{ vs.t }}</p>
+                    <sc-if value="{{ vs.hasNote }}" hint-placeholder-val="{{ false }}">
+                      <p style="font-family:'EB Garamond',serif;font-size:13.5px;font-style:italic;line-height:1.5;margin:0;color:#5A4E3A;border-left:2px solid #C6A25A;padding-left:10px;text-wrap:pretty">{{ vs.note }}</p>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <section style="display:flex;flex-direction:column;gap:11px">
+              <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">Where else scripture touches this site</div>
+              <sc-for list="{{ crossrefs }}" as="cr" hint-placeholder-count="8">
+                <div style="display:grid;grid-template-columns:172px 1fr;gap:14px;align-items:start;padding-bottom:9px;border-bottom:1px solid #E2D8C0">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.04em;color:#7C2317;line-height:1.45">{{ cr.ref }}</div>
+                  <div style="display:flex;flex-direction:column;gap:3px">
+                    <div style="font-family:'EB Garamond',serif;font-size:16px;line-height:1.5;color:#241E15;text-wrap:pretty">{{ cr.t }}</div>
+                    <div style="font-family:'EB Garamond',serif;font-size:13.5px;font-style:italic;color:#5A4E3A">{{ cr.tie }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </section>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ tabCredits }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:22px">
+            <div>
+              <div style="font-family:'EB Garamond',serif;font-size:26px;font-weight:600;line-height:1.15">Credits</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#7E5F21;margin-top:7px">Sources and acknowledgements</div>
+            </div>
+            <p style="font-family:'EB Garamond',serif;font-size:15.5px;line-height:1.55;margin:0;color:#3B3225;text-wrap:pretty">Sources, texts, illustrations and typefaces used in this atlas.</p>
+
+            <sc-for list="{{ credits }}" as="cg" hint-placeholder-count="7">
+              <section style="display:flex;flex-direction:column;gap:9px">
+                <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">{{ cg.group }}</div>
+                <sc-if value="{{ cg.hasLead }}" hint-placeholder-val="{{ false }}">
+                  <p style="font-family:'EB Garamond',serif;font-size:14.5px;font-style:italic;line-height:1.55;margin:0;color:#5A4E3A;text-wrap:pretty">{{ cg.lead }}</p>
+                </sc-if>
+                <sc-for list="{{ cg.items }}" as="ci" hint-placeholder-count="4">
+                  <div style="display:flex;flex-direction:column;gap:2px;padding-bottom:9px;border-bottom:1px solid #E9E0CB">
+                    <div style="font-family:'EB Garamond',serif;font-size:16px;font-weight:600;line-height:1.35;color:#201A12;text-wrap:pretty">{{ ci.n }}</div>
+                    <div style="font-family:'EB Garamond',serif;font-size:16px;line-height:1.55;color:#3B3225;text-wrap:pretty">{{ ci.t }}</div>
+                  </div>
+                </sc-for>
+              </section>
+            </sc-for>
+
+            <section style="display:flex;flex-direction:column;gap:9px">
+              <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">Using this atlas</div>
+              <sc-for list="{{ creditsUse }}" as="cu" hint-placeholder-count="3">
+                <div style="display:flex;flex-direction:column;gap:2px;padding-bottom:9px;border-bottom:1px solid #E9E0CB">
+                  <div style="font-family:'EB Garamond',serif;font-size:16px;font-weight:600;line-height:1.35;color:#201A12">{{ cu.n }}</div>
+                  <div style="font-family:'EB Garamond',serif;font-size:16px;line-height:1.55;color:#3B3225;text-wrap:pretty">{{ cu.t }}</div>
+                </div>
+              </sc-for>
+            </section>
+
+            <section style="border:1.5px solid #201A12;background:#EFE8D6;padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#7C2317">Font notices</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{ fontNotices }}" as="fn" hint-placeholder-count="3">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.5;color:#241E15;word-break:break-word">{{ fn }}</div>
+                </sc-for>
+              </div>
+              <button type="button" onClick="{{ toggleOfl }}" style="{{ oflBtnStyle }}">{{ oflLabel }}</button>
+              <sc-if value="{{ oflOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:12px;border-top:1px solid #DFCFA8;padding-top:12px">
+                  <sc-for list="{{ oflText }}" as="ox" hint-placeholder-count="6">
+                    <div style="display:flex;flex-direction:column;gap:4px">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#7C2317">{{ ox.h }}</span>
+                      <span style="font-family:'EB Garamond',serif;font-size:13.5px;line-height:1.5;color:#241E15;white-space:pre-wrap;text-wrap:pretty">{{ ox.t }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </section>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ tabLegal }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div>
+              <div style="font-family:'EB Garamond',serif;font-size:26px;font-weight:600;line-height:1.15">Terms of Use, Refund Policy &amp; License</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#7E5F21;margin-top:7px">Effective September 8, 2026</div>
+            </div>
+            <p style="font-family:'EB Garamond',serif;font-size:16px;line-height:1.6;margin:0;color:#241E15;text-wrap:pretty">This product is a Beta: an interactive model of nine building phases of the Pool of Bethesda site, with accompanying essays, a self-check quiz, and reference material, published by Taylor Halverson, Ph.D. ("Publisher"). It is a teaching aid and reconstruction, not a survey document — see The site tab's Accuracy &amp; limits section for what that means.</p>
+            <sc-for list="{{ legalSections }}" as="ls" hint-placeholder-count="7">
+              <section style="display:flex;flex-direction:column;gap:5px">
+                <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">{{ ls.h }}</div>
+                <p style="font-family:'EB Garamond',serif;font-size:15px;line-height:1.55;margin:0;color:#3B3225;text-wrap:pretty">{{ ls.t }}</p>
+              </section>
+            </sc-for>
+
+            <div style="margin-top:8px">
+              <div style="font-family:'EB Garamond',serif;font-size:22px;font-weight:600;line-height:1.15">Privacy Notice</div>
+            </div>
+            <sc-for list="{{ privacySections }}" as="ps" hint-placeholder-count="6">
+              <section style="display:flex;flex-direction:column;gap:5px">
+                <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">{{ ps.h }}</div>
+                <p style="font-family:'EB Garamond',serif;font-size:15px;line-height:1.55;margin:0;color:#3B3225;text-wrap:pretty">{{ ps.t }}</p>
+              </section>
+            </sc-for>
+
+            <div style="margin-top:8px">
+              <div style="font-family:'EB Garamond',serif;font-size:22px;font-weight:600;line-height:1.15">Image Rights Policy</div>
+            </div>
+            <sc-for list="{{ imageRightsSections }}" as="irs" hint-placeholder-count="5">
+              <section style="display:flex;flex-direction:column;gap:5px">
+                <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">{{ irs.h }}</div>
+                <p style="font-family:'EB Garamond',serif;font-size:15px;line-height:1.55;margin:0;color:#3B3225;text-wrap:pretty">{{ irs.t }}</p>
+              </section>
+            </sc-for>
+          </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ quizOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeQuiz }}" style="position:fixed;inset:0;z-index:44;background:rgba(24,20,14,0.62);display:flex;align-items:center;justify-content:center;padding:30px">
+      <div onClick="{{ stop }}" ref="{{ modalRef }}" role="dialog" aria-modal="true" aria-label="Self-check: seventeen questions on the nine phases" tabIndex="-1" class="bx" style="width:min(760px,100%);max-height:90vh;overflow-y:auto;background:#F3ECDC;border:1.5px solid #201A12;box-shadow:0 24px 60px rgba(24,20,14,0.4)">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:20px 28px 15px;border-bottom:1.5px solid #201A12;background:#E9E1CE;position:sticky;top:0">
+          <div>
+            <div style="font-family:'EB Garamond',serif;font-size:25px;font-weight:600;line-height:1.15">Self-check</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#7E5F21;margin-top:6px">{{ quizScoreLine }}</div>
+          </div>
+          <button type="button" onClick="{{ closeQuiz }}" style="font-family:'IBM Plex Mono',monospace;font-size:11px;padding:6px 11px;background:#DED3B8;border:1.2px solid #201A12;cursor:pointer;color:#201A12;flex:none">Close ✕</button>
+        </div>
+        <div style="padding:20px 28px 30px;display:flex;flex-direction:column;gap:24px">
+
+          <section style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">1 · Put each phase with its dates</div>
+            <sc-for list="{{ quizMatch }}" as="mp" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:1fr 210px 20px;gap:10px;align-items:center">
+                <span style="font-family:'EB Garamond',serif;font-size:15.5px;color:#241E15">{{ mp.label }}</span>
+                <select value="{{ mp.value }}" onChange="{{ mp.set }}" style="font-family:'IBM Plex Mono',monospace;font-size:11px;padding:5px 6px;background:#DED3B8;border:1.2px solid #C0B295;color:#201A12">
+                  <option value="">— choose —</option>
+                  <sc-for list="{{ quizDateOptions }}" as="op" hint-placeholder-count="6">
+                    <option value="{{ op }}">{{ op }}</option>
+                  </sc-for>
+                </select>
+                <span style="{{ mp.markStyle }}">{{ mp.mark }}</span>
+              </div>
+            </sc-for>
+          </section>
+
+          <section style="display:flex;flex-direction:column;gap:9px">
+            <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">2 · Could a visitor in AD 30 have seen it?</div>
+            <sc-for list="{{ quizSeen }}" as="si" hint-placeholder-count="8">
+              <div style="display:flex;flex-direction:column;gap:4px;padding-bottom:8px;border-bottom:1px solid #E2D8C0">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="display:flex;gap:4px;flex:none">
+                    <button type="button" onClick="{{ si.yes }}" style="{{ si.yesStyle }}">Yes</button>
+                    <button type="button" onClick="{{ si.no }}" style="{{ si.noStyle }}">No</button>
+                  </div>
+                  <span style="font-family:'EB Garamond',serif;font-size:15px;line-height:1.4;color:#241E15;text-wrap:pretty">{{ si.t }}</span>
+                  <span style="{{ si.markStyle }}">{{ si.mark }}</span>
+                </div>
+                <sc-if value="{{ si.showWhy }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-family:'EB Garamond',serif;font-size:13.5px;font-style:italic;line-height:1.5;color:#5A4E3A;padding-left:78px;text-wrap:pretty">{{ si.why }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </section>
+
+          <section style="display:flex;flex-direction:column;gap:14px">
+            <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:6px">3 · Three from the model</div>
+            <sc-for list="{{ quizFacts }}" as="fi" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <div style="display:flex;align-items:baseline;gap:9px">
+                  <span style="font-family:'EB Garamond',serif;font-size:15.5px;line-height:1.45;color:#241E15;text-wrap:pretty">{{ fi.q }}</span>
+                  <span style="{{ fi.markStyle }}">{{ fi.mark }}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <sc-for list="{{ fi.options }}" as="op" hint-placeholder-count="3">
+                    <button type="button" onClick="{{ op.pick }}" style="{{ op.style }}">{{ op.t }}</button>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ fi.showWhy }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-family:'EB Garamond',serif;font-size:13.5px;font-style:italic;line-height:1.5;color:#5A4E3A;text-wrap:pretty">{{ fi.why }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </section>
+
+          <div style="display:flex;gap:8px;align-items:center;border-top:1.5px solid #201A12;padding-top:15px">
+            <button type="button" onClick="{{ quizCheck }}" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:8px 14px;background:#7C2317;border:1.2px solid #7C2317;cursor:pointer;color:#F3ECDC">Check my answers</button>
+            <button type="button" onClick="{{ quizReset }}" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:8px 14px;background:#DED3B8;border:1.2px solid #C0B295;cursor:pointer;color:#3B3225">Start again</button>
+            <span style="font-family:'EB Garamond',serif;font-size:14px;font-style:italic;color:#5A4E3A">{{ quizHint }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1600,&quot;height&quot;:1000},&quot;startPeriod&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:2,&quot;min&quot;:0,&quot;max&quot;:8,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Start state&quot;},&quot;showLabels&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Start state&quot;},&quot;overlayMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;prev&quot;,&quot;next&quot;,&quot;modern&quot;,&quot;herodian&quot;],&quot;default&quot;:&quot;prev&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Start state&quot;},&quot;overlayStrength&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.5,&quot;min&quot;:0.15,&quot;max&quot;:1,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Start state&quot;},&quot;showFigures&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Teaching&quot;},&quot;tourSeconds&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:14,&quot;min&quot;:5,&quot;max&quot;:60,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Teaching&quot;},&quot;startPresenting&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Teaching&quot;}}">
+class Component extends DCLogic {
+  state = {
+    idx: 2, compare: "none", ghost: 0.5, labels: true, hover: null, data: null, leftVisible: false, rightVisible: false, menuOpen: false, timelineOpen: true,
+    secOpen: { view: false, reading: false, key: false, overlay: false, gospel: false },
+    yaw: 28, tilt: 52, zoom: 1.15, spinning: false,
+    modelOpacity: 1, solo: false, preSolo: 1, about: false, aboutTab: "site", trans: "asv",
+    teach: null, viewMode: "model", pins: true, porticoNums: true, newMode: "off",
+    pinIdx: null, focusTarget: null, touchOrbit: false,
+    elev: -9, note: false, takeaway: false, mBox: null, sBox: null,
+    figures: true, measureOn: false, measure: null, present: false,
+    evidenceOn: false, gospel: null,
+    tourOn: false, tourPaused: false, quizOpen: false, copied: false,
+    quiz: { match: {}, seen: {}, facts: {}, checked: false }, ofl: false
+  };
+  _pan = { x: 0, y: 0 };
+
+  // the data files are plain scripts, so they work in a single offline file;
+  // wait for them rather than assuming the helmet has finished loading
+  whenLoaded() {
+    return new Promise((resolve) => {
+      const tick = () => {
+        const B = window.BETHESDA;
+        if (B && B.PERIODS && B.essaysA && B.essaysB && B.PINS && B.JOHN5_ASV) return resolve(B);
+        setTimeout(tick, 25); // timers keep running when the document is hidden; rAF does not
+      };
+      tick();
+    });
+  }
+
+  componentDidMount() {
+    this.whenLoaded().then((B) => {
+      const site = B, a = B, b = B, teach = B, ref = B;
+      this.teach = teach;
+      this.ref = ref;
+      const h = this.readHash();
+      this.setState({
+        data: {
+          PERIODS: site.PERIODS, CATS: site.CATS, CENTER: site.CENTER,
+          EVIDENCE_TIERS: site.EVIDENCE_TIERS || [], CAT_TIER: site.CAT_TIER || {}, GOSPEL: site.GOSPEL_SETTINGS || null,
+          essays: Object.assign({}, a.essaysA, b.essaysB)
+        },
+        idx: (() => {
+          let want = h.period;
+          if (want == null) want = this.readLastPeriod();
+          if (want == null) want = this.props.startPeriod ?? 2;
+          return Math.min(site.PERIODS.length - 1, Math.max(0, want));
+        })(),
+        viewMode: h.view || "model",
+        pinIdx: h.pin == null ? null : h.pin,
+        about: !!(h.panel && h.panel !== "quiz" && this.ABOUT_TABS[h.panel]),
+        aboutTab: (h.panel && this.ABOUT_TABS[h.panel]) || "site",
+        quizOpen: h.panel === "quiz",
+        labels: this.props.showLabels ?? true,
+        ghost: this.props.overlayStrength ?? 0.5,
+        compare: this.props.overlayMode ?? "prev",
+        figures: this.props.showFigures ?? true,
+        present: this.props.startPresenting ?? false
+      });
+    });
+    window.addEventListener("keydown", this.onKey);
+    window.addEventListener("hashchange", this.applyHash);
+    window.addEventListener("mousemove", this.onMove);
+    window.addEventListener("mouseup", this.onUp);
+    window.addEventListener("resize", this.remeasure);
+    // the pane is still growing while the template streams: check again once it settles
+    requestAnimationFrame(() => { this.remeasure(); requestAnimationFrame(this.remeasure); });
+    setTimeout(this.remeasure, 120);
+    setTimeout(this.remeasure, 600);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(this.remeasure);
+    try {
+      this._reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    } catch (err) { this._reduced = false; }
+  }
+
+  // ---- deep links: #period=4&view=section&pin=2&panel=john ----------------
+  // Every value currentHash() can write must be readable back, or Copy link
+  // hands out an address that this page then silently rewrites.
+  PANELS = ["about", "use", "bio", "john", "licences", "attributions", "legal", "quiz"];
+  ABOUT_TABS = { about: "site", use: "use", bio: "bio", john: "john", licences: "credits", attributions: "credits", legal: "legal" };
+  // A link pasted into an already-open tab must land too, not only on a cold load.
+  applyHash = () => {
+    if ((window.location.hash || "") === (this._lastHash || "")) return;
+    const h = this.readHash();
+    if (h.period == null && !h.view && h.pin == null && !h.panel) return;
+    const n = (this.state.data && this.state.data.PERIODS.length) || 9;
+    this.setState({
+      idx: h.period == null ? this.state.idx : Math.min(n - 1, Math.max(0, h.period)),
+      viewMode: h.view || "model",
+      pinIdx: h.pin == null ? null : h.pin,
+      about: !!(h.panel && h.panel !== "quiz" && this.ABOUT_TABS[h.panel]),
+      aboutTab: (h.panel && this.ABOUT_TABS[h.panel]) || "site",
+      quizOpen: h.panel === "quiz",
+      measure: null
+    });
+  };
+  readHash() {
+    const raw = (window.location.hash || "").replace(/^#/, "");
+    const out = { period: null, view: null, pin: null, panel: null };
+    raw.split("&").forEach((part) => {
+      const eq = part.indexOf("=");
+      if (eq < 1) return;
+      const k = part.slice(0, eq), v = decodeURIComponent(part.slice(eq + 1));
+      if (k === "period" && /^\d+$/.test(v)) out.period = Number(v);
+      else if (k === "view" && /^(model|section)$/.test(v)) out.view = v;
+      else if (k === "pin" && /^\d+$/.test(v)) out.pin = Math.max(0, Number(v) - 1);
+      else if (k === "panel" && this.PANELS.indexOf(v) >= 0) out.panel = v;
+    });
+    return out;
+  }
+  currentHash() {
+    const bits = ["period=" + this.state.idx];
+    if (this.state.viewMode !== "model") bits.push("view=" + this.state.viewMode);
+    if (this.state.pinIdx != null) bits.push("pin=" + (this.state.pinIdx + 1));
+    if (this.state.quizOpen) bits.push("panel=quiz");
+    else if (this.state.about) {
+      const t = this.state.aboutTab;
+      bits.push("panel=" + (t === "site" ? "about" : t === "credits" ? "attributions" : t));
+    }
+    return "#" + bits.join("&");
+  }
+  syncHash() {
+    const next = this.currentHash();
+    if (next === this._lastHash) return;
+    this._lastHash = next;
+    try { window.history.replaceState(null, "", next); } catch (err) { /* file:// */ }
+  }
+  readLastPeriod() {
+    try {
+      const v = window.localStorage.getItem("bethesda.lastPeriod");
+      return v == null || !/^\d+$/.test(v) ? null : Number(v);
+    } catch (err) { return null; }
+  }
+  saveLastPeriod(n) {
+    try { window.localStorage.setItem("bethesda.lastPeriod", String(n)); } catch (err) { /* ignore */ }
+  }
+  copyLink = () => {
+    const url = window.location.href.split("#")[0] + this.currentHash();
+    const done = () => {
+      this.setState({ copied: true });
+      if (this._copyT) clearTimeout(this._copyT);
+      this._copyT = setTimeout(() => this.setState({ copied: false }), 1800);
+    };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, done);
+      else done();
+    } catch (err) { done(); }
+  };
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this.onKey);
+    window.removeEventListener("hashchange", this.applyHash);
+    window.removeEventListener("mousemove", this.onMove);
+    window.removeEventListener("mouseup", this.onUp);
+    window.removeEventListener("resize", this.remeasure);
+    if (this.timer) clearInterval(this.timer);
+    if (this._tour) clearInterval(this._tour);
+    if (this._copyT) clearTimeout(this._copyT);
+    if (this._raf) cancelAnimationFrame(this._raf);
+  }
+
+  // alignment is fixed by survey; end users cannot move it
+
+  onKey = (e) => {
+    if (e.key === "Escape") {
+      this.setState({ about: false, quizOpen: false, pinIdx: null, present: false });
+      return;
+    }
+    if (this.state.about || this.state.quizOpen) {
+      if (e.key === "Tab") this.trapTab(e);
+      return;
+    }
+    const t = e.target || {};
+    const tag = (t.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "select" || tag === "textarea") return;
+    if (e.key === "p" || e.key === "P") { this.togglePresent(); return; }
+    if (e.key === "t" || e.key === "T") { this.toggleTour(); return; }
+    if (tag === "svg" || (t.closest && t.closest("svg"))) return; // the model owns the arrows
+    if (e.key === "ArrowRight") this.step(1);
+    else if (e.key === "ArrowLeft") this.step(-1);
+  };
+
+  // arrow keys turn the model when it has focus, so it is reachable without a mouse
+  modelKey = (e) => {
+    const k = e.key;
+    const big = e.shiftKey;
+    if (k === "ArrowLeft" || k === "ArrowRight") {
+      e.preventDefault();
+      const d = (k === "ArrowRight" ? 1 : -1) * (big ? 15 : 5);
+      this.setState((st) => ({ yaw: (((st.yaw + d) % 360) + 360) % 360 }));
+    } else if (k === "ArrowUp" || k === "ArrowDown") {
+      e.preventDefault();
+      const d = (k === "ArrowUp" ? 1 : -1) * (big ? 12 : 4);
+      this.setState((st) => ({ tilt: Math.max(12, Math.min(90, st.tilt + d)) }));
+    } else if (k === "+" || k === "=") {
+      e.preventDefault();
+      this.setState((st) => ({ zoom: Math.min(1.8, Math.round((st.zoom + 0.1) * 100) / 100) }));
+    } else if (k === "-" || k === "_") {
+      e.preventDefault();
+      this.setState((st) => ({ zoom: Math.max(0.65, Math.round((st.zoom - 0.1) * 100) / 100) }));
+    } else if (k === "Home") {
+      e.preventDefault();
+      this.setState({ yaw: 28, tilt: 52, zoom: 1.15, focusTarget: null });
+    }
+  };
+
+  // ---- measure on the ground plane ---------------------------------------
+  unproject(sx, sy) {
+    const { CENTER } = this.state.data;
+    const a = (this.state.yaw * Math.PI) / 180;
+    const t = (this.state.tilt * Math.PI) / 180;
+    const S = 1.02 * this.state.zoom;
+    const st = Math.max(0.08, Math.sin(t));
+    const xr = (sx - this._pan.x) / S;
+    const yr = (sy - this._pan.y) / (S * st);
+    return {
+      x: xr * Math.cos(a) + yr * Math.sin(a) + CENTER.x,
+      y: -xr * Math.sin(a) + yr * Math.cos(a) + CENTER.y
+    };
+  }
+  modelClick = (e) => {
+    if (!this.state.measureOn || !this.state.data || !this._svg) return;
+    if (this._moved) return;
+    const r = this._svg.getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    const k = Math.min(r.width / 280, r.height / 250);
+    const ox = (r.width - 280 * k) / 2 + 140 * k;
+    const oy = (r.height - 250 * k) / 2 + 128 * k;
+    const sx = (e.clientX - r.left - ox) / k;
+    const sy = (e.clientY - r.top - oy) / k;
+    const p = this.unproject(sx, sy);
+    this.setState((st) => {
+      const cur = st.measure;
+      if (!cur || cur.length >= 2) return { measure: [p] };
+      return { measure: [cur[0], p] };
+    });
+  };
+  toggleMeasure = () => this.setState((st) => ({ measureOn: !st.measureOn, measure: null }));
+  clearMeasure = () => this.setState({ measure: null });
+
+  // ---- guided tour and presenter mode -------------------------------------
+  // The tour advances on a timer, but every manual move re-arms that timer, so
+  // clicking through the phases yourself never fights the clock.
+  armTour() {
+    if (this._tour) { clearInterval(this._tour); this._tour = null; }
+    if (!this.state.tourOn || this.state.tourPaused) return;
+    this._tour = setInterval(() => {
+      this.setState((st) => {
+        const n = (st.data && st.data.PERIODS.length) || 9;
+        if (st.idx >= n - 1) {
+          clearInterval(this._tour); this._tour = null;
+          return { tourOn: false, tourPaused: false };
+        }
+        return { idx: st.idx + 1, yaw: (28 + (st.idx + 1) * 7) % 360 };
+      });
+    }, Math.max(3, this.props.tourSeconds ?? 14) * 1000);
+  }
+  toggleTour = () => {
+    if (this.state.tourOn) {
+      if (this._tour) { clearInterval(this._tour); this._tour = null; }
+      this.setState({ tourOn: false, tourPaused: false });
+      return;
+    }
+    if (this.timer) { clearInterval(this.timer); this.timer = null; }
+    this.setState(
+      { tourOn: true, tourPaused: false, spinning: false, idx: 0, focusTarget: null, yaw: 28, tilt: 52, zoom: 1.15 },
+      () => this.armTour()
+    );
+  };
+  tourGo = (d) => {
+    const n = (this.state.data && this.state.data.PERIODS.length) || 9;
+    this.setState((st) => ({
+      idx: Math.min(n - 1, Math.max(0, st.idx + d)),
+      yaw: (28 + Math.min(n - 1, Math.max(0, st.idx + d)) * 7) % 360
+    }), () => this.armTour());
+  };
+  tourPause = () => this.setState((st) => ({ tourPaused: !st.tourPaused }), () => this.armTour());
+  // any jump on the timeline while the tour runs restarts the dwell
+  tourTouched() { if (this.state.tourOn) this.armTour(); }
+  togglePresent = () => this.setState((st) => ({ present: !st.present }));
+  openLeftPanel = () => this.setState({ leftVisible: true });
+  openRightPanel = () => this.setState({ rightVisible: true });
+  closeLeftPanel = () => this.setState({ leftVisible: false });
+  closeRightPanel = () => this.setState({ rightVisible: false });
+  closePanel = () => this.setState({ leftVisible: false, rightVisible: false });
+
+  // ---- self-check ---------------------------------------------------------
+  setQuiz = (group, key, value) => this.setState((st) => {
+    const q = Object.assign({}, st.quiz);
+    q[group] = Object.assign({}, q[group]); q[group][key] = value;
+    return { quiz: q };
+  });
+  quizCheck = () => this.setState((st) => ({ quiz: Object.assign({}, st.quiz, { checked: true }) }));
+  quizReset = () => this.setState({ quiz: { match: {}, seen: {}, facts: {}, checked: false } });
+  drag = null;
+  onDown = (e) => {
+    this.drag = {
+      x: e.clientX, y: e.clientY, yaw: this.state.yaw, tilt: this.state.tilt,
+    };
+  };
+  // one render per frame: pointer events fire far faster than the model can draw
+  onMove = (e) => {
+    if (!this.drag) return;
+    this._at = { x: e.clientX, y: e.clientY };
+    this.frame(0.45, 0.28);
+  };
+  frame(kx, ky) {
+    if (this._raf) return;
+    this._raf = requestAnimationFrame(() => {
+      this._raf = null;
+      if (!this.drag || !this._at) return;
+      const dx = this._at.x - this.drag.x, dy = this._at.y - this.drag.y;
+      if (Math.abs(dx) > 2 || Math.abs(dy) > 2) this._moved = true;
+      this.setState({
+        yaw: (((this.drag.yaw + dx * kx) % 360) + 360) % 360,
+        tilt: Math.max(12, Math.min(90, this.drag.tilt + dy * ky))
+      });
+    });
+  }
+  onUp = () => {
+    this.drag = null;
+    if (this._raf) { cancelAnimationFrame(this._raf); this._raf = null; }
+    setTimeout(() => { this._moved = false; }, 0);
+  };
+
+  step(d) {
+    const n = (this.state.data && this.state.data.PERIODS.length) || 1;
+    this.setState((s) => ({ idx: Math.min(n - 1, Math.max(0, s.idx + d)) }), () => this.tourTouched());
+  }
+
+  toggleSpin = () => {
+    if (this.timer) { clearInterval(this.timer); this.timer = null; this.setState({ spinning: false }); return; }
+    if (this._reduced) {
+      this.setState({ hover: "Continuous rotation is off because this device asks for reduced motion. Use the Turn slider, or the arrow keys with the model focused." });
+      return;
+    }
+    this.timer = setInterval(() => this.setState((s) => ({ yaw: (s.yaw + 0.6) % 360 })), 40);
+    this.setState({ spinning: true });
+  };
+
+  ghostIndex() {
+    const { compare, idx, data } = this.state;
+    const last = data.PERIODS.length - 1;
+    if (compare === "prev") return idx > 0 ? idx - 1 : -1;
+    if (compare === "next") return idx < last ? idx + 1 : -1;
+    if (compare === "modern") return idx === last ? -1 : last;
+    if (compare === "herodian") return idx === 2 ? -1 : 2;
+    return -1;
+  }
+
+  // ---- geometry helpers -------------------------------------------------
+  shade(hex, f) {
+    const n = parseInt(hex.slice(1), 16);
+    const c = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) =>
+      Math.max(0, Math.min(255, Math.round(v * f)))
+    );
+    return "#" + c.map((v) => v.toString(16).padStart(2, "0")).join("");
+  }
+
+  proj(x, y, z) {
+    const { CENTER } = this.state.data;
+    const a = (this.state.yaw * Math.PI) / 180, t = (this.state.tilt * Math.PI) / 180;
+    const S = 1.02 * this.state.zoom;
+    const X = x - CENTER.x, Y = y - CENTER.y;
+    const xr = X * Math.cos(a) - Y * Math.sin(a);
+    const yr = X * Math.sin(a) + Y * Math.cos(a);
+    return {
+      sx: xr * S + this._pan.x,
+      sy: (yr * Math.sin(t) - z * Math.cos(t)) * S + this._pan.y,
+      d: yr * Math.cos(t) + z * Math.sin(t)
+    };
+  }
+
+  ring(poly, z) { return poly.map(([x, y]) => this.proj(x, y, z)); }
+  pts(list) { return list.map((p) => p.sx.toFixed(2) + "," + p.sy.toFixed(2)).join(" "); }
+  avgD(list) { return list.reduce((s, p) => s + p.d, 0) / list.length; }
+
+  centroid(poly) {
+    let x = 0, y = 0;
+    poly.forEach((p) => { x += p[0]; y += p[1]; });
+    return [x / poly.length, y / poly.length];
+  }
+
+  // outward normal of edge i, rotated into view space
+  edgeNormal(poly, i, cx, cy) {
+    const p1 = poly[i], p2 = poly[(i + 1) % poly.length];
+    let nx = p2[1] - p1[1], ny = -(p2[0] - p1[0]);
+    const mx = (p1[0] + p2[0]) / 2 - cx, my = (p1[1] + p2[1]) / 2 - cy;
+    if (nx * mx + ny * my < 0) { nx = -nx; ny = -ny; }
+    const len = Math.hypot(nx, ny) || 1;
+    nx /= len; ny /= len;
+    const a = (this.state.yaw * Math.PI) / 180;
+    return { x: nx * Math.cos(a) - ny * Math.sin(a), y: nx * Math.sin(a) + ny * Math.cos(a) };
+  }
+
+  boxFaces(poly, z0, z1, color, label, enter, out) {
+    const [cx, cy] = this.centroid(poly);
+    for (let i = 0; i < poly.length; i++) {
+      const n = this.edgeNormal(poly, i, cx, cy);
+      if (n.y <= 0.02) continue;
+      const p1 = poly[i], p2 = poly[(i + 1) % poly.length];
+      const q = [
+        this.proj(p1[0], p1[1], z1), this.proj(p2[0], p2[1], z1),
+        this.proj(p2[0], p2[1], z0), this.proj(p1[0], p1[1], z0)
+      ];
+      out.push({
+        pts: this.pts(q), fill: this.shade(color, 0.62 + 0.26 * (-n.x)),
+        stroke: this.shade(color, 0.45), fo: 1, key: this.avgD(q), label, enter
+      });
+    }
+    const top = this.ring(poly, z1);
+    out.push({
+      pts: this.pts(top), fill: this.shade(color, 1.1), stroke: this.shade(color, 0.45),
+      fo: 1, key: this.avgD(top) + 0.4, label, enter
+    });
+  }
+
+  pitFaces(f, C, enter, out) {
+    const poly = f.poly, floorZ = -f.depth;
+    const surfaceZ = f.water > 0 ? floorZ + f.water : floorZ;
+    const wallCol = C[f.cat].fill;
+    const [cx, cy] = this.centroid(poly);
+    const surf = this.ring(poly, surfaceZ);
+    out.push({
+      pts: this.pts(surf),
+      fill: f.water > 0 ? "#3E8380" : this.shade(wallCol, 0.72),
+      stroke: f.water > 0 ? "#255553" : this.shade(wallCol, 0.5),
+      fo: 1, key: this.avgD(surf),
+      label: f.water > 0 ? f.label + " — water surface, about " + Math.round(f.depth - f.water) + " m below the rim" : f.label,
+      enter
+    });
+    for (let i = 0; i < poly.length; i++) {
+      const n = this.edgeNormal(poly, i, cx, cy);
+      if (n.y >= -0.02) continue; // only the far walls: we look down into the cutting
+      const p1 = poly[i], p2 = poly[(i + 1) % poly.length];
+      const q = [
+        this.proj(p1[0], p1[1], 0), this.proj(p2[0], p2[1], 0),
+        this.proj(p2[0], p2[1], surfaceZ), this.proj(p1[0], p1[1], surfaceZ)
+      ];
+      out.push({ pts: this.pts(q), fill: this.shade(wallCol, 0.86 + 0.12 * n.x), stroke: this.shade(wallCol, 0.5), fo: 1, key: this.avgD(q) + 0.2, label: f.label + " — rock-cut side, " + f.depth + " m deep", enter });
+    }
+    const rim = this.ring(poly, 0);
+    out.push({ pts: this.pts(rim), fill: "none", stroke: this.shade(wallCol, 0.42), fo: 0, key: this.avgD(rim) + 0.3, label: f.label, enter });
+  }
+
+  colonnadeFaces(f, C, enter, out) {
+    const col = C.colonnade.fill;
+    const [ax, ay] = f.a, [bx, by] = f.b;
+    const dx = bx - ax, dy = by - ay, len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len, uy = dy / len, px = -uy, py = ux;
+    const band = (hw, z0, z1) => {
+      const poly = [
+        [ax - px * hw - ux * 1.5, ay - py * hw - uy * 1.5],
+        [bx - px * hw + ux * 1.5, by - py * hw + uy * 1.5],
+        [bx + px * hw + ux * 1.5, by + py * hw + uy * 1.5],
+        [ax + px * hw - ux * 1.5, ay + py * hw - uy * 1.5]
+      ];
+      this.boxFaces(poly, z0, z1, col, f.label, enter, out);
+    };
+    band(2.6, -0.8, 0.6); // stylobate
+    for (let i = 0; i < f.n; i++) {
+      const t = f.n === 1 ? 0.5 : i / (f.n - 1);
+      const x = ax + dx * t, y = ay + dy * t, s = 0.8;
+      this.boxFaces([[x - s, y - s], [x + s, y - s], [x + s, y + s], [x - s, y + s]], 0.6, f.h, col, f.label, enter, out);
+    }
+    band(1.6, f.h, f.h + 1.6); // entablature
+  }
+
+  // ---- measure drawings so labels can be sized in real pixels ------------
+  // Every measured drawing is re-checked against its live rect after each render,
+  // so a size taken while the template was still streaming cannot persist.
+  remeasure = () => {
+    const store = this._els || (this._els = {});
+    const next = {};
+    let changed = false;
+    Object.keys(store).forEach((key) => {
+      const el = store[key];
+      if (!el || !el.isConnected) return;
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      const cur = this.state[key];
+      if (!cur || Math.abs(cur.w - r.width) > 0.5 || Math.abs(cur.h - r.height) > 0.5) {
+        next[key] = { w: r.width, h: r.height };
+        changed = true;
+      }
+    });
+    if (changed) this.setState(next);
+  };
+  makeMeasureRef(key) {
+    const store = this._els || (this._els = {});
+    return (el) => {
+      if (store[key] === el) return;
+      if (store[key] && store[key]._ro) { store[key]._ro.disconnect(); store[key]._ro = null; }
+      store[key] = el;
+      if (!el) return;
+      if (window.ResizeObserver) { const ro = new ResizeObserver(this.remeasure); ro.observe(el); el._ro = ro; }
+      this.remeasure();
+    };
+  }
+  componentDidUpdate(prevProps, prevState) {
+    this.remeasure();
+    this.syncHash();
+    if (!prevState || prevState.idx !== this.state.idx) this.saveLastPeriod(this.state.idx);
+    // a dialog takes focus when it opens and hands it back when it closes
+    const open = this.state.about || this.state.quizOpen;
+    if (open && !this._modalWas) {
+      this._returnTo = document.activeElement;
+      if (this._modalEl) this._modalEl.focus();
+    } else if (!open && this._modalWas && this._returnTo && this._returnTo.focus) {
+      this._returnTo.focus();
+      this._returnTo = null;
+    }
+    this._modalWas = open;
+  }
+  modalRef = (el) => { this._modalEl = el; };
+  // keep Tab inside the open dialog rather than behind it
+  trapTab(e) {
+    const el = this._modalEl;
+    if (!el) return;
+    const items = el.querySelectorAll("button, a[href], select, input, [tabindex]:not([tabindex='-1'])");
+    if (!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && (document.activeElement === first || document.activeElement === el)) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  }
+  _measureModel = this.makeMeasureRef("mBox");
+  secRef = this.makeMeasureRef("sBox");
+  modelRef = (el) => { this.svgRef(el); this._measureModel(el); };
+
+  // viewBox user units -> pixels inside the rendered svg (xMidYMid meet)
+  fit(box, vx, vy, vw, vh) {
+    if (!box || !box.w || !box.h) return null;
+    const k = Math.min(box.w / vw, box.h / vh);
+    const ox = (box.w - vw * k) / 2 - vx * k;
+    const oy = (box.h - vh * k) / 2 - vy * k;
+    return (x, y) => ({ left: ox + x * k, top: oy + y * k });
+  }
+
+  // ---- touch: one finger scrolls the page, two fingers turn the model ----
+  svgRef = (el) => {
+    if (this._svg === el) return;
+    if (this._svg) {
+      this._svg.removeEventListener("touchstart", this.onTouchStart);
+      this._svg.removeEventListener("touchmove", this.onTouchMove);
+      this._svg.removeEventListener("touchend", this.onTouchEnd);
+    }
+    this._svg = el;
+    if (el) {
+      el.style.touchAction = this.state.touchOrbit ? "none" : "pan-y";
+      el.addEventListener("touchstart", this.onTouchStart, { passive: false });
+      el.addEventListener("touchmove", this.onTouchMove, { passive: false });
+      el.addEventListener("touchend", this.onTouchEnd, { passive: false });
+    }
+  };
+  touchMid(e) {
+    let x = 0, y = 0;
+    for (let i = 0; i < e.touches.length; i++) { x += e.touches[i].clientX; y += e.touches[i].clientY; }
+    return { x: x / e.touches.length, y: y / e.touches.length };
+  }
+  onTouchStart = (e) => {
+    const orbit = this.state.touchOrbit || e.touches.length >= 2;
+    if (!orbit) { this.drag = null; return; }
+    e.preventDefault();
+    const m = this.touchMid(e);
+    this.drag = {
+      x: m.x, y: m.y, yaw: this.state.yaw, tilt: this.state.tilt, touch: true,
+    };
+  };
+  onTouchMove = (e) => {
+    if (!this.drag || !this.drag.touch) return;
+    if (!this.state.touchOrbit && e.touches.length < 2) { this.drag = null; return; }
+    e.preventDefault();
+    this._at = this.touchMid(e);
+    this.frame(0.5, 0.3);
+  };
+  onTouchEnd = () => { this.drag = null; };
+  toggleTouchOrbit = () => {
+    this.setState((s) => {
+      const on = !s.touchOrbit;
+      if (this._svg) this._svg.style.touchAction = on ? "none" : "pan-y";
+      return { touchOrbit: on };
+    });
+  };
+
+  focusOn = (tm) => {
+    if (this.timer) { clearInterval(this.timer); this.timer = null; }
+    this.setState({
+      viewMode: "model", spinning: false,
+      focusTarget: { x: tm.x, y: tm.y, z: tm.z || 0 },
+      yaw: tm.yaw == null ? this.state.yaw : tm.yaw,
+      tilt: tm.tilt == null ? this.state.tilt : tm.tilt,
+      zoom: tm.zoom == null ? 1.45 : tm.zoom,
+      hover: tm.label || tm.where || null
+    });
+  };
+
+  // split each paragraph into plain runs and clickable terms
+  tokenize(body, terms) {
+    const used = {};
+    const plain = { display: "inline" };
+    const link = {
+      display: "inline", color: "#7C2317", cursor: "pointer",
+      borderBottom: "1px dotted #B08A6A", textUnderlineOffset: "2px"
+    };
+    return body.map((text) => {
+      const parts = [];
+      let rest = text;
+      while (rest.length) {
+        let best = null;
+        (terms || []).forEach((tm) => {
+          if (used[tm.t]) return;
+          const k = rest.indexOf(tm.t);
+          if (k >= 0 && (best === null || k < best.k)) best = { k: k, tm: tm };
+        });
+        if (!best) { parts.push({ t: rest, style: plain }); break; }
+        if (best.k > 0) parts.push({ t: rest.slice(0, best.k), style: plain });
+        used[best.tm.t] = true;
+        const tm = best.tm;
+        parts.push({ t: tm.t, style: link, go: () => this.focusOn(tm) });
+        rest = rest.slice(best.k + tm.t.length);
+      }
+      return { parts: parts };
+    });
+  }
+
+  // ---- section through the pools, looking north -------------------------
+  // Section plane at plan x = 54 m. Screen x = plan y; screen y = -z.
+  sectionShapes(p, C) {
+    const SX = 54, out = [];
+    const rect = (y0, y1, z0, z1, fill, stroke, label, dash) => out.push({
+      x: y0.toFixed(2), y: (-Math.max(z0, z1)).toFixed(2),
+      w: (y1 - y0).toFixed(2), h: Math.abs(z1 - z0).toFixed(2),
+      fill: fill, stroke: stroke, label: label, dash: dash || "none"
+    });
+    const bounds = (poly) => {
+      let a = Infinity, b = -Infinity, c = Infinity, e = -Infinity;
+      poly.forEach((q) => { a = Math.min(a, q[0]); b = Math.max(b, q[0]); c = Math.min(c, q[1]); e = Math.max(e, q[1]); });
+      return { x0: a, x1: b, y0: c, y1: e };
+    };
+    const cuts = [];
+    p.features.forEach((f) => {
+      const cat = C[f.cat] || C.bedrock;
+      if (f.kind === "colonnade") {
+        const [ax, ay] = f.a, [bx, by] = f.b;
+        if (Math.min(ax, bx) > SX || Math.max(ax, bx) < SX) return;
+        const t = Math.abs(bx - ax) < 0.01 ? 0.5 : (SX - ax) / (bx - ax);
+        const y = ay + (by - ay) * t;
+        rect(y - 2.6, y + 2.6, -0.8, 0.6, this.shade(C.colonnade.fill, 0.8), this.shade(C.colonnade.fill, 0.5), f.label);
+        rect(y - 0.9, y + 0.9, 0.6, f.h, C.colonnade.fill, this.shade(C.colonnade.fill, 0.5), f.label);
+        rect(y - 1.8, y + 1.8, f.h, f.h + 1.6, this.shade(C.colonnade.fill, 1.05), this.shade(C.colonnade.fill, 0.5), f.label);
+        return;
+      }
+      const b = bounds(f.poly);
+      if (b.x0 > SX || b.x1 < SX) return;
+      if (f.kind === "pit") {
+        cuts.push({ y0: b.y0, y1: b.y1, depth: f.depth, water: f.water, cat: f.cat, label: f.label });
+      } else if (f.kind === "flat") {
+        rect(b.y0, b.y1, f.z, f.z + 0.5, cat.fill, this.shade(cat.fill, 0.5), f.label);
+      } else if (f.kind === "box") {
+        rect(b.y0, b.y1, f.z0, f.z0 + f.h, cat.fill, this.shade(cat.fill, 0.5), f.label);
+      }
+    });
+    return { shapes: out, cuts: cuts };
+  }
+
+  buildQuiz() {
+    const R = this.ref;
+    const empty = { quizMatch: [], quizSeen: [], quizFacts: [], quizDateOptions: [], quizScoreLine: "", quizHint: "" };
+    if (!R) return empty;
+    const q = R.QUIZ, a = this.state.quiz, ck = a.checked;
+    const ok = (v) => ({ color: "#1F6B57", fontFamily: "'IBM Plex Mono', monospace", fontSize: "13px", fontWeight: 600 });
+    const bad = { color: "#B03A2C", fontFamily: "'IBM Plex Mono', monospace", fontSize: "13px", fontWeight: 600 };
+    const blank = { color: "transparent", fontSize: "13px" };
+    let right = 0, answered = 0;
+
+    const quizMatch = q.match.pairs.map((p) => {
+      const v = a.match[p.k] || "";
+      if (v) answered++;
+      const good = v === p.answer;
+      if (ck && good) right++;
+      return {
+        label: p.label, value: v,
+        set: (e) => this.setQuiz("match", p.k, e.target.value),
+        mark: ck ? (good ? "✓" : "✗") : "",
+        markStyle: ck ? (good ? ok() : bad) : blank
+      };
+    });
+
+    const btn = (on, correctish) => ({
+      fontFamily: "'IBM Plex Mono', monospace", fontSize: "10.5px", padding: "4px 9px", cursor: "pointer",
+      background: on ? (correctish === false ? "#B03A2C" : correctish === true ? "#1F6B57" : "#201A12") : "#DED3B8",
+      color: on ? "#F3ECDC" : "#3B3225",
+      border: "1.2px solid " + (on ? (correctish === false ? "#B03A2C" : correctish === true ? "#1F6B57" : "#201A12") : "#C0B295")
+    });
+    const quizSeen = q.seen.items.map((it, n) => {
+      const v = a.seen[n];
+      if (v != null) answered++;
+      const good = v === it.yes;
+      if (ck && good) right++;
+      return {
+        t: it.t, why: it.why, showWhy: ck,
+        yes: () => this.setQuiz("seen", n, true),
+        no: () => this.setQuiz("seen", n, false),
+        yesStyle: btn(v === true, ck ? it.yes === true : null),
+        noStyle: btn(v === false, ck ? it.yes === false : null),
+        mark: ck ? (good ? "✓" : "✗") : "",
+        markStyle: ck ? (good ? ok() : bad) : blank
+      };
+    });
+
+    const quizFacts = q.facts.items.map((it, n) => {
+      const v = a.facts[n];
+      if (v != null) answered++;
+      const good = v === it.answer;
+      if (ck && good) right++;
+      return {
+        q: it.q, why: it.why, showWhy: ck,
+        options: it.options.map((t, k) => ({
+          t: t, pick: () => this.setQuiz("facts", n, k),
+          style: {
+            fontFamily: "'EB Garamond', serif", fontSize: "14.5px", lineHeight: 1.35, textAlign: "left",
+            padding: "7px 11px", cursor: "pointer",
+            background: v === k ? (ck ? (k === it.answer ? "#1F6B57" : "#B03A2C") : "#201A12") : "#DED3B8",
+            color: v === k ? "#F3ECDC" : "#3B3225",
+            border: "1.2px solid " + (ck && k === it.answer ? "#1F6B57" : v === k ? "#201A12" : "#C0B295")
+          }
+        })),
+        mark: ck ? (good ? "✓" : "✗") : "",
+        markStyle: ck ? (good ? ok() : bad) : blank
+      };
+    });
+
+    const total = q.match.pairs.length + q.seen.items.length + q.facts.items.length;
+    return {
+      quizMatch, quizSeen, quizFacts,
+      quizDateOptions: q.match.options,
+      quizScoreLine: ck ? right + " of " + total + " right" : answered + " of " + total + " answered",
+      quizHint: ck
+        ? (right === total ? "All of it. Go and teach it." : "The explanation sits under each answer — the model will show you every one of them.")
+        : "Answer from memory, then check. Nothing is recorded."
+    };
+  }
+
+  renderVals() {
+    const d = this.state.data;
+    const R = this.ref;
+    const pres = this.state.present;
+    const base = {
+      idx: this.state.idx, maxIdx: 8, ghost: this.state.ghost, labels: this.state.labels,
+      yaw: Math.round(this.state.yaw), tilt: Math.round(this.state.tilt), zoom: this.state.zoom,
+      yawText: Math.round(this.state.yaw) + "°",
+      tiltText: Math.round(this.state.tilt) + "° " + (this.state.tilt > 84 ? "(plan)" : ""),
+      zoomText: Math.round(this.state.zoom * 100) + "%",
+      ghostPct: Math.round(this.state.ghost * 100) + "%",
+      spinLabel: this.state.spinning ? "Stop turning" : "Turn slowly",
+      spin: this.toggleSpin,
+      dragStart: this.onDown,
+      svgRef: this.svgRef, modelRef: this.modelRef, secRef: this.secRef,
+      modelText: [], secLabels: [], secFigures: [],
+      isModel: this.state.viewMode === "model",
+      isSection: this.state.viewMode === "section",
+      showModel: () => this.setState({ viewMode: "model" }),
+      showSection: () => this.setState({ viewMode: "section", pinIdx: null }),
+      viewTabs: [["model", "Model"], ["section", "Section"]].map(([k, label]) => ({
+        label: label,
+        pick: () => this.setState({ viewMode: k, pinIdx: null, measure: k === "model" ? this.state.measure : null }),
+        style: {
+          fontFamily: "'IBM Plex Mono', monospace", fontSize: "10.5px", letterSpacing: "0.06em",
+          padding: "5px 11px", cursor: "pointer",
+          background: this.state.viewMode === k ? "#201A12" : "#DED3B8",
+          color: this.state.viewMode === k ? "#F3ECDC" : "#3B3225",
+          border: "1.2px solid " + (this.state.viewMode === k ? "#201A12" : "#C0B295")
+        }
+      })),
+      touchOrbit: this.state.touchOrbit,
+      touchLabel: this.state.touchOrbit ? "Touch: turns the model" : "Touch: scrolls the page",
+      toggleTouch: this.toggleTouchOrbit,
+      pinsOn: this.state.pins,
+      togglePins: () => this.setState((s) => ({ pins: !s.pins, pinIdx: null })),
+      evidenceOn: this.state.evidenceOn,
+      toggleEvidence: () => this.setState((s) => ({ evidenceOn: !s.evidenceOn })),
+      porticoOn: this.state.porticoNums,
+      togglePortico: () => this.setState((s) => ({ porticoNums: !s.porticoNums })),
+      newModes: [], newNote: "",
+      pinList: [], porticoList: [], pinCard: null, closePin: () => this.setState({ pinIdx: null }),
+      focusMark: null, clearFocus: () => this.setState({ focusTarget: null }),
+      hasFocus: !!this.state.focusTarget,
+      sectionShapes: [], sectionCuts: [], strata: [], sectionLabels: [],
+      storeys: [0, -3, -6, -9, -12].map((m) => ({
+        y: (-m).toFixed(2), ty: (-m + 0.6).toFixed(2),
+        t: m === 0 ? "0 m — rim" : m + " m"
+      })),
+      elev: this.state.elev, elevY: 9,
+      elevText: (this.state.elev >= 0 ? "+" : "") + this.state.elev + " m",
+      elevGloss: "",
+      setElev: (e) => this.setState({ elev: Number(e.target.value) }),
+      satFailed: this.state.satFailed,
+      note: null, noteOpen: this.state.note,
+      toggleNote: () => this.setState((s) => ({ note: !s.note })),
+      takeaway: null, takeawayOpen: this.state.takeaway,
+      toggleTakeaway: () => this.setState((s) => ({ takeaway: !s.takeaway })),
+      hasNote: false, hasTakeaway: false, termHint: "",
+      noteToggleMark: this.state.note ? "Hide ▲" : "Read ▼",
+      takeawayToggleMark: this.state.takeaway ? "Hide ▲" : "Open ▼",
+      viewPlan: () => this.setState({ tilt: 90 }),
+      viewLow: () => this.setState({ tilt: 22 }),
+      viewIso: () => this.setState({ yaw: 28, tilt: 52, zoom: 1.15 }),
+      setYaw: (e) => this.setState({ yaw: Number(e.target.value) }),
+      setTilt: (e) => this.setState({ tilt: Number(e.target.value) }),
+      setZoom: (e) => this.setState({ zoom: Number(e.target.value) }),
+      prev: () => this.step(-1),
+      next: () => this.step(1),
+      setIdx: (e) => this.setState({ idx: Number(e.target.value) }, () => this.tourTouched()),
+      setGhost: (e) => this.setState({ ghost: Number(e.target.value) }),
+      toggleLabels: () => this.setState((s) => ({ labels: !s.labels })),
+      clearHover: () => this.setState({ hover: null }),
+      hoverText: this.state.hover || "Hover any block to identify it · drag the model to turn it round",
+      about: this.state.about,
+      openAbout: () => this.setState({ about: true, aboutTab: "site" }),
+      menuOpen: this.state.menuOpen,
+      toggleMenu: () => this.setState((st) => ({ menuOpen: !st.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      menuAbout: () => this.setState({ about: true, aboutTab: "site", menuOpen: false }),
+      menuJohn: () => this.setState({ about: true, aboutTab: "john", menuOpen: false }),
+      menuQuiz: () => this.setState({ quizOpen: true, menuOpen: false }),
+      menuTour: () => { this.toggleTour(); this.setState({ menuOpen: false }); },
+      menuCopy: () => { this.copyLink(); this.setState({ menuOpen: false }); },
+      menuPresent: () => { this.togglePresent(); this.setState({ menuOpen: false }); },
+      menuTimeline: () => this.setState((st) => ({ timelineOpen: !st.timelineOpen, menuOpen: false })),
+      menuControls: () => this.setState((st) => ({ leftVisible: !st.leftVisible, menuOpen: false })),
+      menuReading: () => this.setState((st) => ({ rightVisible: !st.rightVisible, menuOpen: false })),
+      leftVisible: this.state.leftVisible, rightVisible: this.state.rightVisible,
+      controlsLabel: this.state.leftVisible ? "Hide controls panel" : "Show controls panel",
+      readingLabel: this.state.rightVisible ? "Hide reading panel" : "Show reading panel",
+      timelineOpen: this.state.timelineOpen !== false,
+      timelineLabel: this.state.timelineOpen === false ? "Show timeline" : "Hide timeline",
+      secOpen: this.state.secOpen,
+      secArrow: {
+        view: this.state.secOpen.view ? "\u2212" : "+",
+        reading: this.state.secOpen.reading ? "\u2212" : "+",
+        sat: this.state.secOpen.sat ? "\u2212" : "+",
+        key: this.state.secOpen.key ? "\u2212" : "+",
+        overlay: this.state.secOpen.overlay ? "\u2212" : "+",
+        gospel: this.state.secOpen.gospel ? "\u2212" : "+",
+      },
+      toggleSecView: () => this.setState((st) => ({ secOpen: { ...st.secOpen, view: !st.secOpen.view } })),
+      toggleSecReading: () => this.setState((st) => ({ secOpen: { ...st.secOpen, reading: !st.secOpen.reading } })),
+      toggleSecKey: () => this.setState((st) => ({ secOpen: { ...st.secOpen, key: !st.secOpen.key } })),
+      toggleSecOverlay: () => this.setState((st) => ({ secOpen: { ...st.secOpen, overlay: !st.secOpen.overlay } })),
+      toggleSecGospel: () => this.setState((st) => ({ secOpen: { ...st.secOpen, gospel: !st.secOpen.gospel } })),
+      expandAllSecs: () => this.setState({ secOpen: { view: true, reading: true, sat: true, key: true, overlay: true, gospel: true } }),
+      collapseAllSecs: () => this.setState({ secOpen: { view: false, reading: false, sat: false, key: false, overlay: false, gospel: false } }),
+      panelMenuOpen: this.state.panelMenu,
+      togglePanelMenu: () => this.setState((st) => ({ panelMenu: !st.panelMenu })),
+      pickWholeModel: () => this.setState({ leftVisible: false, rightVisible: false, panelMenu: false }),
+      pickControlsPanel: () => this.setState({ leftVisible: true, rightVisible: false, panelMenu: false }),
+      pickReadingPanel: () => this.setState({ leftVisible: false, rightVisible: true, panelMenu: false }),
+      tabSite: this.state.aboutTab === "site",
+      tabUse: this.state.aboutTab === "use",
+      tabBio: this.state.aboutTab === "bio",
+      tabs: [["site", "The site"], ["use", "How to use it"], ["john", "John 5"], ["credits", "Credits"], ["legal", "Legal"], ["bio", "The author"]].map(([k, label]) => ({
+        label,
+        pick: () => this.setState({ aboutTab: k }),
+        style: {
+          fontFamily: "'IBM Plex Mono', monospace",
+          fontSize: "11px",
+          letterSpacing: "0.06em",
+          padding: "11px 15px 9px",
+          marginBottom: "-1.5px",
+          cursor: "pointer",
+          background: this.state.aboutTab === k ? "#F3ECDC" : "transparent",
+          border: "1.5px solid " + (this.state.aboutTab === k ? "#201A12" : "transparent"),
+          borderBottomColor: this.state.aboutTab === k ? "#F3ECDC" : "transparent",
+          color: this.state.aboutTab === k ? "#201A12" : "#625743",
+          fontWeight: this.state.aboutTab === k ? 600 : 400
+        }
+      })),
+      degrees: [
+        "Ph.D., Judaism & Christianity in Antiquity — Indiana University",
+        "Ph.D., Instructional Systems Technology — Indiana University",
+        "M.A., Biblical Studies — Yale University",
+        "B.A., Ancient Near Eastern Studies — Brigham Young University"
+      ],
+      closeAbout: () => this.setState({ about: false }),
+      stop: (e) => e.stopPropagation(),
+      howTo: [
+        { k: "Start here", v: "The timeline along the bottom is the main control: nine phase buttons in date order, or drag the scrubber. Left and right arrow keys step through them, and the right-hand panel changes to that period's essay as you go." },
+        { k: "Turn the model", v: "Drag anywhere on the model to spin it; drag up and down to change the angle of view. Plan from above looks straight down like an excavation drawing; Low angle drops to eye level to show depth; Reset view returns to the standard three-quarter view; Turn slowly rotates it on its own, and the same button stops it." },
+        { k: "Turn, angle, zoom", v: "The three sliders under View do the same thing precisely — compass bearing, angle of view from flat to overhead, and zoom. Useful when you want two periods framed identically for comparison." },
+        { k: "Model opacity", v: "Fades the reconstruction so you can see what lies underneath it — a ghosted phase." },
+        { k: "Overlay an age", v: "Ghost the previous age, the age that follows, the site today, or the age of the Gospel — the chosen phase is drawn faintly behind the current one, so you can see exactly what was kept, buried, or built over. Overlay strength controls how strongly it reads." },
+        { k: "Key to the model", v: "The key in the left panel lists only the categories present in the phase you are looking at, so it changes as you move through time. Dashed lines are not a certainty marker: they mean the ghosted comparison phase, or the ring round a feature an essay has just sent you to. Every elevation in the model is reconstruction, so singling some out would flatter the rest." },
+        { k: "Name anything", v: "Hover any element of the model and its identification appears in the strip beneath — which pool, which portico, which grotto, and what category it belongs to." },
+        { k: "Plan labels", v: "Turn the drawn labels on the model off if you want a clean image for a screenshot or a slide, and back on when you want to read it." },
+        { k: "Scripture pins", v: "Numbered pins sit on the model at the places the Gospel names — the porticoes where the sick lay, the stair down to the water, the way out toward the Temple. Click one for the American Standard Version text and a plain-English gloss; clicking also moves the model to that spot. Turn them off under Reading the model." },
+        { k: "The five porticoes", v: "Number the five porticoes puts I to V on the colonnades — four round the two basins and a fifth on the dam. That odd number is what nineteenth-century readers doubted in John 5:2, and what the excavators actually found." },
+        { k: "Clickable phrases", v: "Underlined phrases in the essays are camera moves: click one and the model turns, tilts and zooms to that feature, with a dashed ring marking it. Reset view releases the focus." },
+        { k: "What changed", v: "Mark what is new outlines in red everything built in the phase you are on and fades what it inherited; Only what is new hides the inherited work altogether, leaving that era's footprint alone." },
+        { k: "Section view", v: "Section swaps the model for a true-scale cut through the middle of both pools, looking north, with the stratigraphy beside it. Drag the elevation line to read off how far below the present rim any level sits — this is the answer to why visitors at Saint Anne's walk down so far." },
+        { k: "On a touchscreen", v: "One finger scrolls the page and two fingers turn the model, so the essay never fights the model for your gesture. The Touch button switches to one-finger turning if you prefer it." },
+        { k: "Note on the text", v: "Where a period raises a real textual or archaeological question — the angel in John 5:3b–4, the votive offerings to Asclepius — a note under the essay lays out the evidence rather than deciding quietly." },
+        { k: "For a class", v: "The Second Temple period carries a takeaway card: one teaching point and four discussion questions tied to what the model shows." },
+        { k: "Essays", v: "Each period's essay runs about a thousand words and is written to be read in one sitting at roughly a ninth or tenth grade level. They are continuous — read all nine in order and you have the full history of the site." },
+        { k: "John 5", v: "The John 5 tab in this panel carries the whole passage, verses 1 to 16, with a note where the manuscripts disagree, and the eight other places scripture touches this site — the Sheep Gate in Nehemiah, Hezekiah's waterworks, Ben Sira's reservoir, the Copper Scroll's two pools." },
+        { k: "Self-check", v: "Seventeen questions in three exercises: match the phases to their dates, decide what a visitor in AD 30 could actually have seen, and answer three questions the model itself answers. Check your answers and the reason for each appears. Nothing is recorded anywhere." },
+        { k: "Study sheet", v: "Opens a twelve-page printable packet: the passage and its cross-references, one sheet per phase with a plan, three things to notice, the vocabulary and three discussion questions, then a self-check and an answer key. Print it or save it as a PDF." },
+        { k: "A person for scale", v: "Stand a person in it draws two figures 1.7 m tall to the same scale as everything else — one on the rim, one on the floor of the pool. Nothing else on this page argues the depth as quickly." },
+        { k: "Measure", v: "Measure a distance turns the model into a tape measure: click two points and read the span in metres, royal cubits and common cubits. Distances are taken on the ground plane, so keep the view fairly overhead." },
+        { k: "Tour", v: "Tour walks the nine phases on its own, about fourteen seconds each, with that phase's line held large across the top of the model. Nothing is taken out of your hands: the bar carries back, pause and forward, and clicking any phase on the timeline restarts the dwell rather than fighting it, so you can talk over a phase for as long as you like. It stops itself at the present day, or press the button again — or T." },
+        { k: "Presenter mode", v: "Present hides both side panels and gives the model the whole width, which is what you want on a projector. Press P to go in and out; Escape also leaves." },
+        { k: "Keyboard", v: "Left and right arrows move through time. Give the model itself focus — tab to it or click it — and the arrows turn it instead, shift for bigger steps, plus and minus to zoom, Home to reset the view. Every control here is reachable by keyboard, and the phase is announced to a screen reader as it changes." },
+        { k: "Scripture text", v: "The John 5 tab quotes the American Standard Version of 1901, in the public domain in the United States. Verse 4 \u2014 the angel troubling the water \u2014 is absent from the earliest manuscripts, so the ASV committee printed it only in the margin; the note on verse 4 quotes that margin text in full." },
+        { k: "Credits", v: "The Credits tab names the excavators, translators, ancient witnesses and typefaces this atlas is built from, and says how to cite it." },
+        { k: "Share a view", v: "Copy link puts the current period, view and open panel into the address, so the link you paste opens exactly what you were looking at. The address updates as you move, and the period you were last on is remembered for your next visit." }
+      ],
+      sources: (R && R.SOURCES) || [],
+      soloSat: () => this.setState((s) => (s.solo
+        ? { solo: false, modelOpacity: s.preSolo ?? 1 }
+        : { solo: true, preSolo: s.modelOpacity, modelOpacity: 0.16, tilt: 88 })),
+      soloLabel: this.state.solo ? "Show model" : "Plan only",
+      modelOpacity: this.state.modelOpacity,
+      modelPct: Math.round(this.state.modelOpacity * 100) + "%",
+      setModelOpacity: (e) => this.setState({ modelOpacity: Number(e.target.value), solo: false }),
+      faces: [], ghostFaces: [], planLabels: [], legend: [], paras: [], ticks: [], compareOptions: [],
+      evidenceFaces: [], evidenceLegend: [], showGospelCompare: false, gospelButtons: [], gospelMarks: [], gospelCaption: "",
+      periodName: "…", periodSpan: "…", strap: "", essayTitle: "", essayDek: "", wordCount: "",
+      scaleX1: -128, scaleX2: -78, scaleTx: -92, nx1: 116, ny1: 108, nx2: 116, ny2: 92, nty: 88,
+
+      shellStyle: {
+        flex: 1, display: "grid", minHeight: 0, overflowX: "auto",
+        gridTemplateColumns: pres ? "1fr" : [
+          this.state.leftVisible ? "248px" : "",
+          "minmax(320px,1fr)",
+          this.state.rightVisible ? "clamp(310px,29%,448px)" : ""
+        ].filter(Boolean).join(" ")
+      },
+      panelLeftOpen: this.state.leftVisible ? "1" : "0",
+      panelRightOpen: this.state.rightVisible ? "1" : "0",
+      panelAny: this.state.leftVisible || this.state.rightVisible,
+      openLeftPanel: this.openLeftPanel, openRightPanel: this.openRightPanel, closePanel: this.closePanel,
+      closeLeftPanel: this.closeLeftPanel, closeRightPanel: this.closeRightPanel,
+      leftPaneStyle: {
+        display: pres ? "none" : "flex", flexDirection: "column", gap: "20px",
+        borderRight: "1.5px solid #201A12", background: "#E4DAC2",
+        overflowY: "auto", padding: "16px 15px 24px"
+      },
+      rightPaneStyle: {
+        display: pres ? "none" : "block",
+        borderLeft: "1.5px solid #201A12", background: "#F3ECDC",
+        overflowY: "auto", padding: "24px 30px 60px"
+      },
+      toolStyle: {
+        fontFamily: "'IBM Plex Mono', monospace", fontSize: "10px", letterSpacing: "0.08em",
+        textTransform: "uppercase", padding: "6px 10px", background: "#DED3B8",
+        border: "1.2px solid #201A12", cursor: "pointer", color: "#201A12"
+      },
+      toolLinkStyle: {
+        fontFamily: "'IBM Plex Mono', monospace", fontSize: "10px", letterSpacing: "0.08em",
+        textTransform: "uppercase", padding: "6px 10px", background: "#DED3B8",
+        border: "1.2px solid #201A12", color: "#201A12", textDecoration: "none"
+      },
+      tourStyle: {
+        fontFamily: "'IBM Plex Mono', monospace", fontSize: "10px", letterSpacing: "0.08em",
+        textTransform: "uppercase", padding: "6px 10px", cursor: "pointer",
+        background: this.state.tourOn ? "#7C2317" : "#DED3B8",
+        color: this.state.tourOn ? "#F3ECDC" : "#201A12",
+        border: "1.2px solid " + (this.state.tourOn ? "#7C2317" : "#201A12")
+      },
+      presentStyle: {
+        fontFamily: "'IBM Plex Mono', monospace", fontSize: "10px", letterSpacing: "0.08em",
+        textTransform: "uppercase", padding: "6px 10px", cursor: "pointer",
+        background: pres ? "#201A12" : "#DED3B8",
+        color: pres ? "#F3ECDC" : "#201A12",
+        border: "1.2px solid #201A12"
+      },
+      tourOn: this.state.tourOn,
+      tourLabel: this.state.tourOn ? "Stop tour" : "Tour",
+      tourStep: "",
+      tourBack: () => this.tourGo(-1),
+      tourNext: () => this.tourGo(1),
+      tourPause: this.tourPause,
+      tourPauseLabel: this.state.tourPaused ? "Play" : "Pause",
+      tourHint: this.state.tourPaused ? "Paused — click through at your own pace" : "Advances on its own · click ◀ ▶ or any phase",
+      tourNavStyle: {
+        fontFamily: "'IBM Plex Mono', monospace", fontSize: "11px", lineHeight: 1,
+        padding: "6px 10px", cursor: "pointer",
+        background: "#F3ECDC", color: "#201A12", border: "1.2px solid #F3ECDC"
+      },
+      sheetHref: (() => {
+        try {
+          const offline = window.location.protocol !== "http:" && window.location.protocol !== "https:";
+          const name = offline ? "Bethesda Study Sheet (offline).html" : "Bethesda Study Sheet.dc.html";
+          const u = new URL(name, window.location.href);
+          if (!offline) u.search = window.location.search; // the host's preview token
+          u.hash = "";
+          return u.href;
+        } catch (err) { return "./Bethesda%20Study%20Sheet.dc.html"; }
+      })(),
+      presentOn: pres,
+      presentLabel: pres ? "Leave presenter" : "Present",
+      toggleTour: this.toggleTour,
+      togglePresent: this.togglePresent,
+      copyLink: this.copyLink,
+      copyLabel: this.state.copied ? "Link copied" : "Copy link",
+      isPhotos: this.state.viewMode === "photos",
+      figuresOn: this.state.figures,
+      toggleFigures: () => this.setState((st) => ({ figures: !st.figures })),
+      figures: [],
+      measureOn: this.state.measureOn,
+      toggleMeasure: this.toggleMeasure,
+      clearMeasure: this.clearMeasure,
+      measureLabel: this.state.measureOn ? "Measuring — switch off" : "Measure a distance",
+      measureBtnStyle: {
+        fontFamily: "'IBM Plex Mono', monospace", fontSize: "10.5px", padding: "6px 8px",
+        textAlign: "left", cursor: "pointer",
+        background: this.state.measureOn ? "#7C2317" : "#DED3B8",
+        color: this.state.measureOn ? "#F3ECDC" : "#3B3225",
+        border: "1.2px solid " + (this.state.measureOn ? "#7C2317" : "#C0B295")
+      },
+      hasMeasure: false, measure: null,
+      modelClick: this.modelClick, modelKey: this.modelKey,
+      modalRef: this.modalRef,
+      phaseAria: "",
+      john: ((R && R.JOHN5_ASV) || [])
+        .map((v) => ({ v: v.v, t: v.t, note: v.note || "", hasNote: !!v.note })),
+      transButtons: ((R && R.TRANSLATIONS) || []).map((t) => ({
+        short: t.short,
+        name: t.name,
+        on: this.state.trans === t.key,
+        pick: () => this.setState({ trans: t.key }),
+        style: {
+          fontFamily: "'IBM Plex Mono', monospace",
+          fontSize: "11px",
+          letterSpacing: "0.06em",
+          padding: "7px 12px",
+          cursor: "pointer",
+          background: this.state.trans === t.key ? "#201A12" : "#DED3B8",
+          color: this.state.trans === t.key ? "#F3ECDC" : "#3B3225",
+          border: "1.2px solid #201A12",
+          fontWeight: this.state.trans === t.key ? 600 : 400
+        }
+      })),
+      transNote: (((R && R.TRANSLATIONS) || []).find((t) => t.key === this.state.trans) || {}).note || "",
+      transStatus: (() => {
+        const t = ((R && R.TRANSLATIONS) || []).find((x) => x.key === this.state.trans);
+        return t ? t.name + ", " + t.year + " — " + t.status : "";
+      })(),
+      crossrefs: (R && R.CROSSREFS) || [],
+      tabJohn: this.state.aboutTab === "john",
+      tabCredits: this.state.aboutTab === "credits",
+      tabLegal: this.state.aboutTab === "legal",
+      legalSections: [
+        { h: "2 · License to use", t: "Publisher grants the purchaser or recipient a personal, non-exclusive, non-transferable license to view and use this product for personal study, teaching, and classroom use. Redistribution of the product file itself, or extraction of its model, essays, or illustrations for republication, requires Publisher's prior written permission. Third-party components (typefaces, code libraries) remain under their own licenses; see THIRD_PARTY_NOTICES.txt and the Credits tab." },
+        { h: "3 · Scripture text", t: "The 1901 American Standard Version is in the public domain in the United States and is used throughout this edition; no permission is claimed here beyond what this license already grants for the product as a whole." },
+        { h: "4 · Refunds", t: "If this product was purchased through a store or platform, that platform's refund policy governs first. Where Publisher sells directly, a full refund is available on request within 14 days of purchase, provided the product has not been redistributed." },
+        { h: "5 · No warranty of scholarly conclusion", t: "Because this is a Beta reconstruction of a disputed archaeological site, Publisher makes no warranty that any specific dating, identification, or interpretation shown will not be revised in a later edition. The product is provided \u201cas is\u201d for its stated teaching purpose." },
+        { h: "6 · Limitation of liability", t: "To the extent permitted by law, Publisher's liability for any claim arising from this product is limited to the amount paid for it." },
+        { h: "7 · Governing law & contact", t: "Contact for licensing, refunds, or rights questions: insights.taylorhalverson.com. The user agrees that any legal action, dispute, or proceeding arising out of or relating to this product must be brought exclusively in the state or federal courts located in Utah County, Utah. Both parties irrevocably consent to the personal jurisdiction of these courts and waive any objection based on improper venue or inconvenient forum." }
+      ],
+      privacySections: [
+        { h: "What this product stores, and where", t: "Your browser's local storage, on your own device, keeps one thing so the page remembers your place: the last building phase you viewed (localStorage key bethesda.lastPeriod). None of this ever leaves your device; the product has no server to send it to." },
+        { h: "No third-party imagery", t: "This product contains no aerial or satellite imagery. It bundles and fetches nothing from any imagery provider." },
+        { h: "Analytics, cookies, accounts", t: "None. This product sets no cookies, runs no analytics or tracking script, and has no account system, sign-in, or server-side log of any kind." },
+        { h: "Fonts and runtime libraries", t: "The online build requests two typefaces from fonts.googleapis.com and fonts.gstatic.com, in the ordinary way that any web font works, and loads React, ReactDOM, and Babel from unpkg.com to run the page. The offline build embeds the fonts and these libraries directly and makes none of those requests, except that a user-entered tile URL can still make a remote request in either build." },
+        { h: "Children", t: "This product is intended for general and educational audiences and does not knowingly collect personal information from anyone, including children, because it does not collect personal information from anyone." },
+        { h: "Changes & contact", t: "If this notice changes, the date of record will change with it. Questions go to the Publisher via insights.taylorhalverson.com." }
+      ],
+      imageRightsSections: [
+        { h: "No imagery feature", t: "This product does not include a satellite or aerial imagery overlay. Nothing in the interface fetches, licenses, or displays third-party photography of the site." },
+        { h: "Illustrations already in the product", t: "All plans, sections, and axonometric views of the site are original line drawings redrawn from published excavation reports (see Credits); none are traced from or reproduce a copyrighted photograph or third party's illustration." },
+        { h: "If a user submits an image", t: "This product does not currently accept user-submitted images anywhere in its interface. If that changes, this policy should be extended to require the same affirmative rights confirmation before an image is accepted, plus a takedown contact." },
+        { h: "Contact", t: "Rights concerns: via the Publisher at insights.taylorhalverson.com." }
+      ],
+      credits: ((R && R.CREDITS) || []).map((g) => ({ group: g.group, lead: g.lead || "", hasLead: !!g.lead, items: g.items })),
+      creditsUse: (R && R.CREDITS_USE) || [],
+      fontNotices: (R && R.FONT_NOTICES) || [],
+      oflText: (R && R.OFL_TEXT) || [],
+      oflOpen: this.state.ofl,
+      toggleOfl: () => this.setState((st) => ({ ofl: !st.ofl })),
+      oflLabel: this.state.ofl ? "Hide the full licence ▲" : "Read the full SIL Open Font License 1.1 ▼",
+      oflBtnStyle: {
+        fontFamily: "'IBM Plex Mono', monospace", fontSize: "10.5px", letterSpacing: "0.06em",
+        textAlign: "left", padding: "7px 10px", cursor: "pointer", alignSelf: "flex-start",
+        background: "#DED3B8", color: "#201A12", border: "1.2px solid #201A12"
+      },
+      openJohn: () => this.setState({ about: true, aboutTab: "john" }),
+      quizOpen: this.state.quizOpen,
+      openQuiz: () => this.setState({ quizOpen: true }),
+      closeQuiz: () => this.setState({ quizOpen: false }),
+      quizCheck: this.quizCheck,
+      quizReset: this.quizReset
+    };
+    Object.assign(base, this.buildQuiz());
+    if (!d) return base;
+
+    const P = d.PERIODS, C = d.CATS;
+    const i = Math.min(this.state.idx, P.length - 1), p = P[i];
+    const T = this.teach || { PINS: {}, TERMS: {}, NOTES: {}, TAKEAWAY: {}, STRATA: [], PORTICOES: [] };
+
+    // keep a focused feature centred in the frame
+    this._pan = { x: 0, y: 0 };
+    if (this.state.focusTarget) {
+      const ft = this.state.focusTarget;
+      const q = this.proj(ft.x, ft.y, ft.z);
+      this._pan = { x: Math.max(-110, Math.min(110, -q.sx)), y: Math.max(-90, Math.min(90, -q.sy)) };
+    }
+    // viewBox -> pixel maps, so every label can be sized in real pixels
+    const mMap = this.fit(this.state.mBox, -140, -128, 280, 250);
+    const sMap = this.fit(this.state.sBox, -46, -25, 222, 52);
+    // Overlay furniture is sized from the drawing's own fit scale (px per metre),
+    // so labels and badges shrink with the model instead of swamping it.
+    const kM = this.state.mBox && this.state.mBox.w
+      ? Math.min(this.state.mBox.w / 280, this.state.mBox.h / 250) : 1.15;
+    this._kM = kM;
+    this._lf = Math.max(0.6, Math.min(1.15, kM / 1.15));
+    const at = (map, x, y, extra) => {
+      const q = map(x, y);
+      return Object.assign({
+        position: "absolute", left: q.left + "px", top: q.top + "px",
+        fontFamily: "'IBM Plex Mono', monospace", whiteSpace: "nowrap"
+      }, extra || {});
+    };
+
+    // ground plane, then flats, then pits, then upstanding volumes
+    const ground = this.ring([[-4, -8], [176, -8], [182, 162], [0, 162]], 0);
+    const faces = [{
+      pts: this.pts(ground), fill: "#DCD0B0", stroke: "#C0B295", fo: this.state.sat ? 0 : 1, key: -9999,
+      label: "Ground surface of the period", enter: () => this.setState({ hover: "Ground surface of the period" })
+    }];
+
+    const prevLabels = {};
+    if (i > 0) P[i - 1].features.forEach((f) => { prevLabels[f.label] = true; });
+    const nm = i === 0 ? "off" : this.state.newMode;
+    let newCount = 0;
+
+    const flats = [], pits = [], solids = [];
+    p.features.forEach((f) => {
+      const cat = C[f.cat] || C.bedrock;
+      const tierSuffix = this.state.evidenceOn
+        ? "  ·  evidence: " + ((d.EVIDENCE_TIERS || []).find((t) => t.id === (f.tier || (d.CAT_TIER || {})[f.cat]))?.name || "")
+        : "";
+      const label = f.label + "  —  " + cat.name.toLowerCase() + tierSuffix;
+      const enter = () => this.setState({ hover: label });
+      const isNew = !prevLabels[f.label];
+      if (isNew) newCount++;
+      if (nm === "only" && !isNew) return;
+      const tag = (arr, from) => { for (let k = from; k < arr.length; k++) { arr[k].isNew = isNew; } };
+      if (f.kind === "flat") {
+        const r = this.ring(f.poly, f.z);
+        flats.push({ pts: this.pts(r), fill: cat.fill, stroke: this.shade(cat.fill, 0.55), fo: 0.95, key: this.avgD(r), label, enter, isNew });
+      } else if (f.kind === "pit") {
+        const g = [];
+        this.pitFaces(f, C, enter, g);
+        tag(g, 0);
+        pits.push(g);
+      } else if (f.kind === "box") {
+        const from = solids.length;
+        this.boxFaces(f.poly, f.z0, f.z0 + f.h, cat.fill, label, enter, solids);
+        tag(solids, from);
+      } else if (f.kind === "colonnade") {
+        const from = solids.length;
+        this.colonnadeFaces(f, C, enter, solids);
+        tag(solids, from);
+      }
+    });
+    flats.sort((a, b) => a.key - b.key);
+    pits.sort((a, b) => a[0].key - b[0].key);
+    solids.sort((a, b) => a.key - b.key);
+    flats.forEach((x) => faces.push(x));
+    pits.forEach((g) => g.forEach((x) => faces.push(x)));
+    solids.forEach((x) => faces.push(x));
+
+    // ghost overlay: top outlines of another age
+    const gi = this.ghostIndex();
+    const ghostFaces = [];
+    if (gi >= 0) {
+      const modern = gi === P.length - 1;
+      P[gi].features.forEach((f) => {
+        const cat = C[f.cat] || C.bedrock;
+        const z = f.kind === "pit" ? -f.depth : f.kind === "flat" ? f.z : f.z0 + f.h;
+        const poly = f.kind === "colonnade" ? null : f.poly;
+        if (!poly) return;
+        const r = this.ring(poly, z);
+        ghostFaces.push({
+          pts: this.pts(r), fill: modern ? "none" : cat.fill,
+          fo: modern ? 0 : this.state.ghost * 0.16,
+          stroke: modern ? "#B03A2C" : this.shade(cat.fill, 0.5),
+          so: this.state.ghost
+        });
+      });
+    }
+
+    // the numerals are a plan-view device; at a near-horizontal angle the ground
+    // plane compresses and they would pile onto the captions
+    const porticoLabelled = p.key === "herodian" && this.state.porticoNums;
+    const hidePortico = porticoLabelled && this.state.tilt >= 32;
+    const pinsHere = T.PINS[p.key] || [];
+
+    // ---- one placement pass over every overlay item ----------------------
+    // Scripture pins hold their anchor; portico numerals and plan captions are
+    // pushed to the first candidate offset that clears everything placed before.
+    // A label may step aside by at most 13 px — never far enough to sit on a
+    // different feature. If nothing within that clears, the caption is dropped
+    // rather than relocated (hovering still names every element).
+    // candidate offsets are in METRES, so a caption never travels more than
+    // ~10 m from the feature it names, whatever the zoom
+    const pxPerM = 1.02 * this.state.zoom * (this._kM || 1);
+    const OFF = [[0, 0], [0, -6], [0, 6], [-7, -4], [7, -4], [-7, 4], [7, 4], [-10, 0], [10, 0],
+      [0, -10], [0, 10]].map((o) => [o[0] * pxPerM, o[1] * pxPerM]);
+    const placed = [];
+    const hits = (r) => placed.some((q) =>
+      Math.min(q.l + q.w, r.l + r.w) - Math.max(q.l, r.l) > 2 &&
+      Math.min(q.t + q.h, r.t + r.h) - Math.max(q.t, r.t) > 2);
+    const put = (pos, w, h, movable) => {
+      const list = movable ? OFF : [[0, 0]];
+      for (let n = 0; n < list.length; n++) {
+        const r = { l: pos.left + list[n][0] - w / 2, t: pos.top + list[n][1] - h / 2, w: w, h: h };
+        if (!hits(r)) { placed.push(r); return { dx: list[n][0], dy: list[n][1] }; }
+      }
+      return null;
+    };
+    const claim = (pos, w, h) => {
+      placed.push({ l: pos.left - w / 2, t: pos.top - h / 2, w: w, h: h });
+      return { dx: 0, dy: 0 };
+    };
+    const nudge = (o) => ({ marginLeft: o.dx + "px", marginTop: o.dy + "px" });
+
+    // Captions go down first and keep their anchor; badges are placed after and
+    // always sit exactly on their feature.
+    const pinD = 26 * this._lf, pcD = 22 * this._lf;
+    const pinList = (!this.state.pins || !mMap) ? [] : pinsHere.map((pn, n) => {
+      const q = this.proj(pn.x, pn.y, pn.z);
+      const on = this.state.pinIdx === n;
+      const o = claim(mMap(q.sx, q.sy), pinD, pinD);
+      return {
+        n: n + 1,
+        aria: "Scripture pin " + (n + 1) + ": " + pn.ref + ", " + pn.where,
+        pick: () => { this.setState({ pinIdx: n }); this.focusOn(pn); },
+        style: at(mMap, q.sx, q.sy, Object.assign(nudge(o), {
+          transform: "translate(-50%,-50%)", pointerEvents: "auto", cursor: "pointer",
+          width: pinD + "px", height: pinD + "px", borderRadius: "50%",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 12 * this._lf + "px", fontWeight: 600,
+          background: on ? "#7C2317" : "#201A12", color: "#F3ECDC",
+          border: "2px solid #F3ECDC", boxShadow: "0 2px 6px rgba(24,20,14,0.35)",
+          padding: 0
+        }))
+      };
+    });
+
+    const porticoList = (!hidePortico || !mMap) ? [] : T.PORTICOES.map((pc) => {
+      const q = this.proj(pc.x, pc.y, pc.z);
+      const o = claim(mMap(q.sx, q.sy), pcD, pcD);
+      return {
+        n: pc.n, t: "Portico " + pc.n + " — " + pc.t,
+        style: at(mMap, q.sx, q.sy, Object.assign(nudge(o), {
+          transform: "translate(-50%,-50%)",
+          width: pcD + "px", height: pcD + "px", borderRadius: "50%",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 11 * this._lf + "px", fontWeight: 600, letterSpacing: "0.02em",
+          background: "#F3ECDC", color: "#7E5F21", border: "1.6px solid #7E5F21"
+        }))
+      };
+    });
+
+    const seen = [];
+    p.features.forEach((f) => {
+      const k = f.kind === "colonnade" ? "colonnade" : f.cat;
+      if (seen.indexOf(k) === -1) seen.push(k);
+      if (f.kind === "pit" && f.water > 0 && seen.indexOf("water") === -1) seen.push("water");
+    });
+    const legend = seen.map((k) => ({ fill: C[k].fill, stroke: this.shade(C[k].fill, 0.5), name: C[k].name }));
+
+    // ---- evidence-status grammar (SCH-05/10/16): a tier per feature, from an
+    // explicit override or the category default, rendered as a pattern overlay
+    // so the distinction survives greyscale printing and colorblind viewing.
+    const TIERS = (d.EVIDENCE_TIERS && d.EVIDENCE_TIERS.length) ? d.EVIDENCE_TIERS : [];
+    const CAT_TIER = d.CAT_TIER || {};
+    const tierOf = (f) => f.tier || CAT_TIER[f.cat] || "inferred";
+    const evidenceFaces = [];
+    if (this.state.evidenceOn) {
+      p.features.forEach((f) => {
+        if (f.kind === "colonnade" || !f.poly) return;
+        const z = f.kind === "pit" ? -f.depth : f.kind === "flat" ? f.z : f.z0 + f.h;
+        const r = this.ring(f.poly, z);
+        evidenceFaces.push({ pts: this.pts(r), pattern: "url(#ev-" + tierOf(f) + ")" });
+      });
+    }
+    const tierName = {};
+    TIERS.forEach((t) => { tierName[t.id] = t.name; });
+    // CSS equivalents of the SVG patterns above, so the legend swatch (plain HTML) matches the model overlay
+    const TIER_CSS = {
+      excavated: "background:#E4DAC2",
+      secured: "background-image:radial-gradient(circle,#201A12 1px,transparent 1.3px);background-size:6px 6px;background-color:#EFE8D6",
+      textual: "background-image:repeating-linear-gradient(to bottom,#201A12 0 1px,transparent 1px 5px);background-color:#EFE8D6",
+      inferred: "background-image:repeating-linear-gradient(45deg,#201A12 0 1px,transparent 1px 6px);background-color:#EFE8D6",
+      conventional: "background-image:repeating-linear-gradient(45deg,#201A12 0 1px,transparent 1px 6px),repeating-linear-gradient(-45deg,#201A12 0 1px,transparent 1px 6px);background-color:#EFE8D6",
+      contested: "background-image:repeating-linear-gradient(45deg,#7C2317 0 2px,transparent 2px 7px);background-color:#EFE8D6",
+      speculative: "background-image:radial-gradient(circle,#7C2317 1px,transparent 1.3px);background-size:9px 9px;background-color:#EFE8D6"
+    };
+    const evidenceLegend = TIERS.map((t) => ({
+      name: t.name, desc: t.desc,
+      swatch: "width:26px;height:16px;flex:none;margin-top:2px;border:1.2px solid #C0B295;" + (TIER_CSS[t.id] || "")
+    }));
+
+    const tickStyle = (on) => ({
+      fontFamily: "'IBM Plex Mono', monospace", textAlign: "left", padding: "6px 8px", cursor: "pointer",
+      color: on ? "#F3ECDC" : "#3B3225", background: on ? "#201A12" : "#DED3B8",
+      border: "1.2px solid " + (on ? "#201A12" : "#C0B295"), lineHeight: 1.1
+    });
+    const ticks = P.map((q, n) => ({
+      tick: q.tick, name: q.name, style: tickStyle(n === i),
+      pick: () => this.setState({ idx: n }, () => this.tourTouched())
+    }));
+
+    const optStyle = (on) => ({
+      fontFamily: "'IBM Plex Mono', monospace", fontSize: "11px", textAlign: "left", padding: "6px 9px",
+      cursor: "pointer", color: on ? "#F3ECDC" : "#3B3225", background: on ? "#7C2317" : "#DED3B8",
+      border: "1.2px solid " + (on ? "#7C2317" : "#C0B295")
+    });
+    const compareOptions = [
+      ["none", "No overlay"],
+      ["prev", "Ghost the previous age"],
+      ["next", "Ghost the age that follows"],
+      ["modern", "Overlay the site today"],
+      ["herodian", "Overlay the age of the Gospel"]
+    ].map(([k, label]) => ({ label, style: optStyle(this.state.compare === k), pick: () => this.setState({ compare: k }) }));
+
+    // ---- SCH-04: A/B compare of the two proposed Gospel settings -----------
+    const GOSPEL = d.GOSPEL || null;
+    const showGospelCompare = !!GOSPEL && p.key === "herodian";
+    const gospelBtnStyle = (on) => ({
+      fontFamily: "'IBM Plex Mono', monospace", fontSize: "10.5px", textAlign: "center", padding: "8px 4px",
+      minHeight: "40px", cursor: "pointer", color: on ? "#F3ECDC" : "#3B3225",
+      background: on ? "#7C2317" : "#DED3B8", border: "1.2px solid " + (on ? "#7C2317" : "#C0B295")
+    });
+    const gospelButtons = GOSPEL ? ["a", "b"].map((k) => ({
+      label: (k === "a" ? "A · " : "B · ") + GOSPEL[k].label,
+      style: gospelBtnStyle(this.state.gospel === k),
+      pick: () => this.setState((s) => ({ gospel: s.gospel === k ? null : k }))
+    })) : [];
+    const gospelBothStyle = {
+      fontFamily: "'IBM Plex Mono', monospace", fontSize: "10.5px", textAlign: "left", padding: "8px 8px",
+      minHeight: "40px", cursor: "pointer", color: this.state.gospel === "both" ? "#F3ECDC" : "#3B3225",
+      background: this.state.gospel === "both" ? "#201A12" : "#DED3B8",
+      border: "1.2px solid " + (this.state.gospel === "both" ? "#201A12" : "#C0B295")
+    };
+    const gospelMarks = (!GOSPEL || !mMap || !showGospelCompare) ? [] : ["a", "b"]
+      .filter((k) => this.state.gospel === k || this.state.gospel === "both")
+      .map((k) => {
+        const g = GOSPEL[k];
+        const q = this.proj(g.x, g.y, g.z);
+        const pos = mMap(q.sx, q.sy);
+        return {
+          cx: q.sx, cy: q.sy,
+          style: Object.assign({}, at(mMap, q.sx, q.sy), {
+            transform: "translate(-50%,-50%)", width: "20px", height: "20px", borderRadius: "50%",
+            display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 600,
+            fontSize: "11px", background: "#7C2317", color: "#F3ECDC", border: "2px solid #F3ECDC",
+            boxShadow: "0 2px 6px rgba(24,20,14,0.35)", pointerEvents: "none"
+          }),
+          letter: k.toUpperCase()
+        };
+      });
+    const gospelCaption = !showGospelCompare ? "" : (
+      this.state.gospel === "both" ? GOSPEL.a.label + " vs. " + GOSPEL.b.label + " — " + GOSPEL.note :
+      this.state.gospel === "a" ? "A · " + GOSPEL.a.label + " — " + GOSPEL.a.case :
+      this.state.gospel === "b" ? "B · " + GOSPEL.b.label + " — " + GOSPEL.b.case : ""
+    );
+
+    // scale bar and compass, drawn in screen units
+    const s50 = 50 * 1.02 * this.state.zoom;
+    const a = (this.state.yaw * Math.PI) / 180, t = (this.state.tilt * Math.PI) / 180;
+    const nDir = { x: -Math.sin(a) * 0, y: 0 };
+    nDir.x = (0 * Math.cos(a) - -1 * Math.sin(a)) * 18;
+    nDir.y = (0 * Math.sin(a) + -1 * Math.cos(a)) * Math.sin(t) * 18;
+
+    // satellite ground plane: plan metres -> screen, then anchor + true-north rotation
+    let satMatrix = "matrix(1,0,0,1,0,0)", satAnchor = "translate(0,0)", satTiles = [];
+    if (this.state.sat) {
+      const S = 1.02 * this.state.zoom, st = Math.sin(t);
+      satMatrix = "matrix(" + [
+        (Math.cos(a) * S).toFixed(5), (Math.sin(a) * st * S).toFixed(5),
+        (-Math.sin(a) * S).toFixed(5), (Math.cos(a) * st * S).toFixed(5), 0, 0
+      ].join(",") + ")";
+      satAnchor = "translate(" + (this.state.satDx).toFixed(2) + "," + (this.state.satDy).toFixed(2) +
+        ") rotate(" + this.state.satRot + ")";
+      satTiles = this.satelliteTiles();
+    }
+
+    // mark what is new in this phase
+    faces.forEach((f, n) => {
+      f.sw = 0.35;
+      if (n === 0) return;
+      if (nm === "mark" && f.isNew) { f.stroke = "#7C2317"; f.sw = 0.85; }
+      else if (nm === "mark" && !f.isNew) { f.fo = (f.fo == null ? 1 : f.fo) * 0.5; }
+    });
+
+    // scripture hotspots and numbered porticoes
+
+    const pinCard = this.state.viewMode === "model" && this.state.pins &&
+      this.state.pinIdx != null && pinsHere[this.state.pinIdx]
+      ? Object.assign({}, pinsHere[this.state.pinIdx], { n: this.state.pinIdx + 1 })
+      : null;
+
+    // captions last: they take what the badges have left, and a minor italic
+    // caption is dropped rather than moved onto a neighbouring feature
+    const planLabels = (!this.state.labels || !mMap) ? [] : p.labels.filter((l) =>
+      !(porticoLabelled && l.t.indexOf("PORTICO") === 0)
+    ).map((l) => {
+      const q = this.proj(l.x, l.y, l.z);
+      const fs = (l.small ? 11 : 12.5) * this._lf;
+      const pos = mMap(q.sx, q.sy);
+      const w = l.t.length * fs * 0.6, h = fs * 1.35;
+      // a basin's name must always show; a minor italic caption may be dropped
+      const o = put(pos, w, h, true) || (l.small ? null : claim(pos, w, h));
+      if (!o) return null;
+      return {
+        t: l.t,
+        style: at(mMap, q.sx, q.sy, Object.assign(nudge(o), {
+          transform: "translate(-50%,-50%)",
+          fontSize: fs + "px", lineHeight: 1.2,
+          fontStyle: l.small ? "italic" : "normal",
+          fontWeight: l.small ? 400 : 600,
+          letterSpacing: l.small ? "0" : "0.06em",
+          color: l.small ? "#4A4030" : "#141009",
+          textShadow: "0 0 3px #EFE8D6, 0 0 3px #EFE8D6, 0 0 6px #EFE8D6, 0 0 6px #EFE8D6"
+        }))
+      };
+    }).filter((l) => l);
+
+    const modelText = !mMap ? [] : [
+      { t: "0", style: at(mMap, -132, 116, { fontSize: 11 * this._lf + "px", color: "#4A4030" }) },
+      { t: "50 m", style: at(mMap, -132 + 50 * 1.02 * this.state.zoom, 116, { fontSize: 11 * this._lf + "px", color: "#4A4030", transform: "translateX(-100%)" }) },
+      { t: "N", style: at(mMap, 112 + (Math.sin((this.state.yaw * Math.PI) / 180)) * 18, 104 + (-Math.cos((this.state.yaw * Math.PI) / 180)) * Math.sin((this.state.tilt * Math.PI) / 180) * 18, { fontSize: 13 * this._lf + "px", fontWeight: 600, color: "#201A12", transform: "translate(-50%,-140%)" }) }
+    ];
+
+    const focusMark = this.state.focusTarget ? (() => {
+      const ft = this.state.focusTarget;
+      const q = this.proj(ft.x, ft.y, ft.z);
+      return { cx: q.sx.toFixed(2), cy: q.sy.toFixed(2) };
+    })() : null;
+
+    const newModes = [
+      ["off", "Off"],
+      ["mark", "Mark what is new"],
+      ["only", "Only what is new"]
+    ].map(([k, label]) => ({
+      label: label, pick: () => this.setState({ newMode: k }),
+      style: {
+        fontFamily: "'IBM Plex Mono', monospace", fontSize: "10.5px", textAlign: "left",
+        padding: "5px 8px", cursor: "pointer",
+        color: this.state.newMode === k ? "#F3ECDC" : "#3B3225",
+        background: this.state.newMode === k ? "#7C2317" : "#DED3B8",
+        border: "1.2px solid " + (this.state.newMode === k ? "#7C2317" : "#C0B295")
+      }
+    }));
+    const newNote = i === 0
+      ? "The first phase — everything here is new."
+      : newCount + " of " + p.features.length + " elements are built in this phase; the rest is inherited from " + P[i - 1].name + ".";
+
+    // section through the pools
+    const sec = this.sectionShapes(p, C);
+    const sectionCuts = sec.cuts.map((c) => ({
+      x: c.y0.toFixed(2), w: (c.y1 - c.y0).toFixed(2), h: c.depth.toFixed(2),
+      stroke: this.shade((C[c.cat] || C.bedrock).fill, 0.5),
+      wy: (-(c.water - c.depth)).toFixed(2), wh: Math.max(0, c.water).toFixed(2),
+      label: c.label
+    }));
+    const fmt = (v) => (v > 0 ? "+" + v.toFixed(1) : v.toFixed(1));
+    const strata = T.STRATA.map((s, n) => ({
+      era: s.era, name: s.name,
+      range: fmt(s.top) + " to " + fmt(s.bot) + " m",
+      rowStyle: {
+        display: "flex", alignItems: "stretch", gap: "8px",
+        flexGrow: (s.top - s.bot), flexShrink: 1, flexBasis: "0",
+        minHeight: "42px",
+        borderBottom: n === T.STRATA.length - 1 ? "none" : "1px solid #DDD0B2",
+        background: n % 2 ? "#EFE8D6" : "#F3ECDC"
+      },
+      swatchStyle: {
+        width: "10px", flex: "none",
+        background: (C[s.cat] || C.bedrock).fill
+      }
+    }));
+
+    const secLabels = !sMap ? [] : (() => {
+      const out = [];
+      const drawnH = Math.min(this.state.sBox.w / 222, this.state.sBox.h / 52) * 52;
+      const rungs = drawnH < 120 ? [0, -12] : [0, -3, -6, -9, -12];
+      rungs.forEach((m) => {
+        out.push({
+          t: m === 0 ? "0 m — rim" : m + " m",
+          style: at(sMap, -7, -m, {
+            fontSize: "10.5px", color: "#625743",
+            transform: "translate(-100%,-50%)"
+          })
+        });
+      });
+      out.push({ t: "UPPER POOL", style: at(sMap, 34, 24, { fontSize: "11px", letterSpacing: "0.1em", color: "#4A4030" }) });
+      out.push({ t: "LOWER POOL", style: at(sMap, 98, 24, { fontSize: "11px", letterSpacing: "0.1em", color: "#4A4030" }) });
+      out.push({
+        t: this.state.elev >= 0 ? "+" + this.state.elev + " m" : this.state.elev + " m",
+        style: at(sMap, 168, -this.state.elev, {
+          fontSize: "11px", fontWeight: 600, color: "#7C2317",
+          transform: "translate(-100%,-125%)"
+        })
+      });
+      return out;
+    })();
+    const elevGloss = this.state.elev >= 0
+      ? "Above the present rim of the pools."
+      : Math.abs(this.state.elev).toFixed(0) + " m below the present rim — about " +
+        (Math.abs(this.state.elev) < 4 ? "one storey" : Math.abs(this.state.elev) < 7.5 ? "two storeys" : Math.abs(this.state.elev) < 11 ? "three storeys" : "four storeys") +
+        " down. This marker shows depth below the present rim. It does not identify a fixed first-century water level.";
+
+    const e = d.essays[p.essay] || { title: p.name, dek: "", body: [] };
+    const words = e.body.join(" ").split(/\s+/).length;
+    const note = T.NOTES[p.key] || null;
+    const takeaway = T.TAKEAWAY[p.key] || null;
+    const paras = this.tokenize(e.body, T.TERMS[p.key]);
+
+    if (this.state.modelOpacity < 1) {
+      const o = this.state.modelOpacity;
+      faces.forEach((f, n) => {
+        if (n === 0) return; // ground plane keeps its own state
+        f.fo = (f.fo == null ? 1 : f.fo) * o;
+        f.so = Math.max(o, o * 0.5 + 0.35);
+      });
+      ghostFaces.forEach((g) => { g.fo *= o; g.so *= o; });
+    }
+
+    // ---- a person, 1.7 m, standing on the rim and on the pool floor -------
+    const S = 1.02 * this.state.zoom;
+    const figures = [];
+    if (this.state.figures) {
+      const spots = [{ x: 54, y: 63.5, z: 0 }];
+      let deepest = null;
+      p.features.forEach((f) => {
+        if (f.kind === "pit" && (!deepest || f.depth > deepest.depth)) deepest = f;
+      });
+      if (deepest) {
+        const [cx, cy] = this.centroid(deepest.poly);
+        spots.push({ x: cx, y: cy, z: -deepest.depth });
+      }
+      spots.forEach((sp) => {
+        const foot = this.proj(sp.x, sp.y, sp.z);
+        const head = this.proj(sp.x, sp.y, sp.z + 1.7);
+        const shoulder = this.proj(sp.x, sp.y, sp.z + 1.36);
+        figures.push({
+          x: foot.sx.toFixed(2), y0: foot.sy.toFixed(2), ys: shoulder.sy.toFixed(2),
+          hy: head.sy.toFixed(2), r: Math.max(0.5, 0.23 * S).toFixed(2),
+          sw: Math.max(0.5, 0.44 * S).toFixed(2)
+        });
+      });
+    }
+
+    // ---- measurement on the ground plane ----------------------------------
+    let measure = null;
+    if (this.state.measure && this.state.measure.length === 2) {
+      const [m1, m2] = this.state.measure;
+      const q1 = this.proj(m1.x, m1.y, 0), q2 = this.proj(m2.x, m2.y, 0);
+      const dist = Math.hypot(m2.x - m1.x, m2.y - m1.y);
+      measure = {
+        x1: q1.sx.toFixed(2), y1: q1.sy.toFixed(2), x2: q2.sx.toFixed(2), y2: q2.sy.toFixed(2),
+        m: dist.toFixed(1) + " m",
+        royal: (dist / 0.525).toFixed(0) + " royal cubits",
+        common: (dist / 0.445).toFixed(0) + " common cubits"
+      };
+    } else if (this.state.measure && this.state.measure.length === 1) {
+      const q1 = this.proj(this.state.measure[0].x, this.state.measure[0].y, 0);
+      measure = {
+        x1: q1.sx.toFixed(2), y1: q1.sy.toFixed(2), x2: q1.sx.toFixed(2), y2: q1.sy.toFixed(2),
+        m: "—", royal: "Click a second point", common: ""
+      };
+    }
+
+    // the same 1.7 m person, drawn into the section where the depth is argued
+    const secFigures = [];
+    if (this.state.figures) {
+      const rimY = 63.5;
+      secFigures.push({ x: rimY.toFixed(1), y0: "0", ys: "-1.36", hy: "-1.55" });
+      let deep = null;
+      p.features.forEach((f) => {
+        if (f.kind !== "pit") return;
+        let y0 = Infinity, y1 = -Infinity, x0 = Infinity, x1 = -Infinity;
+        f.poly.forEach((q) => {
+          x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]);
+          y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]);
+        });
+        if (x0 > 54 || x1 < 54) return;
+        if (!deep || f.depth > deep.depth) deep = { depth: f.depth, mid: (y0 + y1) / 2 };
+      });
+      if (deep) {
+        secFigures.push({
+          x: deep.mid.toFixed(1), y0: deep.depth.toFixed(2),
+          ys: (deep.depth - 1.36).toFixed(2), hy: (deep.depth - 1.55).toFixed(2)
+        });
+      }
+    }
+
+    const names = p.features.map((f) => f.label).filter((v, n, arr) => arr.indexOf(v) === n);
+    const phaseAria = "Phase " + (i + 1) + " of " + P.length + ": " + p.name + ", " + p.span + ". " +
+      p.strap + " On the model: " + names.join("; ") + ".";
+
+    return Object.assign(base, {
+      satImages: satTiles.length
+        ? React.createElement(React.Fragment, null, satTiles.filter((s) => !!s.href).map((s, n) =>
+            React.createElement("image", {
+              key: s.href + ":" + n, href: s.href, x: s.x, y: s.y,
+              width: s.w, height: s.w, preserveAspectRatio: "none"
+            })))
+        : null,
+      satMatrix, satAnchor,
+      figures, secFigures, measure, hasMeasure: !!measure, phaseAria,
+      tourStep: "Phase " + (i + 1) + " of " + P.length,
+      idx: i, maxIdx: P.length - 1,
+      periodName: p.name, periodSpan: p.span, strap: p.strap,
+      faces, ghostFaces, planLabels, legend, ticks, compareOptions,
+      evidenceFaces, evidenceLegend,
+      showGospelCompare, gospelButtons, gospelBothStyle, gospelCaption, gospelMarks,
+      gospelBoth: () => this.setState((s) => ({ gospel: s.gospel === "both" ? null : "both" })),
+      pinList, pinCard, porticoList, focusMark, newModes, newNote,
+      modelText, secLabels,
+      sectionShapes: sec.shapes, sectionCuts, strata,
+      elevY: (-this.state.elev).toFixed(2), elevGloss,
+      note, takeaway, hasNote: !!note, hasTakeaway: !!takeaway,
+      termHint: (T.TERMS[p.key] || []).length
+        ? "Underlined phrases in the essay move the model to that spot."
+        : "",
+      essayTitle: e.title, essayDek: e.dek, paras,
+      wordCount: words + " words · phase " + (i + 1) + " of " + P.length,
+      scaleX1: -132, scaleX2: -132 + s50, scaleTx: -132 + s50 - 14,
+      nx1: 112, ny1: 104, nx2: 112 + nDir.x, ny2: 104 + nDir.y, nty: 104 + nDir.y - 3
+    });
+  }
+}
+</script>
+</body>
+</html>

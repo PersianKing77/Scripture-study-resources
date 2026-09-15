@@ -1,0 +1,80 @@
+THIRD-PARTY NOTICES — The Pool of Bethesda, Jerusalem
+=======================================================
+Generated from the locked runtime dependency inventory for this build.
+This file must accompany any distributed copy of the product.
+
+-------------------------------------------------------------------------
+FONTS — see LICENSES.txt for full SIL OFL 1.1 text
+-------------------------------------------------------------------------
+EB Garamond — Copyright 2017 The EB Garamond Project Authors
+IBM Plex Mono — Copyright 2017 IBM Corp., Reserved Font Name "Plex"
+Licence: SIL Open Font License 1.1
+
+-------------------------------------------------------------------------
+RUNTIME LIBRARIES
+-------------------------------------------------------------------------
+React
+Copyright (c) Meta Platforms, Inc. and affiliates.
+Licence: MIT (full text below)
+
+ReactDOM
+Copyright (c) Meta Platforms, Inc. and affiliates.
+Licence: MIT (full text below)
+
+Babel (standalone, browser transpiler)
+Copyright (c) 2014-present Sebastian McKenzie and other contributors.
+Licence: MIT (full text below)
+Note: Babel is a build/dev-time transpiler. Production release builds
+should remove in-browser Babel transpilation where the offline/static
+bundle can ship already-transpiled JavaScript instead.
+
+--- MIT License (applies to React, ReactDOM, and Babel as noted above) ---
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Platform-provided runtime component loader ("support.js")
+Supplied by the design-component platform that built this project.
+
+-------------------------------------------------------------------------
+FIRST-PARTY MATERIAL
+-------------------------------------------------------------------------
+Essays, teaching notes, discussion questions, self-check quizzes, and the
+3D reconstruction geometry were created for this project. See the
+Rights and Permissions Clearance Dossier for scholarly source attribution
+and the geometry-provenance notes accompanying each modeled feature.
+
+-------------------------------------------------------------------------
+SCRIPTURE TEXT
+-------------------------------------------------------------------------
+The 1901 American Standard Version is in the public domain in the United
+States and is used throughout this edition. This is the only translation
+quoted at length anywhere in the product. The King James Version is
+discussed by name (to explain a manuscript difference) but never quoted
+at length.
+
+-------------------------------------------------------------------------
+IMAGERY
+-------------------------------------------------------------------------
+No imagery is bundled with or fetched by this product by default. An
+optional aerial-overlay feature accepts a user-supplied, user-licensed
+tile-service URL; no default third-party imagery endpoint ships in this
+build.
+
+Nothing in this file is legal advice.
