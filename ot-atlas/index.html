@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>The Old Testament &amp; Intertestamental Atlas</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://gibs.earthdata.nasa.gov; connect-src 'self' https://cdn.jsdelivr.net https://bible-api.com https://gibs.earthdata.nasa.gov; frame-src 'none'; object-src 'none'; base-uri 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.mapbox.com; connect-src 'self' https://cdn.jsdelivr.net https://bible-api.com https://api.mapbox.com; frame-src 'none'; object-src 'none'; base-uri 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -29,10 +29,23 @@
   a{color:var(--terra)} a:hover{color:var(--ink)}
   header{display:flex; align-items:baseline; gap:16px; padding:12px 20px 10px; flex-wrap:wrap;
     border-bottom:1px solid var(--rule); background:linear-gradient(#f4ecda,#eee4d0)}
-  .hdracts2{margin-left:auto; display:flex; align-items:center; gap:8px; min-width:0;
-    overflow-x:auto; scrollbar-width:none; padding-bottom:1px}
-  .hdracts2::-webkit-scrollbar{display:none}
-  .hdracts{display:none}
+  .hdracts{display:none; position:fixed; top:calc(max(10px, env(safe-area-inset-top)) + 40px); right:10px;
+    z-index:80; flex-direction:column; align-items:stretch; gap:4px; width:196px;
+    max-height:calc(100vh - 64px); overflow-y:auto; background:#f4ecda; border:1px solid #8d8266; border-radius:3px;
+    box-shadow:0 14px 36px #241f1840; padding:8px}
+  body.ctrl-open .hdracts{display:flex}
+  .hdracts .aboutbtn{width:100%; text-align:left; white-space:normal}
+  .hdracts .menucat{font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-2); margin:7px 2px 2px; padding-top:6px; border-top:1px solid var(--rule)}
+  .hdracts .menucat:first-child{margin-top:0; padding-top:0; border-top:0}
+  .hdrfab{position:fixed; top:max(10px, env(safe-area-inset-top)); right:10px; z-index:81; display:flex; gap:8px}
+  .hdrfab .aboutbtn{height:34px; display:flex; align-items:center; padding:0 12px; border-radius:3px}
+  .ctrlfab{display:flex; align-items:center; justify-content:center; gap:5px;
+    height:34px; padding:0 12px; border-radius:3px; border:1px solid var(--line); background:#f4ecdaf2;
+    color:var(--ink); font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+    line-height:1; cursor:pointer; box-shadow:0 6px 16px #241f1833; white-space:nowrap}
+  .ctrlfab:hover{background:#fff}
+  .ctrlfab[aria-expanded="true"]{background:var(--terra); color:#f4ecda; border-color:var(--terra)}
   header h1{margin:0; font-size:24px; font-weight:600; letter-spacing:.02em; flex:none; white-space:nowrap}
   header .beta{flex:none; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.18em;
     text-transform:uppercase; color:#f4ecda; background:var(--terra); padding:2px 6px; border-radius:2px;
@@ -44,37 +57,19 @@
     border:1px solid var(--line); border-radius:2px; padding:5px 9px; cursor:pointer; white-space:nowrap}
   .aboutbtn:hover{background:#fff; color:var(--ink)}
   .aboutbtn[aria-pressed="true"]{background:#e3d3b0; border-color:var(--terra); color:var(--terra)}
+  .wkreadbtn{background:var(--terra); color:#f4ecda; border-color:var(--terra)}
+  .wkreadbtn:hover{background:#8f3821; color:#f4ecda}
   .more{background:none; border:0; padding:0; margin-top:6px; cursor:pointer; color:var(--terra);
     font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase}
   .more:hover{color:var(--ink)}
   .hdrtitle{display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; min-width:0}
   body.hide-header .hdrtitle{display:none}
-  .ctrlfab{display:none}
   .x{position:absolute; top:4px; right:7px; border:0; background:none; cursor:pointer; font-size:18px; color:var(--ink-2)}
   .x:hover{color:var(--ink)}
   #pane-detail{position:relative}
   @media (max-width:1280px){
     header{padding-top:max(9px, env(safe-area-inset-top)); transition:padding .15s ease}
     body.hide-header header{padding:0; min-height:0; border-bottom:0; background:none}
-    .ctrlfab,.ctrlfab2{display:flex; align-items:center; justify-content:center; position:fixed;
-      top:max(10px, env(safe-area-inset-top)); z-index:81;
-      width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:#f4ecdaf2;
-      color:var(--ink); font-size:16px; line-height:1; cursor:pointer; box-shadow:0 6px 16px #241f1833}
-    .ctrlfab{right:10px}
-    .ctrlfab2{right:50px; border-color:var(--indigo); color:var(--indigo)}
-    .ctrlfab:hover,.ctrlfab2:hover{background:#fff}
-    .ctrlfab[aria-expanded="true"]{background:var(--terra); color:#f4ecda; border-color:var(--terra)}
-    .ctrlfab2[aria-expanded="true"]{background:var(--indigo); color:#f4ecda}
-    .hdracts,.hdracts2{display:none}
-    #dtgrail,#dtgpanel{display:none}
-    body.ctrl-open .hdracts,body.ctrl2-open .hdracts2{display:flex; flex-direction:column; align-items:stretch; gap:5px;
-      position:fixed; top:calc(max(10px, env(safe-area-inset-top)) + 40px); z-index:80; width:168px;
-      max-height:calc(100vh - 64px); overflow-y:auto; background:#f4ecda; border:1px solid #8d8266; border-radius:3px;
-      box-shadow:0 14px 36px #241f1840; padding:7px; margin-left:0}
-    body.ctrl-open .hdracts{right:10px}
-    body.ctrl2-open .hdracts2{right:50px; border-color:var(--indigo)}
-    body.ctrl-open .hdracts .aboutbtn,body.ctrl2-open .hdracts2 .aboutbtn{width:100%; text-align:left; white-space:normal}
-    body.hide-layers .layerbar{display:none}
     .cfmdetailbtn{display:inline-block}
   }
   @media (max-width:1280px){ header .hint{display:none} }
@@ -124,8 +119,27 @@
 
   main{display:grid; grid-template-columns:216px minmax(0,1fr) 384px; min-height:0}
   .rail{border-right:1px solid var(--rule); overflow-y:auto; padding:0 0 18px}
-  .rail h2,.panel h2{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.18em;
+  .panel h2{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.18em;
     text-transform:uppercase; color:var(--ink-2); margin:14px 14px 6px; font-weight:500}
+  .railsec{border-bottom:1px solid var(--rule)}
+  .railsec:last-child{border-bottom:0}
+  .railh2{display:flex; align-items:center; justify-content:space-between; width:100%;
+    font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--ink-2); font-weight:500; background:none; border:0; cursor:pointer; padding:14px 14px 10px; text-align:left}
+  .railh2:hover{color:var(--ink)}
+  .railh2 .arrow{font-size:12px; transition:transform .15s ease}
+  .railsec[data-open="false"] .railh2 .arrow{transform:rotate(-90deg)}
+  .railsec[data-open="false"] .railbody{display:none}
+  .railbody{padding-bottom:10px}
+  .railall{padding:8px 12px; border-bottom:1px solid var(--rule)}
+  .railall button{width:100%; font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--ink-2); background:#f6efdd; border:1px solid var(--line);
+    border-radius:2px; padding:6px 4px; cursor:pointer}
+  .railall button:hover{background:#fff; color:var(--ink)}
+  @media (max-width:900px){
+    .railh2{padding:16px 14px; min-height:44px}
+    .railh2 .arrow{font-size:16px}
+  }
   .searchwrap{padding:10px 12px 4px; position:sticky; top:0; background:var(--parch); z-index:2}
   #q{width:100%; font-family:inherit; font-size:15px; padding:6px 8px; color:var(--ink);
     background:#f6efdd; border:1px solid var(--line); border-radius:2px}
@@ -150,10 +164,8 @@
   .lay .k{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:9.5px; color:var(--ink-2)}
 
   .stage{position:relative; min-width:0; overflow:hidden; background:var(--sea)}
-  svg{display:block; width:100%; height:100%; cursor:grab}
-  svg.dragging{cursor:grabbing}
-  .layerbar{position:absolute; top:10px; left:12px; right:12px; display:flex; flex-wrap:wrap; gap:5px; z-index:4}
-  /* the chip bar keeps wrapping: the map row has a floor, so there is room for both */
+  #map{display:block; width:100%; height:100%; cursor:grab}
+  #map.dragging{cursor:grabbing}
   .lchip{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase;
     padding:4px 7px; border:1px solid var(--line); border-radius:2px; background:#f4ecdad9; color:var(--ink-2);
     cursor:pointer; white-space:nowrap}
@@ -206,28 +218,28 @@
     padding:5px 8px; border-radius:2px; z-index:4; pointer-events:none}
   .tilecredit{position:absolute; right:12px; top:auto; bottom:38px; font-family:"IBM Plex Mono",monospace;
     font-size:9px; color:#e9e2d0; text-shadow:0 1px 3px #000a; pointer-events:none; text-align:right}
-  #map.sat{background:#0d1520}
+  #map.imagery{background:#0d1520}
   /* over imagery every label needs its own dark halo, or it disappears into the ground */
-  #map.sat .site-label,#map.relief .site-label,
-  #map.sat .citylab,#map.relief .citylab{stroke:#000000c9; stroke-width:3.6px; fill:#fff !important}
-  #map.sat .cityval,#map.relief .cityval{stroke:#000000c9; stroke-width:3.2px; fill:#bcd3dc !important}
-  #map.sat .region-label,#map.relief .region-label,
-  #map.sat .tribe-label,#map.relief .tribe-label,
-  #map.sat .water-label,#map.relief .water-label,
-  #map.sat .road-label,#map.relief .road-label,
-  #map.sat .zone-label,#map.relief .zone-label,
-  #map.sat .zone-belt,#map.relief .zone-belt,
-  #map.sat .isohyet-label,#map.relief .isohyet-label,
-  #map.sat .dist-label,#map.relief .dist-label,
-  #map.sat .kingdom-label,#map.relief .kingdom-label{
+  #map.imagery .site-label,
+  #map.imagery .citylab{stroke:#000000c9; stroke-width:3.6px; fill:#fff !important}
+  #map.imagery .cityval{stroke:#000000c9; stroke-width:3.2px; fill:#bcd3dc !important}
+  #map.imagery .region-label,
+  #map.imagery .tribe-label,
+  #map.imagery .water-label,
+  #map.imagery .road-label,
+  #map.imagery .zone-label,
+  #map.imagery .zone-belt,
+  #map.imagery .isohyet-label,
+  #map.imagery .dist-label,
+  #map.imagery .kingdom-label{
     fill:#ffffff !important; opacity:1;
-    paint-order:stroke; stroke:#08111a; stroke-width:3.6px; stroke-linejoin:round; stroke-linecap:round}
-  #map.sat .region-label,#map.relief .region-label{font-size:13px}
-  #map.sat .zone-label,#map.relief .zone-label,
-  #map.sat .zone-belt,#map.relief .zone-belt{font-size:10.5px; letter-spacing:.06em}
-  #map.sat .road-label,#map.relief .road-label{fill:#f2e4c8 !important}
-  #map.sat .coast{stroke:#ffffff55}
-  #map.sat .kingdom-label{stroke:#08111a; stroke-width:3.8px}
+    paint-order:stroke; stroke:#08111a; stroke-width:4px; stroke-linejoin:round; stroke-linecap:round}
+  #map.imagery .region-label{font-size:15px}
+  #map.imagery .zone-label,
+  #map.imagery .zone-belt{font-size:11.5px; letter-spacing:.06em}
+  #map.imagery .road-label{fill:#f2e4c8 !important}
+  #map.imagery .coast{stroke:#ffffff55}
+  #map.imagery .kingdom-label{stroke:#08111a; stroke-width:4.2px}
   #map.relief{background:#cdd8d8}
   .zone-label{font-family:"IBM Plex Mono",monospace; fill:#3f6b76; paint-order:stroke; stroke:#efe6d4;
     stroke-width:2.5px; stroke-linejoin:round; pointer-events:none}
@@ -236,10 +248,14 @@
   .scalebar{position:absolute; left:52px; bottom:16px; font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:#3c3a33}
   .scalebar .bar{height:5px;border:1px solid #4a4740;border-top:0;margin-bottom:2px}
 
-  .panel{border-left:1px solid var(--rule); overflow:hidden; display:grid; grid-template-rows:auto auto minmax(0,1fr)}
-  .cfmreturn{display:flex; padding:8px 12px; border-bottom:1px solid var(--rule); background:#f7ece6}
+  .panel{position:relative; border-left:1px solid var(--rule); overflow:hidden; display:grid; grid-template-rows:auto auto auto minmax(0,1fr)}
+  .panelclose{position:absolute; top:6px; right:6px; width:26px; height:26px; z-index:5; font-size:16px; line-height:1;
+    background:#eee4d0; border:1px solid var(--line); border-radius:2px; color:var(--ink); cursor:pointer}
+  .panelclose:hover{background:#fff}
+  .basemaprow{display:flex; gap:5px; flex-wrap:wrap; padding:0 12px 10px}
+  .cfmreturn{display:flex; padding:6px 12px; border-bottom:1px solid var(--rule); background:#f7ece6; grid-row:3}
   .cfmreturn[hidden]{display:none}
-  .cfmweeknav{display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid var(--rule); background:#eee4d0}
+  .cfmweeknav{display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid var(--rule); background:#eee4d0; grid-row:1}
   .cfmweeknav[hidden]{display:none}
   .cfmweeknav button{border:1px solid var(--line); background:#f4ecda; color:var(--ink); cursor:pointer;
     width:34px; height:34px; border-radius:2px; font-size:16px; line-height:1}
@@ -247,10 +263,10 @@
   .cfmweeknav button:disabled{opacity:.4; cursor:default}
   .cfmweeknav span{flex:1; text-align:center; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
     letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2)}
-  .cfmreturn button{width:100%; display:flex; align-items:center; gap:6px; background:var(--terra); color:#f4ecda;
-    border:0; border-radius:3px; padding:10px 13px; cursor:pointer; font-family:"IBM Plex Mono",monospace;
-    font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 3px 10px #241f1833}
-  .cfmreturn button:hover{background:var(--ink)}
+  .cfmreturn button{width:100%; display:flex; align-items:center; gap:5px; background:transparent; color:var(--terra);
+    border:1px solid var(--terra); border-radius:2px; padding:5px 9px; cursor:pointer; font-family:"IBM Plex Mono",monospace;
+    font-size:10px; letter-spacing:.04em}
+  .cfmreturn button:hover{background:var(--terra); color:#f4ecda}
   body.hide-rail .rail{display:none}
   body.hide-panel .panel{display:none}
   body.hide-rail main{grid-template-columns:minmax(0,1fr) 384px}
@@ -258,18 +274,18 @@
   body.hide-rail.hide-panel main{grid-template-columns:minmax(0,1fr)}
   body.hide-timeline footer{display:none}
   .tabs{display:flex; border-bottom:1px solid var(--rule); background:#eee4d0;
-    overflow-x:auto; scrollbar-width:none}
+    overflow-x:auto; scrollbar-width:none; grid-row:2}
   .tabs::-webkit-scrollbar{display:none}
   .tabs button{flex:1 1 auto; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border:0; background:none; cursor:pointer; padding:9px 5px 8px;
     font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.04em; text-transform:uppercase;
     color:var(--ink-2); border-bottom:2px solid transparent}
   .tabs button:hover{color:var(--ink)}
   .tabs button[aria-current="true"]{color:var(--terra); border-bottom-color:var(--terra); background:var(--parch)}
-  .pane{overflow-y:auto; padding-bottom:26px; background:var(--parch)}
+  .pane{overflow-y:auto; padding-bottom:26px; background:var(--parch); grid-row:4}
   .pane[hidden]{display:none}
   .body{padding:13px 17px}
   .kicker{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--terra)}
-  .pane h3{margin:4px 0 2px; font-size:22px; font-weight:600; line-height:1.15}
+  .pane h3{margin:0 0 2px; font-size:20px; font-weight:600; line-height:1.15}
   .dates{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-2); margin-bottom:9px}
   .pacebar{display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin:2px 0 7px}
   .pacesel{font-family:"IBM Plex Mono",monospace; font-size:10.5px; background:#f6efdd; color:var(--ink);
@@ -295,6 +311,10 @@
   .chip{border:1px solid var(--line); background:#f2e9d6; cursor:pointer; font-family:inherit; font-size:14px;
     padding:3px 8px; border-radius:2px; color:var(--ink)}
   .chip:hover{background:#fff}
+  .findbadge{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.04em; color:var(--ink-2);
+    background:#eee4d0; border:1px solid var(--line); border-radius:2px; padding:3px 6px; cursor:pointer; line-height:1}
+  .findbadge:hover{background:var(--terra); color:#f4ecda; border-color:var(--terra)}
+  .cfmplacewrap{display:inline-flex; align-items:center; gap:3px}
   .ref{border:1px solid #d3b6ab; background:#f7ece6; color:var(--terra); cursor:pointer;
     font-family:"IBM Plex Mono",monospace; font-size:11px; padding:3px 7px; border-radius:2px}
   .ref:hover{background:#fff; color:var(--ink)}
@@ -360,6 +380,8 @@
   footer{border-top:1px solid var(--rule); padding:7px 20px 10px; background:#eee4d0;
     display:grid; grid-template-rows:minmax(0,1fr) auto; min-height:0}
   .tlrow{display:flex; align-items:stretch; gap:8px; min-width:0}
+  #eraprev, #eranext{flex:none; width:34px; font-size:14px; padding:0}
+  #eraprev:disabled, #eranext:disabled{opacity:.35; cursor:default}
   .tlbtn{flex:none; border:1px solid var(--line); background:#f6efdd; color:var(--ink-2); cursor:pointer;
     font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
     padding:0 9px; border-radius:2px}
@@ -393,9 +415,9 @@
   .tl button[aria-current="true"]{color:var(--terra); border-bottom-color:var(--terra)}
 
   .site-label{font-size:11.5px; paint-order:stroke; stroke:#efe6d4; stroke-width:3px; stroke-linejoin:round; pointer-events:none}
-  .region-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.22em; fill:#8a7c5f; pointer-events:none}
-  .tribe-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.16em; fill:#7d6a4b; pointer-events:none}
-  .kingdom-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.22em; opacity:.85; paint-order:stroke;
+  .region-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.1em; font-size:12px; fill:#8a7c5f; pointer-events:none}
+  .tribe-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.08em; font-size:11px; fill:#7d6a4b; pointer-events:none}
+  .kingdom-label{font-family:"IBM Plex Mono",monospace; letter-spacing:.1em; opacity:.85; paint-order:stroke;
     stroke:#efe6d4; stroke-width:3px; stroke-linejoin:round; pointer-events:none}
   .water-label{font-style:italic; fill:#6d8189; pointer-events:none}
   .modern-label{font-family:"IBM Plex Mono",monospace; fill:#2f6d8c; paint-order:stroke; stroke:#eef4f6;
@@ -411,7 +433,7 @@
   .cfmnow .k{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.16em;
     text-transform:uppercase; color:var(--terra)}
   .cfmnow .t{display:block; font-size:17px; line-height:1.25; margin:2px 0 6px}
-  .where{margin:9px 0 2px; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:8px 0}
+  .where{margin:9px 0 2px; border-bottom:1px solid var(--rule); padding:8px 0}
   .wrow{display:grid; grid-template-columns:88px minmax(0,1fr); gap:9px; padding:3px 0; font-size:14.5px; line-height:1.4}
   .wk{font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.14em; text-transform:uppercase;
     color:var(--ink-2); padding-top:4px}
@@ -451,7 +473,7 @@
   body.present .presentacts{display:flex}
   .presentpill:hover{background:var(--terra)}
   body.present .presentpill{display:block}
-  body.present .rail,body.present .panel,body.present .layerbar,body.present .legtoggle,
+  body.present .rail,body.present .panel,body.present .legtoggle,
   body.present .legend,body.present header .hint,body.present .tilecredit{display:none}
   body.chrono-open footer{padding-bottom:8px}
   body.present main{grid-template-columns:minmax(0,1fr)}
@@ -483,7 +505,7 @@
   .focusring{animation:spin 1.6s linear infinite}
   .focus-label{font-size:12px; font-family:"EB Garamond",Georgia,serif; paint-order:stroke; stroke:#f4ecda;
     stroke-width:3.5px; stroke-linejoin:round; pointer-events:none}
-  #map.sat .focus-label,#map.relief .focus-label{stroke:#000000c9; fill:#fff !important}
+  #map.imagery .focus-label{stroke:#000000c9; fill:#fff !important}
   @keyframes pulse{0%{opacity:.85; r:9}70%{opacity:0; r:22}100%{opacity:0; r:22}}
 
   /* ---- shared overlay shell: guide, camp diagram, study sheet ---- */
@@ -587,7 +609,6 @@
     main{grid-template-columns:minmax(0,1fr)}
     header{padding:9px 12px 8px; gap:8px}
     header h1{font-size:17px}
-    .hdracts2{gap:5px}
     .aboutbtn{padding:8px 8px; font-size:9px}
     footer{display:none}
     .rail{position:fixed; top:0; bottom:0; left:0; width:min(332px,87vw); z-index:42;
@@ -603,10 +624,6 @@
     .scrim{display:block; position:fixed; inset:0; background:#241f1833; z-index:41;
       opacity:0; pointer-events:none; transition:opacity .22s ease}
     body.drawer-open #scrim,body.sheet-open #scrim{opacity:1; pointer-events:auto}
-    .layerbar{flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden; scrollbar-width:none;
-      -webkit-overflow-scrolling:touch; padding-bottom:2px; left:8px; right:8px}
-    .layerbar::-webkit-scrollbar{display:none}
-    .lchip{flex:0 0 auto}
     .scalebar{bottom:12px}
     .tilecredit{bottom:12px}
     .tourbar,#cfmbar{left:8px; right:8px; max-width:none; bottom:12px; max-height:54vh; overflow-y:auto}
@@ -622,10 +639,7 @@
     .card{width:min(300px,calc(100% - 24px))}
     body.chrono-open footer{display:block; position:fixed; left:0; right:0; bottom:0; z-index:43;
       background:#f4ecda; border-top:1px solid var(--rule); max-height:72vh; overflow:auto}
-    body.chrono-open .ctrlfab,body.chrono-open .ctrlfab2{z-index:82}
-    .ctrllayers{display:flex; flex-direction:column; max-height:180px; overflow-y:auto; gap:2px;
-      border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin:2px 0; padding:4px 0}
-    .ctrllayers .lay{min-height:30px; padding:4px 6px; font-size:12px}
+    body.chrono-open .hdrfab{z-index:82}
     body.sheet-open .zoombar,body.sheet-open .scalebar,body.sheet-open .tilecredit,
     body.sheet-open .legtoggle,body.sheet-open .legend{display:none}
   }
@@ -657,6 +671,7 @@
     .tournav{position:sticky; bottom:-11px; z-index:1; background:#f4ecdaf5; margin:8px -12px -11px;
       padding:8px 12px 11px; border-top:1px solid var(--rule)}
     body.tab-panel-open .tourbar,body.tab-panel-open #cfmbar{right:calc(min(30vw,380px) + 20px)}
+    body.tab-panel-open .hdrfab,body.tab-panel-open .hdracts{right:calc(min(30vw,380px) + 20px)}
     body.tab-panel-open .zoombar,body.tab-panel-open .legtoggle,body.tab-panel-open .legend{display:none}
   }
 </style>
@@ -669,29 +684,35 @@
   <span class="sub">Ur to the death of Herod</span>
   <span class="hint">drag to pan · scroll to zoom · click any place, event or verse</span>
   </div>
-  <button class="ctrlfab2" id="ctrlbtn2" aria-expanded="false" aria-label="More: Weekly Reading, presenter mode, study sheet, share, guide, credits" title="More: Weekly Reading, presenter mode, study sheet, share, guide, credits">⋯</button>
-  <button class="ctrlfab" id="ctrlbtn" aria-expanded="false" aria-label="Show and hide panels" title="Show and hide panels">⋯</button>
+  <div class="hdrfab">
+    <button class="aboutbtn wkreadbtn" id="cfmbtn" title="Study — this week’s reading on the map (w)">Study</button>
+    <button class="ctrlfab" id="ctrlbtn" aria-expanded="false" aria-label="Tools menu: panels, layers, tools and help" title="Tools">Tools</button>
+  </div>
   <div class="hdracts" id="hdracts">
-    <button class="aboutbtn" id="tgheader" aria-pressed="true">Top bar</button>
-    <button class="aboutbtn" id="mbbrowse" aria-pressed="false">Left side panel</button>
-    <button class="aboutbtn" id="mbpanel" aria-pressed="false">Right panel</button>
-    <button class="aboutbtn" id="mbtime" aria-pressed="false">Timeline</button>
-    <button class="aboutbtn" id="tglayers" aria-pressed="true">Map layers</button>
+    <div class="menucat">View</div>
+    <button class="aboutbtn" id="tgheader" aria-pressed="true" title="Show or hide the top title bar">Header bar</button>
+    <button class="aboutbtn" id="mbbrowse" aria-pressed="false" title="Left sidebar: search, map layers, eras, scale">Left sidebar (search &amp; layers)</button>
+    <button class="aboutbtn" id="mbpanel" aria-pressed="false" title="Right panel: era, study, tours, place and other details">Right panel (place &amp; reading details)</button>
+    <button class="aboutbtn" id="mbtime" aria-pressed="false" title="Show or hide the chronology timeline">Timeline</button>
+    <button class="aboutbtn" id="mbmap" aria-pressed="false" title="Hide every panel and show only the map">Map only (hide all panels)</button>
+    <button class="aboutbtn" id="cfmbtn2" title="Study — this week’s reading on the map (w)">Study</button>
+    <div class="menucat">Basemap</div>
+    <div class="basemaprow" id="basemaprow-tools" style="padding:0 2px 4px"></div>
+    <button class="aboutbtn" id="modroadsbtn" aria-pressed="true" title="Hide the roads and place-name labels drawn into the satellite basemap">Modern roads &amp; labels: On</button>
+    <div class="menucat">Layers</div>
     <button class="aboutbtn" id="laychip-all">All layers on</button>
     <button class="aboutbtn" id="laychip-clear">All layers off</button>
-    <button class="aboutbtn" id="laychip-reset">Reset layers</button>
-    <div class="ctrllayers" id="ctrllayers"></div>
-    <button class="aboutbtn" id="mbmap" aria-pressed="false">Map only</button>
-  </div>
-  <div class="hdracts2" id="hdracts2">
-    <button class="aboutbtn" id="dtgrail" aria-pressed="true">Left panel</button>
-    <button class="aboutbtn" id="dtgpanel" aria-pressed="true">Right panel</button>
-    <button class="aboutbtn" id="cfmbtn" title="Weekly Reading — this week’s reading on the map (w)">Weekly Reading</button>
+    <button class="aboutbtn" id="laychip-reset" title="Back to the recommended starting layers: Journeys, Places and Events">Reset layers</button>
+    <div class="menucat">Tools</div>
+    <button class="aboutbtn" id="unitsbtn" aria-pressed="false">Units: Km</button>
     <button class="aboutbtn" id="presentbtn" title="Presenter mode — large type, high contrast, no controls (m or p)">Presenter</button>
     <button class="aboutbtn" id="sheetbtn" title="Printable study sheet for the current week or era">Study sheet</button>
     <button class="aboutbtn" id="sharebtn" title="Copy a link that reopens exactly this view">Share view</button>
+    <div class="menucat">Chronology</div>
+    <select id="chronomodelsel" class="aboutbtn" title="Which Exodus/Conquest/Judges date model to display" aria-label="Chronology model"></select>
+    <div class="menucat">Help</div>
     <button class="aboutbtn" id="guidebtn" title="A six-step tour of the controls (?)">Guide</button>
-  <button class="aboutbtn" id="creditsbtn" title="Credits, licences and attributions">Credits</button>
+    <button class="aboutbtn" id="creditsbtn" title="Credits, licences and attributions">Credits</button>
     <button class="aboutbtn" id="aboutbtn">About</button>
   </div>
 </header>
@@ -712,23 +733,46 @@
       <input id="q" type="search" placeholder="Search places, events, peoples…" autocomplete="off">
       <div id="results"></div>
     </div>
-    <h2>Map layers</h2>
-    <div id="layers"></div>
-    <h2>Eras</h2>
-    <div id="eralist"></div>
-    <h2>Scale</h2>
-    <div class="theaters" id="theaters"></div>
-    <h2>Compare eras</h2>
-    <select id="cmp" title="Ghost the routes and places of another era over this one"
-      style="width:100%; font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:6px;
-             background:#f6efdd; border:1px solid var(--line); color:var(--ink)">
-      <option value="-1">No comparison</option>
-    </select>
+    <div class="railall">
+      <button id="railtoggle" type="button">Expand all</button>
+    </div>
+    <div class="railsec" data-open="false">
+      <button class="railh2" type="button">Map layers<span class="arrow">▾</span></button>
+      <div class="railbody">
+        <div class="basemaprow" id="basemaprow-rail"></div>
+        <div class="basemaprow" style="padding:0 0 6px">
+          <button class="aboutbtn" id="raillay-all" style="flex:1">All on</button>
+          <button class="aboutbtn" id="raillay-clear" style="flex:1">All off</button>
+          <button class="aboutbtn" id="raillay-reset" style="flex:1" title="Back to the recommended starting layers: Journeys, Places and Events">Reset</button>
+        </div>
+        <div id="layers"></div>
+      </div>
+    </div>
+    <div class="railsec" data-open="false">
+      <button class="railh2" type="button">Eras<span class="arrow">▾</span></button>
+      <div class="railbody"><div id="eralist"></div></div>
+    </div>
+    <div class="railsec" data-open="false">
+      <button class="railh2" type="button">Scale<span class="arrow">▾</span></button>
+      <div class="railbody"><div class="theaters" id="theaters"></div></div>
+    </div>
+    <script>
+      document.querySelectorAll(".railsec > .railh2").forEach(btn=>{
+        btn.onclick = ()=>{
+          const sec = btn.closest(".railsec");
+          sec.dataset.open = sec.dataset.open==="true" ? "false" : "true";
+        };
+      });
+      document.getElementById("railtoggle").onclick = e=>{
+        const allOpen = [...document.querySelectorAll(".railsec")].every(s=>s.dataset.open==="true");
+        document.querySelectorAll(".railsec").forEach(s=>s.dataset.open = allOpen ? "false" : "true");
+        e.target.textContent = allOpen ? "Expand all" : "Collapse all";
+      };
+    </script>
   </nav>
 
   <div class="stage" id="stage">
     <svg id="map"></svg>
-    <div class="layerbar" id="layerbar"></div>
     <div class="hovertip" id="hovertip"></div>
     <div class="zoombar">
       <button id="zin" title="Zoom in">+</button>
@@ -770,13 +814,14 @@
   </div>
 
   <aside class="panel">
+    <button class="panelclose" id="panelclose" title="Close panel" aria-label="Close panel">×</button>
     <div class="cfmweeknav" id="cfmweeknav" hidden>
       <button id="cfmwnprev" aria-label="Previous week" title="Previous week">‹</button>
-      <span id="cfmwnlabel"></span>
       <button id="cfmwnnext" aria-label="Next week" title="Next week">›</button>
+      <span id="cfmwnlabel"></span>
     </div>
-    <div class="cfmreturn" id="cfmreturn" hidden><button id="cfmreturnbtn">‹ Back to this week’s reading</button></div>
     <div class="tabs" id="tabs"></div>
+    <div class="cfmreturn" id="cfmreturn" hidden><button id="cfmreturnbtn">‹ Back to this week’s reading</button></div>
     <div class="pane" id="pane-era"></div>
     <div class="pane" id="pane-cfm" hidden></div>
     <div class="pane" id="pane-tours" hidden></div>
@@ -804,7 +849,8 @@
   </div>
   <div class="tlrow">
     <button class="tlbtn" id="chronobtn" aria-pressed="false">Timeline</button>
-    <select id="chronomodelsel" class="tlbtn" title="Which Exodus/Conquest/Judges date model to display" aria-label="Chronology model"></select>
+    <button class="tlbtn" id="eraprev" aria-label="Previous era" title="Previous era">‹</button>
+    <button class="tlbtn" id="eranext" aria-label="Next era" title="Next era">›</button>
     <div class="tl" id="tl"></div>
   </div>
 </footer>
@@ -859,7 +905,7 @@
         you last clicked.</p>
       <div class="subhead">Finding your way in</div>
       <ul>
-        <li><em>Weekly Reading</em> (key w) opens the reading year: pick a week and the map sets itself to that
+        <li><em>Study</em> (key w) opens the reading year: pick a week and the map sets itself to that
           reading — era, layers, places and one note on what the ground adds.</li>
         <li><em>Tours</em> is the easiest start: eight narrated walks that set the map up stop by stop.</li>
         <li><em>Presenter</em> (key m) strips the controls and enlarges every label for a classroom projector.</li>
@@ -890,8 +936,7 @@
       <ul>
         <li>Coastlines and modern borders: Natural Earth, public domain, 1:50m.</li>
         <li>Scripture text: American Standard Version (1901), public domain worldwide — no jurisdiction requires a licence.</li>
-        <li>Relief: NASA shaded relief with bathymetry, public domain, served through
-          NASA GIBS. Imagery needs a connection; without one the atlas falls back to the drawn map.</li>
+        <li>Relief: terrain tiles from Mapbox (© Mapbox © OpenStreetMap contributors). Imagery needs a connection; without one the atlas falls back to the drawn map.</li>
         <li>Elevations are the recorded heights of the named places, quoted in each place entry.</li>
         <li>Dates are editorial choices, not settled facts: each era says which chronology it follows and what the
           alternative is. In beta these are under review.</li>
@@ -1024,6 +1069,7 @@
 <script src="atlas-data.js"></script>
 <script src="atlas-intertestamental.js"></script>
 <script src="atlas-finds.js"></script>
+<script src="atlas-catalog.js"></script>
 <script src="atlas-questions.js"></script>
 <script>
 /* Index every campaign and find AFTER all data files have loaded: the base data assigns its
@@ -1042,13 +1088,15 @@ const BOOKS = {
   mal:"Malachi"
 };
 const norm = s => s.toLowerCase().replace(/[\s.]/g,"");
+const BOOKLOOKUP = Object.assign({}, BOOKS);
+Object.values(BOOKS).forEach(full=>{ BOOKLOOKUP[norm(full)] = full; });
 
 /* "Gen 11:31 – 13:18" -> {book, display, query, chapters:[11,12,13]} */
 function parseRef(tok){
   let t = tok.trim().replace(/^cf\.\s*/i,"").replace(/[–—]/g,"-").replace(/\s*-\s*/g,"-");
   const m = t.match(/^([123]?\s?[A-Za-z]+\.?)\s*(.*)$/);
   if(!m) return null;
-  const book = BOOKS[norm(m[1])];
+  const book = BOOKLOOKUP[norm(m[1])];
   if(!book) return null;
   const nums = m[2].trim();
   const chapters = [];
@@ -1092,16 +1140,18 @@ function indexRef(refStr, entry){
 }
 Object.values(S).forEach(s => indexRef(s.r, {kind:"place", label:s.n, id:s.id, c:s.c}));
 EVENTS.forEach((v,i) => indexRef(v.r, {kind:"event", label:v.t, i, c:v.c, era:v.e}));
+FINDS.forEach((f,i) => indexRef(f.r, {kind:"find", label:f.n, i, c:f.c}));
 ERAS.forEach((e,ei) => e.journeys.forEach((j,ji) => indexRef(j.refs, {kind:"journey", label:j.name, ei, ji})));
 PEOPLES.forEach((p,i) => { /* peoples carry loose refs; index by book mentions only */ });
 
 /* =========================== state =========================== */
 const state = {
   era: 1, tab: "era", activeJourney: null, place: null, people: null,
-  passage: null, highlight: [], verseIds: [], campaign: null, find: null, allFinds: false, focus: null, tour: null,
+  passage: null, highlight: [], verseIds: [], campaign: null, find: null, allFinds: false, findsPlace: null, focus: null, tour: null,
+  units: "km",
   layers: { routes:false, places:false, events:false, campaigns:false, finds:false,
             kingdoms:false, roads:false, distances:false, tribes:false, modern:false,
-            terrain:false, relief:false, city:false,
+            terrain:false, relief:false, city:false, streets:true,
             names:false, certainty:false },
   cityPeriod: "nehemiah",
   chronoModel: (()=>{ try{ return localStorage.getItem("otatlas:chrono") || "neutral"; }catch(e){ return "neutral"; } })()
@@ -1137,7 +1187,6 @@ const gLand = root.append("g"), gModern = root.append("g"), gWater = root.append
       gCity = root.append("g"), gVerse = root.append("g"), gBattles = root.append("g"), gEvents = root.append("g"), gFinds = root.append("g"), gDist = root.append("g"),
       gSites = root.append("g"), gLabels = root.append("g"),
       gFocus = root.append("g");
-const gCmp = root.insert("g", ()=>gRoutes.node());     // ghosted comparison era, under the live one
 const RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const say = msg => { const l = document.getElementById("live"); if(l) l.textContent = msg; };
 const CF_COLOR = { secure:"#2f6b64", probable:"#8a6a1f", disputed:"#7a2f2f", unrated:"#8a8272" };
@@ -1150,7 +1199,6 @@ function cfOf(id){ const p = (typeof PREC!=="undefined" && PREC[id]) || {};
   return p.cf || ((S[id] && S[id].q) ? "disputed" : "unrated"); }
 const cfColor = id => CF_COLOR[cfOf(id)] || "#8a8272";
 const modName = m => (m||"").split(",")[0].trim();
-let cmpEra = -1;
 const CHRON = {
   primeval:"The atlas gives no absolute dates here: Genesis 1–11 is placed by sequence, not by calendar.",
   patriarchs:"The atlas follows the traditional early dating, c. 2000–1700 BC, read from the internal chronology of Genesis and 1 Kgs 6:1.",
@@ -1173,12 +1221,12 @@ const line = d3.line().curve(d3.curveCatmullRom.alpha(0.6));
 let transform = d3.zoomIdentity, land, coast, borders;
 
 function fitTo(bbox){
-  projection.fitExtent([[22,22],[W-22,H-22]],{type:"MultiPoint",coordinates:[
+  projection.fitExtent([[24,24],[W-30,H-24]],{type:"MultiPoint",coordinates:[
     [bbox[0][0],bbox[0][1]],[bbox[1][0],bbox[0][1]],[bbox[1][0],bbox[1][1]],[bbox[0][0],bbox[1][1]]]});
 }
 const px = p => Array.isArray(p) ? projection(p) : projection(S[p].c);
 
-const zoom = d3.zoom().scaleExtent([0.12,2000]).on("zoom", e=>{
+const zoom = d3.zoom().scaleExtent([0.45,2000]).on("zoom", e=>{
   transform = e.transform; root.attr("transform",transform);
   const k = transform.k;
   gSites.selectAll("circle.pin").interrupt().attr("opacity",1);
@@ -1224,7 +1272,6 @@ function scaleMarks(k){
   gCity.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   gCity.selectAll("g.cy").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   relayoutCityLabels();
-  renderCompare();
   gKing.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   gTerrain.selectAll("text").attr("transform",d=>`translate(${d.xy}) scale(${1/k})`);
   gTerrain.selectAll("path").attr("stroke-width",1.6/k).attr("stroke-dasharray",`${8/k} ${4/k}`);
@@ -1244,11 +1291,13 @@ function updateScale(){
   const c = projection.invert([W/2,H/2]);
   const p1 = projection([c[0],c[1]]), p2 = projection([c[0]+1,c[1]]);
   const kmPerPx = 111.32*Math.cos(c[1]*Math.PI/180)/((p2[0]-p1[0])*transform.k);
+  const unitPerPx = state.units==="mi" ? kmPerPx*0.621371 : kmPerPx;
   const targets=[0.05,0.1,0.25,0.5,1,2,5,10,25,50,100,200,400,800,1600];
-  const km = targets.find(t=>t/kmPerPx>70 && t/kmPerPx<190) ||
-    targets.reduce((a,b)=>Math.abs(b/kmPerPx-120)<Math.abs(a/kmPerPx-120)?b:a);
-  document.getElementById("scalebar").style.width = Math.min(W-70, km/kmPerPx).toFixed(0)+"px";
-  document.getElementById("scaletext").textContent = km < 1 ? Math.round(km*1000)+" m" : km+" km";
+  const val = targets.find(t=>t/unitPerPx>70 && t/unitPerPx<190) ||
+    targets.reduce((a,b)=>Math.abs(b/unitPerPx-120)<Math.abs(a/unitPerPx-120)?b:a);
+  document.getElementById("scalebar").style.width = Math.min(W-70, val/unitPerPx).toFixed(0)+"px";
+  const big = state.units==="mi" ? "mi" : "km", small = state.units==="mi" ? "ft" : "m", perBig = state.units==="mi" ? 5280 : 1000;
+  document.getElementById("scaletext").textContent = val < 1 ? Math.round(val*perBig)+" "+small : val+" "+big;
 }
 
 const REGION = [[-32,-28],[124,76]];            // wide enough to pull right back without cut edges
@@ -1556,7 +1605,6 @@ function renderMap(animate){
     .attr("transform",d=>`translate(${d.xy}) scale(${1/k})`).text(d=>d.t);
 
   renderTiles();
-  renderCompare();
   relayoutRoadLabels();
   renderDistances();
   applyDetailVisibility();
@@ -1702,9 +1750,7 @@ function visibleStageSize(){
   let visW = W, visH = H;
   if(window.innerWidth<=820) visH = H - (document.body.classList.contains("sheet-open") ? Math.min(H*0.45, 420) : 0);
   else if(window.innerWidth<=1280) visW = W - (document.body.classList.contains("tab-panel-open") ? Math.min(W*0.30, 380) : 0);
-  const layerbarEl = document.getElementById("layerbar");
-  const topOffset = (!document.body.classList.contains("hide-layers") && layerbarEl)
-    ? layerbarEl.getBoundingClientRect().height + 18 : 0;
+  const topOffset = 0;
   visH -= topOffset;
   return {visW, visH, topOffset};
 }
@@ -1825,11 +1871,12 @@ function spotlightVerse(ids, fit){
 }
 
 /* =========================== raster tiles (relief) =========================== */
-function activeTileset(){ return state.layers.relief ? "relief" : null; }
+function activeTileset(){ return BASES.find(b=>state.layers[b]) || null; }
 function renderTiles(){
   const set = activeTileset();
   const svgEl = document.getElementById("map");
   svgEl.classList.toggle("relief", set==="relief");
+  svgEl.classList.toggle("imagery", !!set);
   gLand.selectAll(".landmass").attr("fill-opacity", set==="relief" ? 0.35 : set ? 0 : 1);
   gWater.selectAll(".lake").attr("fill-opacity", set?0:1);
   document.getElementById("tilecredit").textContent = set ? TILESETS[set].credit : "";
@@ -1842,7 +1889,8 @@ function renderTiles(){
   const lon0 = Math.max(-179.9, Math.min(nw[0],se[0])), lon1 = Math.min(179.9, Math.max(nw[0],se[0]));
   const lat1 = Math.min(85, Math.max(nw[1],se[1])), lat0 = Math.max(-85, Math.min(nw[1],se[1]));
   const spanLon = lon1 - lon0;
-  let z = Math.round(Math.log2(360 / Math.max(0.02, spanLon)) + Math.log2(W/256));
+  const tileSize = TILESETS[set].tileSize || 256;
+  let z = Math.round(Math.log2(360 / Math.max(0.02, spanLon)) + Math.log2(W/tileSize));
   z = Math.max(1, Math.min(TILESETS[set].maxZ || 19, z));
   const n = 2**z;
   const xOf = lon => Math.floor((lon+180)/360*n);
@@ -1881,6 +1929,7 @@ function km(a,b){
   const s=Math.sin(dLat/2)**2 + Math.cos(a[1]*t)*Math.cos(b[1]*t)*Math.sin(dLon/2)**2;
   return 2*R*Math.asin(Math.sqrt(s));
 }
+const near = (a,b)=>km(a,b) < 12;
 const coordOf = p => Array.isArray(p) ? p : S[p].c;
 /* legs run from one NAMED stop to the next, measured along the road waypoints between them */
 function itinerary(pathArr){
@@ -1995,13 +2044,14 @@ function placesForRef(ref){
 }
 
 /* =========================== panels =========================== */
-const TABS = [["era","Era"],["cfm","Weekly Reading"],["tours","Tours"],["place","Place"],["wars","Wars"],["finds","Finds"],["peoples","Peoples"],["scripture","Verses"]];
+const TABS = [["era","Era"],["cfm","Study"],["tours","Tours"],["place","Place"],["wars","Wars"],["finds","Finds"],["peoples","Peoples"],["scripture","Verses"]];
 const tabsEl = document.getElementById("tabs");
 tabsEl.setAttribute("role","tablist");
 TABS.forEach(([id,label])=>{
+  if(id==="scripture") return;   // reached via scripture-reference links, not a browsable tab
   const b = document.createElement("button"); b.textContent = label; b.dataset.tab = id;
   b.setAttribute("role","tab");
-  b.onclick = ()=>setTab(id); tabsEl.appendChild(b);
+  b.onclick = ()=>{ if(id==="finds") state.findsPlace = null; setTab(id); }; tabsEl.appendChild(b);
 });
 function setTab(id, skipShow){
   state.tab = id;
@@ -2144,6 +2194,7 @@ function whereBlock(id){
     ${cf ? `<div class="wrow"><span class="wk">Certainty</span><span class="wv"><span class="cf ${cf}">${CF_MARK[cf]} ${CF_LABEL[cf]}</span></span></div>` : ""}
     ${p.at ? `<div class="wrow"><span class="wk">Finding it</span><span class="wv">${p.at}</span></div>` : ""}
     ${p.id ? `<div class="wrow"><span class="wk">How we know</span><span class="wv">${p.id}</span></div>` : ""}
+    ${s.tier?`<div class="wrow"><span class="wk">Evidence tier</span><span class="wv">Tier ${s.tier} · ${s.conf} confidence — ${s.catalogWhy}</span></div>`:""}
     ${s.w?`<div class="wrow"><span class="wk">Further reading</span><span class="wv"><a href="https://en.wikipedia.org/wiki/${s.w}" target="_blank" rel="noopener">${s.w.replace(/_/g," ")} — Wikipedia</a></span></div>`:""}
     <div class="wrow"><span class="wk">Cite as</span><span class="wv mono" style="font-size:10px">Halverson, Taylor. “${s.n}.” <i>The Old Testament &amp; Intertestamental Atlas</i>, ${s.c[1].toFixed(4)}, ${s.c[0].toFixed(4)}. Accessed ${new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})}.</span></div>
     <div class="wrow"><span class="wk">See it</span><span class="wv groundrow">
@@ -2168,7 +2219,6 @@ function placeHTML(id){
       <div class="kicker">Place</div>
       <h3>${s.n}</h3>
       <div class="dates">${s.m}</div>
-      ${whereBlock(id)}
       <p class="narr" style="margin-top:11px">${s.p}</p>
       ${s.q ? `<p class="idnote"><b>Identification</b> — ${s.q}</p>` : ""}
       ${id==="jerusalem" ? `<div class="sec">The city plan</div>
@@ -2182,7 +2232,9 @@ function placeHTML(id){
       <div class="sec">Campaigns through here</div><div class="sitelist" id="pcamp" style="padding-left:0"></div>
       <div class="sec">Finds from here</div><div class="sitelist" id="pfinds" style="padding-left:0"></div>
       <div class="sec">Appears in</div>
-      <div class="sitelist" id="perias" style="padding-left:0"></div>`;
+      <div class="sitelist" id="perias" style="padding-left:0"></div>
+      <div class="sec">Location details &amp; sourcing</div>
+      ${whereBlock(id)}`;
 }
 function wirePlaceHTML(p, id){
   const s = S[id];
@@ -2199,7 +2251,6 @@ function wirePlaceHTML(p, id){
       b.setAttribute("aria-pressed", true); };
     perBox.appendChild(b);
   });
-  const near = (a,b)=>km(a,b) < 12;
   const evBox = p.querySelector("#pevents");
   const evs = EVENTS.map((v,i)=>({...v,i})).filter(v=>near(v.c, s.c));
   evs.forEach(v=>{ const b=document.createElement("button"); b.className="chip";
@@ -2270,7 +2321,8 @@ function showCampaign(c, keepList){
     <div class="sec">Outcome</div><p class="arch">${c.out}</p>
     <div class="sec">Battles</div><div id="btl"></div>
     <div id="citin"></div>
-    <div class="sec">Scripture</div><div id="crefs"></div>`;
+    <div class="sec">Scripture</div><div id="crefs"></div>
+    ${c.w?`<div class="wrow"><span class="wk">Further reading</span><span class="wv"><a href="https://en.wikipedia.org/wiki/${c.w}" target="_blank" rel="noopener">${c.w.replace(/_/g," ")} — Wikipedia ↗</a></span></div>`:""}`;
   const old = p.querySelector(".campdetail"); if(old) old.remove();
   box.classList.add("campdetail"); p.appendChild(box);
   const btl = box.querySelector("#btl");
@@ -2286,13 +2338,17 @@ function showCampaign(c, keepList){
 
 function renderFindsPane(){
   const era = ERAS[state.era], p = document.getElementById("pane-finds");
-  const list = FINDS.filter(f=>state.allFinds || f.e.includes(era.id));
+  const placeFilter = state.findsPlace!==null ? S[state.findsPlace] : null;
+  const list = placeFilter ? FINDS.filter(f=>near(f.c, placeFilter.c)) : FINDS.filter(f=>state.allFinds || f.e.includes(era.id));
   p.innerHTML = `<div class="body"><div class="kicker">Archaeology</div>
       <h3>Finds &amp; inscriptions</h3>
-      <div class="dates">${list.length} object${list.length===1?"":"s"} ${state.allFinds?"in the whole atlas":"tied to "+era.name}</div>
-      <label class="lay" style="padding:6px 0"><input type="checkbox" id="allf" ${state.allFinds?"checked":""}><span>Show every find, not just this era</span></label>
+      ${placeFilter ? `<div class="dates">${list.length} object${list.length===1?"":"s"} near ${placeFilter.n}</div>
+      <button class="chip" id="findsclearplace" style="margin-top:6px">‹ Show all finds</button>`
+      : `<div class="dates">${list.length} object${list.length===1?"":"s"} ${state.allFinds?"in the whole atlas":"tied to "+era.name}</div>
+      <label class="lay" style="padding:6px 0"><input type="checkbox" id="allf" ${state.allFinds?"checked":""}><span>Show every find, not just this era</span></label>`}
       </div>`;
-  p.querySelector("#allf").onchange = e=>{ state.allFinds = e.target.checked; renderFindsPane(); if(land) renderMap(false); };
+  if(placeFilter) p.querySelector("#findsclearplace").onclick = ()=>{ state.findsPlace = null; renderFindsPane(); };
+  else p.querySelector("#allf").onchange = e=>{ state.allFinds = e.target.checked; renderFindsPane(); if(land) renderMap(false); };
   list.forEach(f=>{
     const wrap = document.createElement("div"); wrap.className = "body";
     wrap.dataset.find = f.i;
@@ -2300,7 +2356,9 @@ function renderFindsPane(){
     wrap.style.transition = "background .5s";
     wrap.innerHTML = `<div class="t" style="font-size:17px;font-weight:600">${f.n}</div>
       <div class="r">${f.date} · ${f.found} · ${f.where}</div>
-      <p class="arch" style="margin-top:8px">${f.p}</p>`;
+      <p class="arch" style="margin-top:8px">${f.p}</p>
+      ${f.tier?`<div class="wrow" style="margin-top:6px"><span class="wk">Evidence tier</span><span class="wv">Tier ${f.tier} · ${f.conf} confidence${f.catalogWhy?" — "+f.catalogWhy:""}</span></div>`:""}
+      ${f.w?`<div class="wrow" style="margin-top:6px"><span class="wk">Further reading</span><span class="wv"><a href="https://en.wikipedia.org/wiki/${f.w}" target="_blank" rel="noopener">${f.w.replace(/_/g," ")} — Wikipedia ↗</a></span></div>`:""}`;
     const rr = refRow(f.r); wrap.appendChild(rr);
     const go = document.createElement("button"); go.className="chip"; go.textContent="Show on map";
     go.style.marginTop = "7px";
@@ -2333,6 +2391,7 @@ function renderPeoplesPane(){
       <p class="narr">${pe.p}</p>
       <div class="sec">In Scripture</div><p class="arch">${pe.b}</p>
       <div class="sec">What they left behind</div><p class="arch">${pe.f}</p>
+      ${pe.w?`<div class="wrow"><span class="wk">Further reading</span><span class="wv"><a href="https://en.wikipedia.org/wiki/${pe.w}" target="_blank" rel="noopener">${pe.w.replace(/_/g," ")} — Wikipedia ↗</a></span></div>`:""}
     </div>`;
   p.querySelector("#pback").onclick = ()=>{ state.people=null; renderPeoplesPane(); };
 }
@@ -2363,11 +2422,11 @@ function renderScripturePane(){
     return;
   }
   const {ref, verses, error} = state.passage;
+  if(!ref){ state.passage = null; renderScripturePane(); return; }
   p.innerHTML = `<div class="body">
       <button class="back" id="sback">‹ passages in ${era.name}</button>
       <h3 style="margin-top:8px">${ref.display}</h3>
-      <div class="dates"><select class="pacesel" id="transsel">${TRANSLATIONS.map(t=>
-        `<option value="${t[0]}" ${t[0]===TRANS?"selected":""}>${t[1]}</option>`).join("")}</select>${ref.clipped?` · first ${ref.chapters.length} chapters of this range`:""}</div>
+      <div class="dates">${ref.clipped?`first ${ref.chapters.length} chapters of this range`:""}</div>
       <div id="vtext">${error?`<p class="note">${error}</p><button class="chip" id="vretry">Try again</button>`:
         verses?verses.map((v,i)=>{
           const ids = placesInText(v.t);
@@ -2375,11 +2434,10 @@ function renderScripturePane(){
                  `<span class="vn">${v.c}:${v.v}</span>${markupVerse(v.t.replace(/\n/g," "))} </span>`;
         }).join(""):
         `<p class="loading">Loading text…</p>`}</div>
-      <div class="scrip-src">Text: American Standard Version (1901), public domain</div>
       <div class="sec">On the map in this passage</div>
       <div id="plinks"></div>
     </div>`;
-  const ts = p.querySelector("#transsel");
+  const ts = null;
   if(ts) ts.onchange = e=>{ TRANS = e.target.value;
     try{ localStorage.setItem("otatlas:trans", TRANS); }catch(err){}
     openPassage(ref); };
@@ -2393,7 +2451,7 @@ function renderScripturePane(){
   if(!hits.length) links.innerHTML = `<span class="note">No atlas entry is keyed to this chapter.</span>`;
   hits.forEach(e=>{
     const b = document.createElement("button"); b.className="chip";
-    b.innerHTML = e.kind==="event" ? `${glyphSVG(EVENTS[e.i].k)} ${e.label}` : e.label;
+    b.innerHTML = e.kind==="event" ? `${glyphSVG(EVENTS[e.i].k)} ${e.label}` : e.kind==="find" ? `⛁ ${e.label}` : e.label;
     b.style.display = "inline-flex"; b.style.alignItems="center"; b.style.gap="5px";
     b.onclick = ()=>{
       if(e.kind==="place"){ openPlace(e.id); }
@@ -2401,6 +2459,7 @@ function renderScripturePane(){
         if(ERAS[state.era].id !== v.e){ const ei = ERAS.findIndex(x=>x.id===v.e); if(ei>=0) setEra(ei,false); }
         openEvent({...v, i:e.i, xy:projection(v.c)}); }
       else if(e.kind==="journey"){ if(state.era!==e.ei) setEra(e.ei,false); setJourney(e.ji); setTab("era"); }
+      else if(e.kind==="find"){ openFind(e.i); flyTo(FINDS[e.i].c, 4); setTab("finds"); }
     };
     links.appendChild(b);
   });
@@ -2473,12 +2532,19 @@ function renderToursPane(){
     <p class="narr">Eight narrated routes through the atlas. Each stop sets the map up for you — era, layers,
     zoom — and hands you the passage to read there. Arrow keys move between stops.</p></div>`;
   TOURS.forEach(t=>{
+    const wrap = document.createElement("div");
     const b = document.createElement("button"); b.className = "tourpick";
     b.innerHTML = `<span class="swatch" style="background:var(--terra);width:13px;height:13px;flex:none;margin-top:4px;border-radius:2px"></span>
       <span><span class="t">${t.n}</span><br><span class="r">${t.sub}</span>
       <br><span class="note">${t.intro}</span></span>`;
     b.onclick = ()=>startTour(t.id);
-    p.appendChild(b);
+    wrap.appendChild(b);
+    if(t.w){
+      const link = document.createElement("div"); link.className = "wrow"; link.style.padding = "0 0 8px 35px";
+      link.innerHTML = `<span class="wk">Further reading</span><span class="wv"><a href="https://en.wikipedia.org/wiki/${t.w}" target="_blank" rel="noopener">${t.w.replace(/_/g," ")} — Wikipedia ↗</a></span>`;
+      wrap.appendChild(link);
+    }
+    p.appendChild(wrap);
   });
 }
 function startTour(id){
@@ -2589,11 +2655,26 @@ function openPlace(id){
 function openEvent(v){
   ensureLayer("events");
   focusOn(v.c, v.t, KINDS[v.k].c);
+  const ci = v.k==="battle" ? CAMPAIGNS.findIndex(c=>c.n===v.t) : -1;
   showDetail(`<div class="kicker">${KINDS[v.k].n}</div>
     <h3 style="display:flex; align-items:center; gap:6px">${glyphSVG(v.k)} ${v.t}</h3>
     <p class="narr">${v.p}</p>
-    <div class="refrow" id="detailrefs"></div>`);
+    <div class="refrow" id="detailrefs"></div>
+    ${v.w?`<div class="wrow"><span class="wk">Further reading</span><span class="wv"><a href="https://en.wikipedia.org/wiki/${v.w}" target="_blank" rel="noopener">${v.w.replace(/_/g," ")} — Wikipedia ↗</a></span></div>`:""}
+    ${ci>=0 ? `<button class="more" id="detailmore">Read the campaign ›</button>` : ""}`);
   document.getElementById("detailrefs").replaceWith(refRow(v.r));
+  if(ci>=0) document.getElementById("detailmore").onclick = ()=>{ closeDetail(); setTab("wars"); setCampaign(ci); };
+}
+function openPersonCard(n, dateRange, r, w, extra){
+  showDetail(`<div class="kicker">Timeline</div>
+    <h3>${n}</h3>
+    <div class="dates">${dateRange}</div>
+    ${extra?`<p class="narr">${extra}</p>`:""}
+    <div class="refrow" id="detailrefs"></div>
+    ${w?`<div class="wrow"><span class="wk">Further reading</span><span class="wv"><a href="https://en.wikipedia.org/wiki/${w}" target="_blank" rel="noopener">${w.replace(/_/g," ")} — Wikipedia ↗</a></span></div>`:""}
+    <button class="more" id="detailmore">Read the passage ›</button>`);
+  document.getElementById("detailrefs").replaceWith(refRow(r));
+  document.getElementById("detailmore").onclick = ()=>{ const ref = parseRef(r.split(";")[0]); if(ref){ closeDetail(); openPassage(ref); ensurePanelVisible(); } };
 }
 function openBattle(b){
   const c = CAMPAIGNS[b.ci];
@@ -2634,6 +2715,8 @@ svg.on("click",()=>dismissCard());
 /* =========================== era switching =========================== */
 function setEra(i, animate=true){
   state.era = i; state.activeJourney = null; state.campaign = null;
+  const _eprev=document.getElementById("eraprev"), _enext=document.getElementById("eranext");
+  if(_eprev){ _eprev.disabled = i<=0; _enext.disabled = i>=ERAS.length-1; }
   if(!state.tour) clearFocus();
   closeCard();
   document.querySelectorAll("#eralist .era").forEach((b,j)=>b.setAttribute("aria-current", j===i));
@@ -2673,11 +2756,73 @@ function applyChronoModel(id, opts={}){
   if(!chronoEl.hidden) drawChrono();
 }
 chronoModelSel.onchange = e => applyChronoModel(e.target.value);
+document.getElementById("eraprev").onclick = ()=> setEra(Math.max(0,state.era-1));
+document.getElementById("eranext").onclick = ()=> setEra(Math.min(ERAS.length-1,state.era+1));
 
 /* =========================== layers UI =========================== */
+const MAPBOX_TOKEN = "pk.eyJ1IjoiZXhvZHVzdG91cnNtYXBzIiwiYSI6ImNtdTMydWd5djAydzIyeXB6czRvN2V1aDEifQ.Kjf1faxolYvaliA8kTgNdQ";
+function mbTileUrl(styleOn, styleOff){ return (z,x,y)=>{
+  const style = (!modernRoadsOn && styleOff) ? styleOff : styleOn;
+  const r = (window.devicePixelRatio>1) ? "@2x" : "";
+  return `https://api.mapbox.com/styles/v1/mapbox/${style}/tiles/512/${z}/${x}/${y}${r}?access_token=${MAPBOX_TOKEN}`;
+}; }
+let modernRoadsOn = true;
 const TILESETS = {
-  relief:{    url:(z,x,y)=>`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/${z}/${y}/${x}.jpeg`,
-              maxZ:8, credit:"Relief and bathymetry: NASA Blue Marble — public domain, via NASA GIBS" }
+  relief:{    url:mbTileUrl("outdoors-v12"), tileSize:512, maxZ:20, credit:"© Mapbox © OpenStreetMap contributors" },
+  satellite:{ url:mbTileUrl("satellite-streets-v12","satellite-v9"), tileSize:512, maxZ:20, credit:"© Mapbox © OpenStreetMap contributors" },
+  streets:{   url:mbTileUrl("streets-v12"), tileSize:512, maxZ:20, credit:"© Mapbox © OpenStreetMap contributors" }
+};
+const BASES = ["relief","satellite","streets"];
+const BASEMAPS = [["parchment","Parchment"],["relief","Terrain"],["satellite","Satellite"],["streets","Streets"]];
+function setBasemap(key){
+  BASES.forEach(b=>state.layers[b] = (b===key));
+  gTiles.selectAll("*").remove();
+  syncBasemapUI();
+  if(land){ paintOverlays(); renderMap(false); renderTiles(); }
+}
+function syncBasemapUI(){
+  const active = BASES.find(b=>state.layers[b]) || "parchment";
+  document.querySelectorAll(".basemapbtn").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.base===active)));
+  syncModRoadsBtn();
+}
+function syncModRoadsBtn(){
+  const btn = document.getElementById("modroadsbtn");
+  if(!btn) return;
+  const applicable = !!state.layers.satellite;
+  btn.disabled = !applicable;
+  btn.style.opacity = "1";
+  btn.setAttribute("aria-pressed", applicable ? String(modernRoadsOn) : "false");
+  btn.style.color = applicable ? "" : "#4a3a22";
+  btn.style.background = applicable ? "" : "#e9e2cf";
+  btn.style.borderColor = applicable ? "" : "var(--line)";
+  btn.style.cursor = applicable ? "pointer" : "not-allowed";
+  btn.title = applicable
+    ? "Hide the roads and place-name labels drawn into the satellite basemap"
+    : "Only affects the Satellite basemap — switch to Satellite to use this. Terrain and Streets always draw their own roads and labels.";
+}
+["basemaprow-rail","basemaprow-tools"].forEach(rowId=>{
+  const row = document.getElementById(rowId);
+  BASEMAPS.forEach(([key,label])=>{
+    const b = document.createElement("button"); b.className = "lchip basemap basemapbtn"; b.dataset.base = key;
+    b.textContent = label; b.setAttribute("aria-pressed", key==="streets"?"true":"false");
+    b.onclick = ()=>setBasemap(key);
+    row.appendChild(b);
+  });
+});
+syncBasemapUI();
+document.getElementById("panelclose").onclick = ()=>{
+  if(isCompact()){ closeOverlays(); }
+  else if(window.innerWidth<=1280){ setTabPanelOpen(false); }
+  else { document.body.classList.add("hide-panel"); mbBtn.panel.setAttribute("aria-pressed","false"); }
+};
+const modroadsbtn = document.getElementById("modroadsbtn");
+syncModRoadsBtn();
+modroadsbtn.onclick = ()=>{
+  modernRoadsOn = !modernRoadsOn;
+  modroadsbtn.setAttribute("aria-pressed", String(modernRoadsOn));
+  modroadsbtn.textContent = "Modern roads & labels: " + (modernRoadsOn ? "On" : "Off");
+  gTiles.selectAll("*").remove();
+  if(land) renderTiles();
 };
 const WALLC = { david:"#7a3b2e", solomon:"#8a6a1f", hezekiah:"#2f4858", nehemiah:"#6d3355" };
 /* road names ride their own course; drop any that would sit on a place name or another road name */
@@ -2773,7 +2918,8 @@ function openCityItem(o,kind){
     <h3>${o.n}</h3>
     ${o.p ? `<p class="narr">${o.p}</p>` : ""}
     ${o.a ? `<p class="idnote"><b>Archaeology</b> — ${o.a}</p>` : ""}
-    <div class="refrow" id="detailrefs"></div>`);
+    <div class="refrow" id="detailrefs"></div>
+    ${o.w?`<div class="wrow"><span class="wk">Further reading</span><span class="wv"><a href="https://en.wikipedia.org/wiki/${o.w}" target="_blank" rel="noopener">${o.w.replace(/_/g," ")} — Wikipedia ↗</a></span></div>`:""}`);
   if(o.r) document.getElementById("detailrefs").replaceWith(refRow(o.r));
 }
 function showJerusalem(period){
@@ -2787,58 +2933,42 @@ const LAYERS = [
   ["campaigns","Campaigns","4"],["finds","Finds","5"],["kingdoms","Kingdoms","6"],
   ["roads","Trade roads","7"],["distances","Distances","8"],["tribes","Tribes","9"],
   ["terrain","Land + rainfall","g"],["modern","Borders + cities","0"],
-  ["relief","Relief (NASA)","r"],
   ["names","Then & now","n"],["certainty","Certainty","k"],
   ["city","Jerusalem plan","j"]
 ];
 const DEFAULT_LAYERS = {routes:true, places:true, events:true};
+const LAYER_TITLES = {
+  routes:"Named journeys drawn as routes on the map.", places:"Pins for every site tied to this era.",
+  events:"Markers for dated events in this era.", campaigns:"Military campaign routes and battles.",
+  finds:"Archaeological finds and inscriptions tied to this era.", kingdoms:"Kingdom/empire territory shading.",
+  roads:"Ancient trade and travel roads.",
+  distances:"Distance and day-count markers along a route — turn this on, then click a journey or campaign to see them.",
+  tribes:"Tribal allotment boundaries (Israelite eras).", terrain:"Shaded terrain and rainfall instead of parchment.",
+  modern:"Modern political borders and city labels for orientation.", names:"Toggle each place's ancient vs. modern name.",
+  certainty:"Colour-codes each pin by how securely it's identified.", city:"Jerusalem's walls and gates for the selected period."
+};
 if(!state.cityPeriod) state.cityPeriod = "nehemiah";
 const layersEl = document.getElementById("layers");
 LAYERS.forEach(([key,label,k])=>{
-  const l = document.createElement("label"); l.className = "lay";
+  const l = document.createElement("label"); l.className = "lay"; l.title = LAYER_TITLES[key] || "";
   l.innerHTML = `<input type="checkbox" ${state.layers[key]?"checked":""}><span>${label}</span><span class="k">${k}</span>`;
   l.querySelector("input").onchange = e => toggleLayer(key, e.target.checked);
   layersEl.appendChild(l);
 });
-const ctrlLayersEl = document.getElementById("ctrllayers");
-LAYERS.forEach(([key,label])=>{
-  const l = document.createElement("label"); l.className = "lay";
-  l.innerHTML = `<input type="checkbox" ${state.layers[key]?"checked":""}><span>${label}</span>`;
-  l.querySelector("input").onchange = e => toggleLayer(key, e.target.checked);
-  ctrlLayersEl.appendChild(l);
-});
-const barEl = document.getElementById("layerbar");
-[["Clear","Turn every layer off",()=>setLayers(Object.fromEntries(LAYERS.map(l=>[l[0],false])))],
- ["All","Turn every layer on",()=>setLayers(Object.fromEntries(LAYERS.map(l=>[l[0],true])))],
- ["Reset","Back to the default view",()=>setLayers(DEFAULT_LAYERS)]].forEach(([label,tip,fn])=>{
-  const b = document.createElement("button");
-  b.className = "lchip act"; b.textContent = label; b.title = tip; b.onclick = fn;
-  ({Clear:"laychip-clear",All:"laychip-all",Reset:"laychip-reset"})[label] &&
-    (document.getElementById({Clear:"laychip-clear",All:"laychip-all",Reset:"laychip-reset"}[label]).onclick = fn);
-  barEl.appendChild(b);
-});
-barEl.appendChild(Object.assign(document.createElement("span"),{className:"barsep"}));
-const layerChips = [];
-LAYERS.forEach(([key,label,k])=>{
-  const b = document.createElement("button");
-  b.className = "lchip" + (key==="modern"?" modern":"") +
-    (["relief"].includes(key)?" basemap":"");
-  layerChips.push(b);
-  b.textContent = label; b.title = "Layer "+k+" — click to toggle";
-  b.setAttribute("aria-pressed", state.layers[key]);
-  b.onclick = ()=>toggleLayer(key, !state.layers[key]);
-  barEl.appendChild(b);
+[["Clear",()=>{ setLayers(Object.fromEntries(LAYERS.map(l=>[l[0],false])));
+    if(state.cfm){ state.highlight = []; state.verseIds = []; gVerse.selectAll("*").remove(); renderHalos(); } },
+   ["laychip-clear","raillay-clear"]],
+ ["All",()=>setLayers(Object.fromEntries(LAYERS.map(l=>[l[0],true]))),["laychip-all","raillay-all"]],
+ ["Reset",()=>setLayers(DEFAULT_LAYERS),["laychip-reset","raillay-reset"]]].forEach(([label,fn,ids])=>{
+  ids.forEach(id=>document.getElementById(id).onclick = fn);
 });
 function syncLayerUI(){
   const ck = document.getElementById("cfkey");
   if(ck) ck.hidden = !state.layers.certainty;
   LAYERS.forEach(([key],i)=>{
     layersEl.querySelectorAll("input")[i].checked = state.layers[key];
-    layerChips[i].setAttribute("aria-pressed", state.layers[key]);
-    ctrlLayersEl.querySelectorAll("input")[i].checked = state.layers[key];
   });
 }
-const BASES = ["relief"];
 /* a basemap choice is the reader’s, not the view’s: keep it unless the caller names one */
 function baseToKeep(map){
   return BASES.some(b=>b in map) ? null : (BASES.find(b=>state.layers[b]) || null);
@@ -2855,9 +2985,8 @@ function setLayers(map){
 function toggleLayer(key, on){
   state.layers[key] = on;
   syncLayerUI();
-  const bases = ["relief"];                                      // basemap toggle
-  if(bases.includes(key)){
-    if(on) bases.forEach(b=>{ if(b!==key) state.layers[b] = false; });
+  if(BASES.includes(key)){
+    if(on) BASES.forEach(b=>{ if(b!==key) state.layers[b] = false; });
     gTiles.selectAll("*").remove();                            // drop the old set before re-tiling
   }
   syncLayerUI();
@@ -2937,7 +3066,7 @@ qEl.oninput = ()=>{
     out.push({label:e.name, tag:"era", go:()=>setEra(i)}); });
   Object.keys(BOOKS).forEach(k=>{ const b=BOOKS[k];
     if(b.toLowerCase().includes(q) && out.filter(o=>o.tag==="book").length<3)
-      out.push({label:b+" 1", tag:"book", go:()=>openPassage(parseRef(b+" 1"))}); });
+      out.push({label:b+" 1", tag:"book", go:()=>{ openPassage(parseRef(b+" 1")); ensurePanelVisible(); }}); });
   out.slice(0,14).forEach(o=>{
     const b = document.createElement("button");
     b.innerHTML = `${o.label}<span class="t">${o.tag}</span>`;
@@ -3060,7 +3189,7 @@ function drawChrono(){
   jPlaced.forEach(({j,lane})=>{
     const y = rows.judges + lane*13, x0 = x(j.a), x1 = Math.max(x0+3, x(j.b));
     const grp = g.append("g").attr("class","creign")
-      .on("click",()=>{ const r = parseRef(j.r.split(";")[0]); if(r) openPassage(r); });
+      .on("click",()=>{ openPersonCard(j.n, yrRange(j.a,j.b), j.r, j.w); });
     grp.append("rect").attr("x",x0).attr("y",y).attr("width",x1-x0).attr("height",11)
       .attr("fill","#6b5a3a").attr("fill-opacity",0.8);
     grp.append("title").text(j.n+" · "+j.r+" · approximate");
@@ -3096,7 +3225,7 @@ function drawChrono(){
     const y = (key==="israel" ? rows.israel : rows.judah) + lane*13;
     const x0 = x(k.a), x1 = Math.max(x0+3, x(k.b));
     const grp = g.append("g").attr("class","creign")
-      .on("click",()=>{ const r = parseRef(k.r.split(";")[0]); if(r) openPassage(r); });
+      .on("click",()=>{ openPersonCard(k.n, yrRange(k.a,k.b), k.r, k.w); });
     grp.append("rect").attr("x",x0).attr("y",y).attr("width",x1-x0).attr("height",11)
       .attr("fill",KCOL[key]).attr("fill-opacity",k.g==="good"?0.95:0.72)
       .attr("stroke",k.g==="good"?"#f4ecda":"none").attr("stroke-width",1);
@@ -3115,8 +3244,7 @@ function drawChrono(){
                     : k.k==="hasmonean" ? "hasmonean" : "roman";
         const ei = ERAS.findIndex(e=>e.id===eraId);
         if(ei>=0) setEra(ei);
-        const r = k.r ? parseRef(k.r.split(";")[0]) : null;
-        if(r) openPassage(r);
+        openPersonCard(k.n, yrRange(k.a,k.b), k.r, k.w);
       });
     grp.append("rect").attr("x",x0).attr("y",y).attr("width",x1-x0).attr("height",11)
       .attr("fill",KCOL[k.k]).attr("fill-opacity",0.82);
@@ -3131,7 +3259,7 @@ function drawChrono(){
     const x0 = x(p.a), x1 = Math.max(x0+3, x(p.b));
     const grp = g.append("g").attr("class","creign")
       .on("click",()=>{ if(S[p.home]) { openPlace(p.home); flyTo(S[p.home].c, 3.2); }
-        const r = parseRef(p.r.split(";")[0]); if(r) openPassage(r); });
+        openPersonCard(p.n, yrRange(p.a,p.b), p.r, p.w, `Ministered to ${p.to}.`); });
     grp.append("line").attr("x1",x0).attr("x2",x1).attr("y1",y+5).attr("y2",y+5)
       .attr("stroke","var(--olive)").attr("stroke-width",3).attr("stroke-linecap","round");
     grp.append("circle").attr("cx",x0).attr("cy",y+5).attr("r",3).attr("fill","var(--olive)");
@@ -3313,14 +3441,24 @@ function openWeek(n){
   pr.innerHTML = "";
   week.pl.forEach(id=>{
     if(!S[id]) return;
+    const wrap = document.createElement("span"); wrap.className = "cfmplacewrap";
     const b = document.createElement("button"); b.className = "chip"; b.textContent = S[id].n;
     b.title = S[id].m + " — click for the exact location";
     b.onclick = ()=>{ openPlace(id); setTab("place"); flyTo(S[id].c, Math.max(transform.k, 5)); };
-    pr.appendChild(b);
+    wrap.appendChild(b);
+    const nearby = FINDS.filter(f=>near(f.c, S[id].c));
+    if(nearby.length){
+      const fb = document.createElement("button"); fb.className = "findbadge";
+      fb.textContent = `Finds · ${nearby.length}`;
+      fb.title = `See ${nearby.length} find${nearby.length===1?"":"s"} near ${S[id].n}`;
+      fb.onclick = ()=>{ state.findsPlace = id; setTab("finds"); };
+      wrap.appendChild(fb);
+    }
+    pr.appendChild(wrap);
   });
   const now = cfmWeekNow();
   document.getElementById("cfmweekno").textContent =
-    `Weekly Reading · week ${week.w}${now===week.w ? " · this week" : ""}`;
+    `Study · week ${week.w}${now===week.w ? " · this week" : ""}`;
   document.getElementById("cfmtitle").textContent = week.t;
   say(`Week ${week.w}: ${week.t}`);
   document.getElementById("cfmnote").textContent = week.note;
@@ -3357,7 +3495,7 @@ function scrollCfmToActive(){
 function renderCfmPane(){
   const p = document.getElementById("pane-cfm"), now = cfmWeekNow();
   const cur = now ? CFM.find(c=>c.w===now) : null;
-  p.innerHTML = `<div class="body"><div class="kicker">Weekly Reading</div>
+  p.innerHTML = `<div class="body"><div class="kicker">Study</div>
     <h3>This week on the ground</h3>
     <p class="narr">The Old Testament reading year, week by week. Each week sets the era, turns on the layers
       that reading needs, marks the places it names and says what the map adds that the text alone does not.
@@ -3396,6 +3534,7 @@ document.getElementById("cfmnext").onclick = ()=>openWeekAndRead((state.cfm||0)+
 document.getElementById("cfmwnprev").onclick = ()=>openWeekAndRead((state.cfm||1)-1);
 document.getElementById("cfmwnnext").onclick = ()=>openWeekAndRead((state.cfm||0)+1);
 document.getElementById("cfmdetail").onclick = ()=>{ setTab("cfm"); ensurePanelVisible(); };
+document.getElementById("cfmbtn2").onclick = ()=>document.getElementById("cfmbtn").click();
 document.getElementById("cfmbtn").onclick = ()=>{
   setTab("cfm");
   ensurePanelVisible();
@@ -3434,43 +3573,6 @@ window.addEventListener("keydown", e=>{
     if(e.key==="["){ openWeek(state.cfm-1); e.preventDefault(); }
   }
 });
-
-/* =========================== comparison era =========================== */
-function renderCompare(){
-  gCmp.selectAll("*").remove();
-  if(!(cmpEra>=0) || cmpEra===state.era || !land) return;
-  const e = ERAS[cmpEra], k = transform.k;
-  e.journeys.forEach(j=>{
-    gCmp.append("path").attr("fill","none").attr("stroke","#6b6357").attr("stroke-opacity",.45)
-      .attr("stroke-width",2/k).attr("stroke-dasharray",`${3/k} ${4/k}`)
-      .attr("d", line(j.path.map(p=>px(p))))
-      .append("title").text(`${e.name}: ${j.name}`);
-  });
-  e.sites.forEach(id=>{
-    if(!S[id]) return;
-    const p = projection(S[id].c);
-    gCmp.append("circle").attr("cx",p[0]).attr("cy",p[1]).attr("r",3.2/k).attr("fill","none")
-      .attr("stroke","#6b6357").attr("stroke-opacity",.55).attr("stroke-width",1.2/k)
-      .append("title").text(`${S[id].n} — ${e.name}`);
-  });
-  KINGDOMS.filter(kd=>kd.e.includes(e.id)).forEach(kd=>{
-    gCmp.append("path").attr("fill","none").attr("stroke","#6b6357").attr("stroke-opacity",.5)
-      .attr("stroke-width",1.3/k).attr("stroke-dasharray",`${6/k} ${4/k}`)
-      .attr("d", line(kd.ring.map(p=>projection(p)))+"Z")
-      .append("title").text(`${kd.n} — ${e.name} (approximate)`);
-    gCmp.append("text").attr("class","kingdom-label").attr("text-anchor","middle")
-      .attr("font-size",9).attr("fill","#6b6357").attr("fill-opacity",.75)
-      .attr("transform",`translate(${projection(kd.at)}) scale(${1/k})`).text(kd.n);
-  });
-}
-const cmpSel = document.getElementById("cmp");
-ERAS.forEach((e,i)=>{ const o = document.createElement("option");
-  o.value = String(i); o.textContent = e.name; cmpSel.appendChild(o); });
-cmpSel.onchange = ()=>{
-  cmpEra = Number(cmpSel.value);
-  renderCompare();
-  say(cmpEra>=0 ? `Comparing with ${ERAS[cmpEra].name}` : "Comparison off");
-};
 
 /* =========================== elevation profiles =========================== */
 /* Heights come from the same PREC table the place entries quote — no interpolated terrain. */
@@ -3724,7 +3826,6 @@ function viewHash(){
   }
   const on = LAYERS.map(l=>l[0]).filter(k=>state.layers[k]);
   if(on.length) p.set("lay", on.join(","));
-  if(cmpEra>=0) p.set("cmp", String(cmpEra));
   return "#"+p.toString();
 }
 let toastTimer;
@@ -3751,9 +3852,9 @@ const GUIDE = [
       <div class="guidefig">Try it: press the left and right arrow keys to walk through the eras.</div>` },
   { t:"Layers sit above the map", b:`<p>The chips along the top of the map switch what is drawn: journeys, places, events, campaigns, finds, trade roads, tribal allotments, rainfall belts.</p>
       <div class="guidefig"><b>Then &amp; now</b> adds each site’s modern name; <b>Certainty</b> recolours the pins by how securely the place is identified.</div>` },
-  { t:"Read by the week", b:`<p><b>Weekly Reading</b> (key w) opens a week-by-week Old Testament reading sequence. Pick a week and the atlas sets the era, the layers, the scale and the places for that reading — and says plainly when a week has no earthly setting.</p>` },
+  { t:"Read by the week", b:`<p><b>Study</b> (key w) opens a week-by-week Old Testament reading sequence. Pick a week and the atlas sets the era, the layers, the scale and the places for that reading — and says plainly when a week has no earthly setting.</p>` },
   { t:"Take it to class", b:`<p><b>Presenter</b> (key m) strips the controls and enlarges every label for a projector. <b>Study sheet</b> makes a printable handout of the week or era on screen — map, places, coordinates, and questions.</p>` },
-  { t:"Look at the real ground", b:`<p><b>Relief (NASA)</b> swaps the parchment for shaded terrain and stays on as you move around. The <b>Scale</b> presets (shift-1 to shift-5) jump between the Crescent, Egypt and Sinai, Canaan, the ridge country and Jerusalem.</p>` },
+  { t:"Look at the real ground", b:`<p><b>Terrain</b> swaps the parchment for shaded terrain and stays on as you move around. The <b>Scale</b> presets (shift-1 to shift-5) jump between the Crescent, Egypt and Sinai, Canaan, the ridge country and Jerusalem.</p>` },
   { t:"Keep what you find", b:`<p><b>Share view</b> copies a link that reopens exactly this era, zoom, layers and place — paste it into your lesson notes. Search (key /) reaches places, events, peoples, objects, weeks and scripture references.</p>
       <div class="guidefig">Press <b>?</b> at any time to reopen this guide.</div>` }
 ];
@@ -3803,8 +3904,8 @@ const CREDIT_SECTIONS = [
     ["Jerusalem plan", "Drawn for this atlas from the excavated and surveyed wall, gate and water-system lines of the Davidic, Solomonic, Hezekian and Nehemian phases; reconstructed stretches are named in each entry."]
   ]],
   ["Relief imagery", [
-    ["Shaded relief with bathymetry", "NASA Global Imagery Browse Services (GIBS), Earth Observing System Data and Information System. Public domain. Courtesy NASA/GSFC/ESDIS."],
-    ["Delivery", "Tiles are requested from NASA GIBS at view time. Without a connection the atlas draws its own parchment map instead."]
+    ["Terrain tiles", "© Mapbox © OpenStreetMap contributors. Used under Mapbox's terms of service."],
+    ["Delivery", "Tiles are requested from Mapbox at view time. Without a connection the atlas draws its own parchment map instead."]
   ]],
   ["Scripture texts", [
     ["American Standard Version, 1901 (only translation in this build)", "Public domain in the United States and worldwide; unlike the King James Version, the ASV carries no UK Crown-copyright claim."],
@@ -3868,30 +3969,17 @@ const scrim = document.getElementById("scrim");
 const mbBtn = { map:document.getElementById("mbmap"), browse:document.getElementById("mbbrowse"),
   panel:document.getElementById("mbpanel"), time:document.getElementById("mbtime") };
 const ctrlBtn = document.getElementById("ctrlbtn"), tgHeader = document.getElementById("tgheader");
-const ctrlBtn2 = document.getElementById("ctrlbtn2");
 ctrlBtn.onclick = ()=>{
   const open = !document.body.classList.contains("ctrl-open");
   document.body.classList.toggle("ctrl-open", open);
-  document.body.classList.remove("ctrl2-open"); ctrlBtn2.setAttribute("aria-expanded","false");
   ctrlBtn.setAttribute("aria-expanded", String(open));
-};
-ctrlBtn2.onclick = ()=>{
-  const open = !document.body.classList.contains("ctrl2-open");
-  document.body.classList.toggle("ctrl2-open", open);
-  document.body.classList.remove("ctrl-open"); ctrlBtn.setAttribute("aria-expanded","false");
-  ctrlBtn2.setAttribute("aria-expanded", String(open));
 };
 document.addEventListener("click", e=>{
   if(document.body.classList.contains("ctrl-open") && !e.target.closest("#hdracts") && !e.target.closest("#ctrlbtn"))
     document.body.classList.remove("ctrl-open");
-  if(document.body.classList.contains("ctrl2-open") && !e.target.closest("#hdracts2") && !e.target.closest("#ctrlbtn2"))
-    document.body.classList.remove("ctrl2-open");
 });
 document.getElementById("hdracts").addEventListener("click", e=>{
   if(e.target.closest("button")) setTimeout(()=>document.body.classList.remove("ctrl-open"), 0);
-});
-document.getElementById("hdracts2").addEventListener("click", e=>{
-  if(e.target.closest("button")) setTimeout(()=>document.body.classList.remove("ctrl2-open"), 0);
 });
 tgHeader.onclick = ()=>{
   const hidden = document.body.classList.toggle("hide-header");
@@ -3935,8 +4023,8 @@ function syncPanelToggles(){
   const panelOn = isCompact() ? document.body.classList.contains("sheet-open")
     : window.innerWidth<=1280 ? document.body.classList.contains("tab-panel-open")
     : !document.body.classList.contains("hide-panel");
-  [mbBtn.browse, document.getElementById("dtgrail")].forEach(b=>b.setAttribute("aria-pressed", String(railOn)));
-  [mbBtn.panel, document.getElementById("dtgpanel")].forEach(b=>b.setAttribute("aria-pressed", String(panelOn)));
+  mbBtn.browse.setAttribute("aria-pressed", String(railOn));
+  mbBtn.panel.setAttribute("aria-pressed", String(panelOn));
 }
 mbBtn.map.onclick = ()=>{
   const on = !document.body.classList.contains("map-only");
@@ -3964,18 +4052,13 @@ mbBtn.panel.onclick = ()=>{ document.body.classList.remove("map-only"); mbBtn.ma
   else toggleStatic("hide-panel", mbBtn.panel); };
 mbBtn.time.onclick = ()=>{ document.body.classList.remove("map-only"); mbBtn.map.setAttribute("aria-pressed","false");
   if(isCompact()) toggleOverlay("time"); else toggleStatic("hide-timeline", mbBtn.time); };
-const tgLayers = document.getElementById("tglayers");
-document.getElementById("dtgrail").onclick = ()=>{ mbBtn.browse.click(); };
-document.getElementById("dtgpanel").onclick = e=>{
-  mbBtn.panel.click();
-  e.target.setAttribute("aria-pressed", String(!document.body.classList.contains("hide-panel")));
-  syncPanelToggles();
-};
-tgLayers.onclick = ()=>{
-  const hidden = document.body.classList.toggle("hide-layers");
-  tgLayers.setAttribute("aria-pressed", String(!hidden));
-};
 scrim.onclick = closeOverlays;
+document.getElementById("unitsbtn").onclick = e=>{
+  state.units = state.units==="mi" ? "km" : "mi";
+  e.target.textContent = "Units: " + (state.units==="mi" ? "Miles" : "Km");
+  e.target.setAttribute("aria-pressed", String(state.units==="mi"));
+  updateScale();
+};
 function setTabPanelOpen(open){
   document.body.classList.toggle("tab-panel-open", open);
   document.querySelector(".panel").style.transform = "";
@@ -4030,14 +4113,13 @@ window.addEventListener("resize", ()=>{
   if(window.innerWidth>1280 && (document.body.classList.contains("hide-rail")||document.body.classList.contains("hide-panel")||document.body.classList.contains("hide-header")||document.body.classList.contains("hide-timeline")||document.body.classList.contains("hide-layers")||document.body.classList.contains("ctrl-open")||document.body.classList.contains("map-only")||document.body.classList.contains("tab-panel-open"))){
     document.body.classList.remove("hide-rail","hide-panel","hide-header","hide-timeline","hide-layers","ctrl-open","map-only","tab-panel-open");
     document.querySelector(".panel").style.transform = "";
-    [mbBtn.browse,mbBtn.panel,mbBtn.time,mbBtn.map,tgHeader,tgLayers].forEach(b=>b.setAttribute("aria-pressed","true"));
+    [mbBtn.browse,mbBtn.panel,mbBtn.time,mbBtn.map,tgHeader].forEach(b=>b.setAttribute("aria-pressed","true"));
     mbBtn.map.setAttribute("aria-pressed","false");
     syncPanelToggles();
   }
 });
 let userToggledView = false;
 ctrlBtn.addEventListener("click", ()=>userToggledView=true);
-ctrlBtn2.addEventListener("click", ()=>userToggledView=true);
 Object.values(mbBtn).forEach(b=>b.addEventListener("click", ()=>userToggledView=true));
 tgHeader.addEventListener("click", ()=>userToggledView=true);
 function isLandscapePhone(){ return window.innerWidth<=900 && window.innerHeight<=500 && window.innerWidth>window.innerHeight; }
@@ -4086,7 +4168,6 @@ function readHash(){
   if(chrono && CHRONO_MODELS.some(m=>m[0]===chrono)) applyChronoModel(chrono, {skipPersist:true});
   const cfm = h.get("cfm"), passage = h.get("passage"), eraP = h.get("era");
   const lay = h.get("lay"), cmp = h.get("cmp"), place = h.get("place"), v = h.get("v");
-  if(cmp!==null && ERAS[Number(cmp)]){ cmpEra = Number(cmp); cmpSel.value = cmp; }
   const applyLayers = ()=>{
     if(!lay) return;
     const want = lay.split(",");
