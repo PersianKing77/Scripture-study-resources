@@ -35,6 +35,16 @@
   .more-resources-nav a { text-decoration: none; color: #8E9CA7; font-size: 0.85rem; }
   .more-resources-nav a span { margin-left: 0.4rem; opacity: 0.85; }
   .section { scroll-margin-top: 4.5rem; }
+
+  /* On phones and tablets the three nav pills wrap onto 2–3 lines instead
+     of one, making the sticky bar taller than on desktop. The 4.5rem
+     offset above only clears a single-line bar, so on narrow screens the
+     scroll target lands under the (now taller) bar and past the section
+     heading, right at the card images. This gives narrow screens more
+     breathing room to clear the wrapped bar. */
+  @media (max-width: 900px) {
+    .section { scroll-margin-top: 9rem; }
+  }
 </style>
 </head>
 <body>
