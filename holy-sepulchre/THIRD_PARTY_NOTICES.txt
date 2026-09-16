@@ -1,0 +1,52 @@
+THIRD-PARTY NOTICES
+Holy Sepulchre Site Evolution
+
+This application loads the following third-party components. It is not currently
+self-hosted or offline-capable; all four load over the network at runtime.
+
+1. React 18.3.1
+   Copyright (c) Meta Platforms, Inc. and affiliates.
+   License: MIT
+   Source: https://github.com/facebook/react
+   Delivery: remote, via UNPKG CDN, pinned version with Subresource Integrity (SRI)
+
+2. ReactDOM 18.3.1
+   Copyright (c) Meta Platforms, Inc. and affiliates.
+   License: MIT
+   Source: https://github.com/facebook/react
+   Delivery: remote, via UNPKG CDN, pinned version with SRI
+
+3. Babel Standalone 7.29.0
+   Copyright (c) 2014-present Sebastian McKenzie and other contributors.
+   License: MIT
+   Source: https://github.com/babel/babel
+   Delivery: remote, via UNPKG CDN, pinned version with SRI
+   Note: compiles JSX/JS in the browser at runtime (new Function). This is the
+   component responsible for the app's unsafe-eval CSP requirement; see the
+   Known Issues note below.
+
+4. Fonts: EB Garamond, Archivo, Archivo Narrow
+   License: SIL Open Font License 1.1
+   Source: https://fonts.google.com/ (Google Fonts)
+   Delivery: remote, via Google Fonts CDN
+   Full OFL 1.1 text: https://openfontlicense.org/open-font-license-official-text/
+
+MIT license (React, ReactDOM, Babel Standalone), summarized permission notice:
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files, to deal in the Software
+without restriction, subject to including the above copyright notice and this
+permission notice in all copies or substantial portions of the Software. THE
+SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. See the official
+license text at the source link above for the complete, authoritative terms.
+
+Runtime files support.js and image-slot.js are generated
+scaffolding produced by the Claude Design authoring runtime for this project.
+No independent third-party license applies to them beyond the components they
+load, listed above.
+
+TECHNICAL LIMITATIONS OF THIS BETA:
+- This edition requires an internet connection. React, ReactDOM, Babel, and
+  fonts load from the content-delivery networks listed above.
+- Babel compiles JSX in the browser at runtime, so a restrictive
+  Content-Security-Policy serving this app may need to allow 'unsafe-eval'.
+- No offline build is included.
