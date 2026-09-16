@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  doc-page:not(:defined) { visibility: hidden; }
+  a { color: #7C2317; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #B03A2C; }
+</style>
+<script src="./doc-page.js"></script>
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <rect width="120" height="120" fill="#F7F2E6"></rect>
+    <rect x="30" y="30" width="60" height="44" fill="none" stroke="#201A12" stroke-width="3"></rect>
+    <circle cx="46" cy="46" r="6" fill="#C6A25A"></circle>
+    <path d="M30 68 L52 50 L66 60 L90 40 L90 74 L30 74 Z" fill="#7C2317" opacity="0.7"></path>
+  </svg>
+</template>
+</helmet>
+<doc-page>
+<section class="page" style="padding:64px 68px 50px;background:#FBF8F0;font-family:'EB Garamond',serif;color:#201A12;display:flex;flex-direction:column;gap:14px">
+  <h1 style="font-size:28px;font-weight:600;margin:6px 0 0">Image Rights Policy</h1>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#7E5F21">The Pool of Bethesda, Jerusalem — an interactive atlas</div>
+
+  <p style="font-size:15px;line-height:1.6">This product ships with no third-party photography or map imagery embedded in it. It supports one optional feature — an aerial-imagery overlay — that fetches tiles from a service the user supplies. This policy governs that feature and its in-product rights gate.</p>
+
+  <h2 style="font-size:16px;margin:14px 0 4px">1. What is gated</h2>
+  <p style="font-size:15px;line-height:1.6">Before the "Custom tile service" field accepts a URL, the user must check a box confirming they hold a commercial license for that service and accept responsibility for its use. The field is disabled and the underlying fetch code refuses to run until that box is checked, on every session (the confirmation is not carried over silently between browsers or devices).</p>
+
+  <h2 style="font-size:16px;margin:14px 0 4px">2. Why this exists</h2>
+  <p style="font-size:15px;line-height:1.6">Commercial satellite and aerial imagery is almost always licensed per-seat or per-request. A product that fetched a default provider's tiles for every visitor would create licensing exposure the Publisher does not control. Gating the feature behind an affirmative, per-session confirmation keeps that exposure with the user who supplies the service, not the Publisher.</p>
+
+  <h2 style="font-size:16px;margin:14px 0 4px">3. Illustrations and diagrams already in the product</h2>
+  <p style="font-size:15px;line-height:1.6">All plans, sections, and axonometric views of the site are original line drawings redrawn from published excavation reports (see the Credits panel and the Feature Provenance Workbook); none are traced from or reproduce a copyrighted photograph or third party's illustration.</p>
+
+  <h2 style="font-size:16px;margin:14px 0 4px">4. If a user submits an image</h2>
+  <p style="font-size:15px;line-height:1.6">This product does not currently accept user-submitted images anywhere in its interface. If an image-upload feature is added later, this policy should be extended to require the same affirmative rights confirmation before the image is accepted, plus a takedown contact.</p>
+
+  <h2 style="font-size:16px;margin:14px 0 4px">5. Contact</h2>
+  <p style="font-size:15px;line-height:1.6">Rights concerns: via the Publisher at <a href="https://insights.taylorhalverson.com" target="_blank" rel="noopener">insights.taylorhalverson.com</a>.</p>
+
+  <div style="margin-top:auto;padding-top:18px;border-top:1px solid #DCD0B0;font-size:11px;color:#8A7D5F">Effective September 8, 2026. Not a substitute for advice from qualified counsel.</div>
+</section>
+</doc-page>
+
+</x-dc>
+</body>
+</html>

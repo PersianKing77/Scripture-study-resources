@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  doc-page:not(:defined) { visibility: hidden; }
+  @media print { [data-noprint] { display: none !important; } }
+  a { color: #7C2317; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #B03A2C; }
+</style>
+<script src="./doc-page.js"></script>
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <rect width="120" height="120" fill="#DED3B8"></rect>
+    <rect x="34" y="26" width="52" height="68" fill="#F7F2E6" stroke="#201A12" stroke-width="2.4"></rect>
+    <line x1="42" y1="42" x2="78" y2="42" stroke="#7C2317" stroke-width="3.2"></line>
+    <line x1="42" y1="56" x2="78" y2="56" stroke="#6A5D41" stroke-width="2"></line>
+    <line x1="42" y1="66" x2="78" y2="66" stroke="#6A5D41" stroke-width="2"></line>
+    <line x1="42" y1="76" x2="66" y2="76" stroke="#6A5D41" stroke-width="2"></line>
+  </svg>
+</template>
+<script src="./bethesda-3d.js"></script>
+<script src="./bethesda-essays-a.js"></script>
+<script src="./bethesda-essays-b.js"></script>
+<script src="./bethesda-teaching.js"></script>
+<script src="./bethesda-reference.js"></script>
+</helmet>
+<doc-page>
+
+  <section class="page" style="padding:58px 62px 46px;background:#F7F2E6;font-family:'EB Garamond',serif;color:#201A12;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;border-bottom:2px solid #201A12;padding-bottom:11px">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:#7E5F21">Study packet · twelve pages</div>
+        <div style="font-size:33px;font-weight:600;line-height:1.05;letter-spacing:-0.015em;margin-top:6px">The Pool of Bethesda</div>
+        <div style="font-size:14.5px;font-style:italic;color:#5A4E3A;margin-top:5px">Nine building phases in one hollow of rock, and the passage that made it famous</div>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#F7F2E6;background:#7C2317;padding:4px 8px;flex:none;margin-top:6px">Beta</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:14px;flex:1;min-height:0">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:5px">John 5:1–16 · American Standard Version</div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ john }}" as="vs" hint-placeholder-count="16">
+            <p style="font-size:10px;line-height:1.29;margin:0;text-wrap:pretty"><span style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#7E5F21;margin-right:5px;vertical-align:1px">{{ vs.v }}</span>{{ vs.t }}</p>
+          </sc-for>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;line-height:1.5;color:#7C2317;border-top:1px solid #DFCFA8;padding-top:8px">Verses 3b–4 — the angel troubling the water — are absent from the oldest manuscripts. See the Second Temple sheet.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:5px">Where else scripture touches this site</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <sc-for list="{{ crossrefs }}" as="cr" hint-placeholder-count="8">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.06em;color:#7C2317">{{ cr.ref }}</div>
+              <div style="font-size:10px;line-height:1.3;color:#241E15;text-wrap:pretty">{{ cr.t }}</div>
+              <div style="font-size:10px;font-style:italic;color:#6B5F49">{{ cr.tie }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:auto;border:1.2px solid #201A12;background:#EFE8D6;padding:9px 11px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:#7E5F21">How to use this packet</div>
+          <div style="font-size:10.5px;line-height:1.4;color:#241E15;margin-top:5px;text-wrap:pretty">One sheet per phase, in date order. Each carries a plan of what stood on the ground, three things to notice, the vocabulary you need, and three questions for discussion. The last two pages are a self-check with an answer key.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid #C0B295;margin-top:16px;padding-top:9px;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.06em;color:#625743">
+      <span>Project Created by Taylor Halverson, Ph.D. (Beta mode)</span>
+      <span>Cover</span>
+    </div>
+  </section>
+
+  <sc-for list="{{ sheets }}" as="sh" hint-placeholder-count="9">
+    <section class="page" style="padding:44px 54px 34px;background:#F7F2E6;font-family:'EB Garamond',serif;color:#201A12;display:flex;flex-direction:column">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:18px;border-bottom:2px solid #201A12;padding-bottom:11px">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:#7E5F21">Phase {{ sh.no }} of nine · {{ sh.span }}</div>
+          <div style="font-size:29px;font-weight:600;line-height:1.08;letter-spacing:-0.015em;margin-top:5px">{{ sh.name }}</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:#625743;text-align:right;flex:none">The Pool of Bethesda<br />Jerusalem</div>
+      </div>
+
+      <div style="font-size:13.5px;font-style:italic;line-height:1.4;color:#5A4E3A;margin-top:9px;text-wrap:pretty">{{ sh.strap }}</div>
+
+      <div style="display:grid;grid-template-columns:340px 1fr;gap:22px;margin-top:12px">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="border:1.2px solid #201A12;background:#EFE8D6;padding:8px">
+            <svg viewBox="-10 -16 200 186" preserveAspectRatio="xMidYMid meet" style="width:100%;height:262px;display:block">
+              <rect x="-10" y="-16" width="200" height="186" fill="#F1EADA"></rect>
+              <sc-for list="{{ sh.shapes }}" as="s" hint-placeholder-count="10">
+                <polygon points="{{ s.pts }}" fill="{{ s.fill }}" stroke="{{ s.stroke }}" stroke-width="{{ s.sw }}" stroke-dasharray="{{ s.dash }}"></polygon>
+              </sc-for>
+              <sc-for list="{{ sh.rows }}" as="r" hint-placeholder-count="4">
+                <g>
+                  <line x1="{{ r.x1 }}" y1="{{ r.y1 }}" x2="{{ r.x2 }}" y2="{{ r.y2 }}" stroke="#7E5F21" stroke-width="1.6"></line>
+                  <sc-for list="{{ r.cols }}" as="c" hint-placeholder-count="6">
+                    <circle cx="{{ c.x }}" cy="{{ c.y }}" r="1.5" fill="#B9964F" stroke="#7A5F26" stroke-width="0.4"></circle>
+                  </sc-for>
+                </g>
+              </sc-for>
+              <sc-for list="{{ sh.marks }}" as="mk" hint-placeholder-count="5">
+                <g>
+                  <circle cx="{{ mk.x }}" cy="{{ mk.y }}" r="5" fill="#F7F2E6" stroke="#201A12" stroke-width="0.8"></circle>
+                  <text x="{{ mk.x }}" y="{{ mk.ty }}" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="5.4" font-weight="600" fill="#201A12">{{ mk.n }}</text>
+                </g>
+              </sc-for>
+              <g>
+                <line x1="-4" y1="163" x2="46" y2="163" stroke="#201A12" stroke-width="0.7"></line>
+                <line x1="-4" y1="160.5" x2="-4" y2="165.5" stroke="#201A12" stroke-width="0.7"></line>
+                <line x1="46" y1="160.5" x2="46" y2="165.5" stroke="#201A12" stroke-width="0.7"></line>
+                <text x="21" y="159" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="5" fill="#4A4030">50 m</text>
+                <line x1="180" y1="163" x2="180" y2="149" stroke="#201A12" stroke-width="0.8"></line>
+                <circle cx="180" cy="163" r="1.4" fill="#201A12"></circle>
+                <text x="180" y="146" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="6" font-weight="600" fill="#201A12">N</text>
+              </g>
+            </svg>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 12px">
+            <sc-for list="{{ sh.marks }}" as="mk" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:13px 1fr;gap:5px;align-items:start">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;color:#7C2317;padding-top:1px">{{ mk.n }}</span>
+                <span style="font-size:10px;line-height:1.32;color:#3B3225">{{ mk.t }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;line-height:1.45;color:#6A5D41">Plan looking straight down · north to the top · footprints redrawn from published excavation plans, not a survey. Every elevation and roof in the interactive model is reconstruction; this plan shows footprints only.</div>
+          <sc-if value="{{ sh.hasScripture }}" hint-placeholder-val="{{ false }}">
+            <section style="border:1.2px solid #201A12;background:#EFE8D6;padding:10px 12px;display:flex;flex-direction:column;gap:7px">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:#7E5F21">Scripture on the ground</div>
+              <sc-for list="{{ sh.scripture }}" as="sc" hint-placeholder-count="2">
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#7C2317">{{ sc.ref }} · {{ sc.where }}</div>
+                  <div style="font-size:11px;line-height:1.4;color:#241E15;text-wrap:pretty">{{ sc.asv }}</div>
+                </div>
+              </sc-for>
+            </section>
+          </sc-if>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <section style="display:flex;flex-direction:column;gap:7px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:5px">What to notice</div>
+            <sc-for list="{{ sh.notice }}" as="nt" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:11px 1fr;gap:8px;align-items:start">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#7C2317;padding-top:2px">·</span>
+                <span style="font-size:12px;line-height:1.42;color:#241E15;text-wrap:pretty">{{ nt }}</span>
+              </div>
+            </sc-for>
+          </section>
+
+          <section style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:5px">Words you need</div>
+            <sc-for list="{{ sh.vocab }}" as="vb" hint-placeholder-count="3">
+              <div style="font-size:11px;line-height:1.38;color:#241E15"><span style="font-weight:600">{{ vb.w }}</span> — {{ vb.d }}</div>
+            </sc-for>
+          </section>
+
+        </div>
+      </div>
+
+      <section style="margin-top:12px;border-top:2px solid #201A12;padding-top:10px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#7E5F21">To discuss</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+          <sc-for list="{{ sh.questions }}" as="q" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <span style="font-size:11.5px;line-height:1.38;color:#241E15;text-wrap:pretty">{{ q }}</span>
+              <span style="border-bottom:1px solid #C9BB9C;height:17px"></span>
+              <span style="border-bottom:1px solid #C9BB9C;height:17px"></span>
+              <span style="border-bottom:1px solid #C9BB9C;height:17px"></span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <div style="margin-top:auto;border-top:1px solid #C0B295;padding-top:9px;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.06em;color:#625743">
+        <span>Project Created by Taylor Halverson, Ph.D. (Beta mode)</span>
+        <span>{{ sh.name }} · {{ sh.span }}</span>
+      </div>
+    </section>
+  </sc-for>
+
+  <section class="page" style="padding:52px 58px 42px;background:#F7F2E6;font-family:'EB Garamond',serif;color:#201A12;display:flex;flex-direction:column">
+    <div style="border-bottom:2px solid #201A12;padding-bottom:11px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:#7E5F21">Self-check</div>
+      <div style="font-size:29px;font-weight:600;line-height:1.08;margin-top:5px">What did you keep?</div>
+      <div style="font-size:13.5px;font-style:italic;color:#5A4E3A;margin-top:5px">Answer from memory first. The key is on the last page.</div>
+    </div>
+
+    <section style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:5px">1 · Put each phase with its dates</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#4A4030;line-height:1.5">{{ matchOptions }}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 26px;margin-top:4px">
+        <sc-for list="{{ matchPairs }}" as="mp" hint-placeholder-count="6">
+          <div style="display:flex;align-items:baseline;gap:9px">
+            <span style="font-size:12.5px;color:#241E15;flex:none">{{ mp.label }}</span>
+            <span style="flex:1;border-bottom:1px solid #C9BB9C;height:16px"></span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="margin-top:18px;display:flex;flex-direction:column;gap:7px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:5px">2 · Could a visitor in AD 30 have seen it? Y or N</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 26px">
+        <sc-for list="{{ seenItems }}" as="si" hint-placeholder-count="8">
+          <div style="display:flex;align-items:baseline;gap:9px">
+            <span style="width:34px;border-bottom:1px solid #C9BB9C;height:16px;flex:none"></span>
+            <span style="font-size:12px;line-height:1.35;color:#241E15">{{ si.t }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="margin-top:18px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:5px">3 · Three from the model</div>
+      <sc-for list="{{ factItems }}" as="fi" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:12.5px;line-height:1.4;color:#241E15;text-wrap:pretty">{{ fi.q }}</div>
+          <sc-for list="{{ fi.options }}" as="op" hint-placeholder-count="3">
+            <div style="display:flex;align-items:baseline;gap:8px;padding-left:12px">
+              <span style="width:11px;height:11px;border:1.2px solid #6A5D41;flex:none;display:inline-block"></span>
+              <span style="font-size:11.5px;line-height:1.35;color:#3B3225">{{ op }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </section>
+
+    <div style="margin-top:auto;border-top:1px solid #C0B295;padding-top:9px;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.06em;color:#625743">
+      <span>Project Created by Taylor Halverson, Ph.D. (Beta mode)</span>
+      <span>Self-check</span>
+    </div>
+  </section>
+
+  <section class="page" style="padding:52px 58px 42px;background:#F7F2E6;font-family:'EB Garamond',serif;color:#201A12;display:flex;flex-direction:column">
+    <div style="border-bottom:2px solid #201A12;padding-bottom:11px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:#7E5F21">Answer key · and the sources behind it</div>
+      <div style="font-size:26px;font-weight:600;line-height:1.08;margin-top:4px">Where these answers come from</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:13px;flex:1;min-height:0">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <section style="display:flex;flex-direction:column;gap:5px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:5px">1 · Phases and dates</div>
+          <sc-for list="{{ matchPairs }}" as="mp" hint-placeholder-count="6">
+            <div style="font-size:10.5px;line-height:1.36;color:#241E15"><span style="font-weight:600">{{ mp.label }}</span> — {{ mp.answer }}</div>
+          </sc-for>
+        </section>
+        <section style="display:flex;flex-direction:column;gap:5px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:5px">2 · AD 30</div>
+          <sc-for list="{{ seenItems }}" as="si" hint-placeholder-count="8">
+            <div style="font-size:10px;line-height:1.34;color:#241E15"><span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;color:#7C2317;margin-right:5px">{{ si.mark }}</span><span style="font-weight:600">{{ si.t }}</span> — {{ si.why }}</div>
+          </sc-for>
+        </section>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <section style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:5px">3 · Three from the model</div>
+          <sc-for list="{{ factItems }}" as="fi" hint-placeholder-count="3">
+            <div style="font-size:10px;line-height:1.34;color:#241E15"><span style="font-weight:600">{{ fi.correct }}</span> — {{ fi.why }}</div>
+          </sc-for>
+        </section>
+        <section style="display:flex;flex-direction:column;gap:5px">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#625743;border-bottom:1px solid #C9BB9C;padding-bottom:5px">Sources</div>
+          <sc-for list="{{ sources }}" as="sr" hint-placeholder-count="10">
+            <div style="display:grid;grid-template-columns:64px 1fr;gap:8px;align-items:start">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:#7C2317;padding-top:2px">{{ sr.k }}</span>
+              <span style="font-size:8.5px;line-height:1.3;color:#3B3225;text-wrap:pretty">{{ sr.t }}</span>
+            </div>
+          </sc-for>
+        </section>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid #C0B295;margin-top:14px;padding-top:9px;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.06em;color:#625743">
+      <span>Project Created by Taylor Halverson, Ph.D. (Beta mode)</span>
+      <span>Answer key</span>
+    </div>
+  </section>
+
+  <section class="page" data-noprint="1" style="padding:52px 58px 42px;background:#F7F2E6;font-family:'EB Garamond',serif;color:#201A12;display:flex;flex-direction:column">
+    <div style="border-bottom:2px solid #201A12;padding-bottom:11px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:#7E5F21">Not printed · carried for distribution</div>
+      <div style="font-size:21px;font-weight:600;line-height:1.1;margin-top:4px">Font notices and licence</div>
+      <div style="font-size:11px;font-style:italic;color:#5A4E3A;margin-top:4px">This copy embeds its typefaces, so the SIL Open Font License requires the notice and licence to travel with it. This page is excluded from print.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px;margin-top:13px">
+      <sc-for list="{{ fontNotices }}" as="fn" hint-placeholder-count="3">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;line-height:1.45;color:#241E15;word-break:break-word">{{ fn }}</div>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-top:11px;column-count:2;column-gap:20px">
+      <sc-for list="{{ oflText }}" as="ox" hint-placeholder-count="6">
+        <div style="display:flex;flex-direction:column;gap:3px;break-inside:avoid">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:#7C2317">{{ ox.h }}</span>
+          <span style="font-size:7.6px;line-height:1.38;color:#241E15;white-space:pre-wrap">{{ ox.t }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="margin-top:auto;border-top:1px solid #C0B295;padding-top:9px;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.06em;color:#625743">
+      <span>Project Created by Taylor Halverson, Ph.D. (Beta mode)</span>
+      <span>Licence notice · not printed</span>
+    </div>
+  </section>
+
+</doc-page>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:880,&quot;height&quot;:1120}}">
+class Component extends DCLogic {
+  state = { d: null };
+
+  componentDidMount() {
+    const tick = () => {
+      const B = window.BETHESDA;
+      if (B && B.PERIODS && B.PINS && B.SHEET) this.setState({ d: { site: B, teach: B, ref: B } });
+      else setTimeout(tick, 25);
+    };
+    tick();
+  }
+
+  shade(hex, f) {
+    const n = parseInt(hex.slice(1), 16);
+    return "#" + [(n >> 16) & 255, (n >> 8) & 255, n & 255]
+      .map((v) => Math.max(0, Math.min(255, Math.round(v * f))).toString(16).padStart(2, "0")).join("");
+  }
+
+  // straight-down plan: plan metres map 1:1 into the diagram's user units
+  planShapes(p, C) {
+    const out = [], rows = [];
+    const poly = (pts, fill, stroke, sw, dash) => out.push({
+      pts: pts.map((q) => q[0].toFixed(1) + "," + q[1].toFixed(1)).join(" "),
+      fill, stroke, sw: sw, dash: dash || "none"
+    });
+    poly([[-4, -8], [176, -8], [182, 162], [0, 162]], "#E4DAC2", "#C0B295", 0.5);
+    const order = { flat: 0, pit: 1, box: 2, colonnade: 3 };
+    p.features.slice().sort((a, b) => order[a.kind] - order[b.kind]).forEach((f) => {
+      const cat = C[f.cat] || C.bedrock;
+      if (f.kind === "colonnade") {
+        const [ax, ay] = f.a, [bx, by] = f.b, cols = [];
+        for (let i = 0; i < f.n; i++) {
+          const t = f.n === 1 ? 0.5 : i / (f.n - 1);
+          cols.push({ x: (ax + (bx - ax) * t).toFixed(1), y: (ay + (by - ay) * t).toFixed(1) });
+        }
+        rows.push({ x1: ax, y1: ay, x2: bx, y2: by, cols });
+      } else if (f.kind === "pit") {
+        poly(f.poly, f.water > 0 ? "#3E8380" : this.shade(cat.fill, 0.8), "#1F4746", 0.9);
+      } else if (f.kind === "flat") {
+        poly(f.poly, cat.fill, this.shade(cat.fill, 0.55), 0.5);
+      } else {
+        poly(f.poly, cat.fill, this.shade(cat.fill, 0.5), 0.7);
+      }
+    });
+    return { shapes: out, rows };
+  }
+
+  renderVals() {
+    const d = this.state.d;
+    const base = {
+      john: [], crossrefs: [], sheets: [], sources: [], fontNotices: [], oflText: [],
+      matchPairs: [], matchOptions: "", seenItems: [], factItems: []
+    };
+    if (!d) return base;
+    const { site, teach, ref } = d;
+    const C = site.CATS;
+
+    const sheets = site.PERIODS.map((p, n) => {
+      const sh = ref.SHEET[p.key] || { notice: [], questions: [], vocab: [] };
+      const g = this.planShapes(p, C);
+      const marks = (p.labels || []).filter((l) => !l.small).slice(0, 8).map((l, k) => ({
+        n: k + 1, t: l.t.replace(/^PORTICO\s*/i, "Portico "),
+        x: l.x.toFixed(1), y: l.y.toFixed(1), ty: (l.y + 1.9).toFixed(1)
+      }));
+      const pins = teach.PINS[p.key] || [];
+      return {
+        no: n + 1, name: p.name, span: p.span, strap: p.strap,
+        shapes: g.shapes, rows: g.rows, marks,
+        notice: sh.notice, questions: sh.questions,
+        vocab: (sh.vocab || []).map(([w, def]) => ({ w, d: def })),
+        hasScripture: pins.length > 0,
+        scripture: pins.slice(0, 1).map((q) => ({ ref: q.ref, where: q.where, asv: q.asv }))
+      };
+    });
+
+    const q = ref.QUIZ;
+    return Object.assign(base, {
+      john: ref.JOHN5_ASV,
+      crossrefs: ref.CROSSREFS,
+      sources: ref.SOURCES,
+      fontNotices: ref.FONT_NOTICES || [],
+      oflText: ref.OFL_TEXT || [],
+      sheets,
+      matchOptions: "Choose from:  " + q.match.options.join("   ·   "),
+      matchPairs: q.match.pairs,
+      seenItems: q.seen.items.map((it) => ({ t: it.t, why: it.why, mark: it.yes ? "YES" : "NO" })),
+      factItems: q.facts.items.map((it) => ({
+        q: it.q, options: it.options, correct: it.options[it.answer], why: it.why
+      }))
+    });
+  }
+}
+
+</script>
+</body>
+</html>
