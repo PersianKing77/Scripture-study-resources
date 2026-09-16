@@ -16,21 +16,11 @@
   }
 
   body {
-    background: linear-gradient(160deg, var(--parchment-a) 0%, var(--parchment-b) 100%);
+    background:
+      linear-gradient(160deg, rgba(22, 32, 46, 0.88) 0%, rgba(14, 21, 32, 0.92) 100%),
+      url('/public-assets/levant-map.png') center center / cover no-repeat fixed;
     min-height: 100vh;
     margin: 0;
-  }
-
-  .map-bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  .map-bg svg {
-    width: 100%;
-    height: 100%;
   }
 
   .attribution {
@@ -159,69 +149,6 @@
 </style>
 </head>
 <body>
-<div class="map-bg">
-  <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="sea" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#1F2E3F"/>
-        <stop offset="100%" stop-color="#263A4F"/>
-      </linearGradient>
-    </defs>
-
-    <path d="M1030 0 C 990 90, 960 200, 950 300 C 945 360, 945 400, 903 454
-             C 890 480, 882 500, 880 526 C 875 570, 865 620, 858 700
-             C 852 750, 848 780, 845 800 L0 800 L0 0 Z"
-          fill="url(#sea)" opacity="0.7"/>
-
-    <path d="M925 350 L950 375 L935 395 L960 420 L945 440"
-          fill="none" stroke="#2E4358" stroke-width="8" stroke-linecap="round"
-          stroke-linejoin="round" opacity="0.4"/>
-
-    <g fill="#3D5468" opacity="0.25">
-      <circle cx="1040" cy="80" r="2"/><circle cx="1100" cy="160" r="2"/>
-      <circle cx="1150" cy="60" r="2"/><circle cx="1080" cy="260" r="2"/>
-      <circle cx="1130" cy="340" r="2"/><circle cx="1060" cy="420" r="2"/>
-      <circle cx="1160" cy="480" r="2"/><circle cx="1040" cy="560" r="2"/>
-      <circle cx="1120" cy="600" r="2"/><circle cx="1080" cy="680" r="2"/>
-      <circle cx="1170" cy="220" r="2"/><circle cx="1020" cy="720" r="2"/>
-    </g>
-
-    <path d="M933 512 C 928 545, 924 580, 923 605 C 922 612, 923 616, 925 620"
-          fill="none" stroke="#3D5468" stroke-width="3.5" opacity="0.6"/>
-
-    <ellipse cx="933" cy="499" rx="14" ry="18" fill="#2E4358" opacity="0.6"/>
-
-    <path d="M910 610 C 926 602, 944 610, 945 626 C 946 642, 928 649, 914 642
-             C 903 635, 901 617, 910 610 Z"
-          fill="#2E4358" opacity="0.55"/>
-
-    <path d="M903 454 L880 526 L905 594" fill="none" stroke="#D4AF5A"
-          stroke-width="1.5" stroke-dasharray="2 8" opacity="0.35"/>
-    <path d="M978 180 L987 432 L932 491 L905 594" fill="none" stroke="#D4AF5A"
-          stroke-width="1.5" stroke-dasharray="2 8" opacity="0.35"/>
-
-    <g fill="#D4AF5A" opacity="0.55" font-family="Georgia, serif" font-size="15">
-      <circle cx="978" cy="180" r="3.5"/><text x="988" y="184">Antioch</text>
-      <circle cx="987" cy="432" r="3.5"/><text x="997" y="428">Damascus</text>
-      <circle cx="903" cy="454" r="3"/><text x="861" y="450">Tyre</text>
-      <circle cx="932" cy="491" r="3"/><text x="942" y="487">Capernaum</text>
-      <circle cx="880" cy="526" r="3.5"/><text x="838" y="522">Caesarea</text>
-      <circle cx="905" cy="594" r="4"/><text x="863" y="590">Jerusalem</text>
-    </g>
-
-    <rect x="18" y="18" width="1164" height="764" fill="none" stroke="#D4AF5A" stroke-width="1" opacity="0.25"/>
-  </svg>
-</div>
-
-<svg class="compass" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
-     style="position:fixed;bottom:28px;right:32px;width:84px;height:84px;opacity:0.4;pointer-events:none;z-index:1;">
-  <circle cx="50" cy="50" r="46" fill="none" stroke="#9c7a3c" stroke-width="1"/>
-  <circle cx="50" cy="50" r="2" fill="#9c7a3c"/>
-  <path d="M50 6 L54 46 L50 50 L46 46 Z" fill="#9c7a3c"/>
-  <path d="M50 94 L46 54 L50 50 L54 54 Z" fill="#9c7a3c" opacity="0.6"/>
-  <path d="M6 50 L46 46 L50 50 L46 54 Z" fill="#9c7a3c" opacity="0.6"/>
-  <path d="M94 50 L54 54 L50 50 L54 46 Z" fill="#9c7a3c" opacity="0.6"/>
-</svg>
 
 <div class="login-wrap">
   <div class="login-card">
