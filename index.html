@@ -34,17 +34,7 @@
   .more-resources-nav { display: flex !important; flex-direction: column !important; gap: 0.3rem !important; margin: 0 !important; padding: 0 !important; }
   .more-resources-nav a { text-decoration: none; color: #8E9CA7; font-size: 0.85rem; }
   .more-resources-nav a span { margin-left: 0.4rem; opacity: 0.85; }
-  .section { scroll-margin-top: 4.5rem; }
-
-  /* On phones and tablets the three nav pills wrap onto 2–3 lines instead
-     of one, making the sticky bar taller than on desktop. The 4.5rem
-     offset above only clears a single-line bar, so on narrow screens the
-     scroll target lands under the (now taller) bar and past the section
-     heading, right at the card images. This gives narrow screens more
-     breathing room to clear the wrapped bar. */
-  @media (max-width: 900px) {
-    .section { scroll-margin-top: 9rem; }
-  }
+  .section { scroll-margin-top: var(--nav-h, 4.5rem); }
 </style>
 </head>
 <body>
@@ -91,7 +81,7 @@
         <span class="open-label">Open</span>
       </a>
 
-      <a class="card" href="/gospel-synopsis/">
+      <a class="card" href="/gospel-comparison/">
         <img class="thumb" src="/public-assets/GospelComparison.jpg" alt="Four Gospel Synopsis">
         <h3>Four Gospel Synopsis</h3>
         <p>Matthew, Mark, Luke, and John set side by side, pericope by pericope, so you can see where they align.</p>
@@ -190,6 +180,21 @@
     await fetch('/api/logout', { method: 'POST' });
     window.location.href = '/login.html';
   });
+
+  // Set the section scroll offset to the sticky nav's ACTUAL rendered
+  // height, whatever that happens to be at the current window width —
+  // rather than guessing a screen-width breakpoint (which broke on
+  // desktop windows narrower than the guessed cutoff). Re-measures on
+  // resize so it stays correct if the pills wrap differently.
+  function setNavHeightVar() {
+    var nav = document.querySelector('.section-nav');
+    if (nav) {
+      document.documentElement.style.setProperty('--nav-h', (nav.offsetHeight + 24) + 'px');
+    }
+  }
+  setNavHeightVar();
+  window.addEventListener('load', setNavHeightVar);
+  window.addEventListener('resize', setNavHeightVar);
 </script>
 </body>
 </html>
