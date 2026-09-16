@@ -203,4 +203,94 @@
     <g fill="#D4AF5A" opacity="0.55" font-family="Georgia, serif" font-size="17">
       <circle cx="675" cy="28" r="4"/><text x="687" y="32">Antioch</text>
       <circle cx="691" cy="454" r="4"/><text x="703" y="450">Damascus</text>
-      <circle cx="549" cy="492" r="3.5"/><text x="561"
+      <circle cx="549" cy="492" r="3.5"/><text x="561" y="488">Tyre</text>
+      <circle cx="597" cy="554" r="3.5"/><text x="609" y="550">Capernaum</text>
+      <circle cx="509" cy="614" r="4"/><text x="475" y="644">Caesarea</text>
+      <circle cx="551" cy="729" r="5"/><text x="563" y="725">Jerusalem</text>
+    </g>
+
+    <rect x="18" y="18" width="1164" height="764" fill="none" stroke="#D4AF5A" stroke-width="1" opacity="0.25"/>
+  </svg>
+</div>
+
+<svg class="compass" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+     style="position:fixed;bottom:28px;right:32px;width:84px;height:84px;opacity:0.4;pointer-events:none;z-index:1;">
+  <circle cx="50" cy="50" r="46" fill="none" stroke="#9c7a3c" stroke-width="1"/>
+  <circle cx="50" cy="50" r="2" fill="#9c7a3c"/>
+  <path d="M50 6 L54 46 L50 50 L46 46 Z" fill="#9c7a3c"/>
+  <path d="M50 94 L46 54 L50 50 L54 54 Z" fill="#9c7a3c" opacity="0.6"/>
+  <path d="M6 50 L46 46 L50 50 L46 54 Z" fill="#9c7a3c" opacity="0.6"/>
+  <path d="M94 50 L54 54 L50 50 L54 46 Z" fill="#9c7a3c" opacity="0.6"/>
+</svg>
+
+<div class="login-wrap">
+  <div class="login-card">
+    <h1>Interactive Scripture Tools</h1>
+    <p class="login-blurb">What if you could watch Jerusalem change across three thousand years, or walk Paul's actual route on an interactive map? This is your library of atlases, site chronologies, and Gospel comparison tools — found nowhere else like this.</p>
+    <p>Enter the email you use for the insights.taylorhalverson.com Teacher's Circle newsletter. We'll check your subscription and let you straight in — no password to remember.</p>
+
+    <form id="login-form" onsubmit="return false;">
+      <label for="email">Email address</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+      <button type="button" id="submit-btn">Enter the library</button>
+      <div class="login-status" id="status"></div>
+    </form>
+
+    <div class="login-foot">
+      Access is limited to active Teacher's Circle subscribers. Not a subscriber yet? <a href="https://insights.taylorhalverson.com/upgrade">Join here</a>.
+    </div>
+    <div class="attribution"><span class="prepared-by">Prepared by Taylor Halverson</span><br>Ph.D., Judaism and Christianity in Antiquity<br>Ph.D., Instructional Systems Technology</div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('login-form');
+  const status = document.getElementById('status');
+  const btn = document.getElementById('submit-btn');
+
+  const params = new URLSearchParams(window.location.search);
+  const next = params.get('next') || '/';
+
+  async function attemptLogin(e) {
+    if (e) e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    if (!email) return;
+
+    btn.disabled = true;
+    status.textContent = 'Checking your subscription…';
+    status.className = 'login-status pending';
+
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        status.textContent = 'Welcome — taking you in…';
+        window.location.href = next;
+      } else {
+        let message = data.error || "We couldn't verify that subscription.";
+        if (data.debug) {
+          message += ' — debug: ' + JSON.stringify(data.debug);
+        }
+        status.textContent = message;
+        status.className = 'login-status error';
+        btn.disabled = false;
+      }
+    } catch (err) {
+      status.textContent = 'Something went wrong. Try again in a moment.';
+      status.className = 'login-status error';
+      btn.disabled = false;
+    }
+  }
+
+  btn.addEventListener('click', attemptLogin);
+  document.getElementById('email').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') attemptLogin(e);
+  });
+</script>
+</body>
+</html>
