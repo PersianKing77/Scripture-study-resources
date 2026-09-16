@@ -8,6 +8,15 @@
 <style>
   .card img.thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
   .header-meta .byline { line-height: 1.4; }
+  .section-nav { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+  .section-nav a {
+    display: inline-block;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
 </style>
 </head>
 <body>
@@ -22,9 +31,14 @@
         <button type="submit">Sign out</button>
       </form>
     </div>
+    <nav class="section-nav">
+      <a href="#nt-section">New Testament Resources</a>
+      <a href="#ot-section">Old Testament Resources</a>
+      <a href="#travel-section">Israel Travel Resources</a>
+    </nav>
   </header>
 
-  <section class="section">
+  <section class="section" id="nt-section">
     <h2 class="section-title">Studying the New Testament</h2>
     <div class="card-grid">
 
@@ -66,7 +80,7 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="ot-section">
     <h2 class="section-title">Studying the Old Testament</h2>
     <div class="card-grid">
 
@@ -87,7 +101,7 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="travel-section">
     <h2 class="section-title">Getting ready for the Holy Land</h2>
     <div class="card-grid">
 
