@@ -3,197 +3,221 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Study Library — Teacher's Circle</title>
+<title>Sign in — Interactive Scripture Tools</title>
 <link rel="stylesheet" href="/public-assets/style.css">
 <style>
-  .card img.thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
-  .header-meta .byline { line-height: 1.4; }
-  .header-meta .byline .prepared-by { color: #D4AF5A; }
-  .section-nav {
+  :root {
+    --parchment-a: #16202E;
+    --parchment-b: #0E1520;
+    --ink: #ECEAE0;
+    --ink-soft: #A9B3C2;
+    --gold: #D4AF5A;
+    --gold-line: rgba(212, 175, 90, 0.3);
+  }
+
+  body {
+    background:
+      linear-gradient(160deg, rgba(22, 32, 46, 0.55) 0%, rgba(14, 21, 32, 0.65) 100%),
+      url('/public-assets/levant-map.jpg') center center / cover no-repeat fixed;
+    min-height: 100vh;
+    margin: 0;
+  }
+
+  .attribution {
+    position: relative;
+    z-index: 1;
+    text-align: left;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: 18px;
+    letter-spacing: 0.01em;
+  }
+
+  .attribution .prepared-by {
+    color: var(--gold);
+  }
+
+  .login-wrap {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin: 1rem 0;
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background-color: #141C28;
-    padding: 0.9rem 0;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
   }
-  .section-nav a {
-    display: inline-block;
-    padding: 0.45rem 0.9rem;
-    border: 1px solid currentColor;
-    border-radius: 999px;
-    text-decoration: none;
-    font-size: 0.85rem;
+
+  .login-card {
+    background: #1B2635;
+    border: 1px solid var(--gold-line);
+    border-radius: 4px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2);
+    padding: 44px 40px 36px;
+    max-width: 440px;
+    width: 100%;
   }
-  .section-title { font-size: 1.7rem !important; }
-  .card { background-color: #1E3A5C !important; }
-  .footer-links-label { margin: 2.5rem 0 0.4rem !important; padding: 0 !important; font-size: 0.75rem !important; font-weight: 400 !important; }
-  .more-resources-nav { display: flex !important; flex-direction: column !important; gap: 0.3rem !important; margin: 0 !important; padding: 0 !important; }
-  .more-resources-nav a { text-decoration: none; color: #8E9CA7; font-size: 0.85rem; }
-  .more-resources-nav a span { margin-left: 0.4rem; opacity: 0.85; }
-  .section { scroll-margin-top: var(--nav-h, 4.5rem); }
+
+  .login-card::before {
+    content: "";
+    display: block;
+    width: 56px;
+    height: 3px;
+    background: var(--gold);
+    margin: 0 0 20px;
+  }
+
+  .login-card h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 27px;
+    color: var(--ink);
+    margin: 0 0 14px;
+    line-height: 1.25;
+  }
+
+  .login-card > p {
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0 0 26px;
+  }
+
+  .login-card label {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+
+  .login-card input[type="email"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    font-size: 15px;
+    border: 1px solid #38465A;
+    border-radius: 3px;
+    margin-bottom: 18px;
+    background: #0E1520;
+    color: var(--ink);
+  }
+
+  .login-card button {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--ink);
+    color: #16202E;
+    border: none;
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+  }
+
+  .login-card button:hover {
+    background: #D6D3C6;
+  }
+
+  .login-status {
+    min-height: 18px;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+
+  .login-status.pending { color: var(--ink-soft); }
+  .login-status.error { color: #E28A72; }
+
+  .login-foot {
+    margin-top: 26px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gold-line);
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .login-foot a {
+    color: var(--gold);
+    text-decoration: underline;
+  }
+
+  .login-blurb {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin: 0 0 18px;
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header class="site-header">
-    <div style="display:flex; align-items:center; gap:0.65rem;">
-      <h1 style="margin:0;">Interactive Scripture Tools</h1>
-      <img src="/public-assets/logo-mark.png" alt="" style="width:40px; height:40px; flex:none;">
+<div class="login-wrap">
+  <div class="login-card">
+    <h1 style="display:flex; align-items:center; gap:0.6rem;">Interactive Scripture Tools<img src="/public-assets/logo-mark.png" alt="" style="width:32px; height:32px; flex:none;"></h1>
+    <p class="login-blurb">What if you could watch Jerusalem change across three thousand years, or walk Paul's actual route on an interactive map? This is your library of atlases, site chronologies, and Gospel comparison tools — found nowhere else like this.</p>
+    <p>Enter the email you use for the insights.taylorhalverson.com Teacher's Circle newsletter. We'll check your subscription and let you straight in — no password to remember.</p>
+
+    <form id="login-form" onsubmit="return false;">
+      <label for="email">Email address</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+      <button type="button" id="submit-btn">Enter the library</button>
+      <div class="login-status" id="status"></div>
+    </form>
+
+    <div class="login-foot">
+      Access is limited to active Teacher's Circle subscribers. Not a subscriber yet? <a href="https://insights.taylorhalverson.com/upgrade">Join here</a>.
     </div>
-    <p>Built to make the geography, history, culture, and literary structure behind the scriptures easier to see.</p>
-    <div class="header-meta">
-      <span class="byline"><span class="prepared-by">Prepared by Taylor Halverson</span><br>Ph.D., Judaism and Christianity in Antiquity<br>Ph.D., Instructional Systems Technology</span>
-      <form class="logout-form" id="logout-form">
-        <button type="submit">Sign out</button>
-      </form>
-    </div>
-    <p class="footer-links-label">More resources</p>
-    <nav class="more-resources-nav">
-      <a href="https://insights.taylorhalverson.com/">Insights<span>insights.taylorhalverson.com</span></a>
-      <a href="https://books.taylorhalverson.com/">Books<span>books.taylorhalverson.com</span></a>
-      <a href="https://exodustours.com/">Tours<span>exodustours.com</span></a>
-    </nav>
-  </header>
-
-  <nav class="section-nav">
-    <a href="#nt-section">New Testament Resources</a>
-    <a href="#ot-section">Old Testament Resources</a>
-    <a href="#travel-section">Israel Travel Resources</a>
-    <img src="/public-assets/logo-mark.png" alt="" style="width:32px; height:32px; margin-left:auto; align-self:center; flex:none;">
-  </nav>
-
-  <section class="section" id="nt-section">
-    <h2 class="section-title">Studying the New Testament</h2>
-    <div class="card-grid">
-
-      <a class="card" href="/nt-atlas/">
-        <img class="thumb" src="/public-assets/NTAtlas.jpg" alt="New Testament Atlas">
-        <h3>New Testament Atlas</h3>
-        <p>The world of the four Gospels and Acts, mapped and cross-referenced with the weekly reading.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-      <a class="card" href="/paul-journeys/">
-        <img class="thumb" src="/public-assets/PaulsJourneys.jpg" alt="Paul's Journeys">
-        <h3>Paul's Journeys</h3>
-        <p>His missionary voyages and letters, mapped leg by leg with the people and places along the way.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-      <a class="card" href="/gospel-comparison/">
-        <img class="thumb" src="/public-assets/GospelComparison.jpg" alt="Gospel Comparison">
-        <h3>Gospel Comparison</h3>
-        <p>Matthew, Mark, Luke, and John set side by side, pericope by pericope, so you can see where they align.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-      <a class="card" href="/gospel-threads/">
-        <img class="thumb" src="/public-assets/Gospel-Timeline.jpg" alt="Gospel Structure Explorer">
-        <h3>Gospel Structure Explorer</h3>
-        <p>See where the four Gospels agree on pericope order — and where they diverge — at a glance.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-      <a class="card" href="/herods-temple/">
-        <img class="thumb" src="/public-assets/HerodsTemple.jpg" alt="Herod's Temple — a 3D model">
-        <h3>Herod's Temple — a 3D model</h3>
-        <p>Walk around a reconstructed model of the temple from the time of Jesus.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-    </div>
-  </section>
-
-  <section class="section" id="ot-section">
-    <h2 class="section-title">Studying the Old Testament</h2>
-    <div class="card-grid">
-
-      <a class="card" href="/ot-atlas/">
-        <img class="thumb" src="/public-assets/OTAtlas.jpg" alt="Old Testament Atlas">
-        <h3>Old Testament Atlas</h3>
-        <p>Every place the Old Testament names, mapped and searchable, with its weekly scripture reading context attached.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-      <a class="card" href="/scripture-timeline/">
-        <img class="thumb" src="/public-assets/CanonizationTimeline.jpg" alt="Scripture Composition & Canonization Timeline">
-        <h3>Scripture Composition &amp; Canonization Timeline</h3>
-        <p>When each book was written, and when it was recognized as scripture — set side by side across the canon.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-    </div>
-  </section>
-
-  <section class="section" id="travel-section">
-    <h2 class="section-title">Getting ready for the Holy Land</h2>
-    <div class="card-grid">
-
-      <a class="card" href="/jerusalem/">
-        <img class="thumb" src="/public-assets/JerusalemThen_Now.jpg" alt="Jerusalem Then and Now">
-        <h3>Jerusalem Then and Now</h3>
-        <p>Layer the modern city over every major period of its past, with an overlay map you can drag between eras.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-      <a class="card" href="/city-of-david/">
-        <img class="thumb" src="/public-assets/cityofDavid.jpg" alt="City of David">
-        <h3>City of David</h3>
-        <p>The stepped terraces and tunnels of ancient Jerusalem's oldest settled ridge, period by period.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-      <a class="card" href="/temple-mount/">
-        <img class="thumb" src="/public-assets/TempleMount.jpg" alt="The Temple Mount over the years">
-        <h3>The Temple Mount over the years</h3>
-        <p>One platform, many buildings — from Solomon's temple through Herod's expansion to the present day.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-      <a class="card" href="/bethesda/">
-        <img class="thumb" src="/public-assets/Bethesda.jpg" alt="The Pool of Bethesda">
-        <h3>The Pool of Bethesda</h3>
-        <p>The five porticoes and the healing pool of John 5:1–15, traced across the periods that shaped the site.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-      <a class="card" href="/holy-sepulchre/">
-        <img class="thumb" src="/public-assets/ChurchofTheHolySepulchre.jpg" alt="Church of the Holy Sepulchre">
-        <h3>Church of the Holy Sepulchre</h3>
-        <p>Watch the site evolve from quarry and tomb to the rotunda and church that stand there now.</p>
-        <span class="open-label">Open</span>
-      </a>
-
-    </div>
-  </section>
-
-  <footer class="site-footer">
-    A Teacher's Circle member benefit for insights.taylorhalverson.com. Questions or a broken link? Just reply to any Teacher's Circle email.
-  </footer>
-
+    <div class="attribution"><span class="prepared-by">Prepared by Taylor Halverson</span><br>Ph.D., Judaism and Christianity in Antiquity<br>Ph.D., Instructional Systems Technology</div>
+  </div>
 </div>
 
 <script>
-  document.getElementById('logout-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    await fetch('/api/logout', { method: 'POST' });
-    window.location.href = '/login.html';
-  });
+  const form = document.getElementById('login-form');
+  const status = document.getElementById('status');
+  const btn = document.getElementById('submit-btn');
 
-  function setNavHeightVar() {
-    var nav = document.querySelector('.section-nav');
-    if (nav) {
-      document.documentElement.style.setProperty('--nav-h', (nav.offsetHeight + 24) + 'px');
+  const params = new URLSearchParams(window.location.search);
+  const next = params.get('next') || '/';
+
+  async function attemptLogin(e) {
+    if (e) e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    if (!email) return;
+
+    btn.disabled = true;
+    status.textContent = 'Checking your subscription…';
+    status.className = 'login-status pending';
+
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        status.textContent = 'Welcome — taking you in…';
+        window.location.href = next;
+      } else {
+        let message = data.error || "We couldn't verify that subscription.";
+        if (data.debug) {
+          message += ' — debug: ' + JSON.stringify(data.debug);
+        }
+        status.textContent = message;
+        status.className = 'login-status error';
+        btn.disabled = false;
+      }
+    } catch (err) {
+      status.textContent = 'Something went wrong. Try again in a moment.';
+      status.className = 'login-status error';
+      btn.disabled = false;
     }
   }
-  setNavHeightVar();
-  window.addEventListener('load', setNavHeightVar);
-  window.addEventListener('resize', setNavHeightVar);
+
+  btn.addEventListener('click', attemptLogin);
+  document.getElementById('email').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') attemptLogin(e);
+  });
 </script>
 </body>
 </html>
