@@ -41,7 +41,10 @@
 <div class="wrap">
 
   <header class="site-header">
-    <h1>Interactive Scripture Tools</h1>
+    <div style="display:flex; align-items:center; gap:0.65rem;">
+      <h1 style="margin:0;">Interactive Scripture Tools</h1>
+      <img src="/public-assets/logo-mark.png" alt="" style="width:40px; height:40px; flex:none;">
+    </div>
     <p>Built to make the geography, history, culture, and literary structure behind the scriptures easier to see.</p>
     <div class="header-meta">
       <span class="byline"><span class="prepared-by">Prepared by Taylor Halverson</span><br>Ph.D., Judaism and Christianity in Antiquity<br>Ph.D., Instructional Systems Technology</span>
@@ -61,6 +64,7 @@
     <a href="#nt-section">New Testament Resources</a>
     <a href="#ot-section">Old Testament Resources</a>
     <a href="#travel-section">Israel Travel Resources</a>
+    <img src="/public-assets/logo-mark.png" alt="" style="width:32px; height:32px; margin-left:auto; align-self:center; flex:none;">
   </nav>
 
   <section class="section" id="nt-section">
@@ -82,8 +86,8 @@
       </a>
 
       <a class="card" href="/gospel-comparison/">
-        <img class="thumb" src="/public-assets/GospelComparison.jpg" alt="Four Gospel Synopsis">
-        <h3>Four Gospel Synopsis</h3>
+        <img class="thumb" src="/public-assets/GospelComparison.jpg" alt="Gospel Comparison">
+        <h3>Gospel Comparison</h3>
         <p>Matthew, Mark, Luke, and John set side by side, pericope by pericope, so you can see where they align.</p>
         <span class="open-label">Open</span>
       </a>
@@ -181,11 +185,6 @@
     window.location.href = '/login.html';
   });
 
-  // Set the section scroll offset to the sticky nav's ACTUAL rendered
-  // height, whatever that happens to be at the current window width —
-  // rather than guessing a screen-width breakpoint (which broke on
-  // desktop windows narrower than the guessed cutoff). Re-measures on
-  // resize so it stays correct if the pills wrap differently.
   function setNavHeightVar() {
     var nav = document.querySelector('.section-nav');
     if (nav) {
