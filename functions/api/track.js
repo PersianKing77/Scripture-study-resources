@@ -6,15 +6,34 @@
 //
 // Requires the same ANALYTICS_DB D1 binding as the rest of this kit.
 //
-// NOTE on "who": these rows are currently anonymous (email is stored as
-// null) because this repo's login/session setup wasn't confirmed to use
-// the same cookie system as downloads.taylorhalverson.com. If
-// resources.taylorhalverson.com signs visitors in the same way, tell me
-// and I'll wire email capture into this route too, the same low-risk way
-// it was added to the downloads middleware (reading the existing session
-// cookie, never touching your login code).
+// NOTE on "who": this now attempts to read the visitor's email the same
+// read-only way it was added to the downloads middleware -- by reading and
+// verifying this site's own session cookie via functions/_utils/session.js,
+// the same helper file downloads.taylorhalverson.com uses. This repo's
+// exact session file wasn't independently confirmed, so if this file
+// doesn't actually exist at that path (or exports different names), the
+// NEXT DEPLOY of this repo will fail to build -- check the Deployments tab
+// build log after uploading this. A failed build never touches the live
+// site (Cloudflare just keeps serving the last successful deploy), so
+// nothing breaks either way -- but if it fails, send me the error text
+// and tell me the real path/name of this site's session-cookie helper.
+import { COOKIE_NAME, verifySessionToken } from "../_utils/session.js";
 
 const MAX_POINTS_PER_BATCH = 300;
+
+async function getEmailFromRequest(request, env) {
+  try {
+    const cookieHeader = request.headers.get("cookie") || "";
+    if (!COOKIE_NAME) return null;
+    const match = cookieHeader.match(new RegExp(`${COOKIE_NAME}=([^;]+)`));
+    if (!match) return null;
+    const token = decodeURIComponent(match[1]);
+    const session = await verifySessionToken(token, env.SESSION_SECRET);
+    return (session && session.email) || null;
+  } catch (err) {
+    return null;
+  }
+}
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -32,6 +51,7 @@ export async function onRequestPost(context) {
 
   try {
     const country = (request.cf && request.cf.country) || null;
+    const email = await getEmailFromRequest(request, env);
 
     if (body.type === "start") {
       const now = new Date().toISOString();
@@ -39,10 +59,11 @@ export async function onRequestPost(context) {
         `INSERT INTO tool_sessions
            (session_id, email, path, started_at, last_seen_at, active_seconds, max_scroll_pct,
             referrer, user_agent, country, viewport_w, viewport_h)
-         VALUES (?, NULL, ?, ?, ?, 0, 0, ?, ?, ?, ?, ?)`
+         VALUES (?, ?, ?, ?, ?, 0, 0, ?, ?, ?, ?, ?)`
       )
         .bind(
           String(body.session_id || "").slice(0, 64),
+          email,
           String(body.path || "").slice(0, 512),
           now,
           now,
@@ -57,7 +78,8 @@ export async function onRequestPost(context) {
       const now = new Date().toISOString();
       await env.ANALYTICS_DB.prepare(
         `UPDATE tool_sessions
-         SET last_seen_at = ?, active_seconds = ?, max_scroll_pct = ?
+         SET last_seen_at = ?, active_seconds = ?, max_scroll_pct = ?,
+             email = COALESCE(email, ?)
          WHERE id = (
            SELECT id FROM tool_sessions
            WHERE session_id = ? AND path = ?
@@ -68,6 +90,7 @@ export async function onRequestPost(context) {
           now,
           intOrNull(body.active_seconds) || 0,
           intOrNull(body.max_scroll_pct) || 0,
+          email,
           String(body.session_id || "").slice(0, 64),
           String(body.path || "").slice(0, 512)
         )
@@ -84,9 +107,10 @@ export async function onRequestPost(context) {
         .map((p) =>
           env.ANALYTICS_DB.prepare(
             `INSERT INTO click_events (session_id, email, path, ts, page_x, page_y, doc_w, doc_h, target)
-             VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?)`
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
           ).bind(
             sessionId,
+            email,
             path,
             p.ts ? new Date(p.ts).toISOString() : new Date().toISOString(),
             Math.round(p.x),
