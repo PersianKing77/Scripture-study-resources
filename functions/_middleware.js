@@ -25,6 +25,15 @@
 
 const SKIP_EXTENSIONS = /\.(css|js|mjs|json|map|png|jpe?g|gif|svg|webp|ico|woff2?|ttf|eot|txt|xml|webmanifest)$/i;
 
+// Vulnerability-scanner / credential-probe paths every public site gets hit
+// with constantly (wp-login.php, .env, .aws/credentials, etc.). These never
+// come from a real visitor's browser -- bots don't run the injected tracker
+// script -- so counting them as "visits" only inflates the KPI numbers and
+// clutters the tool-page picker with junk that never has real session data
+// behind it. This is purely a logging filter: it doesn't change what's
+// served to the request, just what gets written to resource_visits.
+const SKIP_BOT_PATTERNS = /(^\/wp-|\.env(\.|$|~)|\.aws\/|\.kube\/|\.git-credentials|\.git\/config|\.ssh\/|\.docker\/|phpmyadmin|xmlrpc\.php|\.php$)/i;
+
 export async function onRequest(context) {
   const { request, next, env, waitUntil } = context;
   const response = await next();
@@ -34,7 +43,10 @@ export async function onRequest(context) {
 
     // Only log real page navigations, not asset/script requests, and only
     // successful page loads (skip redirects/errors so counts reflect real visits).
-    const isAsset = SKIP_EXTENSIONS.test(url.pathname) || url.pathname.startsWith("/_");
+    const isAsset =
+      SKIP_EXTENSIONS.test(url.pathname) ||
+      url.pathname.startsWith("/_") ||
+      SKIP_BOT_PATTERNS.test(url.pathname);
     const isPageLoad = request.method === "GET" && response.status === 200;
 
     if (!isAsset && isPageLoad && env.ANALYTICS_DB) {
