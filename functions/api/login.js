@@ -4,6 +4,19 @@ import { createSessionToken, buildSetCookie } from "../_utils/session.js";
 // your real API response before going live (see DEBUG mode note below).
 const ACTIVE_STATUSES = ["active", "validating"];
 
+// Access is now tag-based instead of tier-based. Any subscriber carrying one of these
+// three tags gets into resources.taylorhalverson.com:
+//   - study-tools-access        auto-applied on Study Tools upgrade, removed on downgrade
+//   - insights-ultimate-access  auto-applied on Insights Ultimate upgrade, removed on downgrade
+//   - tools-grandfathered       applied once to Teacher's Circle subscribers active as of
+//                               2026-09-18, and never removed — permanent legacy access
+// Overridable via env vars in case a tag ever gets renamed, but these are the live values.
+const DEFAULT_ACCESS_TAGS = [
+  "study-tools-access",
+  "insights-ultimate-access",
+  "tools-grandfathered",
+];
+
 export async function onRequestPost(context) {
   const { request, env } = context;
   const debug = env.DEBUG_LOGIN === "true";
@@ -25,11 +38,16 @@ export async function onRequestPost(context) {
       return json({ ok: false, error: "Server isn't configured yet (missing Beehiiv credentials)." }, 500);
     }
 
-    const tierNameNeeded = (env.TEACHERS_CIRCLE_TIER_NAME || "teacher's circle").toLowerCase();
+    const accessTagsNeeded = (env.ACCESS_TAG_NAMES
+      ? env.ACCESS_TAG_NAMES.split(",")
+      : DEFAULT_ACCESS_TAGS
+    ).map((t) => t.trim().toLowerCase()).filter(Boolean);
 
+    // Ask for tags explicitly, in case this account's API build requires it to be expanded
+    // rather than always being present on the base response (see DEBUG note below).
     const beehiivUrl =
       `https://api.beehiiv.com/v2/publications/${env.BEEHIIV_PUBLICATION_ID}` +
-      `/subscriptions/by_email/${encodeURIComponent(email)}?expand[]=subscription_premium_tiers`;
+      `/subscriptions/by_email/${encodeURIComponent(email)}?expand[]=tags`;
 
     let beehiivRes;
     try {
@@ -63,28 +81,33 @@ export async function onRequestPost(context) {
     const subscription = beehiivData.data || beehiivData;
 
     const status = (subscription.status || "").toLowerCase();
-    // Beehiiv returns this as a flat array of tier name strings, e.g. ["Teacher's Circle"] —
-    // not an array of tier objects. Handle both shapes defensively.
-    const rawTierNames = subscription.subscription_premium_tier_names
-      || (subscription.subscription_premium_tiers || []).map((t) => (t && t.name) || t);
-    const tierNames = (rawTierNames || []).map((n) => (n || "").toString().toLowerCase());
-    const hasTeachersCircle = tierNames.some((name) => name.includes(tierNameNeeded));
+
+    // Beehiiv may return tags as a flat array of name strings, e.g. ["study-tools-access"],
+    // or as an array of tag objects with a `name` field. Handle both shapes defensively,
+    // same as the old tier-name check used to.
+    const rawTags = subscription.tags || subscription.subscription_tags || [];
+    const tagNames = rawTags
+      .map((t) => (typeof t === "string" ? t : (t && t.name) || ""))
+      .map((n) => n.toString().toLowerCase());
+    const hasAccessTag = tagNames.some((name) => accessTagsNeeded.includes(name));
 
     const isActiveSubscriber = ACTIVE_STATUSES.includes(status);
-    const authorized = isActiveSubscriber && hasTeachersCircle;
+    const authorized = isActiveSubscriber && hasAccessTag;
 
-    // DEBUG MODE — set env.DEBUG_LOGIN = "true" in Cloudflare Pages while you're first
-    // wiring this up, so you can see exactly what Beehiiv sent back and confirm the
-    // real tier name / status values before relying on it silently. Turn it off after.
+    // DEBUG MODE — set env.DEBUG_LOGIN = "true" in Cloudflare Pages right after this
+    // deploys, log in with a known study-tools-access / insights-ultimate-access /
+    // tools-grandfathered subscriber, and confirm `tagNames` actually shows the tag
+    // (and that `rawKeys` includes `tags` at all — some accounts need it requested
+    // differently). Turn DEBUG_LOGIN back off once confirmed.
     if (debug) {
       return json({
         ok: authorized,
-        debug: { status, tierNames, tierNameNeeded, rawKeys: Object.keys(subscription), rawSubscription: subscription },
+        debug: { status, tagNames, accessTagsNeeded, rawKeys: Object.keys(subscription), rawSubscription: subscription },
       });
     }
 
     if (!authorized) {
-      return json({ ok: false, error: "That email isn't an active Teacher's Circle subscriber." }, 403);
+      return json({ ok: false, error: "That email doesn't currently have access to the interactive study tools." }, 403);
     }
 
     const token = await createSessionToken(email, env.SESSION_SECRET);
